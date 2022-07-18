@@ -93,16 +93,16 @@ trait Services
         );
     }
 
-    public function getRoutesProviderService(): Service\Route\Provider
+    public function getGeneratorService(): Service\Generator
     {
         $factory = new ProviderFactory(
             $this->get('provider_loader'),
             $this->get('container_autowire_resolver'),
-            ProviderConfig::TYPE_ROUTES,
-            \Fusio\Engine\Routes\ProviderInterface::class
+            ProviderConfig::TYPE_GENERATOR,
+            \Fusio\Engine\Generator\ProviderInterface::class
         );
 
-        return new Service\Route\Provider(
+        return new Service\Generator(
             $this->get('connection'),
             $factory,
             $this->get('generator_entity_creator_service'),

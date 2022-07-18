@@ -19,52 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route\Provider;
+namespace Fusio\Impl\Backend\Action\Generator;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Engine\Routes\ProviderInterface;
-use Fusio\Impl\Provider\ProviderConfig;
-use Fusio\Impl\Provider\ProviderLoader;
-use PSX\Dependency\AutowireResolverInterface;
+use Fusio\Impl\Service\Generator;
 
 /**
- * Index
+ * Form
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Index extends ActionAbstract
+class Form extends ActionAbstract
 {
-    private ProviderLoader $loader;
-    private AutowireResolverInterface $resolver;
+    private Generator $generatorService;
 
-    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver)
+    public function __construct(Generator $generatorService)
     {
-        $this->loader = $loader;
-        $this->resolver = $resolver;
+        $this->generatorService = $generatorService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $classes = $this->loader->getConfig()->getClasses(ProviderConfig::TYPE_ROUTES);
-        $result  = [];
-
-        foreach ($classes as $name => $class) {
-            $provider = $this->resolver->getObject($class);
-            if ($provider instanceof ProviderInterface) {
-                $result[] = [
-                    'name' => $provider->getName(),
-                    'class' => $name,
-                ];
-            }
-        }
-
-        return [
-            'providers' => $result
-        ];
+        return $this->generatorService->getForm($request->get('provider'));
     }
 }

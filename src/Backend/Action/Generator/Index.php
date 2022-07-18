@@ -19,49 +19,52 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route\Provider;
+namespace Fusio\Impl\Backend\Action\Generator;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Route\Provider;
-use Fusio\Model\Backend\Route_Provider;
-use PSX\Http\Environment\HttpResponse;
+use Fusio\Engine\Generator\ProviderInterface;
+use Fusio\Impl\Provider\ProviderConfig;
+use Fusio\Impl\Provider\ProviderLoader;
+use PSX\Dependency\AutowireResolverInterface;
 
 /**
- * Create
+ * Index
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Create extends ActionAbstract
+class Index extends ActionAbstract
 {
-    private Provider $providerService;
+    private ProviderLoader $loader;
+    private AutowireResolverInterface $resolver;
 
-    public function __construct(Provider $providerService)
+    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver)
     {
-        $this->providerService = $providerService;
+        $this->loader = $loader;
+        $this->resolver = $resolver;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
+        $classes = $this->loader->getConfig()->getClasses(ProviderConfig::TYPE_GENERATOR);
+        $result  = [];
 
-        assert($body instanceof Route_Provider);
+        foreach ($classes as $name => $class) {
+            $provider = $this->resolver->getObject($class);
+            if ($provider instanceof ProviderInterface) {
+                $result[] = [
+                    'name' => $provider->getName(),
+                    'class' => $name,
+                ];
+            }
+        }
 
-        $this->providerService->create(
-            $request->get('provider'),
-            $context->getUser()->getCategoryId(),
-            $body,
-            UserContext::newActionContext($context)
-        );
-
-        return new HttpResponse(201, [], [
-            'success' => true,
-            'message' => 'Provider successfully created',
-        ]);
+        return [
+            'providers' => $result
+        ];
     }
 }

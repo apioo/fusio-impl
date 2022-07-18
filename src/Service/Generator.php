@@ -19,30 +19,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Route;
+namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Form;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Parameters;
-use Fusio\Engine\Routes\ExecutableInterface;
-use Fusio\Engine\Routes\ProviderInterface;
-use Fusio\Engine\Routes\Setup;
+use Fusio\Engine\Generator\ExecutableInterface;
+use Fusio\Engine\Generator\ProviderInterface;
+use Fusio\Engine\Generator\Setup;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Generator\EntityCreator;
-use Fusio\Model\Backend\Route_Provider;
-use Fusio\Model\Backend\Route_Provider_Config;
+use Fusio\Model\Backend\Generator_Provider;
+use Fusio\Model\Backend\Generator_Provider_Config;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Provider
+ * Generator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Provider
+class Generator
 {
     private Connection $connection;
     private ProviderFactory $providerFactory;
@@ -57,7 +57,7 @@ class Provider
         $this->elementFactory = $elementFactory;
     }
 
-    public function create(string $providerName, int $categoryId, Route_Provider $config, UserContext $context): void
+    public function create(string $providerName, int $categoryId, Generator_Provider $config, UserContext $context): void
     {
         $setup = new Setup();
         $basePath = $config->getPath();
@@ -96,7 +96,7 @@ class Provider
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName, Route_Provider_Config $config): array
+    public function getChangelog(string $providerName, Generator_Provider_Config $config): array
     {
         $setup = new Setup();
 

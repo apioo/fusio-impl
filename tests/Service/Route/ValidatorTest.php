@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Service\Route;
 
-use Fusio\Impl\Backend\Filter\Route\Path;
 use Fusio\Impl\Service\Route\Validator;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\BadRequestException;

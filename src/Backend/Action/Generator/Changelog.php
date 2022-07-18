@@ -19,14 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route\Provider;
+namespace Fusio\Impl\Backend\Action\Generator;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Route\Provider;
-use Fusio\Model\Backend\Route_Provider_Config;
+use Fusio\Impl\Service\Generator;
+use Fusio\Model\Backend\Generator_Provider_Config;
 
 /**
  * Changelog
@@ -37,20 +37,20 @@ use Fusio\Model\Backend\Route_Provider_Config;
  */
 class Changelog extends ActionAbstract
 {
-    private Provider $providerService;
+    private Generator $generatorService;
 
-    public function __construct(Provider $providerService)
+    public function __construct(Generator $generatorService)
     {
-        $this->providerService = $providerService;
+        $this->generatorService = $generatorService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Route_Provider_Config);
+        assert($body instanceof Generator_Provider_Config);
 
-        return $this->providerService->getChangelog(
+        return $this->generatorService->getChangelog(
             $request->get('provider'),
             $body
         );
