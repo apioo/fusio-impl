@@ -74,8 +74,8 @@ class ProviderLoaderTest extends DbTestCase
                 'google' => \Fusio\Impl\Provider\User\Google::class,
                 'stdclass' => \stdClass::class,
             ],
-            'routes' => [
-                'sqltable' => \Fusio\Adapter\Sql\Routes\SqlTable::class,
+            'generator' => [
+                'sqltable' => \Fusio\Adapter\Sql\Generator\SqlTable::class,
                 'stdclass' => \stdClass::class,
             ],
         ];

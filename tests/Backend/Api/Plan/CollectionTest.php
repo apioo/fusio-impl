@@ -150,7 +150,7 @@ JSON;
         $result = Environment::getService('connection')->fetchAll($sql, ['plan_id' => $row['id']]);
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals(41, $result[0]['scope_id']);
+        $this->assertEquals(42, $result[0]['scope_id']);
     }
 
     public function testPut()

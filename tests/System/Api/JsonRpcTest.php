@@ -211,7 +211,7 @@ JSON;
     "jsonrpc": "2.0",
     "error": {
         "code": 400,
-        "message": "Column title must not be null"
+        "message": "Property title must not be null"
     },
     "id": 1
 }

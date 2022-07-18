@@ -176,20 +176,6 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/routes\/provider\/:provider",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/routes\/provider",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
       "path": "\/backend\/routes",
       "methods": [
         "ANY"
@@ -289,6 +275,20 @@
     },
     {
       "path": "\/backend\/log\/error",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/generator\/:provider",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/generator",
       "methods": [
         "ANY"
       ],

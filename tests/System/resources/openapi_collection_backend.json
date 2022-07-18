@@ -1310,140 +1310,6 @@
         }
       ]
     },
-    "\/backend\/routes\/provider\/{provider}": {
-      "get": {
-        "tags": [
-          "backend.route"
-        ],
-        "operationId": "Backend_Action_Route_Provider_Form",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Form_Container"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.route"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "backend.route"
-        ],
-        "operationId": "Backend_Action_Route_Provider_Changelog",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Route_Provider_Config"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Route_Provider_Changelog"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.route"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "backend.route"
-        ],
-        "operationId": "Backend_Action_Route_Provider_Create",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Route_Provider"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "POST 201 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.route"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "provider",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "\/backend\/routes\/provider": {
-      "get": {
-        "tags": [
-          "backend.route"
-        ],
-        "operationId": "Backend_Action_Route_Provider_Index",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Route_Index_Providers"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.route"
-            ]
-          }
-        ]
-      }
-    },
     "\/backend\/routes": {
       "get": {
         "tags": [
@@ -2578,6 +2444,140 @@
           {
             "app": [
               "backend.log"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/generator\/{provider}": {
+      "get": {
+        "tags": [
+          "backend.generator"
+        ],
+        "operationId": "Backend_Action_Generator_Form",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Form_Container"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.generator"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.generator"
+        ],
+        "operationId": "Backend_Action_Generator_Changelog",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Generator_Provider_Config"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Generator_Provider_Changelog"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.generator"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.generator"
+        ],
+        "operationId": "Backend_Action_Generator_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Generator_Provider"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.generator"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/generator": {
+      "get": {
+        "tags": [
+          "backend.generator"
+        ],
+        "operationId": "Backend_Action_Generator_Index",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Generator_Index_Providers"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.generator"
             ]
           }
         ]
@@ -5044,6 +5044,18 @@
       "Backend_Event_Update": {
         "$ref": "#\/components\/schemas\/Event_Update"
       },
+      "Backend_Generator_Index_Providers": {
+        "$ref": "#\/components\/schemas\/Generator_Index_Providers"
+      },
+      "Backend_Generator_Provider": {
+        "$ref": "#\/components\/schemas\/Generator_Provider"
+      },
+      "Backend_Generator_Provider_Changelog": {
+        "$ref": "#\/components\/schemas\/Generator_Provider_Changelog"
+      },
+      "Backend_Generator_Provider_Config": {
+        "$ref": "#\/components\/schemas\/Generator_Provider_Config"
+      },
       "Backend_Log": {
         "$ref": "#\/components\/schemas\/Log"
       },
@@ -5127,18 +5139,6 @@
       },
       "Backend_Route_Create": {
         "$ref": "#\/components\/schemas\/Route_Create"
-      },
-      "Backend_Route_Index_Providers": {
-        "$ref": "#\/components\/schemas\/Route_Index_Providers"
-      },
-      "Backend_Route_Provider": {
-        "$ref": "#\/components\/schemas\/Route_Provider"
-      },
-      "Backend_Route_Provider_Changelog": {
-        "$ref": "#\/components\/schemas\/Route_Provider_Changelog"
-      },
-      "Backend_Route_Provider_Config": {
-        "$ref": "#\/components\/schemas\/Route_Provider_Config"
       },
       "Backend_Route_Update": {
         "$ref": "#\/components\/schemas\/Route_Update"
@@ -5757,6 +5757,73 @@
           }
         ]
       },
+      "Generator_Index_Provider": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Generator_Index_Providers": {
+        "type": "object",
+        "properties": {
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Generator_Index_Provider"
+            }
+          }
+        }
+      },
+      "Generator_Provider": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Generator_Provider_Config"
+          }
+        }
+      },
+      "Generator_Provider_Changelog": {
+        "type": "object",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Action"
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Route"
+            }
+          }
+        }
+      },
+      "Generator_Provider_Config": {
+        "type": "object",
+        "additionalProperties": [],
+        "maxProperties": 16
+      },
       "Log": {
         "type": "object",
         "properties": {
@@ -6266,28 +6333,6 @@
           }
         ]
       },
-      "Route_Index_Provider": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "class": {
-            "type": "string"
-          }
-        }
-      },
-      "Route_Index_Providers": {
-        "type": "object",
-        "properties": {
-          "providers": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Route_Index_Provider"
-            }
-          }
-        }
-      },
       "Route_Method": {
         "type": "object",
         "properties": {
@@ -6343,51 +6388,6 @@
         "additionalProperties": {
           "$ref": "#\/components\/schemas\/Route_Method"
         }
-      },
-      "Route_Provider": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "config": {
-            "$ref": "#\/components\/schemas\/Route_Provider_Config"
-          }
-        }
-      },
-      "Route_Provider_Changelog": {
-        "type": "object",
-        "properties": {
-          "schemas": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Schema"
-            }
-          },
-          "actions": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Action"
-            }
-          },
-          "routes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Route"
-            }
-          }
-        }
-      },
-      "Route_Provider_Config": {
-        "type": "object",
-        "additionalProperties": [],
-        "maxProperties": 16
       },
       "Route_Update": {
         "allOf": [
@@ -6860,6 +6860,7 @@
               "backend.cronjob": "",
               "backend.dashboard": "",
               "backend.event": "",
+              "backend.generator": "",
               "backend.log": "",
               "backend.marketplace": "",
               "backend.page": "",
@@ -6891,6 +6892,7 @@
               "backend.cronjob": "",
               "backend.dashboard": "",
               "backend.event": "",
+              "backend.generator": "",
               "backend.log": "",
               "backend.marketplace": "",
               "backend.page": "",
@@ -6923,6 +6925,7 @@
               "backend.cronjob": "",
               "backend.dashboard": "",
               "backend.event": "",
+              "backend.generator": "",
               "backend.log": "",
               "backend.marketplace": "",
               "backend.page": "",

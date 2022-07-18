@@ -1,27 +1,27 @@
 {
   "status": 1,
-  "path": "\/backend\/routes\/provider",
+  "path": "\/backend\/generator",
   "methods": {
     "GET": {
-      "operationId": "Backend_Action_Route_Provider_Index",
+      "operationId": "Backend_Action_Generator_Index",
       "security": {
         "app": [
-          "backend.route"
+          "backend.generator"
         ]
       },
       "tags": [
-        "backend.route"
+        "backend.generator"
       ],
       "responses": {
-        "200": "Backend_Route_Index_Providers"
+        "200": "Backend_Generator_Index_Providers"
       }
     }
   },
   "definitions": {
-    "Backend_Route_Index_Providers": {
-      "$ref": "Route_Index_Providers"
+    "Backend_Generator_Index_Providers": {
+      "$ref": "Generator_Index_Providers"
     },
-    "Route_Index_Provider": {
+    "Generator_Index_Provider": {
       "type": "object",
       "properties": {
         "name": {
@@ -32,13 +32,13 @@
         }
       }
     },
-    "Route_Index_Providers": {
+    "Generator_Index_Providers": {
       "type": "object",
       "properties": {
         "providers": {
           "type": "array",
           "items": {
-            "$ref": "Route_Index_Provider"
+            "$ref": "Generator_Index_Provider"
           }
         }
       }

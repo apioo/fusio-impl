@@ -135,71 +135,76 @@ class CategoriesTest extends ControllerDbTestCase
                 },
                 {
                     "id": 15,
-                    "name": "backend.log",
+                    "name": "backend.generator",
                     "description": ""
                 },
                 {
                     "id": 16,
-                    "name": "backend.marketplace",
+                    "name": "backend.log",
                     "description": ""
                 },
                 {
                     "id": 17,
-                    "name": "backend.page",
+                    "name": "backend.marketplace",
                     "description": ""
                 },
                 {
                     "id": 18,
-                    "name": "backend.plan",
+                    "name": "backend.page",
                     "description": ""
                 },
                 {
                     "id": 19,
-                    "name": "backend.rate",
+                    "name": "backend.plan",
                     "description": ""
                 },
                 {
                     "id": 20,
-                    "name": "backend.role",
+                    "name": "backend.rate",
                     "description": ""
                 },
                 {
                     "id": 21,
-                    "name": "backend.route",
+                    "name": "backend.role",
                     "description": ""
                 },
                 {
                     "id": 22,
-                    "name": "backend.schema",
+                    "name": "backend.route",
                     "description": ""
                 },
                 {
                     "id": 23,
-                    "name": "backend.scope",
+                    "name": "backend.schema",
                     "description": ""
                 },
                 {
                     "id": 24,
-                    "name": "backend.sdk",
+                    "name": "backend.scope",
                     "description": ""
                 },
                 {
                     "id": 25,
-                    "name": "backend.statistic",
+                    "name": "backend.sdk",
                     "description": ""
                 },
                 {
                     "id": 26,
-                    "name": "backend.transaction",
+                    "name": "backend.statistic",
                     "description": ""
                 },
                 {
                     "id": 27,
-                    "name": "backend.trash",
+                    "name": "backend.transaction",
                     "description": ""
                 },
                 {
                     "id": 28,
+                    "name": "backend.trash",
+                    "description": ""
+                },
+                {
+                    "id": 29,
                     "name": "backend.user",
                     "description": ""
                 }
@@ -215,57 +220,57 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 29,
+                    "id": 30,
                     "name": "consumer.app",
                     "description": ""
                 },
                 {
-                    "id": 30,
+                    "id": 31,
                     "name": "consumer.event",
                     "description": ""
                 },
                 {
-                    "id": 31,
+                    "id": 32,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 32,
+                    "id": 33,
                     "name": "consumer.log",
                     "description": ""
                 },
                 {
-                    "id": 33,
+                    "id": 34,
                     "name": "consumer.page",
                     "description": ""
                 },
                 {
-                    "id": 34,
+                    "id": 35,
                     "name": "consumer.payment",
                     "description": ""
                 },
                 {
-                    "id": 35,
+                    "id": 36,
                     "name": "consumer.plan",
                     "description": ""
                 },
                 {
-                    "id": 36,
+                    "id": 37,
                     "name": "consumer.scope",
                     "description": ""
                 },
                 {
-                    "id": 37,
+                    "id": 38,
                     "name": "consumer.subscription",
                     "description": ""
                 },
                 {
-                    "id": 38,
+                    "id": 39,
                     "name": "consumer.transaction",
                     "description": ""
                 },
                 {
-                    "id": 39,
+                    "id": 40,
                     "name": "consumer.user",
                     "description": ""
                 }
@@ -276,7 +281,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 42,
+                    "id": 43,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -286,12 +291,12 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 41,
+                    "id": 42,
                     "name": "foo",
                     "description": "Foo access"
                 },
                 {
-                    "id": 43,
+                    "id": 44,
                     "name": "plan_scope",
                     "description": "Plan scope access"
                 }
@@ -302,7 +307,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 40,
+                    "id": 41,
                     "name": "system",
                     "description": ""
                 }

@@ -82,6 +82,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
+        "backend.generator",
         "backend.log",
         "backend.marketplace",
         "backend.page",

@@ -202,7 +202,7 @@ JSON;
         $result = Environment::getService('connection')->fetchAll($sql, ['plan_id' => 1]);
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals(42, $result[0]['scope_id']);
+        $this->assertEquals(43, $result[0]['scope_id']);
     }
 
     public function testDelete()
