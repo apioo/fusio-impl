@@ -97,7 +97,7 @@ class Assert extends \PHPUnit\Framework\Assert
             ->where('path = :path')
             ->getSQL();
 
-        $route = $connection->fetchAssoc($sql, ['path' => $expectPath]);
+        $route = $connection->fetchAssociative($sql, ['path' => $expectPath]);
 
         self::assertNotEmpty($route['id']);
         self::assertEquals(1, $route['status']);
@@ -113,7 +113,7 @@ class Assert extends \PHPUnit\Framework\Assert
             ->orderBy('id', 'ASC')
             ->getSQL();
 
-        $methods = $connection->fetchAll($sql, ['route_id' => $route['id']]);
+        $methods = $connection->fetchAllAssociative($sql, ['route_id' => $route['id']]);
 
         self::assertEquals(count($expectConfig), count($methods));
 
@@ -139,7 +139,7 @@ class Assert extends \PHPUnit\Framework\Assert
                     ->orderBy('code', 'ASC')
                     ->getSQL();
 
-                $responses = $connection->fetchAll($sql, ['method_id' => $methods[$index]['id']]);
+                $responses = $connection->fetchAllAssociative($sql, ['method_id' => $methods[$index]['id']]);
 
                 self::assertEquals(count($row['responses']), count($responses));
 
@@ -151,8 +151,6 @@ class Assert extends \PHPUnit\Framework\Assert
                     $respIndex++;
                 }
             }
-
-            $index++;
         }
 
         // check scopes
@@ -164,7 +162,7 @@ class Assert extends \PHPUnit\Framework\Assert
             ->orderBy('s.id', 'ASC')
             ->getSQL();
 
-        $result = $connection->fetchAll($sql, ['route_id' => $route['id']]);
+        $result = $connection->fetchAllAssociative($sql, ['route_id' => $route['id']]);
         $scopes = [];
 
         foreach ($result as $row) {
