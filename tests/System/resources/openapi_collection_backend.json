@@ -3181,6 +3181,88 @@
         ]
       }
     },
+    "\/backend\/connection\/{connection_id}\/introspection\/{entity}": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Introspection_GetDetails",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "connection_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "entity",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/connection\/{connection_id}\/introspection": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Introspection_GetEntities",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "connection_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "\/backend\/connection\/{connection_id}\/redirect": {
       "get": {
         "tags": [

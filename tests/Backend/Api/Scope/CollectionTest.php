@@ -221,12 +221,12 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'route_id' => 115,
+            'route_id' => 117,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
-            'route_id' => 114,
+            'route_id' => 116,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);

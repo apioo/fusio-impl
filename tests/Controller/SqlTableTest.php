@@ -235,7 +235,8 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": "3"
+    "id": 3,
+    "affected": 1
 }
 JSON;
 
