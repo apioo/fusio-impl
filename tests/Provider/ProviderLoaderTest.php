@@ -76,6 +76,7 @@ class ProviderLoaderTest extends DbTestCase
             ],
             'generator' => [
                 'sqltable' => \Fusio\Adapter\Sql\Generator\SqlTable::class,
+                'sqlentity' => \Fusio\Adapter\Sql\Generator\SqlEntity::class,
                 'stdclass' => \stdClass::class,
             ],
         ];

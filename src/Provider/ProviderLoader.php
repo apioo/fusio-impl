@@ -122,6 +122,7 @@ class ProviderLoader
             ],
             ProviderConfig::TYPE_GENERATOR => [
                 Adapter\Sql\Generator\SqlTable::class,
+                Adapter\Sql\Generator\SqlEntity::class,
             ],
         ];
     }
