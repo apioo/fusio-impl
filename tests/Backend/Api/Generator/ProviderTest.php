@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
+use Fusio\Impl\Service\Route\Config;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -88,8 +89,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path' => '/foo',
-            'scopes' => ['foo'],
+            'path' => '/provider',
+            'scopes' => ['provider'],
             'config' => [
                 'table' => 'foobar'
             ],
@@ -106,77 +107,69 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
+        $data = json_decode(file_get_contents(__DIR__ . '/resource/changelog_test.json'));
+
         // check schema
-        $schema = <<<JSON
-{
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    },
-    "createDate": {
-      "type": "string",
-      "format": "date-time"
-    }
-  }
-}
-JSON;
-
-        Assert::assertSchema('Provider_Schema_Request', $schema);
-
-        $schema = <<<JSON
-{
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    },
-    "createDate": {
-      "type": "string",
-      "format": "date-time"
-    }
-  }
-}
-JSON;
-
-        Assert::assertSchema('Provider_Schema_Response', $schema);
+        foreach ($data->schemas as $schema) {
+            Assert::assertSchema($schema->name, json_encode($schema->source));
+        }
 
         // check action
-        Assert::assertAction('Provider_Action_Select', SqlSelectAll::class, '{"table":"foobar"}');
-        Assert::assertAction('Provider_Action_Insert', SqlInsert::class, '{"table":"foobar"}');
+        foreach ($data->actions as $action) {
+            Assert::assertAction($action->name, $action->class, json_encode($action->config));
+        }
 
         // check routes
-        Assert::assertRoute('/foo/table', ['foo', 'foo', 'bar'], [[
-            'method'       => 'GET',
-            'version'      => 1,
-            'status'       => Resource::STATUS_DEVELOPMENT,
-            'active'       => true,
-            'public'       => true,
-            'description'  => 'Returns all entries on the table',
-            'operation_id' => 'get.foo.table',
-            'parameters'   => null,
-            'request'      => 'Provider_Schema_Request',
-            'responses'    => [
-                '200'      => 'Provider_Schema_Response'
+        foreach ($data->routes as $route) {
+            $path = '/provider' . $route->path;
+            Assert::assertRoute($path, ['foo', 'bar', 'provider'], $this->convertConfig($route->config, $data, $path));
+        }
+    }
+
+    public function testPostSqlEntity()
+    {
+        $typeSchema = \json_decode(file_get_contents(__DIR__ . '/resource/typeschema.json'));
+
+        $response = $this->sendRequest('/backend/generator/sqlentity', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'path' => '/provider',
+            'scopes' => ['provider'],
+            'config' => [
+                'connection' => 1,
+                'schema' => $typeSchema,
             ],
-            'action'       => 'Provider_Action_Select',
-            'costs'        => 0,
-        ], [
-            'method'       => 'POST',
-            'version'      => 1,
-            'status'       => Resource::STATUS_DEVELOPMENT,
-            'active'       => true,
-            'public'       => false,
-            'description'  => 'Creates a new entry on the table',
-            'operation_id' => 'post.foo.table',
-            'parameters'   => null,
-            'request'      => 'Provider_Schema_Request',
-            'responses'    => [
-                '200'      => 'Provider_Schema_Response'
-            ],
-            'action'       => 'Provider_Action_Insert',
-            'costs'        => 0,
-        ]]);
+        ]));
+
+        $body = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Provider successfully created"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        $data = json_decode(file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json'));
+
+        // check schema
+        foreach ($data->schemas as $schema) {
+            Assert::assertSchema($schema->name, json_encode($schema->source));
+        }
+
+        // check action
+        foreach ($data->actions as $action) {
+            Assert::assertAction($action->name, $action->class, json_encode($action->config));
+        }
+
+        // check routes
+        foreach ($data->routes as $route) {
+            $path = '/provider' . $route->path;
+            Assert::assertRoute($path, ['provider'], $this->convertConfig($route->config, $data, $path));
+        }
     }
 
     public function testPut()
@@ -189,99 +182,26 @@ JSON;
         ]));
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "schemas": [
-        {
-            "name": "Provider_Schema_Request",
-            "source": {
-                "type": "object",
-                "properties": {
-                    "title": {
-                        "type": "string"
-                    },
-                    "createDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Provider_Schema_Response",
-            "source": {
-                "type": "object",
-                "properties": {
-                    "title": {
-                        "type": "string"
-                    },
-                    "createDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            }
-        }
-    ],
-    "actions": [
-        {
-            "name": "Provider_Action_Select",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
-            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-            "config": {
-                "table": "foobar"
-            }
-        },
-        {
-            "name": "Provider_Action_Insert",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
-            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-            "config": {
-                "table": "foobar"
-            }
-        }
-    ],
-    "routes": [
-        {
-            "priority": 1,
-            "path": "\/table",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-            "scopes": [
-                "foo",
-                "bar"
-            ],
-            "config": [
-                {
-                    "version": 1,
-                    "status": 4,
-                    "methods": {
-                        "GET": {
-                            "active": true,
-                            "public": true,
-                            "description": "Returns all entries on the table",
-                            "request": 0,
-                            "responses": {
-                                "200": 1
-                            },
-                            "action": 0
-                        },
-                        "POST": {
-                            "active": true,
-                            "public": false,
-                            "description": "Creates a new entry on the table",
-                            "request": 0,
-                            "responses": {
-                                "200": 1
-                            },
-                            "action": 1
-                        }
-                    }
-                }
-            ]
-        }
-    ]
-}
-JSON;
+        $expect = file_get_contents(__DIR__ . '/resource/changelog_test.json');
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPutSqlEntity()
+    {
+        $typeSchema = \json_decode(file_get_contents(__DIR__ . '/resource/typeschema.json'));
+
+        $response = $this->sendRequest('/backend/generator/sqlentity', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'connection' => 1,
+            'schema' => $typeSchema,
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -299,5 +219,47 @@ JSON;
         $body = (string) $response->getBody();
 
         $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
+    private function convertConfig(array $configs, \stdClass $data, string $path): array
+    {
+        $result = [];
+        foreach ($configs as $config) {
+            foreach ($config->methods as $methodName => $method) {
+                $newConfig = [
+                    'method'       => $methodName,
+                    'version'      => $config->version ?? null,
+                    'status'       => $config->status ?? 4,
+                    'active'       => $method->active ?? null,
+                    'public'       => $method->public ?? null,
+                    'description'  => $method->description ?? null,
+                    'operation_id' => $method->operationId ?? Config::buildOperationId($path, $methodName),
+                    'parameters'   => isset($method->parameters) ? $this->findSchemaByIndex($method->parameters, $data) : null,
+                    'request'      => isset($method->request) ? $this->findSchemaByIndex($method->request, $data) : null,
+                    'responses'    => [],
+                    'action'       => $this->findActionByIndex($method->action, $data),
+                    'costs'        => $method->costs ?? null,
+                ];
+
+                if (isset($method->responses)) {
+                    foreach ($method->responses as $statusCode => $response) {
+                        $newConfig['responses'][$statusCode] = $this->findSchemaByIndex($response, $data);
+                    }
+                }
+
+                $result[] = $newConfig;
+            }
+        }
+        return $result;
+    }
+
+    private function findSchemaByIndex(int $index, \stdClass $data): string
+    {
+        return $data->schemas[$index]->name ?? throw new \RuntimeException('Provided an invalid index');
+    }
+
+    private function findActionByIndex(int $index, \stdClass $data): string
+    {
+        return $data->actions[$index]->name ?? throw new \RuntimeException('Provided an invalid index');
     }
 }

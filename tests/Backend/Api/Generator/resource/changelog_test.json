@@ -1,0 +1,91 @@
+{
+  "schemas": [
+    {
+      "name": "Provider_Schema_Request",
+      "source": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    {
+      "name": "Provider_Schema_Response",
+      "source": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "Provider_Action_Select",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "table": "foobar"
+      }
+    },
+    {
+      "name": "Provider_Action_Insert",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "table": "foobar"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "priority": 1,
+      "path": "\/table",
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "foo",
+        "bar"
+      ],
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "description": "Returns all entries on the table",
+              "request": 0,
+              "responses": {
+                "200": 1
+              },
+              "action": 0
+            },
+            "POST": {
+              "active": true,
+              "public": false,
+              "description": "Creates a new entry on the table",
+              "request": 0,
+              "responses": {
+                "200": 1
+              },
+              "action": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "imports": [],
+  "types": [
+    {
+      "type": "object",
+      "name": "Human",
+      "description": "",
+      "properties": [
+        {
+          "name": "firstName",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "lastName",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "description": "",
+          "type": "object",
+          "refs": [
+            "Location"
+          ]
+        },
+        {
+          "name": "tags",
+          "description": "",
+          "type": "array",
+          "refs": [
+            "string"
+          ]
+        },
+        {
+          "name": "categories",
+          "description": "",
+          "type": "array",
+          "refs": [
+            "Category"
+          ]
+        },
+        {
+          "name": "map",
+          "description": "",
+          "type": "map",
+          "refs": [
+            "Location"
+          ]
+        },
+        {
+          "name": "union",
+          "description": "",
+          "type": "union",
+          "refs": [
+            "Location",
+            "Category"
+          ]
+        },
+        {
+          "name": "intersection",
+          "description": "",
+          "type": "intersection",
+          "refs": [
+            "Human",
+            "Location"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "name": "Location",
+      "description": "",
+      "properties": [
+        {
+          "name": "name",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "lat",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "long",
+          "description": "",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "name": "Category",
+      "description": "",
+      "properties": [
+        {
+          "name": "name",
+          "description": "",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "root": 0
+}

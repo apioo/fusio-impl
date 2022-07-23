@@ -68,6 +68,10 @@ class IndexTest extends ControllerDbTestCase
             "class": "sqltable"
         },
         {
+            "name": "SQL-Entity",
+            "class": "sqlentity"
+        },
+        {
             "name": "Test-Provider",
             "class": "testprovider"
         }
