@@ -23,6 +23,9 @@ namespace Fusio\Impl\Connection;
 
 use Doctrine\DBAL;
 use Doctrine\DBAL\Schema\AbstractAsset;
+use Fusio\Adapter\Sql\Introspection\Introspector;
+use Fusio\Engine\Connection\IntrospectableInterface;
+use Fusio\Engine\Connection\Introspection\IntrospectorInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -37,7 +40,7 @@ use PSX\Framework\Config\Config;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class System implements ConnectionInterface, PingableInterface
+class System implements ConnectionInterface, PingableInterface, IntrospectableInterface
 {
     private Config $config;
 
@@ -76,5 +79,10 @@ class System implements ConnectionInterface, PingableInterface
         }
 
         return false;
+    }
+
+    public function getIntrospector(mixed $connection): IntrospectorInterface
+    {
+        return new Introspector($connection);
     }
 }

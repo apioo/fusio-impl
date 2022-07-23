@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Connection\DeploymentInterface;
+use Fusio\Engine\Connection\IntrospectableInterface;
+use Fusio\Engine\Connection\Introspection\IntrospectorInterface;
 use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
@@ -205,6 +207,26 @@ class Connection
         } else {
             return false;
         }
+    }
+
+    public function getIntrospection(int $connectionId): IntrospectorInterface
+    {
+        $existing = $this->connectionTable->find($connectionId);
+        if (empty($existing)) {
+            throw new StatusCode\NotFoundException('Could not find connection');
+        }
+
+        $factory = $this->connectionFactory->factory($existing->getClass());
+        if (!$factory instanceof IntrospectableInterface) {
+            throw new StatusCode\InternalServerErrorException('Provided connection is not introspectable');
+        }
+
+        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $parameters = new Parameters($config ?: []);
+
+        $connection = $factory->getConnection($parameters);
+
+        return $factory->getIntrospector($connection);
     }
 
     protected function testConnection(ConnectionInterface $factory, object $connection)

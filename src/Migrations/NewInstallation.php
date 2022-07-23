@@ -249,6 +249,12 @@ class NewInstallation
                 '/connection/$connection_id<[0-9]+|^~>/redirect' => [
                     'GET' => new Method(Backend\Action\Connection\GetRedirect::class, null, [200 => Message::class], null, 'backend.connection'),
                 ],
+                '/connection/$connection_id<[0-9]+|^~>/introspection' => [
+                    'GET' => new Method(Backend\Action\Connection\Introspection\GetEntities::class, null, [200 => Message::class], null, 'backend.connection'),
+                ],
+                '/connection/$connection_id<[0-9]+|^~>/introspection/:entity' => [
+                    'GET' => new Method(Backend\Action\Connection\Introspection\GetDetails::class, null, [200 => Message::class], null, 'backend.connection'),
+                ],
                 '/cronjob' => [
                     'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Model\Backend\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
                     'POST' => new Method(Backend\Action\Cronjob\Create::class, Model\Backend\Cronjob_Create::class, [201 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.create'),

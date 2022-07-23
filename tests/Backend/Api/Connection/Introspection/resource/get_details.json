@@ -1,0 +1,45 @@
+{
+  "status": 1,
+  "path": "\/backend\/connection\/$connection_id<[0-9]+|^~>\/introspection\/:entity",
+  "pathParameters": "BackendConnectionConnection_idIntrospectionEntityPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Connection_Introspection_GetDetails",
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ],
+      "responses": {
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "BackendConnectionConnection_idIntrospectionEntityPath": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
