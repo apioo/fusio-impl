@@ -48,6 +48,7 @@ class GetEntities extends ActionAbstract
     {
         $introspection = $this->connectionService->getIntrospection((int) $request->get('connection_id'));
         $entities = $introspection->getEntities();
+        sort($entities);
 
         return [
             'entities' => $entities,
