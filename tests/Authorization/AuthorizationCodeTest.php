@@ -74,8 +74,8 @@ class AuthorizationCodeTest extends ControllerDbTestCase
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime($row['expire'])));
+        $this->assertEquals(date('Y-m-d H'), substr($row['date'], 0, 13));
     }
 
     /**
