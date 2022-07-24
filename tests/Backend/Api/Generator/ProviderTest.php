@@ -39,6 +39,24 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class ProviderTest extends ControllerDbTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $tableNames = [
+            'app_location_0',
+            'app_category_0',
+            'app_human_0',
+        ];
+
+        foreach ($tableNames as $tableName) {
+            if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
+                $this->connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
+                $this->connection->executeQuery('DROP TABLE ' . $tableName);
+            }
+        }
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
