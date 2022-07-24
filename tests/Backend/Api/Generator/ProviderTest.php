@@ -109,6 +109,7 @@ JSON;
         ), json_encode([
             'path' => '/provider',
             'scopes' => ['provider'],
+            'public' => true,
             'config' => [
                 'table' => 'foobar'
             ],
@@ -154,6 +155,7 @@ JSON;
         ), json_encode([
             'path' => '/provider',
             'scopes' => ['provider'],
+            'public' => true,
             'config' => [
                 'connection' => 1,
                 'schema' => $typeSchema,
@@ -246,10 +248,10 @@ JSON;
             foreach ($config->methods as $methodName => $method) {
                 $newConfig = [
                     'method'       => $methodName,
-                    'version'      => $config->version ?? null,
-                    'status'       => $config->status ?? 4,
-                    'active'       => $method->active ?? null,
-                    'public'       => $method->public ?? null,
+                    'version'      => 1,
+                    'status'       => Resource::STATUS_DEVELOPMENT,
+                    'active'       => 1,
+                    'public'       => 1,
                     'description'  => $method->description ?? null,
                     'operation_id' => $method->operationId ?? Config::buildOperationId($path, $methodName),
                     'parameters'   => isset($method->parameters) ? $this->findSchemaByIndex($method->parameters, $data) : null,

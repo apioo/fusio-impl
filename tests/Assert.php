@@ -23,9 +23,8 @@ namespace Fusio\Impl\Tests;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Controller\SchemaApiController;
-use PSX\Framework\Test\Environment;
 use Fusio\Impl\Service;
-use PSX\Schema\SchemaInterface;
+use PSX\Framework\Test\Environment;
 
 /**
  * Assert
