@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "firstName": "Christoph",
+  "lastName": "Kappestein",
+  "location": {
+    "id": 1,
+    "name": "foo",
+    "lat": "50.883331",
+    "long": "8.016667"
+  },
+  "tags": [
+    "foo",
+    "bar"
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "foo"
+    }
+  ],
+  "map": {
+    "foo": {
+      "id": 1,
+      "name": "foo",
+      "lat": "50.883331",
+      "long": "8.016667"
+    },
+    "bar": {
+      "id": 1,
+      "name": "foo",
+      "lat": "50.883331",
+      "long": "8.016667"
+    }
+  }
+}

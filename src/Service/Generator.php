@@ -62,6 +62,7 @@ class Generator
         $setup = new Setup();
         $basePath = $config->getPath();
         $scopes = $config->getScopes();
+        $public = $config->getPublic();
         $configuration = new Parameters($config->getConfig()->getProperties());
 
         $provider = $this->getProvider($providerName);
@@ -72,7 +73,7 @@ class Generator
         try {
             $this->entityCreator->createSchemas($categoryId, $setup->getSchemas(), $context);
             $this->entityCreator->createActions($categoryId, $setup->getActions(), $context);
-            $this->entityCreator->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $context);
+            $this->entityCreator->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $public, $context);
 
             if ($provider instanceof ExecutableInterface) {
                 $provider->execute($configuration);

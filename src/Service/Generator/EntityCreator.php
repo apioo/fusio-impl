@@ -27,6 +27,7 @@ use Fusio\Impl\Service\Route;
 use Fusio\Impl\Service\Schema;
 use Fusio\Model\Backend\Action_Create;
 use Fusio\Model\Backend\Route_Create;
+use Fusio\Model\Backend\Route_Method;
 use Fusio\Model\Backend\Route_Version;
 use Fusio\Model\Backend\Schema_Create;
 use PSX\Api\Resource;
@@ -101,7 +102,7 @@ class EntityCreator
         }
     }
 
-    public function createRoutes(int $categoryId, array $routes, $basePath, $scopes, UserContext $context): void
+    public function createRoutes(int $categoryId, array $routes, $basePath, $scopes, ?bool $public, UserContext $context): void
     {
         $scopes = $scopes ?: [];
         $schema = $this->schemaManager->getSchema(Route_Create::class);
@@ -114,11 +115,17 @@ class EntityCreator
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
             $record->setPath($this->buildPath($basePath, $record->getPath()));
-            $record->setScopes(array_merge($scopes, $record->getScopes() ?? []));
+            $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
-            foreach ($record->getConfig() as $key => $version) {
+            foreach ($record->getConfig() as $version) {
                 /** @var Route_Version $version */
+                $version->setVersion(1);
                 $version->setStatus(Resource::STATUS_DEVELOPMENT);
+                foreach ($version->getMethods() as $methodName => $method) {
+                    /** @var Route_Method $method */
+                    $method->setActive(true);
+                    $method->setPublic($public === true);
+                }
             }
 
             $id = $this->routeService->exists($record->getPath());
