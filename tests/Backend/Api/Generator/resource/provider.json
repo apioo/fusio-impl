@@ -200,6 +200,9 @@
             "type": "string"
           }
         },
+        "public": {
+          "type": "boolean"
+        },
         "config": {
           "$ref": "Generator_Provider_Config"
         }

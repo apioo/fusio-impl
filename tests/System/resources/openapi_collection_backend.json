@@ -5873,6 +5873,9 @@
               "type": "string"
             }
           },
+          "public": {
+            "type": "boolean"
+          },
           "config": {
             "$ref": "#\/components\/schemas\/Generator_Provider_Config"
           }
