@@ -40,6 +40,8 @@ class SqlEntityTest extends ControllerDbTestCase
         parent::setUp();
 
         $tableNames = [
+            'app_human_0_location',
+            'app_human_0_category',
             'app_location_0',
             'app_category_0',
             'app_human_0',
