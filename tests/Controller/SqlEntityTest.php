@@ -42,14 +42,19 @@ class SqlEntityTest extends ControllerDbTestCase
         $tableNames = [
             'app_human_0_location',
             'app_human_0_category',
+            'app_human_0',
             'app_location_0',
             'app_category_0',
-            'app_human_0',
         ];
 
         foreach ($tableNames as $tableName) {
             if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
                 $this->connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
+            }
+        }
+
+        foreach ($tableNames as $tableName) {
+            if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
                 $this->connection->executeQuery('DROP TABLE ' . $tableName);
             }
         }
