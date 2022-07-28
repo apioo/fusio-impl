@@ -25,6 +25,7 @@ use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Impl\Service\Route\Config;
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Controller\SqlEntityTest;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
@@ -43,18 +44,7 @@ class ProviderTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $tableNames = [
-            'app_location_0',
-            'app_category_0',
-            'app_human_0',
-        ];
-
-        foreach ($tableNames as $tableName) {
-            if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
-                $this->connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
-                $this->connection->executeQuery('DROP TABLE ' . $tableName);
-            }
-        }
+        SqlEntityTest::dropAppTables($this->connection);
     }
 
     public function getDataSet()

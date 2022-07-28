@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -39,25 +40,7 @@ class SqlEntityTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $tableNames = [
-            'app_human_0_location',
-            'app_human_0_category',
-            'app_human_0',
-            'app_location_0',
-            'app_category_0',
-        ];
-
-        foreach ($tableNames as $tableName) {
-            if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
-                $this->connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
-            }
-        }
-
-        foreach ($tableNames as $tableName) {
-            if ($this->connection->getSchemaManager()->tablesExist($tableName)) {
-                $this->connection->executeQuery('DROP TABLE ' . $tableName);
-            }
-        }
+        self::dropAppTables($this->connection);
     }
 
     public function getDataSet()
@@ -211,5 +194,28 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public static function dropAppTables(Connection $connection): void
+    {
+        $tableNames = [
+            'app_human_0_location',
+            'app_human_0_category',
+            'app_human_0',
+            'app_location_0',
+            'app_category_0',
+        ];
+
+        foreach ($tableNames as $tableName) {
+            if ($connection->getSchemaManager()->tablesExist($tableName)) {
+                $connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
+            }
+        }
+
+        foreach ($tableNames as $tableName) {
+            if ($connection->getSchemaManager()->tablesExist($tableName)) {
+                $connection->executeQuery('DROP TABLE ' . $tableName);
+            }
+        }
     }
 }
