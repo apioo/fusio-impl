@@ -34,7 +34,8 @@ class LatestUsers extends ViewAbstract
 {
     public function getView()
     {
-        $sql = '  SELECT usr.status,
+        $sql = '  SELECT usr.id,
+                         usr.status,
                          usr.name,
                          usr.date
                     FROM fusio_user usr
@@ -44,6 +45,7 @@ class LatestUsers extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
+                'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'date' => $this->fieldDateTime('date'),

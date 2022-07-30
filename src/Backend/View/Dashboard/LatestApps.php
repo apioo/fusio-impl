@@ -34,7 +34,8 @@ class LatestApps extends ViewAbstract
 {
     public function getView()
     {
-        $sql = '  SELECT app.name,
+        $sql = '  SELECT app.id,
+                         app.name,
                          app.date
                     FROM fusio_app app
                 ORDER BY app.date DESC';
@@ -43,6 +44,7 @@ class LatestApps extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'date' => $this->fieldDateTime('date'),
             ]),

@@ -357,22 +357,27 @@
   "latestApps": {
     "entry": [
       {
+        "id": 1,
         "name": "Backend",
         "date": "[datetime]"
       },
       {
+        "id": 2,
         "name": "Consumer",
         "date": "[datetime]"
       },
       {
+        "id": 3,
         "name": "Foo-App",
         "date": "[datetime]"
       },
       {
+        "id": 4,
         "name": "Pending",
         "date": "[datetime]"
       },
       {
+        "id": 5,
         "name": "Deactivated",
         "date": "[datetime]"
       }
@@ -381,11 +386,13 @@
   "latestRequests": {
     "entry": [
       {
+        "id": 1,
         "path": "\/bar",
         "ip": "127.0.0.1",
         "date": "[datetime]"
       },
       {
+        "id": 2,
         "path": "\/bar",
         "ip": "127.0.0.1",
         "date": "[datetime]"
@@ -395,26 +402,31 @@
   "latestUsers": {
     "entry": [
       {
+        "id": 1,
         "status": 1,
         "name": "Administrator",
         "date": "[datetime]"
       },
       {
+        "id": 2,
         "status": 1,
         "name": "Consumer",
         "date": "[datetime]"
       },
       {
+        "id": 3,
         "status": 2,
         "name": "Disabled",
         "date": "[datetime]"
       },
       {
+        "id": 4,
         "status": 1,
         "name": "Developer",
         "date": "[datetime]"
       },
       {
+        "id": 5,
         "status": 0,
         "name": "Deleted",
         "date": "[datetime]"
@@ -424,6 +436,7 @@
   "latestTransactions": {
     "entry": [
       {
+        "id": 1,
         "user_id": 1,
         "plan_id": 2,
         "transactionId": "[transaction_id]",

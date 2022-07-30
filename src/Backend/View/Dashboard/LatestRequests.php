@@ -34,7 +34,8 @@ class LatestRequests extends ViewAbstract
 {
     public function getView(int $categoryId)
     {
-        $sql = '  SELECT log.path,
+        $sql = '  SELECT log.id,
+                         log.path,
                          log.ip,
                          log.date
                     FROM fusio_log log
@@ -45,6 +46,7 @@ class LatestRequests extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, ['category_id' => $categoryId], [
+                'id' => $this->fieldInteger('id'),
                 'path' => 'path',
                 'ip' => 'ip',
                 'date' => $this->fieldDateTime('date'),
