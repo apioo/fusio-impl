@@ -75,15 +75,17 @@ class Generator
             $this->entityCreator->createActions($categoryId, $setup->getActions(), $context);
             $this->entityCreator->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $public, $context);
 
-            if ($provider instanceof ExecutableInterface) {
-                $provider->execute($configuration);
-            }
-
             $this->connection->commit();
         } catch (\Throwable $e) {
             $this->connection->rollBack();
 
             throw $e;
+        }
+
+        // NOTE we intentionally do not execute the execute method inside the transaction since this method most likely
+        // will execute schema changes on the db and for mysql we can not wrap those actions in a transaction
+        if ($provider instanceof ExecutableInterface) {
+            $provider->execute($configuration);
         }
     }
 
