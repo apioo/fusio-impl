@@ -68,7 +68,9 @@ class Config extends ViewAbstract
                 'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
                 'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-                'value' => Table\Generated\ConfigTable::COLUMN_VALUE,
+                'value' => $this->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
+                    return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
+                }),
             ]),
         ];
 
@@ -90,7 +92,9 @@ class Config extends ViewAbstract
             'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,
             'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-            'value' => Table\Generated\ConfigTable::COLUMN_VALUE,
+            'value' => $this->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
+                return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
+            }),
         ]);
 
         return $this->build($definition);

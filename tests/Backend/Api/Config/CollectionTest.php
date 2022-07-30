@@ -71,14 +71,14 @@ class CollectionTest extends ControllerDbTestCase
             "type": 2,
             "name": "app_approval",
             "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
-            "value": "0"
+            "value": false
         },
         {
             "id": 2,
             "type": 3,
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
-            "value": "16"
+            "value": 16
         },
         {
             "id": 3,
@@ -92,7 +92,7 @@ class CollectionTest extends ControllerDbTestCase
             "type": 3,
             "name": "consumer_subscription",
             "description": "The max amount of subscriptions a consumer can add",
-            "value": "8"
+            "value": 8
         },
         {
             "id": 10,
@@ -234,14 +234,14 @@ JSON;
             "type": 2,
             "name": "app_approval",
             "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
-            "value": "0"
+            "value": false
         },
         {
             "id": 2,
             "type": 3,
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
-            "value": "16"
+            "value": 16
         },
         {
             "id": 3,
@@ -255,7 +255,7 @@ JSON;
             "type": 3,
             "name": "consumer_subscription",
             "description": "The max amount of subscriptions a consumer can add",
-            "value": "8"
+            "value": 8
         },
         {
             "id": 10,
@@ -374,14 +374,14 @@ JSON;
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
-            "value": "0"
+            "value": 0
         },
         {
             "id": 31,
             "type": 3,
             "name": "points_threshold",
             "description": "If a user goes below this points threshold we send an information to the user",
-            "value": "0"
+            "value": 0
         },
         {
             "id": 19,
@@ -465,14 +465,14 @@ JSON;
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
-            "value": "1"
+            "value": true
         },
         {
             "id": 34,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
-            "value": "8"
+            "value": 8
         }
     ]
 }

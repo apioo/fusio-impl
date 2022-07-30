@@ -69,13 +69,13 @@ class Config
     {
         $config = $this->configTable->getValue($name);
         if (!empty($config)) {
-            return $this->convertValueToType($config['value'], $config['type']);
+            return self::convertValueToType($config['value'], $config['type']);
         } else {
             return null;
         }
     }
 
-    protected function convertValueToType(mixed $value, int $type)
+    public static function convertValueToType(mixed $value, int $type)
     {
         switch ($type) {
             case Table\Config::FORM_NUMBER:
@@ -90,6 +90,7 @@ class Config
             case Table\Config::FORM_TEXT:
             case Table\Config::FORM_EMAIL:
             case Table\Config::FORM_STRING:
+            case Table\Config::FORM_SECRET:
             default:
                 return $value;
         }
