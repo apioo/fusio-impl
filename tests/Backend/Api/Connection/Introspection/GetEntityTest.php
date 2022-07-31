@@ -27,13 +27,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * GetDetailsTest
+ * GetEntityTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetDetailsTest extends ControllerDbTestCase
+class GetEntityTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -48,7 +48,7 @@ class GetDetailsTest extends ControllerDbTestCase
         ));
 
         $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/get_details.json');
+        $expect = file_get_contents(__DIR__ . '/resource/get_entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
