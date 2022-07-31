@@ -14,7 +14,7 @@
         "backend.connection"
       ],
       "responses": {
-        "200": "Message"
+        "200": "Backend_Connection_Introspection_Entities"
       }
     }
   },
@@ -27,14 +27,17 @@
         }
       }
     },
-    "Message": {
+    "Backend_Connection_Introspection_Entities": {
+      "$ref": "Connection_Introspection_Entities"
+    },
+    "Connection_Introspection_Entities": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

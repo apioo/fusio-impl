@@ -70,26 +70,34 @@ class GetDetailsTest extends ControllerDbTestCase
         "Comment"
     ],
     "rows": [
-        [
-            "id",
-            "integer",
-            null
-        ],
-        [
-            "title",
-            "string",
-            null
-        ],
-        [
-            "content",
-            "string",
-            null
-        ],
-        [
-            "date",
-            "datetime",
-            null
-        ]
+        {
+            "values": [
+                "id",
+                "integer",
+                null
+            ]
+        },
+        {
+            "values": [
+                "title",
+                "string",
+                null
+            ]
+        },
+        {
+            "values": [
+                "content",
+                "string",
+                null
+            ]
+        },
+        {
+            "values": [
+                "date",
+                "datetime",
+                null
+            ]
+        }
     ]
 }
 JSON;

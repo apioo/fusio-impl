@@ -4,7 +4,7 @@
   "pathParameters": "BackendConnectionConnection_idIntrospectionEntityPath",
   "methods": {
     "GET": {
-      "operationId": "Backend_Action_Connection_Introspection_GetDetails",
+      "operationId": "Backend_Action_Connection_Introspection_GetEntity",
       "security": {
         "app": [
           "backend.connection"
@@ -14,7 +14,7 @@
         "backend.connection"
       ],
       "responses": {
-        "200": "Message"
+        "200": "Backend_Connection_Introspection_Entity"
       }
     }
   },
@@ -30,14 +30,37 @@
         }
       }
     },
-    "Message": {
+    "Backend_Connection_Introspection_Entity": {
+      "$ref": "Connection_Introspection_Entity"
+    },
+    "Connection_Introspection_Entity": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
+        "name": {
           "type": "string"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection_Introspection_Entity_Row"
+          }
+        }
+      }
+    },
+    "Connection_Introspection_Entity_Row": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

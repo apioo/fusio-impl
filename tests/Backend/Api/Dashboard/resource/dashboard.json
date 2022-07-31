@@ -73,6 +73,9 @@
     "Dashboard_App": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "name": {
           "type": "string"
         },
@@ -91,6 +94,9 @@
     "Dashboard_Request": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "path": {
           "type": "string"
         },
@@ -112,6 +118,9 @@
     "Dashboard_Transaction": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "status": {
           "type": "string"
         },
@@ -139,6 +148,9 @@
     "Dashboard_User": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "status": {
           "type": "string"
         },

@@ -3186,14 +3186,14 @@
         "tags": [
           "backend.connection"
         ],
-        "operationId": "Backend_Action_Connection_Introspection_GetDetails",
+        "operationId": "Backend_Action_Connection_Introspection_GetEntity",
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Backend_Connection_Introspection_Entity"
                 }
               }
             }
@@ -3238,7 +3238,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Backend_Connection_Introspection_Entities"
                 }
               }
             }
@@ -5084,6 +5084,12 @@
       "Backend_Connection_Index": {
         "$ref": "#\/components\/schemas\/Connection_Index"
       },
+      "Backend_Connection_Introspection_Entities": {
+        "$ref": "#\/components\/schemas\/Connection_Introspection_Entities"
+      },
+      "Backend_Connection_Introspection_Entity": {
+        "$ref": "#\/components\/schemas\/Connection_Introspection_Entity"
+      },
       "Backend_Connection_Update": {
         "$ref": "#\/components\/schemas\/Connection_Update"
       },
@@ -5444,6 +5450,48 @@
           }
         }
       },
+      "Connection_Introspection_Entities": {
+        "type": "object",
+        "properties": {
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Connection_Introspection_Entity": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection_Introspection_Entity_Row"
+            }
+          }
+        }
+      },
+      "Connection_Introspection_Entity_Row": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "Connection_Update": {
         "allOf": [
           {
@@ -5565,6 +5613,9 @@
       "Dashboard_App": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "name": {
             "type": "string"
           },
@@ -5580,6 +5631,9 @@
       "Dashboard_Request": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "path": {
             "type": "string"
           },
@@ -5598,6 +5652,9 @@
       "Dashboard_Transaction": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "status": {
             "type": "string"
           },
@@ -5622,6 +5679,9 @@
       "Dashboard_User": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "status": {
             "type": "string"
           },
