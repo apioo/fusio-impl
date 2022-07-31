@@ -28,13 +28,13 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Connection;
 
 /**
- * GetDetails
+ * GetEntity
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetDetails extends ActionAbstract
+class GetEntity extends ActionAbstract
 {
     private Connection $connectionService;
 
@@ -46,8 +46,6 @@ class GetDetails extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $introspection = $this->connectionService->getIntrospection((int) $request->get('connection_id'));
-        $details = $introspection->getDetails($request->get('entity'));
-
-        return $details;
+        return $introspection->getEntity($request->get('entity'));
     }
 }

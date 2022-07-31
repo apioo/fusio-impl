@@ -250,10 +250,10 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Connection\GetRedirect::class, null, [200 => Message::class], null, 'backend.connection'),
                 ],
                 '/connection/$connection_id<[0-9]+|^~>/introspection' => [
-                    'GET' => new Method(Backend\Action\Connection\Introspection\GetEntities::class, null, [200 => Message::class], null, 'backend.connection'),
+                    'GET' => new Method(Backend\Action\Connection\Introspection\GetEntities::class, null, [200 => Model\Backend\Connection_Introspection_Entities::class], null, 'backend.connection'),
                 ],
                 '/connection/$connection_id<[0-9]+|^~>/introspection/:entity' => [
-                    'GET' => new Method(Backend\Action\Connection\Introspection\GetDetails::class, null, [200 => Message::class], null, 'backend.connection'),
+                    'GET' => new Method(Backend\Action\Connection\Introspection\GetEntity::class, null, [200 => Model\Backend\Connection_Introspection_Entity::class], null, 'backend.connection'),
                 ],
                 '/cronjob' => [
                     'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Model\Backend\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
