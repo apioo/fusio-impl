@@ -96,8 +96,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'name' => $name,
-            'lat'  => $lat,
-            'long' => $long,
+            'latitude' => $lat,
+            'longitude' => $long,
         ]));
 
         $body = (string) $response->getBody();

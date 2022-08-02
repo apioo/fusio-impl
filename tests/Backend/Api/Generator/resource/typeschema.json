@@ -79,12 +79,12 @@
           "type": "string"
         },
         {
-          "name": "lat",
+          "name": "latitude",
           "description": "",
           "type": "string"
         },
         {
-          "name": "long",
+          "name": "longitude",
           "description": "",
           "type": "string"
         }

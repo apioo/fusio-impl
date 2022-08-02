@@ -5,8 +5,8 @@
   "location": {
     "id": 1,
     "name": "foo",
-    "lat": "50.883331",
-    "long": "8.016667"
+    "latitude": "50.883331",
+    "longitude": "8.016667"
   },
   "tags": [
     "foo",
@@ -22,14 +22,14 @@
     "foo": {
       "id": 1,
       "name": "foo",
-      "lat": "50.883331",
-      "long": "8.016667"
+      "latitude": "50.883331",
+      "longitude": "8.016667"
     },
     "bar": {
       "id": 1,
       "name": "foo",
-      "lat": "50.883331",
-      "long": "8.016667"
+      "latitude": "50.883331",
+      "longitude": "8.016667"
     }
   }
 }
