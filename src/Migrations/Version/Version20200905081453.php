@@ -232,6 +232,7 @@ final class Version20200905081453 extends AbstractMigration
             $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
+            $logTable->addIndex(['category_id', 'ip', 'date']);
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
@@ -309,6 +310,7 @@ final class Version20200905081453 extends AbstractMigration
             $rateTable->addColumn('timespan', 'string');
             $rateTable->setPrimaryKey(['id']);
             $rateTable->addUniqueIndex(['name']);
+            $rateTable->addIndex(['status']);
         }
 
         if (!$schema->hasTable('fusio_rate_allocation')) {
@@ -354,6 +356,8 @@ final class Version20200905081453 extends AbstractMigration
             $routesTable->setPrimaryKey(['id']);
             $routesTable->addUniqueIndex(['path']);
             $routesTable->addIndex(['priority']);
+            $routesTable->addIndex(['status']);
+            $routesTable->addIndex(['category_id', 'status']);
         }
 
         if (!$schema->hasTable('fusio_routes_method')) {
