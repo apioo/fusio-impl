@@ -34,7 +34,7 @@
     "fusio/adapter-fcgi": "^5.0",
     "firebase/php-jwt": "^5.0",
     "doctrine/migrations": "^2.3",
-    "symfony/filesystem": "^4.0|^5.0",
+    "symfony/filesystem": "^5.0|^6.0",
     "symfony/mailer": "^6.0",
     "packaged/thrift": "^0.15",
     "dragonmantank/cron-expression": "^3.3"
