@@ -243,7 +243,7 @@ class Action
 
     private function assertSandboxAccess(Backend\Action $record): void
     {
-        $class = ltrim($record->getClass(), '\\');
+        $class = ltrim((string) $record->getClass(), '\\');
 
         if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
             throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
