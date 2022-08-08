@@ -48,6 +48,7 @@ class DataSyncronizerTest extends DbTestCase
         $schema = $this->getSchema('Backend_Action');
         $event = $this->getEvent('fusio.action.create');
         $cronjob = $this->getCronjob('Dispatch_Event');
+        $scope = $this->getScope('backend.action');
 
         DataSyncronizer::sync($this->connection);
 
@@ -57,6 +58,7 @@ class DataSyncronizerTest extends DbTestCase
         $this->assertEquals($schema, $this->getSchema('Backend_Action'));
         $this->assertEquals($event, $this->getEvent('fusio.action.create'));
         $this->assertEquals($cronjob, $this->getCronjob('Dispatch_Event'));
+        $this->assertEquals($scope, $this->getScope('backend.action'));
     }
 
     private function getConfig(string $name): array
@@ -145,5 +147,14 @@ class DataSyncronizerTest extends DbTestCase
         unset($cronjob['id']);
 
         return $cronjob;
+    }
+
+    private function getScope(string $name): array
+    {
+        $scope = $this->connection->fetchAssociative('SELECT * FROM fusio_scope WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_scope', ['id' => $scope['id']]);
+        unset($scope['id']);
+
+        return $scope;
     }
 }

@@ -52,6 +52,7 @@ class DataSyncronizer
         }
 
         $routes = $data->getData('fusio_routes');
+        $routeMap = [];
         foreach ($routes as $row) {
             $routeId = $connection->fetchOne('SELECT id FROM fusio_routes WHERE path = :path', [
                 'path' => $row['path']
@@ -60,6 +61,8 @@ class DataSyncronizer
             if (empty($routeId)) {
                 $connection->insert('fusio_routes', $row);
                 $routeId = $connection->lastInsertId();
+
+                $routeMap[$data->getId('fusio_routes', $row['path'])] = $routeId;
 
                 $methods = $data->getData('fusio_routes_method', 'route_id', $data->getId('fusio_routes', $row['path']));
                 foreach ($methods as $method) {
@@ -117,6 +120,31 @@ class DataSyncronizer
 
             if (empty($cronjobId)) {
                 $connection->insert('fusio_cronjob', $cronjob);
+            }
+        }
+
+        $scopes = $data->getData('fusio_scope');
+        $scopeMap = [];
+        foreach ($scopes as $scope) {
+            $scopeId = $connection->fetchOne('SELECT id FROM fusio_scope WHERE name = :name', [
+                'name' => $scope['name']
+            ]);
+
+            if (empty($scopeId)) {
+                $connection->insert('fusio_scope', $scope);
+                $scopeId = $connection->lastInsertId();
+
+                $scopeMap[$data->getId('fusio_scope', $scope['name'])] = $scopeId;
+            }
+        }
+
+        $scopeRoutes = $data->getData('fusio_scope_routes');
+        foreach ($scopeRoutes as $scopeRoute) {
+            if (isset($scopeMap[$scopeRoute['scope_id']]) && isset($routeMap[$scopeRoute['route_id']])) {
+                $scopeRoute['scope_id'] = $scopeMap[$scopeRoute['scope_id']];
+                $scopeRoute['route_id'] = $routeMap[$scopeRoute['route_id']];
+
+                $connection->insert('fusio_scope_routes', $scopeRoute);
             }
         }
     }
