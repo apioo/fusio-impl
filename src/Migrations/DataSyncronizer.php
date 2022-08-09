@@ -62,8 +62,6 @@ class DataSyncronizer
                 $connection->insert('fusio_routes', $row);
                 $routeId = $connection->lastInsertId();
 
-                $routeMap[$data->getId('fusio_routes', $row['path'])] = $routeId;
-
                 $methods = $data->getData('fusio_routes_method', 'route_id', $data->getId('fusio_routes', $row['path']));
                 foreach ($methods as $method) {
                     $method['route_id'] = $routeId;
@@ -77,6 +75,8 @@ class DataSyncronizer
                     }
                 }
             }
+
+            $routeMap[$data->getId('fusio_routes', $row['path'])] = $routeId;
         }
 
         $actions = $data->getData('fusio_action');
@@ -133,16 +133,28 @@ class DataSyncronizer
             if (empty($scopeId)) {
                 $connection->insert('fusio_scope', $scope);
                 $scopeId = $connection->lastInsertId();
-
-                $scopeMap[$data->getId('fusio_scope', $scope['name'])] = $scopeId;
             }
+
+            $scopeMap[$data->getId('fusio_scope', $scope['name'])] = $scopeId;
         }
 
         $scopeRoutes = $data->getData('fusio_scope_routes');
         foreach ($scopeRoutes as $scopeRoute) {
-            if (isset($scopeMap[$scopeRoute['scope_id']]) && isset($routeMap[$scopeRoute['route_id']])) {
-                $scopeRoute['scope_id'] = $scopeMap[$scopeRoute['scope_id']];
-                $scopeRoute['route_id'] = $routeMap[$scopeRoute['route_id']];
+            $scopeId = $scopeMap[$scopeRoute['scope_id']] ?? null;
+            $routeId = $routeMap[$scopeRoute['route_id']] ?? null;
+
+            if (empty($scopeId) || empty($routeId)) {
+                continue;
+            }
+
+            $id = $connection->fetchOne('SELECT id FROM fusio_scope_routes WHERE scope_id = :scope AND route_id = :route', [
+                'scope' => $scopeId,
+                'route' => $routeId,
+            ]);
+
+            if (empty($id)) {
+                $scopeRoute['scope_id'] = $scopeId;
+                $scopeRoute['route_id'] = $routeId;
 
                 $connection->insert('fusio_scope_routes', $scopeRoute);
             }
