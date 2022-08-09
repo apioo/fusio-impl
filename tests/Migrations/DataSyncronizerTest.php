@@ -152,6 +152,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getScope(string $name): array
     {
         $scope = $this->connection->fetchAssociative('SELECT * FROM fusio_scope WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_scope_routes', ['scope_id' => $scope['id']]);
         $this->connection->delete('fusio_scope', ['id' => $scope['id']]);
         unset($scope['id']);
 
