@@ -78,6 +78,7 @@ class Subscription extends ViewAbstract
             'userId' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_USER_ID),
             'endpoint' => Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT,
             'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
+                'id' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_ID),
                 'status' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_STATUS),
                 'code' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_CODE),
                 'attempts' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_ATTEMPTS),
