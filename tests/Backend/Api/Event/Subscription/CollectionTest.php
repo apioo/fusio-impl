@@ -35,7 +35,7 @@ use PSX\Framework\Test\Environment;
  */
 class CollectionTest extends ControllerDbTestCase
 {
-    private $eventId;
+    private ?int $eventId = null;
 
     protected function setUp(): void
     {

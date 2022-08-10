@@ -76,6 +76,36 @@
         },
         "endpoint": {
           "type": "string"
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "$ref": "Event_Subscription_Response"
+          }
+        }
+      }
+    },
+    "Event_Subscription_Response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "attempts": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "string"
+        },
+        "executeDate": {
+          "format": "date-time",
+          "type": "string"
         }
       }
     },
