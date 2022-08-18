@@ -1,13 +1,13 @@
 
-<p>To access protected parts of the API you need to obtain an access token. The following lists shows some examples how
+<p class="lead">To access protected parts of the API you need to obtain an access token. The following page shows how
 to obtain an access token.</p>
 
 <h3>Basic</h3>
 
-<p>The most basic way to obtain an access token is to use your personal credentials i.e.</p>
+<p>The most basic way to obtain an access token is to use your personal credentials.</p>
 
 <p><b>Request</b></p>
-<pre>POST /consumer/login
+<pre class="bg-dark text-white p-2">POST /consumer/login
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 </pre>
 
 <p><b>Response</b></p>
-<pre>
+<pre class="bg-dark text-white p-2">
 {
   "token": "",
   "expires_in": "",
@@ -27,12 +27,12 @@ Content-Type: application/json
 
 <h3>OAuth2</h3>
 
-<p>It is also possible to use our <a href="https://tools.ietf.org/html/rfc6749">OAuth2</a> authorization endpoint.</p>
+<p>It is also possible to use the <a href="https://tools.ietf.org/html/rfc6749">OAuth2</a> authorization endpoint.</p>
 
 <h4>Client credentials</h4>
 
 <p><b>Request</b></p>
-<pre>POST /authorization/token
+<pre class="bg-dark text-white p-2">POST /authorization/token
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 Content-Type: application/x-www-form-urlencoded
 
@@ -44,7 +44,7 @@ encoded string. It is also possible to provide your username and password but in
 app key and secret since the app access can always be revoked later on.</p>
 
 <p><b>Response</b></p>
-<pre>
+<pre class="bg-dark text-white p-2">
 {
   "access_token": "",
   "token_type": "bearer",
@@ -59,7 +59,7 @@ app key and secret since the app access can always be revoked later on.</p>
 it expires.</p>
 
 <p><b>Request</b></p>
-<pre>POST /authorization/token
+<pre class="bg-dark text-white p-2">POST /authorization/token
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 Content-Type: application/x-www-form-urlencoded
 
@@ -69,7 +69,7 @@ grant_type=refresh_token&refresh_token=[refresh_token]
 <p>Like at the client credentials call the Basic header must contain the base64 encode app key and secret.</p>
 
 <p><b>Response</b></p>
-<pre>
+<pre class="bg-dark text-white p-2">
 {
   "access_token": "",
   "token_type": "bearer",
@@ -78,4 +78,4 @@ grant_type=refresh_token&refresh_token=[refresh_token]
 }
 </pre>
 
-<p>As response you will get the refreshed access token.</p>
+<p>As response you will get a new access token.</p>
