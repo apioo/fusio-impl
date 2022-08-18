@@ -78,8 +78,10 @@ class NewInstallation
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
         $bag->addAppScope('Backend', 'backend');
         $bag->addAppScope('Backend', 'authorization');
+        $bag->addAppScope('Backend', 'default');
         $bag->addAppScope('Consumer', 'consumer');
         $bag->addAppScope('Consumer', 'authorization');
+        $bag->addAppScope('Consumer', 'default');
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
         $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
@@ -129,10 +131,13 @@ class NewInstallation
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
+        $bag->addRoleScope('Administrator', 'default');
         $bag->addRoleScope('Backend', 'authorization');
         $bag->addRoleScope('Backend', 'backend');
+        $bag->addRoleScope('Backend', 'default');
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
+        $bag->addRoleScope('Consumer', 'default');
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
         $bag->addRoute('system', 3, '/system/payment/:provider/webhook', System\Api\PaymentWebhook::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
@@ -143,6 +148,7 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
+        $bag->addUserScope('Administrator', 'default');
         $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE);
         $bag->addPage('Getting started', 'getting-started', self::readFile('getting-started.html'));
         $bag->addPage('API', 'api', self::readFile('api.html'));
