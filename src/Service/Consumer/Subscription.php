@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service\Consumer;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\Event_Subscription;
 use Fusio\Model\Consumer\Event_Subscription_Create;
 use Fusio\Model\Consumer\Event_Subscription_Update;
 use PSX\Http\Exception as StatusCode;
@@ -68,6 +69,8 @@ class Subscription
             throw new StatusCode\BadRequestException('Event does not exist');
         }
 
+        $this->assertUrl($subscription->getEndpoint());
+
         $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Create();
         $backendSubscription->setUserId($context->getUserId());
         $backendSubscription->setEventId($event->getId());
@@ -87,6 +90,8 @@ class Subscription
             throw new StatusCode\BadRequestException('Subscription does not belong to the user');
         }
 
+        $this->assertUrl($subscription->getEndpoint());
+
         $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Update();
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
@@ -105,5 +110,16 @@ class Subscription
         }
 
         return $this->subscriptionService->delete($subscriptionId, $context);
+    }
+
+    private function assertUrl(?string $url): void
+    {
+        if (empty($url)) {
+            throw new StatusCode\BadRequestException('The endpoint contains no value');
+        }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new StatusCode\BadRequestException('The endpoint has an invalid url format');
+        }
     }
 }

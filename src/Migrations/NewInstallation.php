@@ -76,6 +76,7 @@ class NewInstallation
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
+        $bag->addScope('default', 'default', 'Default scope');
         $bag->addAppScope('Backend', 'backend');
         $bag->addAppScope('Backend', 'authorization');
         $bag->addAppScope('Backend', 'default');

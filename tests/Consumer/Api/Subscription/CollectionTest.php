@@ -122,6 +122,38 @@ JSON;
         $this->assertEquals('http://127.0.0.1/new-callback.php', $row['endpoint']);
     }
 
+    public function testPostEmptyEndpoint()
+    {
+        $response = $this->sendRequest('/consumer/subscription', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ), json_encode([
+            'event' => 'foo-event',
+            'endpoint' => '',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertStringContainsString('The endpoint contains no value', $body, $body);
+    }
+
+    public function testPostInvalidEndpoint()
+    {
+        $response = $this->sendRequest('/consumer/subscription', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ), json_encode([
+            'event' => 'foo-event',
+            'endpoint' => 'foobar',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertStringContainsString('The endpoint has an invalid url format', $body, $body);
+    }
+
     public function testPut()
     {
         $response = $this->sendRequest('/consumer/subscription', 'PUT', array(
