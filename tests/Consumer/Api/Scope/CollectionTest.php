@@ -63,10 +63,15 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 4,
+            "name": "default",
+            "description": ""
+        },
         {
             "id": 42,
             "name": "foo",

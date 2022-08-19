@@ -169,7 +169,7 @@ class CollectionTest extends ControllerDbTestCase
             "type": 6,
             "name": "mail_pw_reset_body",
             "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/#!\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
+            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
         },
         {
             "id": 15,
@@ -332,7 +332,7 @@ JSON;
             "type": 6,
             "name": "mail_pw_reset_body",
             "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/#!\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
+            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
         },
         {
             "id": 15,
@@ -346,7 +346,7 @@ JSON;
             "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
-            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\n{apps_url}\/developer\/#!\/register\/activate\/{token}"
+            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\n{apps_url}\/developer\/register\/activate\/{token}"
         },
         {
             "id": 13,

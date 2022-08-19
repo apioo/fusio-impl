@@ -78,7 +78,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "title": "Getting started",
     "slug": "getting-started",
-    "content": "\n<p>This is a quick introduction to help you get started using this API. On the left sidebar you see all available\ndocumentation resources. The <a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to\ndiscover the endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a> page you can see all available support\noptions if you get stuck. The <a href=\"#!\/documentation\/sdk\">SDK<\/a> provides an overview of available clients SDKs\nwhich help you to work with the API.<\/p>\n\n<p>You can also <a href=\"#!\/register\">register<\/a> a new account to create a new app. Through this app you can access\nprotected parts of the API. The <a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains\nmore information how you can authenticate.<\/p>",
+    "content": "\n<p class=\"lead\">Learn how to start using this API. Explore the endpoints, sign up for an account, and connect with the\ncommunity.<\/p>\n\n<h3>Quickstart<\/h3>\n\n<p>This is a quick introduction to help you get started using this API.<\/p>\n\n<ul>\n<li><a href=\"\/register\">Signup for a new account<\/a><\/li>\n<li><a href=\"\/authorization\">Learn how to obtain an Access-Token<\/a><\/li>\n<li><a href=\"\/api\">Explore the API documentation<\/a><\/li>\n<li><a href=\"\/sdk\">Download an SDK<\/a><\/li>\n<\/ul>",
     "date": "2021-07-03T13:53:09Z"
 }
 JSON;

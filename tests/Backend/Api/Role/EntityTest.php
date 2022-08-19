@@ -89,7 +89,8 @@ class EntityTest extends ControllerDbTestCase
         "consumer.subscription",
         "consumer.transaction",
         "consumer.user",
-        "authorization"
+        "authorization",
+        "default"
     ]
 }
 JSON;
@@ -125,7 +126,8 @@ JSON;
         "consumer.subscription",
         "consumer.transaction",
         "consumer.user",
-        "authorization"
+        "authorization",
+        "default"
     ]
 }
 JSON;

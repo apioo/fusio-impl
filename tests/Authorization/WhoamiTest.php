@@ -95,6 +95,7 @@ class WhoamiTest extends ControllerDbTestCase
         "consumer.transaction",
         "consumer.user",
         "authorization",
+        "default",
         "foo",
         "bar"
     ],
