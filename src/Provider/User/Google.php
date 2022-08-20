@@ -21,15 +21,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
-use Fusio\Impl\Base;
-use Fusio\Impl\Service\Config;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\PostRequest;
-use PSX\Json\Parser;
-use PSX\Uri\Url;
 
 /**
  * Google
@@ -38,17 +30,8 @@ use PSX\Uri\Url;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Google implements ProviderInterface
+class Google extends ProviderAbstract
 {
-    private ClientInterface $httpClient;
-    private string $secret;
-
-    public function __construct(ClientInterface $httpClient, Config $config)
-    {
-        $this->httpClient = $httpClient;
-        $this->secret     = $config->getValue('provider_google_secret');
-    }
-
     public function getId(): int
     {
         return self::PROVIDER_GOOGLE;
@@ -61,19 +44,11 @@ class Google implements ProviderInterface
             return null;
         }
 
-        $url = new Url('https://www.googleapis.com/userinfo/v2/me');
-
-        $headers = [
-            'Authorization' => 'Bearer ' . $accessToken,
-            'User-Agent'    => Base::getUserAgent()
-        ];
-
-        $response = $this->httpClient->request(new GetRequest($url, $headers));
-        if ($response->getStatusCode() !== 200) {
+        $data = $this->obtainUserInfo('https://www.googleapis.com/userinfo/v2/me', $accessToken);
+        if (empty($data)) {
             return null;
         }
 
-        $data  = Parser::decode((string) $response->getBody());
         $id    = $data->id ?? null;
         $name  = $data->name ?? null;
         $email = $data->email ?? null;
@@ -87,8 +62,6 @@ class Google implements ProviderInterface
 
     protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
     {
-        $url = new Url('https://oauth2.googleapis.com/token');
-
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
@@ -97,22 +70,6 @@ class Google implements ProviderInterface
             'grant_type'    => 'authorization_code'
         ];
 
-        $headers = [
-            'Accept'     => 'application/json',
-            'User-Agent' => Base::getUserAgent()
-        ];
-
-        $response = $this->httpClient->request(new PostRequest($url, $headers, $params));
-
-        if ($response->getStatusCode() !== 200) {
-            return null;
-        }
-
-        $data = Parser::decode((string) $response->getBody());
-        if (isset($data->access_token)) {
-            return $data->access_token;
-        } else {
-            return null;
-        }
+        return $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
     }
 }

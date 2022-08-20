@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Engine\Model\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Authorization\UserContext;

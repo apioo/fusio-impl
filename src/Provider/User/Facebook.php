@@ -21,14 +21,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
-use Fusio\Impl\Base;
-use Fusio\Impl\Service\Config;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\GetRequest;
-use PSX\Json\Parser;
-use PSX\Uri\Url;
 
 /**
  * Facebook
@@ -37,17 +30,8 @@ use PSX\Uri\Url;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Facebook implements ProviderInterface
+class Facebook extends ProviderAbstract
 {
-    private ClientInterface $httpClient;
-    private string $secret;
-
-    public function __construct(ClientInterface $httpClient, Config $config)
-    {
-        $this->httpClient = $httpClient;
-        $this->secret     = $config->getValue('provider_facebook_secret');
-    }
-
     public function getId(): int
     {
         return self::PROVIDER_FACEBOOK;
@@ -60,23 +44,11 @@ class Facebook implements ProviderInterface
             return null;
         }
 
-        $url = new Url('https://graph.facebook.com/v2.5/me');
-        $url = $url->withParameters([
-            'access_token' => $accessToken,
-            'fields'       => 'id,name,email',
-        ]);
-
-        $headers = [
-            'Authorization' => 'Bearer ' . $accessToken,
-            'User-Agent'    => Base::getUserAgent()
-        ];
-
-        $response = $this->httpClient->request(new GetRequest($url, $headers));
-        if ($response->getStatusCode() !== 200) {
+        $data = $this->obtainUserInfo('https://graph.facebook.com/v2.5/me', $accessToken, ['access_token' => $accessToken, 'fields' => 'id,name,email']);
+        if (empty($data)) {
             return null;
         }
 
-        $data  = Parser::decode((string) $response->getBody());
         $id    = $data->id ?? null;
         $name  = $data->name ?? null;
         $email = $data->email ?? null;
@@ -90,24 +62,13 @@ class Facebook implements ProviderInterface
 
     protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
     {
-        $url = new Url('https://graph.facebook.com/v12.0/oauth/access_token');
-        $url = $url->withParameters([
-            'client_id' => $clientId,
-            'redirect_uri' => $redirectUri,
+        $params = [
+            'code'          => $code,
+            'client_id'     => $clientId,
             'client_secret' => $clientSecret,
-            'code' => $code,
-        ]);
+            'redirect_uri'  => $redirectUri,
+        ];
 
-        $response = $this->httpClient->request(new GetRequest($url));
-        if ($response->getStatusCode() !== 200) {
-            return null;
-        }
-
-        $data = Parser::decode((string) $response->getBody());
-        if (isset($data->access_token)) {
-            return $data->access_token;
-        } else {
-            return null;
-        }
+        return $this->obtainAccessToken('https://graph.facebook.com/v12.0/oauth/access_token', $params, self::TYPE_GET);
     }
 }

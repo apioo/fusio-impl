@@ -109,7 +109,7 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token?client_id=bar&redirect_uri=' . urlencode('http://google.com') . '&client_secret=facebook&code=foo', $transaction['request']->getUri());
+        $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token?code=foo&client_id=bar&client_secret=facebook&redirect_uri=' . urlencode('http://google.com'), $transaction['request']->getUri());
 
         $transaction = array_shift($container);
 

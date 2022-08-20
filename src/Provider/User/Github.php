@@ -21,15 +21,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
-use Fusio\Impl\Base;
-use Fusio\Impl\Service\Config;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\PostRequest;
-use PSX\Json\Parser;
-use PSX\Uri\Url;
 
 /**
  * Github
@@ -38,17 +30,8 @@ use PSX\Uri\Url;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Github implements ProviderInterface
+class Github extends ProviderAbstract
 {
-    private ClientInterface $httpClient;
-    private string $secret;
-
-    public function __construct(ClientInterface $httpClient, Config $config)
-    {
-        $this->httpClient = $httpClient;
-        $this->secret     = $config->getValue('provider_github_secret');
-    }
-
     public function getId(): int
     {
         return self::PROVIDER_GITHUB;
@@ -61,19 +44,11 @@ class Github implements ProviderInterface
             return null;
         }
 
-        $url = new Url('https://api.github.com/user');
-
-        $headers = [
-            'Authorization' => 'Bearer ' . $accessToken,
-            'User-Agent'    => Base::getUserAgent()
-        ];
-
-        $response = $this->httpClient->request(new GetRequest($url, $headers));
-        if ($response->getStatusCode() !== 200) {
+        $data = $this->obtainUserInfo('https://api.github.com/user', $accessToken);
+        if (empty($data)) {
             return null;
         }
 
-        $data  = Parser::decode((string) $response->getBody());
         $id    = $data->id ?? null;
         $name  = $data->login ?? null;
         $email = $data->email ?? null;
@@ -85,9 +60,8 @@ class Github implements ProviderInterface
         }
     }
 
-    protected function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
+    private function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
     {
-        $url = new Url('https://github.com/login/oauth/access_token');
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
@@ -95,21 +69,6 @@ class Github implements ProviderInterface
             'redirect_uri'  => $redirectUri,
         ];
 
-        $headers = [
-            'Accept'     => 'application/json',
-            'User-Agent' => Base::getUserAgent()
-        ];
-
-        $response = $this->httpClient->request(new PostRequest($url, $headers, $params));
-        if ($response->getStatusCode() !== 200) {
-            return null;
-        }
-
-        $data = Parser::decode((string) $response->getBody());
-        if (isset($data->access_token)) {
-            return $data->access_token;
-        } else {
-            return null;
-        }
+        return $this->obtainAccessToken('https://github.com/login/oauth/access_token', $params);
     }
 }
