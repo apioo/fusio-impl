@@ -2051,9 +2051,12 @@
             "type": "string"
           },
           "expires_in": {
-            "type": "string"
+            "type": "integer"
           },
           "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
             "type": "string"
           }
         }
