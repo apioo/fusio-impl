@@ -31,6 +31,7 @@ use Fusio\Model\Backend\User_Remote;
 use Fusio\Model\Consumer\User_Provider;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
+use PSX\Oauth2\AccessToken;
 
 /**
  * Provider
@@ -54,7 +55,7 @@ class Provider
         $this->config          = $config;
     }
 
-    public function provider(string $providerName, User_Provider $request): string
+    public function provider(string $providerName, User_Provider $request): AccessToken
     {
         /** @var ProviderInterface $provider */
         $provider = $this->providerFactory->factory($providerName);
@@ -79,14 +80,12 @@ class Provider
         // define this id
         $appId = 2;
 
-        $token = $this->appTokenService->generateAccessToken(
+        return $this->appTokenService->generateAccessToken(
             $appId,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token'))
         );
-
-        return $token->getAccessToken();
     }
 }

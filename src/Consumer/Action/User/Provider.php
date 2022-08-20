@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Provider as UserProvider;
 use Fusio\Model\Consumer\User_Provider;
 use PSX\Http\Exception as StatusCode;
+use PSX\Oauth2\AccessToken;
 
 /**
  * Provider
@@ -51,17 +52,22 @@ class Provider extends ActionAbstract
 
         assert($body instanceof User_Provider);
 
-        $token = $this->providerService->provider(
-            $request->get('provider'),
-            $body
-        );
+        $token = $this->providerService->provider($request->get('provider'), $body);
 
-        if (empty($token)) {
-            throw new StatusCode\UnauthorizedException('Invalid data', 'Basic');
+        return $this->renderToken($token);
+    }
+
+    private function renderToken(?AccessToken $token): array
+    {
+        if ($token instanceof AccessToken) {
+            return [
+                'token' => $token->getAccessToken(),
+                'expires_in' => $token->getExpiresIn(),
+                'refresh_token' => $token->getRefreshToken(),
+                'scope' => $token->getScope(),
+            ];
+        } else {
+            throw new StatusCode\BadRequestException('Invalid name or password');
         }
-
-        return [
-            'token' => $token,
-        ];
     }
 }

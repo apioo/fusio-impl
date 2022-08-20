@@ -57,7 +57,7 @@ class Login extends ActionAbstract
         return $this->renderToken($token);
     }
 
-    private function renderToken(?AccessToken $token)
+    private function renderToken(?AccessToken $token): array
     {
         if ($token instanceof AccessToken) {
             return [
