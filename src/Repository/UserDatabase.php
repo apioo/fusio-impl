@@ -103,7 +103,7 @@ class UserDatabase implements Repository\UserInterface
             $this->getCategoryForRole($row['role_id']),
             $row['status'],
             $row['name'],
-            $row['email'],
+            $row['email'] ?? '',
             $row['points'] ?? 0,
             $row['external_id'] ?? null,
             $row['plan_id'] ?? null
