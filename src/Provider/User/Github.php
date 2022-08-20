@@ -39,7 +39,14 @@ class Github extends ProviderAbstract
 
     public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
-        $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
+        $params = [
+            'code'          => $code,
+            'client_id'     => $clientId,
+            'client_secret' => $this->secret,
+            'redirect_uri'  => $redirectUri,
+        ];
+
+        $accessToken = $this->obtainAccessToken('https://github.com/login/oauth/access_token', $params);
         if (empty($accessToken)) {
             return null;
         }
@@ -58,17 +65,5 @@ class Github extends ProviderAbstract
         } else {
             return null;
         }
-    }
-
-    private function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
-    {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-            'redirect_uri'  => $redirectUri,
-        ];
-
-        return $this->obtainAccessToken('https://github.com/login/oauth/access_token', $params);
     }
 }

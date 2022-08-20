@@ -39,7 +39,15 @@ class Google extends ProviderAbstract
 
     public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
-        $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
+        $params = [
+            'code'          => $code,
+            'client_id'     => $clientId,
+            'client_secret' => $this->secret,
+            'redirect_uri'  => $redirectUri,
+            'grant_type'    => 'authorization_code'
+        ];
+
+        $accessToken = $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
         if (empty($accessToken)) {
             return null;
         }
@@ -58,18 +66,5 @@ class Google extends ProviderAbstract
         } else {
             return null;
         }
-    }
-
-    protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
-    {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-            'redirect_uri'  => $redirectUri,
-            'grant_type'    => 'authorization_code'
-        ];
-
-        return $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
     }
 }

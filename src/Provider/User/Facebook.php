@@ -39,7 +39,14 @@ class Facebook extends ProviderAbstract
 
     public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
-        $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
+        $params = [
+            'code'          => $code,
+            'client_id'     => $clientId,
+            'client_secret' => $this->secret,
+            'redirect_uri'  => $redirectUri,
+        ];
+
+        $accessToken = $this->obtainAccessToken('https://graph.facebook.com/v12.0/oauth/access_token', $params, self::TYPE_GET);
         if (empty($accessToken)) {
             return null;
         }
@@ -58,17 +65,5 @@ class Facebook extends ProviderAbstract
         } else {
             return null;
         }
-    }
-
-    protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
-    {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-            'redirect_uri'  => $redirectUri,
-        ];
-
-        return $this->obtainAccessToken('https://graph.facebook.com/v12.0/oauth/access_token', $params, self::TYPE_GET);
     }
 }
