@@ -102,7 +102,7 @@ class IncomingTransactionsTest extends ControllerDbTestCase
             0,
             0,
             0,
-            3999,
+            39,
             0,
             0,
             0,

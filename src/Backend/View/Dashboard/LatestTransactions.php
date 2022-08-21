@@ -51,7 +51,9 @@ class LatestTransactions extends ViewAbstract
                 'user_id' => $this->fieldInteger('user_id'),
                 'plan_id' => $this->fieldInteger('plan_id'),
                 'transactionId' => 'transaction_id',
-                'amount' => $this->fieldNumber('amount'),
+                'amount' => $this->fieldCallback('amount', function($value){
+                    return round($value / 100, 2);
+                }),
                 'date' => $this->fieldDateTime('insert_date'),
             ]),
         ];

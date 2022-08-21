@@ -67,7 +67,7 @@ class EntityTest extends ControllerDbTestCase
     "userId": 1,
     "planId": 2,
     "transactionId": "[transaction_id]",
-    "amount": 3999,
+    "amount": 39.99,
     "points": 1000,
     "insertDate": "2018-10-05T18:18:00Z"
 }

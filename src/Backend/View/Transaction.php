@@ -58,7 +58,9 @@ class Transaction extends ViewAbstract
                 'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
                 'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
                 'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
-                'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+                'amount' => $this->fieldCallback(Table\Generated\TransactionTable::COLUMN_AMOUNT, function($value){
+                    return round($value / 100, 2);
+                }),
                 'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
                 'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
@@ -74,7 +76,9 @@ class Transaction extends ViewAbstract
             'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
             'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
             'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
-            'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+            'amount' => $this->fieldCallback(Table\Generated\TransactionTable::COLUMN_AMOUNT, function($value){
+                return round($value / 100, 2);
+            }),
             'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
             'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
