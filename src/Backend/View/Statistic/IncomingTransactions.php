@@ -53,7 +53,7 @@ class IncomingTransactions extends ViewAbstract
         }
 
         // fill values
-        $sql = '  SELECT SUM(trans.amount / 100) AS amount,
+        $sql = '  SELECT SUM(trans.amount) AS amount,
                          DATE(trans.insert_date) AS date
                     FROM fusio_transaction trans
                    WHERE ' . $expression . '
@@ -63,7 +63,7 @@ class IncomingTransactions extends ViewAbstract
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {
-                $data[$row['date']] = round($row['amount'], 2);
+                $data[$row['date']] = round($row['amount'] / 100, 2);
             }
         }
 
