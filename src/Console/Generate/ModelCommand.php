@@ -64,13 +64,13 @@ class ModelCommand extends Command
             throw new \RuntimeException('Configured src directory does not exist');
         }
 
-        $source = $srcFolder . '/../gen/typeschema.json';
+        $source = $srcFolder . '/../resources/typeschema.json';
         $target = $srcFolder . '/Model';
         $format = 'php';
         $config = 'namespace=App\Model';
 
         if (!is_file($source)) {
-            throw new \RuntimeException('TypeSchema file does not exist at gen/typeschema.json, please create the file in order to generate the models, more information about TypeSchema at: typeschema.org');
+            throw new \RuntimeException('TypeSchema file does not exist at resources/typeschema.json, please create the file in order to generate the models, more information about TypeSchema at: typeschema.org');
         }
 
         if (!is_dir($target)) {
@@ -80,6 +80,8 @@ class ModelCommand extends Command
         $count = $this->generate($source, $target, $format, $config);
 
         $output->writeln('Generated ' . $count . ' files at ' . $target);
+
+        return 1;
     }
 
     private function generate(string $source, string $target, string $format, string $config): int
