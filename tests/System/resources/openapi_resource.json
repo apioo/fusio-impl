@@ -119,28 +119,7 @@
       "app": {
         "type": "oauth2",
         "flows": {
-          "password": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access",
-              "plan_scope": "Plan scope access"
-            }
-          },
           "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access",
-              "plan_scope": "Plan scope access"
-            }
-          },
-          "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/apps\/developer\/#!\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
