@@ -294,6 +294,7 @@ class Container extends DefaultContainer
         $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
 
         $application->add(new Console\Generate\ModelCommand($this->get('config'), $this->get('schema_manager')));
+        $application->add(new Console\Generate\SdkCommand($this->get('config'), $this->get('resource_listing'), $this->get('generator_factory'), $this->get('listing_filter_factory')));
         $application->add(new Console\Generate\TableCommand($this->get('config'), $this->get('connector')));
 
         $application->add(new Console\Migration\ExecuteCommand($this->get('connection'), $this->get('connector')));
