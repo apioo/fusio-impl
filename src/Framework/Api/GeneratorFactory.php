@@ -62,13 +62,10 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
             $scopes     = $this->scopeTable->getAvailableScopes($filter !== null ? (int) $filter->getId() : 1);
-            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/apps/developer/#!/auth';
             $tokenUrl   = $this->url . '/' . $this->dispatch . 'authorization/token';
             $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
 
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, $refreshUrl, $scopes);
             $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $scopes);
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_PASSWORD, null, $tokenUrl, $refreshUrl, $scopes);
         } elseif ($generator instanceof Generator\Spec\Raml) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
         }
