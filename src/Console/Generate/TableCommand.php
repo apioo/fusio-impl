@@ -54,7 +54,7 @@ class TableCommand extends Command
         $this
             ->setName('generate:table')
             ->setDescription('Generates table and row classes for the configured connection')
-            ->addOption('connection', 'c', InputOption::VALUE_NONE, 'The connection which is used', 'System');
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Optional the connection which is used', 'System');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -64,20 +64,53 @@ class TableCommand extends Command
             throw new \RuntimeException('Configured src directory does not exist');
         }
 
-        $target = $srcFolder . '/Table';
-        if (!is_dir($target)) {
+        $tableFolder = $srcFolder . '/Table';
+        if (!is_dir($tableFolder)) {
             throw new \RuntimeException('The folder src/Table does not exist, please create it in order to generate the table classes');
+        }
+
+        $tableGeneratedFolder = $tableFolder . '/Generated';
+        if (!is_dir($tableGeneratedFolder)) {
+            throw new \RuntimeException('The folder src/Table/Generated does not exist, please create it in order to generate the table classes');
         }
 
         $connection = $this->connector->getConnection($input->getOption('connection'));
 
-        $generator = new Generator($connection, $input->getOption('namespace'));
+        $generator = new Generator($connection, 'App\\Table\\Generated', 'app_');
         $count = 0;
         foreach ($generator->generate() as $className => $source) {
-            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
+            file_put_contents($tableGeneratedFolder . '/' . $className . '.php', '<?php' . "\n\n" . $source);
+
+            if (str_ends_with($className, 'Table')) {
+                $overwriteClass = substr($className, 0, -5);
+                $overwriteFile = $tableFolder . '/' . $overwriteClass . '.php';
+                if (!is_file($overwriteFile)) {
+                    file_put_contents($overwriteFile, $this->getOverwriteClass($className, $overwriteClass));
+                }
+            }
+
             $count++;
         }
 
-        $output->writeln('Generated ' . $count . ' files at ' . $target);
+        $output->writeln('Generated ' . $count . ' files at ' . $tableGeneratedFolder);
+
+        return 1;
+    }
+
+    private function getOverwriteClass(string $className, string $overwriteClass): string
+    {
+        return <<<PHP
+<?php
+
+namespace App\Table;
+
+use App\\Table\\Generated\\{$className};
+
+class {$overwriteClass} extends {$className}
+{
+}
+
+PHP;
+
     }
 }
