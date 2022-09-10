@@ -87,7 +87,8 @@ class SdkCommand extends Command
         }
 
         $config = $this->getConfig($input);
-        $filter = $this->getFilter($input);
+        $filterName = $input->getOption('filter');
+        $filter = !empty($filterName) ? $this->filterFactory->getFilter($filterName) : null;
 
         $generator = $this->factory->getGenerator($format, $config);
         $extension = $this->factory->getFileExtension($format, $config);
@@ -128,15 +129,5 @@ class SdkCommand extends Command
         }
 
         return http_build_query($options);
-    }
-
-    private function getFilter(InputInterface $input): ?FilterInterface
-    {
-        $filterName = $input->getOption('filter');
-        if (!empty($filterName)) {
-            return $this->filterFactory->getFilter($filterName);
-        } else {
-            return null;
-        }
     }
 }
