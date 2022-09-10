@@ -142,6 +142,9 @@
         "startIndex": {
           "type": "integer"
         },
+        "itemsPerPage": {
+          "type": "integer"
+        },
         "entry": {
           "type": "array",
           "items": {

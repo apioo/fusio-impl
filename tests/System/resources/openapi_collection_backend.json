@@ -5353,6 +5353,9 @@
           "startIndex": {
             "type": "integer"
           },
+          "itemsPerPage": {
+            "type": "integer"
+          },
           "entry": {
             "type": "array",
             "items": {
@@ -6466,6 +6469,9 @@
         "type": "object",
         "properties": {
           "id": {
+            "type": "integer"
+          },
+          "status": {
             "type": "integer"
           },
           "priority": {
