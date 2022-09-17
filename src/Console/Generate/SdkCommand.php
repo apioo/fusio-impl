@@ -87,7 +87,14 @@ class SdkCommand extends Command
         }
 
         $config = $this->getConfig($input);
-        $filter = $this->getFilter($input);
+        $filter = null;
+        $filterName = $input->getOption('filter');
+        if (!empty($filterName)) {
+            $filter = $this->filterFactory->getFilter($filterName);
+            if ($filter === null) {
+                throw new \RuntimeException('Provided an invalid filter name');
+            }
+        }
 
         $generator = $this->factory->getGenerator($format, $config);
         $extension = $this->factory->getFileExtension($format, $config);
@@ -119,7 +126,7 @@ class SdkCommand extends Command
         return 1;
     }
 
-    private function getConfig(InputInterface $input): string
+    private function getConfig(InputInterface $input): ?string
     {
         $namespace = $input->getOption('namespace');
         $options = [];
@@ -127,14 +134,8 @@ class SdkCommand extends Command
             $options['namespace'] = $namespace;
         }
 
-        return http_build_query($options);
-    }
-
-    private function getFilter(InputInterface $input): ?FilterInterface
-    {
-        $filterName = $input->getOption('filter');
-        if (!empty($filterName)) {
-            return $this->filterFactory->getFilter($filterName);
+        if (!empty($options)) {
+            return http_build_query($options);
         } else {
             return null;
         }
