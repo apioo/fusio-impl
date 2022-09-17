@@ -43,7 +43,7 @@ class User extends ViewAbstract
             'name' => Table\Generated\UserTable::COLUMN_NAME,
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
             'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
-            'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id'), true], 'name'),
             'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
                 'name' => 'name',
                 'value' => 'value',
