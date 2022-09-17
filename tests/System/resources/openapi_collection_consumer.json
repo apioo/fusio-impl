@@ -844,6 +844,16 @@
           "consumer.payment"
         ],
         "operationId": "Consumer_Action_Payment_Portal",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Payment_Portal_Request"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "POST 200 Response",
@@ -1666,6 +1676,9 @@
       "Consumer_Payment_Checkout_Response": {
         "$ref": "#\/components\/schemas\/Payment_Checkout_Response"
       },
+      "Consumer_Payment_Portal_Request": {
+        "$ref": "#\/components\/schemas\/Payment_Portal_Request"
+      },
       "Consumer_Payment_Portal_Response": {
         "$ref": "#\/components\/schemas\/Payment_Portal_Response"
       },
@@ -1901,6 +1914,14 @@
         "type": "object",
         "properties": {
           "approvalUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "Payment_Portal_Request": {
+        "type": "object",
+        "properties": {
+          "returnUrl": {
             "type": "string"
           }
         }

@@ -13,6 +13,7 @@
       "tags": [
         "consumer.payment"
       ],
+      "request": "Consumer_Payment_Portal_Request",
       "responses": {
         "200": "Consumer_Payment_Portal_Response"
       }
@@ -27,8 +28,19 @@
         }
       }
     },
+    "Consumer_Payment_Portal_Request": {
+      "$ref": "Payment_Portal_Request"
+    },
     "Consumer_Payment_Portal_Response": {
       "$ref": "Payment_Portal_Response"
+    },
+    "Payment_Portal_Request": {
+      "type": "object",
+      "properties": {
+        "returnUrl": {
+          "type": "string"
+        }
+      }
     },
     "Payment_Portal_Response": {
       "type": "object",
