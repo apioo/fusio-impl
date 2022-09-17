@@ -482,7 +482,7 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Page\Get::class, null, [200 => Model\Consumer\Page::class], null, 'consumer.page', null, true),
                 ],
                 '/payment/:provider/portal' => [
-                    'POST' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
+                    'POST' => new Method(Consumer\Action\Payment\Portal::class, Model\Consumer\Payment_Portal_Request::class, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
                 ],
                 '/payment/:provider/checkout' => [
                     'POST' => new Method(Consumer\Action\Payment\Checkout::class, Model\Consumer\Payment_Checkout_Request::class, [200 => Model\Consumer\Payment_Checkout_Response::class], null, 'consumer.payment'),
