@@ -93,6 +93,10 @@
       "href": "http:\/\/127.0.0.1\/system\/export\/client-typescript\/*\/foo"
     },
     {
+      "rel": "markup-client",
+      "href": "http:\/\/127.0.0.1\/system\/export\/markup-client\/*\/foo"
+    },
+    {
       "rel": "markup-html",
       "href": "http:\/\/127.0.0.1\/system\/export\/markup-html\/*\/foo"
     },
