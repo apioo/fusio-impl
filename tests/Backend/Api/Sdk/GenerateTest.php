@@ -69,6 +69,7 @@ class GenerateTest extends ControllerDbTestCase
         "client-java": null,
         "client-php": null,
         "client-typescript": null,
+        "markup-client": null,
         "markup-html": null,
         "markup-markdown": null,
         "spec-openapi": null,
