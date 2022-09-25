@@ -48,7 +48,7 @@ class Paypal implements ProviderInterface
     {
     }
 
-    public function portal(mixed $connection, UserInterface $user, string $returnUrl): ?string
+    public function portal(mixed $connection, UserInterface $user, string $returnUrl, ?string $configurationId = null): ?string
     {
         return 'https://paypal.com';
     }

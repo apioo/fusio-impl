@@ -111,9 +111,11 @@ class Payment
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
+        $configurationId = $this->configService->getValue('payment_' . strtolower($name) . '_portal_configuration');
+
         $connection = $this->connector->getConnection($name);
 
-        return $provider->portal($connection, $user, $returnUrl);
+        return $provider->portal($connection, $user, $returnUrl, $configurationId);
     }
 
     private function getProduct(int $planId): ProductInterface
