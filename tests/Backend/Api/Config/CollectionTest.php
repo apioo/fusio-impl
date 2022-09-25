@@ -62,7 +62,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 35,
+    "totalResults": 36,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -225,7 +225,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 35,
+    "totalResults": 36,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -356,10 +356,17 @@ JSON;
             "value": "Fusio registration"
         },
         {
-            "id": 28,
+            "id": 29,
             "type": 1,
             "name": "payment_currency",
             "description": "The three-character ISO-4217 currency code which is used to process payments",
+            "value": ""
+        },
+        {
+            "id": 28,
+            "type": 1,
+            "name": "payment_stripe_portal_configuration",
+            "description": "The stripe portal configuration id",
             "value": ""
         },
         {
@@ -370,14 +377,14 @@ JSON;
             "value": ""
         },
         {
-            "id": 30,
+            "id": 31,
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
             "value": 0
         },
         {
-            "id": 31,
+            "id": 32,
             "type": 3,
             "name": "points_threshold",
             "description": "If a user goes below this points threshold we send an information to the user",
@@ -440,35 +447,35 @@ JSON;
             "value": ""
         },
         {
-            "id": 29,
+            "id": 30,
             "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
         },
         {
-            "id": 33,
+            "id": 34,
             "type": 1,
             "name": "system_dispatcher",
             "description": "Optional a HTTP or message queue connection which is used to dispatch events",
             "value": ""
         },
         {
-            "id": 32,
+            "id": 33,
             "type": 1,
             "name": "system_mailer",
             "description": "Optional a SMTP connection which is used as mailer",
             "value": ""
         },
         {
-            "id": 35,
+            "id": 36,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": true
         },
         {
-            "id": 34,
+            "id": 35,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
