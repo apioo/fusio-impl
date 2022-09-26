@@ -68,6 +68,7 @@ class User extends ViewAbstract
             'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
                 'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+                'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
                 'provider' => Table\Generated\UserTable::COLUMN_PROVIDER,
                 'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
@@ -84,6 +85,7 @@ class User extends ViewAbstract
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
             'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
             'provider' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PROVIDER),
             'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
             'name' => Table\Generated\UserTable::COLUMN_NAME,
