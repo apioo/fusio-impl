@@ -58,6 +58,7 @@ final class Version20200905081453 extends AbstractMigration
             $appTable->addColumn('parameters', 'string', ['length' => 255, 'notnull' => false]);
             $appTable->addColumn('app_key', 'string', ['length' => 255]);
             $appTable->addColumn('app_secret', 'string', ['length' => 255]);
+            $appTable->addColumn('metadata', 'text', ['notnull' => false]);
             $appTable->addColumn('date', 'datetime');
             $appTable->setPrimaryKey(['id']);
             $appTable->addUniqueIndex(['app_key']);
@@ -448,6 +449,7 @@ final class Version20200905081453 extends AbstractMigration
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('points', 'integer', ['notnull' => false]);
             $userTable->addColumn('token', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $userTable->addColumn('metadata', 'text', ['notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
             $userTable->addUniqueIndex(['provider', 'remote_id']);
