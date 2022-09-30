@@ -62,6 +62,8 @@ class Transaction extends ViewAbstract
                     return round($value / 100, 2);
                 }),
                 'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+                'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+                'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
                 'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
@@ -80,6 +82,8 @@ class Transaction extends ViewAbstract
                 return round($value / 100, 2);
             }),
             'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+            'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+            'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
             'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 

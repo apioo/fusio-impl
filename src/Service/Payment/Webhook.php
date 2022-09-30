@@ -85,7 +85,7 @@ class Webhook implements WebhookInterface
         }
     }
 
-    public function paid(string $customerId, int $amountPaid, string $invoiceId): void
+    public function paid(string $customerId, int $amountPaid, string $invoiceId, \DateTimeImmutable $periodStart, \DateTimeImmutable $periodEnd): void
     {
         $user = $this->userTable->findOneByExternalId($customerId);
         if (!$user instanceof UserRow) {
@@ -106,6 +106,8 @@ class Webhook implements WebhookInterface
         $transaction->setTransactionId($invoiceId);
         $transaction->setAmount($amountPaid);
         $transaction->setPoints($plan->getPoints());
+        $transaction->setPeriodStart(\DateTime::createFromImmutable($periodStart));
+        $transaction->setPeriodEnd(\DateTime::createFromImmutable($periodEnd));
         $transaction->setInsertDate(new \DateTime());
         $this->transactionTable->create($transaction);
     }

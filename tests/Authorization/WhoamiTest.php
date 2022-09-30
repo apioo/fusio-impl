@@ -99,6 +99,14 @@ class WhoamiTest extends ControllerDbTestCase
         "foo",
         "bar"
     ],
+    "plans": [
+        {
+            "id": 2,
+            "name": "Plan B",
+            "price": 49.99,
+            "points": 1000
+        }
+    ],
     "attributes": {
         "first_name": "Johann",
         "last_name": "Bach"

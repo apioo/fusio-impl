@@ -39,11 +39,19 @@ class User extends ViewAbstract
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
             'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
             'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
             'name' => Table\Generated\UserTable::COLUMN_NAME,
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
             'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id'), true], 'name'),
+            'plans' => $this->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
+                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                'name' => Table\Generated\PlanTable::COLUMN_NAME,
+                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+            ]),
             'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
                 'name' => 'name',
                 'value' => 'value',

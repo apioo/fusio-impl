@@ -60,7 +60,9 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+
         $expect = <<<JSON
 {
     "id": 1,
@@ -69,7 +71,9 @@ class EntityTest extends ControllerDbTestCase
     "transactionId": "[transaction_id]",
     "amount": 39.99,
     "points": 1000,
-    "insertDate": "2018-10-05T18:18:00Z"
+    "periodStart": "[datetime]",
+    "periodEnd": "[datetime]",
+    "insertDate": "[datetime]"
 }
 JSON;
 
