@@ -90,6 +90,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 2,
             "roleId": 3,
+            "planId": 1,
             "provider": 1,
             "status": 1,
             "name": "Consumer",
@@ -183,6 +184,7 @@ JSON;
         {
             "id": 2,
             "roleId": 3,
+            "planId": 1,
             "provider": 1,
             "status": 1,
             "name": "Consumer",
