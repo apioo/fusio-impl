@@ -52,6 +52,22 @@ class TransactionRow extends \PSX\Record\Record
     {
         return $this->getProperty('points');
     }
+    public function setPeriodStart(?\DateTime $periodStart) : void
+    {
+        $this->setProperty('period_start', $periodStart);
+    }
+    public function getPeriodStart() : ?\DateTime
+    {
+        return $this->getProperty('period_start');
+    }
+    public function setPeriodEnd(?\DateTime $periodEnd) : void
+    {
+        $this->setProperty('period_end', $periodEnd);
+    }
+    public function getPeriodEnd() : ?\DateTime
+    {
+        return $this->getProperty('period_end');
+    }
     public function setInsertDate(?\DateTime $insertDate) : void
     {
         $this->setProperty('insert_date', $insertDate);

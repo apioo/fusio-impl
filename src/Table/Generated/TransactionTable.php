@@ -14,6 +14,8 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     public const COLUMN_TRANSACTION_ID = 'transaction_id';
     public const COLUMN_AMOUNT = 'amount';
     public const COLUMN_POINTS = 'points';
+    public const COLUMN_PERIOD_START = 'period_start';
+    public const COLUMN_PERIOD_END = 'period_end';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
     {
@@ -21,7 +23,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x20000a, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_AMOUNT => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x20000a, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_AMOUNT => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_START => 0x40800000, self::COLUMN_PERIOD_END => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
@@ -167,6 +169,44 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('points', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByPeriodStart(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('period_start', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByPeriodStart(\DateTime $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('period_start', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByPeriodEnd(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('period_end', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByPeriodEnd(\DateTime $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('period_end', $value);
         return $this->doFindOneBy($condition);
     }
     /**
