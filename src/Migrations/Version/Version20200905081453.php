@@ -429,6 +429,8 @@ final class Version20200905081453 extends AbstractMigration
             $transactionTable->addColumn('transaction_id', 'string');
             $transactionTable->addColumn('amount', 'integer');
             $transactionTable->addColumn('points', 'integer');
+            $transactionTable->addColumn('period_start', 'datetime', ['notnull' => false]);
+            $transactionTable->addColumn('period_end', 'datetime', ['notnull' => false]);
             $transactionTable->addColumn('insert_date', 'datetime');
             $transactionTable->setPrimaryKey(['id']);
             $transactionTable->addUniqueIndex(['transaction_id']);
