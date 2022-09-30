@@ -416,7 +416,7 @@ class DataBag
         ];
     }
 
-    public function addTransaction(string $user, string $plan, int $amount, ?string $date = null)
+    public function addTransaction(string $user, string $plan, int $amount, string $periodStart, string $periodEnd, ?string $date = null)
     {
         $this->data['fusio_transaction'][] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -424,6 +424,8 @@ class DataBag
             'transaction_id' => '[transaction_id]',
             'amount' => $amount,
             'points' => 1000,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd,
             'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
         ];
     }

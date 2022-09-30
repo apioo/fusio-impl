@@ -62,7 +62,7 @@ class AccountTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
         $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        
+
         $expect = <<<JSON
 {
     "id": 1,
@@ -113,6 +113,14 @@ class AccountTest extends ControllerDbTestCase
         "default",
         "foo",
         "bar"
+    ],
+    "plans": [
+        {
+            "id": 2,
+            "name": "Plan B",
+            "price": 49.99,
+            "points": 1000
+        }
     ],
     "attributes": {
         "first_name": "Johann",

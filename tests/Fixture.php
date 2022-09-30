@@ -106,7 +106,7 @@ class Fixture
         $data->addEventResponse(0, 0);
         $data->addRate('silver', 5, 8, 'P1M');
         $data->addRate('gold', 10, 16, 'P1M');
-        $data->addTransaction('Administrator', 'Plan B', 3999, '2018-10-05 18:18:00');
+        $data->addTransaction('Administrator', 'Plan B', 3999, (new \DateTime('last month'))->format('Y-m-d H:i:s'), (new \DateTime('next month'))->format('Y-m-d H:i:s'), '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addScope('default', 'foo', 'Foo access');
