@@ -71,7 +71,10 @@ class CollectionTest extends ControllerDbTestCase
             "id": 46,
             "status": 1,
             "name": "foo-event",
-            "description": "Foo event description"
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }

@@ -78,7 +78,10 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 150,
             "status": 1,
-            "name": "Collection-Schema"
+            "name": "Collection-Schema",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,
@@ -142,7 +145,10 @@ JSON;
         {
             "id": 150,
             "status": 1,
-            "name": "Collection-Schema"
+            "name": "Collection-Schema",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,

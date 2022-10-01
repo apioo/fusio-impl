@@ -81,7 +81,10 @@ class CollectionTest extends ControllerDbTestCase
             "priority": 5,
             "name": "silver",
             "rateLimit": 8,
-            "timespan": "P1M"
+            "timespan": "P1M",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 2,
@@ -165,7 +168,10 @@ JSON;
             "priority": 5,
             "name": "silver",
             "rateLimit": 8,
-            "timespan": "P1M"
+            "timespan": "P1M",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 2,

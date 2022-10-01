@@ -73,6 +73,8 @@ class User extends ViewAbstract
                 'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
                 'email' => Table\Generated\UserTable::COLUMN_EMAIL,
+                'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
+                'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
                 'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
             ]),
         ];
@@ -91,6 +93,7 @@ class User extends ViewAbstract
             'name' => Table\Generated\UserTable::COLUMN_NAME,
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
             'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
+            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'plans' => $this->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
                 'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
@@ -107,7 +110,6 @@ class User extends ViewAbstract
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
                 'date' => Table\Generated\AppTable::COLUMN_DATE,
             ]),
-            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 

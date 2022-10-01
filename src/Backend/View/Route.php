@@ -71,6 +71,7 @@ class Route extends ViewAbstract
                 'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
                 'path' => Table\Generated\RoutesTable::COLUMN_PATH,
                 'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
+                'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -92,6 +93,7 @@ class Route extends ViewAbstract
             'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
             'path' => Table\Generated\RoutesTable::COLUMN_PATH,
             'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
+            'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
             'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
             'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id'), null, null], [
                 'version' => Table\Generated\RoutesMethodTable::COLUMN_VERSION,
@@ -161,7 +163,6 @@ class Route extends ViewAbstract
 
                 return array_values($data);
             }),
-            'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

@@ -85,6 +85,9 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "Foo-App",
             "appKey": "[uuid]",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {
@@ -133,6 +136,9 @@ JSON;
             "status": 1,
             "name": "Foo-App",
             "appKey": "[uuid]",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]
@@ -173,6 +179,9 @@ JSON;
             "status": 1,
             "name": "Foo-App",
             "appKey": "[uuid]",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {

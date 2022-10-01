@@ -69,6 +69,7 @@ class Scope extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+                'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -89,6 +90,7 @@ class Scope extends ViewAbstract
             'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+            'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
             'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
                 'id' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ID),
                 'scopeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID),
@@ -96,7 +98,6 @@ class Scope extends ViewAbstract
                 'allow' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ALLOW),
                 'methods' => Table\Generated\ScopeRoutesTable::COLUMN_METHODS,
             ]),
-            'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

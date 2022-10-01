@@ -77,6 +77,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         },
         {
@@ -96,6 +97,10 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
+            "points": 100,
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {
@@ -138,6 +143,7 @@ JSON;
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         }
     ]
@@ -171,6 +177,7 @@ JSON;
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         },
         {
@@ -190,6 +197,10 @@ JSON;
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
+            "points": 100,
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {

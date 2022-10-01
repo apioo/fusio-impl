@@ -41,7 +41,7 @@ class LatestTransactions extends ViewAbstract
                          trans.amount,
                          trans.insert_date
                     FROM fusio_transaction trans
-                ORDER BY trans.insert_date DESC';
+                ORDER BY trans.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 

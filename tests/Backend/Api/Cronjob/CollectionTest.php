@@ -74,7 +74,10 @@ class CollectionTest extends ControllerDbTestCase
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -104,7 +107,10 @@ JSON;
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -134,7 +140,10 @@ JSON;
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }

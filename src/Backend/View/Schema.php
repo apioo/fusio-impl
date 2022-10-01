@@ -70,6 +70,7 @@ class Schema extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
                 'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
                 'name' => Table\Generated\SchemaTable::COLUMN_NAME,
+                'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -90,9 +91,9 @@ class Schema extends ViewAbstract
             'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,
+            'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
             'source' => Table\Generated\SchemaTable::COLUMN_SOURCE,
             'form' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
-            'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

@@ -96,6 +96,9 @@ class CollectionTest extends ControllerDbTestCase
             "id": 176,
             "status": 1,
             "name": "Util-Static-Response",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]
@@ -180,6 +183,9 @@ JSON;
             "id": 176,
             "status": 1,
             "name": "Util-Static-Response",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]

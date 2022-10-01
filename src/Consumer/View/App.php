@@ -57,6 +57,7 @@ class App extends ViewAbstract
                 'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
+                'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
                 'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
             ]),
         ];
@@ -79,6 +80,7 @@ class App extends ViewAbstract
             'url' => Table\Generated\AppTable::COLUMN_URL,
             'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
             'appSecret' => Table\Generated\AppTable::COLUMN_APP_SECRET,
+            'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
             'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
                 'id' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
@@ -90,7 +92,6 @@ class App extends ViewAbstract
                 'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
                 'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
-            'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
         ]);
 

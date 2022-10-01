@@ -55,6 +55,7 @@ class Event extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
+                'metadata' => $this->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
             ]),
         ];
 

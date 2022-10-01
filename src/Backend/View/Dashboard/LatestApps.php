@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\View\Dashboard;
 
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * LatestApps
@@ -38,12 +39,13 @@ class LatestApps extends ViewAbstract
                          app.name,
                          app.date
                     FROM fusio_app app
-                ORDER BY app.date DESC';
+                   WHERE app.status = :status
+                ORDER BY app.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
-            'entry' => $this->doCollection($sql, [], [
+            'entry' => $this->doCollection($sql, ['status' => Table\App::STATUS_ACTIVE], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'date' => $this->fieldDateTime('date'),

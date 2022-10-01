@@ -72,6 +72,7 @@ class App extends ViewAbstract
                 'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
+                'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
                 'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
             ]),
         ];

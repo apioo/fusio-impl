@@ -40,7 +40,7 @@ class LatestRequests extends ViewAbstract
                          log.date
                     FROM fusio_log log
                    WHERE log.category_id = :category_id
-                ORDER BY log.date DESC';
+                ORDER BY log.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 

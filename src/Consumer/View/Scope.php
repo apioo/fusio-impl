@@ -46,7 +46,7 @@ class Scope extends ViewAbstract
         $condition->equals('user_scope.user_id', $userId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description'], $condition, 'user_scope.id ASC');
+        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description', 'scope.metadata'], $condition, 'user_scope.id ASC');
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
@@ -57,6 +57,7 @@ class Scope extends ViewAbstract
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
+                'metadata' => $this->fieldJson('metadata'),
             ]),
         ];
 

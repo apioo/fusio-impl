@@ -73,6 +73,7 @@ class Cronjob extends ViewAbstract
                 'cron' => Table\Generated\CronjobTable::COLUMN_CRON,
                 'executeDate' => $this->fieldDateTime(Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE),
                 'exitCode' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_EXIT_CODE),
+                'metadata' => $this->fieldJson(Table\Generated\CronjobTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -97,13 +98,13 @@ class Cronjob extends ViewAbstract
             'action' => Table\Generated\CronjobTable::COLUMN_ACTION,
             'executeDate' => $this->fieldDateTime(Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE),
             'exitCode' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_EXIT_CODE),
+            'metadata' => $this->fieldJson(Table\Generated\CronjobTable::COLUMN_METADATA),
             'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'findByCronjobId'], [new Reference('id')], [
                 'message' => Table\Generated\CronjobErrorTable::COLUMN_MESSAGE,
                 'trace' => Table\Generated\CronjobErrorTable::COLUMN_TRACE,
                 'file' => Table\Generated\CronjobErrorTable::COLUMN_FILE,
                 'line' => Table\Generated\CronjobErrorTable::COLUMN_LINE,
             ]),
-            'metadata' => $this->fieldJson(Table\Generated\CronjobTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);
