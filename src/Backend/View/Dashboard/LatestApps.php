@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
-use PSX\Sql\ViewAbstract;
 use Fusio\Impl\Table;
+use PSX\Sql\ViewAbstract;
 
 /**
  * LatestApps
