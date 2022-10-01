@@ -34,12 +34,6 @@ return array(
     // provider file for more information
     'fusio_provider'          => __DIR__ . '/provider.php',
 
-    // A list of additional user attributes. Through this your app can easily store additional attributes to the account
-    'fusio_user_attributes'   => [
-        'first_name',
-        'last_name',
-    ],
-
     // Settings of the internal mailer. More information s.
     // https://symfony.com/doc/current/mailer.html#using-built-in-transports
     'fusio_mailer'            => 'native://default',
