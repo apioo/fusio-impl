@@ -71,6 +71,7 @@ class Cronjob
                 Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
                 Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
                 Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
+                Table\Generated\CronjobTable::COLUMN_METADATA => $cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null,
             ]);
 
             $this->cronjobTable->create($record);
@@ -108,6 +109,7 @@ class Cronjob
             Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
             Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
             Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
+            Table\Generated\CronjobTable::COLUMN_METADATA => $cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null,
         ]);
 
         $this->cronjobTable->update($record);

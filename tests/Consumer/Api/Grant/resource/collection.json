@@ -53,6 +53,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -112,6 +115,12 @@
       "$ref": "Collection",
       "$template": {
         "T": "Grant"
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

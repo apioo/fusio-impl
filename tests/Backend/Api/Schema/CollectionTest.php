@@ -78,7 +78,10 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 150,
             "status": 1,
-            "name": "Collection-Schema"
+            "name": "Collection-Schema",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,
@@ -142,7 +145,10 @@ JSON;
         {
             "id": 150,
             "status": 1,
-            "name": "Collection-Schema"
+            "name": "Collection-Schema",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,
@@ -159,6 +165,10 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $schema = <<<'JSON'
 {
     "$import": {
@@ -185,8 +195,9 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Bar-Schema',
-            'source' => \json_decode($schema),
+            'name'     => 'Bar-Schema',
+            'source'   => \json_decode($schema),
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -201,7 +212,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Bar-Schema', $schema);
+        Assert::assertSchema('Bar-Schema', $schema, null, $metadata);
 
         // test schema
         /** @var Loader $schemaLoader */

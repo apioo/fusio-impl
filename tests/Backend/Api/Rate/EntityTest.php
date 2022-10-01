@@ -35,8 +35,8 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
-    private $routeId;
+    private int $id;
+    private int $routeId;
 
     protected function setUp(): void
     {
@@ -164,6 +164,10 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/rate/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -171,6 +175,7 @@ JSON;
             'name'      => 'Gold',
             'rateLimit' => 20,
             'timespan'  => 'P2M',
+            'metadata'  => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -186,7 +191,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'rate_limit', 'timespan')
+            ->select('id', 'status', 'name', 'rate_limit', 'timespan', 'metadata')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -200,6 +205,7 @@ JSON;
         $this->assertEquals('Gold', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
         $this->assertEquals('P2M', $row['timespan']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testDelete()

@@ -72,6 +72,7 @@ class Rate extends ViewAbstract
                 'name' => Table\Generated\RateTable::COLUMN_NAME,
                 'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
                 'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
+                'metadata' => $this->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -95,6 +96,7 @@ class Rate extends ViewAbstract
             'name' => Table\Generated\RateTable::COLUMN_NAME,
             'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
             'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
+            'metadata' => $this->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
             'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'findByRateId'], [new Reference('id')], [
                 'id' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ID),
                 'rateId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_RATE_ID),

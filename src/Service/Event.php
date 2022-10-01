@@ -67,6 +67,7 @@ class Event
                 Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
                 Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
                 Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
+                Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
             ]);
 
             $this->eventTable->create($record);
@@ -103,6 +104,7 @@ class Event
             Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
             Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
             Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
+            Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
         ]);
 
         $this->eventTable->update($record);

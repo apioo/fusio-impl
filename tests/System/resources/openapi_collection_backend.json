@@ -4667,6 +4667,9 @@
           },
           "config": {
             "$ref": "#\/components\/schemas\/Action_Config"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -4801,6 +4804,9 @@
           },
           "appSecret": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           },
           "date": {
             "format": "date-time",
@@ -5410,6 +5416,9 @@
           },
           "config": {
             "$ref": "#\/components\/schemas\/Connection_Config"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -5527,6 +5536,9 @@
           },
           "exitCode": {
             "type": "integer"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           },
           "errors": {
             "type": "array",
@@ -5715,6 +5727,9 @@
           },
           "schema": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6200,6 +6215,12 @@
           }
         }
       },
+      "Metadata": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
       "Page": {
         "type": "object",
         "properties": {
@@ -6217,6 +6238,9 @@
           },
           "content": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6276,6 +6300,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6365,6 +6392,9 @@
             "items": {
               "$ref": "#\/components\/schemas\/Rate_Allocation"
             }
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6494,6 +6524,9 @@
             "items": {
               "$ref": "#\/components\/schemas\/Route_Version"
             }
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6612,6 +6645,9 @@
           },
           "form": {
             "$ref": "#\/components\/schemas\/Schema_Form"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6677,6 +6713,9 @@
             "items": {
               "$ref": "#\/components\/schemas\/Scope_Route"
             }
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -6851,6 +6890,14 @@
           "points": {
             "type": "number"
           },
+          "periodStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "periodEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
           "insertDate": {
             "format": "date-time",
             "type": "string"
@@ -6971,19 +7018,13 @@
               "$ref": "#\/components\/schemas\/App"
             }
           },
-          "attributes": {
-            "$ref": "#\/components\/schemas\/User_Attributes"
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           },
           "date": {
             "format": "date-time",
             "type": "string"
           }
-        }
-      },
-      "User_Attributes": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
         }
       },
       "User_Collection": {

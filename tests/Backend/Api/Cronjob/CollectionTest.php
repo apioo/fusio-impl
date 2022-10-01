@@ -74,7 +74,10 @@ class CollectionTest extends ControllerDbTestCase
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -104,7 +107,10 @@ JSON;
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -134,7 +140,10 @@ JSON;
             "name": "Test-Cron",
             "cron": "* * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -146,13 +155,18 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/cronjob', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name' => 'New-Cron',
-            'cron' => '5 * * * *',
-            'action' => 'Sql-Table',
+            'name'     => 'New-Cron',
+            'cron'     => '5 * * * *',
+            'action'   => 'Sql-Table',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -168,7 +182,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'cron', 'action')
+            ->select('id', 'name', 'cron', 'action', 'metadata')
             ->from('fusio_cronjob')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -181,6 +195,7 @@ JSON;
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
         $this->assertEquals('Sql-Table', $row['action']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testPut()

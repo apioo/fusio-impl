@@ -73,6 +73,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Plan": {
       "type": "object",
       "properties": {
@@ -102,6 +108,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

@@ -27,6 +27,7 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -65,8 +66,8 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
     "totalResults": 4,
@@ -95,6 +96,9 @@ class CollectionTest extends ControllerDbTestCase
             "id": 176,
             "status": 1,
             "name": "Util-Static-Response",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]
@@ -113,7 +117,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -149,7 +153,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -179,6 +183,9 @@ JSON;
             "id": 176,
             "status": 1,
             "name": "Util-Static-Response",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]
@@ -213,21 +220,28 @@ JSON;
 
     public function testPost()
     {
+        $config = [
+            'string' => 'foo',
+            'integer' => 12,
+            'number' => 12.34,
+            'boolean' => true,
+            'null' => null,
+            'array' => ['foo', 12, 12.34, true, null],
+        ];
+
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/action', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Foo',
-            'class'  => UtilStaticResponse::class,
-            'engine' => PhpClass::class,
-            'config' => [
-                'string' => 'foo',
-                'integer' => 12,
-                'number' => 12.34,
-                'boolean' => true,
-                'null' => null,
-                'array' => ['foo', 12, 12.34, true, null],
-            ],
+            'name'     => 'Foo',
+            'class'    => UtilStaticResponse::class,
+            'engine'   => PhpClass::class,
+            'config'   => $config,
+            'metadata' => $metadata
         ]));
 
         $body   = (string) $response->getBody();
@@ -242,7 +256,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Foo', UtilStaticResponse::class, '{"string":"foo","integer":12,"number":12.34,"boolean":true,"array":["foo",12,12.34,true,null]}');
+        Assert::assertAction('Foo', UtilStaticResponse::class, json_encode(array_filter($config)), $metadata);
     }
 
     public function testPut()

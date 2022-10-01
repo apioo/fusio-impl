@@ -19,40 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\View\Dashboard;
+namespace Fusio\Impl\Tests;
 
-use PSX\Sql\ViewAbstract;
+use Doctrine\DBAL\Connection;
+use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Service;
+use PSX\Framework\Test\Environment;
 
 /**
- * LatestRequests
+ * Normalizer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class LatestRequests extends ViewAbstract
+class Normalizer
 {
-    public function getView(int $categoryId)
+    public static function normalize(string $data): string
     {
-        $sql = '  SELECT log.id,
-                         log.path,
-                         log.ip,
-                         log.date
-                    FROM fusio_log log
-                   WHERE log.category_id = :category_id
-                ORDER BY log.id DESC';
+        $data = self::normalizeUuid($data);
+        $data = self::normalizeDateTime($data);
+        return $data;
+    }
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+    public static function normalizeUuid(string $data): string
+    {
+        return preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[uuid]', $data);
+    }
 
-        $definition = [
-            'entry' => $this->doCollection($sql, ['category_id' => $categoryId], [
-                'id' => $this->fieldInteger('id'),
-                'path' => 'path',
-                'ip' => 'ip',
-                'date' => $this->fieldDateTime('date'),
-            ]),
-        ];
-
-        return $this->build($definition);
+    public static function normalizeDateTime(string $data): string
+    {
+        return preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $data);
     }
 }

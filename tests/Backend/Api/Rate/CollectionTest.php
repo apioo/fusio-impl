@@ -81,7 +81,10 @@ class CollectionTest extends ControllerDbTestCase
             "priority": 5,
             "name": "silver",
             "rateLimit": 8,
-            "timespan": "P1M"
+            "timespan": "P1M",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 2,
@@ -165,7 +168,10 @@ JSON;
             "priority": 5,
             "name": "silver",
             "rateLimit": 8,
-            "timespan": "P1M"
+            "timespan": "P1M",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 2,
@@ -193,6 +199,10 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/rate', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -205,6 +215,7 @@ JSON;
                 'routeId' => 1,
                 'authenticated' => true,
             ]],
+            'metadata'  => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -220,7 +231,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan')
+            ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan', 'metadata')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -235,6 +246,7 @@ JSON;
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
         $this->assertEquals('P2M', $row['timespan']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'rate_id', 'route_id', 'user_id', 'plan_id', 'app_id', 'authenticated')

@@ -60,4 +60,12 @@ class RoutesRow extends \PSX\Record\Record
     {
         return $this->getProperty('controller');
     }
+    public function setMetadata(?string $metadata) : void
+    {
+        $this->setProperty('metadata', $metadata);
+    }
+    public function getMetadata() : ?string
+    {
+        return $this->getProperty('metadata');
+    }
 }

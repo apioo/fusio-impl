@@ -104,6 +104,7 @@ class Action
                 Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
                 Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
                 Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
+                Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
                 Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
             ]);
 
@@ -166,6 +167,7 @@ class Action
             Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
             Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
             Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
+            Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
             Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
         ]);
 

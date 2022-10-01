@@ -51,6 +51,14 @@
         "points": {
           "type": "number"
         },
+        "periodStart": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "periodEnd": {
+          "format": "date-time",
+          "type": "string"
+        },
         "insertDate": {
           "format": "date-time",
           "type": "string"

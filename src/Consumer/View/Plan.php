@@ -58,6 +58,7 @@ class Plan extends ViewAbstract
                 'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
                 'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
                 'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -77,6 +78,7 @@ class Plan extends ViewAbstract
             'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
             'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
             'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+            'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

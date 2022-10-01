@@ -72,6 +72,7 @@ class Connection extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
                 'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
+                'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -93,6 +94,7 @@ class Connection extends ViewAbstract
             'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
+            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);
@@ -135,6 +137,7 @@ class Connection extends ViewAbstract
                     return new \stdClass();
                 }
             }),
+            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

@@ -155,6 +155,9 @@
           "appSecret": {
             "type": "string"
           },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
+          },
           "date": {
             "format": "date-time",
             "type": "string"
@@ -241,6 +244,12 @@
           }
         }
       },
+      "Metadata": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
       "Passthru": {
         "description": "No schema information available",
         "type": "object"
@@ -282,19 +291,13 @@
               "$ref": "#\/components\/schemas\/App"
             }
           },
-          "attributes": {
-            "$ref": "#\/components\/schemas\/User_Attributes"
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           },
           "date": {
             "format": "date-time",
             "type": "string"
           }
-        }
-      },
-      "User_Attributes": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
         }
       }
     },

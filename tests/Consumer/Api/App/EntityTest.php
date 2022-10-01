@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\App;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -62,11 +63,10 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
+        $body = Normalizer::normalize($body);
 
         $data = json_decode($body);
-        $sec  = isset($data->appSecret) ? $data->appSecret : null;
+        $sec  = $data->appSecret ?? null;
         $body = str_replace(trim(json_encode($sec), '"'), '[app_secret]', $body);
 
         $expect = <<<'JSON'
@@ -76,7 +76,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Consumer",
     "url": "https:\/\/www.fusio-project.org",
-    "appKey": "[app_key]",
+    "appKey": "[uuid]",
     "appSecret": "[app_secret]",
     "scopes": [
         "consumer",

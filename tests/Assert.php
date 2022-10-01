@@ -35,21 +35,13 @@ use PSX\Framework\Test\Environment;
  */
 class Assert extends \PHPUnit\Framework\Assert
 {
-    public static function assertEqualsIgnoreWhitespace($expect, $actual)
-    {
-        $expectString = str_replace(["\r\n", "\n", "\r"], "\n", $expect);
-        $actualString = str_replace(["\r\n", "\n", "\r"], "\n", $actual);
-
-        self::assertEquals($expectString, $actualString);
-    }
-
-    public static function assertAction(string $expectName, string $expectClass, string $expectConfig)
+    public static function assertAction(string $expectName, string $expectClass, string $expectConfig, ?array $expectMetadata = null)
     {
         /** @var Connection $connection */
         $connection = Environment::getService('connection');
 
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'name', 'class', 'config')
+            ->select('id', 'name', 'class', 'config', 'metadata')
             ->from('fusio_action')
             ->where('name = :name')
             ->getSQL();
@@ -61,20 +53,24 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertEquals($expectName, $row['name']);
         self::assertEquals($expectClass, $row['class']);
         self::assertJsonStringEqualsJsonString($expectConfig, $config, $config);
+
+        if ($expectMetadata !== null) {
+            self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $row['metadata'], $row['metadata']);
+        }
     }
 
-    public static function assertSchema(string $expectName, string $expectSchema, ?string $expectForm = null)
+    public static function assertSchema(string $expectName, string $expectSchema, ?string $expectForm = null, ?array $expectMetadata = null)
     {
         /** @var Connection $connection */
         $connection = Environment::getService('connection');
 
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'name', 'source', 'form')
+            ->select('id', 'name', 'source', 'form', 'metadata')
             ->from('fusio_schema')
             ->where('name = :name')
             ->getSQL();
 
-        $row = $connection->fetchAssoc($sql, ['name' => $expectName]);
+        $row = $connection->fetchAssociative($sql, ['name' => $expectName]);
 
         self::assertNotEmpty($row['id']);
         self::assertEquals($expectName, $row['name']);
@@ -83,15 +79,19 @@ class Assert extends \PHPUnit\Framework\Assert
         if ($expectForm !== null) {
             self::assertJsonStringEqualsJsonString($expectForm, $row['form']);
         }
+
+        if ($expectMetadata !== null) {
+            self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $row['metadata'], $row['metadata']);
+        }
     }
 
-    public static function assertRoute(string $expectPath, array $expectScopes, array $expectConfig)
+    public static function assertRoute(string $expectPath, array $expectScopes, array $expectConfig, ?array $expectMetadata = null)
     {
         /** @var Connection $connection */
         $connection = Environment::getService('connection');
 
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'status', 'methods', 'path', 'controller')
+            ->select('id', 'status', 'methods', 'path', 'controller', 'metadata')
             ->from('fusio_routes')
             ->where('path = :path')
             ->getSQL();
@@ -103,6 +103,10 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertEquals('ANY', $route['methods']);
         self::assertEquals($expectPath, $route['path']);
         self::assertEquals(SchemaApiController::class, $route['controller']);
+
+        if ($expectMetadata !== null) {
+            self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $route['metadata'], $route['metadata']);
+        }
 
         // check methods
         $sql = $connection->createQueryBuilder()

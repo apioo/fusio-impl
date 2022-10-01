@@ -75,7 +75,10 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 42,
             "name": "foo",
-            "description": "Foo access"
+            "description": "Foo access",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 43,

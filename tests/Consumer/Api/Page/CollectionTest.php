@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Page;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -60,6 +61,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -71,31 +73,31 @@ class CollectionTest extends ControllerDbTestCase
             "id": 3,
             "title": "API",
             "slug": "api",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 4,
             "title": "Authorization",
             "slug": "authorization",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 2,
             "title": "Getting started",
             "slug": "getting-started",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 6,
             "title": "SDK",
             "slug": "sdk",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 5,
             "title": "Support",
             "slug": "support",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         }
     ]
 }

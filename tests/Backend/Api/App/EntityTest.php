@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Backend\Api\App;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -36,7 +37,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -71,17 +72,17 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "id": {$this->id},
+    "id": 3,
     "userId": 2,
     "status": 1,
     "name": "Foo-App",
     "url": "http:\/\/google.com",
     "parameters": "",
-    "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
+    "appKey": "[uuid]",
     "appSecret": "342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d",
     "scopes": [
         "authorization",
@@ -114,6 +115,9 @@ class EntityTest extends ControllerDbTestCase
             "date": "[datetime]"
         }
     ],
+    "metadata": {
+        "foo": "bar"
+    },
     "date": "[datetime]"
 }
 JSON;
@@ -160,15 +164,18 @@ JSON;
 
     public function testPut()
     {
+        $metadata = ['foo' => 'bar'];
+
         $response = $this->sendRequest('/backend/app/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 2,
-            'userId' => 2,
-            'name'   => 'Bar',
-            'url'    => 'http://microsoft.com',
-            'scopes' => ['foo', 'bar']
+            'status'   => 2,
+            'userId'   => 2,
+            'name'     => 'Bar',
+            'url'      => 'http://microsoft.com',
+            'scopes'   => ['foo', 'bar'],
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -184,7 +191,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
+            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters', 'metadata')
             ->from('fusio_app')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -196,6 +203,7 @@ JSON;
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
         $this->assertEquals('', $row['parameters']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         /** @var Table\App\Scope $table */
         $table = Environment::getService('table_manager')->getTable(Table\App\Scope::class);

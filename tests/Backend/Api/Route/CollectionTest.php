@@ -163,13 +163,17 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/routes', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'   => '/bar',
-            'scopes' => ['foo', 'baz'],
-            'config' => [[
+            'path'     => '/bar',
+            'scopes'   => ['foo', 'baz'],
+            'config'   => [[
                 'version' => 1,
                 'status'  => 4,
                 'methods' => [
@@ -195,6 +199,7 @@ JSON;
                     ]
                 ],
             ]],
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -239,7 +244,7 @@ JSON;
             ],
             'action'       => 'Sql-Table',
             'costs'        => 0,
-        ]]);
+        ]], $metadata);
     }
 
     public function testPut()

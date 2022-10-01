@@ -94,6 +94,7 @@ class App
                 Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
                 Table\Generated\AppTable::COLUMN_APP_KEY => $appKey,
                 Table\Generated\AppTable::COLUMN_APP_SECRET => $appSecret,
+                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
                 Table\Generated\AppTable::COLUMN_DATE => new DateTime(),
             ]);
 
@@ -147,6 +148,7 @@ class App
                 Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
                 Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
                 Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
+                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
             ]);
 
             $this->appTable->update($record);

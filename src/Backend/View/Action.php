@@ -71,6 +71,7 @@ class Action extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
                 'status' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ActionTable::COLUMN_NAME,
+                'metadata' => $this->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
                 'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
             ]),
         ];
@@ -98,6 +99,7 @@ class Action extends ViewAbstract
             'config' => $this->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
                 return Service\Action::unserializeConfig($config);
             }),
+            'metadata' => $this->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
         ]);
 

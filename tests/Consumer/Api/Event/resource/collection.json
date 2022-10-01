@@ -67,6 +67,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -74,6 +77,12 @@
       "$ref": "Collection",
       "$template": {
         "T": "Event"
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

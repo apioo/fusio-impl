@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Log\Error;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -60,7 +61,7 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {

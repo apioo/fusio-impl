@@ -35,7 +35,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -172,11 +172,16 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Test',
+            'name'     => 'Test',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -192,7 +197,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name')
+            ->select('id', 'name', 'metadata')
             ->from('fusio_scope')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -200,6 +205,7 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals('Test', $row['name']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testDelete()

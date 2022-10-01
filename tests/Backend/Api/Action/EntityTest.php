@@ -25,6 +25,7 @@ use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -37,7 +38,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -71,7 +72,9 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
     "id": {$this->id},
@@ -84,7 +87,7 @@ class EntityTest extends ControllerDbTestCase
         "connection": 2,
         "table": "app_news"
     },
-    "date": "2015-02-27T19:59:15Z"
+    "date": "[datetime]"
 }
 JSON;
 
@@ -99,7 +102,9 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
     "id": {$this->id},
@@ -112,7 +117,7 @@ JSON;
         "connection": 2,
         "table": "app_news"
     },
-    "date": "2015-02-27T19:59:15Z"
+    "date": "[datetime]"
 }
 JSON;
 
@@ -158,14 +163,21 @@ JSON;
 
     public function testPut()
     {
+        $config = [
+            'response' => '{"foo":"bar"}',
+        ];
+
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/action/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Bar',
-            'config' => [
-                'response' => '{"foo":"bar"}',
-            ],
+            'name'     => 'Bar',
+            'config'   => $config,
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -180,7 +192,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Bar', SqlInsert::class, '{"response":"{\"foo\":\"bar\"}"}');
+        Assert::assertAction('Bar', SqlInsert::class, json_encode($config), $metadata);
     }
 
     public function testDelete()

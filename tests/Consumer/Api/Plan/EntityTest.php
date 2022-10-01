@@ -69,7 +69,10 @@ class EntityTest extends ControllerDbTestCase
     "description": "",
     "price": 39.99,
     "points": 500,
-    "period": 1
+    "period": 1,
+    "metadata": {
+        "foo": "bar"
+    }
 }
 JSON;
 

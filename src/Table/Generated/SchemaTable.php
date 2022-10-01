@@ -14,13 +14,14 @@ class SchemaTable extends \PSX\Sql\TableAbstract
     public const COLUMN_NAME = 'name';
     public const COLUMN_SOURCE = 'source';
     public const COLUMN_FORM = 'form';
+    public const COLUMN_METADATA = 'metadata';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_SOURCE => 0xb00000, self::COLUMN_FORM => 0x40b00000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_SOURCE => 0xb00000, self::COLUMN_FORM => 0x40b00000, self::COLUMN_METADATA => 0x40b00000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\SchemaRow>
@@ -166,6 +167,25 @@ class SchemaTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('form', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\SchemaRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\SchemaRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
     /**

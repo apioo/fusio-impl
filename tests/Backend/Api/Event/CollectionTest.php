@@ -71,7 +71,10 @@ class CollectionTest extends ControllerDbTestCase
             "id": 46,
             "status": 1,
             "name": "foo-event",
-            "description": "Foo event description"
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -83,6 +86,10 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/event', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -90,6 +97,7 @@ JSON;
             'name'        => 'bar-event',
             'description' => 'Test description',
             'schema'      => 'my_schema',
+            'metadata'    => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -105,7 +113,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'event_schema')
+            ->select('id', 'status', 'name', 'description', 'event_schema', 'metadata')
             ->from('fusio_event')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -119,6 +127,7 @@ JSON;
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertEquals('my_schema', $row['event_schema']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testPut()

@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -61,11 +62,14 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
     "id": 1,
     "userId": 1,
+    "planId": 2,
     "plan": {
         "id": 1,
         "name": "Plan A",
@@ -77,7 +81,9 @@ class EntityTest extends ControllerDbTestCase
     "transactionId": 0,
     "amount": 3999,
     "points": 1000,
-    "insertDate": "2018-10-05T18:18:00Z"
+    "periodStart": "[datetime]",
+    "periodEnd": "[datetime]",
+    "insertDate": "[datetime]"
 }
 JSON;
 

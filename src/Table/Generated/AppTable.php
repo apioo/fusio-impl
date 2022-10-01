@@ -16,6 +16,7 @@ class AppTable extends \PSX\Sql\TableAbstract
     public const COLUMN_PARAMETERS = 'parameters';
     public const COLUMN_APP_KEY = 'app_key';
     public const COLUMN_APP_SECRET = 'app_secret';
+    public const COLUMN_METADATA = 'metadata';
     public const COLUMN_DATE = 'date';
     public function getName() : string
     {
@@ -23,7 +24,7 @@ class AppTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_URL => 0xa000ff, self::COLUMN_PARAMETERS => 0x40a000ff, self::COLUMN_APP_KEY => 0xa000ff, self::COLUMN_APP_SECRET => 0xa000ff, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_URL => 0xa000ff, self::COLUMN_PARAMETERS => 0x40a000ff, self::COLUMN_APP_KEY => 0xa000ff, self::COLUMN_APP_SECRET => 0xa000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AppRow>
@@ -207,6 +208,25 @@ class AppTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('app_secret', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AppRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\AppRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
     /**

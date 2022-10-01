@@ -92,6 +92,7 @@ class Route
                 Table\Generated\RoutesTable::COLUMN_METHODS => 'ANY',
                 Table\Generated\RoutesTable::COLUMN_PATH => $route->getPath(),
                 Table\Generated\RoutesTable::COLUMN_CONTROLLER => $route->getController(),
+                Table\Generated\RoutesTable::COLUMN_METADATA => $route->getMetadata() !== null ? json_encode($route->getMetadata()) : null,
             ]);
 
             $this->routesTable->create($record);
@@ -145,6 +146,7 @@ class Route
             $record = new Table\Generated\RoutesRow([
                 Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
                 Table\Generated\RoutesTable::COLUMN_PRIORITY => $priority,
+                Table\Generated\RoutesTable::COLUMN_METADATA => $route->getMetadata() !== null ? json_encode($route->getMetadata()) : null,
             ]);
 
             $this->routesTable->update($record);

@@ -72,6 +72,7 @@ class Scope
                 Table\Generated\ScopeTable::COLUMN_CATEGORY_ID => $categoryId,
                 Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
                 Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription() ?? '',
+                Table\Generated\ScopeTable::COLUMN_METADATA => $scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null,
             ]);
 
             $this->scopeTable->create($record);
@@ -144,6 +145,7 @@ class Scope
                 Table\Generated\ScopeTable::COLUMN_ID => $existing->getId(),
                 Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
                 Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription(),
+                Table\Generated\ScopeTable::COLUMN_METADATA => $scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null,
             ]);
 
             $this->scopeTable->update($record);

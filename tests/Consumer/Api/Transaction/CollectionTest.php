@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -60,6 +61,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -74,7 +76,9 @@ class CollectionTest extends ControllerDbTestCase
             "transactionId": 0,
             "amount": 3999,
             "points": 1000,
-            "insertDate": "2018-10-05T18:18:00Z"
+            "periodStart": "[datetime]",
+            "periodEnd": "[datetime]",
+            "insertDate": "[datetime]"
         }
     ]
 }

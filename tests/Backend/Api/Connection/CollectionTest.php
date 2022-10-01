@@ -75,7 +75,10 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 2,
             "status": 1,
-            "name": "Test"
+            "name": "Test",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,
@@ -139,7 +142,10 @@ JSON;
         {
             "id": 2,
             "status": 1,
-            "name": "Test"
+            "name": "Test",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 1,
@@ -169,13 +175,18 @@ JSON;
             'database' => $connection['dbname'],
         ];
 
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/connection', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Foo',
-            'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
-            'config' => $config,
+            'name'     => 'Foo',
+            'class'    => 'Fusio\Adapter\Sql\Connection\Sql',
+            'config'   => $config,
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -191,7 +202,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'class', 'config')
+            ->select('id', 'name', 'class', 'config', 'metadata')
             ->from('fusio_connection')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -204,6 +215,7 @@ JSON;
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
         $this->assertNotEmpty($row['config']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testPut()

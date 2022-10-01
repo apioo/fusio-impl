@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\User;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -61,7 +62,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -76,6 +77,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         },
         {
@@ -95,6 +97,10 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
+            "points": 100,
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {
@@ -122,7 +128,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -137,6 +143,7 @@ JSON;
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         }
     ]
@@ -155,7 +162,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -170,6 +177,7 @@ JSON;
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
+            "points": 10,
             "date": "[datetime]"
         },
         {
@@ -189,6 +197,10 @@ JSON;
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
+            "points": 100,
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         },
         {
@@ -210,6 +222,10 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/user', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -220,6 +236,7 @@ JSON;
             'name'     => 'test',
             'email'    => 'test@localhost.com',
             'password' => 'fooo123!',
+            'metadata' => $metadata,
         ]));
 
         $body = (string) $response->getBody();
@@ -236,7 +253,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'plan_id', 'status', 'name', 'email', 'password')
+            ->select('id', 'plan_id', 'status', 'name', 'email', 'password', 'metadata')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -251,6 +268,7 @@ JSON;
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('test@localhost.com', $row['email']);
         $this->assertTrue(password_verify('fooo123!', $row['password']));
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'user_id', 'scope_id')

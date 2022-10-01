@@ -152,6 +152,10 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/plan/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -161,7 +165,8 @@ JSON;
             'price'       => 49.99,
             'points'      => 4000,
             'externalId'  => 'foobar',
-            'scopes'      => ['bar']
+            'scopes'      => ['bar'],
+            'metadata'    => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -177,7 +182,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'period_type', 'external_id')
+            ->select('id', 'name', 'description', 'price', 'points', 'period_type', 'external_id', 'metadata')
             ->from('fusio_plan')
             ->where('id = 1')
             ->getSQL();
@@ -191,6 +196,7 @@ JSON;
         $this->assertEquals(4000, $row['points']);
         $this->assertEquals(1, $row['period_type']);
         $this->assertEquals('foobar', $row['external_id']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         // check scopes
         $sql = Environment::getService('connection')->createQueryBuilder()

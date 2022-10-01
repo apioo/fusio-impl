@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity(int $id, array $userAttributes = null)
+    public function getEntity(int $id)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
@@ -52,24 +52,7 @@ class User extends ViewAbstract
                 'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
                 'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
-            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
-                'name' => 'name',
-                'value' => 'value',
-            ], null, function(array $result) use ($userAttributes){
-                $values = [];
-                foreach ($result as $row) {
-                    $values[$row['name']] = $row['value'];
-                }
-
-                $data = [];
-                if (!empty($userAttributes)) {
-                    foreach ($userAttributes as $name) {
-                        $data[$name] = $values[$name] ?? null;
-                    }
-                }
-
-                return $data ?: null;
-            }),
+            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 

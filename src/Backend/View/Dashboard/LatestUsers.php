@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Impl\Table;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -39,12 +40,13 @@ class LatestUsers extends ViewAbstract
                          usr.name,
                          usr.date
                     FROM fusio_user usr
-                ORDER BY usr.date DESC';
+                   WHERE usr.status = :status 
+                ORDER BY usr.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
-            'entry' => $this->doCollection($sql, [], [
+            'entry' => $this->doCollection($sql, ['status' => Table\User::STATUS_ACTIVE], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',

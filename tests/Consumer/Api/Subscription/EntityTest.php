@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Subscription;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -61,6 +62,7 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -73,7 +75,7 @@ class EntityTest extends ControllerDbTestCase
             "status": 2,
             "code": 200,
             "attempts": 1,
-            "executeDate": "2018-06-02T14:41:23Z"
+            "executeDate": "[datetime]"
         }
     ]
 }

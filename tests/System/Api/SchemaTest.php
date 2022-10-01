@@ -142,6 +142,9 @@ JSON;
                     "appSecret": {
                         "type": "string"
                     },
+                    "metadata": {
+                        "$ref": "Metadata"
+                    },
                     "date": {
                         "format": "date-time",
                         "type": "string"
@@ -191,6 +194,12 @@ JSON;
                     }
                 }
             },
+            "Metadata": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
             "User": {
                 "type": "object",
                 "properties": {
@@ -228,19 +237,13 @@ JSON;
                             "$ref": "App"
                         }
                     },
-                    "attributes": {
-                        "$ref": "User_Attributes"
+                    "metadata": {
+                        "$ref": "Metadata"
                     },
                     "date": {
                         "format": "date-time",
                         "type": "string"
                     }
-                }
-            },
-            "User_Attributes": {
-                "type": "object",
-                "additionalProperties": {
-                    "type": "string"
                 }
             }
         },

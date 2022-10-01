@@ -80,7 +80,10 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 42,
             "name": "foo",
-            "description": "Foo access"
+            "description": "Foo access",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 4,
@@ -112,7 +115,10 @@ JSON;
         {
             "id": 42,
             "name": "foo",
-            "description": "Foo access"
+            "description": "Foo access",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -149,7 +155,10 @@ JSON;
         {
             "id": 42,
             "name": "foo",
-            "description": "Foo access"
+            "description": "Foo access",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 4,
@@ -166,13 +175,17 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/scope', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'        => 'test',
             'description' => 'Test description',
-            'routes' => [[
+            'routes'      => [[
                 'routeId' => Fixture::getId('fusio_routes', '/foo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
@@ -180,7 +193,8 @@ JSON;
                 'routeId' => Fixture::getId('fusio_routes', '/inspect/:foo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
-            ]]
+            ]],
+            'metadata'    => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -196,7 +210,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description')
+            ->select('id', 'name', 'description', 'metadata')
             ->from('fusio_scope')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -208,6 +222,7 @@ JSON;
         $this->assertEquals(45, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('scope_id', 'route_id', 'allow', 'methods')

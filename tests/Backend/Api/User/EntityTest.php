@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Backend\Api\User;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -36,7 +37,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -71,7 +72,7 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -106,7 +107,7 @@ class EntityTest extends ControllerDbTestCase
             "status": 3,
             "name": "Deactivated",
             "url": "http:\/\/google.com",
-            "appKey": "f46af464-f7eb-4d04-8661-13063a30826b",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -114,7 +115,7 @@ class EntityTest extends ControllerDbTestCase
             "status": 2,
             "name": "Pending",
             "url": "http:\/\/google.com",
-            "appKey": "7c14809c-544b-43bd-9002-23e1c2de6067",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -122,10 +123,13 @@ class EntityTest extends ControllerDbTestCase
             "status": 1,
             "name": "Foo-App",
             "url": "http:\/\/google.com",
-            "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         }
     ],
+    "metadata": {
+        "foo": "bar"
+    },
     "date": "[datetime]"
 }
 JSON;
@@ -172,16 +176,21 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/user/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'roleId' => 2,
-            'planId' => 2,
-            'status' => User::STATUS_ACTIVE,
-            'name'   => 'bar',
-            'email'  => 'bar@bar.com',
-            'scopes' => ['bar'],
+            'roleId'   => 2,
+            'planId'   => 2,
+            'status'   => User::STATUS_ACTIVE,
+            'name'     => 'bar',
+            'email'    => 'bar@bar.com',
+            'scopes'   => ['bar'],
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -197,7 +206,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'role_id', 'plan_id', 'status', 'name', 'email')
+            ->select('id', 'role_id', 'plan_id', 'status', 'name', 'email', 'metadata')
             ->from('fusio_user')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -209,6 +218,7 @@ JSON;
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
         $this->assertEquals('bar@bar.com', $row['email']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('user_id', 'scope_id')
@@ -222,77 +232,6 @@ JSON;
         $this->assertEquals(1, count($scopes));
         $this->assertEquals(2, $scopes[0]['user_id']);
         $this->assertEquals(43, $scopes[0]['scope_id']);
-    }
-
-    public function testPutAttributes()
-    {
-        $response = $this->sendRequest('/backend/user/' . $this->id, 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'status' => 1,
-            'name'   => 'bar',
-            'email'  => 'bar@bar.com',
-            'scopes' => ['bar'],
-            'attributes' => [
-                'first_name' => 'Foo',
-                'last_name' => 'Bar',
-            ],
-        ]));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "User successfully updated"
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'email')
-            ->from('fusio_user')
-            ->where('id = ' . $this->id)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('bar', $row['name']);
-        $this->assertEquals('bar@bar.com', $row['email']);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('user_id', 'scope_id')
-            ->from('fusio_user_scope')
-            ->where('user_id = :user_id')
-            ->orderBy('id', 'DESC')
-            ->getSQL();
-
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
-
-        $this->assertEquals(1, count($scopes));
-        $this->assertEquals(2, $scopes[0]['user_id']);
-        $this->assertEquals(43, $scopes[0]['scope_id']);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('name', 'value')
-            ->from('fusio_user_attribute')
-            ->where('user_id = ' . $this->id)
-            ->orderBy('id', 'DESC')
-            ->getSQL();
-
-        $attributes = Environment::getService('connection')->fetchAll($sql);
-
-        $this->assertEquals([[
-            'name'  => 'last_name',
-            'value' => 'Bar',
-        ], [
-            'name'  => 'first_name',
-            'value' => 'Foo',
-        ]], $attributes);
     }
 
     public function testDelete()

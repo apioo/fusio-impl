@@ -73,6 +73,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Scope": {
       "type": "object",
       "properties": {
@@ -91,6 +97,9 @@
           "items": {
             "$ref": "Scope_Route"
           }
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

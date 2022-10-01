@@ -45,7 +45,7 @@ class GenerateTableTest extends DbTestCase
 
     public function testGenerate()
     {
-        $this->markTestSkipped();
+        #$this->markTestSkipped();
 
         $target = __DIR__ . '/../../src/Table/Generated';
         $namespace = 'Fusio\Impl\Table\Generated';

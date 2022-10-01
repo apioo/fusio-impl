@@ -73,6 +73,9 @@
         },
         "config": {
           "$ref": "Action_Config"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -249,6 +252,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Route": {
       "type": "object",
       "properties": {
@@ -278,6 +287,9 @@
           "items": {
             "$ref": "Route_Version"
           }
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -369,6 +381,9 @@
         },
         "form": {
           "$ref": "Schema_Form"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

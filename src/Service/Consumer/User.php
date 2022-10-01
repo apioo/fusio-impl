@@ -45,14 +45,8 @@ class User
 
     public function update(User_Account $account, UserContext $context): int
     {
-        $attributes = new User_Attributes();
-        foreach ($account->getAttributes() ?? [] as $key => $value) {
-            $attributes->setProperty($key, $value);
-        }
-
         $backendUser = new User_Update();
         $backendUser->setEmail($account->getEmail());
-        $backendUser->setAttributes($attributes);
 
         return $this->userService->update($context->getUserId(), $backendUser, $context);
     }

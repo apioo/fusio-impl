@@ -56,14 +56,49 @@
     "Consumer_Transaction_Collection": {
       "$ref": "Transaction_Collection"
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        }
+      }
+    },
     "Transaction": {
       "type": "object",
       "properties": {
         "id": {
           "type": "integer"
         },
-        "status": {
+        "userId": {
           "type": "integer"
+        },
+        "planId": {
+          "type": "integer"
+        },
+        "plan": {
+          "$ref": "Plan"
         },
         "transactionId": {
           "type": "string"
@@ -71,11 +106,20 @@
         "amount": {
           "type": "number"
         },
-        "updateDate": {
-          "type": "integer"
+        "points": {
+          "type": "number"
+        },
+        "periodStart": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "periodEnd": {
+          "format": "date-time",
+          "type": "string"
         },
         "insertDate": {
-          "type": "integer"
+          "format": "date-time",
+          "type": "string"
         }
       }
     },

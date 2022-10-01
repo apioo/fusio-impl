@@ -16,13 +16,14 @@ class CronjobTable extends \PSX\Sql\TableAbstract
     public const COLUMN_ACTION = 'action';
     public const COLUMN_EXECUTE_DATE = 'execute_date';
     public const COLUMN_EXIT_CODE = 'exit_code';
+    public const COLUMN_METADATA = 'metadata';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_CRON => 0xa000ff, self::COLUMN_ACTION => 0x40a000ff, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_EXIT_CODE => 0x4020000a);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_CRON => 0xa000ff, self::COLUMN_ACTION => 0x40a000ff, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_EXIT_CODE => 0x4020000a, self::COLUMN_METADATA => 0x40b00000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
@@ -206,6 +207,25 @@ class CronjobTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('exit_code', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
     /**

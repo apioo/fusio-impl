@@ -33,6 +33,7 @@ final class Version20200905081453 extends AbstractMigration
             $actionTable->addColumn('async', 'boolean', ['default' => false]);
             $actionTable->addColumn('engine', 'string', ['length' => 255, 'notnull' => false]);
             $actionTable->addColumn('config', 'text', ['notnull' => false]);
+            $actionTable->addColumn('metadata', 'text', ['notnull' => false]);
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
             $actionTable->addUniqueIndex(['name']);
@@ -58,6 +59,7 @@ final class Version20200905081453 extends AbstractMigration
             $appTable->addColumn('parameters', 'string', ['length' => 255, 'notnull' => false]);
             $appTable->addColumn('app_key', 'string', ['length' => 255]);
             $appTable->addColumn('app_secret', 'string', ['length' => 255]);
+            $appTable->addColumn('metadata', 'text', ['notnull' => false]);
             $appTable->addColumn('date', 'datetime');
             $appTable->setPrimaryKey(['id']);
             $appTable->addUniqueIndex(['app_key']);
@@ -141,6 +143,7 @@ final class Version20200905081453 extends AbstractMigration
             $connectionTable->addColumn('name', 'string', ['length' => 255]);
             $connectionTable->addColumn('class', 'string', ['length' => 255]);
             $connectionTable->addColumn('config', 'text', ['notnull' => false]);
+            $connectionTable->addColumn('metadata', 'text', ['notnull' => false]);
             $connectionTable->setPrimaryKey(['id']);
             $connectionTable->addUniqueIndex(['name']);
         }
@@ -155,6 +158,7 @@ final class Version20200905081453 extends AbstractMigration
             $cronjobTable->addColumn('action', 'string', ['notnull' => false]);
             $cronjobTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
             $cronjobTable->addColumn('exit_code', 'integer', ['notnull' => false]);
+            $cronjobTable->addColumn('metadata', 'text', ['notnull' => false]);
             $cronjobTable->setPrimaryKey(['id']);
             $cronjobTable->addUniqueIndex(['name']);
         }
@@ -178,6 +182,7 @@ final class Version20200905081453 extends AbstractMigration
             $eventTable->addColumn('name', 'string', ['length' => 64]);
             $eventTable->addColumn('description', 'string', ['length' => 255]);
             $eventTable->addColumn('event_schema', 'string', ['notnull' => false]);
+            $eventTable->addColumn('metadata', 'text', ['notnull' => false]);
             $eventTable->setPrimaryKey(['id']);
             $eventTable->addUniqueIndex(['name']);
         }
@@ -253,6 +258,7 @@ final class Version20200905081453 extends AbstractMigration
             $pageTable->addColumn('title', 'string', ['length' => 255]);
             $pageTable->addColumn('slug', 'string', ['length' => 255]);
             $pageTable->addColumn('content', 'text');
+            $pageTable->addColumn('metadata', 'text', ['notnull' => false]);
             $pageTable->addColumn('date', 'datetime');
             $pageTable->setPrimaryKey(['id']);
             $pageTable->addUniqueIndex(['slug']);
@@ -268,6 +274,7 @@ final class Version20200905081453 extends AbstractMigration
             $planTable->addColumn('points', 'integer');
             $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
             $planTable->addColumn('external_id', 'string', ['notnull' => false]);
+            $planTable->addColumn('metadata', 'text', ['notnull' => false]);
             $planTable->setPrimaryKey(['id']);
             $planTable->addUniqueIndex(['name']);
         }
@@ -308,6 +315,7 @@ final class Version20200905081453 extends AbstractMigration
             $rateTable->addColumn('name', 'string', ['length' => 64]);
             $rateTable->addColumn('rate_limit', 'integer');
             $rateTable->addColumn('timespan', 'string');
+            $rateTable->addColumn('metadata', 'text', ['notnull' => false]);
             $rateTable->setPrimaryKey(['id']);
             $rateTable->addUniqueIndex(['name']);
             $rateTable->addIndex(['status'], 'IDX_RATE_S');
@@ -353,6 +361,7 @@ final class Version20200905081453 extends AbstractMigration
             $routesTable->addColumn('methods', 'string', ['length' => 64]);
             $routesTable->addColumn('path', 'string', ['length' => 255]);
             $routesTable->addColumn('controller', 'string', ['length' => 255]);
+            $routesTable->addColumn('metadata', 'text', ['notnull' => false]);
             $routesTable->setPrimaryKey(['id']);
             $routesTable->addUniqueIndex(['path']);
             $routesTable->addIndex(['priority']);
@@ -396,6 +405,7 @@ final class Version20200905081453 extends AbstractMigration
             $schemaTable->addColumn('name', 'string', ['length' => 255]);
             $schemaTable->addColumn('source', 'text');
             $schemaTable->addColumn('form', 'text', ['notnull' => false, 'default' => null]);
+            $schemaTable->addColumn('metadata', 'text', ['notnull' => false]);
             $schemaTable->setPrimaryKey(['id']);
             $schemaTable->addUniqueIndex(['name']);
         }
@@ -407,6 +417,7 @@ final class Version20200905081453 extends AbstractMigration
             $scopeTable->addColumn('status', 'integer', ['default' => Table\Scope::STATUS_ACTIVE]);
             $scopeTable->addColumn('name', 'string', ['length' => 32]);
             $scopeTable->addColumn('description', 'string', ['length' => 255]);
+            $scopeTable->addColumn('metadata', 'text', ['notnull' => false]);
             $scopeTable->setPrimaryKey(['id']);
             $scopeTable->addUniqueIndex(['name']);
         }
@@ -450,20 +461,12 @@ final class Version20200905081453 extends AbstractMigration
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('points', 'integer', ['notnull' => false]);
             $userTable->addColumn('token', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $userTable->addColumn('metadata', 'text', ['notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
             $userTable->addUniqueIndex(['provider', 'remote_id']);
             $userTable->addUniqueIndex(['name']);
             $userTable->addUniqueIndex(['email']);
-        }
-
-        if (!$schema->hasTable('fusio_user_attribute')) {
-            $userAttributeTable = $schema->createTable('fusio_user_attribute');
-            $userAttributeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $userAttributeTable->addColumn('user_id', 'integer');
-            $userAttributeTable->addColumn('name', 'string');
-            $userAttributeTable->addColumn('value', 'string');
-            $userAttributeTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {
@@ -547,10 +550,6 @@ final class Version20200905081453 extends AbstractMigration
             $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'scope_routes_route_id');
         }
 
-        if (isset($userAttributeTable)) {
-            $userAttributeTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_attribute_user_id');
-        }
-
         if (isset($userGrantTable)) {
             $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_grant_user_id');
             $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'user_grant_app_id');
@@ -594,7 +593,6 @@ final class Version20200905081453 extends AbstractMigration
         $schema->dropTable('fusio_scope');
         $schema->dropTable('fusio_scope_routes');
         $schema->dropTable('fusio_user');
-        $schema->dropTable('fusio_user_attribute');
         $schema->dropTable('fusio_user_grant');
         $schema->dropTable('fusio_user_scope');
     }

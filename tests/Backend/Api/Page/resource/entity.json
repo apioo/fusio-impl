@@ -73,6 +73,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Page": {
       "type": "object",
       "properties": {
@@ -90,6 +96,9 @@
         },
         "content": {
           "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

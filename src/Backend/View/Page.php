@@ -71,6 +71,7 @@ class Page extends ViewAbstract
                 'status' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
                 'title' => Table\Generated\PageTable::COLUMN_TITLE,
                 'slug' => Table\Generated\PageTable::COLUMN_SLUG,
+                'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
                 'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
             ]),
         ];
@@ -86,6 +87,7 @@ class Page extends ViewAbstract
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,
             'content' => Table\Generated\PageTable::COLUMN_CONTENT,
+            'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
         ]);
 

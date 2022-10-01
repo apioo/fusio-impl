@@ -73,6 +73,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Schema": {
       "type": "object",
       "properties": {
@@ -91,6 +97,9 @@
         },
         "form": {
           "$ref": "Schema_Form"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

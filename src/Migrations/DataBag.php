@@ -174,7 +174,7 @@ class DataBag
         return $result;
     }
 
-    public function addAction(string $category, string $name, string $class, ?string $config = null, ?string $date = null)
+    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null)
     {
         $this->data['fusio_action'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -183,11 +183,12 @@ class DataBag
             'class' => $class,
             'engine' => PhpClass::class,
             'config' => $config,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
-    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?string $date = null)
+    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null)
     {
         $this->data['fusio_app'][$name] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -197,7 +198,8 @@ class DataBag
             'parameters' => '',
             'app_key' => $appKey,
             'app_secret' => $appSecret,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -209,7 +211,7 @@ class DataBag
             'code' => $code,
             'redirect_uri' => '',
             'scope' => $scope,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -231,8 +233,8 @@ class DataBag
             'refresh' => $refresh,
             'scope' => $scope,
             'ip' => '127.0.0.1',
-            'expire' => $expire,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'expire' => (new \DateTime($expire))->format('Y-m-d H:i:s'),
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -246,7 +248,7 @@ class DataBag
             'ip' => '127.0.0.1',
             'message' => $message,
             'content' => '{"foo": "bar"}',
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -268,17 +270,18 @@ class DataBag
         ];
     }
 
-    public function addConnection(string $name, string $class, ?string $config = null)
+    public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null)
     {
         $this->data['fusio_connection'][$name] = [
             'status' => Table\Connection::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
-            'config' => $config
+            'config' => $config,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
-    public function addCronjob(string $category, string $name, string $cron, string $action)
+    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null)
     {
         $this->data['fusio_cronjob'][$name] = [
             'category_id' => $this->getId('fusio_category', $category),
@@ -287,7 +290,8 @@ class DataBag
             'cron' => $cron,
             'action' => $action,
             'execute_date' => '2015-02-27 19:59:15',
-            'exit_code' => 0
+            'exit_code' => 0,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
@@ -302,17 +306,18 @@ class DataBag
         ];
     }
 
-    public function addEvent(string $category, string $name, string $description = '')
+    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null)
     {
         $this->data['fusio_event'][$name] = [
             'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Event::STATUS_ACTIVE,
             'name' => $name,
-            'description' => $description
+            'description' => $description,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
-    public function addEventResponse(int $trigger, int $subscription)
+    public function addEventResponse(int $trigger, int $subscription, ?string $executeDate = null, ?string $insertDate = null)
     {
         $this->data['fusio_event_response'][] = [
             'trigger_id' => $this->getId('fusio_event_trigger', $trigger),
@@ -320,8 +325,8 @@ class DataBag
             'status' => 2,
             'code' => 200,
             'attempts' => 1,
-            'execute_date' => '2018-06-02 14:41:23',
-            'insert_date' => '2018-06-02 14:41:23'
+            'execute_date' => (new \DateTime($executeDate))->format('Y-m-d H:i:s'),
+            'insert_date' => (new \DateTime($insertDate))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -341,7 +346,7 @@ class DataBag
             'event_id' => $this->getId('fusio_event', $event),
             'status' => 2,
             'payload' => $payload,
-            'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'insert_date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -373,18 +378,19 @@ class DataBag
         ];
     }
 
-    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE)
+    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null)
     {
         $this->data['fusio_page'][$slug] = [
             'status' => $status,
             'title' => $title,
             'slug' => $slug,
             'content' => $content,
-            'date' => '2021-07-03 13:53:09'
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
-    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null)
+    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null)
     {
         $this->data['fusio_plan'][$name] = [
             'status' => Table\Plan::STATUS_ACTIVE,
@@ -394,6 +400,7 @@ class DataBag
             'points' => $points,
             'period_type' => $period,
             'external_id' => $externalId,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
@@ -404,7 +411,7 @@ class DataBag
             'user_id' => $this->getId('fusio_user', $user),
             'app_id' => $this->getId('fusio_app', $app),
             'points' => $points,
-            'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'insert_date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -424,20 +431,21 @@ class DataBag
             'transaction_id' => '[transaction_id]',
             'amount' => $amount,
             'points' => 1000,
-            'period_start' => $periodStart,
-            'period_end' => $periodEnd,
-            'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
+            'period_start' => (new \DateTime($periodStart))->format('Y-m-d H:i:s'),
+            'period_end' => (new \DateTime($periodEnd))->format('Y-m-d H:i:s'),
+            'insert_date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
-    public function addRate(string $name, int $priority, int $rateLimit, string $timespan)
+    public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null)
     {
         $this->data['fusio_rate'][$name] = [
             'status' => Table\Rate::STATUS_ACTIVE,
             'priority' => $priority,
             'name' => $name,
             'rate_limit' => $rateLimit,
-            'timespan' => $timespan
+            'timespan' => $timespan,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
@@ -470,7 +478,7 @@ class DataBag
         ];
     }
 
-    public function addRoute(string $category, int $prio, string $path, string $controller)
+    public function addRoute(string $category, int $prio, string $path, string $controller, ?array $metadata = null)
     {
         $this->data['fusio_routes'][$path] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -478,7 +486,8 @@ class DataBag
             'priority' => $prio,
             'methods' => 'ANY',
             'path' => $path,
-            'controller' => $controller
+            'controller' => $controller,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
@@ -508,23 +517,25 @@ class DataBag
         ];
     }
 
-    public function addSchema(string $category, string $name, string $source, ?string $form = null)
+    public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null)
     {
         $this->data['fusio_schema'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Schema::STATUS_ACTIVE,
             'name' => $name,
             'source' => $source,
-            'form' => $form
+            'form' => $form,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
-    public function addScope(string $category, string $name, string $description = '')
+    public function addScope(string $category, string $name, string $description = '', ?array $metadata = null)
     {
         $this->data['fusio_scope'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
             'name' => $name,
-            'description' => $description
+            'description' => $description,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
@@ -538,7 +549,7 @@ class DataBag
         ];
     }
 
-    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?string $date = null)
+    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null)
     {
         $this->data['fusio_user'][$name] = [
             'role_id' => self::getId('fusio_role', $role),
@@ -548,7 +559,8 @@ class DataBag
             'email' => $email,
             'password' => $password,
             'points' => $points,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -566,16 +578,7 @@ class DataBag
             'user_id' => $this->getId('fusio_user', $user),
             'app_id' => $this->getId('fusio_app', $app),
             'allow' => $allow,
-            'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date
-        ];
-    }
-
-    public function addUserAttribute(string $user, string $name, string $value)
-    {
-        $this->data['fusio_user_attribute'][] = [
-            'user_id' => $this->getId('fusio_user', $user),
-            'name' => $name,
-            'value' => $value
+            'date' => (new \DateTime($date))->format('Y-m-d H:i:s'),
         ];
     }
 
