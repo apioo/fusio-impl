@@ -36,7 +36,7 @@ use Fusio\Impl\Table;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection(int $userId, ?int $startIndex = null, ?int $invoiceId = null)
+    public function getCollection(int $userId, ?int $startIndex = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -58,6 +58,8 @@ class Transaction extends ViewAbstract
                 'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
                 'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
                 'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+                'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+                'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
                 'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
@@ -74,6 +76,7 @@ class Transaction extends ViewAbstract
         $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'findOneBy'], [$condition], [
             'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
             'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+            'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
             'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('id')], [
                 'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
@@ -85,6 +88,8 @@ class Transaction extends ViewAbstract
             'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
             'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
             'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+            'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+            'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
             'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 

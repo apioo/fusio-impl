@@ -39,19 +39,16 @@ use PSX\Sql\TableManagerInterface;
 class Get extends ActionAbstract
 {
     private View\User $table;
-    private Config $config;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config)
+    public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\User::class);
-        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getEntity(
-            $context->getUser()->getId(),
-            $this->config->get('fusio_user_attributes')
+            $context->getUser()->getId()
         );
     }
 }

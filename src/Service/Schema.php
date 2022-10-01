@@ -81,6 +81,7 @@ class Schema
                 Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
                 Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
                 Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
+                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
             ]);
 
             $this->schemaTable->create($record);
@@ -122,6 +123,7 @@ class Schema
                 Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
                 Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
                 Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
+                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
             ]);
 
             $this->schemaTable->update($record);

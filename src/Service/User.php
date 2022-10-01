@@ -24,7 +24,6 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Model\Backend\Account_ChangePassword;
-use Fusio\Model\Backend\User_Attributes;
 use Fusio\Model\Backend\User_Create;
 use Fusio\Model\Backend\User_Remote;
 use Fusio\Model\Backend\User_Update;
@@ -58,9 +57,8 @@ class User
     private Table\Plan $planTable;
     private Service\Config $configService;
     private EventDispatcherInterface $eventDispatcher;
-    private ?array $userAttributes;
 
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, ?array $userAttributes = null)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
@@ -70,7 +68,6 @@ class User
         $this->planTable       = $planTable;
         $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
-        $this->userAttributes  = $userAttributes;
     }
 
     /**
@@ -147,6 +144,7 @@ class User
                 Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
                 Table\Generated\UserTable::COLUMN_PASSWORD => $user->getPassword() !== null ? \password_hash($user->getPassword(), PASSWORD_DEFAULT) : null,
                 Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
+                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
                 Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
             ]);
 
@@ -280,6 +278,7 @@ class User
                 Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
                 Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
                 Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
+                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
             ]);
 
             $this->userTable->update($record);
@@ -291,9 +290,6 @@ class User
                 // add scopes
                 $this->insertScopes($existing->getId(), $user->getScopes());
             }
-
-            // update attributes
-            $this->updateAttributes($existing->getId(), $user->getAttributes());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -391,7 +387,7 @@ class User
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
     }
 
-    protected function insertScopes(int $userId, array $scopes): void
+    private function insertScopes(int $userId, array $scopes): void
     {
         $scopes = $this->scopeTable->getValidScopes($scopes);
 
@@ -403,7 +399,7 @@ class User
         }
     }
 
-    protected function insertScopesByRole(int $userId, int $roleId): void
+    private function insertScopesByRole(int $userId, int $roleId): void
     {
         $scopes = $this->roleScopeTable->getAvailableScopes($roleId);
         if (!empty($scopes)) {
@@ -412,22 +408,6 @@ class User
                     Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
                     Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope['id'],
                 ]));
-            }
-        }
-    }
-
-    protected function updateAttributes(int $userId, ?User_Attributes $attributes): void
-    {
-        if (empty($this->userAttributes)) {
-            // in case we have no attributes defined
-            return;
-        }
-
-        if (!empty($attributes)) {
-            foreach ($attributes as $name => $value) {
-                if (in_array($name, $this->userAttributes)) {
-                    $this->userTable->setAttribute($userId, $name, $value);
-                }
             }
         }
     }

@@ -103,6 +103,7 @@ class Cronjob extends ViewAbstract
                 'file' => Table\Generated\CronjobErrorTable::COLUMN_FILE,
                 'line' => Table\Generated\CronjobErrorTable::COLUMN_LINE,
             ]),
+            'metadata' => $this->fieldJson(Table\Generated\CronjobTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

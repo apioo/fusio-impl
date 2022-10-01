@@ -13,6 +13,7 @@ class PageTable extends \PSX\Sql\TableAbstract
     public const COLUMN_TITLE = 'title';
     public const COLUMN_SLUG = 'slug';
     public const COLUMN_CONTENT = 'content';
+    public const COLUMN_METADATA = 'metadata';
     public const COLUMN_DATE = 'date';
     public function getName() : string
     {
@@ -20,7 +21,7 @@ class PageTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TITLE => 0xa000ff, self::COLUMN_SLUG => 0xa000ff, self::COLUMN_CONTENT => 0xb00000, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TITLE => 0xa000ff, self::COLUMN_SLUG => 0xa000ff, self::COLUMN_CONTENT => 0xb00000, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\PageRow>
@@ -147,6 +148,25 @@ class PageTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('content', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\PageRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\PageRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
     /**

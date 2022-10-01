@@ -97,6 +97,7 @@ class Connection
                 Table\Generated\ConnectionTable::COLUMN_NAME => $connection->getName(),
                 Table\Generated\ConnectionTable::COLUMN_CLASS => $connection->getClass(),
                 Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
+                Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
             ]);
 
             $this->connectionTable->create($record);
@@ -145,6 +146,7 @@ class Connection
         $record = new Table\Generated\ConnectionRow([
             Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
             Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
+            Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
         ]);
 
         $this->connectionTable->update($record);

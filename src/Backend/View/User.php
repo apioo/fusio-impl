@@ -80,7 +80,7 @@ class User extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id, array $userAttributes = null)
+    public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
@@ -107,24 +107,7 @@ class User extends ViewAbstract
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
                 'date' => Table\Generated\AppTable::COLUMN_DATE,
             ]),
-            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
-                'name' => Table\Generated\UserAttributeTable::COLUMN_NAME,
-                'value' => Table\Generated\UserAttributeTable::COLUMN_VALUE,
-            ], null, function (array $result) use ($userAttributes) {
-                $values = [];
-                foreach ($result as $row) {
-                    $values[$row['name']] = $row['value'];
-                }
-
-                $data = [];
-                if (!empty($userAttributes)) {
-                    foreach ($userAttributes as $name) {
-                        $data[$name] = $values[$name] ?? null;
-                    }
-                }
-
-                return $data ?: null;
-            }),
+            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 

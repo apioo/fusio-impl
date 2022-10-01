@@ -70,6 +70,7 @@ class Page
                 Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
                 Table\Generated\PageTable::COLUMN_SLUG => $slug,
                 Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
+                Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,
                 Table\Generated\PageTable::COLUMN_DATE => new \DateTime(),
             ]);
 
@@ -112,6 +113,7 @@ class Page
             Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
             Table\Generated\PageTable::COLUMN_SLUG => $slug,
             Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
+            Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,
         ]);
 
         $this->pageTable->update($record);

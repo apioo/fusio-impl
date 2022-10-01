@@ -47,8 +47,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Role::class),
             $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('config_service'),
-            $this->get('event_dispatcher'),
-            $this->get('config')->get('fusio_user_attributes')
+            $this->get('event_dispatcher')
         );
     }
 

@@ -68,4 +68,12 @@ class PlanRow extends \PSX\Record\Record
     {
         return $this->getProperty('external_id');
     }
+    public function setMetadata(?string $metadata) : void
+    {
+        $this->setProperty('metadata', $metadata);
+    }
+    public function getMetadata() : ?string
+    {
+        return $this->getProperty('metadata');
+    }
 }

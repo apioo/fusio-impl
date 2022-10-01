@@ -161,6 +161,7 @@ class Route extends ViewAbstract
 
                 return array_values($data);
             }),
+            'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

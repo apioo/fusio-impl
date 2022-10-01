@@ -90,6 +90,7 @@ class App extends ViewAbstract
                 'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
                 'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
+            'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
         ]);
 

@@ -44,6 +44,14 @@ class PageRow extends \PSX\Record\Record
     {
         return $this->getProperty('content');
     }
+    public function setMetadata(?string $metadata) : void
+    {
+        $this->setProperty('metadata', $metadata);
+    }
+    public function getMetadata() : ?string
+    {
+        return $this->getProperty('metadata');
+    }
     public function setDate(?\DateTime $date) : void
     {
         $this->setProperty('date', $date);

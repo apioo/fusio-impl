@@ -104,6 +104,7 @@ class Rate extends ViewAbstract
                 'appId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_APP_ID),
                 'authenticated' => $this->fieldBoolean(Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED),
             ]),
+            'metadata' => $this->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

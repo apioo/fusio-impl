@@ -98,6 +98,7 @@ class Action extends ViewAbstract
             'config' => $this->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
                 return Service\Action::unserializeConfig($config);
             }),
+            'metadata' => $this->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
             'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
         ]);
 

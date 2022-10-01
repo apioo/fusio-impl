@@ -96,6 +96,7 @@ class Scope extends ViewAbstract
                 'allow' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ALLOW),
                 'methods' => Table\Generated\ScopeRoutesTable::COLUMN_METHODS,
             ]),
+            'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);

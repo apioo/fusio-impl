@@ -74,6 +74,7 @@ class Rate
                 Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
                 Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
                 Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
+                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
             ]);
 
             $this->rateTable->create($record);
@@ -116,6 +117,7 @@ class Rate
                 Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
                 Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
                 Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
+                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
             ]);
 
             $this->rateTable->update($record);

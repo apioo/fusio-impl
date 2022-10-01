@@ -73,6 +73,7 @@ class Plan
                 Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
                 Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
                 Table\Generated\PlanTable::COLUMN_EXTERNAL_ID => $plan->getExternalId(),
+                Table\Generated\PlanTable::COLUMN_METADATA => $plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null,
             ]);
 
             $this->planTable->create($record);
@@ -97,18 +98,6 @@ class Plan
         return $planId;
     }
 
-    protected function insertScopes(int $planId, array $scopes): void
-    {
-        $scopes = $this->scopeTable->getValidScopes($scopes);
-
-        foreach ($scopes as $scope) {
-            $this->planScopeTable->create(new Table\Generated\PlanScopeRow([
-                Table\Generated\PlanScopeTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\PlanScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-            ]));
-        }
-    }
-
     public function update(int $planId, Plan_Update $plan, UserContext $context): int
     {
         $existing = $this->planTable->find($planId);
@@ -129,6 +118,7 @@ class Plan
             Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
             Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
             Table\Generated\PlanTable::COLUMN_EXTERNAL_ID => $plan->getExternalId(),
+            Table\Generated\PlanTable::COLUMN_METADATA => $plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null,
         ]);
 
         $this->planTable->update($record);
@@ -177,6 +167,18 @@ class Plan
             return $plan->getId() ?? false;
         } else {
             return false;
+        }
+    }
+
+    private function insertScopes(int $planId, array $scopes): void
+    {
+        $scopes = $this->scopeTable->getValidScopes($scopes);
+
+        foreach ($scopes as $scope) {
+            $this->planScopeTable->create(new Table\Generated\PlanScopeRow([
+                Table\Generated\PlanScopeTable::COLUMN_PLAN_ID => $planId,
+                Table\Generated\PlanScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
+            ]));
         }
     }
 }

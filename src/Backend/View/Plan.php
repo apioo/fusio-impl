@@ -74,6 +74,7 @@ class Plan extends ViewAbstract
                 'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
                 'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
                 'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
+                'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
             ]),
         ];
 

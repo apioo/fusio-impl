@@ -67,9 +67,9 @@ class Schema extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+                'name' => Table\Generated\SchemaTable::COLUMN_NAME,
             ]),
         ];
 
@@ -87,11 +87,12 @@ class Schema extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'source' => 'source',
-            'form' => $this->fieldJson('form'),
+            'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+            'name' => Table\Generated\SchemaTable::COLUMN_NAME,
+            'source' => Table\Generated\SchemaTable::COLUMN_SOURCE,
+            'form' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
+            'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
         ]);
 
         return $this->build($definition);
@@ -106,10 +107,10 @@ class Schema extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'form' => $this->fieldJson('form'),
+            'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+            'name' => Table\Generated\SchemaTable::COLUMN_NAME,
+            'form' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
         ]);
 
         return $this->build($definition);
