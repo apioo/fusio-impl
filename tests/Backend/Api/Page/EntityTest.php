@@ -25,6 +25,7 @@ use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -37,7 +38,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -71,7 +72,9 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
     "id": 2,
@@ -79,7 +82,7 @@ class EntityTest extends ControllerDbTestCase
     "title": "Getting started",
     "slug": "getting-started",
     "content": "\n<p class=\"lead\">Learn how to start using this API. Explore the endpoints, sign up for an account, and connect with the\ncommunity.<\/p>\n\n<h3>Quickstart<\/h3>\n\n<p>This is a quick introduction to help you get started using this API.<\/p>\n\n<ul>\n<li><a href=\"\/register\">Signup for a new account<\/a><\/li>\n<li><a href=\"\/authorization\">Learn how to obtain an Access-Token<\/a><\/li>\n<li><a href=\"\/api\">Explore the API documentation<\/a><\/li>\n<li><a href=\"\/sdk\">Download an SDK<\/a><\/li>\n<\/ul>",
-    "date": "2021-07-03T13:53:09Z"
+    "date": "[datetime]"
 }
 JSON;
 
@@ -125,13 +128,18 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/page/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status'  => 1,
-            'title'   => 'Foobar',
-            'content' => 'Foobar',
+            'status'   => 1,
+            'title'    => 'Foobar',
+            'content'  => 'Foobar',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -147,7 +155,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'content')
+            ->select('id', 'content', 'metadata')
             ->from('fusio_page')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -155,6 +163,7 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals('Foobar', $row['content']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testDelete()

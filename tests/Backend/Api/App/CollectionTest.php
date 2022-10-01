@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Backend\Api\App;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -62,8 +63,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
@@ -76,7 +76,7 @@ class CollectionTest extends ControllerDbTestCase
             "userId": 2,
             "status": 2,
             "name": "Pending",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -84,7 +84,7 @@ class CollectionTest extends ControllerDbTestCase
             "userId": 2,
             "status": 1,
             "name": "Foo-App",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -92,7 +92,7 @@ class CollectionTest extends ControllerDbTestCase
             "userId": 1,
             "status": 1,
             "name": "Consumer",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -100,7 +100,7 @@ class CollectionTest extends ControllerDbTestCase
             "userId": 1,
             "status": 1,
             "name": "Backend",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         }
     ]
@@ -119,8 +119,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
@@ -133,7 +132,7 @@ JSON;
             "userId": 2,
             "status": 1,
             "name": "Foo-App",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         }
     ]
@@ -152,8 +151,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
@@ -166,7 +164,7 @@ JSON;
             "userId": 2,
             "status": 2,
             "name": "Pending",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -174,7 +172,7 @@ JSON;
             "userId": 2,
             "status": 1,
             "name": "Foo-App",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -182,7 +180,7 @@ JSON;
             "userId": 1,
             "status": 1,
             "name": "Consumer",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         },
         {
@@ -190,7 +188,7 @@ JSON;
             "userId": 1,
             "status": 1,
             "name": "Backend",
-            "appKey": "[app_key]",
+            "appKey": "[uuid]",
             "date": "[datetime]"
         }
     ]
@@ -203,15 +201,18 @@ JSON;
 
     public function testPost()
     {
+        $metadata = ['foo' => 'bar'];
+
         $response = $this->sendRequest('/backend/app', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 0,
-            'userId' => 1,
-            'name'   => 'Foo',
-            'url'    => 'http://google.com',
-            'scopes' => ['foo', 'bar']
+            'status'   => 0,
+            'userId'   => 1,
+            'name'     => 'Foo',
+            'url'      => 'http://google.com',
+            'scopes'   => ['foo', 'bar'],
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -227,7 +228,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
+            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters', 'metadata')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -242,6 +243,7 @@ JSON;
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('', $row['parameters']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(6);
         $scopes = Table\Scope::getNames($scopes);

@@ -73,6 +73,12 @@
         }
       }
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Rate": {
       "type": "object",
       "properties": {
@@ -100,6 +106,9 @@
           "items": {
             "$ref": "Rate_Allocation"
           }
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

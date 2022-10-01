@@ -77,6 +77,9 @@
         },
         "config": {
           "$ref": "Connection_Config"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -100,6 +103,12 @@
         "message": {
           "type": "string"
         }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

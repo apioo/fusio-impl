@@ -76,6 +76,9 @@
         "appSecret": {
           "type": "string"
         },
+        "metadata": {
+          "$ref": "Metadata"
+        },
         "date": {
           "format": "date-time",
           "type": "string"
@@ -152,6 +155,12 @@
         "message": {
           "type": "string"
         }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

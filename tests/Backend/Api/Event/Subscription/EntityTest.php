@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Event\Subscription;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -69,7 +70,9 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
     "id": 1,
@@ -82,7 +85,7 @@ class EntityTest extends ControllerDbTestCase
             "status": 2,
             "code": 200,
             "attempts": 1,
-            "executeDate": "2018-06-02T14:41:23Z"
+            "executeDate": "[datetime]"
         }
     ]
 }

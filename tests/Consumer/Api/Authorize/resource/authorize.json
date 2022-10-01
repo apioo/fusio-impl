@@ -112,6 +112,12 @@
     "Consumer_Authorize_Response": {
       "$ref": "Authorize_Response"
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Scope": {
       "type": "object",
       "properties": {
@@ -124,6 +130,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     }

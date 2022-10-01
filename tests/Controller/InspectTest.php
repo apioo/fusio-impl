@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -63,7 +64,8 @@ class InspectTest extends ControllerDbTestCase
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+        $actual = Normalizer::normalize($actual);
+
         $expect = <<<'JSON'
 {
     "method": "GET",
@@ -75,7 +77,7 @@ class InspectTest extends ControllerDbTestCase
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {
@@ -166,7 +168,7 @@ JSON;
             ));
 
             $actual = (string) $response->getBody();
-            $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+            $actual = Normalizer::normalize($actual);
 
             if ($status === Resource::STATUS_CLOSED) {
                 $data = Parser::decode($actual);
@@ -195,7 +197,7 @@ JSON;
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {
@@ -333,7 +335,8 @@ JSON;
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+        $actual = Normalizer::normalize($actual);
+
         $expect = <<<'JSON'
 {
     "method": "POST",
@@ -345,7 +348,7 @@ JSON;
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {
@@ -374,7 +377,8 @@ JSON;
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+        $actual = Normalizer::normalize($actual);
+
         $expect = <<<'JSON'
 {
     "method": "PUT",
@@ -386,7 +390,7 @@ JSON;
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {
@@ -415,7 +419,8 @@ JSON;
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+        $actual = Normalizer::normalize($actual);
+
         $expect = <<<'JSON'
 {
     "method": "PATCH",
@@ -427,7 +432,7 @@ JSON;
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {
@@ -456,7 +461,8 @@ JSON;
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
+        $actual = Normalizer::normalize($actual);
+
         $expect = <<<'JSON'
 {
     "method": "DELETE",
@@ -468,7 +474,7 @@ JSON;
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "uri_fragments": {

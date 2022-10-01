@@ -30,6 +30,12 @@
     "Consumer_Plan": {
       "$ref": "Plan"
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Plan": {
       "type": "object",
       "properties": {
@@ -47,6 +53,9 @@
         },
         "points": {
           "type": "integer"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     }

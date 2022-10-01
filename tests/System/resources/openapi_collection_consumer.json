@@ -1462,6 +1462,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -1735,6 +1738,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -1879,6 +1885,12 @@
           }
         }
       },
+      "Metadata": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
       "Page": {
         "type": "object",
         "properties": {
@@ -1893,6 +1905,9 @@
           },
           "content": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -1951,6 +1966,9 @@
           },
           "points": {
             "type": "integer"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -1969,6 +1987,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
@@ -1981,8 +2002,14 @@
           "id": {
             "type": "integer"
           },
-          "status": {
+          "userId": {
             "type": "integer"
+          },
+          "planId": {
+            "type": "integer"
+          },
+          "plan": {
+            "$ref": "#\/components\/schemas\/Plan"
           },
           "transactionId": {
             "type": "string"
@@ -1990,11 +2017,20 @@
           "amount": {
             "type": "number"
           },
-          "updateDate": {
-            "type": "integer"
+          "points": {
+            "type": "number"
+          },
+          "periodStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "periodEnd": {
+            "format": "date-time",
+            "type": "string"
           },
           "insertDate": {
-            "type": "integer"
+            "format": "date-time",
+            "type": "string"
           }
         }
       },
@@ -2028,8 +2064,8 @@
               "type": "string"
             }
           },
-          "attributes": {
-            "$ref": "#\/components\/schemas\/User_Attributes"
+          "metadata": {
+            "$ref": "#\/components\/schemas\/Metadata"
           },
           "date": {
             "format": "date-time",
@@ -2047,12 +2083,6 @@
         "required": [
           "token"
         ]
-      },
-      "User_Attributes": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
       },
       "User_Email": {
         "type": "object",

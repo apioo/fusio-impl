@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\System\Api;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -58,7 +59,7 @@ class DebugTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -69,7 +70,7 @@ class DebugTest extends ControllerDbTestCase
             "Fusio TestCase"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "method": "GET",
@@ -93,7 +94,7 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -106,7 +107,7 @@ JSON;
             "Fusio TestCase"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "method": "POST",
@@ -128,7 +129,7 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -141,7 +142,7 @@ JSON;
             "Fusio TestCase"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "method": "PUT",
@@ -163,7 +164,7 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -174,7 +175,7 @@ JSON;
             "Fusio TestCase"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "method": "DELETE",
@@ -196,7 +197,7 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -209,7 +210,7 @@ JSON;
             "Fusio TestCase"
         ],
         "x-request-id": [
-            "00000000-0000-0000-0000-000000000000"
+            "[uuid]"
         ]
     },
     "method": "PATCH",

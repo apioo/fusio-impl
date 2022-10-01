@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Log;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -62,8 +63,7 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -73,7 +73,7 @@ class EntityTest extends ControllerDbTestCase
     "userAgent": "Fusio TestCase",
     "method": "GET",
     "path": "\/consumer\/log\/3",
-    "header": "User-Agent: Fusio TestCase\nAuthorization: Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2\nX-Request-Id: 00000000-0000-0000-0000-000000000000",
+    "header": "User-Agent: Fusio TestCase\nAuthorization: Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2\nX-Request-Id: [uuid]",
     "date": "[datetime]"
 }
 JSON;

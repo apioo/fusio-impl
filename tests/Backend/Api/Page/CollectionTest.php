@@ -27,6 +27,7 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -65,6 +66,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -77,42 +79,42 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "title": "API",
             "slug": "api",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 4,
             "status": 1,
             "title": "Authorization",
             "slug": "authorization",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "title": "Getting started",
             "slug": "getting-started",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 2,
             "title": "Overview",
             "slug": "overview",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 6,
             "status": 1,
             "title": "SDK",
             "slug": "sdk",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 5,
             "status": 1,
             "title": "Support",
             "slug": "support",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -130,6 +132,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
@@ -142,42 +145,42 @@ JSON;
             "status": 1,
             "title": "API",
             "slug": "api",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 4,
             "status": 1,
             "title": "Authorization",
             "slug": "authorization",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "title": "Getting started",
             "slug": "getting-started",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 2,
             "title": "Overview",
             "slug": "overview",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 6,
             "status": 1,
             "title": "SDK",
             "slug": "sdk",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         },
         {
             "id": 5,
             "status": 1,
             "title": "Support",
             "slug": "support",
-            "date": "2021-07-03T13:53:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -211,13 +214,18 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/page', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status'  => 1,
-            'title'   => 'My new page',
-            'content' => '<p>And here some content</p>',
+            'status'   => 1,
+            'title'    => 'My new page',
+            'content'  => '<p>And here some content</p>',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -233,7 +241,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'title', 'content')
+            ->select('id', 'title', 'content', 'metadata')
             ->from('fusio_page')
             ->where('slug = :slug')
             ->getSQL();
@@ -242,6 +250,7 @@ JSON;
 
         $this->assertEquals('My new page', $row['title']);
         $this->assertEquals('<p>And here some content</p>', $row['content']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testPut()

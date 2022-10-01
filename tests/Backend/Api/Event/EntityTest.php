@@ -35,7 +35,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -75,7 +75,10 @@ class EntityTest extends ControllerDbTestCase
     "id": {$this->id},
     "status": 1,
     "name": "foo-event",
-    "description": "Foo event description"
+    "description": "Foo event description",
+    "metadata": {
+        "foo": "bar"
+    }
 }
 JSON;
 
@@ -96,7 +99,10 @@ JSON;
     "id": {$this->id},
     "status": 1,
     "name": "foo-event",
-    "description": "Foo event description"
+    "description": "Foo event description",
+    "metadata": {
+        "foo": "bar"
+    }
 }
 JSON;
 
@@ -142,12 +148,17 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/event/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'        => 'New-Test',
             'description' => 'Test new description',
+            'metadata'    => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -163,7 +174,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description')
+            ->select('id', 'name', 'description', 'metadata')
             ->from('fusio_event')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -172,6 +183,7 @@ JSON;
 
         $this->assertEquals('New-Test', $row['name']);
         $this->assertEquals('Test new description', $row['description']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testDelete()

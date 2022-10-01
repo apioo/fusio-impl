@@ -19,44 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Migrations;
+namespace Fusio\Impl\Tests;
 
-use Fusio\Impl\Backend;
-use Fusio\Impl\Migrations\DataSyncronizer;
-use Fusio\Impl\Migrations\NewInstallation;
-use Fusio\Impl\Table\Config;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\DbTestCase;
-use PSX\Sql\Generator\Generator;
+use Doctrine\DBAL\Connection;
+use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Service;
+use PSX\Framework\Test\Environment;
 
 /**
- * GenerateTableTest
+ * Normalizer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GenerateTableTest extends DbTestCase
+class Normalizer
 {
-    public function getDataSet()
+    public static function normalize(string $data): string
     {
-        return Fixture::getDataSet();
+        $data = self::normalizeUuid($data);
+        $data = self::normalizeDateTime($data);
+        return $data;
     }
 
-    public function testGenerate()
+    public static function normalizeUuid(string $data): string
     {
-        #$this->markTestSkipped();
+        return preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[uuid]', $data);
+    }
 
-        $target = __DIR__ . '/../../src/Table/Generated';
-        $namespace = 'Fusio\Impl\Table\Generated';
-
-        $generator = new Generator($this->connection, $namespace, 'fusio_');
-        $count = 0;
-        foreach ($generator->generate() as $className => $source) {
-            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
-            $count++;
-        }
-
-        $this->assertNotEmpty($count);
+    public static function normalizeDateTime(string $data): string
+    {
+        return preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $data);
     }
 }

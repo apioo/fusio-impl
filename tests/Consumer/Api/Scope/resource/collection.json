@@ -56,6 +56,12 @@
     "Consumer_Scope_Collection": {
       "$ref": "Scope_Collection"
     },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
     "Scope": {
       "type": "object",
       "properties": {
@@ -68,6 +74,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },

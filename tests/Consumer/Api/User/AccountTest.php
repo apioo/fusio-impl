@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -61,7 +62,7 @@ class AccountTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
@@ -122,10 +123,6 @@ class AccountTest extends ControllerDbTestCase
             "points": 1000
         }
     ],
-    "attributes": {
-        "first_name": "Johann",
-        "last_name": "Bach"
-    },
     "date": "[datetime]"
 }
 JSON;

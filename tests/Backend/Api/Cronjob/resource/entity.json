@@ -85,6 +85,9 @@
         "exitCode": {
           "type": "integer"
         },
+        "metadata": {
+          "$ref": "Metadata"
+        },
         "errors": {
           "type": "array",
           "items": {
@@ -123,6 +126,12 @@
         "message": {
           "type": "string"
         }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

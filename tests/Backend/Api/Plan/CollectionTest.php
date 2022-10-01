@@ -76,7 +76,10 @@ class CollectionTest extends ControllerDbTestCase
             "price": 39.99,
             "points": 500,
             "period": 1,
-            "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
+            "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
             "id": 2,
@@ -96,6 +99,10 @@ JSON;
 
     public function testPost()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/plan', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -106,7 +113,8 @@ JSON;
             'points'      => 1000,
             'period'      => ProductInterface::INTERVAL_SUBSCRIPTION,
             'externalId'  => 'price_1L3dOA2Tb35ankTn36cCgliu',
-            'scopes'      => ['foo']
+            'scopes'      => ['foo'],
+            'metadata'    => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -122,7 +130,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type', 'external_id')
+            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type', 'external_id', 'metadata')
             ->from('fusio_plan')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -139,6 +147,7 @@ JSON;
         $this->assertEquals(1000, $row['points']);
         $this->assertEquals(ProductInterface::INTERVAL_SUBSCRIPTION, $row['period_type']);
         $this->assertEquals('price_1L3dOA2Tb35ankTn36cCgliu', $row['external_id']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         // check scopes
         $sql = Environment::getService('connection')->createQueryBuilder()

@@ -79,7 +79,10 @@ class EntityTest extends ControllerDbTestCase
             "file": "[file]",
             "line": 74
         }
-    ]
+    ],
+    "metadata": {
+        "foo": "bar"
+    }
 }
 JSON;
 
@@ -111,7 +114,10 @@ JSON;
             "file": "[file]",
             "line": 74
         }
-    ]
+    ],
+    "metadata": {
+        "foo": "bar"
+    }
 }
 JSON;
 
@@ -157,13 +163,18 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $response = $this->sendRequest('/backend/cronjob/4', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name' => 'Foo-Cron',
-            'cron' => '10 * * * *',
-            'action' => 'Inspect',
+            'name'     => 'Foo-Cron',
+            'cron'     => '10 * * * *',
+            'action'   => 'Inspect',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -179,7 +190,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'cron', 'action')
+            ->select('id', 'name', 'cron', 'action', 'metadata')
             ->from('fusio_cronjob')
             ->where('id = :id')
             ->getSQL();
@@ -190,6 +201,7 @@ JSON;
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
         $this->assertEquals('Inspect', $row['action']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testDelete()

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Dashboard;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -60,7 +61,7 @@ class DashboardTest extends ControllerDbTestCase
         ));
 
         $actual = (string) $response->getBody();
-        $actual = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $actual);
+        $actual = Normalizer::normalize($actual);
         $expect = file_get_contents(__DIR__ . '/resource/dashboard_get.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $actual);

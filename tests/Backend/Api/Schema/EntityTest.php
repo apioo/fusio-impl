@@ -140,6 +140,10 @@ JSON;
 
     public function testPut()
     {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
         $schema = [
             'type' => 'object',
             'properties' => [
@@ -159,8 +163,9 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Test-Schema',
-            'source' => $schema,
+            'name'     => 'Test-Schema',
+            'source'   => $schema,
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
@@ -175,7 +180,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Test-Schema', json_encode($schema));
+        Assert::assertSchema('Test-Schema', json_encode($schema), null, $metadata);
     }
 
     public function testPutForm()

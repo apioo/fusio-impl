@@ -77,6 +77,9 @@
         },
         "schema": {
           "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
         }
       }
     },
@@ -93,6 +96,12 @@
         "message": {
           "type": "string"
         }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

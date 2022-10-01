@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Account;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -60,7 +61,9 @@ class AccountTest extends ControllerDbTestCase
             'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
     "id": 4,
@@ -113,7 +116,7 @@ class AccountTest extends ControllerDbTestCase
         "foo",
         "bar"
     ],
-    "date": "2015-02-27T19:59:15Z"
+    "date": "[datetime]"
 }
 JSON;
 
