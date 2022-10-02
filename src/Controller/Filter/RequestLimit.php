@@ -49,11 +49,15 @@ class RequestLimit implements FilterInterface
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
+        $routeId = $this->context->getRouteId() ?? throw new \RuntimeException('Request context does not contain a route id');
+        $app = $this->context->getApp() ?? throw new \RuntimeException('Request context does not contain an app');
+        $user = $this->context->getUser() ?? throw new \RuntimeException('Request context does not contain a user');
+
         $success = $this->rateService->assertLimit(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
-            $this->context->getRouteId(),
-            $this->context->getApp(),
-            $this->context->getUser(),
+            $routeId,
+            $app,
+            $user,
             $response
         );
 

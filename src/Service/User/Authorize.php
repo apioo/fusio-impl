@@ -66,6 +66,11 @@ class Authorize
         // client id
         $app = $this->getApp($request->getClientId());
 
+        $appId = $app->getId();
+        if ($appId === null) {
+            throw new StatusCode\BadRequestException('Unknown client id');
+        }
+
         // redirect uri
         $redirectUri = $request->getRedirectUri();
         if (!empty($redirectUri)) {
@@ -100,7 +105,7 @@ class Authorize
 
         // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app->getId(), $request->getAllow());
+        $this->saveUserDecision($userId, $appId, $request->getAllow() ?? false);
 
         $state = $request->getState();
         if ($request->getAllow()) {
@@ -112,7 +117,7 @@ class Authorize
 
                 // generate access token
                 $accessToken = $this->appTokenService->generateAccessToken(
-                    $app->getId(),
+                    $appId,
                     $userId,
                     $scopes,
                     $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
@@ -140,7 +145,7 @@ class Authorize
                 // generate code which can be later exchanged by the app with an
                 // access token
                 $code = $this->appCodeService->generateCode(
-                    $app->getId(),
+                    $appId,
                     $userId,
                     $redirectUri,
                     $scopes
@@ -189,7 +194,7 @@ class Authorize
         }
     }
 
-    protected function saveUserDecision($userId, $appId, $allow)
+    protected function saveUserDecision(int $userId, int $appId, bool $allow): void
     {
         $condition = new Condition();
         $condition->equals('user_id', $userId);
