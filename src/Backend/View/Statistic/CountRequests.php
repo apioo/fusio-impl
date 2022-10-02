@@ -43,10 +43,10 @@ class CountRequests extends ViewAbstract
                  WHERE log.category_id = ?
                    AND ' . $expression;
 
-        $row = $this->connection->fetchAssoc($sql, array_merge([$categoryId], $condition->getValues()));
+        $row = $this->connection->fetchAssociative($sql, array_merge([$categoryId], $condition->getValues()));
 
         return [
-            'count' => (int) $row['cnt'],
+            'count' => (int) ($row['cnt'] ?? 0),
             'from'  => $filter->getFrom()->format(\DateTime::RFC3339),
             'to'    => $filter->getTo()->format(\DateTime::RFC3339),
         ];

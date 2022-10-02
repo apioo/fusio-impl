@@ -75,7 +75,7 @@ class Revoke extends ActionAbstract
     private function getTokenByHttp(HttpRequest $request): ?string
     {
         $header = $request->getHeader('Authorization');
-        $parts  = explode(' ', $header, 2);
+        $parts  = explode(' ', $header ?? '', 2);
         $type   = $parts[0] ?? null;
         $token  = $parts[1] ?? null;
 

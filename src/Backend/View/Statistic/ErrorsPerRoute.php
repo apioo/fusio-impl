@@ -51,8 +51,8 @@ class ErrorsPerRoute extends ViewAbstract
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result   = $this->connection->fetchAll($sql, array_merge([$categoryId], $condition->getValues()));
-        $routeIds = array();
+        $result   = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $routeIds = [];
         $data     = [];
         $series   = [];
 
@@ -90,7 +90,7 @@ class ErrorsPerRoute extends ViewAbstract
                      WHERE ' . $expression . '
                   GROUP BY DATE(log.date), log.route_id, routes.path';
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['route_id']][$row['date']])) {

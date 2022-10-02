@@ -104,12 +104,8 @@ class Restorer
         ];
     }
 
-    public function restore(string $type, ?string $id): int
+    public function restore(string $type, string $id): int
     {
-        if (empty($id)) {
-            throw new StatusCode\BadRequestException('Provided no id');
-        }
-
         if (!isset($this->config[$type])) {
             throw new StatusCode\BadRequestException('Provided an invalid type');
         }

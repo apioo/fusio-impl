@@ -69,7 +69,7 @@ class RefreshToken extends RefreshTokenAbstract
             $grant->getRefreshToken(),
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
             new \DateInterval($this->expireApp),
-            new \DateInterval($this->expireRefresh)
+            new \DateInterval($this->expireRefresh ?? $this->expireApp)
         );
     }
 }
