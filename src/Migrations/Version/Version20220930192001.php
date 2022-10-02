@@ -24,6 +24,10 @@ final class Version20220930192001 extends AbstractMigration
             $transactionTable->addColumn('period_start', 'datetime', ['notnull' => false]);
             $transactionTable->addColumn('period_end', 'datetime', ['notnull' => false]);
         }
+
+        if ($schema->hasTable('fusio_user_attribute')) {
+            $schema->dropTable('fusio_user_attribute');
+        }
     }
 
     public function down(Schema $schema) : void

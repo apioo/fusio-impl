@@ -40,6 +40,29 @@ final class Version20220927201645 extends AbstractMigration
 
     }
 
+    public function postUp(Schema $schema): void
+    {
+        $users = $this->connection->fetchAllAssociative('SELECT id FROM fusio_user');
+        foreach ($users as $user) {
+            $result = $this->connection->fetchAllAssociative('SELECT name, value FROM fusio_user_attribute WHERE user_id = :user_id', [
+                'user_id' => $user['id']
+            ]);
+
+            $metadata = [];
+            foreach ($result as $row) {
+                $metadata[$row['name']] = $row['value'];
+            }
+
+            if (!empty($metadata)) {
+                $this->connection->update('fusio_user', [
+                    'metadata' => json_encode($metadata)
+                ], [
+                    'id' => $user['id']
+                ]);
+            }
+        }
+    }
+
     private function addMetaDataColumn(Schema $schema, string $tableName)
     {
         $table = $schema->getTable($tableName);
