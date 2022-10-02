@@ -93,6 +93,10 @@ class CollectionTest extends ControllerDbTestCase
             $this->markTestSkipped('Marketplace enabled');
         }
 
+        if (is_dir(Environment::getConfig()->get('fusio_apps_dir') . '/fusio')) {
+            $this->markTestSkipped('The fusio app is already installed');
+        }
+
         $response = $this->sendRequest('/backend/marketplace', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'

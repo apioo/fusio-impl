@@ -55,6 +55,10 @@ class GenerateTest extends ControllerDbTestCase
 
     public function testGet()
     {
+        if (count(scandir(Environment::getConfig()->get('psx_path_public') . '/sdk')) > 2) {
+            $this->markTestSkipped('The SDK folder already contains a release');
+        }
+
         $response = $this->sendRequest('/backend/sdk', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -85,6 +89,10 @@ JSON;
 
     public function testPost()
     {
+        if (count(scandir(Environment::getConfig()->get('psx_path_public') . '/sdk')) > 2) {
+            $this->markTestSkipped('The SDK folder already contains a release');
+        }
+
         $response = $this->sendRequest('/backend/sdk', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
