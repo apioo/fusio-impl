@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\User_Create;
@@ -41,6 +42,8 @@ use Symfony\Component\Console\Question\Question;
  */
 class UserAddCommand extends Command
 {
+    use InputTrait;
+
     private Service\User $userService;
     private Service\Config $configService;
 
@@ -64,12 +67,12 @@ class UserAddCommand extends Command
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = $this->getHelper('question');
 
         // role
-        $role = $input->getOption('role');
+        $role = $this->getOptionString($input, 'role');
         if ($role === null) {
             $question = new Question('Choose the role of the account [1=Administrator, 2=Backend, 3=Consumer]: ');
             $role = (int) $helper->ask($input, $output, $question);
@@ -78,7 +81,7 @@ class UserAddCommand extends Command
         }
 
         // username
-        $name = $input->getOption('username');
+        $name = $this->getOptionString($input, 'username');
         if ($name === null) {
             $question = new Question('Enter the username: ');
             $question->setValidator(function ($value) {
@@ -92,7 +95,7 @@ class UserAddCommand extends Command
         }
 
         // email
-        $email = $input->getOption('email');
+        $email = $this->getOptionString($input, 'email');
         if ($email === null) {
             $question = new Question('Enter the email: ');
             $question->setValidator(function ($value) {
@@ -106,7 +109,7 @@ class UserAddCommand extends Command
         }
 
         // password
-        $password = $input->getOption('password');
+        $password = $this->getOptionString($input, 'password');
         if ($password === null) {
             $question = new Question('Enter the password: ');
             $question->setHidden(true);

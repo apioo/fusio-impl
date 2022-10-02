@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Generate;
 
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Console\InputTrait;
 use PSX\Framework\Config\Config;
 use PSX\Sql\Generator\Generator;
 use Symfony\Component\Console\Command\Command;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TableCommand extends Command
 {
+    use InputTrait;
+
     private Config $config;
     private ConnectorInterface $connector;
 
@@ -74,7 +77,8 @@ class TableCommand extends Command
             throw new \RuntimeException('The folder src/Table/Generated does not exist, please create it in order to generate the table classes');
         }
 
-        $connection = $this->connector->getConnection($input->getOption('connection'));
+        $connectionName = $this->getOptionString($input, 'connection') ?? 'System';
+        $connection = $this->connector->getConnection($connectionName);
 
         $generator = new Generator($connection, 'App\\Table\\Generated', 'app_');
         $count = 0;

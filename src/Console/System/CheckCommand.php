@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Console\InputTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,6 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CheckCommand extends Command
 {
+    use InputTrait;
+
     private Connection $connection;
 
     public function __construct(Connection $connection)
@@ -53,9 +56,9 @@ class CheckCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'Name of the check i.e. user');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $check = $input->getArgument('name');
+        $check = $this->getArgumentString($input, 'name');
 
         try {
             $result = $this->executeCheck($check);

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console\Generate;
 
+use Fusio\Impl\Console\InputTrait;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Api\Listing\FilterFactoryInterface;
@@ -43,10 +44,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SdkCommand extends Command
 {
+    use InputTrait;
+
     private Config $config;
     private ListingInterface $listing;
     private GeneratorFactoryInterface $factory;
-    private ?FilterFactoryInterface $filterFactory;
+    private FilterFactoryInterface $filterFactory;
 
     public function __construct(Config $config, ListingInterface $listing, GeneratorFactoryInterface $factory, FilterFactoryInterface $filterFactory)
     {
@@ -64,12 +67,11 @@ class SdkCommand extends Command
             ->setName('generate:sdk')
             ->setDescription('Generates a client SDK')
             ->addArgument('format', InputArgument::OPTIONAL, 'The target format of the SDK', GeneratorFactoryInterface::CLIENT_TYPESCRIPT)
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection which is used', 'System')
-            ->addOption('namespace', 's', InputOption::VALUE_REQUIRED, 'A namespace which is used', null)
+            ->addOption('namespace', 's', InputOption::VALUE_REQUIRED, 'A namespace which is used')
             ->addOption('filter', 'e', InputOption::VALUE_REQUIRED, 'Optional a filter which is used', 'default');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $srcFolder = $this->config->get('psx_path_src');
         if (!is_dir($srcFolder)) {
@@ -81,14 +83,14 @@ class SdkCommand extends Command
             throw new \RuntimeException('The folder output/ does not exist, please create it in order to generate the SDK');
         }
 
-        $format = $input->getArgument('format') ?? GeneratorFactoryInterface::CLIENT_TYPESCRIPT;
+        $format = $this->getArgumentString($input, 'format', GeneratorFactoryInterface::CLIENT_TYPESCRIPT);
         if (!in_array($format, GeneratorFactory::getPossibleTypes())) {
             throw new \InvalidArgumentException('Provided an invalid format, possible values are: ' . implode(', ', GeneratorFactory::getPossibleTypes()));
         }
 
         $config = $this->getConfig($input);
         $filter = null;
-        $filterName = $input->getOption('filter');
+        $filterName = $this->getOptionString($input, 'filter') ?? 'default';
         if (!empty($filterName)) {
             $filter = $this->filterFactory->getFilter($filterName);
             if ($filter === null) {
@@ -128,7 +130,7 @@ class SdkCommand extends Command
 
     private function getConfig(InputInterface $input): ?string
     {
-        $namespace = $input->getOption('namespace');
+        $namespace = $this->getOptionString($input, 'namespace');
         $options = [];
         if (!empty($namespace)) {
             $options['namespace'] = $namespace;

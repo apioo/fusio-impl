@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console\System;
 
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Mail\Mailer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,6 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MailTestCommand extends Command
 {
+    use InputTrait;
+
     private Mailer $mailer;
 
     public function __construct(Mailer $mailer)
@@ -53,9 +56,9 @@ class MailTestCommand extends Command
             ->addArgument('to', InputArgument::REQUIRED, 'The target mail address');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $to = $input->getArgument('to');
+        $to = $this->getArgumentString($input, 'to');
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
             throw new \RuntimeException('Provided "to" email address has not a valid format');
         }

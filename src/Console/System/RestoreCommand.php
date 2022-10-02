@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service\System\Restorer;
 use Fusio\Impl\Table;
 use Symfony\Component\Console\Command\Command;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RestoreCommand extends Command
 {
+    use InputTrait;
+
     private Restorer $restorer;
 
     public function __construct(Restorer $restorer)
@@ -56,10 +59,10 @@ class RestoreCommand extends Command
             ->addArgument('id', InputArgument::REQUIRED, 'Name or id of the record');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $type = $input->getArgument('type');
-        $id   = $input->getArgument('id');
+        $type = $this->getArgumentString($input, 'type');
+        $id   = $this->getArgumentString($input, 'id');
 
         $result = $this->restorer->restore($type, $id);
 

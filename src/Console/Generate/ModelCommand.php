@@ -57,7 +57,7 @@ class ModelCommand extends Command
             ->setDescription('Generates model classes based on a TypeSchema specification');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $srcFolder = $this->config->get('psx_path_src');
         if (!is_dir($srcFolder)) {

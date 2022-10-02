@@ -24,6 +24,7 @@ namespace Fusio\Impl\Console\System;
 use Fusio\Engine\AdapterInterface;
 use Fusio\Impl\Adapter\Installer;
 use Fusio\Impl\Adapter\InstructionParser;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Provider\ProviderWriter;
 use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
@@ -43,6 +44,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class RegisterCommand extends Command
 {
+    use InputTrait;
+
     private Installer $installer;
     private InstructionParser $parser;
 
@@ -64,9 +67,9 @@ class RegisterCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $class = $input->getArgument('class');
+        $class = $this->getArgumentString($input, 'class');
         if (!class_exists($class)) {
             $output->writeln('Provided adapter class does not exist');
             return 1;
@@ -93,8 +96,7 @@ class RegisterCommand extends Command
         $output->writeLn('Loaded definition ' . $adapter->getDefinition());
 
         // confirm
-        $autoConfirm = $input->getOption('yes');
-        $confirmed   = $autoConfirm;
+        $confirmed = $input->getOption('yes');
         if (!$confirmed) {
             // show instructions
             $output->writeLn('');

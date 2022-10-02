@@ -54,7 +54,7 @@ class LogRotateCommand extends Command
             ->setDescription('Rotates the log table');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->logRotator->rotate() as $message) {
             $output->writeln($message);

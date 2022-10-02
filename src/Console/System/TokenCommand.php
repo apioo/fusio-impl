@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use DateInterval;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use RuntimeException;
@@ -40,6 +41,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TokenCommand extends Command
 {
+    use InputTrait;
+
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
     private Table\App $appTable;
@@ -66,12 +69,12 @@ class TokenCommand extends Command
             ->addArgument('expire', InputArgument::REQUIRED, 'Interval when the token expires (i.e. P1D for one day)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $appId  = $input->getArgument('appId');
-        $userId = $input->getArgument('userId');
-        $scopes = $input->getArgument('scopes');
-        $expire = $input->getArgument('expire');
+        $appId  = $this->getArgumentString($input, 'appId');
+        $userId = $this->getArgumentString($input, 'userId');
+        $scopes = $this->getArgumentString($input, 'scopes');
+        $expire = $this->getArgumentString($input, 'expire');
 
         if (!is_numeric($appId)) {
             $app = $this->appTable->findOneByName($appId);
@@ -103,9 +106,13 @@ class TokenCommand extends Command
             'App'     => $app['name'],
             'User'    => $user['name'],
             'Token'   => $accessToken->getAccessToken(),
-            'Expires' => date('Y-m-d', $accessToken->getExpiresIn()),
             'Scope'   => $accessToken->getScope(),
         ];
+
+        $expiresIn = $accessToken->getExpiresIn();
+        if ($expiresIn !== null) {
+            $response['Expires'] = date('Y-m-d', $expiresIn);
+        }
 
         $output->writeln("");
         $output->writeln(Yaml::dump($response, 2));

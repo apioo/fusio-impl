@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -39,6 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpdateCommand extends Command
 {
+    use InputTrait;
+
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
 
@@ -66,7 +69,7 @@ class UpdateCommand extends Command
         }
 
         try {
-            $app = $this->installer->update($input->getArgument('name'), UserContext::newAnonymousContext());
+            $app = $this->installer->update($this->getArgumentString($input, 'name'), UserContext::newAnonymousContext());
 
             $output->writeln('');
             $output->writeln('Updated app ' . $app->getName());

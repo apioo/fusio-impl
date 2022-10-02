@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\Marketplace_Install;
 use PSX\Http\Exception\BadRequestException;
@@ -40,6 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InstallCommand extends Command
 {
+    use InputTrait;
+
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
 
@@ -61,7 +64,7 @@ class InstallCommand extends Command
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('disable_ssl_verify')) {
             $this->remoteRepository->setSslVerify(false);
@@ -73,7 +76,7 @@ class InstallCommand extends Command
         }
 
         $install = new Marketplace_Install();
-        $install->setName($input->getArgument('name'));
+        $install->setName($this->getArgumentString($input, 'name'));
 
         try {
             $app = $this->installer->install($install, UserContext::newAnonymousContext(), $replaceEnv);

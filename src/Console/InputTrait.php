@@ -19,45 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Console;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Service\System\Cleaner;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * CleanCommand
- *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+trait InputTrait
 {
-    private Cleaner $cleaner;
-
-    public function __construct(Cleaner $cleaner)
+    public function getArgumentString(InputInterface $input, string $name, ?string $default = null): string
     {
-        parent::__construct();
+        $value = $input->getArgument($name);
+        if (empty($value)) {
+            if ($default !== null) {
+                return $default;
+            } else {
+                throw new \InvalidArgumentException('You need to provide an argument ' . $name);
+            }
+        }
 
-        $this->cleaner = $cleaner;
+        if (is_int($value)) {
+            $value = (string) $value;
+        }
+
+        if (!is_string($value)) {
+            throw new \InvalidArgumentException('Provided argument ' . $name . ' must be a string');
+        }
+
+        return $value;
     }
 
-    protected function configure()
+    public function getOptionString(InputInterface $input, string $name): ?string
     {
-        $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
-    }
+        $value = $input->getOption($name);
+        if (empty($value)) {
+            return null;
+        }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $this->cleaner->cleanUp();
+        if (!is_string($value)) {
+            throw new \InvalidArgumentException('Provided option ' . $name . ' must be a string');
+        }
 
-        $output->writeln('Clean up successful!');
-
-        return 0;
+        return $value;
     }
 }

@@ -54,7 +54,7 @@ class CronjobExecuteCommand extends Command
             ->addOption('daemon', 'd', InputOption::VALUE_NONE, 'Whether to execute in daemon mode');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('daemon')) {
             $this->executor->executeDaemon();

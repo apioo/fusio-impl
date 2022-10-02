@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\InputTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EnvCommand extends Command
 {
+    use InputTrait;
+
     private Service\Marketplace\Installer $installer;
 
     public function __construct(Service\Marketplace\Installer $installer)
@@ -55,10 +58,10 @@ class EnvCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $app = $this->installer->env($input->getArgument('name'));
+            $app = $this->installer->env($this->getArgumentString($input, 'name'));
 
             $output->writeln('');
             $output->writeln('Replaced env ' . $app->getName());

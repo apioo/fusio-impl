@@ -51,7 +51,7 @@ class HealthCommand extends Command
             ->setDescription('Checks whether the system is healthy');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $result = $this->health->check();
         foreach ($result->getChecks() as $name => $check) {

@@ -56,7 +56,7 @@ class WaitForCommand extends Command
             ->setDescription('Command which waits until all required external connections are available');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $params = $this->config->get('psx_connection');
         $config = new Configuration();
@@ -78,14 +78,14 @@ class WaitForCommand extends Command
         return 0;
     }
 
-    private function waitFor(string $name, OutputInterface $output, \Closure $closure): bool
+    private function waitFor(string $name, OutputInterface $output, \Closure $closure): void
     {
         $count = 0;
         while ($count < self::MAX_TRY) {
             try {
                 $closure();
                 $output->writeln('* Connection to ' . $name . ' successful');
-                return true;
+                return;
             } catch (\Throwable $e) {
             }
 

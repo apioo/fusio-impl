@@ -54,7 +54,7 @@ class ClearCacheCommand extends Command
             ->setDescription('Clears the complete cache');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cache->clear();
         $this->engineCache->clear();
