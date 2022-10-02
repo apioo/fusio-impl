@@ -42,6 +42,10 @@ final class Version20220927201645 extends AbstractMigration
 
     public function postUp(Schema $schema): void
     {
+        if (!$schema->hasTable('fusio_user_attribute')) {
+            return;
+        }
+
         $users = $this->connection->fetchAllAssociative('SELECT id FROM fusio_user');
         foreach ($users as $user) {
             $result = $this->connection->fetchAllAssociative('SELECT name, value FROM fusio_user_attribute WHERE user_id = :user_id', [
