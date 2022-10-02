@@ -233,7 +233,7 @@ class DataBag
             'refresh' => $refresh,
             'scope' => $scope,
             'ip' => '127.0.0.1',
-            'expire' => (new \DateTime($expire ?? 'now'))->format('Y-m-d H:i:s'),
+            'expire' => (new \DateTime($expire))->format('Y-m-d H:i:s'),
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
@@ -431,8 +431,8 @@ class DataBag
             'transaction_id' => '[transaction_id]',
             'amount' => $amount,
             'points' => 1000,
-            'period_start' => (new \DateTime($periodStart ?? 'now'))->format('Y-m-d H:i:s'),
-            'period_end' => (new \DateTime($periodEnd ?? 'now'))->format('Y-m-d H:i:s'),
+            'period_start' => (new \DateTime($periodStart))->format('Y-m-d H:i:s'),
+            'period_end' => (new \DateTime($periodEnd))->format('Y-m-d H:i:s'),
             'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
