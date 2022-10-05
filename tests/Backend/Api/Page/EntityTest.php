@@ -81,7 +81,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "title": "Getting started",
     "slug": "getting-started",
-    "content": "\n<p class=\"lead\">Learn how to start using this API. Explore the endpoints, sign up for an account, and connect with the\ncommunity.<\/p>\n\n<h3>Quickstart<\/h3>\n\n<p>This is a quick introduction to help you get started using this API.<\/p>\n\n<ul>\n<li><a href=\"\/register\">Signup for a new account<\/a><\/li>\n<li><a href=\"\/authorization\">Learn how to obtain an Access-Token<\/a><\/li>\n<li><a href=\"\/api\">Explore the API documentation<\/a><\/li>\n<li><a href=\"\/sdk\">Download an SDK<\/a><\/li>\n<\/ul>",
+    "content": "\n<p class=\"lead\">Learn how to start using this API. Explore the endpoints, sign up for an account, and connect with the\ncommunity.<\/p>\n\n<h3>Quickstart<\/h3>\n\n<p>This is a quick introduction to help you get started using this API.<\/p>\n\n<ul>\n<li><a href=\".\/register\">Signup for a new account<\/a><\/li>\n<li><a href=\".\/authorization\">Learn how to obtain an Access-Token<\/a><\/li>\n<li><a href=\".\/api\">Explore the API documentation<\/a><\/li>\n<li><a href=\".\/sdk\">Download an SDK<\/a><\/li>\n<\/ul>",
     "date": "[datetime]"
 }
 JSON;
