@@ -55,10 +55,10 @@ return array(
     // directly, but it is also possible to specify a different folder
     'fusio_apps_dir'          => __DIR__ . '/apps',
 
-    // The url to the psx public folder (i.e. http://127.0.0.1/psx/public or http://localhost.com)
+    // The public url to the public folder (i.e. http://acme.com/public or http://acme.com)
     'psx_url'                 => 'http://127.0.0.1',
 
-    // The input path 'index.php/' or '' if you use mod_rewrite
+    // To enable clean urls you need to set this to '' this works only in case mod rewrite is activated
     'psx_dispatch'            => '',
 
     // The default timezone
@@ -89,7 +89,7 @@ return array(
     //'psx_filter_pre'          => [],
     //'psx_filter_post'         => [],
 
-    // A closure which returns a doctrine cache implementation. If null the filesystem cache is used
+    // A closure which returns a symfony cache implementation. If null the filesystem cache is used. Please take a look
     //'psx_cache_factory'       => null,
 
     // Specify a specific log level
