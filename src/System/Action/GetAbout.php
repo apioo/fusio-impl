@@ -72,6 +72,7 @@ class GetAbout extends ActionAbstract
             'contactEmail' => $this->configService->getValue('info_contact_email') ?: null,
             'licenseName' => $this->configService->getValue('info_license_name') ?: null,
             'licenseUrl' => $this->configService->getValue('info_license_url') ?: null,
+            'paymentCurrency' => $this->configService->getValue('payment_currency') ?: 'EUR',
             'categories' => $this->getCategories(),
             'scopes' => $this->getScopes(),
             'apps' => $this->getApps(),
