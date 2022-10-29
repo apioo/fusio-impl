@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\App;
-use Fusio\Model\Consumer\App_Update;
+use Fusio\Model\Consumer\AppUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof App_Update);
+        assert($body instanceof AppUpdate);
 
         $this->appService->update(
             (int) $request->get('app_id'),

@@ -29,8 +29,8 @@ use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Model\Backend;
-use Fusio\Model\Backend\Action_Create;
-use Fusio\Model\Backend\Action_Update;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\ActionUpdate;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
@@ -67,7 +67,7 @@ class Action
         $this->eventDispatcher  = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Action_Create $action, UserContext $context): int
+    public function create(int $categoryId, ActionCreate $action, UserContext $context): int
     {
         $this->assertSandboxAccess($action);
 
@@ -125,7 +125,7 @@ class Action
         return $actionId;
     }
 
-    public function update(int $actionId, Action_Update $action, UserContext $context): int
+    public function update(int $actionId, ActionUpdate $action, UserContext $context): int
     {
         $this->assertSandboxAccess($action);
 

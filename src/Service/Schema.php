@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Schema_Create;
-use Fusio\Model\Backend\Schema_Form;
-use Fusio\Model\Backend\Schema_Update;
+use Fusio\Model\Backend\SchemaCreate;
+use Fusio\Model\Backend\SchemaForm;
+use Fusio\Model\Backend\SchemaUpdate;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
@@ -60,7 +60,7 @@ class Schema
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Schema_Create $schema, UserContext $context): int
+    public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
     {
         if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
             throw new StatusCode\BadRequestException('Invalid schema name');
@@ -104,7 +104,7 @@ class Schema
         return $schemaId;
     }
 
-    public function update(int $schemaId, Schema_Update $schema, UserContext $context): int
+    public function update(int $schemaId, SchemaUpdate $schema, UserContext $context): int
     {
         $existing = $this->schemaTable->find($schemaId);
         if (empty($existing)) {
@@ -166,7 +166,7 @@ class Schema
         return $schemaId;
     }
 
-    public function updateForm(int $schemaId, Schema_Form $form, UserContext $context): void
+    public function updateForm(int $schemaId, SchemaForm $form, UserContext $context): void
     {
         $schema = $this->schemaTable->find($schemaId);
         if (empty($schema)) {

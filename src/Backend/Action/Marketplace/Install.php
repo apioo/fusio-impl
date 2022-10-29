@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
-use Fusio\Model\Backend\Marketplace_Install;
+use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Framework\Config\Config;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception as StatusCode;
@@ -58,7 +58,7 @@ class Install extends ActionAbstract
 
         $body = $request->getPayload();
 
-        assert($body instanceof Marketplace_Install);
+        assert($body instanceof MarketplaceInstall);
 
         $app = $this->installerService->install(
             $body,

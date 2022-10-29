@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
-use Fusio\Model\Backend\Schema_Form;
+use Fusio\Model\Backend\SchemaForm;
 
 /**
  * GetForm
@@ -49,7 +49,7 @@ class Form extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Schema_Form);
+        assert($body instanceof SchemaForm);
 
         $this->schemaService->updateForm(
             (int) $request->get('schema_id'),

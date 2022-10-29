@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\UserRow;
-use Fusio\Model\Backend\User_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\UserUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private User_Update $user;
+    private UserUpdate $user;
     private UserRow $existing;
 
-    public function __construct(User_Update $user, UserRow $existing, UserContext $context)
+    public function __construct(UserUpdate $user, UserRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getUser(): User_Update
+    public function getUser(): UserUpdate
     {
         return $this->user;
     }

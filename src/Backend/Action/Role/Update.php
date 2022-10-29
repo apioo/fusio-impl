@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Role;
-use Fusio\Model\Backend\Role_Update;
+use Fusio\Model\Backend\RoleUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Role_Update);
+        assert($body instanceof RoleUpdate);
 
         $this->roleService->update(
             (int) $request->get('role_id'),

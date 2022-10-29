@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
-use Fusio\Model\Backend\Schema_Create;
+use Fusio\Model\Backend\SchemaCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Schema_Create);
+        assert($body instanceof SchemaCreate);
 
         $this->schemaService->create(
             $context->getUser()->getCategoryId(),

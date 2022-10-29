@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Category_Create;
-use Fusio\Model\Backend\Category_Update;
+use Fusio\Model\Backend\CategoryCreate;
+use Fusio\Model\Backend\CategoryUpdate;
 use Fusio\Impl\Event\Category\CreatedEvent;
 use Fusio\Impl\Event\Category\DeletedEvent;
 use Fusio\Impl\Event\Category\UpdatedEvent;
@@ -50,7 +50,7 @@ class Category
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Category_Create $category, UserContext $context): int
+    public function create(CategoryCreate $category, UserContext $context): int
     {
         // check whether rate exists
         if ($this->exists($category->getName())) {
@@ -83,7 +83,7 @@ class Category
         return $categoryId;
     }
 
-    public function update(int $categoryId, Category_Update $category, UserContext $context): int
+    public function update(int $categoryId, CategoryUpdate $category, UserContext $context): int
     {
         $existing = $this->categoryTable->find($categoryId);
         if (empty($existing)) {

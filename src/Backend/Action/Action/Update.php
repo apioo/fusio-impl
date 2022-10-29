@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Action;
-use Fusio\Model\Backend\Action_Update;
+use Fusio\Model\Backend\ActionUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Action_Update);
+        assert($body instanceof ActionUpdate);
 
         $this->actionService->update(
             (int) $request->get('action_id'),

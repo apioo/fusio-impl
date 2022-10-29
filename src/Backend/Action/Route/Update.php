@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Route;
-use Fusio\Model\Backend\Route_Update;
+use Fusio\Model\Backend\RouteUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Route_Update);
+        assert($body instanceof RouteUpdate);
 
         $this->routeService->update(
             (int) $request->get('route_id'),

@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\Plan;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\PlanRow;
-use Fusio\Model\Backend\Plan_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\PlanUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Plan_Update $plan;
+    private PlanUpdate $plan;
     private PlanRow $existing;
 
-    public function __construct(Plan_Update $plan, PlanRow $existing, UserContext $context)
+    public function __construct(PlanUpdate $plan, PlanRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getPlan(): Plan_Update
+    public function getPlan(): PlanUpdate
     {
         return $this->plan;
     }

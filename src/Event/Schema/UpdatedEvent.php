@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\Schema;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\SchemaRow;
-use Fusio\Model\Backend\Schema_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\SchemaUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Schema_Update $schema;
+    private SchemaUpdate $schema;
     private SchemaRow $existing;
 
-    public function __construct(Schema_Update $schema, SchemaRow $existing, UserContext $context)
+    public function __construct(SchemaUpdate $schema, SchemaRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getSchema(): Schema_Update
+    public function getSchema(): SchemaUpdate
     {
         return $this->schema;
     }

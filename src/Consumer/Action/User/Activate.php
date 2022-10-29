@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Activate as UserActivate;
-use Fusio\Model\Consumer\User_Activate;
+use Fusio\Model;
 
 /**
  * Activate
@@ -48,7 +48,7 @@ class Activate extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Activate);
+        assert($body instanceof Model\Consumer\UserActivate);
 
         $this->activateService->activate($body);
 

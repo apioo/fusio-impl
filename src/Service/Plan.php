@@ -26,8 +26,8 @@ use Fusio\Impl\Event\Plan\CreatedEvent;
 use Fusio\Impl\Event\Plan\DeletedEvent;
 use Fusio\Impl\Event\Plan\UpdatedEvent;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Plan_Create;
-use Fusio\Model\Backend\Plan_Update;
+use Fusio\Model\Backend\PlanCreate;
+use Fusio\Model\Backend\PlanUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -54,7 +54,7 @@ class Plan
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Plan_Create $plan, UserContext $context): int
+    public function create(PlanCreate $plan, UserContext $context): int
     {
         // check whether plan exists
         if ($this->exists($plan->getName())) {
@@ -98,7 +98,7 @@ class Plan
         return $planId;
     }
 
-    public function update(int $planId, Plan_Update $plan, UserContext $context): int
+    public function update(int $planId, PlanUpdate $plan, UserContext $context): int
     {
         $existing = $this->planTable->find($planId);
         if (empty($existing)) {

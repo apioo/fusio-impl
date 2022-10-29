@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Authorize as UserAuthorize;
-use Fusio\Model\Consumer\Authorize_Request;
+use Fusio\Model\Consumer\AuthorizeRequest;
 
 /**
  * Authorize
@@ -48,7 +48,7 @@ class Authorize extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Authorize_Request);
+        assert($body instanceof AuthorizeRequest);
 
         return $this->authorizeService->authorize(
             $context->getUser()->getId(),

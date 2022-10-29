@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\App;
-use Fusio\Model\Consumer\App_Create;
+use Fusio\Model\Consumer\AppCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof App_Create);
+        assert($body instanceof AppCreate);
 
         $this->appService->create(
             $body,

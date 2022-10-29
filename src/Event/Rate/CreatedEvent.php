@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Rate;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Rate_Create;
+use Fusio\Model\Backend\RateCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Rate_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Rate_Create $rate;
+    private RateCreate $rate;
 
-    public function __construct(Rate_Create $rate, UserContext $context)
+    public function __construct(RateCreate $rate, UserContext $context)
     {
         parent::__construct($context);
 
         $this->rate = $rate;
     }
 
-    public function getRate(): Rate_Create
+    public function getRate(): RateCreate
     {
         return $this->rate;
     }

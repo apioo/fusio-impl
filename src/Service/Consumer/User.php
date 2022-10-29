@@ -23,9 +23,8 @@ namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\User_Attributes;
-use Fusio\Model\Backend\User_Update;
-use Fusio\Model\Consumer\User_Account;
+use Fusio\Model\Backend\UserUpdate;
+use Fusio\Model\Consumer\UserAccount;
 
 /**
  * User
@@ -43,9 +42,9 @@ class User
         $this->userService = $userService;
     }
 
-    public function update(User_Account $account, UserContext $context): int
+    public function update(UserAccount $account, UserContext $context): int
     {
-        $backendUser = new User_Update();
+        $backendUser = new UserUpdate();
         $backendUser->setEmail($account->getEmail());
 
         return $this->userService->update($context->getUserId(), $backendUser, $context);

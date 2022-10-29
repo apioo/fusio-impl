@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
-use Fusio\Model\Backend\Cronjob_Create;
+use Fusio\Model\Backend\CronjobCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Cronjob_Create);
+        assert($body instanceof CronjobCreate);
 
         $this->cronjobService->create(
             $context->getUser()->getCategoryId(),

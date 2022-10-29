@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\Role;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\RoleRow;
-use Fusio\Model\Backend\Role_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\RoleUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Role_Update $role;
+    private RoleUpdate $role;
     private RoleRow $existing;
 
-    public function __construct(Role_Update $role, RoleRow $existing, UserContext $context)
+    public function __construct(RoleUpdate $role, RoleRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getRole(): Role_Update
+    public function getRole(): RoleUpdate
     {
         return $this->role;
     }

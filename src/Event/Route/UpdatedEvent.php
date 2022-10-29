@@ -24,7 +24,7 @@ namespace Fusio\Impl\Event\Route;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\RoutesRow;
-use Fusio\Model\Backend\Route_Update;
+use Fusio\Model\Backend\RouteUpdate;
 use PSX\Record\RecordInterface;
 
 /**
@@ -36,10 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Route_Update $route;
+    private RouteUpdate $route;
     private RoutesRow $existing;
 
-    public function __construct(Route_Update $route, RoutesRow $existing, UserContext $context)
+    public function __construct(RouteUpdate $route, RoutesRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +47,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getRoute(): Route_Update
+    public function getRoute(): RouteUpdate
     {
         return $this->route;
     }

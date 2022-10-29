@@ -23,7 +23,7 @@ namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\Marketplace_Install;
+use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
@@ -53,7 +53,7 @@ class Installer
         $this->filesystem = new Filesystem();
     }
 
-    public function install(Marketplace_Install $install, UserContext $context, bool $replaceEnv = true): App
+    public function install(MarketplaceInstall $install, UserContext $context, bool $replaceEnv = true): App
     {
         $remoteApp = $this->remoteRepository->fetchByName($install->getName());
         $localApp = $this->localRepository->fetchByName($install->getName());

@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Route_Create;
-use Fusio\Model\Backend\Route_Update;
+use Fusio\Model\Backend\RouteCreate;
+use Fusio\Model\Backend\RouteUpdate;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Event\Route\CreatedEvent;
 use Fusio\Impl\Event\Route\DeletedEvent;
@@ -58,7 +58,7 @@ class Route
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Route_Create $route, UserContext $context): int
+    public function create(int $categoryId, RouteCreate $route, UserContext $context): int
     {
         Route\Validator::assertPath($route->getPath());
 
@@ -121,7 +121,7 @@ class Route
         return $routeId;
     }
 
-    public function update(int $routeId, Route_Update $route, UserContext $context): int
+    public function update(int $routeId, RouteUpdate $route, UserContext $context): int
     {
         $existing = $this->routesTable->find($routeId);
         if (empty($existing)) {

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Schema_Create;
+use Fusio\Model\Backend\SchemaCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Schema_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Schema_Create $schema;
+    private SchemaCreate $schema;
 
-    public function __construct(Schema_Create $schema, UserContext $context)
+    public function __construct(SchemaCreate $schema, UserContext $context)
     {
         parent::__construct($context);
 
         $this->schema = $schema;
     }
 
-    public function getSchema(): Schema_Create
+    public function getSchema(): SchemaCreate
     {
         return $this->schema;
     }

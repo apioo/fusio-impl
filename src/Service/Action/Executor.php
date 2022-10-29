@@ -25,7 +25,7 @@ use Fusio\Engine\Context;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
-use Fusio\Model\Backend\Action_Execute_Request;
+use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Http\Environment\HttpContext;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Request as HttpRequest;
@@ -52,7 +52,7 @@ class Executor
         $this->userRepository = $userRepository;
     }
 
-    public function execute(string|int $actionId, Action_Execute_Request $request): mixed
+    public function execute(string|int $actionId, ActionExecuteRequest $request): mixed
     {
         $body = $request->getBody();
         if ($body === null) {

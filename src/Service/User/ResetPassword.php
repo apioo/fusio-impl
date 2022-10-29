@@ -24,8 +24,8 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\User_Email;
-use Fusio\Model\Consumer\User_PasswordReset;
+use Fusio\Model\Consumer\UserEmail;
+use Fusio\Model\Consumer\UserPasswordReset;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -52,7 +52,7 @@ class ResetPassword
         $this->userTable      = $userTable;
     }
 
-    public function resetPassword(User_Email $reset): void
+    public function resetPassword(UserEmail $reset): void
     {
         $this->captchaService->assertCaptcha($reset->getCaptcha());
 
@@ -72,7 +72,7 @@ class ResetPassword
         $this->mailerService->sendResetPasswordMail($user->getName(), $user->getEmail(), $token);
     }
 
-    public function changePassword(User_PasswordReset $reset): void
+    public function changePassword(UserPasswordReset $reset): void
     {
         $userId = $this->tokenService->getUser($reset->getToken());
         if (empty($userId)) {

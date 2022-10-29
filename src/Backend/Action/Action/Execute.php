@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Action;
-use Fusio\Model\Backend\Action_Execute_Request;
+use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
 
@@ -50,7 +50,7 @@ class Execute extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Action_Execute_Request);
+        assert($body instanceof ActionExecuteRequest);
 
         try {
             $response = $this->actionExecutorService->execute(

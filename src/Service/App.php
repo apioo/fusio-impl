@@ -27,8 +27,8 @@ use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\App_Create;
-use Fusio\Model\Backend\App_Update;
+use Fusio\Model\Backend\AppCreate;
+use Fusio\Model\Backend\AppUpdate;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -60,7 +60,7 @@ class App
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(App_Create $app, UserContext $context): int
+    public function create(AppCreate $app, UserContext $context): int
     {
         // check whether app exists
         $condition  = new Condition();
@@ -120,7 +120,7 @@ class App
         return $appId;
     }
 
-    public function update(int $appId, App_Update $app, UserContext $context): int
+    public function update(int $appId, AppUpdate $app, UserContext $context): int
     {
         $existing = $this->appTable->find($appId);
         if (empty($existing)) {

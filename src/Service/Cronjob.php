@@ -22,14 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Action_Execute_Request;
-use Fusio\Model\Backend\Cronjob_Create;
-use Fusio\Model\Backend\Cronjob_Update;
 use Fusio\Impl\Event\Cronjob\CreatedEvent;
 use Fusio\Impl\Event\Cronjob\DeletedEvent;
 use Fusio\Impl\Event\Cronjob\UpdatedEvent;
-use Fusio\Impl\Service\Action\Executor;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\CronjobCreate;
+use Fusio\Model\Backend\CronjobUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -52,7 +50,7 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Cronjob_Create $cronjob, UserContext $context): int
+    public function create(int $categoryId, CronjobCreate $cronjob, UserContext $context): int
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
@@ -91,7 +89,7 @@ class Cronjob
         return $cronjobId;
     }
 
-    public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context): int
+    public function update(int $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 

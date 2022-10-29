@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Config;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Config_Update;
+use Fusio\Model\Backend\ConfigUpdate;
 
 /**
  * UpdatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Config_Update;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Config_Update $config;
+    private ConfigUpdate $config;
 
-    public function __construct(Config_Update $config, UserContext $context)
+    public function __construct(ConfigUpdate $config, UserContext $context)
     {
         parent::__construct($context);
 
         $this->config = $config;
     }
 
-    public function getConfig(): Config_Update
+    public function getConfig(): ConfigUpdate
     {
         return $this->config;
     }

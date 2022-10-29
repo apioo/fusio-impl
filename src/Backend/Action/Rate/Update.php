@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Rate;
-use Fusio\Model\Backend\Rate_Update;
+use Fusio\Model\Backend\RateUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Rate_Update);
+        assert($body instanceof RateUpdate);
 
         $this->rateService->update(
             (int) $request->get('rate_id'),

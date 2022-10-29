@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Action;
-use Fusio\Model\Backend\Action_Create;
+use Fusio\Model\Backend\ActionCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Action_Create);
+        assert($body instanceof ActionCreate);
 
         $this->actionService->create(
             $context->getUser()->getCategoryId(),

@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\Category;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\CategoryRow;
-use Fusio\Model\Backend\Category_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\CategoryUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Category_Update $category;
+    private CategoryUpdate $category;
     private CategoryRow $existing;
 
-    public function __construct(Category_Update $category, CategoryRow $existing, UserContext $context)
+    public function __construct(CategoryUpdate $category, CategoryRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getCategory(): Category_Update
+    public function getCategory(): CategoryUpdate
     {
         return $this->category;
     }

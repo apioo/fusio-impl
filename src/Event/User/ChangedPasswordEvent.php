@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Account_ChangePassword;
+use Fusio\Model\Backend\AccountChangePassword;
 
 /**
  * ChangedPasswordEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Account_ChangePassword;
  */
 class ChangedPasswordEvent extends EventAbstract
 {
-    private Account_ChangePassword $changePassword;
+    private AccountChangePassword $changePassword;
 
-    public function __construct(Account_ChangePassword $changePassword, UserContext $context)
+    public function __construct(AccountChangePassword $changePassword, UserContext $context)
     {
         parent::__construct($context);
 
         $this->changePassword = $changePassword;
     }
 
-    public function getChangePassword(): Account_ChangePassword
+    public function getChangePassword(): AccountChangePassword
     {
         return $this->changePassword;
     }

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Event_Subscription_Create;
+use Fusio\Model\Backend\EventSubscriptionCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Event_Subscription_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Event_Subscription_Create $subscription;
+    private EventSubscriptionCreate $subscription;
 
-    public function __construct(Event_Subscription_Create $subscription, UserContext $context)
+    public function __construct(EventSubscriptionCreate $subscription, UserContext $context)
     {
         parent::__construct($context);
 
         $this->subscription = $subscription;
     }
 
-    public function getSubscription(): Event_Subscription_Create
+    public function getSubscription(): EventSubscriptionCreate
     {
         return $this->subscription;
     }

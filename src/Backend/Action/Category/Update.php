@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Category_Update;
+use Fusio\Model\Backend\CategoryUpdate;
 use Fusio\Impl\Service\Category;
 
 /**
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Category_Update);
+        assert($body instanceof CategoryUpdate);
 
         $this->categoryService->update(
             (int) $request->get('category_id'),

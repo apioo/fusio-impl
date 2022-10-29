@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Page;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Page_Create;
+use Fusio\Model\Backend\PageCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Page_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Page_Create $page;
+    private PageCreate $page;
 
-    public function __construct(Page_Create $page, UserContext $context)
+    public function __construct(PageCreate $page, UserContext $context)
     {
         parent::__construct($context);
 
         $this->page = $page;
     }
 
-    public function getPage(): Page_Create
+    public function getPage(): PageCreate
     {
         return $this->page;
     }

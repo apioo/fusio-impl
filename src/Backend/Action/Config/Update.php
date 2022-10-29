@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Config;
-use Fusio\Model\Backend\Config_Update;
+use Fusio\Model\Backend\ConfigUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Config_Update);
+        assert($body instanceof ConfigUpdate);
 
         $this->configService->update(
             (int) $request->get('config_id'),

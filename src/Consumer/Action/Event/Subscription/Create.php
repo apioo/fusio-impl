@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\Subscription;
-use Fusio\Model\Consumer\Event_Subscription_Create;
+use Fusio\Model\Consumer\EventSubscriptionCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Event_Subscription_Create);
+        assert($body instanceof EventSubscriptionCreate);
 
         $this->subscriptionService->create(
             $body,

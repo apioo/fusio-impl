@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User;
-use Fusio\Model\Backend\User_Update;
+use Fusio\Model\Backend\UserUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Update);
+        assert($body instanceof UserUpdate);
 
         $this->userService->update(
             $context->getUser()->getId(),

@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
-use Fusio\Model\Backend\Schema_Update;
+use Fusio\Model\Backend\SchemaUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Schema_Update);
+        assert($body instanceof SchemaUpdate);
 
         $this->schemaService->update(
             (int) $request->get('schema_id'),

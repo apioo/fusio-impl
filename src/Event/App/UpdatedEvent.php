@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\App;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\AppRow;
-use Fusio\Model\Backend\App_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\AppUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private App_Update $app;
+    private AppUpdate $app;
     private AppRow $existing;
 
-    public function __construct(App_Update $app, AppRow $existing, UserContext $context)
+    public function __construct(AppUpdate $app, AppRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    public function getApp(): App_Update
+    public function getApp(): AppUpdate
     {
         return $this->app;
     }

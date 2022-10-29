@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Role;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Role_Create;
+use Fusio\Model\Backend\RoleCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Role_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Role_Create $role;
+    private RoleCreate $role;
 
-    public function __construct(Role_Create $role, UserContext $context)
+    public function __construct(RoleCreate $role, UserContext $context)
     {
         parent::__construct($context);
 
         $this->role = $role;
     }
 
-    public function getRole(): Role_Create
+    public function getRole(): RoleCreate
     {
         return $this->role;
     }

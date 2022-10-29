@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Role_Create;
-use Fusio\Model\Backend\Role_Update;
+use Fusio\Model\Backend\RoleCreate;
+use Fusio\Model\Backend\RoleUpdate;
 use Fusio\Impl\Event\Role\CreatedEvent;
 use Fusio\Impl\Event\Role\DeletedEvent;
 use Fusio\Impl\Event\Role\UpdatedEvent;
@@ -54,7 +54,7 @@ class Role
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Role_Create $role, UserContext $context): int
+    public function create(RoleCreate $role, UserContext $context): int
     {
         // check whether role exists
         if ($this->exists($role->getName())) {
@@ -92,7 +92,7 @@ class Role
         return $roleId;
     }
 
-    public function update(int $roleId, Role_Update $role, UserContext $context): int
+    public function update(int $roleId, RoleUpdate $role, UserContext $context): int
     {
         $existing = $this->roleTable->find($roleId);
         if (empty($existing)) {

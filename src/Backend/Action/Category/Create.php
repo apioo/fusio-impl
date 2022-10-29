@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Category_Create;
+use Fusio\Model\Backend\CategoryCreate;
 use Fusio\Impl\Service\Category;
 use PSX\Http\Environment\HttpResponse;
 
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Category_Create);
+        assert($body instanceof CategoryCreate);
 
         $this->categoryService->create(
             $body,

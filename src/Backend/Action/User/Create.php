@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User;
-use Fusio\Model\Backend\User_Create;
+use Fusio\Model\Backend\UserCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Create);
+        assert($body instanceof UserCreate);
 
         $this->userService->create(
             $body,

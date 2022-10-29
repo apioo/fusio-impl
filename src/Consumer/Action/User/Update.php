@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\User;
-use Fusio\Model\Consumer\User_Account;
+use Fusio\Model\Consumer\UserAccount;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Account);
+        assert($body instanceof UserAccount);
 
         $this->userService->update(
             $body,

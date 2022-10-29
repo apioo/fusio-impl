@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Route;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Route_Create;
+use Fusio\Model\Backend\RouteCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Route_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Route_Create $route;
+    private RouteCreate $route;
 
-    public function __construct(Route_Create $route, UserContext $context)
+    public function __construct(RouteCreate $route, UserContext $context)
     {
         parent::__construct($context);
 
         $this->route = $route;
     }
 
-    public function getRoute(): Route_Create
+    public function getRoute(): RouteCreate
     {
         return $this->route;
     }

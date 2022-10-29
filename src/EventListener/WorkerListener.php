@@ -30,8 +30,8 @@ use Fusio\Impl\Worker\ClientFactory;
 use Fusio\Impl\Worker\Generated\Action;
 use Fusio\Impl\Worker\Generated\Connection;
 use Fusio\Impl\Worker\Generated\Message;
-use Fusio\Model\Backend\Action_Config;
-use Fusio\Model\Backend\Connection_Config;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\ConnectionConfig;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception\InternalServerErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -105,7 +105,7 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    private function notifyWorkerConnection(string $name, ?string $class, ?Connection_Config $config)
+    private function notifyWorkerConnection(string $name, ?string $class, ?ConnectionConfig $config)
     {
         if (empty($class)) {
             return;
@@ -134,7 +134,7 @@ class WorkerListener implements EventSubscriberInterface
         }
     }
 
-    private function notifyWorkerAction(string $name, ?string $class, ?Action_Config $config)
+    private function notifyWorkerAction(string $name, ?string $class, ?ActionConfig $config)
     {
         if (empty($class)) {
             return;

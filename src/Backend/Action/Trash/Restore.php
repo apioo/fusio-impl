@@ -26,9 +26,10 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\Restorer;
-use Fusio\Model\Backend\Plan_Create;
-use Fusio\Model\Backend\Trash_Restore;
+use Fusio\Model\Backend\PlanCreate;
+use Fusio\Model\Backend\TrashRestore;
 use PSX\Http\Exception as StatusCode;
+
 /**
  * Restore
  *
@@ -49,7 +50,7 @@ class Restore extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Trash_Restore);
+        assert($body instanceof TrashRestore);
 
         $id = $body->getId();
         if ($id === null) {

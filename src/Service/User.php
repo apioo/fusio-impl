@@ -23,10 +23,10 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Account_ChangePassword;
-use Fusio\Model\Backend\User_Create;
-use Fusio\Model\Backend\User_Remote;
-use Fusio\Model\Backend\User_Update;
+use Fusio\Model\Backend\AccountChangePassword;
+use Fusio\Model\Backend\UserCreate;
+use Fusio\Model\Backend\UserRemote;
+use Fusio\Model\Backend\UserUpdate;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -38,6 +38,7 @@ use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use Fusio\Model;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -111,7 +112,7 @@ class User
         return null;
     }
 
-    public function create(User_Create $user, UserContext $context): int
+    public function create(UserCreate $user, UserContext $context): int
     {
         // check whether user name exists
         if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_NAME, '=', $user->getName()])) > 0) {
@@ -168,7 +169,7 @@ class User
         return $userId;
     }
 
-    public function createRemote(User_Remote $remote, UserContext $context): int
+    public function createRemote(UserRemote $remote, UserContext $context): int
     {
         // check whether user exists
         $condition  = new Condition();
@@ -227,7 +228,7 @@ class User
             throw $e;
         }
 
-        $user = new User_Create();
+        $user = new UserCreate();
         $user->setId($userId);
         $user->setName($remote->getName());
         $user->setEmail($remote->getEmail());
@@ -237,7 +238,7 @@ class User
         return $userId;
     }
 
-    public function update(int $userId, User_Update $user, UserContext $context): int
+    public function update(int $userId, UserUpdate $user, UserContext $context): int
     {
         $existing = $this->userTable->find($userId);
         if (empty($existing)) {
@@ -339,7 +340,7 @@ class User
         $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user->getStatus(), $status, $context));
     }
 
-    public function changePassword(Account_ChangePassword $changePassword, UserContext $context): bool
+    public function changePassword(AccountChangePassword $changePassword, UserContext $context): bool
     {
         $appId  = $context->getAppId();
         $userId = $context->getUserId();
@@ -412,7 +413,7 @@ class User
         }
     }
 
-    private function getRoleId(\Fusio\Model\Backend\User $user): ?int
+    private function getRoleId(Model\Backend\User $user): ?int
     {
         $roleId = $user->getRoleId();
         if (!empty($roleId)) {
@@ -427,7 +428,7 @@ class User
         }
     }
 
-    private function getPlanId(\Fusio\Model\Backend\User $user): ?int
+    private function getPlanId(Model\Backend\User $user): ?int
     {
         $planId = $user->getPlanId();
         if (!empty($planId)) {

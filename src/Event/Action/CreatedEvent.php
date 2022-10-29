@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Action;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Action_Create;
+use Fusio\Model\Backend\ActionCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Action_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Action_Create $action;
+    private ActionCreate $action;
 
-    public function __construct(Action_Create $action, UserContext $context)
+    public function __construct(ActionCreate $action, UserContext $context)
     {
         parent::__construct($context);
 
         $this->action = $action;
     }
 
-    public function getAction(): Action_Create
+    public function getAction(): ActionCreate
     {
         return $this->action;
     }

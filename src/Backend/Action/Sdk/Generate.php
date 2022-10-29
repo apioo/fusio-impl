@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Sdk;
-use Fusio\Model\Backend\Sdk_Generate;
+use Fusio\Model\Backend\SdkGenerate;
 
 /**
  * Generate
@@ -48,7 +48,7 @@ class Generate extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Sdk_Generate);
+        assert($body instanceof SdkGenerate);
 
         $link = $this->sdkService->generate($body);
 

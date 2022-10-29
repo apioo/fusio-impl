@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\Subscription;
-use Fusio\Model\Consumer\Event_Subscription_Update;
+use Fusio\Model\Consumer\EventSubscriptionUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Event_Subscription_Update);
+        assert($body instanceof EventSubscriptionUpdate);
 
         $this->subscriptionService->update(
             (int) $request->get('subscription_id'),

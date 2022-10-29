@@ -25,16 +25,13 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Route;
 use Fusio\Impl\Service\Schema;
-use Fusio\Model\Backend\Action_Create;
-use Fusio\Model\Backend\Route_Create;
-use Fusio\Model\Backend\Route_Method;
-use Fusio\Model\Backend\Route_Version;
-use Fusio\Model\Backend\Schema_Create;
+use Fusio\Model;
+use Fusio\Model\Backend\RouteMethod;
+use Fusio\Model\Backend\RouteMethodResponses;
+use Fusio\Model\Backend\RouteVersion;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\SchemaManagerInterface;
-use PSX\Schema\SchemaTraverser;
-use PSX\Schema\Visitor\TypeVisitor;
 
 /**
  * EntityCreator
@@ -48,33 +45,28 @@ class EntityCreator
     private Route $routeService;
     private Schema $schemaService;
     private Action $actionService;
-    private SchemaManagerInterface $schemaManager;
 
     private array $schemas;
     private array $actions;
     private array $routes;
 
-    public function __construct(Route $routeService, Schema $schemaService, Action $actionService, SchemaManagerInterface $schemaManager)
+    public function __construct(Route $routeService, Schema $schemaService, Action $actionService)
     {
         $this->routeService = $routeService;
         $this->schemaService = $schemaService;
         $this->actionService = $actionService;
-        $this->schemaManager = $schemaManager;
 
         $this->schemas = [];
         $this->actions = [];
         $this->routes = [];
     }
 
+    /**
+     * @param Model\Backend\SchemaCreate[] $schemas
+     */
     public function createSchemas(int $categoryId, array $schemas, UserContext $context): void
     {
-        $schema = $this->schemaManager->getSchema(Schema_Create::class);
-
-        foreach ($schemas as $index => $data) {
-            $data = \json_decode(\json_encode($data));
-            /** @var Schema_Create $record */
-            $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
-
+        foreach ($schemas as $index => $record) {
             $id = $this->schemaService->exists($record->getName());
             if (!$id) {
                 $this->schemaService->create($categoryId, $record, $context);
@@ -84,15 +76,12 @@ class EntityCreator
         }
     }
 
+    /**
+     * @param Model\Backend\ActionCreate[] $actions
+     */
     public function createActions(int $categoryId, array $actions, UserContext $context): void
     {
-        $schema = $this->schemaManager->getSchema(Action_Create::class);
-
-        foreach ($actions as $index => $data) {
-            $data = \json_decode(\json_encode($data));
-            /** @var Action_Create $record */
-            $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
-
+        foreach ($actions as $index => $record) {
             $id = $this->actionService->exists($record->getName());
             if (!$id) {
                 $this->actionService->create($categoryId, $record, $context);
@@ -102,29 +91,37 @@ class EntityCreator
         }
     }
 
+    /**
+     * @param Model\Backend\RouteCreate[] $routes
+     */
     public function createRoutes(int $categoryId, array $routes, $basePath, $scopes, ?bool $public, UserContext $context): void
     {
         $scopes = $scopes ?: [];
-        $schema = $this->schemaManager->getSchema(Route_Create::class);
 
-        foreach ($routes as $index => $data) {
-            $data = \json_decode(\json_encode($data));
-            $this->resolveConfig($data);
-
-            /** @var Route_Create $record */
-            $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
-
+        foreach ($routes as $index => $record) {
             $record->setPath($this->buildPath($basePath, $record->getPath()));
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
             foreach ($record->getConfig() as $version) {
-                /** @var Route_Version $version */
+                /** @var RouteVersion $version */
                 $version->setVersion(1);
                 $version->setStatus(Resource::STATUS_DEVELOPMENT);
-                foreach ($version->getMethods() as $methodName => $method) {
-                    /** @var Route_Method $method */
+                foreach ($version->getMethods() as $method) {
+                    /** @var RouteMethod $method */
                     $method->setActive(true);
                     $method->setPublic($public === true);
+
+                    $method->setParameters($this->resolveSchema((int) $method->getParameters()));
+                    $method->setRequest($this->resolveSchema((int) $method->getRequest()));
+
+                    $responses = $method->getResponses();
+                    if ($responses instanceof RouteMethodResponses) {
+                        foreach ($responses as $statusCode => $response) {
+                            $responses[$statusCode] = $this->resolveSchema((int) $response);
+                        }
+                    }
+
+                    $method->setAction($this->resolveAction((int) $method->getAction()));
                 }
             }
 
@@ -140,37 +137,6 @@ class EntityCreator
     private function buildPath(string $basePath, string $path): string
     {
         return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
-    }
-
-    private function resolveConfig(\stdClass $data): void
-    {
-        $versions = $data->config ?? [];
-
-        foreach ($versions as $index => $version) {
-            if (!isset($version->methods) || !$version->methods instanceof \stdClass) {
-                continue;
-            }
-
-            foreach ($version->methods as $methodName => $method) {
-                if (isset($method->parameters)) {
-                    $data->config[$index]->methods->{$methodName}->parameters = $this->resolveSchema((int) $method->parameters);
-                }
-
-                if (isset($method->request)) {
-                    $data->config[$index]->methods->{$methodName}->request = $this->resolveSchema((int) $method->request);
-                }
-
-                if (isset($method->responses) && $method->responses instanceof \stdClass) {
-                    foreach ($method->responses as $code => $response) {
-                        $data->config[$index]->methods->{$methodName}->responses->{$code} = $this->resolveSchema((int) $response);
-                    }
-                }
-
-                if (isset($method->action)) {
-                    $data->config[$index]->methods->{$methodName}->action = $this->resolveAction((int) $method->action);
-                }
-            }
-        }
     }
 
     private function resolveSchema(int $schema): string

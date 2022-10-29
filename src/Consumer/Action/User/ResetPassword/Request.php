@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
-use Fusio\Model\Consumer\User_Email;
+use Fusio\Model\Consumer\UserEmail;
 
 /**
  * Request
@@ -48,7 +48,7 @@ class Request extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Email);
+        assert($body instanceof UserEmail);
 
         $this->resetService->resetPassword($body);
 

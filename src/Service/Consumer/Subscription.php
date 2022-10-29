@@ -24,9 +24,10 @@ namespace Fusio\Impl\Service\Consumer;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\Event_Subscription;
-use Fusio\Model\Consumer\Event_Subscription_Create;
-use Fusio\Model\Consumer\Event_Subscription_Update;
+use Fusio\Model;
+use Fusio\Model\Consumer\EventSubscription;
+use Fusio\Model\Consumer\EventSubscriptionCreate;
+use Fusio\Model\Consumer\EventSubscriptionUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -52,7 +53,7 @@ class Subscription
         $this->eventTable          = $eventTable;
     }
 
-    public function create(Event_Subscription_Create $subscription, UserContext $context): int
+    public function create(EventSubscriptionCreate $subscription, UserContext $context): int
     {
         // check max subscription count
         $count = $this->subscriptionTable->getSubscriptionCount($context->getUserId());
@@ -71,7 +72,7 @@ class Subscription
 
         $this->assertUrl($subscription->getEndpoint());
 
-        $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Create();
+        $backendSubscription = new Model\Backend\EventSubscriptionCreate();
         $backendSubscription->setUserId($context->getUserId());
         $backendSubscription->setEventId($event->getId());
         $backendSubscription->setEndpoint($subscription->getEndpoint());
@@ -79,7 +80,7 @@ class Subscription
         return $this->subscriptionService->create($backendSubscription, $context);
     }
 
-    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context): int
+    public function update(int $subscriptionId, EventSubscriptionUpdate $subscription, UserContext $context): int
     {
         $existing = $this->subscriptionTable->find($subscriptionId);
         if (empty($existing)) {
@@ -92,7 +93,7 @@ class Subscription
 
         $this->assertUrl($subscription->getEndpoint());
 
-        $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Update();
+        $backendSubscription = new Model\Backend\EventSubscriptionUpdate();
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
         return $this->subscriptionService->update($subscriptionId, $backendSubscription, $context);

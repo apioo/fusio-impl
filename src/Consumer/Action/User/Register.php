@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Register as UserRegister;
-use Fusio\Model\Consumer\User_Register;
+use Fusio\Model;
 
 /**
  * Register
@@ -48,7 +48,7 @@ class Register extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Register);
+        assert($body instanceof Model\Consumer\UserRegister);
 
         $this->registerService->register($body);
 

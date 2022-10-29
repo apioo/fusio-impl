@@ -24,8 +24,9 @@ namespace Fusio\Impl\Service\Consumer;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\App_Create;
-use Fusio\Model\Consumer\App_Update;
+use Fusio\Model\Consumer\AppCreate;
+use Fusio\Model\Consumer\AppUpdate;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -53,7 +54,7 @@ class App
         $this->userScopeTable = $userScopeTable;
     }
 
-    public function create(App_Create $app, UserContext $context): int
+    public function create(AppCreate $app, UserContext $context): int
     {
         $this->assertName($app->getName());
         $this->assertUrl($app->getUrl());
@@ -66,7 +67,7 @@ class App
 
         $appApproval = $this->configService->getValue('app_approval');
 
-        $backendApp = new \Fusio\Model\Backend\App_Create();
+        $backendApp = new Model\Backend\AppCreate();
         $backendApp->setUserId($context->getUserId());
         $backendApp->setStatus($appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING);
         $backendApp->setName($app->getName());
@@ -76,7 +77,7 @@ class App
         return $this->appService->create($backendApp, $context);
     }
 
-    public function update(int $appId, App_Update $app, UserContext $context): int
+    public function update(int $appId, AppUpdate $app, UserContext $context): int
     {
         $existing = $this->appTable->find($appId);
         if (empty($existing)) {
@@ -96,7 +97,7 @@ class App
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
-        $backendApp = new \Fusio\Model\Backend\App_Update();
+        $backendApp = new Model\Backend\AppUpdate();
         $backendApp->setName($app->getName());
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);

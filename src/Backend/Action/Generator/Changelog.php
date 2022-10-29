@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Generator;
-use Fusio\Model\Backend\Generator_Provider_Config;
+use Fusio\Model\Backend\GeneratorProviderConfig;
 
 /**
  * Changelog
@@ -48,7 +48,7 @@ class Changelog extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Generator_Provider_Config);
+        assert($body instanceof GeneratorProviderConfig);
 
         return $this->generatorService->getChangelog(
             $request->get('provider'),

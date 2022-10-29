@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Action_Update;
-use Fusio\Model\Backend\Connection_Update;
+use Fusio\Model\Backend\ActionUpdate;
+use Fusio\Model\Backend\ConnectionUpdate;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
 
@@ -51,7 +51,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Connection_Update);
+        assert($body instanceof ConnectionUpdate);
 
         $this->connectionService->update(
             (int) $request->get('connection_id'),

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\Authorize_Request;
+use Fusio\Model\Consumer\AuthorizeRequest;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -56,7 +56,7 @@ class Authorize
         $this->config          = $config;
     }
 
-    public function authorize(int $userId, Authorize_Request $request): array
+    public function authorize(int $userId, AuthorizeRequest $request): array
     {
         // response type
         if (!in_array($request->getResponseType(), ['code', 'token'])) {

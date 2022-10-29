@@ -30,8 +30,8 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\Connection_Config;
-use Fusio\Model\Backend\Connection_Update;
+use Fusio\Model\Backend\ConnectionConfig;
+use Fusio\Model\Backend\ConnectionUpdate;
 use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
@@ -176,8 +176,8 @@ class Token
         $config[OAuth2Interface::CONFIG_EXPIRES_IN] = $token->getExpiresIn();
         $config[OAuth2Interface::CONFIG_REFRESH_TOKEN] = $token->getRefreshToken();
 
-        $update = new Connection_Update();
-        $update->setConfig(new Connection_Config($config));
+        $update = new ConnectionUpdate();
+        $update->setConfig(new ConnectionConfig($config));
         $this->connectionService->update($connection->getId(), $update, UserContext::newAnonymousContext());
     }
 

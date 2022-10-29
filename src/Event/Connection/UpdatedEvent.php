@@ -24,7 +24,7 @@ namespace Fusio\Impl\Event\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\ConnectionRow;
-use Fusio\Model\Backend\Connection_Update;
+use Fusio\Model\Backend\ConnectionUpdate;
 use PSX\Record\RecordInterface;
 
 /**
@@ -36,10 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Connection_Update $connection;
+    private ConnectionUpdate $connection;
     private ConnectionRow $existing;
 
-    public function __construct(Connection_Update $connection, ConnectionRow $existing, UserContext $context)
+    public function __construct(ConnectionUpdate $connection, ConnectionRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +47,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing   = $existing;
     }
 
-    public function getConnection(): Connection_Update
+    public function getConnection(): ConnectionUpdate
     {
         return $this->connection;
     }

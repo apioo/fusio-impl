@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Plan_Create;
+use Fusio\Model\Backend\PlanCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Plan_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Plan_Create $plan;
+    private PlanCreate $plan;
 
-    public function __construct(Plan_Create $plan, UserContext $context)
+    public function __construct(PlanCreate $plan, UserContext $context)
     {
         parent::__construct($context);
 
         $this->plan = $plan;
     }
 
-    public function getPlan(): Plan_Create
+    public function getPlan(): PlanCreate
     {
         return $this->plan;
     }

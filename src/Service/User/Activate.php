@@ -24,7 +24,7 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\User_Activate;
+use Fusio\Model\Consumer\UserActivate;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -45,7 +45,7 @@ class Activate
         $this->tokenService = $tokenService;
     }
 
-    public function activate(User_Activate $activate): void
+    public function activate(UserActivate $activate): void
     {
         $userId = $this->tokenService->getUser($activate->getToken());
         if (!empty($userId)) {

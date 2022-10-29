@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Generator;
-use Fusio\Model\Backend\Generator_Provider;
+use Fusio\Model\Backend\GeneratorProvider;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Generator_Provider);
+        assert($body instanceof GeneratorProvider);
 
         $this->generatorService->create(
             $request->get('provider'),

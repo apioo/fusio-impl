@@ -26,8 +26,8 @@ use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\User_Remote;
-use Fusio\Model\Consumer\User_Provider;
+use Fusio\Model\Backend\UserRemote;
+use Fusio\Model\Consumer\UserProvider;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
@@ -54,7 +54,7 @@ class Provider
         $this->config          = $config;
     }
 
-    public function provider(string $providerName, User_Provider $request): AccessToken
+    public function provider(string $providerName, UserProvider $request): AccessToken
     {
         /** @var ProviderInterface $provider */
         $provider = $this->providerFactory->factory($providerName);
@@ -64,7 +64,7 @@ class Provider
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
-        $remote = new User_Remote();
+        $remote = new UserRemote();
         $remote->setProvider((string) $provider->getId());
         $remote->setRemoteId($user->getId());
         $remote->setName($user->getUserName());

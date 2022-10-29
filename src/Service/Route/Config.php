@@ -24,8 +24,8 @@ namespace Fusio\Impl\Service\Route;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Framework\Filter\Filter;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Route_Method;
-use Fusio\Model\Backend\Route_Version;
+use Fusio\Model\Backend\RouteMethod;
+use Fusio\Model\Backend\RouteVersion;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
@@ -58,7 +58,7 @@ class Config
      * Method which handles data change of each API method. Basically an API method can only change if it is in
      * development mode. In every other case we can only change the status
      *
-     * @param Route_Version[] $versions
+     * @param RouteVersion[] $versions
      */
     public function handleConfig(int $categoryId, int $routeId, string $path, array $versions, UserContext $context)
     {
@@ -128,7 +128,7 @@ class Config
         }
     }
 
-    private function createMethod(int $routeId, string $method, int $ver, int $status, Route_Method $config, string $path): int
+    private function createMethod(int $routeId, string $method, int $ver, int $status, RouteMethod $config, string $path): int
     {
         $active      = $config->getActive() ?? false;
         $public      = $config->getPublic() ?? false;
@@ -166,9 +166,9 @@ class Config
 
     /**
      * @param integer $methodId
-     * @param Route_Method $config
+     * @param RouteMethod $config
      */
-    private function createResponses(int $methodId, Route_Method $config): void
+    private function createResponses(int $methodId, RouteMethod $config): void
     {
         $response  = $config->getResponse(); // deprecated
         $responses = $config->getResponses();

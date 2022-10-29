@@ -22,7 +22,7 @@
 namespace Fusio\Impl\EventListener;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\User_Create;
+use Fusio\Model\Backend\UserCreate;
 use Fusio\Impl\Event;
 use Fusio\Impl\Table;
 use PSX\Record\Record;
@@ -509,7 +509,7 @@ class AuditListener implements EventSubscriberInterface
 
     private function normalize(?object $content = null): string
     {
-        if ($content instanceof User_Create) {
+        if ($content instanceof UserCreate) {
             $content->setPassword('******');
         }
 

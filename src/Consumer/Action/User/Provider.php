@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Provider as UserProvider;
-use Fusio\Model\Consumer\User_Provider;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
@@ -50,7 +50,7 @@ class Provider extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Provider);
+        assert($body instanceof Model\Consumer\UserProvider);
 
         $token = $this->providerService->provider($request->get('provider'), $body);
 

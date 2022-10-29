@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Action_Create;
-use Fusio\Model\Backend\Connection_Create;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\ConnectionCreate;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
 use PSX\Http\Environment\HttpResponse;
@@ -52,7 +52,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Connection_Create);
+        assert($body instanceof ConnectionCreate);
 
         $this->connectionService->create(
             $body,

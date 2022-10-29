@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User;
-use Fusio\Model\Backend\Account_ChangePassword;
+use Fusio\Model\Backend\AccountChangePassword;
 
 /**
  * ChangePassword
@@ -49,7 +49,7 @@ class ChangePassword extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Account_ChangePassword);
+        assert($body instanceof AccountChangePassword);
 
         $this->userService->changePassword(
             $body,

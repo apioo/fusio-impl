@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\App;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\App_Create;
+use Fusio\Model\Backend\AppCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\App_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private App_Create $app;
+    private AppCreate $app;
 
-    public function __construct(App_Create $app, UserContext $context)
+    public function __construct(AppCreate $app, UserContext $context)
     {
         parent::__construct($context);
 
         $this->app = $app;
     }
 
-    public function getApp(): App_Create
+    public function getApp(): AppCreate
     {
         return $this->app;
     }

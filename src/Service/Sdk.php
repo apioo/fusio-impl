@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Model\Backend\Sdk_Generate;
+use Fusio\Model\Backend\SdkGenerate;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Http\Exception as StatusCode;
@@ -48,7 +48,7 @@ class Sdk
         $this->config = $config;
     }
 
-    public function generate(Sdk_Generate $record): string
+    public function generate(SdkGenerate $record): string
     {
         $format = $record->getFormat();
         $config = $record->getConfig();

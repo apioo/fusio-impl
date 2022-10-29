@@ -24,7 +24,7 @@ namespace Fusio\Impl\Service\Cronjob;
 use Cron\CronExpression;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Action_Execute_Request;
+use Fusio\Model\Backend\ActionExecuteRequest;
 
 /**
  * Executor
@@ -85,7 +85,7 @@ class Executor
     private function executeCronjob(Table\Generated\CronjobRow $cronjob)
     {
         try {
-            $execute = new Action_Execute_Request();
+            $execute = new ActionExecuteRequest();
             $execute->setMethod('GET');
 
             $this->executorService->execute($cronjob->getAction(), $execute);

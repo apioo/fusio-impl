@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
-use Fusio\Model\Backend\Cronjob_Update;
+use Fusio\Model\Backend\CronjobUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Cronjob_Update);
+        assert($body instanceof CronjobUpdate);
 
         $this->cronjobService->update(
             (int) $request->get('cronjob_id'),

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Scope_Create;
+use Fusio\Model\Backend\ScopeCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Scope_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Scope_Create $scope;
+    private ScopeCreate $scope;
 
-    public function __construct(Scope_Create $scope, UserContext $context)
+    public function __construct(ScopeCreate $scope, UserContext $context)
     {
         parent::__construct($context);
 
         $this->scope = $scope;
     }
 
-    public function getScope(): Scope_Create
+    public function getScope(): ScopeCreate
     {
         return $this->scope;
     }

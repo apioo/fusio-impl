@@ -24,7 +24,6 @@ namespace Fusio\Impl\Event\Route;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\RoutesRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

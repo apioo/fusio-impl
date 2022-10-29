@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Event_Create;
-use Fusio\Model\Backend\Event_Update;
+use Fusio\Model\Backend\EventCreate;
+use Fusio\Model\Backend\EventUpdate;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
@@ -50,7 +50,7 @@ class Event
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Event_Create $event, UserContext $context): int
+    public function create(int $categoryId, EventCreate $event, UserContext $context): int
     {
         // check whether event exists
         if ($this->exists($event->getName())) {
@@ -87,7 +87,7 @@ class Event
         return $eventId;
     }
 
-    public function update(int $eventId, Event_Update $event, UserContext $context): int
+    public function update(int $eventId, EventUpdate $event, UserContext $context): int
     {
         $existing = $this->eventTable->find($eventId);
         if (empty($existing)) {

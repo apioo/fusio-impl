@@ -23,7 +23,7 @@ namespace Fusio\Impl\Event\Category;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\Category_Create;
+use Fusio\Model\Backend\CategoryCreate;
 
 /**
  * CreatedEvent
@@ -34,16 +34,16 @@ use Fusio\Model\Backend\Category_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    private Category_Create $category;
+    private CategoryCreate $category;
 
-    public function __construct(Category_Create $category, UserContext $context)
+    public function __construct(CategoryCreate $category, UserContext $context)
     {
         parent::__construct($context);
 
         $this->category = $category;
     }
 
-    public function getCategory(): Category_Create
+    public function getCategory(): CategoryCreate
     {
         return $this->category;
     }

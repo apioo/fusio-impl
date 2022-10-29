@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Event;
-use Fusio\Model\Backend\Event_Update;
+use Fusio\Model\Backend\EventUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Event_Update);
+        assert($body instanceof EventUpdate);
 
         $this->eventService->update(
             (int) $request->get('event_id'),

@@ -23,9 +23,9 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Rate_Allocation;
-use Fusio\Model\Backend\Rate_Create;
-use Fusio\Model\Backend\Rate_Update;
+use Fusio\Model\Backend\RateAllocation;
+use Fusio\Model\Backend\RateCreate;
+use Fusio\Model\Backend\RateUpdate;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;
@@ -57,7 +57,7 @@ class Rate
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create(Rate_Create $rate, UserContext $context): int
+    public function create(RateCreate $rate, UserContext $context): int
     {
         // check whether rate exists
         if ($this->exists($rate->getName())) {
@@ -96,7 +96,7 @@ class Rate
         return $rateId;
     }
 
-    public function update(int $rateId, Rate_Update $rate, UserContext $context): int
+    public function update(int $rateId, RateUpdate $rate, UserContext $context): int
     {
         $existing = $this->rateTable->find($rateId);
         if (empty($existing)) {
@@ -218,7 +218,7 @@ class Rate
     }
 
     /**
-     * @param Rate_Allocation[] $allocations
+     * @param RateAllocation[] $allocations
      */
     private function handleAllocations(int $rateId, ?array $allocations = null): void
     {

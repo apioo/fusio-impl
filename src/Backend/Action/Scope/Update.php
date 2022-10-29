@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Scope;
-use Fusio\Model\Backend\Scope_Update;
+use Fusio\Model\Backend\ScopeUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Scope_Update);
+        assert($body instanceof ScopeUpdate);
 
         $this->scopeService->update(
             (int) $request->get('scope_id'),

@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Scope_Create;
-use Fusio\Model\Backend\Scope_Route;
-use Fusio\Model\Backend\Scope_Update;
+use Fusio\Model\Backend\ScopeCreate;
+use Fusio\Model\Backend\ScopeRoute;
+use Fusio\Model\Backend\ScopeUpdate;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
@@ -57,7 +57,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Scope_Create $scope, UserContext $context): int
+    public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
     {
         // check whether scope exists
         if ($this->exists($scope->getName())) {
@@ -112,12 +112,12 @@ class Scope
                 ]));
             } else {
                 // create new scope
-                $route = new Scope_Route();
+                $route = new ScopeRoute();
                 $route->setRouteId($routeId);
                 $route->setAllow(true);
                 $route->setMethods('GET|POST|PUT|PATCH|DELETE');
 
-                $scope = new Scope_Create();
+                $scope = new ScopeCreate();
                 $scope->setName($scopeName);
                 $scope->setRoutes([$route]);
 
@@ -126,7 +126,7 @@ class Scope
         }
     }
 
-    public function update(int $scopeId, Scope_Update $scope, UserContext $context): int
+    public function update(int $scopeId, ScopeUpdate $scope, UserContext $context): int
     {
         $existing = $this->scopeTable->find($scopeId);
         if (empty($existing)) {
@@ -246,7 +246,7 @@ class Scope
     }
 
     /**
-     * @param Scope_Route[] $routes
+     * @param ScopeRoute[] $routes
      */
     protected function insertRoutes(int $scopeId, ?array $routes): void
     {

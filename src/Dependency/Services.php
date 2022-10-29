@@ -87,8 +87,7 @@ trait Services
         return new Service\Generator\EntityCreator(
             $this->get('routes_service'),
             $this->get('schema_service'),
-            $this->get('action_service'),
-            $this->get('schema_manager')
+            $this->get('action_service')
         );
     }
 

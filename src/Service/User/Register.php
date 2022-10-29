@@ -24,10 +24,9 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\User_Create;
-use Fusio\Model\Consumer\User_Register;
+use Fusio\Model\Backend\UserCreate;
+use Fusio\Model\Consumer\UserRegister;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Register
@@ -55,7 +54,7 @@ class Register
         $this->roleTable      = $roleTable;
     }
 
-    public function register(User_Register $register): int
+    public function register(UserRegister $register): int
     {
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
@@ -71,7 +70,7 @@ class Register
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }
 
-        $user = new User_Create();
+        $user = new UserCreate();
         $user->setRoleId($role->getId());
         $user->setStatus($status);
         $user->setName($register->getName());

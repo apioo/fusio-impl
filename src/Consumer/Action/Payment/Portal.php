@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Payment;
-use Fusio\Model\Consumer\Payment_Portal_Request;
+use Fusio\Model\Consumer\PaymentPortalRequest;
 use PSX\Framework\Config\Config;
 
 /**
@@ -51,7 +51,7 @@ class Portal extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Payment_Portal_Request);
+        assert($body instanceof PaymentPortalRequest);
 
         $returnUrl = $body->getReturnUrl();
         if (empty($returnUrl)) {

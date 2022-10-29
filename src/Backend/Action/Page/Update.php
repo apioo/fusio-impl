@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Page;
-use Fusio\Model\Backend\Page_Update;
+use Fusio\Model\Backend\PageUpdate;
 
 /**
  * Update
@@ -49,7 +49,7 @@ class Update extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Page_Update);
+        assert($body instanceof PageUpdate);
 
         $this->pageService->update(
             (int) $request->get('page_id'),

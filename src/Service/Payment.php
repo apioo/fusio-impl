@@ -32,7 +32,7 @@ use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Payment\Webhook;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\Payment_Checkout_Request;
+use Fusio\Model\Consumer\PaymentCheckoutRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\RequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -63,7 +63,7 @@ class Payment
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function checkout(string $name, Payment_Checkout_Request $checkout, UserInterface $user, UserContext $context): string
+    public function checkout(string $name, PaymentCheckoutRequest $checkout, UserInterface $user, UserContext $context): string
     {
         $provider = $this->providerFactory->factory($name);
         if (!$provider instanceof ProviderInterface) {

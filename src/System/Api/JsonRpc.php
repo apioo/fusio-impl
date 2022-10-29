@@ -68,7 +68,7 @@ class JsonRpc extends ControllerAbstract
 
     #[Description('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification')]
     #[Incoming(schema: Passthru::class)]
-    #[Outgoing(code: 200, schema: System\Rpc_Response_Success::class)]
+    #[Outgoing(code: 200, schema: System\RpcResponseSuccess::class)]
     protected function doPost($record, HttpContextInterface $context): mixed
     {
         $invoker = $this->rpcInvokerFactory->createByFramework($context);

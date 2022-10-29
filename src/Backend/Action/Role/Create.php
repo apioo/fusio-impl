@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Role;
-use Fusio\Model\Backend\Role_Create;
+use Fusio\Model\Backend\RoleCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Role_Create);
+        assert($body instanceof RoleCreate);
 
         $this->roleService->create(
             $body,

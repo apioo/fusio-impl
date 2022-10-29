@@ -31,8 +31,8 @@ use Fusio\Engine\Generator\Setup;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Generator\EntityCreator;
-use Fusio\Model\Backend\Generator_Provider;
-use Fusio\Model\Backend\Generator_Provider_Config;
+use Fusio\Model\Backend\GeneratorProvider;
+use Fusio\Model\Backend\GeneratorProviderConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -57,7 +57,7 @@ class Generator
         $this->elementFactory = $elementFactory;
     }
 
-    public function create(string $providerName, int $categoryId, Generator_Provider $config, UserContext $context): void
+    public function create(string $providerName, int $categoryId, GeneratorProvider $config, UserContext $context): void
     {
         $setup = new Setup();
         $basePath = $config->getPath();
@@ -99,7 +99,7 @@ class Generator
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName, Generator_Provider_Config $config): array
+    public function getChangelog(string $providerName, GeneratorProviderConfig $config): array
     {
         $setup = new Setup();
 

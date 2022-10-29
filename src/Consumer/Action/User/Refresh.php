@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Login as UserLogin;
-use Fusio\Model\Consumer\User_Refresh;
+use Fusio\Model\Consumer\UserRefresh;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
@@ -50,7 +50,7 @@ class Refresh extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Refresh);
+        assert($body instanceof UserRefresh);
 
         $token = $this->loginService->refresh($body);
 

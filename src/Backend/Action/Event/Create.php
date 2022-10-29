@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Event;
-use Fusio\Model\Backend\Event_Create;
+use Fusio\Model\Backend\EventCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Event_Create);
+        assert($body instanceof EventCreate);
 
         $this->eventService->create(
             $context->getUser()->getCategoryId(),

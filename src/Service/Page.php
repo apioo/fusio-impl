@@ -26,8 +26,8 @@ use Fusio\Impl\Event\Page\CreatedEvent;
 use Fusio\Impl\Event\Page\DeletedEvent;
 use Fusio\Impl\Event\Page\UpdatedEvent;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Page_Create;
-use Fusio\Model\Backend\Page_Update;
+use Fusio\Model\Backend\PageCreate;
+use Fusio\Model\Backend\PageUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -50,7 +50,7 @@ class Page
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Page_Create $page, UserContext $context): int
+    public function create(PageCreate $page, UserContext $context): int
     {
         $slug = $this->createSlug($page->getTitle());
 
@@ -91,7 +91,7 @@ class Page
         return $pageId;
     }
 
-    public function update(int $pageId, Page_Update $page, UserContext $context): int
+    public function update(int $pageId, PageUpdate $page, UserContext $context): int
     {
         $existing = $this->pageTable->find($pageId);
         if (empty($existing)) {

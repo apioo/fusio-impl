@@ -26,8 +26,8 @@ use Fusio\Impl\Event\Event\Subscription\CreatedEvent;
 use Fusio\Impl\Event\Event\Subscription\DeletedEvent;
 use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Event_Subscription_Create;
-use Fusio\Model\Backend\Event_Subscription_Update;
+use Fusio\Model\Backend\EventSubscriptionCreate;
+use Fusio\Model\Backend\EventSubscriptionUpdate;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -51,7 +51,7 @@ class Subscription
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(Event_Subscription_Create $subscription, UserContext $context): int
+    public function create(EventSubscriptionCreate $subscription, UserContext $context): int
     {
         // create subscription
         try {
@@ -81,7 +81,7 @@ class Subscription
         return $subscriptionId;
     }
 
-    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context): int
+    public function update(int $subscriptionId, EventSubscriptionUpdate $subscription, UserContext $context): int
     {
         $existing = $this->subscriptionTable->find($subscriptionId);
         if (empty($existing)) {

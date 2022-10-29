@@ -30,8 +30,8 @@ use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Connection_Create;
-use Fusio\Model\Backend\Connection_Update;
+use Fusio\Model\Backend\ConnectionCreate;
+use Fusio\Model\Backend\ConnectionUpdate;
 use Fusio\Impl\Event\Connection\CreatedEvent;
 use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
@@ -62,7 +62,7 @@ class Connection
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(Connection_Create $connection, UserContext $context): int
+    public function create(ConnectionCreate $connection, UserContext $context): int
     {
         // check whether connection exists
         if ($this->exists($connection->getName())) {
@@ -117,7 +117,7 @@ class Connection
         return $connectionId;
     }
 
-    public function update(int $connectionId, Connection_Update $connection, UserContext $context): int
+    public function update(int $connectionId, ConnectionUpdate $connection, UserContext $context): int
     {
         $existing = $this->connectionTable->find($connectionId);
         if (empty($existing)) {

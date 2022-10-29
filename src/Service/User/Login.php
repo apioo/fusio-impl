@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
-use Fusio\Model\Consumer\User_Login;
-use Fusio\Model\Consumer\User_Refresh;
+use Fusio\Model\Consumer\UserLogin;
+use Fusio\Model\Consumer\UserRefresh;
 use PSX\Framework\Config\Config;
 use PSX\Oauth2\AccessToken;
 
@@ -47,7 +47,7 @@ class Login
         $this->config          = $config;
     }
 
-    public function login(User_Login $login): ?AccessToken
+    public function login(UserLogin $login): ?AccessToken
     {
         $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword());
         if (empty($userId)) {
@@ -72,11 +72,11 @@ class Login
         );
     }
 
-    public function refresh(User_Refresh $refresh): AccessToken
+    public function refresh(UserRefresh $refresh): AccessToken
     {
         return $this->appTokenService->refreshAccessToken(
             $this->getAppId(),
-            $refresh->getRefresh_token(),
+            $refresh->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))

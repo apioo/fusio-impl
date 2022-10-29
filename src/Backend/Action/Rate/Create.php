@@ -27,7 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Rate;
-use Fusio\Model\Backend\Rate_Create;
+use Fusio\Model\Backend\RateCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -50,7 +50,7 @@ class Create extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Rate_Create);
+        assert($body instanceof RateCreate);
 
         $this->rateService->create(
             $body,

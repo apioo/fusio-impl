@@ -24,8 +24,7 @@ namespace Fusio\Impl\Event\Event\Subscription;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\EventSubscriptionRow;
-use Fusio\Model\Backend\Event_Subscription_Update;
-use PSX\Record\RecordInterface;
+use Fusio\Model\Backend\EventSubscriptionUpdate;
 
 /**
  * UpdatedEvent
@@ -36,10 +35,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private Event_Subscription_Update $subscription;
+    private EventSubscriptionUpdate $subscription;
     private EventSubscriptionRow $existing;
 
-    public function __construct(Event_Subscription_Update $subscription, EventSubscriptionRow $existing, UserContext $context)
+    public function __construct(EventSubscriptionUpdate $subscription, EventSubscriptionRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -47,7 +46,7 @@ class UpdatedEvent extends EventAbstract
         $this->existing     = $existing;
     }
 
-    public function getSubscription(): Event_Subscription_Update
+    public function getSubscription(): EventSubscriptionUpdate
     {
         return $this->subscription;
     }

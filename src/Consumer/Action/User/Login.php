@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Login as UserLogin;
-use Fusio\Model\Consumer\User_Login;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
@@ -50,7 +50,7 @@ class Login extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Login);
+        assert($body instanceof Model\Consumer\UserLogin);
 
         $token = $this->loginService->login($body);
 

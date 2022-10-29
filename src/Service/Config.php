@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Config_Update;
+use Fusio\Model\Backend\ConfigUpdate;
 use Fusio\Impl\Event\Config\UpdatedEvent;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -46,7 +46,7 @@ class Config
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function update(int $configId, Config_Update $config, UserContext $context): int
+    public function update(int $configId, ConfigUpdate $config, UserContext $context): int
     {
         $existing = $this->configTable->find($configId);
         if (empty($existing)) {

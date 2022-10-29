@@ -90,7 +90,7 @@ class SdkCommand extends Command
         $filter = null;
         $filterName = $input->getOption('filter');
         if (!empty($filterName)) {
-            $filter = $this->filterFactory->getFilter($filterName);
+            $filter = $this->filterFactory->getFilter((string) $filterName);
             if ($filter === null) {
                 throw new \RuntimeException('Provided an invalid filter name');
             }
