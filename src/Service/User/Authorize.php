@@ -64,7 +64,12 @@ class Authorize
         }
 
         // client id
-        $app = $this->getApp($request->getClientId());
+        $clientId = $request->getClientId();
+        if (empty($clientId)) {
+            throw new StatusCode\BadRequestException('No client id provided');
+        }
+
+        $app = $this->getApp($clientId);
 
         // redirect uri
         $redirectUri = $request->getRedirectUri();
@@ -93,7 +98,7 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($request->getScope(), $app->getId(), $userId);
+        $scopes = $this->scopeService->getValidScopes($request->getScope() ?? '', $app->getId(), $userId);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }

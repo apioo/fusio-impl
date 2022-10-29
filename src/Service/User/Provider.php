@@ -56,9 +56,24 @@ class Provider
 
     public function provider(string $providerName, UserProvider $request): AccessToken
     {
+        $code = $request->getCode();
+        if (empty($code)) {
+            throw new StatusCode\BadRequestException('No code provided');
+        }
+
+        $clientId = $request->getClientId();
+        if (empty($clientId)) {
+            throw new StatusCode\BadRequestException('No client id provided');
+        }
+
+        $redirectUri = $request->getRedirectUri();
+        if (empty($redirectUri)) {
+            throw new StatusCode\BadRequestException('No redirect uri provided');
+        }
+
         /** @var ProviderInterface $provider */
         $provider = $this->providerFactory->factory($providerName);
-        $user     = $provider->requestUser($request->getCode(), $request->getClientId(), $request->getRedirectUri());
+        $user     = $provider->requestUser($code, $clientId, $redirectUri);
 
         if (!$user instanceof UserDetails) {
             throw new StatusCode\BadRequestException('Could not request user information');

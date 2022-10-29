@@ -22,6 +22,7 @@
 namespace Fusio\Impl\System\Api;
 
 use Fusio\Impl\Controller\Filter;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Rpc\InvokerFactory;
 use Fusio\Impl\Service\Log;
 use Fusio\Model\System;
@@ -58,10 +59,12 @@ class JsonRpc extends ControllerAbstract
         // identifies the client
         $filter[] = new UserAgentEnforcer();
 
-        $filter[] = new Filter\Logger(
-            $this->logService,
-            $this->context
-        );
+        if ($this->context instanceof Context) {
+            $filter[] = new Filter\Logger(
+                $this->logService,
+                $this->context
+            );
+        }
 
         return $filter;
     }

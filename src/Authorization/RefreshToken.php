@@ -41,7 +41,7 @@ class RefreshToken extends RefreshTokenAbstract
     private Service\App\Token $appTokenService;
     private Table\App $appTable;
     private string $expireApp;
-    private ?string $expireRefresh;
+    private string $expireRefresh;
 
     public function __construct(Service\App\Token $appTokenService, Table\App $appTable, string $expireApp, ?string $expireRefresh = null)
     {

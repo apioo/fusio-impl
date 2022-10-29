@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Framework\Config\Config;
+use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
 /**
@@ -49,7 +50,17 @@ class Login
 
     public function login(UserLogin $login): ?AccessToken
     {
-        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword());
+        $username = $login->getUsername();
+        if (empty($username)) {
+            throw new StatusCode\BadRequestException('No username provided');
+        }
+
+        $password = $login->getPassword();
+        if (empty($password)) {
+            throw new StatusCode\BadRequestException('No password provided');
+        }
+
+        $userId = $this->userService->authenticateUser($username, $password);
         if (empty($userId)) {
             return null;
         }
@@ -74,9 +85,14 @@ class Login
 
     public function refresh(UserRefresh $refresh): AccessToken
     {
+        $refreshToken = $refresh->getRefreshToken();
+        if (empty($refreshToken)) {
+            throw new StatusCode\BadRequestException('No refresh token provided');
+        }
+
         return $this->appTokenService->refreshAccessToken(
             $this->getAppId(),
-            $refresh->getRefreshToken(),
+            $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))

@@ -56,7 +56,12 @@ class ResetPassword
     {
         $this->captchaService->assertCaptcha($reset->getCaptcha());
 
-        $user = $this->userTable->findOneByEmail($reset->getEmail());
+        $email = $reset->getEmail();
+        if (empty($email)) {
+            throw new StatusCode\NotFoundException('No email was provided');
+        }
+
+        $user = $this->userTable->findOneByEmail($email);
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -65,16 +70,26 @@ class ResetPassword
             throw new StatusCode\BadRequestException('Provided user is not a local user');
         }
 
+        $email = $user->getEmail();
+        if (empty($email)) {
+            throw new StatusCode\BadRequestException('Provided user has no assigned email');
+        }
+
         // set onetime token for the user
         $token = $this->tokenService->generateToken($user->getId());
 
         // send reset mail
-        $this->mailerService->sendResetPasswordMail($user->getName(), $user->getEmail(), $token);
+        $this->mailerService->sendResetPasswordMail($user->getName(), $email, $token);
     }
 
     public function changePassword(UserPasswordReset $reset): void
     {
-        $userId = $this->tokenService->getUser($reset->getToken());
+        $token = $reset->getToken();
+        if (empty($token)) {
+            throw new StatusCode\NotFoundException('No token was provided');
+        }
+
+        $userId = $this->tokenService->getUser($token);
         if (empty($userId)) {
             throw new StatusCode\NotFoundException('Invalid token provided');
         }

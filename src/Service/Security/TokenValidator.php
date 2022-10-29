@@ -80,8 +80,6 @@ class TokenValidator
             );
 
             if ($type == 'Bearer' && !empty($accessToken)) {
-                $token = null;
-
                 try {
                     $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
                 } catch (\UnexpectedValueException $e) {

@@ -25,6 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
+use Fusio\Engine\Model\ActionInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpInterface;
 use Fusio\Engine\Request\RpcInterface;
@@ -67,8 +68,13 @@ abstract class WorkerAbstract extends ActionAbstract
             throw new StatusCode\InternalServerErrorException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. Please add a worker to the configuration file, more information at: https://www.fusio-project.org/documentation/worker');
         }
 
+        $action = $context->getAction();
+        if (!$action instanceof ActionInterface) {
+            throw new StatusCode\InternalServerErrorException('No action was provided');
+        }
+
         $execute = new Execute();
-        $execute->action = $context->getAction()->getName();
+        $execute->action = $action->getName();
         $execute->request = $this->buildRequest($request);
         $execute->context = $this->buildContext($context);
 

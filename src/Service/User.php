@@ -103,7 +103,12 @@ class User
         }
 
         // check password
-        if (password_verify($password, $user->getPassword())) {
+        $databasePassword = $user->getPassword();
+        if (empty($databasePassword)) {
+            return null;
+        }
+
+        if (password_verify($password, $databasePassword)) {
             return $user->getId();
         } else {
             $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user->getId())));
@@ -136,6 +141,8 @@ class User
         try {
             $this->userTable->beginTransaction();
 
+            $password = $user->getPassword();
+
             $record = new Table\Generated\UserRow([
                 Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
                 Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
@@ -143,7 +150,7 @@ class User
                 Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
                 Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
                 Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
-                Table\Generated\UserTable::COLUMN_PASSWORD => $user->getPassword() !== null ? \password_hash($user->getPassword(), PASSWORD_DEFAULT) : null,
+                Table\Generated\UserTable::COLUMN_PASSWORD => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
                 Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
                 Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
                 Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
@@ -178,11 +185,11 @@ class User
 
         $existing = $this->userTable->findOneBy($condition);
         if ($existing instanceof Table\Generated\UserRow) {
-            return $existing->getId() ?? throw new \RuntimeException('No user id available');
+            return $existing->getId();
         }
 
         // replace spaces with a dot
-        $remote->setName(str_replace(' ', '.', $remote->getName()));
+        $remote->setName(str_replace(' ', '.', $remote->getName() ?? ''));
 
         // check values
         User\Validator::assertName($remote->getName());
@@ -284,12 +291,13 @@ class User
 
             $this->userTable->update($record);
 
-            if ($user->getScopes() !== null) {
+            $scopes = $user->getScopes();
+            if ($scopes !== null) {
                 // delete existing scopes
                 $this->userScopeTable->deleteAllFromUser($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $user->getScopes());
+                $this->insertScopes($existing->getId(), $scopes);
             }
 
             $this->userTable->commit();
@@ -413,7 +421,7 @@ class User
         }
     }
 
-    private function getRoleId(Model\Backend\User $user): ?int
+    private function getRoleId(Model\Backend\User $user): int
     {
         $roleId = $user->getRoleId();
         if (!empty($roleId)) {

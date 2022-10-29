@@ -33,8 +33,14 @@ use PSX\Sql\Condition;
  */
 abstract class QueryFilterAbstract
 {
-    protected ?\DateTimeImmutable $from = null;
-    protected ?\DateTimeImmutable $to = null;
+    protected \DateTimeImmutable $from;
+    protected \DateTimeImmutable $to;
+
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to)
+    {
+        $this->from = $from;
+        $this->to = $to;
+    }
 
     public function getFrom(): ?\DateTimeImmutable
     {
@@ -78,10 +84,6 @@ abstract class QueryFilterAbstract
             $to = $from->add(new \DateInterval('P2M'));
         }
 
-        $filter = new static();
-        $filter->from = $from;
-        $filter->to   = $to;
-
-        return $filter;
+        return new static($from, $to);
     }
 }

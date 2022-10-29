@@ -70,12 +70,27 @@ class Register
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }
 
+        $name = $register->getName();
+        if (empty($name)) {
+            throw new StatusCode\InternalServerErrorException('No username was provided');
+        }
+
+        $email = $register->getEmail();
+        if (empty($email)) {
+            throw new StatusCode\InternalServerErrorException('No email was provided');
+        }
+
+        $password = $register->getPassword();
+        if (empty($password)) {
+            throw new StatusCode\InternalServerErrorException('No password was provided');
+        }
+
         $user = new UserCreate();
         $user->setRoleId($role->getId());
         $user->setStatus($status);
-        $user->setName($register->getName());
-        $user->setEmail($register->getEmail());
-        $user->setPassword($register->getPassword());
+        $user->setName($name);
+        $user->setEmail($email);
+        $user->setPassword($password);
 
         $userId = $this->userService->create($user, UserContext::newAnonymousContext());
 
@@ -83,7 +98,7 @@ class Register
         if ($approval) {
             $token = $this->tokenService->generateToken($userId);
 
-            $this->mailerService->sendActivationMail($register->getName(), $register->getEmail(), $token);
+            $this->mailerService->sendActivationMail($name, $email, $token);
         }
 
         return $userId;
