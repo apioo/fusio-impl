@@ -61,12 +61,13 @@ class Schema
 
     public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
     {
-        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
+        $name = $schema->getName();
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
         // check whether schema exists
-        if ($this->exists($schema->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Schema already exists');
         }
 
@@ -77,7 +78,7 @@ class Schema
             $record = new Table\Generated\SchemaRow([
                 Table\Generated\SchemaTable::COLUMN_CATEGORY_ID => $categoryId,
                 Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_ACTIVE,
-                Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
+                Table\Generated\SchemaTable::COLUMN_NAME => $name,
                 Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
                 Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
                 Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
@@ -89,7 +90,7 @@ class Schema
             $schema->setId($schemaId);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($schema->getName());
+            $this->schemaLoader->getSchema($name);
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -114,12 +115,17 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
+        $name = $schema->getName();
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid schema name');
+        }
+
         try {
             $this->schemaTable->beginTransaction();
 
             $record = new Table\Generated\SchemaRow([
                 Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
+                Table\Generated\SchemaTable::COLUMN_NAME => $name,
                 Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
                 Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
                 Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
@@ -128,7 +134,7 @@ class Schema
             $this->schemaTable->update($record);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($schema->getName());
+            $this->schemaLoader->getSchema($name);
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {

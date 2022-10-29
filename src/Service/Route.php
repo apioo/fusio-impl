@@ -60,10 +60,20 @@ class Route
 
     public function create(int $categoryId, RouteCreate $route, UserContext $context): int
     {
-        Route\Validator::assertPath($route->getPath());
+        $path = $route->getPath();
+        if (empty($path)) {
+            throw new StatusCode\BadRequestException('Path not provided');
+        }
+
+        Route\Validator::assertPath($path);
+
+        $config = $route->getConfig();
+        if (empty($config)) {
+            throw new StatusCode\BadRequestException('Config not provided');
+        }
 
         // check whether route exists
-        if ($this->exists($route->getPath())) {
+        if ($this->exists($path)) {
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
@@ -73,12 +83,13 @@ class Route
             throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
         }
 
-        if (!empty($route->getController())) {
-            if (!class_exists($route->getController())) {
+        $controller = $route->getController();
+        if (!empty($controller)) {
+            if (!class_exists($controller)) {
                 throw new StatusCode\BadRequestException('Provided controller does not exist');
             }
         } else {
-            $route->setController(SchemaApiController::class);
+            $controller = SchemaApiController::class;
         }
 
         // create route
@@ -90,8 +101,8 @@ class Route
                 Table\Generated\RoutesTable::COLUMN_STATUS => Table\Route::STATUS_ACTIVE,
                 Table\Generated\RoutesTable::COLUMN_PRIORITY => $route->getPriority(),
                 Table\Generated\RoutesTable::COLUMN_METHODS => 'ANY',
-                Table\Generated\RoutesTable::COLUMN_PATH => $route->getPath(),
-                Table\Generated\RoutesTable::COLUMN_CONTROLLER => $route->getController(),
+                Table\Generated\RoutesTable::COLUMN_PATH => $path,
+                Table\Generated\RoutesTable::COLUMN_CONTROLLER => $controller,
                 Table\Generated\RoutesTable::COLUMN_METADATA => $route->getMetadata() !== null ? json_encode($route->getMetadata()) : null,
             ]);
 
@@ -107,7 +118,7 @@ class Route
             }
 
             // handle config
-            $this->configService->handleConfig($categoryId, $route->getId(), $route->getPath(), $route->getConfig(), $context);
+            $this->configService->handleConfig($categoryId, $routeId, $path, $config, $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -130,6 +141,11 @@ class Route
 
         if ($existing->getStatus() == Table\Route::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
+        }
+
+        $config = $route->getConfig();
+        if (empty($config)) {
+            throw new StatusCode\BadRequestException('Config not provided');
         }
 
         $priority = $route->getPriority();
@@ -158,7 +174,7 @@ class Route
             }
 
             // handle config
-            $this->configService->handleConfig($existing->getCategoryId(), $existing->getId(), $existing->getPath(), $route->getConfig(), $context);
+            $this->configService->handleConfig($existing->getCategoryId(), $existing->getId(), $existing->getPath(), $config, $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {

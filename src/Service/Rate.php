@@ -59,8 +59,13 @@ class Rate
 
     public function create(RateCreate $rate, UserContext $context): int
     {
+        $name = $rate->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether rate exists
-        if ($this->exists($rate->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Rate already exists');
         }
 

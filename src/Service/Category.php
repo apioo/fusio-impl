@@ -52,8 +52,13 @@ class Category
 
     public function create(CategoryCreate $category, UserContext $context): int
     {
+        $name = $category->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether rate exists
-        if ($this->exists($category->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Category already exists');
         }
 

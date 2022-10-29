@@ -52,8 +52,13 @@ class Event
 
     public function create(int $categoryId, EventCreate $event, UserContext $context): int
     {
+        $name = $event->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether event exists
-        if ($this->exists($event->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Event already exists');
         }
 

@@ -71,8 +71,13 @@ class Action
     {
         $this->assertSandboxAccess($action);
 
+        $name = $action->getName();
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid action name');
+        }
+
         // check whether action exists
-        if ($this->exists($action->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
@@ -89,7 +94,7 @@ class Action
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onCreate($action->getName(), $parameters);
+            $handler->onCreate($name, $parameters);
         }
 
         // create action
@@ -138,6 +143,11 @@ class Action
             throw new StatusCode\GoneException('Action was deleted');
         }
 
+        $name = $action->getName();
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid action name');
+        }
+
         // in case the class is empty use the existing class
         $class = $action->getClass();
         if (empty($class)) {
@@ -156,13 +166,13 @@ class Action
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onUpdate($action->getName(), $parameters);
+            $handler->onUpdate($name, $parameters);
         }
 
         // update action
         $record = new Table\Generated\ActionRow([
             Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ActionTable::COLUMN_NAME => $action->getName(),
+            Table\Generated\ActionTable::COLUMN_NAME => $name,
             Table\Generated\ActionTable::COLUMN_CLASS => $class,
             Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
             Table\Generated\ActionTable::COLUMN_ENGINE => $engine,

@@ -64,8 +64,13 @@ class Connection
 
     public function create(ConnectionCreate $connection, UserContext $context): int
     {
+        $name = $connection->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether connection exists
-        if ($this->exists($connection->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
@@ -75,7 +80,7 @@ class Connection
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
-            $factory->onUp($connection->getName(), $parameters);
+            $factory->onUp($name, $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
@@ -85,7 +90,7 @@ class Connection
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onCreate($connection->getName(), $parameters, $conn);
+            $factory->onCreate($name, $parameters, $conn);
         }
 
         // create connection

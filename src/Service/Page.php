@@ -52,7 +52,12 @@ class Page
 
     public function create(PageCreate $page, UserContext $context): int
     {
-        $slug = $this->createSlug($page->getTitle());
+        $title = $page->getTitle();
+        if (empty($title)) {
+            throw new StatusCode\BadRequestException('Title not provided');
+        }
+
+        $slug = $this->createSlug($title);
 
         // check whether page exists
         if ($this->exists($slug)) {
@@ -67,7 +72,7 @@ class Page
 
             $record = new Table\Generated\PageRow([
                 Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
-                Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
+                Table\Generated\PageTable::COLUMN_TITLE => $title,
                 Table\Generated\PageTable::COLUMN_SLUG => $slug,
                 Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
                 Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,
@@ -102,15 +107,20 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
-        $this->assertStatus($page);
+        $title = $page->getTitle();
+        if (empty($title)) {
+            throw new StatusCode\BadRequestException('Title not provided');
+        }
 
-        $slug = $this->createSlug($page->getTitle());
+        $slug = $this->createSlug($title);
+
+        $this->assertStatus($page);
 
         // update action
         $record = new Table\Generated\PageRow([
             Table\Generated\PageTable::COLUMN_ID => $existing->getId(),
             Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
-            Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
+            Table\Generated\PageTable::COLUMN_TITLE => $title,
             Table\Generated\PageTable::COLUMN_SLUG => $slug,
             Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
             Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,

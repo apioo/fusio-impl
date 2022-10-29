@@ -56,8 +56,13 @@ class Role
 
     public function create(RoleCreate $role, UserContext $context): int
     {
+        $name = $role->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether role exists
-        if ($this->exists($role->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Role already exists');
         }
 

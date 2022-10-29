@@ -202,7 +202,12 @@ class Config
             if ($part[0] === ':') {
                 return substr($part, 1);
             } elseif ($part[0] === '$') {
-                return substr($part, 1, strpos($part, '<') - 1);
+                $pos = strpos($part, '<');
+                if ($pos !== false) {
+                    return substr($part, 1, $pos - 1);
+                } else {
+                    return substr($part, 1);
+                }
             } else {
                 return $part;
             }

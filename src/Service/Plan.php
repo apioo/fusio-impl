@@ -56,8 +56,13 @@ class Plan
 
     public function create(PlanCreate $plan, UserContext $context): int
     {
+        $name = $plan->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether plan exists
-        if ($this->exists($plan->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Plan already exists');
         }
 
@@ -81,9 +86,10 @@ class Plan
             $planId = $this->planTable->getLastInsertId();
             $plan->setId($planId);
 
-            if ($plan->getScopes() !== null) {
+            $scopes = $plan->getScopes();
+            if ($scopes !== null) {
                 // add scopes
-                $this->insertScopes($planId, $plan->getScopes());
+                $this->insertScopes($planId, $scopes);
             }
 
             $this->planTable->commit();
@@ -123,12 +129,13 @@ class Plan
 
         $this->planTable->update($record);
 
-        if ($plan->getScopes() !== null) {
+        $scopes = $plan->getScopes();
+        if ($scopes !== null) {
             // delete existing scopes
             $this->planScopeTable->deleteAllFromPlan($existing->getId());
 
             // add scopes
-            $this->insertScopes($existing->getId(), $plan->getScopes());
+            $this->insertScopes($existing->getId(), $scopes);
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));

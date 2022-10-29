@@ -55,8 +55,17 @@ class Installer
 
     public function install(MarketplaceInstall $install, UserContext $context, bool $replaceEnv = true): App
     {
-        $remoteApp = $this->remoteRepository->fetchByName($install->getName());
-        $localApp = $this->localRepository->fetchByName($install->getName());
+        $name = $install->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
+        $remoteApp = $this->remoteRepository->fetchByName($name);
+        $localApp = $this->localRepository->fetchByName($name);
+
+        if (!$remoteApp instanceof App) {
+            throw new StatusCode\BadRequestException('App not available');
+        }
 
         if ($localApp instanceof App) {
             throw new StatusCode\BadRequestException('App already installed');
@@ -71,6 +80,10 @@ class Installer
     {
         $remoteApp = $this->remoteRepository->fetchByName($name);
         $localApp = $this->localRepository->fetchByName($name);
+
+        if (!$remoteApp instanceof App) {
+            throw new StatusCode\BadRequestException('App not available');
+        }
 
         if (!$localApp instanceof App) {
             throw new StatusCode\BadRequestException('App is not installed');

@@ -92,7 +92,7 @@ class Webhook implements WebhookInterface
             return;
         }
 
-        $plan = $this->planTable->find($user->getPlanId());
+        $plan = $this->planTable->find($user->getPlanId() ?? 0);
         if (!$plan instanceof PlanRow) {
             return;
         }
@@ -119,7 +119,7 @@ class Webhook implements WebhookInterface
             return;
         }
 
-        $plan = $this->planTable->find($user->getPlanId());
+        $plan = $this->planTable->find($user->getPlanId() ?? 0);
         if (!$plan instanceof PlanRow) {
             return;
         }

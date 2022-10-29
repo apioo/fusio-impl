@@ -130,7 +130,7 @@ class Payment
             $plan->getName(),
             $plan->getPrice(),
             $plan->getPoints(),
-            $plan->getPeriodType(),
+            $plan->getPeriodType() ?? ProductInterface::INTERVAL_ONETIME,
             $plan->getExternalId()
         );
     }

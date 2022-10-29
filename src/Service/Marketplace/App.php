@@ -31,16 +31,19 @@ namespace Fusio\Impl\Service\Marketplace;
 class App
 {
     private string $name;
-    private ?string $version = null;
+    private string $version;
+    private string $downloadUrl;
+    private string $sha1Hash;
     private ?string $description = null;
     private ?string $screenshot = null;
     private ?string $website = null;
-    private ?string $downloadUrl = null;
-    private ?string $sha1Hash = null;
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $version, string $downloadUrl, string $sha1Hash)
     {
         $this->name = $name;
+        $this->version = $version;
+        $this->downloadUrl = $downloadUrl;
+        $this->sha1Hash = $sha1Hash;
     }
 
     public function getName(): string
@@ -53,7 +56,7 @@ class App
         $this->name = $name;
     }
 
-    public function getVersion(): ?string
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -61,6 +64,26 @@ class App
     public function setVersion(string $version): void
     {
         $this->version = $version;
+    }
+
+    public function getDownloadUrl(): string
+    {
+        return $this->downloadUrl;
+    }
+
+    public function setDownloadUrl(string $downloadUrl): void
+    {
+        $this->downloadUrl = $downloadUrl;
+    }
+
+    public function getSha1Hash(): string
+    {
+        return $this->sha1Hash;
+    }
+
+    public function setSha1Hash(string $sha1Hash): void
+    {
+        $this->sha1Hash = $sha1Hash;
     }
 
     public function getDescription(): ?string
@@ -93,26 +116,6 @@ class App
         $this->website = $website;
     }
 
-    public function getDownloadUrl(): ?string
-    {
-        return $this->downloadUrl;
-    }
-
-    public function setDownloadUrl(string $downloadUrl): void
-    {
-        $this->downloadUrl = $downloadUrl;
-    }
-
-    public function getSha1Hash(): ?string
-    {
-        return $this->sha1Hash;
-    }
-
-    public function setSha1Hash(string $sha1Hash): void
-    {
-        $this->sha1Hash = $sha1Hash;
-    }
-
     public function toArray(): array
     {
         return [
@@ -125,13 +128,24 @@ class App
         ];
     }
 
-    public static function fromArray(string $name, array $data)
+    public static function fromArray(string $name, array $data): static
     {
-        $app = new static($name);
-
-        if (isset($data['version'])) {
-            $app->setVersion($data['version']);
+        $version = $data['version'] ?? null;
+        if (empty($version) || !is_string($version)) {
+            throw new \InvalidArgumentException('No version available');
         }
+
+        $downloadUrl = $data['downloadUrl'] ?? null;
+        if (empty($downloadUrl) || !is_string($downloadUrl)) {
+            throw new \InvalidArgumentException('No download url available');
+        }
+
+        $sha1Hash = $data['sha1Hash'] ?? null;
+        if (empty($sha1Hash) || !is_string($sha1Hash)) {
+            throw new \InvalidArgumentException('No hash available');
+        }
+
+        $app = new static($name, $version, $downloadUrl, $sha1Hash);
 
         if (isset($data['description'])) {
             $app->setDescription($data['description']);
@@ -143,14 +157,6 @@ class App
 
         if (isset($data['website'])) {
             $app->setWebsite($data['website']);
-        }
-
-        if (isset($data['downloadUrl'])) {
-            $app->setDownloadUrl($data['downloadUrl']);
-        }
-
-        if (isset($data['sha1Hash'])) {
-            $app->setSha1Hash($data['sha1Hash']);
         }
 
         return $app;

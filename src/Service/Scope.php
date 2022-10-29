@@ -59,8 +59,13 @@ class Scope
 
     public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
     {
+        $name = $scope->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether scope exists
-        if ($this->exists($scope->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }
 

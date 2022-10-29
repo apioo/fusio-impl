@@ -98,7 +98,9 @@ class EntityCreator
         $scopes = $scopes ?: [];
 
         foreach ($routes as $index => $record) {
-            $record->setPath($this->buildPath($basePath, $record->getPath()));
+            $path = $this->buildPath($basePath, $record->getPath());
+
+            $record->setPath($path);
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
             foreach ($record->getConfig() as $version) {
@@ -136,7 +138,7 @@ class EntityCreator
                 }
             }
 
-            $id = $this->routeService->exists($record->getPath());
+            $id = $this->routeService->exists($path);
             if (!$id) {
                 $id = $this->routeService->create($categoryId, $record, $context);
             }

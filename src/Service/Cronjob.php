@@ -54,8 +54,13 @@ class Cronjob
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
+        $name = $cronjob->getName();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name not provided');
+        }
+
         // check whether cronjob exists
-        if ($this->exists($cronjob->getName())) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
         }
 
