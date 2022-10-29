@@ -111,17 +111,29 @@ class EntityCreator
                     $method->setActive(true);
                     $method->setPublic($public === true);
 
-                    $method->setParameters($this->resolveSchema((int) $method->getParameters()));
-                    $method->setRequest($this->resolveSchema((int) $method->getRequest()));
+                    $parameters = $method->getParameters();
+                    if ($parameters !== null) {
+                        $method->setParameters($this->resolveSchema((int) $parameters));
+                    }
+
+                    $request = $method->getRequest();
+                    if ($request !== null) {
+                        $method->setRequest($this->resolveSchema((int) $request));
+                    }
 
                     $responses = $method->getResponses();
                     if ($responses instanceof RouteMethodResponses) {
                         foreach ($responses as $statusCode => $response) {
-                            $responses[$statusCode] = $this->resolveSchema((int) $response);
+                            if ($response !== null) {
+                                $responses[$statusCode] = $this->resolveSchema((int) $response);
+                            }
                         }
                     }
 
-                    $method->setAction($this->resolveAction((int) $method->getAction()));
+                    $action = $method->getAction();
+                    if ($action !== null) {
+                        $method->setAction($this->resolveAction((int) $action));
+                    }
                 }
             }
 
