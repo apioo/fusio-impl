@@ -153,21 +153,21 @@ class EntityCreator
 
             foreach ($version->methods as $methodName => $method) {
                 if (isset($method->parameters)) {
-                    $data->config[$index]->methods->{$methodName}->parameters = $this->resolveSchema($method->parameters);
+                    $data->config[$index]->methods->{$methodName}->parameters = $this->resolveSchema((int) $method->parameters);
                 }
 
                 if (isset($method->request)) {
-                    $data->config[$index]->methods->{$methodName}->request = $this->resolveSchema($method->request);
+                    $data->config[$index]->methods->{$methodName}->request = $this->resolveSchema((int) $method->request);
                 }
 
                 if (isset($method->responses) && $method->responses instanceof \stdClass) {
                     foreach ($method->responses as $code => $response) {
-                        $data->config[$index]->methods->{$methodName}->responses->{$code} = $this->resolveSchema($response);
+                        $data->config[$index]->methods->{$methodName}->responses->{$code} = $this->resolveSchema((int) $response);
                     }
                 }
 
                 if (isset($method->action)) {
-                    $data->config[$index]->methods->{$methodName}->action = $this->resolveAction($method->action);
+                    $data->config[$index]->methods->{$methodName}->action = $this->resolveAction((int) $method->action);
                 }
             }
         }
