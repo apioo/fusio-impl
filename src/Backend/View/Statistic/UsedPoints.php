@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Impl\Backend\View\Plan\Usage\QueryFilter;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -32,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class UsedPoints extends ViewAbstract
 {
-    public function getView(Plan\Usage\QueryFilter $filter)
+    public function getView(QueryFilter $filter)
     {
         $condition  = $filter->getCondition('usag');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
