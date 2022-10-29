@@ -22,18 +22,13 @@
 namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Adapter;
-use Fusio\Engine\Factory\Resolver\PhpClass;
-use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Provider\ProviderConfig;
-use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\VoidAction;
 use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
 use Fusio\Impl\Tests\Adapter\TestAdapter;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

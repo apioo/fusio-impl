@@ -25,7 +25,6 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\System;
 use PHPUnit\Framework\TestCase;
-use PSX\Dependency\Container;
 use PSX\Framework\Config\Config;
 
 /**

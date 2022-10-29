@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Cronjob;
 
 use Fusio\Impl\Table;
-use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;

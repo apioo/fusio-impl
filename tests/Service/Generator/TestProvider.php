@@ -26,9 +26,9 @@ use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
-use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
+use Fusio\Engine\ParametersInterface;
 use Fusio\Impl\Controller\SchemaApiController;
 
 /**

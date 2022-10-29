@@ -21,10 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Page;
 
-use Fusio\Adapter\Util\Action\UtilStaticResponse;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
-use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;

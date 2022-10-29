@@ -21,11 +21,6 @@
 
 namespace Fusio\Impl\Tests;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Service;
-use PSX\Framework\Test\Environment;
-
 /**
  * Normalizer
  *

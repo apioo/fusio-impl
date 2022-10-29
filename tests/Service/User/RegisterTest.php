@@ -23,14 +23,14 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\ConfigUpdate;
-use Fusio\Model\Consumer\UserRegister;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Service\User\Mailer;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Model\Backend\ConfigUpdate;
+use Fusio\Model\Consumer\UserRegister;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;

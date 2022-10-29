@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
-use Fusio\Adapter\Sql\Action\SqlInsert;
-use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Impl\Service\Route\Config;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Controller\SqlEntityTest;

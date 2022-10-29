@@ -23,7 +23,6 @@ namespace Fusio\Impl\Tests\Backend\Api\Audit;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
-use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**

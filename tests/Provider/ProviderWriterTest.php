@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Provider;
 
-use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
 use Fusio\Impl\Tests\DbTestCase;
 

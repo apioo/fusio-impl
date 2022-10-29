@@ -21,12 +21,10 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Log;
 
-use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest
