@@ -163,7 +163,7 @@ class Role
         $role = $this->roleTable->findOneBy($condition);
 
         if ($role instanceof Table\Generated\RoleRow) {
-            return $role->getId() ?? false;
+            return $role->getId();
         } else {
             return false;
         }

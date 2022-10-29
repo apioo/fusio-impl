@@ -219,7 +219,7 @@ class Action
         $action = $this->actionTable->findOneBy($condition);
 
         if ($action instanceof Table\Generated\ActionRow) {
-            return $action->getId() ?? false;
+            return $action->getId();
         } else {
             return false;
         }

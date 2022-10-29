@@ -145,7 +145,7 @@ class Category
         $category = $this->categoryTable->findOneBy($condition);
 
         if ($category instanceof Table\Generated\CategoryRow) {
-            return $category->getId() ?? false;
+            return $category->getId();
         } else {
             return false;
         }

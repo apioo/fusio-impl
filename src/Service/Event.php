@@ -142,7 +142,7 @@ class Event
         $event = $this->eventTable->findOneBy($condition);
 
         if ($event instanceof Table\Generated\EventRow) {
-            return $event->getId() ?? false;
+            return $event->getId();
         } else {
             return false;
         }

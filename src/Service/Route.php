@@ -213,7 +213,7 @@ class Route
         $route = $this->routesTable->findOneBy($condition);
 
         if ($route instanceof Table\Generated\RoutesRow) {
-            return $route->getId() ?? false;
+            return $route->getId();
         } else {
             return false;
         }

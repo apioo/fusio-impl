@@ -186,7 +186,7 @@ class Rate
         $rate = $this->rateTable->findOneBy($condition);
 
         if ($rate instanceof Table\Generated\RateRow) {
-            return $rate->getId() ?? false;
+            return $rate->getId();
         } else {
             return false;
         }

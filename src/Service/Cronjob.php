@@ -157,7 +157,7 @@ class Cronjob
         $cronjob = $this->cronjobTable->findOneBy($condition);
 
         if ($cronjob instanceof Table\Generated\CronjobRow) {
-            return $cronjob->getId() ?? false;
+            return $cronjob->getId();
         } else {
             return false;
         }

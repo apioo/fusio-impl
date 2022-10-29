@@ -71,7 +71,7 @@ class TokenValidator
         // a header from the client we also check the token so that the client
         // gets maybe another rate limit
         if ($needsAuth || !empty($authorization)) {
-            $parts       = explode(' ', $authorization, 2);
+            $parts       = explode(' ', $authorization ?? '', 2);
             $type        = $parts[0] ?? null;
             $accessToken = $parts[1] ?? null;
 
@@ -80,18 +80,28 @@ class TokenValidator
             );
 
             if ($type == 'Bearer' && !empty($accessToken)) {
+                $routeId = $context->getRouteId();
+                if ($routeId === null) {
+                    throw new UnauthorizedException('Unknown route id', 'Bearer', $params);
+                }
+
                 try {
-                    $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
+                    $token = $this->getToken($accessToken, $routeId, $requestMethod);
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }
 
                 if ($token instanceof Model\Token) {
-                    $app  = $this->appRepository->get($token->getAppId());
-                    $user = $this->userRepository->get($token->getUserId());
+                    $app = $this->appRepository->get($token->getAppId());
+                    if ($app !== null) {
+                        $context->setApp($app);
+                    }
 
-                    $context->setApp($app);
-                    $context->setUser($user);
+                    $user = $this->userRepository->get($token->getUserId());
+                    if ($user !== null) {
+                        $context->setUser($user);
+                    }
+
                     $context->setToken($token);
                 } else {
                     throw new UnauthorizedException('Invalid access token', 'Bearer', $params);

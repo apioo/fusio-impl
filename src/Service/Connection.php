@@ -205,7 +205,7 @@ class Connection
         $connection = $this->connectionTable->findOneBy($condition);
 
         if ($connection instanceof Table\Generated\ConnectionRow) {
-            return $connection->getId() ?? false;
+            return $connection->getId();
         } else {
             return false;
         }

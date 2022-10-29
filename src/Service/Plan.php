@@ -164,7 +164,7 @@ class Plan
         $plan = $this->planTable->findOneBy($condition);
 
         if ($plan instanceof Table\Generated\PlanRow) {
-            return $plan->getId() ?? false;
+            return $plan->getId();
         } else {
             return false;
         }

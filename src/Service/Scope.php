@@ -239,7 +239,7 @@ class Scope
         $scope = $this->scopeTable->findOneBy($condition);
 
         if ($scope instanceof Table\Generated\ScopeRow) {
-            return $scope->getId() ?? false;
+            return $scope->getId();
         } else {
             return false;
         }

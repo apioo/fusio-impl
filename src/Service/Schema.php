@@ -202,7 +202,7 @@ class Schema
         $schema = $this->schemaTable->findOneBy($condition);
 
         if ($schema instanceof Table\Generated\SchemaRow) {
-            return $schema->getId() ?? false;
+            return $schema->getId();
         } else {
             return false;
         }

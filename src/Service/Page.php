@@ -155,7 +155,7 @@ class Page
         $page = $this->pageTable->findOneBy($condition);
 
         if ($page instanceof Table\Generated\PageRow) {
-            return $page->getId() ?? false;
+            return $page->getId();
         } else {
             return false;
         }
