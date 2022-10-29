@@ -22,19 +22,18 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\SchemaCreate;
-use Fusio\Model\Backend\SchemaForm;
-use Fusio\Model\Backend\SchemaUpdate;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\SchemaCreate;
+use Fusio\Model\Backend\SchemaForm;
+use Fusio\Model\Backend\SchemaUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
-use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

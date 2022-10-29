@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Log
  *

@@ -27,7 +27,6 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Framework\Config\Config;
-use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**

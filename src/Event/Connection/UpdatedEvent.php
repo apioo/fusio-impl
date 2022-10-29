@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\ConnectionRow;
 use Fusio\Model\Backend\ConnectionUpdate;
-use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent

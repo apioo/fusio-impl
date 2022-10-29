@@ -22,13 +22,13 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\ScopeCreate;
-use Fusio\Model\Backend\ScopeRoute;
-use Fusio\Model\Backend\ScopeUpdate;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\ScopeCreate;
+use Fusio\Model\Backend\ScopeRoute;
+use Fusio\Model\Backend\ScopeUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

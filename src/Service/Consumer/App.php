@@ -24,9 +24,9 @@ namespace Fusio\Impl\Service\Consumer;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use Fusio\Model\Consumer\AppCreate;
 use Fusio\Model\Consumer\AppUpdate;
-use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 

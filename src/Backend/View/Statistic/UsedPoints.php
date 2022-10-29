@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
-use Fusio\Impl\Backend\View\Plan;
 use PSX\Sql\ViewAbstract;
 
 /**

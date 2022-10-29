@@ -27,8 +27,6 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Service\Action\Invoker as ActionInvoker;
 use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\RequestInterface;
-use PSX\Schema\SchemaTraverser;
 
 /**
  * InvokerFactory

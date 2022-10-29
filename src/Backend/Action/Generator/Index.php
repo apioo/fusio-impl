@@ -23,9 +23,9 @@ namespace Fusio\Impl\Backend\Action\Generator;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderLoader;
 use PSX\Dependency\AutowireResolverInterface;

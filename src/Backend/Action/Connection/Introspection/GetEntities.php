@@ -26,7 +26,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Connection;
-use Fusio\Impl\Service\Connection\Token;
 
 /**
  * GetEntities

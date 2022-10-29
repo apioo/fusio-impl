@@ -26,7 +26,6 @@ use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 

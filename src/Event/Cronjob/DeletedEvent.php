@@ -24,7 +24,6 @@ namespace Fusio\Impl\Event\Cronjob;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\CronjobRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

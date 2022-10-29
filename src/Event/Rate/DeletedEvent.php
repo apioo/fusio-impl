@@ -24,7 +24,6 @@ namespace Fusio\Impl\Event\Rate;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\RateRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

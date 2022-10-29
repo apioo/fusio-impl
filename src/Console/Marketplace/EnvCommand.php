@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Console\Marketplace;
 
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;

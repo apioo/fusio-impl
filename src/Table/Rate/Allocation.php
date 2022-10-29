@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Table\Rate;
 
 use Fusio\Engine\Model;
-use Fusio\Impl\Table\Rate;
 use Fusio\Impl\Table\Generated;
+use Fusio\Impl\Table\Rate;
 
 /**
  * Allocation

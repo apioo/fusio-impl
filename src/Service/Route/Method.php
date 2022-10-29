@@ -21,19 +21,9 @@
 
 namespace Fusio\Impl\Service\Route;
 
-use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Table;
-use PSX\Api\Resource;
-use PSX\Api\Specification;
-use PSX\Api\SpecificationInterface;
-use PSX\Api\Util\Inflection;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Definitions;
-use PSX\Schema\DefinitionsInterface;
-use PSX\Schema\Type\StructType;
-use PSX\Schema\TypeFactory;
-use PSX\Schema\TypeInterface;
 
 /**
  * Method

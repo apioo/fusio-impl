@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\CategoryUpdate;
 use Fusio\Impl\Service\Category;
+use Fusio\Model\Backend\CategoryUpdate;
 
 /**
  * Update

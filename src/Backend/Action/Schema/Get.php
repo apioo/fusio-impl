@@ -26,10 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\TableManagerInterface;
 
 /**

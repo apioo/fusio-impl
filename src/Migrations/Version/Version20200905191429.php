@@ -6,8 +6,6 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Fusio\Impl\Migrations\DataSyncronizer;
-use Fusio\Impl\Migrations\NewInstallation;
 
 /**
  * Auto-generated Migration: Please modify to your needs!

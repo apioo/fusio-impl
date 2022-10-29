@@ -23,15 +23,9 @@ namespace Fusio\Impl\Backend\Action\Connection;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
-use Fusio\Engine\Form\Container;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
 use Fusio\Impl\Provider\ConnectionProviderParser;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetIndex

@@ -27,7 +27,6 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Http\Environment\HttpContext;
-use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
 use PSX\Uri\Uri;

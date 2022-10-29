@@ -24,7 +24,6 @@ namespace Fusio\Impl\Event\Event\Subscription;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\EventSubscriptionRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

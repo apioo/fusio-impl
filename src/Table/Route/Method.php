@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Table\Route;
 
-use PSX\Api\Resource;
 use Fusio\Impl\Table\Generated;
+use PSX\Api\Resource;
 
 /**
  * Method

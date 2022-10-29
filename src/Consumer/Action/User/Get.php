@@ -26,7 +26,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
-use PSX\Framework\Config\Config;
 use PSX\Sql\TableManagerInterface;
 
 /**

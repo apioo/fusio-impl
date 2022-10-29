@@ -21,9 +21,6 @@
 
 namespace Fusio\Impl\Console\System;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Service\System\LogRotator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

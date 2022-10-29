@@ -23,10 +23,6 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\AccountChangePassword;
-use Fusio\Model\Backend\UserCreate;
-use Fusio\Model\Backend\UserRemote;
-use Fusio\Model\Backend\UserUpdate;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -35,10 +31,14 @@ use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
+use Fusio\Model\Backend\AccountChangePassword;
+use Fusio\Model\Backend\UserCreate;
+use Fusio\Model\Backend\UserRemote;
+use Fusio\Model\Backend\UserUpdate;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Fusio\Model;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

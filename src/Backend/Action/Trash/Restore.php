@@ -26,7 +26,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\Restorer;
-use Fusio\Model\Backend\PlanCreate;
 use Fusio\Model\Backend\TrashRestore;
 use PSX\Http\Exception as StatusCode;
 

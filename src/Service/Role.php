@@ -22,12 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\RoleCreate;
-use Fusio\Model\Backend\RoleUpdate;
 use Fusio\Impl\Event\Role\CreatedEvent;
 use Fusio\Impl\Event\Role\DeletedEvent;
 use Fusio\Impl\Event\Role\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\RoleCreate;
+use Fusio\Model\Backend\RoleUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

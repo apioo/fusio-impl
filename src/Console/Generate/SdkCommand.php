@@ -24,7 +24,6 @@ namespace Fusio\Impl\Console\Generate;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Api\Listing\FilterFactoryInterface;
-use PSX\Api\Listing\FilterInterface;
 use PSX\Api\ListingInterface;
 use PSX\Framework\Config\Config;
 use PSX\Schema\Generator\Code\Chunks;

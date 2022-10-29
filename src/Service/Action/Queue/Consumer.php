@@ -24,7 +24,6 @@ namespace Fusio\Impl\Service\Action\Queue;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Processor;
 use Fusio\Impl\Repository\ActionDatabase;
-use Fusio\Impl\Table\Generated\ActionQueueRow;
 use Fusio\Impl\Table\Generated\ActionQueueTable;
 
 /**

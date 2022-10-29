@@ -24,7 +24,6 @@ namespace Fusio\Impl\Event\Page;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Impl\Table\Generated\PageRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

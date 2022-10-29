@@ -22,12 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\EventCreate;
-use Fusio\Model\Backend\EventUpdate;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\EventCreate;
+use Fusio\Model\Backend\EventUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

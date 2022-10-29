@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model;
-use Fusio\Model\Consumer\EventSubscription;
 use Fusio\Model\Consumer\EventSubscriptionCreate;
 use Fusio\Model\Consumer\EventSubscriptionUpdate;
 use PSX\Http\Exception as StatusCode;

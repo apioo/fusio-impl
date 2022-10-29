@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Console\System;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service\System\Cleaner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

@@ -23,9 +23,7 @@ namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Impl\Table\Generated\ScopeRoutesRow;
 use Fusio\Impl\Table\Generated\ScopeRow;
-use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent

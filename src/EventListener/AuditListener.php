@@ -22,9 +22,9 @@
 namespace Fusio\Impl\EventListener;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\UserCreate;
 use Fusio\Impl\Event;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\UserCreate;
 use PSX\Record\Record;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -21,9 +21,7 @@
 
 namespace Fusio\Impl\Console\System;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service\System\Restorer;
-use Fusio\Impl\Table;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

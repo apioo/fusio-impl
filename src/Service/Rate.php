@@ -23,13 +23,13 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\RateAllocation;
-use Fusio\Model\Backend\RateCreate;
-use Fusio\Model\Backend\RateUpdate;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\RateAllocation;
+use Fusio\Model\Backend\RateCreate;
+use Fusio\Model\Backend\RateUpdate;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
