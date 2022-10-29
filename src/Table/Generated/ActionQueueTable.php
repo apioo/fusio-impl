@@ -169,6 +169,9 @@ class ActionQueueTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record);
     }
+    /**
+     * @param array<string, mixed> $row
+     */
     protected function newRecord(array $row) : \Fusio\Impl\Table\Generated\ActionQueueRow
     {
         return new \Fusio\Impl\Table\Generated\ActionQueueRow($row);

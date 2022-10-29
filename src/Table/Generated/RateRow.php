@@ -4,51 +4,51 @@ namespace Fusio\Impl\Table\Generated;
 
 class RateRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setStatus(?int $status) : void
+    public function setStatus(int $status) : void
     {
         $this->setProperty('status', $status);
     }
-    public function getStatus() : ?int
+    public function getStatus() : int
     {
         return $this->getProperty('status');
     }
-    public function setPriority(?int $priority) : void
+    public function setPriority(int $priority) : void
     {
         $this->setProperty('priority', $priority);
     }
-    public function getPriority() : ?int
+    public function getPriority() : int
     {
         return $this->getProperty('priority');
     }
-    public function setName(?string $name) : void
+    public function setName(string $name) : void
     {
         $this->setProperty('name', $name);
     }
-    public function getName() : ?string
+    public function getName() : string
     {
         return $this->getProperty('name');
     }
-    public function setRateLimit(?int $rateLimit) : void
+    public function setRateLimit(int $rateLimit) : void
     {
         $this->setProperty('rate_limit', $rateLimit);
     }
-    public function getRateLimit() : ?int
+    public function getRateLimit() : int
     {
         return $this->getProperty('rate_limit');
     }
-    public function setTimespan(?string $timespan) : void
+    public function setTimespan(string $timespan) : void
     {
         $this->setProperty('timespan', $timespan);
     }
-    public function getTimespan() : ?string
+    public function getTimespan() : string
     {
         return $this->getProperty('timespan');
     }

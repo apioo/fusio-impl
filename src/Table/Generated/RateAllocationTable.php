@@ -209,6 +209,9 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record);
     }
+    /**
+     * @param array<string, mixed> $row
+     */
     protected function newRecord(array $row) : \Fusio\Impl\Table\Generated\RateAllocationRow
     {
         return new \Fusio\Impl\Table\Generated\RateAllocationRow($row);

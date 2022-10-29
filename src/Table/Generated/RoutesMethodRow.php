@@ -4,59 +4,59 @@ namespace Fusio\Impl\Table\Generated;
 
 class RoutesMethodRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setRouteId(?int $routeId) : void
+    public function setRouteId(int $routeId) : void
     {
         $this->setProperty('route_id', $routeId);
     }
-    public function getRouteId() : ?int
+    public function getRouteId() : int
     {
         return $this->getProperty('route_id');
     }
-    public function setMethod(?string $method) : void
+    public function setMethod(string $method) : void
     {
         $this->setProperty('method', $method);
     }
-    public function getMethod() : ?string
+    public function getMethod() : string
     {
         return $this->getProperty('method');
     }
-    public function setVersion(?int $version) : void
+    public function setVersion(int $version) : void
     {
         $this->setProperty('version', $version);
     }
-    public function getVersion() : ?int
+    public function getVersion() : int
     {
         return $this->getProperty('version');
     }
-    public function setStatus(?int $status) : void
+    public function setStatus(int $status) : void
     {
         $this->setProperty('status', $status);
     }
-    public function getStatus() : ?int
+    public function getStatus() : int
     {
         return $this->getProperty('status');
     }
-    public function setActive(?int $active) : void
+    public function setActive(int $active) : void
     {
         $this->setProperty('active', $active);
     }
-    public function getActive() : ?int
+    public function getActive() : int
     {
         return $this->getProperty('active');
     }
-    public function setPublic(?int $public) : void
+    public function setPublic(int $public) : void
     {
         $this->setProperty('public', $public);
     }
-    public function getPublic() : ?int
+    public function getPublic() : int
     {
         return $this->getProperty('public');
     }

@@ -4,19 +4,19 @@ namespace Fusio\Impl\Table\Generated;
 
 class LogRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setCategoryId(?int $categoryId) : void
+    public function setCategoryId(int $categoryId) : void
     {
         $this->setProperty('category_id', $categoryId);
     }
-    public function getCategoryId() : ?int
+    public function getCategoryId() : int
     {
         return $this->getProperty('category_id');
     }
@@ -44,43 +44,43 @@ class LogRow extends \PSX\Record\Record
     {
         return $this->getProperty('user_id');
     }
-    public function setIp(?string $ip) : void
+    public function setIp(string $ip) : void
     {
         $this->setProperty('ip', $ip);
     }
-    public function getIp() : ?string
+    public function getIp() : string
     {
         return $this->getProperty('ip');
     }
-    public function setUserAgent(?string $userAgent) : void
+    public function setUserAgent(string $userAgent) : void
     {
         $this->setProperty('user_agent', $userAgent);
     }
-    public function getUserAgent() : ?string
+    public function getUserAgent() : string
     {
         return $this->getProperty('user_agent');
     }
-    public function setMethod(?string $method) : void
+    public function setMethod(string $method) : void
     {
         $this->setProperty('method', $method);
     }
-    public function getMethod() : ?string
+    public function getMethod() : string
     {
         return $this->getProperty('method');
     }
-    public function setPath(?string $path) : void
+    public function setPath(string $path) : void
     {
         $this->setProperty('path', $path);
     }
-    public function getPath() : ?string
+    public function getPath() : string
     {
         return $this->getProperty('path');
     }
-    public function setHeader(?string $header) : void
+    public function setHeader(string $header) : void
     {
         $this->setProperty('header', $header);
     }
-    public function getHeader() : ?string
+    public function getHeader() : string
     {
         return $this->getProperty('header');
     }
@@ -100,11 +100,11 @@ class LogRow extends \PSX\Record\Record
     {
         return $this->getProperty('execution_time');
     }
-    public function setDate(?\DateTime $date) : void
+    public function setDate(\DateTime $date) : void
     {
         $this->setProperty('date', $date);
     }
-    public function getDate() : ?\DateTime
+    public function getDate() : \DateTime
     {
         return $this->getProperty('date');
     }

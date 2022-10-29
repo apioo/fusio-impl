@@ -4,51 +4,51 @@ namespace Fusio\Impl\Table\Generated;
 
 class TransactionRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setUserId(?int $userId) : void
+    public function setUserId(int $userId) : void
     {
         $this->setProperty('user_id', $userId);
     }
-    public function getUserId() : ?int
+    public function getUserId() : int
     {
         return $this->getProperty('user_id');
     }
-    public function setPlanId(?int $planId) : void
+    public function setPlanId(int $planId) : void
     {
         $this->setProperty('plan_id', $planId);
     }
-    public function getPlanId() : ?int
+    public function getPlanId() : int
     {
         return $this->getProperty('plan_id');
     }
-    public function setTransactionId(?string $transactionId) : void
+    public function setTransactionId(string $transactionId) : void
     {
         $this->setProperty('transaction_id', $transactionId);
     }
-    public function getTransactionId() : ?string
+    public function getTransactionId() : string
     {
         return $this->getProperty('transaction_id');
     }
-    public function setAmount(?int $amount) : void
+    public function setAmount(int $amount) : void
     {
         $this->setProperty('amount', $amount);
     }
-    public function getAmount() : ?int
+    public function getAmount() : int
     {
         return $this->getProperty('amount');
     }
-    public function setPoints(?int $points) : void
+    public function setPoints(int $points) : void
     {
         $this->setProperty('points', $points);
     }
-    public function getPoints() : ?int
+    public function getPoints() : int
     {
         return $this->getProperty('points');
     }
@@ -68,11 +68,11 @@ class TransactionRow extends \PSX\Record\Record
     {
         return $this->getProperty('period_end');
     }
-    public function setInsertDate(?\DateTime $insertDate) : void
+    public function setInsertDate(\DateTime $insertDate) : void
     {
         $this->setProperty('insert_date', $insertDate);
     }
-    public function getInsertDate() : ?\DateTime
+    public function getInsertDate() : \DateTime
     {
         return $this->getProperty('insert_date');
     }

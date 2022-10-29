@@ -4,19 +4,19 @@ namespace Fusio\Impl\Table\Generated;
 
 class RateAllocationRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setRateId(?int $rateId) : void
+    public function setRateId(int $rateId) : void
     {
         $this->setProperty('rate_id', $rateId);
     }
-    public function getRateId() : ?int
+    public function getRateId() : int
     {
         return $this->getProperty('rate_id');
     }

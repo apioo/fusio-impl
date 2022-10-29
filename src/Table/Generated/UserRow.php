@@ -4,19 +4,19 @@ namespace Fusio\Impl\Table\Generated;
 
 class UserRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setRoleId(?int $roleId) : void
+    public function setRoleId(int $roleId) : void
     {
         $this->setProperty('role_id', $roleId);
     }
-    public function getRoleId() : ?int
+    public function getRoleId() : int
     {
         return $this->getProperty('role_id');
     }
@@ -28,19 +28,19 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('plan_id');
     }
-    public function setProvider(?int $provider) : void
+    public function setProvider(int $provider) : void
     {
         $this->setProperty('provider', $provider);
     }
-    public function getProvider() : ?int
+    public function getProvider() : int
     {
         return $this->getProperty('provider');
     }
-    public function setStatus(?int $status) : void
+    public function setStatus(int $status) : void
     {
         $this->setProperty('status', $status);
     }
-    public function getStatus() : ?int
+    public function getStatus() : int
     {
         return $this->getProperty('status');
     }
@@ -60,11 +60,11 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('external_id');
     }
-    public function setName(?string $name) : void
+    public function setName(string $name) : void
     {
         $this->setProperty('name', $name);
     }
-    public function getName() : ?string
+    public function getName() : string
     {
         return $this->getProperty('name');
     }
@@ -108,11 +108,11 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('metadata');
     }
-    public function setDate(?\DateTime $date) : void
+    public function setDate(\DateTime $date) : void
     {
         $this->setProperty('date', $date);
     }
-    public function getDate() : ?\DateTime
+    public function getDate() : \DateTime
     {
         return $this->getProperty('date');
     }

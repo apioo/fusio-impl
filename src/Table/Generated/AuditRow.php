@@ -4,27 +4,27 @@ namespace Fusio\Impl\Table\Generated;
 
 class AuditRow extends \PSX\Record\Record
 {
-    public function setId(?int $id) : void
+    public function setId(int $id) : void
     {
         $this->setProperty('id', $id);
     }
-    public function getId() : ?int
+    public function getId() : int
     {
         return $this->getProperty('id');
     }
-    public function setAppId(?int $appId) : void
+    public function setAppId(int $appId) : void
     {
         $this->setProperty('app_id', $appId);
     }
-    public function getAppId() : ?int
+    public function getAppId() : int
     {
         return $this->getProperty('app_id');
     }
-    public function setUserId(?int $userId) : void
+    public function setUserId(int $userId) : void
     {
         $this->setProperty('user_id', $userId);
     }
-    public function getUserId() : ?int
+    public function getUserId() : int
     {
         return $this->getProperty('user_id');
     }
@@ -36,27 +36,27 @@ class AuditRow extends \PSX\Record\Record
     {
         return $this->getProperty('ref_id');
     }
-    public function setEvent(?string $event) : void
+    public function setEvent(string $event) : void
     {
         $this->setProperty('event', $event);
     }
-    public function getEvent() : ?string
+    public function getEvent() : string
     {
         return $this->getProperty('event');
     }
-    public function setIp(?string $ip) : void
+    public function setIp(string $ip) : void
     {
         $this->setProperty('ip', $ip);
     }
-    public function getIp() : ?string
+    public function getIp() : string
     {
         return $this->getProperty('ip');
     }
-    public function setMessage(?string $message) : void
+    public function setMessage(string $message) : void
     {
         $this->setProperty('message', $message);
     }
-    public function getMessage() : ?string
+    public function getMessage() : string
     {
         return $this->getProperty('message');
     }
@@ -68,11 +68,11 @@ class AuditRow extends \PSX\Record\Record
     {
         return $this->getProperty('content');
     }
-    public function setDate(?\DateTime $date) : void
+    public function setDate(\DateTime $date) : void
     {
         $this->setProperty('date', $date);
     }
-    public function getDate() : ?\DateTime
+    public function getDate() : \DateTime
     {
         return $this->getProperty('date');
     }
