@@ -12,9 +12,9 @@
       "tags": [
         "backend.app"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_App_Collection"
+        "200": "Backend_AppCollection"
       }
     },
     "POST": {
@@ -27,7 +27,7 @@
       "tags": [
         "backend.app"
       ],
-      "request": "Backend_App_Create",
+      "request": "Backend_AppCreate",
       "responses": {
         "201": "Message"
       }
@@ -78,18 +78,18 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Collection": {
+    "AppCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "App"
       }
     },
-    "App_Create": {
+    "AppCreate": {
       "$extends": "App",
       "type": "object",
       "required": [
@@ -99,7 +99,7 @@
         "scopes"
       ]
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -130,11 +130,11 @@
         }
       }
     },
-    "Backend_App_Collection": {
-      "$ref": "App_Collection"
+    "Backend_AppCollection": {
+      "$ref": "AppCollection"
     },
-    "Backend_App_Create": {
-      "$ref": "App_Create"
+    "Backend_AppCreate": {
+      "$ref": "AppCreate"
     },
     "Collection": {
       "type": "object",
@@ -156,7 +156,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {

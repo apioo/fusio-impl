@@ -12,20 +12,20 @@
       "tags": [
         "backend.statistic"
       ],
-      "queryParameters": "Backend_Log_Collection_Query",
+      "queryParameters": "Backend_LogCollectionQuery",
       "responses": {
-        "200": "Backend_Statistic_Count"
+        "200": "Backend_StatisticCount"
       }
     }
   },
   "definitions": {
-    "Backend_Log_Collection_Query": {
-      "$ref": "Log_Collection_Query"
+    "Backend_LogCollectionQuery": {
+      "$ref": "LogCollectionQuery"
     },
-    "Backend_Statistic_Count": {
-      "$ref": "Statistic_Count"
+    "Backend_StatisticCount": {
+      "$ref": "StatisticCount"
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -39,8 +39,8 @@
         }
       }
     },
-    "Log_Collection_Query": {
-      "$extends": "Collection_Query",
+    "LogCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {
@@ -83,7 +83,7 @@
         }
       }
     },
-    "Statistic_Count": {
+    "StatisticCount": {
       "type": "object",
       "properties": {
         "count": {

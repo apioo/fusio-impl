@@ -13,15 +13,15 @@
         "backend.trash"
       ],
       "responses": {
-        "200": "Backend_Trash_Types"
+        "200": "Backend_TrashTypes"
       }
     }
   },
   "definitions": {
-    "Backend_Trash_Types": {
-      "$ref": "Trash_Types"
+    "Backend_TrashTypes": {
+      "$ref": "TrashTypes"
     },
-    "Trash_Types": {
+    "TrashTypes": {
       "type": "object",
       "properties": {
         "types": {

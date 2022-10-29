@@ -12,9 +12,9 @@
       "tags": [
         "backend.user"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_User_Collection"
+        "200": "Backend_UserCollection"
       }
     },
     "POST": {
@@ -27,7 +27,7 @@
       "tags": [
         "backend.user"
       ],
-      "request": "Backend_User_Create",
+      "request": "Backend_UserCreate",
       "responses": {
         "201": "Message"
       }
@@ -78,12 +78,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -114,11 +114,11 @@
         }
       }
     },
-    "Backend_User_Collection": {
-      "$ref": "User_Collection"
+    "Backend_UserCollection": {
+      "$ref": "UserCollection"
     },
-    "Backend_User_Create": {
-      "$ref": "User_Create"
+    "Backend_UserCreate": {
+      "$ref": "UserCreate"
     },
     "Collection": {
       "type": "object",
@@ -140,7 +140,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -217,13 +217,13 @@
         }
       }
     },
-    "User_Collection": {
+    "UserCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "User"
       }
     },
-    "User_Create": {
+    "UserCreate": {
       "$extends": "User",
       "type": "object",
       "properties": {

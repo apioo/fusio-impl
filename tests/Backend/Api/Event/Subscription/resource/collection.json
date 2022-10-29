@@ -12,9 +12,9 @@
       "tags": [
         "backend.event"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Event_Subscription_Collection"
+        "200": "Backend_EventSubscriptionCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Event_Subscription_Create",
+      "request": "Backend_EventSubscriptionCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Event_Subscription_Collection": {
-      "$ref": "Event_Subscription_Collection"
+    "Backend_EventSubscriptionCollection": {
+      "$ref": "EventSubscriptionCollection"
     },
-    "Backend_Event_Subscription_Create": {
-      "$ref": "Event_Subscription_Create"
+    "Backend_EventSubscriptionCreate": {
+      "$ref": "EventSubscriptionCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,7 +60,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -74,7 +74,7 @@
         }
       }
     },
-    "Event_Subscription": {
+    "EventSubscription": {
       "type": "object",
       "properties": {
         "id": {
@@ -92,19 +92,19 @@
         "responses": {
           "type": "array",
           "items": {
-            "$ref": "Event_Subscription_Response"
+            "$ref": "EventSubscriptionResponse"
           }
         }
       }
     },
-    "Event_Subscription_Collection": {
+    "EventSubscriptionCollection": {
       "$ref": "Collection",
       "$template": {
-        "T": "Event_Subscription"
+        "T": "EventSubscription"
       }
     },
-    "Event_Subscription_Create": {
-      "$extends": "Event_Subscription",
+    "EventSubscriptionCreate": {
+      "$extends": "EventSubscription",
       "type": "object",
       "required": [
         "eventId",
@@ -112,7 +112,7 @@
         "endpoint"
       ]
     },
-    "Event_Subscription_Response": {
+    "EventSubscriptionResponse": {
       "type": "object",
       "properties": {
         "id": {

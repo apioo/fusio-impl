@@ -14,7 +14,7 @@
         "backend.log"
       ],
       "responses": {
-        "200": "Backend_Log_Error"
+        "200": "Backend_LogError"
       }
     }
   },
@@ -27,10 +27,10 @@
         }
       }
     },
-    "Backend_Log_Error": {
-      "$ref": "Log_Error"
+    "Backend_LogError": {
+      "$ref": "LogError"
     },
-    "Log_Error": {
+    "LogError": {
       "type": "object",
       "properties": {
         "id": {

@@ -13,23 +13,23 @@
         "backend.action"
       ],
       "responses": {
-        "200": "Backend_Action_Index"
+        "200": "Backend_ActionIndex"
       }
     }
   },
   "definitions": {
-    "Action_Index": {
+    "ActionIndex": {
       "type": "object",
       "properties": {
         "actions": {
           "type": "array",
           "items": {
-            "$ref": "Action_Index_Entry"
+            "$ref": "ActionIndexEntry"
           }
         }
       }
     },
-    "Action_Index_Entry": {
+    "ActionIndexEntry": {
       "type": "object",
       "properties": {
         "name": {
@@ -40,8 +40,8 @@
         }
       }
     },
-    "Backend_Action_Index": {
-      "$ref": "Action_Index"
+    "Backend_ActionIndex": {
+      "$ref": "ActionIndex"
     }
   }
 }

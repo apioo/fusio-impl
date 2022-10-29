@@ -12,18 +12,18 @@
       "tags": [
         "backend.log"
       ],
-      "queryParameters": "Backend_Log_Collection_Query",
+      "queryParameters": "Backend_LogCollectionQuery",
       "responses": {
-        "200": "Backend_Log_Collection"
+        "200": "Backend_LogCollection"
       }
     }
   },
   "definitions": {
-    "Backend_Log_Collection": {
-      "$ref": "Log_Collection"
+    "Backend_LogCollection": {
+      "$ref": "LogCollection"
     },
-    "Backend_Log_Collection_Query": {
-      "$ref": "Log_Collection_Query"
+    "Backend_LogCollectionQuery": {
+      "$ref": "LogCollectionQuery"
     },
     "Collection": {
       "type": "object",
@@ -45,7 +45,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -90,19 +90,19 @@
         "errors": {
           "type": "array",
           "items": {
-            "$ref": "Log_Error"
+            "$ref": "LogError"
           }
         }
       }
     },
-    "Log_Collection": {
+    "LogCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Log"
       }
     },
-    "Log_Collection_Query": {
-      "$extends": "Collection_Query",
+    "LogCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {
@@ -145,7 +145,7 @@
         }
       }
     },
-    "Log_Error": {
+    "LogError": {
       "type": "object",
       "properties": {
         "id": {

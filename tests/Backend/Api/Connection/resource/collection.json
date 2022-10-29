@@ -12,9 +12,9 @@
       "tags": [
         "backend.connection"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Connection_Collection"
+        "200": "Backend_ConnectionCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.connection"
       ],
-      "request": "Backend_Connection_Create",
+      "request": "Backend_ConnectionCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Connection_Collection": {
-      "$ref": "Connection_Collection"
+    "Backend_ConnectionCollection": {
+      "$ref": "ConnectionCollection"
     },
-    "Backend_Connection_Create": {
-      "$ref": "Connection_Create"
+    "Backend_ConnectionCreate": {
+      "$ref": "ConnectionCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,7 +60,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -88,27 +88,27 @@
           "type": "string"
         },
         "config": {
-          "$ref": "Connection_Config"
+          "$ref": "ConnectionConfig"
         },
         "metadata": {
           "$ref": "Metadata"
         }
       }
     },
-    "Connection_Collection": {
+    "ConnectionCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Connection"
       }
     },
-    "Connection_Config": {
+    "ConnectionConfig": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       },
       "maxProperties": 16
     },
-    "Connection_Create": {
+    "ConnectionCreate": {
       "$extends": "Connection",
       "type": "object"
     },

@@ -13,15 +13,15 @@
         "backend.generator"
       ],
       "responses": {
-        "200": "Backend_Generator_Index_Providers"
+        "200": "Backend_GeneratorIndexProviders"
       }
     }
   },
   "definitions": {
-    "Backend_Generator_Index_Providers": {
-      "$ref": "Generator_Index_Providers"
+    "Backend_GeneratorIndexProviders": {
+      "$ref": "GeneratorIndexProviders"
     },
-    "Generator_Index_Provider": {
+    "GeneratorIndexProvider": {
       "type": "object",
       "properties": {
         "name": {
@@ -32,13 +32,13 @@
         }
       }
     },
-    "Generator_Index_Providers": {
+    "GeneratorIndexProviders": {
       "type": "object",
       "properties": {
         "providers": {
           "type": "array",
           "items": {
-            "$ref": "Generator_Index_Provider"
+            "$ref": "GeneratorIndexProvider"
           }
         }
       }

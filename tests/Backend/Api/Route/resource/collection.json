@@ -12,9 +12,9 @@
       "tags": [
         "backend.route"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Route_Collection"
+        "200": "Backend_RouteCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Route_Create",
+      "request": "Backend_RouteCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Route_Collection": {
-      "$ref": "Route_Collection"
+    "Backend_RouteCollection": {
+      "$ref": "RouteCollection"
     },
-    "Backend_Route_Create": {
-      "$ref": "Route_Create"
+    "Backend_RouteCreate": {
+      "$ref": "RouteCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,8 +60,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -127,7 +127,7 @@
         "config": {
           "type": "array",
           "items": {
-            "$ref": "Route_Version"
+            "$ref": "RouteVersion"
           }
         },
         "metadata": {
@@ -135,13 +135,13 @@
         }
       }
     },
-    "Route_Collection": {
+    "RouteCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Route"
       }
     },
-    "Route_Create": {
+    "RouteCreate": {
       "$extends": "Route",
       "type": "object",
       "required": [
@@ -149,7 +149,7 @@
         "config"
       ]
     },
-    "Route_Method": {
+    "RouteMethod": {
       "type": "object",
       "properties": {
         "method": {
@@ -183,7 +183,7 @@
           "type": "string"
         },
         "responses": {
-          "$ref": "Route_Method_Responses"
+          "$ref": "RouteMethodResponses"
         },
         "action": {
           "type": "string"
@@ -193,19 +193,19 @@
         }
       }
     },
-    "Route_Method_Responses": {
+    "RouteMethodResponses": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
       }
     },
-    "Route_Methods": {
+    "RouteMethods": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Route_Method"
+        "$ref": "RouteMethod"
       }
     },
-    "Route_Version": {
+    "RouteVersion": {
       "type": "object",
       "properties": {
         "version": {
@@ -215,7 +215,7 @@
           "type": "integer"
         },
         "methods": {
-          "$ref": "Route_Methods"
+          "$ref": "RouteMethods"
         }
       }
     }

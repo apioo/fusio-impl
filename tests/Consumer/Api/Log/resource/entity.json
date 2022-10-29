@@ -13,14 +13,14 @@
       "tags": [
         "consumer.log"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
         "200": "Consumer_Log"
       }
     }
   },
   "definitions": {
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {

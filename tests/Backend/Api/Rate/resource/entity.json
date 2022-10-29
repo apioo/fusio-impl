@@ -27,7 +27,7 @@
       "tags": [
         "backend.rate"
       ],
-      "request": "Backend_Rate_Update",
+      "request": "Backend_RateUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Rate": {
       "$ref": "Rate"
     },
-    "Backend_Rate_Update": {
-      "$ref": "Rate_Update"
+    "Backend_RateUpdate": {
+      "$ref": "RateUpdate"
     },
     "Message": {
       "type": "object",
@@ -104,7 +104,7 @@
         "allocation": {
           "type": "array",
           "items": {
-            "$ref": "Rate_Allocation"
+            "$ref": "RateAllocation"
           }
         },
         "metadata": {
@@ -112,7 +112,7 @@
         }
       }
     },
-    "Rate_Allocation": {
+    "RateAllocation": {
       "type": "object",
       "properties": {
         "id": {
@@ -135,7 +135,7 @@
         }
       }
     },
-    "Rate_Update": {
+    "RateUpdate": {
       "$extends": "Rate",
       "type": "object"
     }

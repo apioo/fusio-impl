@@ -7,9 +7,9 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_User_Login",
+      "request": "Consumer_UserLogin",
       "responses": {
-        "200": "Consumer_User_JWT"
+        "200": "Consumer_UserJWT"
       }
     },
     "PUT": {
@@ -17,23 +17,23 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_User_Refresh",
+      "request": "Consumer_UserRefresh",
       "responses": {
-        "200": "Consumer_User_JWT"
+        "200": "Consumer_UserJWT"
       }
     }
   },
   "definitions": {
-    "Consumer_User_JWT": {
-      "$ref": "User_JWT"
+    "Consumer_UserJWT": {
+      "$ref": "UserJWT"
     },
-    "Consumer_User_Login": {
-      "$ref": "User_Login"
+    "Consumer_UserLogin": {
+      "$ref": "UserLogin"
     },
-    "Consumer_User_Refresh": {
-      "$ref": "User_Refresh"
+    "Consumer_UserRefresh": {
+      "$ref": "UserRefresh"
     },
-    "User_JWT": {
+    "UserJWT": {
       "type": "object",
       "properties": {
         "token": {
@@ -50,7 +50,7 @@
         }
       }
     },
-    "User_Login": {
+    "UserLogin": {
       "type": "object",
       "properties": {
         "username": {
@@ -67,7 +67,7 @@
         }
       }
     },
-    "User_Refresh": {
+    "UserRefresh": {
       "type": "object",
       "properties": {
         "refresh_token": {

@@ -26,7 +26,7 @@
       "tags": [
         "backend.account"
       ],
-      "request": "Backend_User_Update",
+      "request": "Backend_UserUpdate",
       "responses": {
         "200": "Message"
       }
@@ -77,12 +77,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -116,8 +116,8 @@
     "Backend_User": {
       "$ref": "User"
     },
-    "Backend_User_Update": {
-      "$ref": "User_Update"
+    "Backend_UserUpdate": {
+      "$ref": "UserUpdate"
     },
     "Message": {
       "type": "object",
@@ -182,7 +182,7 @@
         }
       }
     },
-    "User_Update": {
+    "UserUpdate": {
       "$extends": "User",
       "type": "object"
     }

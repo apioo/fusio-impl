@@ -50,12 +50,12 @@ class PostmanTest extends DbTestCase
         $this->assertEquals(132, count($actions));
         $this->assertEquals(73, count($routes));
 
-        $this->assertEquals('Backend_Action_User_Get_GET', $actions[0]->name);
-        $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[0]->config->url);
-        $this->assertEquals('Backend_Action_User_Update_PUT', $actions[1]->name);
-        $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[1]->config->url);
+        $this->assertEquals('Backend_Action_User_Get_GET', $actions[0]->getName());
+        $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[0]->getConfig()['url']);
+        $this->assertEquals('Backend_Action_User_Update_PUT', $actions[1]->getName());
+        $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[1]->getConfig()['url']);
 
-        $this->assertEquals('/backend/user/:user_id', $routes[0]->path);
-        $this->assertEquals('/backend/user', $routes[1]->path);
+        $this->assertEquals('/backend/user/:user_id', $routes[0]->getPath());
+        $this->assertEquals('/backend/user', $routes[1]->getPath());
     }
 }

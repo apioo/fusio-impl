@@ -67,21 +67,21 @@
               "active": true,
               "public": true,
               "description": "Returns all entries on the table",
-              "request": 0,
+              "request": "0",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 0
+              "action": "0"
             },
             "POST": {
               "active": true,
               "public": false,
               "description": "Creates a new entry on the table",
-              "request": 0,
+              "request": "0",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 1
+              "action": "1"
             }
           }
         }

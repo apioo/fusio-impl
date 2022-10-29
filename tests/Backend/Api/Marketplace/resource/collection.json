@@ -13,7 +13,7 @@
         "backend.marketplace"
       ],
       "responses": {
-        "200": "Backend_Marketplace_Collection"
+        "200": "Backend_MarketplaceCollection"
       }
     },
     "POST": {
@@ -26,20 +26,20 @@
       "tags": [
         "backend.marketplace"
       ],
-      "request": "Backend_Marketplace_Install",
+      "request": "Backend_MarketplaceInstall",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Marketplace_Collection": {
-      "$ref": "Marketplace_Collection"
+    "Backend_MarketplaceCollection": {
+      "$ref": "MarketplaceCollection"
     },
-    "Backend_Marketplace_Install": {
-      "$ref": "Marketplace_Install"
+    "Backend_MarketplaceInstall": {
+      "$ref": "MarketplaceInstall"
     },
-    "Marketplace_App": {
+    "MarketplaceApp": {
       "type": "object",
       "properties": {
         "version": {
@@ -62,21 +62,21 @@
         }
       }
     },
-    "Marketplace_Collection": {
+    "MarketplaceCollection": {
       "type": "object",
       "properties": {
         "apps": {
-          "$ref": "Marketplace_Collection_Apps"
+          "$ref": "MarketplaceCollectionApps"
         }
       }
     },
-    "Marketplace_Collection_Apps": {
+    "MarketplaceCollectionApps": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Marketplace_Remote_App"
+        "$ref": "MarketplaceRemoteApp"
       }
     },
-    "Marketplace_Install": {
+    "MarketplaceInstall": {
       "type": "object",
       "properties": {
         "name": {
@@ -84,12 +84,12 @@
         }
       }
     },
-    "Marketplace_Remote_App": {
-      "$extends": "Marketplace_App",
+    "MarketplaceRemoteApp": {
+      "$extends": "MarketplaceApp",
       "type": "object",
       "properties": {
         "local": {
-          "$ref": "Marketplace_App"
+          "$ref": "MarketplaceApp"
         }
       }
     },

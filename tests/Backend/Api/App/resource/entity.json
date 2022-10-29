@@ -27,7 +27,7 @@
       "tags": [
         "backend.app"
       ],
-      "request": "Backend_App_Update",
+      "request": "Backend_AppUpdate",
       "responses": {
         "200": "Message"
       }
@@ -92,12 +92,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -128,7 +128,7 @@
         }
       }
     },
-    "App_Update": {
+    "AppUpdate": {
       "$extends": "App",
       "type": "object"
     },
@@ -143,8 +143,8 @@
     "Backend_App": {
       "$ref": "App"
     },
-    "Backend_App_Update": {
-      "$ref": "App_Update"
+    "Backend_AppUpdate": {
+      "$ref": "AppUpdate"
     },
     "Message": {
       "type": "object",

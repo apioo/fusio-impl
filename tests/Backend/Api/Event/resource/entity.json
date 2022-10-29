@@ -27,7 +27,7 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Event_Update",
+      "request": "Backend_EventUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Event": {
       "$ref": "Event"
     },
-    "Backend_Event_Update": {
-      "$ref": "Event_Update"
+    "Backend_EventUpdate": {
+      "$ref": "EventUpdate"
     },
     "Event": {
       "type": "object",
@@ -83,7 +83,7 @@
         }
       }
     },
-    "Event_Update": {
+    "EventUpdate": {
       "$extends": "Event",
       "type": "object"
     },

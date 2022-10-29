@@ -8,7 +8,7 @@
         "consumer.user"
       ],
       "responses": {
-        "200": "Consumer_Authorize_Meta"
+        "200": "Consumer_AuthorizeMeta"
       }
     },
     "POST": {
@@ -16,14 +16,14 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_Authorize_Request",
+      "request": "Consumer_AuthorizeRequest",
       "responses": {
-        "200": "Consumer_Authorize_Response"
+        "200": "Consumer_AuthorizeResponse"
       }
     }
   },
   "definitions": {
-    "Authorize_Meta": {
+    "AuthorizeMeta": {
       "type": "object",
       "properties": {
         "name": {
@@ -40,7 +40,7 @@
         }
       }
     },
-    "Authorize_Request": {
+    "AuthorizeRequest": {
       "type": "object",
       "properties": {
         "responseType": {
@@ -69,14 +69,14 @@
         "allow"
       ]
     },
-    "Authorize_Response": {
+    "AuthorizeResponse": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string"
         },
         "token": {
-          "$ref": "Authorize_Response_Token"
+          "$ref": "AuthorizeResponseToken"
         },
         "code": {
           "type": "string"
@@ -86,7 +86,7 @@
         }
       }
     },
-    "Authorize_Response_Token": {
+    "AuthorizeResponseToken": {
       "type": "object",
       "properties": {
         "access_token": {
@@ -103,14 +103,14 @@
         }
       }
     },
-    "Consumer_Authorize_Meta": {
-      "$ref": "Authorize_Meta"
+    "Consumer_AuthorizeMeta": {
+      "$ref": "AuthorizeMeta"
     },
-    "Consumer_Authorize_Request": {
-      "$ref": "Authorize_Request"
+    "Consumer_AuthorizeRequest": {
+      "$ref": "AuthorizeRequest"
     },
-    "Consumer_Authorize_Response": {
-      "$ref": "Authorize_Response"
+    "Consumer_AuthorizeResponse": {
+      "$ref": "AuthorizeResponse"
     },
     "Metadata": {
       "type": "object",

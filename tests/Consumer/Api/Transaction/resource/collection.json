@@ -12,9 +12,9 @@
       "tags": [
         "consumer.transaction"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Transaction_Collection"
+        "200": "Consumer_TransactionCollection"
       }
     }
   },
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -53,8 +53,8 @@
         }
       }
     },
-    "Consumer_Transaction_Collection": {
-      "$ref": "Transaction_Collection"
+    "Consumer_TransactionCollection": {
+      "$ref": "TransactionCollection"
     },
     "Metadata": {
       "type": "object",
@@ -123,7 +123,7 @@
         }
       }
     },
-    "Transaction_Collection": {
+    "TransactionCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Transaction"

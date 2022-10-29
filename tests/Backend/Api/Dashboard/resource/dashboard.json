@@ -45,35 +45,35 @@
       "type": "object",
       "properties": {
         "errorsPerRoute": {
-          "$ref": "Statistic_Chart"
+          "$ref": "StatisticChart"
         },
         "incomingRequests": {
-          "$ref": "Statistic_Chart"
+          "$ref": "StatisticChart"
         },
         "incomingTransactions": {
-          "$ref": "Statistic_Chart"
+          "$ref": "StatisticChart"
         },
         "mostUsedRoutes": {
-          "$ref": "Statistic_Chart"
+          "$ref": "StatisticChart"
         },
         "timePerRoute": {
-          "$ref": "Statistic_Chart"
+          "$ref": "StatisticChart"
         },
         "latestApps": {
-          "$ref": "Dashboard_Apps"
+          "$ref": "DashboardApps"
         },
         "latestRequests": {
-          "$ref": "Dashboard_Requests"
+          "$ref": "DashboardRequests"
         },
         "latestUsers": {
-          "$ref": "Dashboard_Users"
+          "$ref": "DashboardUsers"
         },
         "latestTransactions": {
-          "$ref": "Dashboard_Transactions"
+          "$ref": "DashboardTransactions"
         }
       }
     },
-    "Dashboard_App": {
+    "DashboardApp": {
       "type": "object",
       "properties": {
         "id": {
@@ -88,13 +88,13 @@
         }
       }
     },
-    "Dashboard_Apps": {
+    "DashboardApps": {
       "$ref": "Collection",
       "$template": {
-        "T": "Dashboard_App"
+        "T": "DashboardApp"
       }
     },
-    "Dashboard_Request": {
+    "DashboardRequest": {
       "type": "object",
       "properties": {
         "id": {
@@ -112,13 +112,13 @@
         }
       }
     },
-    "Dashboard_Requests": {
+    "DashboardRequests": {
       "$ref": "Collection",
       "$template": {
-        "T": "Dashboard_Request"
+        "T": "DashboardRequest"
       }
     },
-    "Dashboard_Transaction": {
+    "DashboardTransaction": {
       "type": "object",
       "properties": {
         "id": {
@@ -142,13 +142,13 @@
         }
       }
     },
-    "Dashboard_Transactions": {
+    "DashboardTransactions": {
       "$ref": "Collection",
       "$template": {
-        "T": "Dashboard_Transaction"
+        "T": "DashboardTransaction"
       }
     },
-    "Dashboard_User": {
+    "DashboardUser": {
       "type": "object",
       "properties": {
         "id": {
@@ -166,13 +166,13 @@
         }
       }
     },
-    "Dashboard_Users": {
+    "DashboardUsers": {
       "$ref": "Collection",
       "$template": {
-        "T": "Dashboard_User"
+        "T": "DashboardUser"
       }
     },
-    "Statistic_Chart": {
+    "StatisticChart": {
       "type": "object",
       "properties": {
         "labels": {
@@ -184,7 +184,7 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "Statistic_Chart_Data"
+            "$ref": "StatisticChartData"
           }
         },
         "series": {
@@ -195,7 +195,7 @@
         }
       }
     },
-    "Statistic_Chart_Data": {
+    "StatisticChartData": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

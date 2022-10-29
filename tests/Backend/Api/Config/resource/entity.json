@@ -27,7 +27,7 @@
       "tags": [
         "backend.config"
       ],
-      "request": "Backend_Config_Update",
+      "request": "Backend_ConfigUpdate",
       "responses": {
         "200": "Message"
       }
@@ -45,8 +45,8 @@
     "Backend_Config": {
       "$ref": "Config"
     },
-    "Backend_Config_Update": {
-      "$ref": "Config_Update"
+    "Backend_ConfigUpdate": {
+      "$ref": "ConfigUpdate"
     },
     "Config": {
       "type": "object",
@@ -68,7 +68,7 @@
         }
       }
     },
-    "Config_Update": {
+    "ConfigUpdate": {
       "$extends": "Config",
       "type": "object"
     },

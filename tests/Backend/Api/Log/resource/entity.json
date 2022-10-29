@@ -61,12 +61,12 @@
         "errors": {
           "type": "array",
           "items": {
-            "$ref": "Log_Error"
+            "$ref": "LogError"
           }
         }
       }
     },
-    "Log_Error": {
+    "LogError": {
       "type": "object",
       "properties": {
         "id": {

@@ -50,18 +50,18 @@ class InsomniaTest extends DbTestCase
         $this->assertEquals(21, count($actions));
         $this->assertEquals(9, count($routes));
 
-        $this->assertEquals('GET-_', $actions[0]->name);
-        $this->assertEquals('https://3ca114.fusio.cloud/', $actions[0]->config->url);
-        $this->assertEquals('GET-_contract', $actions[1]->name);
-        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[1]->config->url);
-        $this->assertEquals('POST-_contract', $actions[2]->name);
-        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[2]->config->url);
-        $this->assertEquals('GET-_contract__contract_', $actions[3]->name);
-        $this->assertEquals('https://3ca114.fusio.cloud/contract/:contract', $actions[3]->config->url);
+        $this->assertEquals('GET-_', $actions[0]->getName());
+        $this->assertEquals('https://3ca114.fusio.cloud/', $actions[0]->getConfig()['url']);
+        $this->assertEquals('GET-_contract', $actions[1]->getName());
+        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[1]->getConfig()['url']);
+        $this->assertEquals('POST-_contract', $actions[2]->getName());
+        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[2]->getConfig()['url']);
+        $this->assertEquals('GET-_contract__contract_', $actions[3]->getName());
+        $this->assertEquals('https://3ca114.fusio.cloud/contract/:contract', $actions[3]->getConfig()['url']);
 
-        $this->assertEquals('/', $routes[0]->path);
-        $this->assertEquals('/contract', $routes[1]->path);
-        $this->assertEquals('/contract/:contract', $routes[2]->path);
-        $this->assertEquals('/customer', $routes[3]->path);
+        $this->assertEquals('/', $routes[0]->getPath());
+        $this->assertEquals('/contract', $routes[1]->getPath());
+        $this->assertEquals('/contract/:contract', $routes[2]->getPath());
+        $this->assertEquals('/customer', $routes[3]->getPath());
     }
 }

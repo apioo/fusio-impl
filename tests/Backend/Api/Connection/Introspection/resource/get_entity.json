@@ -14,7 +14,7 @@
         "backend.connection"
       ],
       "responses": {
-        "200": "Backend_Connection_Introspection_Entity"
+        "200": "Backend_ConnectionIntrospectionEntity"
       }
     }
   },
@@ -30,10 +30,10 @@
         }
       }
     },
-    "Backend_Connection_Introspection_Entity": {
-      "$ref": "Connection_Introspection_Entity"
+    "Backend_ConnectionIntrospectionEntity": {
+      "$ref": "ConnectionIntrospectionEntity"
     },
-    "Connection_Introspection_Entity": {
+    "ConnectionIntrospectionEntity": {
       "type": "object",
       "properties": {
         "name": {
@@ -48,12 +48,12 @@
         "rows": {
           "type": "array",
           "items": {
-            "$ref": "Connection_Introspection_Entity_Row"
+            "$ref": "ConnectionIntrospectionEntityRow"
           }
         }
       }
     },
-    "Connection_Introspection_Entity_Row": {
+    "ConnectionIntrospectionEntityRow": {
       "type": "object",
       "properties": {
         "values": {

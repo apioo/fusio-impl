@@ -15,20 +15,20 @@
       "type": "object",
       "properties": {
         "routes": {
-          "$ref": "Route_Path"
+          "$ref": "RoutePath"
         }
       }
     },
-    "Route_Method": {
+    "RouteMethod": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
       }
     },
-    "Route_Path": {
+    "RoutePath": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Route_Method"
+        "$ref": "RouteMethod"
       }
     },
     "System_Route": {

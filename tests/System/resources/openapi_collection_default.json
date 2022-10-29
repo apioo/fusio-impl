@@ -312,6 +312,9 @@
           "licenseUrl": {
             "type": "string"
           },
+          "paymentCurrency": {
+            "type": "string"
+          },
           "categories": {
             "type": "array",
             "items": {
@@ -325,23 +328,23 @@
             }
           },
           "apps": {
-            "$ref": "#\/components\/schemas\/About_Apps"
+            "$ref": "#\/components\/schemas\/AboutApps"
           },
           "links": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/About_Link"
+              "$ref": "#\/components\/schemas\/AboutLink"
             }
           }
         }
       },
-      "About_Apps": {
+      "AboutApps": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "About_Link": {
+      "AboutLink": {
         "type": "object",
         "properties": {
           "rel": {

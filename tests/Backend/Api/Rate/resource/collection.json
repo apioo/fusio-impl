@@ -12,9 +12,9 @@
       "tags": [
         "backend.rate"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Rate_Collection"
+        "200": "Backend_RateCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.rate"
       ],
-      "request": "Backend_Rate_Create",
+      "request": "Backend_RateCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Rate_Collection": {
-      "$ref": "Rate_Collection"
+    "Backend_RateCollection": {
+      "$ref": "RateCollection"
     },
-    "Backend_Rate_Create": {
-      "$ref": "Rate_Create"
+    "Backend_RateCreate": {
+      "$ref": "RateCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,7 +60,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -116,7 +116,7 @@
         "allocation": {
           "type": "array",
           "items": {
-            "$ref": "Rate_Allocation"
+            "$ref": "RateAllocation"
           }
         },
         "metadata": {
@@ -124,7 +124,7 @@
         }
       }
     },
-    "Rate_Allocation": {
+    "RateAllocation": {
       "type": "object",
       "properties": {
         "id": {
@@ -147,13 +147,13 @@
         }
       }
     },
-    "Rate_Collection": {
+    "RateCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Rate"
       }
     },
-    "Rate_Create": {
+    "RateCreate": {
       "$extends": "Rate",
       "type": "object",
       "required": [

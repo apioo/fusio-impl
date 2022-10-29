@@ -180,7 +180,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Health_Check"
+                  "$ref": "#\/components\/schemas\/System_HealthCheck"
                 }
               }
             }
@@ -342,6 +342,9 @@
           "licenseUrl": {
             "type": "string"
           },
+          "paymentCurrency": {
+            "type": "string"
+          },
           "categories": {
             "type": "array",
             "items": {
@@ -355,23 +358,23 @@
             }
           },
           "apps": {
-            "$ref": "#\/components\/schemas\/About_Apps"
+            "$ref": "#\/components\/schemas\/AboutApps"
           },
           "links": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/About_Link"
+              "$ref": "#\/components\/schemas\/AboutLink"
             }
           }
         }
       },
-      "About_Apps": {
+      "AboutApps": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "About_Link": {
+      "AboutLink": {
         "type": "object",
         "properties": {
           "rel": {
@@ -386,25 +389,25 @@
         "type": "object",
         "properties": {
           "headers": {
-            "$ref": "#\/components\/schemas\/Debug_Headers"
+            "$ref": "#\/components\/schemas\/DebugHeaders"
           },
           "parameters": {
-            "$ref": "#\/components\/schemas\/Debug_Parameters"
+            "$ref": "#\/components\/schemas\/DebugParameters"
           },
           "body": {
-            "$ref": "#\/components\/schemas\/Debug_Body"
+            "$ref": "#\/components\/schemas\/DebugBody"
           }
         }
       },
-      "Debug_Body": {
+      "DebugBody": {
         "type": "object",
         "additionalProperties": []
       },
-      "Debug_Headers": {
+      "DebugHeaders": {
         "type": "object",
         "additionalProperties": []
       },
-      "Debug_Parameters": {
+      "DebugParameters": {
         "type": "object",
         "additionalProperties": []
       },
@@ -519,12 +522,12 @@
         "additionalProperties": true
       },
       "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response": {
-        "$ref": "#\/components\/schemas\/Rpc_Response_Success"
+        "$ref": "#\/components\/schemas\/RpcResponseSuccess"
       },
       "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request": {
         "$ref": "#\/components\/schemas\/Passthru"
       },
-      "Health_Check": {
+      "HealthCheck": {
         "type": "object",
         "properties": {
           "healthy": {
@@ -560,34 +563,34 @@
         "type": "object",
         "properties": {
           "routes": {
-            "$ref": "#\/components\/schemas\/Route_Path"
+            "$ref": "#\/components\/schemas\/RoutePath"
           }
         }
       },
-      "Route_Method": {
+      "RouteMethod": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "Route_Path": {
+      "RoutePath": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#\/components\/schemas\/Route_Method"
+          "$ref": "#\/components\/schemas\/RouteMethod"
         }
       },
-      "Rpc_Response_Result": {
+      "RpcResponseResult": {
         "type": "object",
         "additionalProperties": []
       },
-      "Rpc_Response_Success": {
+      "RpcResponseSuccess": {
         "type": "object",
         "properties": {
           "jsonrpc": {
             "type": "string"
           },
           "result": {
-            "$ref": "#\/components\/schemas\/Rpc_Response_Result"
+            "$ref": "#\/components\/schemas\/RpcResponseResult"
           },
           "id": {
             "type": "integer"
@@ -598,18 +601,18 @@
         "type": "object",
         "properties": {
           "schema": {
-            "$ref": "#\/components\/schemas\/Schema_TypeSchema"
+            "$ref": "#\/components\/schemas\/SchemaTypeSchema"
           },
           "form": {
-            "$ref": "#\/components\/schemas\/Schema_Form"
+            "$ref": "#\/components\/schemas\/SchemaForm"
           }
         }
       },
-      "Schema_Form": {
+      "SchemaForm": {
         "type": "object",
         "additionalProperties": []
       },
-      "Schema_TypeSchema": {
+      "SchemaTypeSchema": {
         "type": "object",
         "additionalProperties": []
       },
@@ -619,8 +622,8 @@
       "System_Debug": {
         "$ref": "#\/components\/schemas\/Debug"
       },
-      "System_Health_Check": {
-        "$ref": "#\/components\/schemas\/Health_Check"
+      "System_HealthCheck": {
+        "$ref": "#\/components\/schemas\/HealthCheck"
       },
       "System_Route": {
         "$ref": "#\/components\/schemas\/Route"

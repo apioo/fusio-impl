@@ -12,9 +12,9 @@
       "tags": [
         "backend.cronjob"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Cronjob_Collection"
+        "200": "Backend_CronjobCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.cronjob"
       ],
-      "request": "Backend_Cronjob_Create",
+      "request": "Backend_CronjobCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Cronjob_Collection": {
-      "$ref": "Cronjob_Collection"
+    "Backend_CronjobCollection": {
+      "$ref": "CronjobCollection"
     },
-    "Backend_Cronjob_Create": {
-      "$ref": "Cronjob_Create"
+    "Backend_CronjobCreate": {
+      "$ref": "CronjobCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,8 +60,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -112,18 +112,18 @@
         "errors": {
           "type": "array",
           "items": {
-            "$ref": "Cronjob_Error"
+            "$ref": "CronjobError"
           }
         }
       }
     },
-    "Cronjob_Collection": {
+    "CronjobCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Cronjob"
       }
     },
-    "Cronjob_Create": {
+    "CronjobCreate": {
       "$extends": "Cronjob",
       "type": "object",
       "required": [
@@ -132,7 +132,7 @@
         "action"
       ]
     },
-    "Cronjob_Error": {
+    "CronjobError": {
       "type": "object",
       "properties": {
         "message": {

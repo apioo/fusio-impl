@@ -46,7 +46,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_User_Update"
+                "$ref": "#\/components\/schemas\/Backend_UserUpdate"
               }
             }
           }
@@ -145,7 +145,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_User_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_UserCollection"
                 }
               }
             }
@@ -169,7 +169,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_User_Create"
+                "$ref": "#\/components\/schemas\/Backend_UserCreate"
               }
             }
           }
@@ -233,7 +233,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Trash_Data_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_TrashDataCollection"
                 }
               }
             }
@@ -257,7 +257,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Trash_Restore"
+                "$ref": "#\/components\/schemas\/Backend_TrashRestore"
               }
             }
           }
@@ -305,7 +305,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Trash_Types"
+                  "$ref": "#\/components\/schemas\/Backend_TrashTypes"
                 }
               }
             }
@@ -369,7 +369,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Transaction_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_TransactionCollection"
                 }
               }
             }
@@ -396,7 +396,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -423,7 +423,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -450,7 +450,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -477,7 +477,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -504,7 +504,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -531,7 +531,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -558,7 +558,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -585,7 +585,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -612,7 +612,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticChart"
                 }
               }
             }
@@ -639,7 +639,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_StatisticCount"
                 }
               }
             }
@@ -666,7 +666,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Sdk_Response"
+                  "$ref": "#\/components\/schemas\/Backend_SdkResponse"
                 }
               }
             }
@@ -690,7 +690,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Sdk_Generate"
+                "$ref": "#\/components\/schemas\/Backend_SdkGenerate"
               }
             }
           }
@@ -752,7 +752,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Scope_Update"
+                "$ref": "#\/components\/schemas\/Backend_ScopeUpdate"
               }
             }
           }
@@ -825,7 +825,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Scope_Categories"
+                  "$ref": "#\/components\/schemas\/Backend_ScopeCategories"
                 }
               }
             }
@@ -886,7 +886,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_ScopeCollection"
                 }
               }
             }
@@ -910,7 +910,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Scope_Create"
+                "$ref": "#\/components\/schemas\/Backend_ScopeCreate"
               }
             }
           }
@@ -972,7 +972,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Schema_Update"
+                "$ref": "#\/components\/schemas\/Backend_SchemaUpdate"
               }
             }
           }
@@ -1044,7 +1044,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Schema_Form"
+                "$ref": "#\/components\/schemas\/Backend_SchemaForm"
               }
             }
           }
@@ -1092,7 +1092,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Schema_Preview_Response"
+                  "$ref": "#\/components\/schemas\/Backend_SchemaPreviewResponse"
                 }
               }
             }
@@ -1163,7 +1163,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Schema_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_SchemaCollection"
                 }
               }
             }
@@ -1187,7 +1187,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Schema_Create"
+                "$ref": "#\/components\/schemas\/Backend_SchemaCreate"
               }
             }
           }
@@ -1249,7 +1249,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Route_Update"
+                "$ref": "#\/components\/schemas\/Backend_RouteUpdate"
               }
             }
           }
@@ -1356,7 +1356,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Route_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_RouteCollection"
                 }
               }
             }
@@ -1380,7 +1380,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Route_Create"
+                "$ref": "#\/components\/schemas\/Backend_RouteCreate"
               }
             }
           }
@@ -1442,7 +1442,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Role_Update"
+                "$ref": "#\/components\/schemas\/Backend_RoleUpdate"
               }
             }
           }
@@ -1541,7 +1541,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Role_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_RoleCollection"
                 }
               }
             }
@@ -1565,7 +1565,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Role_Create"
+                "$ref": "#\/components\/schemas\/Backend_RoleCreate"
               }
             }
           }
@@ -1627,7 +1627,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Rate_Update"
+                "$ref": "#\/components\/schemas\/Backend_RateUpdate"
               }
             }
           }
@@ -1726,7 +1726,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Rate_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_RateCollection"
                 }
               }
             }
@@ -1750,7 +1750,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Rate_Create"
+                "$ref": "#\/components\/schemas\/Backend_RateCreate"
               }
             }
           }
@@ -1812,7 +1812,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Plan_Update"
+                "$ref": "#\/components\/schemas\/Backend_PlanUpdate"
               }
             }
           }
@@ -1911,7 +1911,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Plan_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_PlanCollection"
                 }
               }
             }
@@ -1935,7 +1935,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Plan_Create"
+                "$ref": "#\/components\/schemas\/Backend_PlanCreate"
               }
             }
           }
@@ -1997,7 +1997,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Page_Update"
+                "$ref": "#\/components\/schemas\/Backend_PageUpdate"
               }
             }
           }
@@ -2096,7 +2096,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Page_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_PageCollection"
                 }
               }
             }
@@ -2120,7 +2120,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Page_Create"
+                "$ref": "#\/components\/schemas\/Backend_PageCreate"
               }
             }
           }
@@ -2158,7 +2158,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Local_App"
+                  "$ref": "#\/components\/schemas\/Backend_MarketplaceLocalApp"
                 }
               }
             }
@@ -2245,7 +2245,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_MarketplaceCollection"
                 }
               }
             }
@@ -2269,7 +2269,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Marketplace_Install"
+                "$ref": "#\/components\/schemas\/Backend_MarketplaceInstall"
               }
             }
           }
@@ -2344,7 +2344,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Log_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_LogCollection"
                 }
               }
             }
@@ -2371,7 +2371,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Log_Error"
+                  "$ref": "#\/components\/schemas\/Backend_LogError"
                 }
               }
             }
@@ -2434,7 +2434,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Log_Error_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_LogErrorCollection"
                 }
               }
             }
@@ -2461,7 +2461,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Form_Container"
+                  "$ref": "#\/components\/schemas\/FormContainer"
                 }
               }
             }
@@ -2485,7 +2485,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Generator_Provider_Config"
+                "$ref": "#\/components\/schemas\/Backend_GeneratorProviderConfig"
               }
             }
           }
@@ -2496,7 +2496,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Generator_Provider_Changelog"
+                  "$ref": "#\/components\/schemas\/Backend_GeneratorProviderChangelog"
                 }
               }
             }
@@ -2520,7 +2520,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Generator_Provider"
+                "$ref": "#\/components\/schemas\/Backend_GeneratorProvider"
               }
             }
           }
@@ -2568,7 +2568,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Generator_Index_Providers"
+                  "$ref": "#\/components\/schemas\/Backend_GeneratorIndexProviders"
                 }
               }
             }
@@ -2619,7 +2619,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Event_Update"
+                "$ref": "#\/components\/schemas\/Backend_EventUpdate"
               }
             }
           }
@@ -2726,7 +2726,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Event_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_EventCollection"
                 }
               }
             }
@@ -2750,7 +2750,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Event_Create"
+                "$ref": "#\/components\/schemas\/Backend_EventCreate"
               }
             }
           }
@@ -2788,7 +2788,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Event_Subscription"
+                  "$ref": "#\/components\/schemas\/Backend_EventSubscription"
                 }
               }
             }
@@ -2812,7 +2812,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Update"
+                "$ref": "#\/components\/schemas\/Backend_EventSubscriptionUpdate"
               }
             }
           }
@@ -2911,7 +2911,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_EventSubscriptionCollection"
                 }
               }
             }
@@ -2935,7 +2935,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Create"
+                "$ref": "#\/components\/schemas\/Backend_EventSubscriptionCreate"
               }
             }
           }
@@ -3024,7 +3024,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Cronjob_Update"
+                "$ref": "#\/components\/schemas\/Backend_CronjobUpdate"
               }
             }
           }
@@ -3131,7 +3131,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Cronjob_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_CronjobCollection"
                 }
               }
             }
@@ -3155,7 +3155,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Cronjob_Create"
+                "$ref": "#\/components\/schemas\/Backend_CronjobCreate"
               }
             }
           }
@@ -3193,7 +3193,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Connection_Introspection_Entity"
+                  "$ref": "#\/components\/schemas\/Backend_ConnectionIntrospectionEntity"
                 }
               }
             }
@@ -3238,7 +3238,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Connection_Introspection_Entities"
+                  "$ref": "#\/components\/schemas\/Backend_ConnectionIntrospectionEntities"
                 }
               }
             }
@@ -3336,7 +3336,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Connection_Update"
+                "$ref": "#\/components\/schemas\/Backend_ConnectionUpdate"
               }
             }
           }
@@ -3419,7 +3419,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Form_Container"
+                  "$ref": "#\/components\/schemas\/FormContainer"
                 }
               }
             }
@@ -3446,7 +3446,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Connection_Index"
+                  "$ref": "#\/components\/schemas\/Backend_ConnectionIndex"
                 }
               }
             }
@@ -3499,7 +3499,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Connection_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_ConnectionCollection"
                 }
               }
             }
@@ -3523,7 +3523,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Connection_Create"
+                "$ref": "#\/components\/schemas\/Backend_ConnectionCreate"
               }
             }
           }
@@ -3585,7 +3585,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Config_Update"
+                "$ref": "#\/components\/schemas\/Backend_ConfigUpdate"
               }
             }
           }
@@ -3659,7 +3659,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Config_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_ConfigCollection"
                 }
               }
             }
@@ -3710,7 +3710,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Category_Update"
+                "$ref": "#\/components\/schemas\/Backend_CategoryUpdate"
               }
             }
           }
@@ -3809,7 +3809,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Category_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_CategoryCollection"
                 }
               }
             }
@@ -3833,7 +3833,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Category_Create"
+                "$ref": "#\/components\/schemas\/Backend_CategoryCreate"
               }
             }
           }
@@ -3908,7 +3908,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Audit_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_AuditCollection"
                 }
               }
             }
@@ -4004,7 +4004,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_App_Update"
+                "$ref": "#\/components\/schemas\/Backend_AppUpdate"
               }
             }
           }
@@ -4103,7 +4103,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_App_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_AppCollection"
                 }
               }
             }
@@ -4127,7 +4127,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_App_Create"
+                "$ref": "#\/components\/schemas\/Backend_AppCreate"
               }
             }
           }
@@ -4165,7 +4165,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_App_Token"
+                  "$ref": "#\/components\/schemas\/Backend_AppToken"
                 }
               }
             }
@@ -4202,7 +4202,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_App_Token_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_AppTokenCollection"
                 }
               }
             }
@@ -4253,7 +4253,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Action_Update"
+                "$ref": "#\/components\/schemas\/Backend_ActionUpdate"
               }
             }
           }
@@ -4325,7 +4325,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Action_Execute_Request"
+                "$ref": "#\/components\/schemas\/Backend_ActionExecuteRequest"
               }
             }
           }
@@ -4336,7 +4336,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Action_Execute_Response"
+                  "$ref": "#\/components\/schemas\/Backend_ActionExecuteResponse"
                 }
               }
             }
@@ -4383,7 +4383,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Form_Container"
+                  "$ref": "#\/components\/schemas\/FormContainer"
                 }
               }
             }
@@ -4410,7 +4410,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Action_Index"
+                  "$ref": "#\/components\/schemas\/Backend_ActionIndex"
                 }
               }
             }
@@ -4471,7 +4471,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Action_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_ActionCollection"
                 }
               }
             }
@@ -4495,7 +4495,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Action_Create"
+                "$ref": "#\/components\/schemas\/Backend_ActionCreate"
               }
             }
           }
@@ -4532,7 +4532,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Account_ChangePassword"
+                "$ref": "#\/components\/schemas\/Backend_AccountChangePassword"
               }
             }
           }
@@ -4594,7 +4594,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_User_Update"
+                "$ref": "#\/components\/schemas\/Backend_UserUpdate"
               }
             }
           }
@@ -4623,7 +4623,7 @@
   },
   "components": {
     "schemas": {
-      "Account_ChangePassword": {
+      "AccountChangePassword": {
         "type": "object",
         "properties": {
           "oldPassword": {
@@ -4666,21 +4666,21 @@
             "type": "string"
           },
           "config": {
-            "$ref": "#\/components\/schemas\/Action_Config"
+            "$ref": "#\/components\/schemas\/ActionConfig"
           },
           "metadata": {
             "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
-      "Action_Collection": {
+      "ActionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Action_Config": {
+      "ActionConfig": {
         "type": "object",
         "additionalProperties": []
       },
-      "Action_Create": {
+      "ActionCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Action"
@@ -4693,7 +4693,7 @@
           }
         ]
       },
-      "Action_Execute_Request": {
+      "ActionExecuteRequest": {
         "type": "object",
         "properties": {
           "method": {
@@ -4710,53 +4710,53 @@
             "type": "string"
           },
           "body": {
-            "$ref": "#\/components\/schemas\/Action_Execute_Request_Body"
+            "$ref": "#\/components\/schemas\/ActionExecuteRequestBody"
           }
         },
         "required": [
           "method"
         ]
       },
-      "Action_Execute_Request_Body": {
+      "ActionExecuteRequestBody": {
         "type": "object",
         "additionalProperties": []
       },
-      "Action_Execute_Response": {
+      "ActionExecuteResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
             "type": "integer"
           },
           "headers": {
-            "$ref": "#\/components\/schemas\/Action_Execute_Response_Headers"
+            "$ref": "#\/components\/schemas\/ActionExecuteResponseHeaders"
           },
           "body": {
-            "$ref": "#\/components\/schemas\/Action_Execute_Response_Body"
+            "$ref": "#\/components\/schemas\/ActionExecuteResponseBody"
           }
         }
       },
-      "Action_Execute_Response_Body": {
+      "ActionExecuteResponseBody": {
         "type": "object",
         "additionalProperties": []
       },
-      "Action_Execute_Response_Headers": {
+      "ActionExecuteResponseHeaders": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "Action_Index": {
+      "ActionIndex": {
         "type": "object",
         "properties": {
           "actions": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Action_Index_Entry"
+              "$ref": "#\/components\/schemas\/ActionIndexEntry"
             }
           }
         }
       },
-      "Action_Index_Entry": {
+      "ActionIndexEntry": {
         "type": "object",
         "properties": {
           "name": {
@@ -4767,7 +4767,7 @@
           }
         }
       },
-      "Action_Update": {
+      "ActionUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Action"
@@ -4821,15 +4821,15 @@
           "tokens": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/App_Token"
+              "$ref": "#\/components\/schemas\/AppToken"
             }
           }
         }
       },
-      "App_Collection": {
+      "AppCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "App_Create": {
+      "AppCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/App"
@@ -4845,7 +4845,7 @@
           }
         ]
       },
-      "App_Token": {
+      "AppToken": {
         "type": "object",
         "properties": {
           "id": {
@@ -4876,13 +4876,13 @@
           }
         }
       },
-      "App_Token_Collection": {
+      "AppTokenCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "App_Token_Collection_Query": {
+      "AppTokenCollectionQuery": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Collection_Query"
+            "$ref": "#\/components\/schemas\/CollectionQuery"
           },
           {
             "type": "object",
@@ -4917,7 +4917,7 @@
           }
         ]
       },
-      "App_Update": {
+      "AppUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/App"
@@ -4949,7 +4949,7 @@
             "type": "string"
           },
           "content": {
-            "$ref": "#\/components\/schemas\/Audit_Object"
+            "$ref": "#\/components\/schemas\/AuditObject"
           },
           "date": {
             "format": "date-time",
@@ -4957,13 +4957,13 @@
           }
         }
       },
-      "Audit_Collection": {
+      "AuditCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Audit_Collection_Query": {
+      "AuditCollectionQuery": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Collection_Query"
+            "$ref": "#\/components\/schemas\/CollectionQuery"
           },
           {
             "type": "object",
@@ -4998,118 +4998,118 @@
           }
         ]
       },
-      "Audit_Object": {
+      "AuditObject": {
         "description": "A key value object containing the changes",
         "type": "object",
         "additionalProperties": []
       },
-      "Backend_Account_ChangePassword": {
-        "$ref": "#\/components\/schemas\/Account_ChangePassword"
+      "Backend_AccountChangePassword": {
+        "$ref": "#\/components\/schemas\/AccountChangePassword"
       },
       "Backend_Action": {
         "$ref": "#\/components\/schemas\/Action"
       },
-      "Backend_Action_Collection": {
-        "$ref": "#\/components\/schemas\/Action_Collection"
+      "Backend_ActionCollection": {
+        "$ref": "#\/components\/schemas\/ActionCollection"
       },
-      "Backend_Action_Create": {
-        "$ref": "#\/components\/schemas\/Action_Create"
+      "Backend_ActionCreate": {
+        "$ref": "#\/components\/schemas\/ActionCreate"
       },
-      "Backend_Action_Execute_Request": {
-        "$ref": "#\/components\/schemas\/Action_Execute_Request"
+      "Backend_ActionExecuteRequest": {
+        "$ref": "#\/components\/schemas\/ActionExecuteRequest"
       },
-      "Backend_Action_Execute_Response": {
-        "$ref": "#\/components\/schemas\/Action_Execute_Response"
+      "Backend_ActionExecuteResponse": {
+        "$ref": "#\/components\/schemas\/ActionExecuteResponse"
       },
-      "Backend_Action_Index": {
-        "$ref": "#\/components\/schemas\/Action_Index"
+      "Backend_ActionIndex": {
+        "$ref": "#\/components\/schemas\/ActionIndex"
       },
-      "Backend_Action_Update": {
-        "$ref": "#\/components\/schemas\/Action_Update"
+      "Backend_ActionUpdate": {
+        "$ref": "#\/components\/schemas\/ActionUpdate"
       },
       "Backend_App": {
         "$ref": "#\/components\/schemas\/App"
       },
-      "Backend_App_Collection": {
-        "$ref": "#\/components\/schemas\/App_Collection"
+      "Backend_AppCollection": {
+        "$ref": "#\/components\/schemas\/AppCollection"
       },
-      "Backend_App_Create": {
-        "$ref": "#\/components\/schemas\/App_Create"
+      "Backend_AppCreate": {
+        "$ref": "#\/components\/schemas\/AppCreate"
       },
-      "Backend_App_Token": {
-        "$ref": "#\/components\/schemas\/App_Token"
+      "Backend_AppToken": {
+        "$ref": "#\/components\/schemas\/AppToken"
       },
-      "Backend_App_Token_Collection": {
-        "$ref": "#\/components\/schemas\/App_Token_Collection"
+      "Backend_AppTokenCollection": {
+        "$ref": "#\/components\/schemas\/AppTokenCollection"
       },
-      "Backend_App_Token_Collection_Query": {
-        "$ref": "#\/components\/schemas\/App_Token_Collection_Query"
+      "Backend_AppTokenCollectionQuery": {
+        "$ref": "#\/components\/schemas\/AppTokenCollectionQuery"
       },
-      "Backend_App_Update": {
-        "$ref": "#\/components\/schemas\/App_Update"
+      "Backend_AppUpdate": {
+        "$ref": "#\/components\/schemas\/AppUpdate"
       },
       "Backend_Audit": {
         "$ref": "#\/components\/schemas\/Audit"
       },
-      "Backend_Audit_Collection": {
-        "$ref": "#\/components\/schemas\/Audit_Collection"
+      "Backend_AuditCollection": {
+        "$ref": "#\/components\/schemas\/AuditCollection"
       },
-      "Backend_Audit_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Audit_Collection_Query"
+      "Backend_AuditCollectionQuery": {
+        "$ref": "#\/components\/schemas\/AuditCollectionQuery"
       },
       "Backend_Category": {
         "$ref": "#\/components\/schemas\/Category"
       },
-      "Backend_Category_Collection": {
-        "$ref": "#\/components\/schemas\/Category_Collection"
+      "Backend_CategoryCollection": {
+        "$ref": "#\/components\/schemas\/CategoryCollection"
       },
-      "Backend_Category_Create": {
-        "$ref": "#\/components\/schemas\/Category_Create"
+      "Backend_CategoryCreate": {
+        "$ref": "#\/components\/schemas\/CategoryCreate"
       },
-      "Backend_Category_Update": {
-        "$ref": "#\/components\/schemas\/Category_Update"
+      "Backend_CategoryUpdate": {
+        "$ref": "#\/components\/schemas\/CategoryUpdate"
       },
       "Backend_Config": {
         "$ref": "#\/components\/schemas\/Config"
       },
-      "Backend_Config_Collection": {
-        "$ref": "#\/components\/schemas\/Config_Collection"
+      "Backend_ConfigCollection": {
+        "$ref": "#\/components\/schemas\/ConfigCollection"
       },
-      "Backend_Config_Update": {
-        "$ref": "#\/components\/schemas\/Config_Update"
+      "Backend_ConfigUpdate": {
+        "$ref": "#\/components\/schemas\/ConfigUpdate"
       },
       "Backend_Connection": {
         "$ref": "#\/components\/schemas\/Connection"
       },
-      "Backend_Connection_Collection": {
-        "$ref": "#\/components\/schemas\/Connection_Collection"
+      "Backend_ConnectionCollection": {
+        "$ref": "#\/components\/schemas\/ConnectionCollection"
       },
-      "Backend_Connection_Create": {
-        "$ref": "#\/components\/schemas\/Connection_Create"
+      "Backend_ConnectionCreate": {
+        "$ref": "#\/components\/schemas\/ConnectionCreate"
       },
-      "Backend_Connection_Index": {
-        "$ref": "#\/components\/schemas\/Connection_Index"
+      "Backend_ConnectionIndex": {
+        "$ref": "#\/components\/schemas\/ConnectionIndex"
       },
-      "Backend_Connection_Introspection_Entities": {
-        "$ref": "#\/components\/schemas\/Connection_Introspection_Entities"
+      "Backend_ConnectionIntrospectionEntities": {
+        "$ref": "#\/components\/schemas\/ConnectionIntrospectionEntities"
       },
-      "Backend_Connection_Introspection_Entity": {
-        "$ref": "#\/components\/schemas\/Connection_Introspection_Entity"
+      "Backend_ConnectionIntrospectionEntity": {
+        "$ref": "#\/components\/schemas\/ConnectionIntrospectionEntity"
       },
-      "Backend_Connection_Update": {
-        "$ref": "#\/components\/schemas\/Connection_Update"
+      "Backend_ConnectionUpdate": {
+        "$ref": "#\/components\/schemas\/ConnectionUpdate"
       },
       "Backend_Cronjob": {
         "$ref": "#\/components\/schemas\/Cronjob"
       },
-      "Backend_Cronjob_Collection": {
-        "$ref": "#\/components\/schemas\/Cronjob_Collection"
+      "Backend_CronjobCollection": {
+        "$ref": "#\/components\/schemas\/CronjobCollection"
       },
-      "Backend_Cronjob_Create": {
-        "$ref": "#\/components\/schemas\/Cronjob_Create"
+      "Backend_CronjobCreate": {
+        "$ref": "#\/components\/schemas\/CronjobCreate"
       },
-      "Backend_Cronjob_Update": {
-        "$ref": "#\/components\/schemas\/Cronjob_Update"
+      "Backend_CronjobUpdate": {
+        "$ref": "#\/components\/schemas\/CronjobUpdate"
       },
       "Backend_Dashboard": {
         "$ref": "#\/components\/schemas\/Dashboard"
@@ -5117,200 +5117,200 @@
       "Backend_Event": {
         "$ref": "#\/components\/schemas\/Event"
       },
-      "Backend_Event_Collection": {
-        "$ref": "#\/components\/schemas\/Event_Collection"
+      "Backend_EventCollection": {
+        "$ref": "#\/components\/schemas\/EventCollection"
       },
-      "Backend_Event_Create": {
-        "$ref": "#\/components\/schemas\/Event_Create"
+      "Backend_EventCreate": {
+        "$ref": "#\/components\/schemas\/EventCreate"
       },
-      "Backend_Event_Subscription": {
-        "$ref": "#\/components\/schemas\/Event_Subscription"
+      "Backend_EventSubscription": {
+        "$ref": "#\/components\/schemas\/EventSubscription"
       },
-      "Backend_Event_Subscription_Collection": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
+      "Backend_EventSubscriptionCollection": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionCollection"
       },
-      "Backend_Event_Subscription_Create": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Create"
+      "Backend_EventSubscriptionCreate": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionCreate"
       },
-      "Backend_Event_Subscription_Update": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Update"
+      "Backend_EventSubscriptionUpdate": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionUpdate"
       },
-      "Backend_Event_Update": {
-        "$ref": "#\/components\/schemas\/Event_Update"
+      "Backend_EventUpdate": {
+        "$ref": "#\/components\/schemas\/EventUpdate"
       },
-      "Backend_Generator_Index_Providers": {
-        "$ref": "#\/components\/schemas\/Generator_Index_Providers"
+      "Backend_GeneratorIndexProviders": {
+        "$ref": "#\/components\/schemas\/GeneratorIndexProviders"
       },
-      "Backend_Generator_Provider": {
-        "$ref": "#\/components\/schemas\/Generator_Provider"
+      "Backend_GeneratorProvider": {
+        "$ref": "#\/components\/schemas\/GeneratorProvider"
       },
-      "Backend_Generator_Provider_Changelog": {
-        "$ref": "#\/components\/schemas\/Generator_Provider_Changelog"
+      "Backend_GeneratorProviderChangelog": {
+        "$ref": "#\/components\/schemas\/GeneratorProviderChangelog"
       },
-      "Backend_Generator_Provider_Config": {
-        "$ref": "#\/components\/schemas\/Generator_Provider_Config"
+      "Backend_GeneratorProviderConfig": {
+        "$ref": "#\/components\/schemas\/GeneratorProviderConfig"
       },
       "Backend_Log": {
         "$ref": "#\/components\/schemas\/Log"
       },
-      "Backend_Log_Collection": {
-        "$ref": "#\/components\/schemas\/Log_Collection"
+      "Backend_LogCollection": {
+        "$ref": "#\/components\/schemas\/LogCollection"
       },
-      "Backend_Log_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Log_Collection_Query"
+      "Backend_LogCollectionQuery": {
+        "$ref": "#\/components\/schemas\/LogCollectionQuery"
       },
-      "Backend_Log_Error": {
-        "$ref": "#\/components\/schemas\/Log_Error"
+      "Backend_LogError": {
+        "$ref": "#\/components\/schemas\/LogError"
       },
-      "Backend_Log_Error_Collection": {
-        "$ref": "#\/components\/schemas\/Log_Error_Collection"
+      "Backend_LogErrorCollection": {
+        "$ref": "#\/components\/schemas\/LogErrorCollection"
       },
-      "Backend_Marketplace_Collection": {
-        "$ref": "#\/components\/schemas\/Marketplace_Collection"
+      "Backend_MarketplaceCollection": {
+        "$ref": "#\/components\/schemas\/MarketplaceCollection"
       },
-      "Backend_Marketplace_Install": {
-        "$ref": "#\/components\/schemas\/Marketplace_Install"
+      "Backend_MarketplaceInstall": {
+        "$ref": "#\/components\/schemas\/MarketplaceInstall"
       },
-      "Backend_Marketplace_Local_App": {
-        "$ref": "#\/components\/schemas\/Marketplace_Local_App"
+      "Backend_MarketplaceLocalApp": {
+        "$ref": "#\/components\/schemas\/MarketplaceLocalApp"
       },
       "Backend_Page": {
         "$ref": "#\/components\/schemas\/Page"
       },
-      "Backend_Page_Collection": {
-        "$ref": "#\/components\/schemas\/Page_Collection"
+      "Backend_PageCollection": {
+        "$ref": "#\/components\/schemas\/PageCollection"
       },
-      "Backend_Page_Create": {
-        "$ref": "#\/components\/schemas\/Page_Create"
+      "Backend_PageCreate": {
+        "$ref": "#\/components\/schemas\/PageCreate"
       },
-      "Backend_Page_Update": {
-        "$ref": "#\/components\/schemas\/Page_Update"
+      "Backend_PageUpdate": {
+        "$ref": "#\/components\/schemas\/PageUpdate"
       },
       "Backend_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
       },
-      "Backend_Plan_Collection": {
-        "$ref": "#\/components\/schemas\/Plan_Collection"
+      "Backend_PlanCollection": {
+        "$ref": "#\/components\/schemas\/PlanCollection"
       },
-      "Backend_Plan_Create": {
-        "$ref": "#\/components\/schemas\/Plan_Create"
+      "Backend_PlanCreate": {
+        "$ref": "#\/components\/schemas\/PlanCreate"
       },
-      "Backend_Plan_Update": {
-        "$ref": "#\/components\/schemas\/Plan_Update"
+      "Backend_PlanUpdate": {
+        "$ref": "#\/components\/schemas\/PlanUpdate"
       },
-      "Backend_Plan_Usage_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Plan_Usage_Collection_Query"
+      "Backend_PlanUsageCollectionQuery": {
+        "$ref": "#\/components\/schemas\/PlanUsageCollectionQuery"
       },
       "Backend_Rate": {
         "$ref": "#\/components\/schemas\/Rate"
       },
-      "Backend_Rate_Collection": {
-        "$ref": "#\/components\/schemas\/Rate_Collection"
+      "Backend_RateCollection": {
+        "$ref": "#\/components\/schemas\/RateCollection"
       },
-      "Backend_Rate_Create": {
-        "$ref": "#\/components\/schemas\/Rate_Create"
+      "Backend_RateCreate": {
+        "$ref": "#\/components\/schemas\/RateCreate"
       },
-      "Backend_Rate_Update": {
-        "$ref": "#\/components\/schemas\/Rate_Update"
+      "Backend_RateUpdate": {
+        "$ref": "#\/components\/schemas\/RateUpdate"
       },
       "Backend_Role": {
         "$ref": "#\/components\/schemas\/Role"
       },
-      "Backend_Role_Collection": {
-        "$ref": "#\/components\/schemas\/Role_Collection"
+      "Backend_RoleCollection": {
+        "$ref": "#\/components\/schemas\/RoleCollection"
       },
-      "Backend_Role_Create": {
-        "$ref": "#\/components\/schemas\/Role_Create"
+      "Backend_RoleCreate": {
+        "$ref": "#\/components\/schemas\/RoleCreate"
       },
-      "Backend_Role_Update": {
-        "$ref": "#\/components\/schemas\/Role_Update"
+      "Backend_RoleUpdate": {
+        "$ref": "#\/components\/schemas\/RoleUpdate"
       },
       "Backend_Route": {
         "$ref": "#\/components\/schemas\/Route"
       },
-      "Backend_Route_Collection": {
-        "$ref": "#\/components\/schemas\/Route_Collection"
+      "Backend_RouteCollection": {
+        "$ref": "#\/components\/schemas\/RouteCollection"
       },
-      "Backend_Route_Create": {
-        "$ref": "#\/components\/schemas\/Route_Create"
+      "Backend_RouteCreate": {
+        "$ref": "#\/components\/schemas\/RouteCreate"
       },
-      "Backend_Route_Update": {
-        "$ref": "#\/components\/schemas\/Route_Update"
+      "Backend_RouteUpdate": {
+        "$ref": "#\/components\/schemas\/RouteUpdate"
       },
       "Backend_Schema": {
         "$ref": "#\/components\/schemas\/Schema"
       },
-      "Backend_Schema_Collection": {
-        "$ref": "#\/components\/schemas\/Schema_Collection"
+      "Backend_SchemaCollection": {
+        "$ref": "#\/components\/schemas\/SchemaCollection"
       },
-      "Backend_Schema_Create": {
-        "$ref": "#\/components\/schemas\/Schema_Create"
+      "Backend_SchemaCreate": {
+        "$ref": "#\/components\/schemas\/SchemaCreate"
       },
-      "Backend_Schema_Form": {
-        "$ref": "#\/components\/schemas\/Schema_Form"
+      "Backend_SchemaForm": {
+        "$ref": "#\/components\/schemas\/SchemaForm"
       },
-      "Backend_Schema_Preview_Response": {
-        "$ref": "#\/components\/schemas\/Schema_Preview_Response"
+      "Backend_SchemaPreviewResponse": {
+        "$ref": "#\/components\/schemas\/SchemaPreviewResponse"
       },
-      "Backend_Schema_Update": {
-        "$ref": "#\/components\/schemas\/Schema_Update"
+      "Backend_SchemaUpdate": {
+        "$ref": "#\/components\/schemas\/SchemaUpdate"
       },
       "Backend_Scope": {
         "$ref": "#\/components\/schemas\/Scope"
       },
-      "Backend_Scope_Categories": {
-        "$ref": "#\/components\/schemas\/Scope_Categories"
+      "Backend_ScopeCategories": {
+        "$ref": "#\/components\/schemas\/ScopeCategories"
       },
-      "Backend_Scope_Collection": {
-        "$ref": "#\/components\/schemas\/Scope_Collection"
+      "Backend_ScopeCollection": {
+        "$ref": "#\/components\/schemas\/ScopeCollection"
       },
-      "Backend_Scope_Create": {
-        "$ref": "#\/components\/schemas\/Scope_Create"
+      "Backend_ScopeCreate": {
+        "$ref": "#\/components\/schemas\/ScopeCreate"
       },
-      "Backend_Scope_Update": {
-        "$ref": "#\/components\/schemas\/Scope_Update"
+      "Backend_ScopeUpdate": {
+        "$ref": "#\/components\/schemas\/ScopeUpdate"
       },
-      "Backend_Sdk_Generate": {
-        "$ref": "#\/components\/schemas\/Sdk_Generate"
+      "Backend_SdkGenerate": {
+        "$ref": "#\/components\/schemas\/SdkGenerate"
       },
-      "Backend_Sdk_Response": {
-        "$ref": "#\/components\/schemas\/Sdk_Response"
+      "Backend_SdkResponse": {
+        "$ref": "#\/components\/schemas\/SdkResponse"
       },
-      "Backend_Statistic_Chart": {
-        "$ref": "#\/components\/schemas\/Statistic_Chart"
+      "Backend_StatisticChart": {
+        "$ref": "#\/components\/schemas\/StatisticChart"
       },
-      "Backend_Statistic_Count": {
-        "$ref": "#\/components\/schemas\/Statistic_Count"
+      "Backend_StatisticCount": {
+        "$ref": "#\/components\/schemas\/StatisticCount"
       },
       "Backend_Transaction": {
         "$ref": "#\/components\/schemas\/Transaction"
       },
-      "Backend_Transaction_Collection": {
-        "$ref": "#\/components\/schemas\/Transaction_Collection"
+      "Backend_TransactionCollection": {
+        "$ref": "#\/components\/schemas\/TransactionCollection"
       },
-      "Backend_Transaction_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Transaction_Collection_Query"
+      "Backend_TransactionCollectionQuery": {
+        "$ref": "#\/components\/schemas\/TransactionCollectionQuery"
       },
-      "Backend_Trash_Data_Collection": {
-        "$ref": "#\/components\/schemas\/Trash_Data_Collection"
+      "Backend_TrashDataCollection": {
+        "$ref": "#\/components\/schemas\/TrashDataCollection"
       },
-      "Backend_Trash_Restore": {
-        "$ref": "#\/components\/schemas\/Trash_Restore"
+      "Backend_TrashRestore": {
+        "$ref": "#\/components\/schemas\/TrashRestore"
       },
-      "Backend_Trash_Types": {
-        "$ref": "#\/components\/schemas\/Trash_Types"
+      "Backend_TrashTypes": {
+        "$ref": "#\/components\/schemas\/TrashTypes"
       },
       "Backend_User": {
         "$ref": "#\/components\/schemas\/User"
       },
-      "Backend_User_Collection": {
-        "$ref": "#\/components\/schemas\/User_Collection"
+      "Backend_UserCollection": {
+        "$ref": "#\/components\/schemas\/UserCollection"
       },
-      "Backend_User_Create": {
-        "$ref": "#\/components\/schemas\/User_Create"
+      "Backend_UserCreate": {
+        "$ref": "#\/components\/schemas\/UserCreate"
       },
-      "Backend_User_Update": {
-        "$ref": "#\/components\/schemas\/User_Update"
+      "Backend_UserUpdate": {
+        "$ref": "#\/components\/schemas\/UserUpdate"
       },
       "Category": {
         "type": "object",
@@ -5324,10 +5324,10 @@
           }
         }
       },
-      "Category_Collection": {
+      "CategoryCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Category_Create": {
+      "CategoryCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Category"
@@ -5340,7 +5340,7 @@
           }
         ]
       },
-      "Category_Update": {
+      "CategoryUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Category"
@@ -5388,10 +5388,10 @@
           "value": []
         }
       },
-      "Config_Collection": {
+      "ConfigCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Config_Update": {
+      "ConfigUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Config"
@@ -5415,22 +5415,22 @@
             "type": "string"
           },
           "config": {
-            "$ref": "#\/components\/schemas\/Connection_Config"
+            "$ref": "#\/components\/schemas\/ConnectionConfig"
           },
           "metadata": {
             "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
-      "Connection_Collection": {
+      "ConnectionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Connection_Config": {
+      "ConnectionConfig": {
         "type": "object",
         "additionalProperties": [],
         "maxProperties": 16
       },
-      "Connection_Create": {
+      "ConnectionCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Connection"
@@ -5440,18 +5440,18 @@
           }
         ]
       },
-      "Connection_Index": {
+      "ConnectionIndex": {
         "type": "object",
         "properties": {
           "connections": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Connection_Index_Entry"
+              "$ref": "#\/components\/schemas\/ConnectionIndexEntry"
             }
           }
         }
       },
-      "Connection_Index_Entry": {
+      "ConnectionIndexEntry": {
         "type": "object",
         "properties": {
           "name": {
@@ -5462,7 +5462,7 @@
           }
         }
       },
-      "Connection_Introspection_Entities": {
+      "ConnectionIntrospectionEntities": {
         "type": "object",
         "properties": {
           "entities": {
@@ -5473,7 +5473,7 @@
           }
         }
       },
-      "Connection_Introspection_Entity": {
+      "ConnectionIntrospectionEntity": {
         "type": "object",
         "properties": {
           "name": {
@@ -5488,12 +5488,12 @@
           "rows": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Connection_Introspection_Entity_Row"
+              "$ref": "#\/components\/schemas\/ConnectionIntrospectionEntityRow"
             }
           }
         }
       },
-      "Connection_Introspection_Entity_Row": {
+      "ConnectionIntrospectionEntityRow": {
         "type": "object",
         "properties": {
           "values": {
@@ -5504,7 +5504,7 @@
           }
         }
       },
-      "Connection_Update": {
+      "ConnectionUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Connection"
@@ -5543,15 +5543,15 @@
           "errors": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Cronjob_Error"
+              "$ref": "#\/components\/schemas\/CronjobError"
             }
           }
         }
       },
-      "Cronjob_Collection": {
+      "CronjobCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Cronjob_Create": {
+      "CronjobCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Cronjob"
@@ -5566,7 +5566,7 @@
           }
         ]
       },
-      "Cronjob_Error": {
+      "CronjobError": {
         "type": "object",
         "properties": {
           "message": {
@@ -5583,7 +5583,7 @@
           }
         }
       },
-      "Cronjob_Update": {
+      "CronjobUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Cronjob"
@@ -5597,35 +5597,35 @@
         "type": "object",
         "properties": {
           "errorsPerRoute": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+            "$ref": "#\/components\/schemas\/StatisticChart"
           },
           "incomingRequests": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+            "$ref": "#\/components\/schemas\/StatisticChart"
           },
           "incomingTransactions": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+            "$ref": "#\/components\/schemas\/StatisticChart"
           },
           "mostUsedRoutes": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+            "$ref": "#\/components\/schemas\/StatisticChart"
           },
           "timePerRoute": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+            "$ref": "#\/components\/schemas\/StatisticChart"
           },
           "latestApps": {
-            "$ref": "#\/components\/schemas\/Dashboard_Apps"
+            "$ref": "#\/components\/schemas\/DashboardApps"
           },
           "latestRequests": {
-            "$ref": "#\/components\/schemas\/Dashboard_Requests"
+            "$ref": "#\/components\/schemas\/DashboardRequests"
           },
           "latestUsers": {
-            "$ref": "#\/components\/schemas\/Dashboard_Users"
+            "$ref": "#\/components\/schemas\/DashboardUsers"
           },
           "latestTransactions": {
-            "$ref": "#\/components\/schemas\/Dashboard_Transactions"
+            "$ref": "#\/components\/schemas\/DashboardTransactions"
           }
         }
       },
-      "Dashboard_App": {
+      "DashboardApp": {
         "type": "object",
         "properties": {
           "id": {
@@ -5640,10 +5640,10 @@
           }
         }
       },
-      "Dashboard_Apps": {
+      "DashboardApps": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Dashboard_Request": {
+      "DashboardRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -5661,10 +5661,10 @@
           }
         }
       },
-      "Dashboard_Requests": {
+      "DashboardRequests": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Dashboard_Transaction": {
+      "DashboardTransaction": {
         "type": "object",
         "properties": {
           "id": {
@@ -5688,10 +5688,10 @@
           }
         }
       },
-      "Dashboard_Transactions": {
+      "DashboardTransactions": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Dashboard_User": {
+      "DashboardUser": {
         "type": "object",
         "properties": {
           "id": {
@@ -5709,7 +5709,7 @@
           }
         }
       },
-      "Dashboard_Users": {
+      "DashboardUsers": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Event": {
@@ -5733,10 +5733,10 @@
           }
         }
       },
-      "Event_Collection": {
+      "EventCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Event_Create": {
+      "EventCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Event"
@@ -5749,7 +5749,7 @@
           }
         ]
       },
-      "Event_Subscription": {
+      "EventSubscription": {
         "type": "object",
         "properties": {
           "id": {
@@ -5767,18 +5767,18 @@
           "responses": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Event_Subscription_Response"
+              "$ref": "#\/components\/schemas\/EventSubscriptionResponse"
             }
           }
         }
       },
-      "Event_Subscription_Collection": {
+      "EventSubscriptionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Event_Subscription_Create": {
+      "EventSubscriptionCreate": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Event_Subscription"
+            "$ref": "#\/components\/schemas\/EventSubscription"
           },
           {
             "type": "object",
@@ -5790,7 +5790,7 @@
           }
         ]
       },
-      "Event_Subscription_Response": {
+      "EventSubscriptionResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -5814,17 +5814,17 @@
           }
         }
       },
-      "Event_Subscription_Update": {
+      "EventSubscriptionUpdate": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Event_Subscription"
+            "$ref": "#\/components\/schemas\/EventSubscription"
           },
           {
             "type": "object"
           }
         ]
       },
-      "Event_Update": {
+      "EventUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Event"
@@ -5834,7 +5834,7 @@
           }
         ]
       },
-      "Form_Container": {
+      "FormContainer": {
         "type": "object",
         "properties": {
           "element": {
@@ -5842,23 +5842,23 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#\/components\/schemas\/Form_Element_Input"
+                  "$ref": "#\/components\/schemas\/FormElementInput"
                 },
                 {
-                  "$ref": "#\/components\/schemas\/Form_Element_Select"
+                  "$ref": "#\/components\/schemas\/FormElementSelect"
                 },
                 {
-                  "$ref": "#\/components\/schemas\/Form_Element_Tag"
+                  "$ref": "#\/components\/schemas\/FormElementTag"
                 },
                 {
-                  "$ref": "#\/components\/schemas\/Form_Element_TextArea"
+                  "$ref": "#\/components\/schemas\/FormElementTextArea"
                 }
               ]
             }
           }
         }
       },
-      "Form_Element": {
+      "FormElement": {
         "type": "object",
         "properties": {
           "element": {
@@ -5878,10 +5878,10 @@
           "element"
         ]
       },
-      "Form_Element_Input": {
+      "FormElementInput": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Form_Element"
+            "$ref": "#\/components\/schemas\/FormElement"
           },
           {
             "type": "object",
@@ -5893,10 +5893,10 @@
           }
         ]
       },
-      "Form_Element_Select": {
+      "FormElementSelect": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Form_Element"
+            "$ref": "#\/components\/schemas\/FormElement"
           },
           {
             "type": "object",
@@ -5904,14 +5904,14 @@
               "options": {
                 "type": "array",
                 "items": {
-                  "$ref": "#\/components\/schemas\/Form_Element_Select_Option"
+                  "$ref": "#\/components\/schemas\/FormElementSelectOption"
                 }
               }
             }
           }
         ]
       },
-      "Form_Element_Select_Option": {
+      "FormElementSelectOption": {
         "type": "object",
         "properties": {
           "key": {
@@ -5922,20 +5922,20 @@
           }
         }
       },
-      "Form_Element_Tag": {
+      "FormElementTag": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Form_Element"
+            "$ref": "#\/components\/schemas\/FormElement"
           },
           {
             "type": "object"
           }
         ]
       },
-      "Form_Element_TextArea": {
+      "FormElementTextArea": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Form_Element"
+            "$ref": "#\/components\/schemas\/FormElement"
           },
           {
             "type": "object",
@@ -5947,7 +5947,7 @@
           }
         ]
       },
-      "Generator_Index_Provider": {
+      "GeneratorIndexProvider": {
         "type": "object",
         "properties": {
           "name": {
@@ -5958,18 +5958,18 @@
           }
         }
       },
-      "Generator_Index_Providers": {
+      "GeneratorIndexProviders": {
         "type": "object",
         "properties": {
           "providers": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Generator_Index_Provider"
+              "$ref": "#\/components\/schemas\/GeneratorIndexProvider"
             }
           }
         }
       },
-      "Generator_Provider": {
+      "GeneratorProvider": {
         "type": "object",
         "properties": {
           "path": {
@@ -5985,11 +5985,11 @@
             "type": "boolean"
           },
           "config": {
-            "$ref": "#\/components\/schemas\/Generator_Provider_Config"
+            "$ref": "#\/components\/schemas\/GeneratorProviderConfig"
           }
         }
       },
-      "Generator_Provider_Changelog": {
+      "GeneratorProviderChangelog": {
         "type": "object",
         "properties": {
           "schemas": {
@@ -6012,7 +6012,7 @@
           }
         }
       },
-      "Generator_Provider_Config": {
+      "GeneratorProviderConfig": {
         "type": "object",
         "additionalProperties": [],
         "maxProperties": 16
@@ -6048,18 +6048,18 @@
           "errors": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Log_Error"
+              "$ref": "#\/components\/schemas\/LogError"
             }
           }
         }
       },
-      "Log_Collection": {
+      "LogCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Log_Collection_Query": {
+      "LogCollectionQuery": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Collection_Query"
+            "$ref": "#\/components\/schemas\/CollectionQuery"
           },
           {
             "type": "object",
@@ -6106,7 +6106,7 @@
           }
         ]
       },
-      "Log_Error": {
+      "LogError": {
         "type": "object",
         "properties": {
           "id": {
@@ -6126,10 +6126,10 @@
           }
         }
       },
-      "Log_Error_Collection": {
+      "LogErrorCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Marketplace_App": {
+      "MarketplaceApp": {
         "type": "object",
         "properties": {
           "version": {
@@ -6152,21 +6152,21 @@
           }
         }
       },
-      "Marketplace_Collection": {
+      "MarketplaceCollection": {
         "type": "object",
         "properties": {
           "apps": {
-            "$ref": "#\/components\/schemas\/Marketplace_Collection_Apps"
+            "$ref": "#\/components\/schemas\/MarketplaceCollectionApps"
           }
         }
       },
-      "Marketplace_Collection_Apps": {
+      "MarketplaceCollectionApps": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#\/components\/schemas\/Marketplace_Remote_App"
+          "$ref": "#\/components\/schemas\/MarketplaceRemoteApp"
         }
       },
-      "Marketplace_Install": {
+      "MarketplaceInstall": {
         "type": "object",
         "properties": {
           "name": {
@@ -6174,31 +6174,31 @@
           }
         }
       },
-      "Marketplace_Local_App": {
+      "MarketplaceLocalApp": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Marketplace_App"
+            "$ref": "#\/components\/schemas\/MarketplaceApp"
           },
           {
             "type": "object",
             "properties": {
               "remote": {
-                "$ref": "#\/components\/schemas\/Marketplace_App"
+                "$ref": "#\/components\/schemas\/MarketplaceApp"
               }
             }
           }
         ]
       },
-      "Marketplace_Remote_App": {
+      "MarketplaceRemoteApp": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Marketplace_App"
+            "$ref": "#\/components\/schemas\/MarketplaceApp"
           },
           {
             "type": "object",
             "properties": {
               "local": {
-                "$ref": "#\/components\/schemas\/Marketplace_App"
+                "$ref": "#\/components\/schemas\/MarketplaceApp"
               }
             }
           }
@@ -6244,10 +6244,10 @@
           }
         }
       },
-      "Page_Collection": {
+      "PageCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Page_Create": {
+      "PageCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Page"
@@ -6261,7 +6261,7 @@
           }
         ]
       },
-      "Page_Update": {
+      "PageUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Page"
@@ -6306,10 +6306,10 @@
           }
         }
       },
-      "Plan_Collection": {
+      "PlanCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Plan_Create": {
+      "PlanCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Plan"
@@ -6323,7 +6323,7 @@
           }
         ]
       },
-      "Plan_Update": {
+      "PlanUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Plan"
@@ -6333,10 +6333,10 @@
           }
         ]
       },
-      "Plan_Usage_Collection_Query": {
+      "PlanUsageCollectionQuery": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Collection_Query"
+            "$ref": "#\/components\/schemas\/CollectionQuery"
           },
           {
             "type": "object",
@@ -6390,7 +6390,7 @@
           "allocation": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Rate_Allocation"
+              "$ref": "#\/components\/schemas\/RateAllocation"
             }
           },
           "metadata": {
@@ -6398,7 +6398,7 @@
           }
         }
       },
-      "Rate_Allocation": {
+      "RateAllocation": {
         "type": "object",
         "properties": {
           "id": {
@@ -6421,10 +6421,10 @@
           }
         }
       },
-      "Rate_Collection": {
+      "RateCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Rate_Create": {
+      "RateCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Rate"
@@ -6437,7 +6437,7 @@
           }
         ]
       },
-      "Rate_Update": {
+      "RateUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Rate"
@@ -6468,10 +6468,10 @@
           }
         }
       },
-      "Role_Collection": {
+      "RoleCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Role_Create": {
+      "RoleCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Role"
@@ -6485,7 +6485,7 @@
           }
         ]
       },
-      "Role_Update": {
+      "RoleUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Role"
@@ -6522,7 +6522,7 @@
           "config": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Route_Version"
+              "$ref": "#\/components\/schemas\/RouteVersion"
             }
           },
           "metadata": {
@@ -6530,10 +6530,10 @@
           }
         }
       },
-      "Route_Collection": {
+      "RouteCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Route_Create": {
+      "RouteCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Route"
@@ -6547,7 +6547,7 @@
           }
         ]
       },
-      "Route_Method": {
+      "RouteMethod": {
         "type": "object",
         "properties": {
           "method": {
@@ -6581,7 +6581,7 @@
             "type": "string"
           },
           "responses": {
-            "$ref": "#\/components\/schemas\/Route_Method_Responses"
+            "$ref": "#\/components\/schemas\/RouteMethodResponses"
           },
           "action": {
             "type": "string"
@@ -6591,19 +6591,19 @@
           }
         }
       },
-      "Route_Method_Responses": {
+      "RouteMethodResponses": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "Route_Methods": {
+      "RouteMethods": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#\/components\/schemas\/Route_Method"
+          "$ref": "#\/components\/schemas\/RouteMethod"
         }
       },
-      "Route_Update": {
+      "RouteUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Route"
@@ -6613,7 +6613,7 @@
           }
         ]
       },
-      "Route_Version": {
+      "RouteVersion": {
         "type": "object",
         "properties": {
           "version": {
@@ -6623,7 +6623,7 @@
             "type": "integer"
           },
           "methods": {
-            "$ref": "#\/components\/schemas\/Route_Methods"
+            "$ref": "#\/components\/schemas\/RouteMethods"
           }
         }
       },
@@ -6641,20 +6641,20 @@
             "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
           },
           "source": {
-            "$ref": "#\/components\/schemas\/Schema_Source"
+            "$ref": "#\/components\/schemas\/SchemaSource"
           },
           "form": {
-            "$ref": "#\/components\/schemas\/Schema_Form"
+            "$ref": "#\/components\/schemas\/SchemaForm"
           },
           "metadata": {
             "$ref": "#\/components\/schemas\/Metadata"
           }
         }
       },
-      "Schema_Collection": {
+      "SchemaCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Schema_Create": {
+      "SchemaCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Schema"
@@ -6667,12 +6667,12 @@
           }
         ]
       },
-      "Schema_Form": {
+      "SchemaForm": {
         "description": "Contains a UI vocabulary to describe the UI of the schema",
         "type": "object",
         "additionalProperties": []
       },
-      "Schema_Preview_Response": {
+      "SchemaPreviewResponse": {
         "type": "object",
         "properties": {
           "preview": {
@@ -6680,12 +6680,12 @@
           }
         }
       },
-      "Schema_Source": {
+      "SchemaSource": {
         "description": "Contains the TypeSchema specification",
         "type": "object",
         "additionalProperties": []
       },
-      "Schema_Update": {
+      "SchemaUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Schema"
@@ -6711,7 +6711,7 @@
           "routes": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Scope_Route"
+              "$ref": "#\/components\/schemas\/ScopeRoute"
             }
           },
           "metadata": {
@@ -6719,18 +6719,18 @@
           }
         }
       },
-      "Scope_Categories": {
+      "ScopeCategories": {
         "type": "object",
         "properties": {
           "categories": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Scope_Category"
+              "$ref": "#\/components\/schemas\/ScopeCategory"
             }
           }
         }
       },
-      "Scope_Category": {
+      "ScopeCategory": {
         "type": "object",
         "properties": {
           "id": {
@@ -6742,12 +6742,12 @@
           "scopes": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Scope_Category_Scope"
+              "$ref": "#\/components\/schemas\/ScopeCategoryScope"
             }
           }
         }
       },
-      "Scope_Category_Scope": {
+      "ScopeCategoryScope": {
         "type": "object",
         "properties": {
           "id": {
@@ -6761,10 +6761,10 @@
           }
         }
       },
-      "Scope_Collection": {
+      "ScopeCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Scope_Create": {
+      "ScopeCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Scope"
@@ -6777,7 +6777,7 @@
           }
         ]
       },
-      "Scope_Route": {
+      "ScopeRoute": {
         "type": "object",
         "properties": {
           "routeId": {
@@ -6791,7 +6791,7 @@
           }
         }
       },
-      "Scope_Update": {
+      "ScopeUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Scope"
@@ -6801,7 +6801,7 @@
           }
         ]
       },
-      "Sdk_Generate": {
+      "SdkGenerate": {
         "type": "object",
         "properties": {
           "format": {
@@ -6812,21 +6812,21 @@
           }
         }
       },
-      "Sdk_Response": {
+      "SdkResponse": {
         "type": "object",
         "properties": {
           "types": {
-            "$ref": "#\/components\/schemas\/Sdk_Types"
+            "$ref": "#\/components\/schemas\/SdkTypes"
           }
         }
       },
-      "Sdk_Types": {
+      "SdkTypes": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "Statistic_Chart": {
+      "StatisticChart": {
         "type": "object",
         "properties": {
           "labels": {
@@ -6838,7 +6838,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Statistic_Chart_Data"
+              "$ref": "#\/components\/schemas\/StatisticChartData"
             }
           },
           "series": {
@@ -6849,11 +6849,11 @@
           }
         }
       },
-      "Statistic_Chart_Data": {
+      "StatisticChartData": {
         "type": "object",
         "additionalProperties": []
       },
-      "Statistic_Count": {
+      "StatisticCount": {
         "type": "object",
         "properties": {
           "count": {
@@ -6904,13 +6904,13 @@
           }
         }
       },
-      "Transaction_Collection": {
+      "TransactionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Transaction_Collection_Query": {
+      "TransactionCollectionQuery": {
         "allOf": [
           {
-            "$ref": "#\/components\/schemas\/Collection_Query"
+            "$ref": "#\/components\/schemas\/CollectionQuery"
           },
           {
             "type": "object",
@@ -6945,7 +6945,7 @@
           }
         ]
       },
-      "Trash_Data": {
+      "TrashData": {
         "type": "object",
         "properties": {
           "id": {
@@ -6959,10 +6959,10 @@
           }
         }
       },
-      "Trash_Data_Collection": {
+      "TrashDataCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Trash_Restore": {
+      "TrashRestore": {
         "type": "object",
         "properties": {
           "id": {
@@ -6970,7 +6970,7 @@
           }
         }
       },
-      "Trash_Types": {
+      "TrashTypes": {
         "type": "object",
         "properties": {
           "types": {
@@ -7027,10 +7027,10 @@
           }
         }
       },
-      "User_Collection": {
+      "UserCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "User_Create": {
+      "UserCreate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/User"
@@ -7052,7 +7052,7 @@
           }
         ]
       },
-      "User_Update": {
+      "UserUpdate": {
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/User"

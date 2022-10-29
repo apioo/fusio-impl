@@ -12,15 +12,15 @@
       "tags": [
         "backend.statistic"
       ],
-      "queryParameters": "Backend_App_Token_Collection_Query",
+      "queryParameters": "Backend_AppTokenCollectionQuery",
       "responses": {
-        "200": "Backend_Statistic_Chart"
+        "200": "Backend_StatisticChart"
       }
     }
   },
   "definitions": {
-    "App_Token_Collection_Query": {
-      "$extends": "Collection_Query",
+    "AppTokenCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {
@@ -51,13 +51,13 @@
         }
       }
     },
-    "Backend_App_Token_Collection_Query": {
-      "$ref": "App_Token_Collection_Query"
+    "Backend_AppTokenCollectionQuery": {
+      "$ref": "AppTokenCollectionQuery"
     },
-    "Backend_Statistic_Chart": {
-      "$ref": "Statistic_Chart"
+    "Backend_StatisticChart": {
+      "$ref": "StatisticChart"
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -71,7 +71,7 @@
         }
       }
     },
-    "Statistic_Chart": {
+    "StatisticChart": {
       "type": "object",
       "properties": {
         "labels": {
@@ -83,7 +83,7 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "Statistic_Chart_Data"
+            "$ref": "StatisticChartData"
           }
         },
         "series": {
@@ -94,7 +94,7 @@
         }
       }
     },
-    "Statistic_Chart_Data": {
+    "StatisticChartData": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

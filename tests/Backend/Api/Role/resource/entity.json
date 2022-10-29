@@ -27,7 +27,7 @@
       "tags": [
         "backend.role"
       ],
-      "request": "Backend_Role_Update",
+      "request": "Backend_RoleUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Role": {
       "$ref": "Role"
     },
-    "Backend_Role_Update": {
-      "$ref": "Role_Update"
+    "Backend_RoleUpdate": {
+      "$ref": "RoleUpdate"
     },
     "Message": {
       "type": "object",
@@ -94,7 +94,7 @@
         }
       }
     },
-    "Role_Update": {
+    "RoleUpdate": {
       "$extends": "Role",
       "type": "object"
     }

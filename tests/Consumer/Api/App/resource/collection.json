@@ -12,9 +12,9 @@
       "tags": [
         "consumer.app"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_App_Collection"
+        "200": "Consumer_AppCollection"
       }
     },
     "POST": {
@@ -27,7 +27,7 @@
       "tags": [
         "consumer.app"
       ],
-      "request": "Consumer_App_Create",
+      "request": "Consumer_AppCreate",
       "responses": {
         "201": "Message"
       }
@@ -74,13 +74,13 @@
         }
       }
     },
-    "App_Collection": {
+    "AppCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "App"
       }
     },
-    "App_Create": {
+    "AppCreate": {
       "type": "object",
       "properties": {
         "name": {
@@ -124,7 +124,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -138,11 +138,11 @@
         }
       }
     },
-    "Consumer_App_Collection": {
-      "$ref": "App_Collection"
+    "Consumer_AppCollection": {
+      "$ref": "AppCollection"
     },
-    "Consumer_App_Create": {
-      "$ref": "App_Create"
+    "Consumer_AppCreate": {
+      "$ref": "AppCreate"
     },
     "Message": {
       "type": "object",

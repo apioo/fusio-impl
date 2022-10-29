@@ -12,9 +12,9 @@
       "tags": [
         "backend.scope"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Scope_Collection"
+        "200": "Backend_ScopeCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.scope"
       ],
-      "request": "Backend_Scope_Create",
+      "request": "Backend_ScopeCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Scope_Collection": {
-      "$ref": "Scope_Collection"
+    "Backend_ScopeCollection": {
+      "$ref": "ScopeCollection"
     },
-    "Backend_Scope_Create": {
-      "$ref": "Scope_Create"
+    "Backend_ScopeCreate": {
+      "$ref": "ScopeCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,8 +60,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -116,7 +116,7 @@
         "routes": {
           "type": "array",
           "items": {
-            "$ref": "Scope_Route"
+            "$ref": "ScopeRoute"
           }
         },
         "metadata": {
@@ -124,20 +124,20 @@
         }
       }
     },
-    "Scope_Collection": {
+    "ScopeCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Scope"
       }
     },
-    "Scope_Create": {
+    "ScopeCreate": {
       "$extends": "Scope",
       "type": "object",
       "required": [
         "name"
       ]
     },
-    "Scope_Route": {
+    "ScopeRoute": {
       "type": "object",
       "properties": {
         "routeId": {

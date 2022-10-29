@@ -13,9 +13,9 @@
       "tags": [
         "consumer.payment"
       ],
-      "request": "Consumer_Payment_Checkout_Request",
+      "request": "Consumer_PaymentCheckoutRequest",
       "responses": {
-        "200": "Consumer_Payment_Checkout_Response"
+        "200": "Consumer_PaymentCheckoutResponse"
       }
     }
   },
@@ -28,13 +28,13 @@
         }
       }
     },
-    "Consumer_Payment_Checkout_Request": {
-      "$ref": "Payment_Checkout_Request"
+    "Consumer_PaymentCheckoutRequest": {
+      "$ref": "PaymentCheckoutRequest"
     },
-    "Consumer_Payment_Checkout_Response": {
-      "$ref": "Payment_Checkout_Response"
+    "Consumer_PaymentCheckoutResponse": {
+      "$ref": "PaymentCheckoutResponse"
     },
-    "Payment_Checkout_Request": {
+    "PaymentCheckoutRequest": {
       "type": "object",
       "properties": {
         "planId": {
@@ -45,7 +45,7 @@
         }
       }
     },
-    "Payment_Checkout_Response": {
+    "PaymentCheckoutResponse": {
       "type": "object",
       "properties": {
         "approvalUrl": {

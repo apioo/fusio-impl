@@ -13,7 +13,7 @@
         "consumer.user"
       ],
       "responses": {
-        "200": "Consumer_User_Account"
+        "200": "Consumer_UserAccount"
       }
     },
     "PUT": {
@@ -26,15 +26,15 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_User_Account",
+      "request": "Consumer_UserAccount",
       "responses": {
         "200": "Message"
       }
     }
   },
   "definitions": {
-    "Consumer_User_Account": {
-      "$ref": "User_Account"
+    "Consumer_UserAccount": {
+      "$ref": "UserAccount"
     },
     "Message": {
       "type": "object",
@@ -53,7 +53,7 @@
         "type": "string"
       }
     },
-    "User_Account": {
+    "UserAccount": {
       "type": "object",
       "properties": {
         "id": {

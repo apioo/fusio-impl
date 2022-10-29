@@ -13,14 +13,14 @@
       "tags": [
         "backend.action"
       ],
-      "request": "Backend_Action_Execute_Request",
+      "request": "Backend_ActionExecuteRequest",
       "responses": {
-        "200": "Backend_Action_Execute_Response"
+        "200": "Backend_ActionExecuteResponse"
       }
     }
   },
   "definitions": {
-    "Action_Execute_Request": {
+    "ActionExecuteRequest": {
       "type": "object",
       "properties": {
         "method": {
@@ -37,40 +37,40 @@
           "type": "string"
         },
         "body": {
-          "$ref": "Action_Execute_Request_Body"
+          "$ref": "ActionExecuteRequestBody"
         }
       },
       "required": [
         "method"
       ]
     },
-    "Action_Execute_Request_Body": {
+    "ActionExecuteRequestBody": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Action_Execute_Response": {
+    "ActionExecuteResponse": {
       "type": "object",
       "properties": {
         "statusCode": {
           "type": "integer"
         },
         "headers": {
-          "$ref": "Action_Execute_Response_Headers"
+          "$ref": "ActionExecuteResponseHeaders"
         },
         "body": {
-          "$ref": "Action_Execute_Response_Body"
+          "$ref": "ActionExecuteResponseBody"
         }
       }
     },
-    "Action_Execute_Response_Body": {
+    "ActionExecuteResponseBody": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Action_Execute_Response_Headers": {
+    "ActionExecuteResponseHeaders": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
@@ -84,11 +84,11 @@
         }
       }
     },
-    "Backend_Action_Execute_Request": {
-      "$ref": "Action_Execute_Request"
+    "Backend_ActionExecuteRequest": {
+      "$ref": "ActionExecuteRequest"
     },
-    "Backend_Action_Execute_Response": {
-      "$ref": "Action_Execute_Response"
+    "Backend_ActionExecuteResponse": {
+      "$ref": "ActionExecuteResponse"
     }
   }
 }

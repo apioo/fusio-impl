@@ -13,26 +13,26 @@
         "backend.connection"
       ],
       "responses": {
-        "200": "Backend_Connection_Index"
+        "200": "Backend_ConnectionIndex"
       }
     }
   },
   "definitions": {
-    "Backend_Connection_Index": {
-      "$ref": "Connection_Index"
+    "Backend_ConnectionIndex": {
+      "$ref": "ConnectionIndex"
     },
-    "Connection_Index": {
+    "ConnectionIndex": {
       "type": "object",
       "properties": {
         "connections": {
           "type": "array",
           "items": {
-            "$ref": "Connection_Index_Entry"
+            "$ref": "ConnectionIndexEntry"
           }
         }
       }
     },
-    "Connection_Index_Entry": {
+    "ConnectionIndexEntry": {
       "type": "object",
       "properties": {
         "name": {

@@ -171,12 +171,12 @@
           "tokens": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/App_Token"
+              "$ref": "#\/components\/schemas\/AppToken"
             }
           }
         }
       },
-      "App_Token": {
+      "AppToken": {
         "type": "object",
         "properties": {
           "id": {

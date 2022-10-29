@@ -12,15 +12,15 @@
       "tags": [
         "backend.config"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Config_Collection"
+        "200": "Backend_ConfigCollection"
       }
     }
   },
   "definitions": {
-    "Backend_Config_Collection": {
-      "$ref": "Config_Collection"
+    "Backend_ConfigCollection": {
+      "$ref": "ConfigCollection"
     },
     "Collection": {
       "type": "object",
@@ -42,7 +42,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -76,7 +76,7 @@
         }
       }
     },
-    "Config_Collection": {
+    "ConfigCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Config"

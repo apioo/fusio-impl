@@ -12,14 +12,14 @@
       "tags": [
         "backend.connection"
       ],
-      "queryParameters": "Form_Query",
+      "queryParameters": "FormQuery",
       "responses": {
-        "200": "Form_Container"
+        "200": "FormContainer"
       }
     }
   },
   "definitions": {
-    "Form_Container": {
+    "FormContainer": {
       "type": "object",
       "properties": {
         "element": {
@@ -27,23 +27,23 @@
           "items": {
             "oneOf": [
               {
-                "$ref": "Form_Element_Input"
+                "$ref": "FormElementInput"
               },
               {
-                "$ref": "Form_Element_Select"
+                "$ref": "FormElementSelect"
               },
               {
-                "$ref": "Form_Element_Tag"
+                "$ref": "FormElementTag"
               },
               {
-                "$ref": "Form_Element_TextArea"
+                "$ref": "FormElementTextArea"
               }
             ]
           }
         }
       }
     },
-    "Form_Element": {
+    "FormElement": {
       "type": "object",
       "properties": {
         "element": {
@@ -63,8 +63,8 @@
         "element"
       ]
     },
-    "Form_Element_Input": {
-      "$extends": "Form_Element",
+    "FormElementInput": {
+      "$extends": "FormElement",
       "type": "object",
       "properties": {
         "type": {
@@ -72,19 +72,19 @@
         }
       }
     },
-    "Form_Element_Select": {
-      "$extends": "Form_Element",
+    "FormElementSelect": {
+      "$extends": "FormElement",
       "type": "object",
       "properties": {
         "options": {
           "type": "array",
           "items": {
-            "$ref": "Form_Element_Select_Option"
+            "$ref": "FormElementSelectOption"
           }
         }
       }
     },
-    "Form_Element_Select_Option": {
+    "FormElementSelectOption": {
       "type": "object",
       "properties": {
         "key": {
@@ -95,12 +95,12 @@
         }
       }
     },
-    "Form_Element_Tag": {
-      "$extends": "Form_Element",
+    "FormElementTag": {
+      "$extends": "FormElement",
       "type": "object"
     },
-    "Form_Element_TextArea": {
-      "$extends": "Form_Element",
+    "FormElementTextArea": {
+      "$extends": "FormElement",
       "type": "object",
       "properties": {
         "mode": {
@@ -108,7 +108,7 @@
         }
       }
     },
-    "Form_Query": {
+    "FormQuery": {
       "type": "object",
       "properties": {
         "class": {

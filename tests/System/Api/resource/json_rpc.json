@@ -14,7 +14,7 @@
   },
   "definitions": {
     "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response": {
-      "$ref": "Rpc_Response_Success"
+      "$ref": "RpcResponseSuccess"
     },
     "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request": {
       "$ref": "Passthru"
@@ -23,20 +23,20 @@
       "description": "No schema information available",
       "type": "object"
     },
-    "Rpc_Response_Result": {
+    "RpcResponseResult": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Rpc_Response_Success": {
+    "RpcResponseSuccess": {
       "type": "object",
       "properties": {
         "jsonrpc": {
           "type": "string"
         },
         "result": {
-          "$ref": "Rpc_Response_Result"
+          "$ref": "RpcResponseResult"
         },
         "id": {
           "type": "integer"

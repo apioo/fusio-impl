@@ -13,9 +13,9 @@
       "tags": [
         "consumer.payment"
       ],
-      "request": "Consumer_Payment_Portal_Request",
+      "request": "Consumer_PaymentPortalRequest",
       "responses": {
-        "200": "Consumer_Payment_Portal_Response"
+        "200": "Consumer_PaymentPortalResponse"
       }
     }
   },
@@ -28,13 +28,13 @@
         }
       }
     },
-    "Consumer_Payment_Portal_Request": {
-      "$ref": "Payment_Portal_Request"
+    "Consumer_PaymentPortalRequest": {
+      "$ref": "PaymentPortalRequest"
     },
-    "Consumer_Payment_Portal_Response": {
-      "$ref": "Payment_Portal_Response"
+    "Consumer_PaymentPortalResponse": {
+      "$ref": "PaymentPortalResponse"
     },
-    "Payment_Portal_Request": {
+    "PaymentPortalRequest": {
       "type": "object",
       "properties": {
         "returnUrl": {
@@ -42,7 +42,7 @@
         }
       }
     },
-    "Payment_Portal_Response": {
+    "PaymentPortalResponse": {
       "type": "object",
       "properties": {
         "redirectUrl": {

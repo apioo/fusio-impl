@@ -27,7 +27,7 @@
       "tags": [
         "backend.category"
       ],
-      "request": "Backend_Category_Update",
+      "request": "Backend_CategoryUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Category": {
       "$ref": "Category"
     },
-    "Backend_Category_Update": {
-      "$ref": "Category_Update"
+    "Backend_CategoryUpdate": {
+      "$ref": "CategoryUpdate"
     },
     "Category": {
       "type": "object",
@@ -74,7 +74,7 @@
         }
       }
     },
-    "Category_Update": {
+    "CategoryUpdate": {
       "$extends": "Category",
       "type": "object"
     },

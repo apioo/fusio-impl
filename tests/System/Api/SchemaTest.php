@@ -158,12 +158,12 @@ JSON;
                     "tokens": {
                         "type": "array",
                         "items": {
-                            "$ref": "App_Token"
+                            "$ref": "AppToken"
                         }
                     }
                 }
             },
-            "App_Token": {
+            "AppToken": {
                 "type": "object",
                 "properties": {
                     "id": {

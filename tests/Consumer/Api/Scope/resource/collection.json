@@ -12,9 +12,9 @@
       "tags": [
         "consumer.scope"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Scope_Collection"
+        "200": "Consumer_ScopeCollection"
       }
     }
   },
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -53,8 +53,8 @@
         }
       }
     },
-    "Consumer_Scope_Collection": {
-      "$ref": "Scope_Collection"
+    "Consumer_ScopeCollection": {
+      "$ref": "ScopeCollection"
     },
     "Metadata": {
       "type": "object",
@@ -80,7 +80,7 @@
         }
       }
     },
-    "Scope_Collection": {
+    "ScopeCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Scope"

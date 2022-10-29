@@ -13,7 +13,7 @@
         "backend.sdk"
       ],
       "responses": {
-        "200": "Backend_Sdk_Response"
+        "200": "Backend_SdkResponse"
       }
     },
     "POST": {
@@ -26,18 +26,18 @@
       "tags": [
         "backend.sdk"
       ],
-      "request": "Backend_Sdk_Generate",
+      "request": "Backend_SdkGenerate",
       "responses": {
         "200": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Sdk_Generate": {
-      "$ref": "Sdk_Generate"
+    "Backend_SdkGenerate": {
+      "$ref": "SdkGenerate"
     },
-    "Backend_Sdk_Response": {
-      "$ref": "Sdk_Response"
+    "Backend_SdkResponse": {
+      "$ref": "SdkResponse"
     },
     "Message": {
       "type": "object",
@@ -50,7 +50,7 @@
         }
       }
     },
-    "Sdk_Generate": {
+    "SdkGenerate": {
       "type": "object",
       "properties": {
         "format": {
@@ -61,15 +61,15 @@
         }
       }
     },
-    "Sdk_Response": {
+    "SdkResponse": {
       "type": "object",
       "properties": {
         "types": {
-          "$ref": "Sdk_Types"
+          "$ref": "SdkTypes"
         }
       }
     },
-    "Sdk_Types": {
+    "SdkTypes": {
       "type": "object",
       "additionalProperties": {
         "type": "string"

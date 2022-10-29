@@ -13,7 +13,7 @@
       "tags": [
         "backend.schema"
       ],
-      "request": "Backend_Schema_Form",
+      "request": "Backend_SchemaForm",
       "responses": {
         "200": "Message"
       }
@@ -28,8 +28,8 @@
         }
       }
     },
-    "Backend_Schema_Form": {
-      "$ref": "Schema_Form"
+    "Backend_SchemaForm": {
+      "$ref": "SchemaForm"
     },
     "Message": {
       "type": "object",
@@ -42,7 +42,7 @@
         }
       }
     },
-    "Schema_Form": {
+    "SchemaForm": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
       "type": "object",
       "additionalProperties": {

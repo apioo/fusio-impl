@@ -7,15 +7,15 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_User_Register",
+      "request": "Consumer_UserRegister",
       "responses": {
         "200": "Message"
       }
     }
   },
   "definitions": {
-    "Consumer_User_Register": {
-      "$ref": "User_Register"
+    "Consumer_UserRegister": {
+      "$ref": "UserRegister"
     },
     "Message": {
       "type": "object",
@@ -28,7 +28,7 @@
         }
       }
     },
-    "User_Register": {
+    "UserRegister": {
       "type": "object",
       "properties": {
         "name": {

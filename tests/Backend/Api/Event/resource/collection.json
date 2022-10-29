@@ -12,9 +12,9 @@
       "tags": [
         "backend.event"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Event_Collection"
+        "200": "Backend_EventCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Event_Create",
+      "request": "Backend_EventCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Event_Collection": {
-      "$ref": "Event_Collection"
+    "Backend_EventCollection": {
+      "$ref": "EventCollection"
     },
-    "Backend_Event_Create": {
-      "$ref": "Event_Create"
+    "Backend_EventCreate": {
+      "$ref": "EventCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,8 +60,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -104,13 +104,13 @@
         }
       }
     },
-    "Event_Collection": {
+    "EventCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Event"
       }
     },
-    "Event_Create": {
+    "EventCreate": {
       "$extends": "Event",
       "type": "object",
       "required": [

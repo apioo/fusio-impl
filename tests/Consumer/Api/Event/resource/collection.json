@@ -12,9 +12,9 @@
       "tags": [
         "consumer.event"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Event_Collection"
+        "200": "Consumer_EventCollection"
       }
     }
   },
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -53,8 +53,8 @@
         }
       }
     },
-    "Consumer_Event_Collection": {
-      "$ref": "Event_Collection"
+    "Consumer_EventCollection": {
+      "$ref": "EventCollection"
     },
     "Event": {
       "type": "object",
@@ -73,7 +73,7 @@
         }
       }
     },
-    "Event_Collection": {
+    "EventCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Event"

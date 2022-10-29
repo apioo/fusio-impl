@@ -27,7 +27,7 @@
       "tags": [
         "backend.page"
       ],
-      "request": "Backend_Page_Update",
+      "request": "Backend_PageUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Page": {
       "$ref": "Page"
     },
-    "Backend_Page_Update": {
-      "$ref": "Page_Update"
+    "Backend_PageUpdate": {
+      "$ref": "PageUpdate"
     },
     "Message": {
       "type": "object",
@@ -102,7 +102,7 @@
         }
       }
     },
-    "Page_Update": {
+    "PageUpdate": {
       "$extends": "Page",
       "type": "object"
     }

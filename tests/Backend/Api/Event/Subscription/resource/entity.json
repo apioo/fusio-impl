@@ -14,7 +14,7 @@
         "backend.event"
       ],
       "responses": {
-        "200": "Backend_Event_Subscription"
+        "200": "Backend_EventSubscription"
       }
     },
     "PUT": {
@@ -27,7 +27,7 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Event_Subscription_Update",
+      "request": "Backend_EventSubscriptionUpdate",
       "responses": {
         "200": "Message"
       }
@@ -56,13 +56,13 @@
         }
       }
     },
-    "Backend_Event_Subscription": {
-      "$ref": "Event_Subscription"
+    "Backend_EventSubscription": {
+      "$ref": "EventSubscription"
     },
-    "Backend_Event_Subscription_Update": {
-      "$ref": "Event_Subscription_Update"
+    "Backend_EventSubscriptionUpdate": {
+      "$ref": "EventSubscriptionUpdate"
     },
-    "Event_Subscription": {
+    "EventSubscription": {
       "type": "object",
       "properties": {
         "id": {
@@ -80,12 +80,12 @@
         "responses": {
           "type": "array",
           "items": {
-            "$ref": "Event_Subscription_Response"
+            "$ref": "EventSubscriptionResponse"
           }
         }
       }
     },
-    "Event_Subscription_Response": {
+    "EventSubscriptionResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -109,8 +109,8 @@
         }
       }
     },
-    "Event_Subscription_Update": {
-      "$extends": "Event_Subscription",
+    "EventSubscriptionUpdate": {
+      "$extends": "EventSubscription",
       "type": "object"
     },
     "Message": {

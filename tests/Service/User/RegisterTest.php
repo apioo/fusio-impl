@@ -23,8 +23,8 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Config_Update;
-use Fusio\Model\Consumer\User_Register;
+use Fusio\Model\Backend\ConfigUpdate;
+use Fusio\Model\Consumer\UserRegister;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Service\User\Mailer;
@@ -60,7 +60,7 @@ class RegisterTest extends ControllerDbTestCase
             Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
-        $user = new User_Register();
+        $user = new UserRegister();
         $user->setName('new_user');
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
@@ -93,7 +93,7 @@ class RegisterTest extends ControllerDbTestCase
             Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
-        $user = new User_Register();
+        $user = new UserRegister();
         $user->setName('new_user');
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
@@ -126,7 +126,7 @@ class RegisterTest extends ControllerDbTestCase
             Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
-        $user = new User_Register();
+        $user = new UserRegister();
         $user->setName('new_user');
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
@@ -161,7 +161,7 @@ class RegisterTest extends ControllerDbTestCase
             Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
-        $user = new User_Register();
+        $user = new UserRegister();
         $user->setName('new_user');
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
@@ -200,11 +200,11 @@ class RegisterTest extends ControllerDbTestCase
         /** @var Config $config */
         $config = Environment::getService('config_service');
 
-        $update = new Config_Update();
+        $update = new ConfigUpdate();
         $update->setValue($reCaptchaSecret);
         $config->update($this->getConfigId('recaptcha_secret'), $update, UserContext::newAnonymousContext());
 
-        $update = new Config_Update();
+        $update = new ConfigUpdate();
         $update->setValue($userApproval);
         $config->update($this->getConfigId('user_approval'), $update, UserContext::newAnonymousContext()); 
 

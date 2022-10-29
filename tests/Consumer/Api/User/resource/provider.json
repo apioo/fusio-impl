@@ -8,9 +8,9 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_User_Provider",
+      "request": "Consumer_UserProvider",
       "responses": {
-        "200": "Consumer_User_JWT"
+        "200": "Consumer_UserJWT"
       }
     }
   },
@@ -23,13 +23,13 @@
         }
       }
     },
-    "Consumer_User_JWT": {
-      "$ref": "User_JWT"
+    "Consumer_UserJWT": {
+      "$ref": "UserJWT"
     },
-    "Consumer_User_Provider": {
-      "$ref": "User_Provider"
+    "Consumer_UserProvider": {
+      "$ref": "UserProvider"
     },
-    "User_JWT": {
+    "UserJWT": {
       "type": "object",
       "properties": {
         "token": {
@@ -46,7 +46,7 @@
         }
       }
     },
-    "User_Provider": {
+    "UserProvider": {
       "type": "object",
       "properties": {
         "code": {

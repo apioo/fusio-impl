@@ -14,12 +14,12 @@
         "backend.app"
       ],
       "responses": {
-        "200": "Backend_App_Token"
+        "200": "Backend_AppToken"
       }
     }
   },
   "definitions": {
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -58,8 +58,8 @@
         }
       }
     },
-    "Backend_App_Token": {
-      "$ref": "App_Token"
+    "Backend_AppToken": {
+      "$ref": "AppToken"
     }
   }
 }

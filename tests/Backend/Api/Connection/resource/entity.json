@@ -27,7 +27,7 @@
       "tags": [
         "backend.connection"
       ],
-      "request": "Backend_Connection_Update",
+      "request": "Backend_ConnectionUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Connection": {
       "$ref": "Connection"
     },
-    "Backend_Connection_Update": {
-      "$ref": "Connection_Update"
+    "Backend_ConnectionUpdate": {
+      "$ref": "ConnectionUpdate"
     },
     "Connection": {
       "type": "object",
@@ -76,21 +76,21 @@
           "type": "string"
         },
         "config": {
-          "$ref": "Connection_Config"
+          "$ref": "ConnectionConfig"
         },
         "metadata": {
           "$ref": "Metadata"
         }
       }
     },
-    "Connection_Config": {
+    "ConnectionConfig": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       },
       "maxProperties": 16
     },
-    "Connection_Update": {
+    "ConnectionUpdate": {
       "$extends": "Connection",
       "type": "object"
     },

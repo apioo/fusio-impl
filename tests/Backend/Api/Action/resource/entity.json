@@ -27,7 +27,7 @@
       "tags": [
         "backend.action"
       ],
-      "request": "Backend_Action_Update",
+      "request": "Backend_ActionUpdate",
       "responses": {
         "200": "Message"
       }
@@ -71,20 +71,20 @@
           "type": "string"
         },
         "config": {
-          "$ref": "Action_Config"
+          "$ref": "ActionConfig"
         },
         "metadata": {
           "$ref": "Metadata"
         }
       }
     },
-    "Action_Config": {
+    "ActionConfig": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Action_Update": {
+    "ActionUpdate": {
       "$extends": "Action",
       "type": "object"
     },
@@ -99,8 +99,8 @@
     "Backend_Action": {
       "$ref": "Action"
     },
-    "Backend_Action_Update": {
-      "$ref": "Action_Update"
+    "Backend_ActionUpdate": {
+      "$ref": "ActionUpdate"
     },
     "Message": {
       "type": "object",

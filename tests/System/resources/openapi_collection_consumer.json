@@ -21,7 +21,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_PasswordReset"
+                "$ref": "#\/components\/schemas\/Consumer_UserPasswordReset"
               }
             }
           }
@@ -49,7 +49,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Email"
+                "$ref": "#\/components\/schemas\/Consumer_UserEmail"
               }
             }
           }
@@ -79,7 +79,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Register"
+                "$ref": "#\/components\/schemas\/Consumer_UserRegister"
               }
             }
           }
@@ -109,7 +109,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Provider"
+                "$ref": "#\/components\/schemas\/Consumer_UserProvider"
               }
             }
           }
@@ -120,7 +120,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
                 }
               }
             }
@@ -149,7 +149,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Refresh"
+                "$ref": "#\/components\/schemas\/Consumer_UserRefresh"
               }
             }
           }
@@ -160,7 +160,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
                 }
               }
             }
@@ -177,7 +177,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Login"
+                "$ref": "#\/components\/schemas\/Consumer_UserLogin"
               }
             }
           }
@@ -188,7 +188,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
                 }
               }
             }
@@ -208,7 +208,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Meta"
+                  "$ref": "#\/components\/schemas\/Consumer_AuthorizeMeta"
                 }
               }
             }
@@ -225,7 +225,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Authorize_Request"
+                "$ref": "#\/components\/schemas\/Consumer_AuthorizeRequest"
               }
             }
           }
@@ -236,7 +236,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_AuthorizeResponse"
                 }
               }
             }
@@ -255,7 +255,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Activate"
+                "$ref": "#\/components\/schemas\/Consumer_UserActivate"
               }
             }
           }
@@ -285,7 +285,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Account_ChangePassword"
+                "$ref": "#\/components\/schemas\/Backend_AccountChangePassword"
               }
             }
           }
@@ -323,7 +323,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_Account"
+                  "$ref": "#\/components\/schemas\/Consumer_UserAccount"
                 }
               }
             }
@@ -347,7 +347,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Account"
+                "$ref": "#\/components\/schemas\/Consumer_UserAccount"
               }
             }
           }
@@ -448,7 +448,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_TransactionCollection"
                 }
               }
             }
@@ -475,7 +475,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
+                  "$ref": "#\/components\/schemas\/Consumer_EventSubscription"
                 }
               }
             }
@@ -499,7 +499,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Update"
+                "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionUpdate"
               }
             }
           }
@@ -598,7 +598,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionCollection"
                 }
               }
             }
@@ -622,7 +622,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Create"
+                "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionCreate"
               }
             }
           }
@@ -686,7 +686,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_ScopeCollection"
                 }
               }
             }
@@ -776,7 +776,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_PlanCollection"
                 }
               }
             }
@@ -802,7 +802,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Payment_Checkout_Request"
+                "$ref": "#\/components\/schemas\/Consumer_PaymentCheckoutRequest"
               }
             }
           }
@@ -813,7 +813,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Payment_Checkout_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_PaymentCheckoutResponse"
                 }
               }
             }
@@ -849,7 +849,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Payment_Portal_Request"
+                "$ref": "#\/components\/schemas\/Consumer_PaymentPortalRequest"
               }
             }
           }
@@ -860,7 +860,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Payment_Portal_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_PaymentPortalResponse"
                 }
               }
             }
@@ -953,7 +953,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Page_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_PageCollection"
                 }
               }
             }
@@ -1062,7 +1062,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Log_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_LogCollection"
                 }
               }
             }
@@ -1152,7 +1152,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Grant_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_GrantCollection"
                 }
               }
             }
@@ -1205,7 +1205,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Event_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_EventCollection"
                 }
               }
             }
@@ -1256,7 +1256,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_App_Update"
+                "$ref": "#\/components\/schemas\/Consumer_AppUpdate"
               }
             }
           }
@@ -1355,7 +1355,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_App_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_AppCollection"
                 }
               }
             }
@@ -1379,7 +1379,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_App_Create"
+                "$ref": "#\/components\/schemas\/Consumer_AppCreate"
               }
             }
           }
@@ -1408,7 +1408,7 @@
   },
   "components": {
     "schemas": {
-      "Account_ChangePassword": {
+      "AccountChangePassword": {
         "type": "object",
         "properties": {
           "oldPassword": {
@@ -1468,10 +1468,10 @@
           }
         }
       },
-      "App_Collection": {
+      "AppCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "App_Create": {
+      "AppCreate": {
         "type": "object",
         "properties": {
           "name": {
@@ -1495,7 +1495,7 @@
           "scopes"
         ]
       },
-      "App_Update": {
+      "AppUpdate": {
         "type": "object",
         "properties": {
           "name": {
@@ -1519,7 +1519,7 @@
           "scopes"
         ]
       },
-      "Authorize_Meta": {
+      "AuthorizeMeta": {
         "type": "object",
         "properties": {
           "name": {
@@ -1536,7 +1536,7 @@
           }
         }
       },
-      "Authorize_Request": {
+      "AuthorizeRequest": {
         "type": "object",
         "properties": {
           "responseType": {
@@ -1565,14 +1565,14 @@
           "allow"
         ]
       },
-      "Authorize_Response": {
+      "AuthorizeResponse": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string"
           },
           "token": {
-            "$ref": "#\/components\/schemas\/Authorize_Response_Token"
+            "$ref": "#\/components\/schemas\/AuthorizeResponseToken"
           },
           "code": {
             "type": "string"
@@ -1582,7 +1582,7 @@
           }
         }
       },
-      "Authorize_Response_Token": {
+      "AuthorizeResponseToken": {
         "type": "object",
         "properties": {
           "access_token": {
@@ -1599,8 +1599,8 @@
           }
         }
       },
-      "Backend_Account_ChangePassword": {
-        "$ref": "#\/components\/schemas\/Account_ChangePassword"
+      "Backend_AccountChangePassword": {
+        "$ref": "#\/components\/schemas\/AccountChangePassword"
       },
       "Collection": {
         "type": "object",
@@ -1625,107 +1625,107 @@
       "Consumer_App": {
         "$ref": "#\/components\/schemas\/App"
       },
-      "Consumer_App_Collection": {
-        "$ref": "#\/components\/schemas\/App_Collection"
+      "Consumer_AppCollection": {
+        "$ref": "#\/components\/schemas\/AppCollection"
       },
-      "Consumer_App_Create": {
-        "$ref": "#\/components\/schemas\/App_Create"
+      "Consumer_AppCreate": {
+        "$ref": "#\/components\/schemas\/AppCreate"
       },
-      "Consumer_App_Update": {
-        "$ref": "#\/components\/schemas\/App_Update"
+      "Consumer_AppUpdate": {
+        "$ref": "#\/components\/schemas\/AppUpdate"
       },
-      "Consumer_Authorize_Meta": {
-        "$ref": "#\/components\/schemas\/Authorize_Meta"
+      "Consumer_AuthorizeMeta": {
+        "$ref": "#\/components\/schemas\/AuthorizeMeta"
       },
-      "Consumer_Authorize_Request": {
-        "$ref": "#\/components\/schemas\/Authorize_Request"
+      "Consumer_AuthorizeRequest": {
+        "$ref": "#\/components\/schemas\/AuthorizeRequest"
       },
-      "Consumer_Authorize_Response": {
-        "$ref": "#\/components\/schemas\/Authorize_Response"
+      "Consumer_AuthorizeResponse": {
+        "$ref": "#\/components\/schemas\/AuthorizeResponse"
       },
-      "Consumer_Event_Collection": {
-        "$ref": "#\/components\/schemas\/Event_Collection"
+      "Consumer_EventCollection": {
+        "$ref": "#\/components\/schemas\/EventCollection"
       },
-      "Consumer_Event_Subscription": {
-        "$ref": "#\/components\/schemas\/Event_Subscription"
+      "Consumer_EventSubscription": {
+        "$ref": "#\/components\/schemas\/EventSubscription"
       },
-      "Consumer_Event_Subscription_Collection": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
+      "Consumer_EventSubscriptionCollection": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionCollection"
       },
-      "Consumer_Event_Subscription_Create": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Create"
+      "Consumer_EventSubscriptionCreate": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionCreate"
       },
-      "Consumer_Event_Subscription_Update": {
-        "$ref": "#\/components\/schemas\/Event_Subscription_Update"
+      "Consumer_EventSubscriptionUpdate": {
+        "$ref": "#\/components\/schemas\/EventSubscriptionUpdate"
       },
-      "Consumer_Grant_Collection": {
-        "$ref": "#\/components\/schemas\/Grant_Collection"
+      "Consumer_GrantCollection": {
+        "$ref": "#\/components\/schemas\/GrantCollection"
       },
       "Consumer_Log": {
         "$ref": "#\/components\/schemas\/Log"
       },
-      "Consumer_Log_Collection": {
-        "$ref": "#\/components\/schemas\/Log_Collection"
+      "Consumer_LogCollection": {
+        "$ref": "#\/components\/schemas\/LogCollection"
       },
       "Consumer_Page": {
         "$ref": "#\/components\/schemas\/Page"
       },
-      "Consumer_Page_Collection": {
-        "$ref": "#\/components\/schemas\/Page_Collection"
+      "Consumer_PageCollection": {
+        "$ref": "#\/components\/schemas\/PageCollection"
       },
-      "Consumer_Payment_Checkout_Request": {
-        "$ref": "#\/components\/schemas\/Payment_Checkout_Request"
+      "Consumer_PaymentCheckoutRequest": {
+        "$ref": "#\/components\/schemas\/PaymentCheckoutRequest"
       },
-      "Consumer_Payment_Checkout_Response": {
-        "$ref": "#\/components\/schemas\/Payment_Checkout_Response"
+      "Consumer_PaymentCheckoutResponse": {
+        "$ref": "#\/components\/schemas\/PaymentCheckoutResponse"
       },
-      "Consumer_Payment_Portal_Request": {
-        "$ref": "#\/components\/schemas\/Payment_Portal_Request"
+      "Consumer_PaymentPortalRequest": {
+        "$ref": "#\/components\/schemas\/PaymentPortalRequest"
       },
-      "Consumer_Payment_Portal_Response": {
-        "$ref": "#\/components\/schemas\/Payment_Portal_Response"
+      "Consumer_PaymentPortalResponse": {
+        "$ref": "#\/components\/schemas\/PaymentPortalResponse"
       },
       "Consumer_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
       },
-      "Consumer_Plan_Collection": {
-        "$ref": "#\/components\/schemas\/Plan_Collection"
+      "Consumer_PlanCollection": {
+        "$ref": "#\/components\/schemas\/PlanCollection"
       },
-      "Consumer_Scope_Collection": {
-        "$ref": "#\/components\/schemas\/Scope_Collection"
+      "Consumer_ScopeCollection": {
+        "$ref": "#\/components\/schemas\/ScopeCollection"
       },
       "Consumer_Transaction": {
         "$ref": "#\/components\/schemas\/Transaction"
       },
-      "Consumer_Transaction_Collection": {
-        "$ref": "#\/components\/schemas\/Transaction_Collection"
+      "Consumer_TransactionCollection": {
+        "$ref": "#\/components\/schemas\/TransactionCollection"
       },
-      "Consumer_User_Account": {
-        "$ref": "#\/components\/schemas\/User_Account"
+      "Consumer_UserAccount": {
+        "$ref": "#\/components\/schemas\/UserAccount"
       },
-      "Consumer_User_Activate": {
-        "$ref": "#\/components\/schemas\/User_Activate"
+      "Consumer_UserActivate": {
+        "$ref": "#\/components\/schemas\/UserActivate"
       },
-      "Consumer_User_Email": {
-        "$ref": "#\/components\/schemas\/User_Email"
+      "Consumer_UserEmail": {
+        "$ref": "#\/components\/schemas\/UserEmail"
       },
-      "Consumer_User_JWT": {
-        "$ref": "#\/components\/schemas\/User_JWT"
+      "Consumer_UserJWT": {
+        "$ref": "#\/components\/schemas\/UserJWT"
       },
-      "Consumer_User_Login": {
-        "$ref": "#\/components\/schemas\/User_Login"
+      "Consumer_UserLogin": {
+        "$ref": "#\/components\/schemas\/UserLogin"
       },
-      "Consumer_User_PasswordReset": {
-        "$ref": "#\/components\/schemas\/User_PasswordReset"
+      "Consumer_UserPasswordReset": {
+        "$ref": "#\/components\/schemas\/UserPasswordReset"
       },
-      "Consumer_User_Provider": {
-        "$ref": "#\/components\/schemas\/User_Provider"
+      "Consumer_UserProvider": {
+        "$ref": "#\/components\/schemas\/UserProvider"
       },
-      "Consumer_User_Refresh": {
-        "$ref": "#\/components\/schemas\/User_Refresh"
+      "Consumer_UserRefresh": {
+        "$ref": "#\/components\/schemas\/UserRefresh"
       },
-      "Consumer_User_Register": {
-        "$ref": "#\/components\/schemas\/User_Register"
+      "Consumer_UserRegister": {
+        "$ref": "#\/components\/schemas\/UserRegister"
       },
       "Event": {
         "type": "object",
@@ -1744,10 +1744,10 @@
           }
         }
       },
-      "Event_Collection": {
+      "EventCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Event_Subscription": {
+      "EventSubscription": {
         "type": "object",
         "properties": {
           "id": {
@@ -1765,15 +1765,15 @@
           "responses": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Event_Subscription_Response"
+              "$ref": "#\/components\/schemas\/EventSubscriptionResponse"
             }
           }
         }
       },
-      "Event_Subscription_Collection": {
+      "EventSubscriptionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Event_Subscription_Create": {
+      "EventSubscriptionCreate": {
         "type": "object",
         "properties": {
           "event": {
@@ -1788,7 +1788,7 @@
           "endpoint"
         ]
       },
-      "Event_Subscription_Response": {
+      "EventSubscriptionResponse": {
         "type": "object",
         "properties": {
           "status": {
@@ -1805,7 +1805,7 @@
           }
         }
       },
-      "Event_Subscription_Update": {
+      "EventSubscriptionUpdate": {
         "type": "object",
         "properties": {
           "event": {
@@ -1835,7 +1835,7 @@
           }
         }
       },
-      "Grant_Collection": {
+      "GrantCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Log": {
@@ -1871,7 +1871,7 @@
           }
         }
       },
-      "Log_Collection": {
+      "LogCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Message": {
@@ -1911,10 +1911,10 @@
           }
         }
       },
-      "Page_Collection": {
+      "PageCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "Payment_Checkout_Request": {
+      "PaymentCheckoutRequest": {
         "type": "object",
         "properties": {
           "planId": {
@@ -1925,7 +1925,7 @@
           }
         }
       },
-      "Payment_Checkout_Response": {
+      "PaymentCheckoutResponse": {
         "type": "object",
         "properties": {
           "approvalUrl": {
@@ -1933,7 +1933,7 @@
           }
         }
       },
-      "Payment_Portal_Request": {
+      "PaymentPortalRequest": {
         "type": "object",
         "properties": {
           "returnUrl": {
@@ -1941,7 +1941,7 @@
           }
         }
       },
-      "Payment_Portal_Response": {
+      "PaymentPortalResponse": {
         "type": "object",
         "properties": {
           "redirectUrl": {
@@ -1972,7 +1972,7 @@
           }
         }
       },
-      "Plan_Collection": {
+      "PlanCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Scope": {
@@ -1993,7 +1993,7 @@
           }
         }
       },
-      "Scope_Collection": {
+      "ScopeCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Transaction": {
@@ -2034,10 +2034,10 @@
           }
         }
       },
-      "Transaction_Collection": {
+      "TransactionCollection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
-      "User_Account": {
+      "UserAccount": {
         "type": "object",
         "properties": {
           "id": {
@@ -2073,7 +2073,7 @@
           }
         }
       },
-      "User_Activate": {
+      "UserActivate": {
         "type": "object",
         "properties": {
           "token": {
@@ -2084,7 +2084,7 @@
           "token"
         ]
       },
-      "User_Email": {
+      "UserEmail": {
         "type": "object",
         "properties": {
           "email": {
@@ -2098,7 +2098,7 @@
           "email"
         ]
       },
-      "User_JWT": {
+      "UserJWT": {
         "type": "object",
         "properties": {
           "token": {
@@ -2115,7 +2115,7 @@
           }
         }
       },
-      "User_Login": {
+      "UserLogin": {
         "type": "object",
         "properties": {
           "username": {
@@ -2132,7 +2132,7 @@
           }
         }
       },
-      "User_PasswordReset": {
+      "UserPasswordReset": {
         "type": "object",
         "properties": {
           "token": {
@@ -2147,7 +2147,7 @@
           "newPassword"
         ]
       },
-      "User_Provider": {
+      "UserProvider": {
         "type": "object",
         "properties": {
           "code": {
@@ -2161,7 +2161,7 @@
           }
         }
       },
-      "User_Refresh": {
+      "UserRefresh": {
         "type": "object",
         "properties": {
           "refresh_token": {
@@ -2169,7 +2169,7 @@
           }
         }
       },
-      "User_Register": {
+      "UserRegister": {
         "type": "object",
         "properties": {
           "name": {

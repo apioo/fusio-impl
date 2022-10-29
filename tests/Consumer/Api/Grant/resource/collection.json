@@ -12,9 +12,9 @@
       "tags": [
         "consumer.grant"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Grant_Collection"
+        "200": "Consumer_GrantCollection"
       }
     }
   },
@@ -79,7 +79,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -93,8 +93,8 @@
         }
       }
     },
-    "Consumer_Grant_Collection": {
-      "$ref": "Grant_Collection"
+    "Consumer_GrantCollection": {
+      "$ref": "GrantCollection"
     },
     "Grant": {
       "type": "object",
@@ -111,7 +111,7 @@
         }
       }
     },
-    "Grant_Collection": {
+    "GrantCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Grant"

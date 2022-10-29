@@ -14,7 +14,7 @@
         "backend.marketplace"
       ],
       "responses": {
-        "200": "Backend_Marketplace_Local_App"
+        "200": "Backend_MarketplaceLocalApp"
       }
     },
     "PUT": {
@@ -55,10 +55,10 @@
         }
       }
     },
-    "Backend_Marketplace_Local_App": {
-      "$ref": "Marketplace_Local_App"
+    "Backend_MarketplaceLocalApp": {
+      "$ref": "MarketplaceLocalApp"
     },
-    "Marketplace_App": {
+    "MarketplaceApp": {
       "type": "object",
       "properties": {
         "version": {
@@ -81,12 +81,12 @@
         }
       }
     },
-    "Marketplace_Local_App": {
-      "$extends": "Marketplace_App",
+    "MarketplaceLocalApp": {
+      "$extends": "MarketplaceApp",
       "type": "object",
       "properties": {
         "remote": {
-          "$ref": "Marketplace_App"
+          "$ref": "MarketplaceApp"
         }
       }
     },

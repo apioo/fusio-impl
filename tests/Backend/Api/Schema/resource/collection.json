@@ -12,9 +12,9 @@
       "tags": [
         "backend.schema"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Schema_Collection"
+        "200": "Backend_SchemaCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.schema"
       ],
-      "request": "Backend_Schema_Create",
+      "request": "Backend_SchemaCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Schema_Collection": {
-      "$ref": "Schema_Collection"
+    "Backend_SchemaCollection": {
+      "$ref": "SchemaCollection"
     },
-    "Backend_Schema_Create": {
-      "$ref": "Schema_Create"
+    "Backend_SchemaCreate": {
+      "$ref": "SchemaCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,8 +60,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -114,37 +114,37 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "$ref": "Schema_Source"
+          "$ref": "SchemaSource"
         },
         "form": {
-          "$ref": "Schema_Form"
+          "$ref": "SchemaForm"
         },
         "metadata": {
           "$ref": "Metadata"
         }
       }
     },
-    "Schema_Collection": {
+    "SchemaCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Schema"
       }
     },
-    "Schema_Create": {
+    "SchemaCreate": {
       "$extends": "Schema",
       "type": "object",
       "required": [
         "name"
       ]
     },
-    "Schema_Form": {
+    "SchemaForm": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Schema_Source": {
+    "SchemaSource": {
       "description": "Contains the TypeSchema specification",
       "type": "object",
       "additionalProperties": {

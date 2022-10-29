@@ -12,9 +12,9 @@
       "tags": [
         "backend.audit"
       ],
-      "queryParameters": "Backend_Audit_Collection_Query",
+      "queryParameters": "Backend_AuditCollectionQuery",
       "responses": {
-        "200": "Backend_Audit_Collection"
+        "200": "Backend_AuditCollection"
       }
     }
   },
@@ -63,12 +63,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -121,7 +121,7 @@
           "type": "string"
         },
         "content": {
-          "$ref": "Audit_Object"
+          "$ref": "AuditObject"
         },
         "date": {
           "format": "date-time",
@@ -129,14 +129,14 @@
         }
       }
     },
-    "Audit_Collection": {
+    "AuditCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Audit"
       }
     },
-    "Audit_Collection_Query": {
-      "$extends": "Collection_Query",
+    "AuditCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {
@@ -167,18 +167,18 @@
         }
       }
     },
-    "Audit_Object": {
+    "AuditObject": {
       "description": "A key value object containing the changes",
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Backend_Audit_Collection": {
-      "$ref": "Audit_Collection"
+    "Backend_AuditCollection": {
+      "$ref": "AuditCollection"
     },
-    "Backend_Audit_Collection_Query": {
-      "$ref": "Audit_Collection_Query"
+    "Backend_AuditCollectionQuery": {
+      "$ref": "AuditCollectionQuery"
     },
     "Collection": {
       "type": "object",
@@ -200,7 +200,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {

@@ -12,9 +12,9 @@
       "tags": [
         "consumer.log"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Log_Collection"
+        "200": "Consumer_LogCollection"
       }
     }
   },
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -53,8 +53,8 @@
         }
       }
     },
-    "Consumer_Log_Collection": {
-      "$ref": "Log_Collection"
+    "Consumer_LogCollection": {
+      "$ref": "LogCollection"
     },
     "Log": {
       "type": "object",
@@ -89,7 +89,7 @@
         }
       }
     },
-    "Log_Collection": {
+    "LogCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Log"

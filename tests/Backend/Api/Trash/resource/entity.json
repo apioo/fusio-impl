@@ -13,9 +13,9 @@
       "tags": [
         "backend.trash"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Trash_Data_Collection"
+        "200": "Backend_TrashDataCollection"
       }
     },
     "POST": {
@@ -28,7 +28,7 @@
       "tags": [
         "backend.trash"
       ],
-      "request": "Backend_Trash_Restore",
+      "request": "Backend_TrashRestore",
       "responses": {
         "200": "Message"
       }
@@ -43,11 +43,11 @@
         }
       }
     },
-    "Backend_Trash_Data_Collection": {
-      "$ref": "Trash_Data_Collection"
+    "Backend_TrashDataCollection": {
+      "$ref": "TrashDataCollection"
     },
-    "Backend_Trash_Restore": {
-      "$ref": "Trash_Restore"
+    "Backend_TrashRestore": {
+      "$ref": "TrashRestore"
     },
     "Collection": {
       "type": "object",
@@ -69,7 +69,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -94,7 +94,7 @@
         }
       }
     },
-    "Trash_Data": {
+    "TrashData": {
       "type": "object",
       "properties": {
         "id": {
@@ -108,13 +108,13 @@
         }
       }
     },
-    "Trash_Data_Collection": {
+    "TrashDataCollection": {
       "$ref": "Collection",
       "$template": {
-        "T": "Trash_Data"
+        "T": "TrashData"
       }
     },
-    "Trash_Restore": {
+    "TrashRestore": {
       "type": "object",
       "properties": {
         "id": {

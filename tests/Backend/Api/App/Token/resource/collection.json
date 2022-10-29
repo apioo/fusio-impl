@@ -12,14 +12,14 @@
       "tags": [
         "backend.app"
       ],
-      "queryParameters": "Backend_App_Token_Collection_Query",
+      "queryParameters": "Backend_AppTokenCollectionQuery",
       "responses": {
-        "200": "Backend_App_Token_Collection"
+        "200": "Backend_AppTokenCollection"
       }
     }
   },
   "definitions": {
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -50,14 +50,14 @@
         }
       }
     },
-    "App_Token_Collection": {
+    "AppTokenCollection": {
       "$ref": "Collection",
       "$template": {
-        "T": "App_Token"
+        "T": "AppToken"
       }
     },
-    "App_Token_Collection_Query": {
-      "$extends": "Collection_Query",
+    "AppTokenCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {
@@ -88,11 +88,11 @@
         }
       }
     },
-    "Backend_App_Token_Collection": {
-      "$ref": "App_Token_Collection"
+    "Backend_AppTokenCollection": {
+      "$ref": "AppTokenCollection"
     },
-    "Backend_App_Token_Collection_Query": {
-      "$ref": "App_Token_Collection_Query"
+    "Backend_AppTokenCollectionQuery": {
+      "$ref": "AppTokenCollectionQuery"
     },
     "Collection": {
       "type": "object",
@@ -114,7 +114,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {

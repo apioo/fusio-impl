@@ -16,20 +16,20 @@
       "type": "object",
       "properties": {
         "schema": {
-          "$ref": "Schema_TypeSchema"
+          "$ref": "SchemaTypeSchema"
         },
         "form": {
-          "$ref": "Schema_Form"
+          "$ref": "SchemaForm"
         }
       }
     },
-    "Schema_Form": {
+    "SchemaForm": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Schema_TypeSchema": {
+    "SchemaTypeSchema": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

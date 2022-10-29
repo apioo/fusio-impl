@@ -27,7 +27,7 @@
       "tags": [
         "backend.scope"
       ],
-      "request": "Backend_Scope_Update",
+      "request": "Backend_ScopeUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Scope": {
       "$ref": "Scope"
     },
-    "Backend_Scope_Update": {
-      "$ref": "Scope_Update"
+    "Backend_ScopeUpdate": {
+      "$ref": "ScopeUpdate"
     },
     "Message": {
       "type": "object",
@@ -95,7 +95,7 @@
         "routes": {
           "type": "array",
           "items": {
-            "$ref": "Scope_Route"
+            "$ref": "ScopeRoute"
           }
         },
         "metadata": {
@@ -103,7 +103,7 @@
         }
       }
     },
-    "Scope_Route": {
+    "ScopeRoute": {
       "type": "object",
       "properties": {
         "routeId": {
@@ -117,7 +117,7 @@
         }
       }
     },
-    "Scope_Update": {
+    "ScopeUpdate": {
       "$extends": "Scope",
       "type": "object"
     }

@@ -12,18 +12,18 @@
       "tags": [
         "backend.transaction"
       ],
-      "queryParameters": "Backend_Transaction_Collection_Query",
+      "queryParameters": "Backend_TransactionCollectionQuery",
       "responses": {
-        "200": "Backend_Transaction_Collection"
+        "200": "Backend_TransactionCollection"
       }
     }
   },
   "definitions": {
-    "Backend_Transaction_Collection": {
-      "$ref": "Transaction_Collection"
+    "Backend_TransactionCollection": {
+      "$ref": "TransactionCollection"
     },
-    "Backend_Transaction_Collection_Query": {
-      "$ref": "Transaction_Collection_Query"
+    "Backend_TransactionCollectionQuery": {
+      "$ref": "TransactionCollectionQuery"
     },
     "Collection": {
       "type": "object",
@@ -45,7 +45,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -94,14 +94,14 @@
         }
       }
     },
-    "Transaction_Collection": {
+    "TransactionCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Transaction"
       }
     },
-    "Transaction_Collection_Query": {
-      "$extends": "Collection_Query",
+    "TransactionCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {

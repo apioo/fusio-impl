@@ -7,9 +7,9 @@
       "tags": [
         "consumer.page"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Page_Collection"
+        "200": "Consumer_PageCollection"
       }
     }
   },
@@ -34,7 +34,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -48,8 +48,8 @@
         }
       }
     },
-    "Consumer_Page_Collection": {
-      "$ref": "Page_Collection"
+    "Consumer_PageCollection": {
+      "$ref": "PageCollection"
     },
     "Metadata": {
       "type": "object",
@@ -77,7 +77,7 @@
         }
       }
     },
-    "Page_Collection": {
+    "PageCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Page"

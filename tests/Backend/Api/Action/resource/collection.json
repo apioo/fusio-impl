@@ -12,9 +12,9 @@
       "tags": [
         "backend.action"
       ],
-      "queryParameters": "Collection_Category_Query",
+      "queryParameters": "CollectionCategoryQuery",
       "responses": {
-        "200": "Backend_Action_Collection"
+        "200": "Backend_ActionCollection"
       }
     },
     "POST": {
@@ -27,7 +27,7 @@
       "tags": [
         "backend.action"
       ],
-      "request": "Backend_Action_Create",
+      "request": "Backend_ActionCreate",
       "responses": {
         "201": "Message"
       }
@@ -57,37 +57,37 @@
           "type": "string"
         },
         "config": {
-          "$ref": "Action_Config"
+          "$ref": "ActionConfig"
         },
         "metadata": {
           "$ref": "Metadata"
         }
       }
     },
-    "Action_Collection": {
+    "ActionCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Action"
       }
     },
-    "Action_Config": {
+    "ActionConfig": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Action_Create": {
+    "ActionCreate": {
       "$extends": "Action",
       "type": "object",
       "required": [
         "name"
       ]
     },
-    "Backend_Action_Collection": {
-      "$ref": "Action_Collection"
+    "Backend_ActionCollection": {
+      "$ref": "ActionCollection"
     },
-    "Backend_Action_Create": {
-      "$ref": "Action_Create"
+    "Backend_ActionCreate": {
+      "$ref": "ActionCreate"
     },
     "Collection": {
       "type": "object",
@@ -109,8 +109,8 @@
         }
       }
     },
-    "Collection_Category_Query": {
-      "$extends": "Collection_Query",
+    "CollectionCategoryQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "categoryId": {
@@ -118,7 +118,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {

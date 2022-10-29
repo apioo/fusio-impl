@@ -27,7 +27,7 @@
       "tags": [
         "backend.cronjob"
       ],
-      "request": "Backend_Cronjob_Update",
+      "request": "Backend_CronjobUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Cronjob": {
       "$ref": "Cronjob"
     },
-    "Backend_Cronjob_Update": {
-      "$ref": "Cronjob_Update"
+    "Backend_CronjobUpdate": {
+      "$ref": "CronjobUpdate"
     },
     "Cronjob": {
       "type": "object",
@@ -91,12 +91,12 @@
         "errors": {
           "type": "array",
           "items": {
-            "$ref": "Cronjob_Error"
+            "$ref": "CronjobError"
           }
         }
       }
     },
-    "Cronjob_Error": {
+    "CronjobError": {
       "type": "object",
       "properties": {
         "message": {
@@ -113,7 +113,7 @@
         }
       }
     },
-    "Cronjob_Update": {
+    "CronjobUpdate": {
       "$extends": "Cronjob",
       "type": "object"
     },

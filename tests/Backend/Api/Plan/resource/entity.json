@@ -27,7 +27,7 @@
       "tags": [
         "backend.plan"
       ],
-      "request": "Backend_Plan_Update",
+      "request": "Backend_PlanUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Plan": {
       "$ref": "Plan"
     },
-    "Backend_Plan_Update": {
-      "$ref": "Plan_Update"
+    "Backend_PlanUpdate": {
+      "$ref": "PlanUpdate"
     },
     "Message": {
       "type": "object",
@@ -114,7 +114,7 @@
         }
       }
     },
-    "Plan_Update": {
+    "PlanUpdate": {
       "$extends": "Plan",
       "type": "object"
     }

@@ -27,7 +27,7 @@
       "tags": [
         "consumer.app"
       ],
-      "request": "Consumer_App_Update",
+      "request": "Consumer_AppUpdate",
       "responses": {
         "200": "Message"
       }
@@ -88,7 +88,7 @@
         }
       }
     },
-    "App_Update": {
+    "AppUpdate": {
       "type": "object",
       "properties": {
         "name": {
@@ -123,8 +123,8 @@
     "Consumer_App": {
       "$ref": "App"
     },
-    "Consumer_App_Update": {
-      "$ref": "App_Update"
+    "Consumer_AppUpdate": {
+      "$ref": "AppUpdate"
     },
     "Message": {
       "type": "object",

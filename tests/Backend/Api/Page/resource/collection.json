@@ -12,9 +12,9 @@
       "tags": [
         "backend.page"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Page_Collection"
+        "200": "Backend_PageCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.page"
       ],
-      "request": "Backend_Page_Create",
+      "request": "Backend_PageCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Page_Collection": {
-      "$ref": "Page_Collection"
+    "Backend_PageCollection": {
+      "$ref": "PageCollection"
     },
-    "Backend_Page_Create": {
-      "$ref": "Page_Create"
+    "Backend_PageCreate": {
+      "$ref": "PageCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,7 +60,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -114,13 +114,13 @@
         }
       }
     },
-    "Page_Collection": {
+    "PageCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Page"
       }
     },
-    "Page_Create": {
+    "PageCreate": {
       "$extends": "Page",
       "type": "object",
       "required": [

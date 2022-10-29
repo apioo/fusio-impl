@@ -12,9 +12,9 @@
       "tags": [
         "backend.role"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Backend_Role_Collection"
+        "200": "Backend_RoleCollection"
       }
     },
     "POST": {
@@ -27,18 +27,18 @@
       "tags": [
         "backend.role"
       ],
-      "request": "Backend_Role_Create",
+      "request": "Backend_RoleCreate",
       "responses": {
         "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Role_Collection": {
-      "$ref": "Role_Collection"
+    "Backend_RoleCollection": {
+      "$ref": "RoleCollection"
     },
-    "Backend_Role_Create": {
-      "$ref": "Role_Create"
+    "Backend_RoleCreate": {
+      "$ref": "RoleCreate"
     },
     "Collection": {
       "type": "object",
@@ -60,7 +60,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -106,13 +106,13 @@
         }
       }
     },
-    "Role_Collection": {
+    "RoleCollection": {
       "$ref": "Collection",
       "$template": {
         "T": "Role"
       }
     },
-    "Role_Create": {
+    "RoleCreate": {
       "$extends": "Role",
       "type": "object",
       "required": [

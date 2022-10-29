@@ -41,6 +41,9 @@
         "licenseUrl": {
           "type": "string"
         },
+        "paymentCurrency": {
+          "type": "string"
+        },
         "categories": {
           "type": "array",
           "items": {
@@ -54,23 +57,23 @@
           }
         },
         "apps": {
-          "$ref": "About_Apps"
+          "$ref": "AboutApps"
         },
         "links": {
           "type": "array",
           "items": {
-            "$ref": "About_Link"
+            "$ref": "AboutLink"
           }
         }
       }
     },
-    "About_Apps": {
+    "AboutApps": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
       }
     },
-    "About_Link": {
+    "AboutLink": {
       "type": "object",
       "properties": {
         "rel": {

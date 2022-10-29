@@ -63,12 +63,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "App_Token"
+            "$ref": "AppToken"
           }
         }
       }
     },
-    "App_Token": {
+    "AppToken": {
       "type": "object",
       "properties": {
         "id": {
@@ -121,7 +121,7 @@
           "type": "string"
         },
         "content": {
-          "$ref": "Audit_Object"
+          "$ref": "AuditObject"
         },
         "date": {
           "format": "date-time",
@@ -129,7 +129,7 @@
         }
       }
     },
-    "Audit_Object": {
+    "AuditObject": {
       "description": "A key value object containing the changes",
       "type": "object",
       "additionalProperties": {

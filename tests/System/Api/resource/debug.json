@@ -46,29 +46,29 @@
       "type": "object",
       "properties": {
         "headers": {
-          "$ref": "Debug_Headers"
+          "$ref": "DebugHeaders"
         },
         "parameters": {
-          "$ref": "Debug_Parameters"
+          "$ref": "DebugParameters"
         },
         "body": {
-          "$ref": "Debug_Body"
+          "$ref": "DebugBody"
         }
       }
     },
-    "Debug_Body": {
+    "DebugBody": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Debug_Headers": {
+    "DebugHeaders": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Debug_Parameters": {
+    "DebugParameters": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

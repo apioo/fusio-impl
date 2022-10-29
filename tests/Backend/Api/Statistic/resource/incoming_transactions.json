@@ -12,20 +12,20 @@
       "tags": [
         "backend.statistic"
       ],
-      "queryParameters": "Backend_Transaction_Collection_Query",
+      "queryParameters": "Backend_TransactionCollectionQuery",
       "responses": {
-        "200": "Backend_Statistic_Chart"
+        "200": "Backend_StatisticChart"
       }
     }
   },
   "definitions": {
-    "Backend_Statistic_Chart": {
-      "$ref": "Statistic_Chart"
+    "Backend_StatisticChart": {
+      "$ref": "StatisticChart"
     },
-    "Backend_Transaction_Collection_Query": {
-      "$ref": "Transaction_Collection_Query"
+    "Backend_TransactionCollectionQuery": {
+      "$ref": "TransactionCollectionQuery"
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Statistic_Chart": {
+    "StatisticChart": {
       "type": "object",
       "properties": {
         "labels": {
@@ -51,7 +51,7 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "Statistic_Chart_Data"
+            "$ref": "StatisticChartData"
           }
         },
         "series": {
@@ -62,14 +62,14 @@
         }
       }
     },
-    "Statistic_Chart_Data": {
+    "StatisticChartData": {
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
     },
-    "Transaction_Collection_Query": {
-      "$extends": "Collection_Query",
+    "TransactionCollectionQuery": {
+      "$extends": "CollectionQuery",
       "type": "object",
       "properties": {
         "from": {

@@ -58,6 +58,7 @@ class WelcomeTest extends ControllerDbTestCase
         "backend",
         "default"
     ],
+    "paymentCurrency": "EUR",
     "scopes": [
         "bar",
         "default",

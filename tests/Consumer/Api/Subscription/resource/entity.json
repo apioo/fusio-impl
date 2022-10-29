@@ -14,7 +14,7 @@
         "consumer.subscription"
       ],
       "responses": {
-        "200": "Consumer_Event_Subscription"
+        "200": "Consumer_EventSubscription"
       }
     },
     "PUT": {
@@ -27,7 +27,7 @@
       "tags": [
         "consumer.subscription"
       ],
-      "request": "Consumer_Event_Subscription_Update",
+      "request": "Consumer_EventSubscriptionUpdate",
       "responses": {
         "200": "Message"
       }
@@ -56,13 +56,13 @@
         }
       }
     },
-    "Consumer_Event_Subscription": {
-      "$ref": "Event_Subscription"
+    "Consumer_EventSubscription": {
+      "$ref": "EventSubscription"
     },
-    "Consumer_Event_Subscription_Update": {
-      "$ref": "Event_Subscription_Update"
+    "Consumer_EventSubscriptionUpdate": {
+      "$ref": "EventSubscriptionUpdate"
     },
-    "Event_Subscription": {
+    "EventSubscription": {
       "type": "object",
       "properties": {
         "id": {
@@ -80,12 +80,12 @@
         "responses": {
           "type": "array",
           "items": {
-            "$ref": "Event_Subscription_Response"
+            "$ref": "EventSubscriptionResponse"
           }
         }
       }
     },
-    "Event_Subscription_Response": {
+    "EventSubscriptionResponse": {
       "type": "object",
       "properties": {
         "status": {
@@ -102,7 +102,7 @@
         }
       }
     },
-    "Event_Subscription_Update": {
+    "EventSubscriptionUpdate": {
       "type": "object",
       "properties": {
         "event": {

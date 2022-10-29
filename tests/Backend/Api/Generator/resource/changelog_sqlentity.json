@@ -486,21 +486,21 @@
               "active": true,
               "public": true,
               "description": "Returns a collection of Human",
-              "parameters": 0,
+              "parameters": "0",
               "responses": {
-                "200": 2
+                "200": "2"
               },
-              "action": 0
+              "action": "0"
             },
             "POST": {
               "active": true,
               "public": false,
               "description": "Creates a new Human",
-              "request": 3,
+              "request": "3",
               "responses": {
-                "201": 1
+                "201": "1"
               },
-              "action": 3
+              "action": "3"
             }
           }
         }
@@ -520,28 +520,28 @@
               "public": true,
               "description": "Returns a single Human",
               "responses": {
-                "200": 3
+                "200": "3"
               },
-              "action": 1
+              "action": "1"
             },
             "PUT": {
               "active": true,
               "public": false,
               "description": "Updates an existing Human",
-              "request": 3,
+              "request": "3",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 4
+              "action": "4"
             },
             "DELETE": {
               "active": true,
               "public": false,
               "description": "Deletes an existing Human",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 2
+              "action": "2"
             }
           }
         }
@@ -560,21 +560,21 @@
               "active": true,
               "public": true,
               "description": "Returns a collection of Location",
-              "parameters": 0,
+              "parameters": "0",
               "responses": {
-                "200": 4
+                "200": "4"
               },
-              "action": 5
+              "action": "5"
             },
             "POST": {
               "active": true,
               "public": false,
               "description": "Creates a new Location",
-              "request": 5,
+              "request": "5",
               "responses": {
-                "201": 1
+                "201": "1"
               },
-              "action": 8
+              "action": "8"
             }
           }
         }
@@ -594,28 +594,28 @@
               "public": true,
               "description": "Returns a single Location",
               "responses": {
-                "200": 5
+                "200": "5"
               },
-              "action": 6
+              "action": "6"
             },
             "PUT": {
               "active": true,
               "public": false,
               "description": "Updates an existing Location",
-              "request": 5,
+              "request": "5",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 9
+              "action": "9"
             },
             "DELETE": {
               "active": true,
               "public": false,
               "description": "Deletes an existing Location",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 7
+              "action": "7"
             }
           }
         }
@@ -634,21 +634,21 @@
               "active": true,
               "public": true,
               "description": "Returns a collection of Category",
-              "parameters": 0,
+              "parameters": "0",
               "responses": {
-                "200": 6
+                "200": "6"
               },
-              "action": 10
+              "action": "10"
             },
             "POST": {
               "active": true,
               "public": false,
               "description": "Creates a new Category",
-              "request": 7,
+              "request": "7",
               "responses": {
-                "201": 1
+                "201": "1"
               },
-              "action": 13
+              "action": "13"
             }
           }
         }
@@ -668,28 +668,28 @@
               "public": true,
               "description": "Returns a single Category",
               "responses": {
-                "200": 7
+                "200": "7"
               },
-              "action": 11
+              "action": "11"
             },
             "PUT": {
               "active": true,
               "public": false,
               "description": "Updates an existing Category",
-              "request": 7,
+              "request": "7",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 14
+              "action": "14"
             },
             "DELETE": {
               "active": true,
               "public": false,
               "description": "Deletes an existing Category",
               "responses": {
-                "200": 1
+                "200": "1"
               },
-              "action": 12
+              "action": "12"
             }
           }
         }

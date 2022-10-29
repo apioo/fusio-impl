@@ -27,7 +27,7 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Route_Update",
+      "request": "Backend_RouteUpdate",
       "responses": {
         "200": "Message"
       }
@@ -59,8 +59,8 @@
     "Backend_Route": {
       "$ref": "Route"
     },
-    "Backend_Route_Update": {
-      "$ref": "Route_Update"
+    "Backend_RouteUpdate": {
+      "$ref": "RouteUpdate"
     },
     "Message": {
       "type": "object",
@@ -106,7 +106,7 @@
         "config": {
           "type": "array",
           "items": {
-            "$ref": "Route_Version"
+            "$ref": "RouteVersion"
           }
         },
         "metadata": {
@@ -114,7 +114,7 @@
         }
       }
     },
-    "Route_Method": {
+    "RouteMethod": {
       "type": "object",
       "properties": {
         "method": {
@@ -148,7 +148,7 @@
           "type": "string"
         },
         "responses": {
-          "$ref": "Route_Method_Responses"
+          "$ref": "RouteMethodResponses"
         },
         "action": {
           "type": "string"
@@ -158,23 +158,23 @@
         }
       }
     },
-    "Route_Method_Responses": {
+    "RouteMethodResponses": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
       }
     },
-    "Route_Methods": {
+    "RouteMethods": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Route_Method"
+        "$ref": "RouteMethod"
       }
     },
-    "Route_Update": {
+    "RouteUpdate": {
       "$extends": "Route",
       "type": "object"
     },
-    "Route_Version": {
+    "RouteVersion": {
       "type": "object",
       "properties": {
         "version": {
@@ -184,7 +184,7 @@
           "type": "integer"
         },
         "methods": {
-          "$ref": "Route_Methods"
+          "$ref": "RouteMethods"
         }
       }
     }

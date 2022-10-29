@@ -6,12 +6,12 @@
       "operationId": "System_Action_GetHealth",
       "tags": [],
       "responses": {
-        "200": "System_Health_Check"
+        "200": "System_HealthCheck"
       }
     }
   },
   "definitions": {
-    "Health_Check": {
+    "HealthCheck": {
       "type": "object",
       "properties": {
         "healthy": {
@@ -22,8 +22,8 @@
         }
       }
     },
-    "System_Health_Check": {
-      "$ref": "Health_Check"
+    "System_HealthCheck": {
+      "$ref": "HealthCheck"
     }
   }
 }

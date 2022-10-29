@@ -12,9 +12,9 @@
       "tags": [
         "consumer.subscription"
       ],
-      "queryParameters": "Collection_Query",
+      "queryParameters": "CollectionQuery",
       "responses": {
-        "200": "Consumer_Event_Subscription_Collection"
+        "200": "Consumer_EventSubscriptionCollection"
       }
     },
     "POST": {
@@ -27,7 +27,7 @@
       "tags": [
         "consumer.subscription"
       ],
-      "request": "Consumer_Event_Subscription_Create",
+      "request": "Consumer_EventSubscriptionCreate",
       "responses": {
         "201": "Message"
       }
@@ -54,7 +54,7 @@
         }
       }
     },
-    "Collection_Query": {
+    "CollectionQuery": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -68,13 +68,13 @@
         }
       }
     },
-    "Consumer_Event_Subscription_Collection": {
-      "$ref": "Event_Subscription_Collection"
+    "Consumer_EventSubscriptionCollection": {
+      "$ref": "EventSubscriptionCollection"
     },
-    "Consumer_Event_Subscription_Create": {
-      "$ref": "Event_Subscription_Create"
+    "Consumer_EventSubscriptionCreate": {
+      "$ref": "EventSubscriptionCreate"
     },
-    "Event_Subscription": {
+    "EventSubscription": {
       "type": "object",
       "properties": {
         "id": {
@@ -92,18 +92,18 @@
         "responses": {
           "type": "array",
           "items": {
-            "$ref": "Event_Subscription_Response"
+            "$ref": "EventSubscriptionResponse"
           }
         }
       }
     },
-    "Event_Subscription_Collection": {
+    "EventSubscriptionCollection": {
       "$ref": "Collection",
       "$template": {
-        "T": "Event_Subscription"
+        "T": "EventSubscription"
       }
     },
-    "Event_Subscription_Create": {
+    "EventSubscriptionCreate": {
       "type": "object",
       "properties": {
         "event": {
@@ -118,7 +118,7 @@
         "endpoint"
       ]
     },
-    "Event_Subscription_Response": {
+    "EventSubscriptionResponse": {
       "type": "object",
       "properties": {
         "status": {
