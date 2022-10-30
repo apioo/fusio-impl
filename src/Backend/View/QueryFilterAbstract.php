@@ -42,12 +42,12 @@ abstract class QueryFilterAbstract
         $this->to = $to;
     }
 
-    public function getFrom(): ?\DateTimeImmutable
+    public function getFrom(): \DateTimeImmutable
     {
         return $this->from;
     }
 
-    public function getTo(): ?\DateTimeImmutable
+    public function getTo(): \DateTimeImmutable
     {
         return $this->to;
     }
@@ -79,7 +79,7 @@ abstract class QueryFilterAbstract
             $to   = $tmp;
         }
 
-        // check if diff between from and to is larger then ca 2 months
+        // check if diff between from and to is larger than ca 2 months
         if (($to->getTimestamp() - $from->getTimestamp()) > 4838400) {
             $to = $from->add(new \DateInterval('P2M'));
         }
