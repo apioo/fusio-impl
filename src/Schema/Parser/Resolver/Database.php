@@ -59,8 +59,8 @@ class Database implements ResolverInterface
             }
         }
 
-        return (object) [
-            'definitions' => (object) $definitions,
-        ];
+        $return = new \stdClass();
+        $return->definitions = (object) $definitions;
+        return $return;
     }
 }

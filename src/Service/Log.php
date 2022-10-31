@@ -84,7 +84,7 @@ class Log
             Table\Generated\LogTable::COLUMN_DATE => $now->format('Y-m-d H:i:s'),
         ));
 
-        $this->stack[self::$level][self::LOG_ID] = $this->connection->lastInsertId();
+        $this->stack[self::$level][self::LOG_ID] = (int) $this->connection->lastInsertId();
     }
 
     public function finish(): void

@@ -121,7 +121,7 @@ class App
         return $this->appService->delete($appId, $context);
     }
 
-    protected function getValidUserScopes(int $userId, array $scopes): array
+    protected function getValidUserScopes(int $userId, ?array $scopes): array
     {
         if (empty($scopes)) {
             return [];

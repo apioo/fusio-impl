@@ -76,7 +76,7 @@ class Connection
 
         $config     = $connection->getConfig();
         $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass());
+        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
@@ -135,7 +135,7 @@ class Connection
 
         $config     = $connection->getConfig();
         $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass());
+        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
 
         $conn = $factory->getConnection($parameters);
 
@@ -144,7 +144,7 @@ class Connection
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onUpdate($connection->getName(), $parameters, $conn);
+            $factory->onUpdate($existing->getName(), $parameters, $conn);
         }
 
         // update connection

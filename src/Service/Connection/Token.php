@@ -169,12 +169,20 @@ class Token
         }
     }
 
-    private function updateConnectionConfig(Model\ConnectionInterface $connection, AccessToken $token)
+    private function updateConnectionConfig(Model\ConnectionInterface $connection, AccessToken $token): void
     {
         $config = $connection->getConfig();
         $config[OAuth2Interface::CONFIG_ACCESS_TOKEN] = $token->getAccessToken();
-        $config[OAuth2Interface::CONFIG_EXPIRES_IN] = $token->getExpiresIn();
-        $config[OAuth2Interface::CONFIG_REFRESH_TOKEN] = $token->getRefreshToken();
+
+        $expiresIn = $token->getExpiresIn();
+        if ($expiresIn !== null) {
+            $config[OAuth2Interface::CONFIG_EXPIRES_IN] = $expiresIn;
+        }
+
+        $refreshToken = $token->getRefreshToken();
+        if ($refreshToken !== null) {
+            $config[OAuth2Interface::CONFIG_REFRESH_TOKEN] = $refreshToken;
+        }
 
         $update = new ConnectionUpdate();
         $update->setConfig(new ConnectionConfig($config));

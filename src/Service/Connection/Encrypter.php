@@ -40,8 +40,13 @@ class Encrypter
         }
 
         $method = self::getMethodForKey($secretKey);
+        $length = openssl_cipher_iv_length($method);
 
-        $iv   = random_bytes(openssl_cipher_iv_length($method));
+        if ($length <= 0) {
+            throw new \RuntimeException('Could not get cipher length');
+        }
+
+        $iv   = random_bytes($length);
         $data = Parser::encode($config);
         $data = OpenSsl::encrypt($data, $method, $secretKey, OPENSSL_RAW_DATA, $iv);
 

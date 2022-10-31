@@ -115,7 +115,7 @@ class ActionDatabase implements Repository\ActionInterface
             $row['class'],
             $row['engine'],
             $this->async ? (bool) $row['async'] : false,
-            $config
+            $config ?? []
         );
     }
 }

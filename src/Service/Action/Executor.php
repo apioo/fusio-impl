@@ -58,8 +58,8 @@ class Executor
             $body = new Record();
         }
 
-        $app  = $this->appRepository->get(1);
-        $user = $this->userRepository->get(1);
+        $app  = $this->appRepository->get(1) ?? throw new \RuntimeException('App 1 not available');
+        $user = $this->userRepository->get(1) ?? throw new \RuntimeException('User 1 not available');
 
         $uriFragments = $this->parseQueryString($request->getUriFragments());
         $parameters   = $this->parseQueryString($request->getParameters());
@@ -68,7 +68,7 @@ class Executor
         $uri = new Uri('/');
         $uri = $uri->withParameters($parameters);
 
-        $httpRequest = new HttpRequest($uri, $request->getMethod(), $headers);
+        $httpRequest = new HttpRequest($uri, $request->getMethod() ?? 'GET', $headers);
         $httpContext = new HttpContext($httpRequest, $uriFragments);
 
         $context = new Context(0, '/', $app, $user);

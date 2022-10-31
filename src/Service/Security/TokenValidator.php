@@ -80,13 +80,8 @@ class TokenValidator
             );
 
             if ($type == 'Bearer' && !empty($accessToken)) {
-                $routeId = $context->getRouteId();
-                if ($routeId === null) {
-                    throw new UnauthorizedException('Unknown route id', 'Bearer', $params);
-                }
-
                 try {
-                    $token = $this->getToken($accessToken, $routeId, $requestMethod);
+                    $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }

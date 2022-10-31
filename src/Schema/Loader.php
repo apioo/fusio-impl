@@ -58,9 +58,12 @@ class Loader
             $column = 'name';
         }
 
-        $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
-        $source = $row['source'] ?? null;
+        $row = $this->connection->fetchAssociative('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', ['id' => $schemaId]);
+        if (empty($row)) {
+            throw new InvalidSchemaException('Provided schema ' . $schemaId . ' does not exist');
+        }
 
+        $source = $row['source'] ?? null;
         if ($source === null) {
             throw new InvalidSchemaException('Provided schema ' . $schemaId . ' does not exist');
         }

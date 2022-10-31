@@ -88,7 +88,7 @@ class Executor
             $execute = new ActionExecuteRequest();
             $execute->setMethod('GET');
 
-            $this->executorService->execute($cronjob->getAction(), $execute);
+            $this->executorService->execute($cronjob->getAction() ?? '', $execute);
 
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {

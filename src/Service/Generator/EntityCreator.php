@@ -66,9 +66,9 @@ class EntityCreator
     public function createSchemas(int $categoryId, array $schemas, string $prefix, UserContext $context): void
     {
         foreach ($schemas as $index => $record) {
-            $record->setName($this->buildName($prefix, $record->getName()));
+            $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
-            $id = $this->schemaService->exists($record->getName());
+            $id = $this->schemaService->exists($record->getName() ?? '');
             if (!$id) {
                 $this->schemaService->create($categoryId, $record, $context);
             }
@@ -83,9 +83,9 @@ class EntityCreator
     public function createActions(int $categoryId, array $actions, string $prefix, UserContext $context): void
     {
         foreach ($actions as $index => $record) {
-            $record->setName($this->buildName($prefix, $record->getName()));
+            $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
-            $id = $this->actionService->exists($record->getName());
+            $id = $this->actionService->exists($record->getName() ?? '');
             if (!$id) {
                 $this->actionService->create($categoryId, $record, $context);
             }
@@ -102,14 +102,16 @@ class EntityCreator
         $scopes = $scopes ?: [];
 
         foreach ($routes as $index => $record) {
-            $record->setPath($this->buildPath($basePath, $record->getPath()));
+            $record->setPath($this->buildPath($basePath, $record->getPath() ?? ''));
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
-            foreach ($record->getConfig() as $version) {
+            $config = $record->getConfig() ?? [];
+            foreach ($config as $version) {
                 /** @var RouteVersion $version */
                 $version->setVersion(1);
                 $version->setStatus(Resource::STATUS_DEVELOPMENT);
-                foreach ($version->getMethods() as $method) {
+                $methods = $version->getMethods() ?? [];
+                foreach ($methods as $method) {
                     /** @var RouteMethod $method */
                     $method->setActive(true);
                     $method->setPublic($public === true);
@@ -140,7 +142,7 @@ class EntityCreator
                 }
             }
 
-            $id = $this->routeService->exists($record->getPath());
+            $id = $this->routeService->exists((string) $record->getPath());
             if (!$id) {
                 $id = $this->routeService->create($categoryId, $record, $context);
             }

@@ -204,7 +204,7 @@ class Token
         return JWT::encode($payload, $this->config->get('fusio_project_key'));
     }
 
-    private function getApp(int $appId): ?Table\Generated\AppRow
+    private function getApp(int $appId): Table\Generated\AppRow
     {
         $app = $this->appTable->find($appId);
         if (empty($app)) {
@@ -218,7 +218,7 @@ class Token
         return $app;
     }
 
-    private function getUser(int $userId): ?Table\Generated\UserRow
+    private function getUser(int $userId): Table\Generated\UserRow
     {
         $user = $this->userTable->find($userId);
         if (empty($user)) {

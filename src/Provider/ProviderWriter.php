@@ -70,7 +70,7 @@ class ProviderWriter
                     continue;
                 }
 
-                $count+= $this->connection->insert('fusio_provider', [
+                $count+= (int) $this->connection->insert('fusio_provider', [
                     'type'  => $type,
                     'class' => $class,
                 ]);

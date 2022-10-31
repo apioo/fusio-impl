@@ -52,7 +52,9 @@ class Cronjob
 
     public function create(int $categoryId, CronjobCreate $cronjob, UserContext $context): int
     {
-        Cronjob\Validator::assertCron($cronjob->getCron());
+        $cron = $cronjob->getCron() ?? '';
+
+        Cronjob\Validator::assertCron($cron);
 
         $name = $cronjob->getName();
         if (empty($name)) {
@@ -96,7 +98,9 @@ class Cronjob
 
     public function update(int $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
     {
-        Cronjob\Validator::assertCron($cronjob->getCron());
+        $cron = $cronjob->getCron() ?? '';
+
+        Cronjob\Validator::assertCron($cron);
 
         $existing = $this->cronjobTable->find($cronjobId);
         if (empty($existing)) {

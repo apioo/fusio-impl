@@ -45,8 +45,12 @@ class Context extends FrameworkContext
     private ?array $method = null;
     private ?UserContext $userContext = null;
 
-    public function getRouteId(): ?int
+    public function getRouteId(): int
     {
+        if ($this->routeId === null) {
+            throw new \RuntimeException('Context route id not available');
+        }
+
         return $this->routeId;
     }
 
@@ -55,8 +59,12 @@ class Context extends FrameworkContext
         $this->routeId = $routeId;
     }
 
-    public function getCategoryId(): ?int
+    public function getCategoryId(): int
     {
+        if ($this->categoryId === null) {
+            throw new \RuntimeException('Context category id not available');
+        }
+
         return $this->categoryId;
     }
 
@@ -65,8 +73,12 @@ class Context extends FrameworkContext
         $this->categoryId = $categoryId;
     }
 
-    public function getApp(): ?AppInterface
+    public function getApp(): AppInterface
     {
+        if ($this->app === null) {
+            throw new \RuntimeException('Context app not available');
+        }
+
         return $this->app;
     }
 
@@ -80,8 +92,12 @@ class Context extends FrameworkContext
         $this->app = $app;
     }
 
-    public function getUser(): ?UserInterface
+    public function getUser(): UserInterface
     {
+        if ($this->user === null) {
+            throw new \RuntimeException('Context user not available');
+        }
+
         return $this->user;
     }
 
@@ -95,8 +111,12 @@ class Context extends FrameworkContext
         $this->user = $user;
     }
 
-    public function getToken(): ?TokenInterface
+    public function getToken(): TokenInterface
     {
+        if ($this->token === null) {
+            throw new \RuntimeException('Context token not available');
+        }
+
         return $this->token;
     }
 
@@ -105,8 +125,12 @@ class Context extends FrameworkContext
         $this->token = $token;
     }
 
-    public function getLogId(): ?int
+    public function getLogId(): int
     {
+        if ($this->logId === null) {
+            throw new \RuntimeException('Context log id not available');
+        }
+
         return $this->logId;
     }
 
@@ -115,8 +139,12 @@ class Context extends FrameworkContext
         $this->logId = $logId;
     }
 
-    public function getMethod(): ?array
+    public function getMethod(): array
     {
+        if ($this->method === null) {
+            throw new \RuntimeException('Context method not available');
+        }
+
         return $this->method;
     }
 

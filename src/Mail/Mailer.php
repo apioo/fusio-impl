@@ -80,7 +80,7 @@ class Mailer implements MailerInterface
     {
         $host = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
         if (empty($host)) {
-            $host = $_SERVER['SERVER_NAME'];
+            $host = $_SERVER['SERVER_NAME'] ?? 'unknown';
         }
 
         return $host;

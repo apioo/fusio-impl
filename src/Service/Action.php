@@ -26,6 +26,7 @@ use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
+use Fusio\Engine\Factory\Resolver;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
@@ -81,15 +82,19 @@ class Action
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
+        $class = $action->getClass();
+        if (empty($class)) {
+            throw new StatusCode\BadRequestException('Action class not available');
+        }
+
         $engine = $action->getEngine();
-        $class  = $action->getClass();
         if (empty($engine)) {
             $engine = EngineDetector::getEngine($class);
         }
 
         // check source
-        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
-        $parameters = new Parameters($config);
+        $config     = $action->getConfig() ? $action->getConfig()?->getProperties() : [];
+        $parameters = new Parameters($config ?? []);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
@@ -156,12 +161,12 @@ class Action
 
         $engine = $action->getEngine();
         if (empty($engine)) {
-            $engine = $existing->getEngine();
+            $engine = $existing->getEngine() ?? Resolver\PhpClass::class;
         }
 
         // check source
-        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
-        $parameters = new Parameters($config);
+        $config     = $action->getConfig() ? $action->getConfig()?->getProperties() : [];
+        $parameters = new Parameters($config ?? []);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
@@ -201,7 +206,7 @@ class Action
 
         $config     = self::unserializeConfig($existing->getConfig());
         $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($existing->getClass(), $existing->getEngine());
+        $handler    = $this->newAction($existing->getClass(), $existing->getEngine() ?? Resolver\PhpClass::class);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {

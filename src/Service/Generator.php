@@ -60,10 +60,10 @@ class Generator
     public function create(string $providerName, int $categoryId, GeneratorProvider $config, UserContext $context): void
     {
         $setup = new Setup();
-        $basePath = $config->getPath();
+        $basePath = $config->getPath() ?? '';
         $scopes = $config->getScopes();
         $public = $config->getPublic();
-        $configuration = new Parameters($config->getConfig()->getProperties());
+        $configuration = new Parameters($config->getConfig()?->getProperties() ?? []);
         $prefix = $this->getPrefix($basePath);
 
         $provider = $this->getProvider($providerName);
