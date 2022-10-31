@@ -24,10 +24,10 @@ namespace Fusio\Impl\Service;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Form;
 use Fusio\Engine\Form\ElementFactoryInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\Generator\ExecutableInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\Setup;
-use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Generator\EntityCreator;
@@ -64,6 +64,7 @@ class Generator
         $scopes = $config->getScopes();
         $public = $config->getPublic();
         $configuration = new Parameters($config->getConfig()->getProperties());
+        $prefix = $this->getPrefix($basePath);
 
         $provider = $this->getProvider($providerName);
         $provider->setup($setup, $basePath, $configuration);
@@ -71,8 +72,8 @@ class Generator
         $this->connection->beginTransaction();
 
         try {
-            $this->entityCreator->createSchemas($categoryId, $setup->getSchemas(), $context);
-            $this->entityCreator->createActions($categoryId, $setup->getActions(), $context);
+            $this->entityCreator->createSchemas($categoryId, $setup->getSchemas(), $prefix, $context);
+            $this->entityCreator->createActions($categoryId, $setup->getActions(), $prefix, $context);
             $this->entityCreator->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $public, $context);
 
             $this->connection->commit();
@@ -121,5 +122,10 @@ class Generator
         }
 
         return $provider;
+    }
+
+    private function getPrefix(string $path): string
+    {
+        return implode('_', array_map('ucfirst', array_filter(explode('/', $path))));
     }
 }

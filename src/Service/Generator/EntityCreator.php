@@ -63,9 +63,11 @@ class EntityCreator
     /**
      * @param Model\Backend\SchemaCreate[] $schemas
      */
-    public function createSchemas(int $categoryId, array $schemas, UserContext $context): void
+    public function createSchemas(int $categoryId, array $schemas, string $prefix, UserContext $context): void
     {
         foreach ($schemas as $index => $record) {
+            $record->setName($this->buildName($prefix, $record->getName()));
+
             $id = $this->schemaService->exists($record->getName());
             if (!$id) {
                 $this->schemaService->create($categoryId, $record, $context);
@@ -78,9 +80,11 @@ class EntityCreator
     /**
      * @param Model\Backend\ActionCreate[] $actions
      */
-    public function createActions(int $categoryId, array $actions, UserContext $context): void
+    public function createActions(int $categoryId, array $actions, string $prefix, UserContext $context): void
     {
         foreach ($actions as $index => $record) {
+            $record->setName($this->buildName($prefix, $record->getName()));
+
             $id = $this->actionService->exists($record->getName());
             if (!$id) {
                 $this->actionService->create($categoryId, $record, $context);
@@ -98,9 +102,7 @@ class EntityCreator
         $scopes = $scopes ?: [];
 
         foreach ($routes as $index => $record) {
-            $path = $this->buildPath($basePath, $record->getPath());
-
-            $record->setPath($path);
+            $record->setPath($this->buildPath($basePath, $record->getPath()));
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
             foreach ($record->getConfig() as $version) {
@@ -138,7 +140,7 @@ class EntityCreator
                 }
             }
 
-            $id = $this->routeService->exists($path);
+            $id = $this->routeService->exists($record->getPath());
             if (!$id) {
                 $id = $this->routeService->create($categoryId, $record, $context);
             }
@@ -150,6 +152,11 @@ class EntityCreator
     private function buildPath(string $basePath, string $path): string
     {
         return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
+    }
+
+    private function buildName(string $prefix, string $name): string
+    {
+        return implode('_', array_map('ucfirst', array_filter(explode('_', $prefix . '_' . $name))));
     }
 
     private function resolveSchema(int $schema): string
