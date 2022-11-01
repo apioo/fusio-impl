@@ -65,8 +65,13 @@ class UpdateCommand extends Command
             $this->remoteRepository->setSslVerify(false);
         }
 
+        $name = $input->getArgument('name');
+        if (empty($name) || !is_string($name)) {
+            throw new \RuntimeException('Provided an invalid name');
+        }
+
         try {
-            $app = $this->installer->update($input->getArgument('name'), UserContext::newAnonymousContext());
+            $app = $this->installer->update($name, UserContext::newAnonymousContext());
 
             $output->writeln('');
             $output->writeln('Updated app ' . $app->getName());

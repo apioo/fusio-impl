@@ -57,7 +57,14 @@ class RestoreCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $type = $input->getArgument('type');
-        $id   = $input->getArgument('id');
+        if (empty($type) || !is_string($type)) {
+            throw new \RuntimeException('Provided an invalid type');
+        }
+
+        $id = $input->getArgument('id');
+        if (empty($id) || !is_string($id)) {
+            throw new \RuntimeException('Provided an invalid id');
+        }
 
         $result = $this->restorer->restore($type, $id);
 

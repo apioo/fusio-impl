@@ -56,8 +56,13 @@ class EnvCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $name = $input->getArgument('name');
+        if (empty($name) || !is_string($name)) {
+            throw new \RuntimeException('Provided an invalid name');
+        }
+
         try {
-            $app = $this->installer->env($input->getArgument('name'));
+            $app = $this->installer->env($name);
 
             $output->writeln('');
             $output->writeln('Replaced env ' . $app->getName());

@@ -140,12 +140,14 @@ class OpenAPI implements ProviderInterface
             'public' => true,
         ];
 
-        if ($method->hasQueryParameters()) {
-            $config['parameters'] = $this->schemas[$method->getQueryParameters()] ?? null;
+        $queryParameters = $method->getQueryParameters();
+        if (!empty($queryParameters)) {
+            $config['parameters'] = $this->schemas[$queryParameters] ?? null;
         }
 
-        if ($method->hasRequest()) {
-            $config['request'] = $this->schemas[$method->getRequest()] ?? null;
+        $request = $method->getRequest();
+        if (!empty($request)) {
+            $config['request'] = $this->schemas[$request] ?? null;
         }
 
         $config['responses'] = [];

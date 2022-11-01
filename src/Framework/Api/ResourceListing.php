@@ -260,8 +260,12 @@ class ResourceListing extends ControllerDocumentation
                 if ($part[0] == ':') {
                     $name = substr($part, 1);
                 } elseif ($part[0] == '$') {
-                    $pos  = strpos($part, '<');
-                    $name = substr($part, 1, $pos - 1);
+                    $pos = strpos($part, '<');
+                    if ($pos !== false) {
+                        $name = substr($part, 1, $pos - 1);
+                    } else {
+                        $name = substr($part, 1);
+                    }
                 }
 
                 if ($name !== null) {

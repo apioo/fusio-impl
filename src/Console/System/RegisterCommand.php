@@ -67,7 +67,7 @@ class RegisterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $class = $input->getArgument('class');
-        if (!class_exists($class)) {
+        if (empty($class) || !is_string($class) || !class_exists($class)) {
             $output->writeln('Provided adapter class does not exist');
             return 1;
         }

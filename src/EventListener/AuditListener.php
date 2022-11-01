@@ -50,7 +50,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getAction()->getId(),
             'action.create',
-            sprintf('Created action %s', $event->getAction()->getName()),
+            sprintf('Created action %s', $event->getAction()->getName() ?? ''),
             $event->getAction()
         );
     }
@@ -71,7 +71,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getAction()->getId(),
             'action.update',
-            sprintf('Updated action %s', $event->getAction()->getName()),
+            sprintf('Updated action %s', $event->getAction()->getName() ?? ''),
             $event->getAction()
         );
     }
@@ -82,7 +82,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getApp()->getId(),
             'app.create',
-            sprintf('Created app %s', $event->getApp()->getName()),
+            sprintf('Created app %s', $event->getApp()->getName() ?? ''),
             $event->getApp()
         );
     }
@@ -135,7 +135,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getApp()->getId(),
             'app.update',
-            sprintf('Updated app %s', $event->getApp()->getName()),
+            sprintf('Updated app %s', $event->getApp()->getName() ?? ''),
             $event->getApp()
         );
     }
@@ -146,7 +146,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getConfig()->getId(),
             'config.update',
-            sprintf('Updated config %s', $event->getConfig()->getId()),
+            sprintf('Updated config %s', $event->getConfig()->getName() ?? ''),
             $event->getConfig()
         );
     }
@@ -157,7 +157,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getConnection()->getId(),
             'connection.create',
-            sprintf('Created connection %s', $event->getConnection()->getName()),
+            sprintf('Created connection %s', $event->getConnection()->getName() ?? ''),
             $event->getConnection()
         );
     }
@@ -178,7 +178,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getConnection()->getId(),
             'connection.update',
-            sprintf('Updated connection %s', $event->getConnection()->getName()),
+            sprintf('Updated connection %s', $event->getConnection()->getName() ?? ''),
             $event->getConnection()
         );
     }
@@ -189,7 +189,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getCronjob()->getId(),
             'cronjob.create',
-            sprintf('Created cronjob %s', $event->getCronjob()->getName()),
+            sprintf('Created cronjob %s', $event->getCronjob()->getName() ?? ''),
             $event->getCronjob()
         );
     }
@@ -210,7 +210,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getCronjob()->getId(),
             'cronjob.update',
-            sprintf('Updated cronjob %s', $event->getCronjob()->getName()),
+            sprintf('Updated cronjob %s', $event->getCronjob()->getName() ?? ''),
             $event->getCronjob()
         );
     }
@@ -221,7 +221,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getEvent()->getId(),
             'event.create',
-            sprintf('Created event %s', $event->getEvent()->getName()),
+            sprintf('Created event %s', $event->getEvent()->getName() ?? ''),
             $event->getEvent()
         );
     }
@@ -242,7 +242,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getEvent()->getId(),
             'event.update',
-            sprintf('Updated event %s', $event->getEvent()->getName()),
+            sprintf('Updated event %s', $event->getEvent()->getName() ?? ''),
             $event->getEvent()
         );
     }
@@ -253,7 +253,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getSubscription()->getId(),
             'event.subscription.create',
-            sprintf('Created event subscription %s', $event->getSubscription()->getEndpoint()),
+            sprintf('Created event subscription %s', $event->getSubscription()->getEndpoint() ?? ''),
             $event->getSubscription()
         );
     }
@@ -274,7 +274,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getSubscription()->getId(),
             'event.subscription.update',
-            sprintf('Updated event subscription %s', $event->getSubscription()->getEndpoint()),
+            sprintf('Updated event subscription %s', $event->getSubscription()->getEndpoint() ?? ''),
             $event->getSubscription()
         );
     }
@@ -285,7 +285,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getPlan()->getId(),
             'plan.create',
-            sprintf('Created plan %s', $event->getPlan()->getName()),
+            sprintf('Created plan %s', $event->getPlan()->getName() ?? ''),
             $event->getPlan()
         );
     }
@@ -306,7 +306,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getPlan()->getId(),
             'plan.update',
-            sprintf('Updated plan %s', $event->getPlan()->getName()),
+            sprintf('Updated plan %s', $event->getPlan()->getName() ?? ''),
             $event->getPlan()
         );
     }
@@ -317,7 +317,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getRate()->getId(),
             'rate.create',
-            sprintf('Created rate %s', $event->getRate()->getName()),
+            sprintf('Created rate %s', $event->getRate()->getName() ?? ''),
             $event->getRate()
         );
     }
@@ -338,7 +338,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getRate()->getId(),
             'rate.update',
-            sprintf('Updated rate %s', $event->getRate()->getName()),
+            sprintf('Updated rate %s', $event->getRate()->getName() ?? ''),
             $event->getRate()
         );
     }
@@ -349,7 +349,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getRoute()->getId(),
             'routes.create',
-            sprintf('Created route %s', $event->getRoute()->getPath()),
+            sprintf('Created route %s', $event->getRoute()->getPath() ?? ''),
             $event->getRoute()
         );
     }
@@ -370,7 +370,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getRoute()->getId(),
             'routes.update',
-            sprintf('Updated route %s', $event->getRoute()->getPath()),
+            sprintf('Updated route %s', $event->getRoute()->getPath() ?? ''),
             $event->getRoute()
         );
     }
@@ -381,7 +381,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getSchema()->getId(),
             'schema.create',
-            sprintf('Created schema %s', $event->getSchema()->getName()),
+            sprintf('Created schema %s', $event->getSchema()->getName() ?? ''),
             $event->getSchema()
         );
     }
@@ -402,7 +402,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getSchema()->getId(),
             'schema.update',
-            sprintf('Updated schema %s', $event->getSchema()->getName()),
+            sprintf('Updated schema %s', $event->getSchema()->getName() ?? ''),
             $event->getSchema()
         );
     }
@@ -413,7 +413,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getScope()->getId(),
             'scope.create',
-            sprintf('Created scope %s', $event->getScope()->getName()),
+            sprintf('Created scope %s', $event->getScope()->getName() ?? ''),
             $event->getScope()
         );
     }
@@ -434,7 +434,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getScope()->getId(),
             'scope.update',
-            sprintf('Updated scope %s', $event->getScope()->getName()),
+            sprintf('Updated scope %s', $event->getScope()->getName() ?? ''),
             $event->getScope()
         );
     }
@@ -465,7 +465,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getUser()->getId(),
             'user.create',
-            sprintf('Created user %s', $event->getUser()->getName()),
+            sprintf('Created user %s', $event->getUser()->getName() ?? ''),
             $event->getUser()
         );
     }
@@ -486,7 +486,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getUser()->getId(),
             'user.update',
-            sprintf('Updated user %s', $event->getUser()->getName()),
+            sprintf('Updated user %s', $event->getUser()->getName() ?? ''),
             $event->getUser()
         );
     }

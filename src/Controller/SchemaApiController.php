@@ -23,6 +23,7 @@ namespace Fusio\Impl\Controller;
 
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Log;
@@ -73,25 +74,27 @@ class SchemaApiController extends ControllerAbstract
 
         $filter[] = new UserAgentEnforcer();
 
-        $filter[] = new Filter\AssertMethod(
-            $this->routesMethodService,
-            $this->context
-        );
+        if ($this->context instanceof Context) {
+            $filter[] = new Filter\AssertMethod(
+                $this->routesMethodService,
+                $this->context
+            );
 
-        $filter[] = new Filter\Authentication(
-            $this->securityTokenValidator,
-            $this->context
-        );
+            $filter[] = new Filter\Authentication(
+                $this->securityTokenValidator,
+                $this->context
+            );
 
-        $filter[] = new Filter\RequestLimit(
-            $this->rateService,
-            $this->context
-        );
+            $filter[] = new Filter\RequestLimit(
+                $this->rateService,
+                $this->context
+            );
 
-        $filter[] = new Filter\Logger(
-            $this->logService,
-            $this->context
-        );
+            $filter[] = new Filter\Logger(
+                $this->logService,
+                $this->context
+            );
+        }
 
         return $filter;
     }
@@ -123,12 +126,12 @@ class SchemaApiController extends ControllerAbstract
 
     protected function parseRequest(RequestInterface $request, MethodAbstract $method): mixed
     {
-        if ($method->hasRequest()) {
-            if ($method->getRequest() == self::SCHEMA_PASSTHRU) {
+        $requestSchema = $method->getRequest();
+        if (!empty($requestSchema)) {
+            if ($requestSchema === self::SCHEMA_PASSTHRU) {
                 return new PassthruRecord($this->requestReader->getBody($request));
             } else {
-                $schema = $this->schemaLoader->getSchema($method->getRequest());
-                return $this->requestReader->getBodyAs($request, $schema);
+                return $this->requestReader->getBodyAs($request, $this->schemaLoader->getSchema($requestSchema));
             }
         } else {
             return new Record();
@@ -147,6 +150,10 @@ class SchemaApiController extends ControllerAbstract
 
         $request = new Request\HttpRequest($httpContext, $record);
 
-        return $this->actionInvokerService->invoke($request, $this->context);
+        if ($this->context instanceof Context) {
+            return $this->actionInvokerService->invoke($request, $this->context);
+        } else {
+            throw new \RuntimeException('Provided an invalid context');
+        }
     }
 }

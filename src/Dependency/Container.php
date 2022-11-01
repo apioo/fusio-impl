@@ -184,7 +184,7 @@ class Container extends DefaultContainer
 
     public function getConsole(): Application
     {
-        $application = new Application('fusio', Base::getVersion());
+        $application = new Application('fusio', Base::getVersion() ?? 'UNKNOWN');
         $application->setHelperSet(new HelperSet($this->appendConsoleHelpers()));
 
         $this->appendConsoleCommands($application);

@@ -68,11 +68,39 @@ class TokenCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $appId  = $input->getArgument('appId');
-        $userId = $input->getArgument('userId');
-        $scopes = $input->getArgument('scopes');
-        $expire = $input->getArgument('expire');
+        $app    = $this->findApp($input->getArgument('appId'));
+        $user   = $this->findUser($input->getArgument('userId'));
+        $scopes = $this->parseScopes($input->getArgument('scopes'), $app, $user);
+        $expire = $this->parseExpire($input->getArgument('expire'));
+        $ip     = '127.0.0.1';
 
+        $accessToken = $this->appTokenService->generateAccessToken($app['id'], $user['id'], $scopes, $ip, $expire);
+
+        $response = [
+            'App'   => $app['name'],
+            'User'  => $user['name'],
+            'Token' => $accessToken->getAccessToken(),
+        ];
+
+        $expiresIn = $accessToken->getExpiresIn();
+        if (isset($expiresIn)) {
+            $response['Expires'] = date('Y-m-d', $expiresIn);
+        }
+
+        $scope = $accessToken->getScope();
+        if (isset($scope)) {
+            $response['Scope'] = $scope;
+        }
+
+        $output->writeln("");
+        $output->writeln(Yaml::dump($response, 2));
+        $output->writeln("");
+
+        return 0;
+    }
+
+    private function findApp(mixed $appId): Table\Generated\AppRow
+    {
         if (!is_numeric($appId)) {
             $app = $this->appTable->findOneByName($appId);
         } else {
@@ -83,6 +111,11 @@ class TokenCommand extends Command
             throw new RuntimeException('Invalid app');
         }
 
+        return $app;
+    }
+
+    private function findUser(mixed $userId): Table\Generated\UserRow
+    {
         if (!is_numeric($userId)) {
             $user = $this->userTable->findOneByName($userId);
         } else {
@@ -93,24 +126,16 @@ class TokenCommand extends Command
             throw new RuntimeException('Invalid user');
         }
 
-        $scopes = $this->scopeService->getValidScopes($scopes, (int) $app['id'], (int) $user['id']);
-        $ip     = '127.0.0.1';
-        $expire = new DateInterval($expire);
+        return $user;
+    }
 
-        $accessToken = $this->appTokenService->generateAccessToken($app['id'], $user['id'], $scopes, $ip, $expire);
+    private function parseScopes(mixed $scopes, Table\Generated\AppRow $app, Table\Generated\UserRow $user): array
+    {
+        return $this->scopeService->getValidScopes((string) $scopes, $app->getId(), $user->getId());
+    }
 
-        $response = [
-            'App'     => $app['name'],
-            'User'    => $user['name'],
-            'Token'   => $accessToken->getAccessToken(),
-            'Expires' => date('Y-m-d', $accessToken->getExpiresIn()),
-            'Scope'   => $accessToken->getScope(),
-        ];
-
-        $output->writeln("");
-        $output->writeln(Yaml::dump($response, 2));
-        $output->writeln("");
-
-        return 0;
+    private function parseExpire(mixed $expire): DateInterval
+    {
+        return new DateInterval((string) $expire);
     }
 }

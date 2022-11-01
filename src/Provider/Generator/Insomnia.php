@@ -70,8 +70,9 @@ class Insomnia implements ProviderInterface
                 }
 
                 $method = $resource->method ?? null;
-
-                $resources[$path][$method] = $resource;
+                if (!empty($method)) {
+                    $resources[$path][$method] = $resource;
+                }
             }
 
             foreach ($resources as $path => $methods) {

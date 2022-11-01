@@ -73,8 +73,10 @@ class UserAddCommand extends Command
         if ($role === null) {
             $question = new Question('Choose the role of the account [1=Administrator, 2=Backend, 3=Consumer]: ');
             $role = (int) $helper->ask($input, $output, $question);
-        } else {
+        } elseif (is_string($role)) {
             $role = (int) $role;
+        } else {
+            throw new RuntimeException('Provided an invalid role');
         }
 
         // username
@@ -88,6 +90,10 @@ class UserAddCommand extends Command
 
             $name = $helper->ask($input, $output, $question);
         } else {
+            if (!is_string($name)) {
+                throw new RuntimeException('Provided an invalid name');
+            }
+
             Service\User\Validator::assertName($name);
         }
 
@@ -102,6 +108,10 @@ class UserAddCommand extends Command
 
             $email = $helper->ask($input, $output, $question);
         } else {
+            if (!is_string($email)) {
+                throw new RuntimeException('Provided an invalid email');
+            }
+
             Service\User\Validator::assertEmail($email);
         }
 
@@ -130,6 +140,10 @@ class UserAddCommand extends Command
 
             $helper->ask($input, $output, $question);
         } else {
+            if (!is_string($password)) {
+                throw new RuntimeException('Provided an invalid password');
+            }
+
             Service\User\Validator::assertPassword($password, $this->configService->getValue('user_pw_length'));
         }
 

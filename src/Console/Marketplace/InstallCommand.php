@@ -72,8 +72,13 @@ class InstallCommand extends Command
             $replaceEnv = false;
         }
 
+        $name = $input->getArgument('name');
+        if (empty($name) || !is_string($name)) {
+            throw new \RuntimeException('Provided an invalid name');
+        }
+
         $install = new MarketplaceInstall();
-        $install->setName($input->getArgument('name'));
+        $install->setName($name);
 
         try {
             $app = $this->installer->install($install, UserContext::newAnonymousContext(), $replaceEnv);

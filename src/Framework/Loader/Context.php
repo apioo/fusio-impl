@@ -159,6 +159,12 @@ class Context extends FrameworkContext
             return $this->userContext;
         }
 
-        return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId());
+        if ($this->user && $this->app) {
+            return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId());
+        } elseif ($this->user) {
+            return $this->userContext = UserContext::newContext($this->user->getId());
+        } else {
+            return $this->userContext = UserContext::newAnonymousContext();
+        }
     }
 }

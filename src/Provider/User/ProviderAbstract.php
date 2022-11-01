@@ -101,6 +101,10 @@ abstract class ProviderAbstract implements ProviderInterface
         }
 
         $data = Parser::decode((string) $response->getBody(), true);
+        if (!is_array($data)) {
+            return null;
+        }
+
         if (isset($data['access_token']) && is_string($data['access_token'])) {
             return $data['access_token'];
         } elseif (isset($data['error']) && is_string($data['error'])) {

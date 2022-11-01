@@ -74,7 +74,12 @@ class TableCommand extends Command
             throw new \RuntimeException('The folder src/Table/Generated does not exist, please create it in order to generate the table classes');
         }
 
-        $connection = $this->connector->getConnection($input->getOption('connection'));
+        $connectionId = $input->getOption('connection');
+        if (empty($connectionId) || !is_string($connectionId)) {
+            throw new \RuntimeException('Provided an invalid connection name');
+        }
+
+        $connection = $this->connector->getConnection($connectionId);
 
         $generator = new Generator($connection, 'App\\Table\\Generated', 'app_');
         $count = 0;

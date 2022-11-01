@@ -42,7 +42,10 @@ class ConfigurationBuilder
         $configuration->setMigrationsTableName('fusio_migration_versions');
         $configuration->setMigrationsDirectory(__DIR__ . '/Version');
 
-        $configuration->registerMigrationsFromDirectory($configuration->getMigrationsDirectory());
+        $migrationDirectory = $configuration->getMigrationsDirectory();
+        if (!empty($migrationDirectory)) {
+            $configuration->registerMigrationsFromDirectory($migrationDirectory);
+        }
 
         return $configuration;
     }
@@ -67,7 +70,10 @@ class ConfigurationBuilder
         $configuration->setMigrationsTableName(strtolower($namespace) . '_migration_versions');
         $configuration->setMigrationsDirectory(PSX_PATH_SRC . '/Migrations/' . $namespace);
 
-        $configuration->registerMigrationsFromDirectory($configuration->getMigrationsDirectory());
+        $migrationsDirectory = $configuration->getMigrationsDirectory();
+        if (!empty($migrationsDirectory)) {
+            $configuration->registerMigrationsFromDirectory($migrationsDirectory);
+        }
 
         return $configuration;
     }

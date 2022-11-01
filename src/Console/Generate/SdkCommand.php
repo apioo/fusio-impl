@@ -81,15 +81,15 @@ class SdkCommand extends Command
         }
 
         $format = $input->getArgument('format') ?? GeneratorFactoryInterface::CLIENT_TYPESCRIPT;
-        if (!in_array($format, GeneratorFactory::getPossibleTypes())) {
+        if (!is_string($format) || !in_array($format, GeneratorFactory::getPossibleTypes())) {
             throw new \InvalidArgumentException('Provided an invalid format, possible values are: ' . implode(', ', GeneratorFactory::getPossibleTypes()));
         }
 
         $config = $this->getConfig($input);
         $filter = null;
         $filterName = $input->getOption('filter');
-        if (!empty($filterName)) {
-            $filter = $this->filterFactory->getFilter((string) $filterName);
+        if (!empty($filterName) && is_string($filterName)) {
+            $filter = $this->filterFactory?->getFilter($filterName);
             if ($filter === null) {
                 throw new \RuntimeException('Provided an invalid filter name');
             }

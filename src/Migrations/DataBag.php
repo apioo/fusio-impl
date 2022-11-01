@@ -111,32 +111,36 @@ class DataBag
                 }
 
                 $parametersName = null;
-                if ($method->getParameters()) {
-                    if (!$this->hasId('fusio_schema', $method->getParameters())) {
-                        $parametersName = $this->getSchemaName($method->getParameters());
-                        $this->addSchema($category, $parametersName, $method->getParameters());
+                $parameters = $method->getParameters();
+                if (!empty($parameters)) {
+                    if (!$this->hasId('fusio_schema', $parameters)) {
+                        $parametersName = $this->getSchemaName($parameters);
+                        $this->addSchema($category, $parametersName, $parameters);
                     } else {
-                        $parametersName = $method->getParameters();
+                        $parametersName = $parameters;
                     }
                 }
 
                 $requestName = null;
-                if ($method->getRequest()) {
-                    if (!$this->hasId('fusio_schema', $method->getRequest())) {
-                        $requestName = $this->getSchemaName($method->getRequest());
-                        $this->addSchema($category, $requestName, $method->getRequest());
+                $request = $method->getRequest();
+                if (!empty($request)) {
+                    if (!$this->hasId('fusio_schema', $request)) {
+                        $requestName = $this->getSchemaName($request);
+                        $this->addSchema($category, $requestName, $request);
                     } else {
-                        $requestName = $method->getRequest();
+                        $requestName = $request;
                     }
                 }
 
-                if ($method->getScope()) {
-                    $this->addScope($category, $method->getScope());
-                    $this->addScopeRoute($method->getScope(), $path);
+                $scope = $method->getScope();
+                if (!empty($scope)) {
+                    $this->addScope($category, $scope);
+                    $this->addScopeRoute($scope, $path);
                 }
 
-                if ($method->getEventName()) {
-                    $this->addEvent($category, $method->getEventName());
+                $eventName = $method->getEventName();
+                if (!empty($eventName)) {
+                    $this->addEvent($category, $eventName);
                 }
 
                 $this->addRouteMethod(

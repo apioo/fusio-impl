@@ -56,6 +56,9 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $check = $input->getArgument('name');
+        if (empty($check) || !is_string($check)) {
+            throw new \RuntimeException('Provided an invalid check');
+        }
 
         try {
             $result = $this->executeCheck($check);

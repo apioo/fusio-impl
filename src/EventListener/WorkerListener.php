@@ -105,9 +105,9 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    private function notifyWorkerConnection(string $name, ?string $class, ?ConnectionConfig $config)
+    private function notifyWorkerConnection(?string $name, ?string $class, ?ConnectionConfig $config)
     {
-        if (empty($class)) {
+        if (empty($name) || empty($class)) {
             return;
         }
 
@@ -134,9 +134,9 @@ class WorkerListener implements EventSubscriberInterface
         }
     }
 
-    private function notifyWorkerAction(string $name, ?string $class, ?ActionConfig $config)
+    private function notifyWorkerAction(?string $name, ?string $class, ?ActionConfig $config)
     {
-        if (empty($class)) {
+        if (empty($name) || empty($class)) {
             return;
         }
 
@@ -178,7 +178,7 @@ class WorkerListener implements EventSubscriberInterface
 
     private function convertClassToType(?string $class): string
     {
-        return str_replace('\\', '.', $class);
+        return str_replace('\\', '.', $class ?? '');
     }
 
     public static function getSubscribedEvents()

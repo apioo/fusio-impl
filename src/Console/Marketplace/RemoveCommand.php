@@ -57,8 +57,13 @@ class RemoveCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $name = $input->getArgument('name');
+        if (empty($name) || !is_string($name)) {
+            throw new \RuntimeException('Provided an invalid name');
+        }
+
         try {
-            $app = $this->installer->remove($input->getArgument('name'), UserContext::newAnonymousContext());
+            $app = $this->installer->remove($name, UserContext::newAnonymousContext());
 
             $output->writeln('');
             $output->writeln('Removed app ' . $app->getName());
