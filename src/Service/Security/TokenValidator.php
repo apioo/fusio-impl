@@ -58,11 +58,7 @@ class TokenValidator
             $needsAuth = false;
         } else {
             $method = $context->getMethod();
-            if (is_array($method)) {
-                $needsAuth = !$method['public'];
-            } else {
-                $needsAuth = true;
-            }
+            $needsAuth = !$method['public'];
         }
 
         $requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
