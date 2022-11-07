@@ -44,6 +44,21 @@ class QueryFilter extends QueryFilterAbstract
     protected ?string $header = null;
     protected ?string $body = null;
 
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $routeId = null, ?int $appId = null, ?int $userId = null, ?string $ip = null, ?string $userAgent = null, ?string $method = null, ?string $path = null, ?string $header = null, ?string $body = null)
+    {
+        parent::__construct($from, $to);
+
+        $this->routeId = $routeId;
+        $this->appId = $appId;
+        $this->userId = $userId;
+        $this->ip = $ip;
+        $this->userAgent = $userAgent;
+        $this->method = $method;
+        $this->path = $path;
+        $this->header = $header;
+        $this->body = $body;
+    }
+
     public function getRouteId(): ?int
     {
         return $this->routeId;
@@ -133,12 +148,13 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request): static
+    public static function create(RequestInterface $request): self
     {
-        $filter    = parent::create($request);
-        $routeId   = $request->get('routeId');
-        $appId     = $request->get('appId');
-        $userId    = $request->get('userId');
+        [$from, $to] = self::getFromAndTo($request);
+
+        $routeId   = self::toInt($request->get('routeId'));
+        $appId     = self::toInt($request->get('appId'));
+        $userId    = self::toInt($request->get('userId'));
         $ip        = $request->get('ip');
         $userAgent = $request->get('userAgent');
         $method    = $request->get('method');
@@ -166,18 +182,6 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        if ($filter instanceof self) {
-            $filter->routeId   = $routeId;
-            $filter->appId     = $appId;
-            $filter->userId    = $userId;
-            $filter->ip        = $ip;
-            $filter->userAgent = $userAgent;
-            $filter->method    = $method;
-            $filter->path      = $path;
-            $filter->header    = $header;
-            $filter->body      = $body;
-        }
-
-        return $filter;
+        return new self($from, $to, $routeId, $appId, $userId, $ip, $userAgent, $method, $path, $header, $body);
     }
 }

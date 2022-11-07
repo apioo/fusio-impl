@@ -38,6 +38,15 @@ class QueryFilter extends QueryFilterAbstract
     protected ?int $status = null;
     protected ?string $provider = null;
 
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $invoiceId = null, ?int $status = null, ?string $provider = null)
+    {
+        parent::__construct($from, $to);
+
+        $this->invoiceId = $invoiceId;
+        $this->status = $status;
+        $this->provider = $provider;
+    }
+
     public function getInvoiceId(): ?int
     {
         return $this->invoiceId;
@@ -78,11 +87,12 @@ class QueryFilter extends QueryFilterAbstract
         return 'insert_date';
     }
 
-    public static function create(RequestInterface $request): static
+    public static function create(RequestInterface $request): self
     {
-        $filter    = parent::create($request);
-        $invoiceId = $request->get('invoiceId');
-        $status    = $request->get('status');
+        [$from, $to] = self::getFromAndTo($request);
+
+        $invoiceId = self::toInt($request->get('invoiceId'));
+        $status    = self::toInt($request->get('status'));
         $provider  = $request->get('provider');
         $search    = $request->get('search');
 
@@ -99,12 +109,6 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        if ($filter instanceof self) {
-            $filter->invoiceId = $invoiceId;
-            $filter->status    = $status;
-            $filter->provider  = $provider;
-        }
-
-        return $filter;
+        return new self($from, $to, $invoiceId, $status, $provider);
     }
 }

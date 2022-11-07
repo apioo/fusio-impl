@@ -78,6 +78,10 @@ class TokenGenerator
 
     private static function generateString(int $length): string
     {
+        if ($length <= 0) {
+            throw new \RuntimeException('Length must be positive');
+        }
+
         return substr(bin2hex(random_bytes($length)), 0, $length);
     }
 }

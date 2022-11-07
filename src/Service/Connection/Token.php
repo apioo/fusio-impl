@@ -185,7 +185,7 @@ class Token
         }
 
         $update = new ConnectionUpdate();
-        $update->setConfig(new ConnectionConfig($config));
+        $update->setConfig(ConnectionConfig::fromArray($config));
         $this->connectionService->update($connection->getId(), $update, UserContext::newAnonymousContext());
     }
 

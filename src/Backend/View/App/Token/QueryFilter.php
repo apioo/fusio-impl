@@ -40,6 +40,17 @@ class QueryFilter extends QueryFilterAbstract
     protected ?string $scope = null;
     protected ?string $ip = null;
 
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $appId = null, ?int $userId = null, ?int $status = null, ?string $scope = null, ?string $ip = null)
+    {
+        parent::__construct($from, $to);
+
+        $this->appId = $appId;
+        $this->userId = $userId;
+        $this->status = $status;
+        $this->scope = $scope;
+        $this->ip = $ip;
+    }
+
     public function getAppId(): ?int
     {
         return $this->appId;
@@ -93,12 +104,13 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request): static
+    public static function create(RequestInterface $request): self
     {
-        $filter = parent::create($request);
-        $appId  = $request->get('appId');
-        $userId = $request->get('userId');
-        $status = $request->get('status');
+        [$from, $to] = self::getFromAndTo($request);
+
+        $appId  = self::toInt($request->get('appId'));
+        $userId = self::toInt($request->get('userId'));
+        $status = self::toInt($request->get('status'));
         $scope  = $request->get('scope');
         $ip     = $request->get('ip');
         $search = $request->get('search');
@@ -116,14 +128,6 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        if ($filter instanceof self) {
-            $filter->appId  = $appId;
-            $filter->userId = $userId;
-            $filter->status = $status;
-            $filter->scope  = $scope;
-            $filter->ip     = $ip;
-        }
-
-        return $filter;
+        return new self($from, $to, $appId, $userId, $status, $scope, $ip);
     }
 }

@@ -40,6 +40,17 @@ class QueryFilter extends QueryFilterAbstract
     protected ?string $ip = null;
     protected ?string $message = null;
 
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $appId = null, ?int $userId = null, ?string $event = null, ?string $ip = null, ?string $message = null)
+    {
+        parent::__construct($from, $to);
+
+        $this->appId = $appId;
+        $this->userId = $userId;
+        $this->event = $event;
+        $this->ip = $ip;
+        $this->message = $message;
+    }
+
     public function getAppId(): ?int
     {
         return $this->appId;
@@ -93,11 +104,12 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request): static
+    public static function create(RequestInterface $request): self
     {
-        $filter  = parent::create($request);
-        $appId   = $request->get('appId');
-        $userId  = $request->get('userId');
+        [$from, $to] = self::getFromAndTo($request);
+
+        $appId   = self::toInt($request->get('appId'));
+        $userId  = self::toInt($request->get('userId'));
         $event   = $request->get('event');
         $ip      = $request->get('ip');
         $message = $request->get('message');
@@ -116,14 +128,6 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        if ($filter instanceof self) {
-            $filter->appId   = $appId;
-            $filter->userId  = $userId;
-            $filter->event   = $event;
-            $filter->ip      = $ip;
-            $filter->message = $message;
-        }
-
-        return $filter;
+        return new self($from, $to, $appId, $userId, $event, $ip, $message);
     }
 }

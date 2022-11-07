@@ -67,7 +67,7 @@ abstract class QueryFilterAbstract
         return 'date';
     }
 
-    public static function create(RequestInterface $request): static
+    protected static function getFromAndTo(RequestInterface $request): array
     {
         $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
         $to   = new \DateTimeImmutable($request->get('to') ?? 'now');
@@ -84,6 +84,11 @@ abstract class QueryFilterAbstract
             $to = $from->add(new \DateInterval('P2M'));
         }
 
-        return new static($from, $to);
+        return [$from, $to];
+    }
+
+    protected static function toInt(mixed $value): ?int
+    {
+        return !empty($value) ? (int) $value : null;
     }
 }

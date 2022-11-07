@@ -38,6 +38,15 @@ class QueryFilter extends QueryFilterAbstract
     protected ?int $userId = null;
     protected ?int $appId = null;
 
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $routeId = null, ?int $userId = null, ?int $appId = null)
+    {
+        parent::__construct($from, $to);
+
+        $this->routeId = $routeId;
+        $this->userId = $userId;
+        $this->appId = $appId;
+    }
+
     public function getRouteId(): ?int
     {
         return $this->routeId;
@@ -78,19 +87,14 @@ class QueryFilter extends QueryFilterAbstract
         return 'insert_date';
     }
 
-    public static function create(RequestInterface $request): static
+    public static function create(RequestInterface $request): self
     {
-        $filter  = parent::create($request);
-        $routeId = $request->get('routeId');
-        $userId  = $request->get('userId');
-        $appId   = $request->get('appId');
+        [$from, $to] = self::getFromAndTo($request);
 
-        if ($filter instanceof self) {
-            $filter->routeId = $routeId;
-            $filter->userId  = $userId;
-            $filter->appId   = $appId;
-        }
+        $routeId = self::toInt($request->get('routeId'));
+        $userId  = self::toInt($request->get('userId'));
+        $appId   = self::toInt($request->get('appId'));
 
-        return $filter;
+        return new self($from, $to, $routeId, $userId, $appId);
     }
 }
