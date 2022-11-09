@@ -36,6 +36,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CheckCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Connection $connection;
 
     public function __construct(Connection $connection)
@@ -55,10 +57,7 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $check = $input->getArgument('name');
-        if (empty($check) || !is_string($check)) {
-            throw new \RuntimeException('Provided an invalid check');
-        }
+        $check = $this->getArgumentAsString($input, 'name');
 
         try {
             $result = $this->executeCheck($check);

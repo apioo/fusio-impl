@@ -36,6 +36,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RestoreCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Restorer $restorer;
 
     public function __construct(Restorer $restorer)
@@ -56,15 +58,8 @@ class RestoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $type = $input->getArgument('type');
-        if (empty($type) || !is_string($type)) {
-            throw new \RuntimeException('Provided an invalid type');
-        }
-
-        $id = $input->getArgument('id');
-        if (empty($id) || !is_string($id)) {
-            throw new \RuntimeException('Provided an invalid id');
-        }
+        $type = $this->getArgumentAsString($input, 'type');
+        $id   = $this->getArgumentAsString($input, 'id');
 
         $result = $this->restorer->restore($type, $id);
 

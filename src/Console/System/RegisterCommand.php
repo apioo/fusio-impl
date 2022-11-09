@@ -43,6 +43,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class RegisterCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Installer $installer;
     private InstructionParser $parser;
 
@@ -66,8 +68,8 @@ class RegisterCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $class = $input->getArgument('class');
-        if (empty($class) || !is_string($class) || !class_exists($class)) {
+        $class = $this->getArgumentAsString($input, 'class');
+        if (!class_exists($class)) {
             $output->writeln('Provided adapter class does not exist');
             return 1;
         }

@@ -36,6 +36,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MailTestCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Mailer $mailer;
 
     public function __construct(Mailer $mailer)
@@ -55,7 +57,7 @@ class MailTestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $to = $input->getArgument('to');
+        $to = $this->getArgumentAsString($input, 'to');
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
             throw new \RuntimeException('Provided "to" email address has not a valid format');
         }
