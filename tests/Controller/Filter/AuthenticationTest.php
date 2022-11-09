@@ -28,6 +28,7 @@ use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
+use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
 use PSX\Http\Response;
@@ -95,7 +96,7 @@ class AuthenticationTest extends DbTestCase
 
     public function testHandleInvalidToken()
     {
-        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foobar']]);
@@ -117,7 +118,7 @@ class AuthenticationTest extends DbTestCase
 
     public function testHandleInvalidAuthType()
     {
-        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Basic foobar']]);
@@ -139,7 +140,7 @@ class AuthenticationTest extends DbTestCase
 
     public function testHandleNoAuthorizationHeader()
     {
-        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
@@ -163,6 +164,9 @@ class AuthenticationTest extends DbTestCase
     {
         $context = new Context();
         $context->setRouteId(Fixture::getId('fusio_routes', '/foo'));
+        $context->setMethod([
+            'public' => false,
+        ]);
 
         return $context;
     }

@@ -80,12 +80,38 @@
             "type": "string"
           }
         },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "UserPlan"
+          }
+        },
         "metadata": {
           "$ref": "Metadata"
         },
         "date": {
           "format": "date-time",
           "type": "string"
+        }
+      }
+    },
+    "UserPlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
         }
       }
     }

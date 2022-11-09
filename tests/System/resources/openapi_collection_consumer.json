@@ -2064,6 +2064,12 @@
               "type": "string"
             }
           },
+          "plans": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/UserPlan"
+            }
+          },
           "metadata": {
             "$ref": "#\/components\/schemas\/Metadata"
           },
@@ -2146,6 +2152,26 @@
           "token",
           "newPassword"
         ]
+      },
+      "UserPlan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
+          }
+        }
       },
       "UserProvider": {
         "type": "object",
