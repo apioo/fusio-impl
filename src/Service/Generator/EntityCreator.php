@@ -31,7 +31,6 @@ use Fusio\Model\Backend\RouteMethodResponses;
 use Fusio\Model\Backend\RouteVersion;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Parser\TypeSchema;
 
 /**
  * EntityCreator
