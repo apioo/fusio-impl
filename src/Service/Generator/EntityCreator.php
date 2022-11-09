@@ -31,6 +31,7 @@ use Fusio\Model\Backend\RouteMethodResponses;
 use Fusio\Model\Backend\RouteVersion;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Parser\TypeSchema;
 
 /**
  * EntityCreator
@@ -67,6 +68,20 @@ class EntityCreator
     {
         foreach ($schemas as $index => $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
+
+            $source = $record->getSource();
+            if (isset($source['$import']) && is_iterable($source['$import'])) {
+                $import = [];
+                foreach ($source['$import'] as $name => $schema) {
+                    if (str_starts_with($schema, 'schema:///')) {
+                        $import[$name] = 'schema:///' . $prefix . '_' . substr($schema, 10);
+                    } else {
+                        $import[$name] = $schema;
+                    }
+                }
+                $source['$import'] = $import;
+                $record->setSource($source);
+            }
 
             $id = $this->schemaService->exists($record->getName() ?? '');
             if (!$id) {
@@ -153,12 +168,22 @@ class EntityCreator
 
     private function buildPath(string $basePath, string $path): string
     {
-        return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
+        $parts = array_merge(explode('/', $basePath), explode('/', $path));
+        $parts = array_filter($parts, function ($value) {
+            return $value !== '';
+        });
+        return '/' . implode('/', $parts);
     }
 
     private function buildName(string $prefix, string $name): string
     {
-        return implode('_', array_map('ucfirst', array_filter(explode('_', $prefix . '_' . $name))));
+        $parts = explode('_', $prefix . '_' . $name);
+        $parts = array_filter($parts, function ($value) {
+            return $value !== '';
+        });
+        $parts = array_map('ucfirst', $parts);
+        $parts = implode('_', $parts);
+        return $parts;
     }
 
     private function resolveSchema(int $schema): string

@@ -118,12 +118,12 @@ JSON;
 
         // check schema
         foreach ($data->schemas as $schema) {
-            Assert::assertSchema($schema->name, json_encode($schema->source));
+            Assert::assertSchema('Provider_' . $schema->name, json_encode($schema->source));
         }
 
         // check action
         foreach ($data->actions as $action) {
-            Assert::assertAction($action->name, $action->class, json_encode($action->config));
+            Assert::assertAction('Provider_' . $action->name, $action->class, json_encode($action->config));
         }
 
         // check routes
@@ -161,16 +161,18 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
-        $data = json_decode(file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json'));
+        $data = file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json');
+        $data = str_replace('schema:\/\/\/', 'schema:\/\/\/Provider_', $data);
+        $data = json_decode($data);
 
         // check schema
         foreach ($data->schemas as $schema) {
-            Assert::assertSchema($schema->name, json_encode($schema->source));
+            Assert::assertSchema('Provider_' . $schema->name, json_encode($schema->source));
         }
 
         // check action
         foreach ($data->actions as $action) {
-            Assert::assertAction($action->name, $action->class, json_encode($action->config));
+            Assert::assertAction('Provider_' . $action->name, $action->class, json_encode($action->config));
         }
 
         // check routes
@@ -242,16 +244,16 @@ JSON;
                     'public'       => 1,
                     'description'  => $method->description ?? null,
                     'operation_id' => $method->operationId ?? Config::buildOperationId($path, $methodName),
-                    'parameters'   => isset($method->parameters) ? $this->findSchemaByIndex($method->parameters, $data) : null,
-                    'request'      => isset($method->request) ? $this->findSchemaByIndex($method->request, $data) : null,
+                    'parameters'   => isset($method->parameters) ? 'Provider_' . $this->findSchemaByIndex($method->parameters, $data) : null,
+                    'request'      => isset($method->request) ? 'Provider_' . $this->findSchemaByIndex($method->request, $data) : null,
                     'responses'    => [],
-                    'action'       => $this->findActionByIndex($method->action, $data),
+                    'action'       => 'Provider_' . $this->findActionByIndex($method->action, $data),
                     'costs'        => $method->costs ?? null,
                 ];
 
                 if (isset($method->responses)) {
                     foreach ($method->responses as $statusCode => $response) {
-                        $newConfig['responses'][$statusCode] = $this->findSchemaByIndex($response, $data);
+                        $newConfig['responses'][$statusCode] = 'Provider_' . $this->findSchemaByIndex($response, $data);
                     }
                 }
 

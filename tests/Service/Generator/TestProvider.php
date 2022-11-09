@@ -47,7 +47,7 @@ class TestProvider implements ProviderInterface
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
-        $schemaRequest = $setup->addSchema('Provider_Schema_Request', [
+        $schemaRequest = $setup->addSchema('Schema_Request', [
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -60,7 +60,7 @@ class TestProvider implements ProviderInterface
             ],
         ]);
 
-        $schemaResponse = $setup->addSchema('Provider_Schema_Response', [
+        $schemaResponse = $setup->addSchema('Schema_Response', [
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -73,11 +73,11 @@ class TestProvider implements ProviderInterface
             ],
         ]);
 
-        $selectAction = $setup->addAction('Provider_Action_Select', SqlSelectAll::class, PhpClass::class, [
+        $selectAction = $setup->addAction('Action_Select', SqlSelectAll::class, PhpClass::class, [
             'table' => $configuration->get('table'),
         ]);
 
-        $insertAction = $setup->addAction('Provider_Action_Insert', SqlInsert::class, PhpClass::class, [
+        $insertAction = $setup->addAction('Action_Insert', SqlInsert::class, PhpClass::class, [
             'table' => $configuration->get('table'),
         ]);
 

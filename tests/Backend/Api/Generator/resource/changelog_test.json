@@ -1,7 +1,7 @@
 {
   "schemas": [
     {
-      "name": "Provider_Schema_Request",
+      "name": "Schema_Request",
       "source": {
         "type": "object",
         "properties": {
@@ -16,7 +16,7 @@
       }
     },
     {
-      "name": "Provider_Schema_Response",
+      "name": "Schema_Response",
       "source": {
         "type": "object",
         "properties": {
@@ -33,7 +33,7 @@
   ],
   "actions": [
     {
-      "name": "Provider_Action_Select",
+      "name": "Action_Select",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
@@ -41,7 +41,7 @@
       }
     },
     {
-      "name": "Provider_Action_Insert",
+      "name": "Action_Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {

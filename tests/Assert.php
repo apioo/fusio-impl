@@ -46,7 +46,11 @@ class Assert extends \PHPUnit\Framework\Assert
             ->where('name = :name')
             ->getSQL();
 
-        $row    = $connection->fetchAssoc($sql, ['name' => $expectName]);
+        $row = $connection->fetchAssociative($sql, ['name' => $expectName]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided action name ' . $expectName . ' does not exist');
+        }
+
         $config = json_encode(Service\Action::unserializeConfig($row['config']));
 
         self::assertNotEmpty($row['id']);
@@ -71,6 +75,9 @@ class Assert extends \PHPUnit\Framework\Assert
             ->getSQL();
 
         $row = $connection->fetchAssociative($sql, ['name' => $expectName]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided schema name ' . $expectName . ' does not exist');
+        }
 
         self::assertNotEmpty($row['id']);
         self::assertEquals($expectName, $row['name']);
@@ -97,6 +104,9 @@ class Assert extends \PHPUnit\Framework\Assert
             ->getSQL();
 
         $route = $connection->fetchAssociative($sql, ['path' => $expectPath]);
+        if (empty($route)) {
+            throw new \RuntimeException('Provided route path ' . $expectPath . ' does not exist');
+        }
 
         self::assertNotEmpty($route['id']);
         self::assertEquals(1, $route['status']);
