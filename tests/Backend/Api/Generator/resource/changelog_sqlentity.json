@@ -101,8 +101,8 @@
       "name": "Human_0_SQL_Entity",
       "source": {
         "$import": {
-          "Location": "schema:\/\/\/Location_0_Entity",
-          "Category": "schema:\/\/\/Category_0_Entity"
+          "Location": "schema:\/\/\/Location_0_SQL_Entity",
+          "Category": "schema:\/\/\/Category_0_SQL_Entity"
         },
         "definitions": {
           "Human_0_SQL_Entity": {
@@ -121,7 +121,7 @@
                 "type": "string"
               },
               "location": {
-                "$ref": "Location:Location_0_Entity"
+                "$ref": "Location:Location_0_SQL_Entity"
               },
               "tags": {
                 "description": "",
@@ -132,21 +132,21 @@
               },
               "categories": {
                 "items": {
-                  "$ref": "Category:Category_0_Entity"
+                  "$ref": "Category:Category_0_SQL_Entity"
                 }
               },
               "map": {
                 "additionalProperties": {
-                  "$ref": "Location:Location_0_Entity"
+                  "$ref": "Location:Location_0_SQL_Entity"
                 }
               },
               "union": {
                 "oneOf": [
                   {
-                    "$ref": "Location:Location_0_Entity"
+                    "$ref": "Location:Location_0_SQL_Entity"
                   },
                   {
-                    "$ref": "Category:Category_0_Entity"
+                    "$ref": "Category:Category_0_SQL_Entity"
                   }
                 ]
               },
@@ -156,7 +156,7 @@
                     "$ref": "Human"
                   },
                   {
-                    "$ref": "Location:Location_0_Entity"
+                    "$ref": "Location:Location_0_SQL_Entity"
                   }
                 ]
               }
@@ -201,8 +201,8 @@
       "name": "Location_0_SQL_Entity",
       "source": {
         "$import": {
-          "Human": "schema:\/\/\/Human_0_Entity",
-          "Category": "schema:\/\/\/Category_0_Entity"
+          "Human": "schema:\/\/\/Human_0_SQL_Entity",
+          "Category": "schema:\/\/\/Category_0_SQL_Entity"
         },
         "definitions": {
           "Location_0_SQL_Entity": {
@@ -265,8 +265,8 @@
       "name": "Category_0_SQL_Entity",
       "source": {
         "$import": {
-          "Human": "schema:\/\/\/Human_0_Entity",
-          "Location": "schema:\/\/\/Location_0_Entity"
+          "Human": "schema:\/\/\/Human_0_SQL_Entity",
+          "Location": "schema:\/\/\/Location_0_SQL_Entity"
         },
         "definitions": {
           "Category_0_SQL_Entity": {
