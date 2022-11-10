@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console\Marketplace;
 
+use Fusio\Impl\Console\TypeSafeTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -37,6 +38,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EnvCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Service\Marketplace\Installer $installer;
 
     public function __construct(Service\Marketplace\Installer $installer)
@@ -56,10 +59,7 @@ class EnvCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
-        if (empty($name) || !is_string($name)) {
-            throw new \RuntimeException('Provided an invalid name');
-        }
+        $name = $this->getArgumentAsString($input, 'name');
 
         try {
             $app = $this->installer->env($name);

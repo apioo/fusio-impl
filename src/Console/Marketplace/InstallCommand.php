@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\TypeSafeTrait;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Http\Exception\BadRequestException;
@@ -40,6 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InstallCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
 
@@ -72,10 +75,7 @@ class InstallCommand extends Command
             $replaceEnv = false;
         }
 
-        $name = $input->getArgument('name');
-        if (empty($name) || !is_string($name)) {
-            throw new \RuntimeException('Provided an invalid name');
-        }
+        $name = $this->getArgumentAsString($input, 'name');
 
         $install = new MarketplaceInstall();
         $install->setName($name);

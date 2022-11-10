@@ -24,6 +24,7 @@ namespace Fusio\Impl\Console\System;
 use Fusio\Engine\AdapterInterface;
 use Fusio\Impl\Adapter\Installer;
 use Fusio\Impl\Adapter\InstructionParser;
+use Fusio\Impl\Console\TypeSafeTrait;
 use Fusio\Impl\Provider\ProviderWriter;
 use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;

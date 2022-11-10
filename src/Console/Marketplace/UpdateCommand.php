@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Console\TypeSafeTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -39,6 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpdateCommand extends Command
 {
+    use TypeSafeTrait;
+
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
 
@@ -65,10 +68,7 @@ class UpdateCommand extends Command
             $this->remoteRepository->setSslVerify(false);
         }
 
-        $name = $input->getArgument('name');
-        if (empty($name) || !is_string($name)) {
-            throw new \RuntimeException('Provided an invalid name');
-        }
+        $name = $this->getArgumentAsString($input, 'name');
 
         try {
             $app = $this->installer->update($name, UserContext::newAnonymousContext());

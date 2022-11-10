@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Console\TypeSafeTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
