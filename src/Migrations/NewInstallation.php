@@ -117,8 +117,8 @@ class NewInstallation
         $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length');
         $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
         $bag->addConnection('System', ConnectionSystem::class);
-        $bag->addRate('Default', 0, 720, 'PT1H');
-        $bag->addRate('Default-Anonymous', 4, 300, 'PT1H');
+        $bag->addRate('Default', 0, 3600, 'PT1H');
+        $bag->addRate('Default-Anonymous', 4, 900, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false);
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
