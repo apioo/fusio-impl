@@ -42,7 +42,7 @@ class Postman implements ProviderInterface
 {
     public function getName(): string
     {
-        return 'Postman';
+        return 'Import-Postman';
     }
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void

@@ -52,7 +52,7 @@ class OpenAPI implements ProviderInterface
 
     public function getName(): string
     {
-        return 'OpenAPI';
+        return 'Import-OpenAPI';
     }
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void

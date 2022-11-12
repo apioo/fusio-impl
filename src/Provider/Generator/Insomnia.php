@@ -43,7 +43,7 @@ class Insomnia implements ProviderInterface
 {
     public function getName(): string
     {
-        return 'Insomnia';
+        return 'Import-Insomnia';
     }
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
