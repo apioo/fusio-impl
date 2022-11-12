@@ -32,18 +32,16 @@ class App
 {
     private string $name;
     private string $version;
-    private string $downloadUrl;
-    private string $sha1Hash;
+    private ?string $downloadUrl = null;
+    private ?string $sha1Hash = null;
     private ?string $description = null;
     private ?string $screenshot = null;
     private ?string $website = null;
 
-    public function __construct(string $name, string $version, string $downloadUrl, string $sha1Hash)
+    public function __construct(string $name, string $version)
     {
         $this->name = $name;
         $this->version = $version;
-        $this->downloadUrl = $downloadUrl;
-        $this->sha1Hash = $sha1Hash;
     }
 
     public function getName(): string
@@ -66,7 +64,7 @@ class App
         $this->version = $version;
     }
 
-    public function getDownloadUrl(): string
+    public function getDownloadUrl(): ?string
     {
         return $this->downloadUrl;
     }
@@ -76,7 +74,7 @@ class App
         $this->downloadUrl = $downloadUrl;
     }
 
-    public function getSha1Hash(): string
+    public function getSha1Hash(): ?string
     {
         return $this->sha1Hash;
     }
@@ -132,30 +130,28 @@ class App
     {
         $version = $data['version'] ?? null;
         if (empty($version) || !is_string($version)) {
-            throw new \InvalidArgumentException('No version available');
+            $version = '0.0.0';
         }
 
-        $downloadUrl = $data['downloadUrl'] ?? null;
-        if (empty($downloadUrl) || !is_string($downloadUrl)) {
-            throw new \InvalidArgumentException('No download url available');
+        $app = new static($name, $version);
+
+        if (isset($data['downloadUrl']) && is_string($data['downloadUrl'])) {
+            $app->setDownloadUrl($data['downloadUrl']);
         }
 
-        $sha1Hash = $data['sha1Hash'] ?? null;
-        if (empty($sha1Hash) || !is_string($sha1Hash)) {
-            throw new \InvalidArgumentException('No hash available');
+        if (isset($data['sha1Hash']) && is_string($data['sha1Hash'])) {
+            $app->setSha1Hash($data['sha1Hash']);
         }
 
-        $app = new static($name, $version, $downloadUrl, $sha1Hash);
-
-        if (isset($data['description'])) {
+        if (isset($data['description']) && is_string($data['description'])) {
             $app->setDescription($data['description']);
         }
 
-        if (isset($data['screenshot'])) {
+        if (isset($data['screenshot']) && is_string($data['screenshot'])) {
             $app->setScreenshot($data['screenshot']);
         }
 
-        if (isset($data['website'])) {
+        if (isset($data['website']) && is_string($data['website'])) {
             $app->setWebsite($data['website']);
         }
 

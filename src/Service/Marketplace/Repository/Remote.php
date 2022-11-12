@@ -106,6 +106,11 @@ class Remote implements RepositoryInterface
      */
     public function downloadZip(App $app, string $appFile): void
     {
+        $downloadUrl = $app->getDownloadUrl();
+        if (empty($downloadUrl)) {
+            throw new \RuntimeException('Download url is not available for this app');
+        }
+
         // increase timeout to handle download
         set_time_limit(300);
 
@@ -113,7 +118,7 @@ class Remote implements RepositoryInterface
         $options->setVerify($this->sslVerify);
         $options->setAllowRedirects(true);
 
-        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()), $options);
+        $response = $this->httpClient->request(new GetRequest($downloadUrl), $options);
 
         file_put_contents($appFile, $response->getBody()->getContents());
     }

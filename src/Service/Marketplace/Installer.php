@@ -154,7 +154,7 @@ class Installer
         $this->remoteRepository->downloadZip($app, $appFile);
 
         // check hash
-        if (sha1_file($appFile) != $app->getSha1Hash()) {
+        if (sha1_file($appFile) !== $app->getSha1Hash()) {
             throw new StatusCode\InternalServerErrorException('Invalid hash of downloaded app');
         }
 
