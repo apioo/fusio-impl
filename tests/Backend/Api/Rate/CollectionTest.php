@@ -91,7 +91,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "priority": 4,
             "name": "Default-Anonymous",
-            "rateLimit": 300,
+            "rateLimit": 900,
             "timespan": "PT1H"
         },
         {
@@ -99,7 +99,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "priority": 0,
             "name": "Default",
-            "rateLimit": 720,
+            "rateLimit": 3600,
             "timespan": "PT1H"
         }
     ]
@@ -178,7 +178,7 @@ JSON;
             "status": 1,
             "priority": 4,
             "name": "Default-Anonymous",
-            "rateLimit": 300,
+            "rateLimit": 900,
             "timespan": "PT1H"
         },
         {
@@ -186,7 +186,7 @@ JSON;
             "status": 1,
             "priority": 0,
             "name": "Default",
-            "rateLimit": 720,
+            "rateLimit": 3600,
             "timespan": "PT1H"
         }
     ]
