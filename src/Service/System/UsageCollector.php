@@ -22,8 +22,6 @@
 namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
 use PSX\SysInfo\Environment;
 
 /**

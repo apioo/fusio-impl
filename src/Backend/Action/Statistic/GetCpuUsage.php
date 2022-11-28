@@ -37,7 +37,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetCpuUsage extends ActionAbstract
 {
-    private View\Statistic\UsedPoints $table;
+    private View\Statistic\CpuUsage $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {

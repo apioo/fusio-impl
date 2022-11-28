@@ -127,7 +127,7 @@ class NewInstallation
         $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
         $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
         $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', 'Backend_Action_Connection_RenewToken');
-        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', 'Backend_Action_System_UsageCollector');
+        $bag->addCronjob('backend', 'Usage_Collector', '*/5 * * * *', 'Backend_Action_System_UsageCollector');
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
