@@ -426,6 +426,12 @@ class NewInstallation
                 '/statistic/used_points' => [
                     'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\PlanUsageCollectionQuery::class, 'backend.statistic'),
                 ],
+                '/statistic/cpu_usage' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetCpuUsage::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\LogCollectionQuery::class, 'backend.statistic'),
+                ],
+                '/statistic/memory_usage' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetMemoryUsage::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\LogCollectionQuery::class, 'backend.statistic'),
+                ],
                 '/transaction' => [
                     'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Model\Backend\TransactionCollection::class], Model\Backend\TransactionCollectionQuery::class, 'backend.transaction'),
                 ],

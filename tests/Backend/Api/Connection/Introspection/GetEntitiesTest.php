@@ -98,6 +98,7 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_schema",
         "fusio_scope",
         "fusio_scope_routes",
+        "fusio_system_usage",
         "fusio_transaction",
         "fusio_user",
         "fusio_user_grant",

@@ -33,6 +33,11 @@ use Fusio\Impl\Backend\View\QueryFilterAbstract;
  */
 class QueryFilter extends QueryFilterAbstract
 {
+    protected function getDateColumn(): string
+    {
+        return 'insert_date';
+    }
+
     public static function create(RequestInterface $request): self
     {
         [$from, $to] = self::getFromAndTo($request);
