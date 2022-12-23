@@ -99,7 +99,7 @@ class TableCommand extends Command
 
         $output->writeln('Generated ' . $count . ' files at ' . $tableGeneratedFolder);
 
-        return 1;
+        return 0;
     }
 
     private function getOverwriteClass(string $className, string $overwriteClass): string

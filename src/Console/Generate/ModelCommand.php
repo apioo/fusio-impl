@@ -81,7 +81,7 @@ class ModelCommand extends Command
 
         $output->writeln('Generated ' . $count . ' files at ' . $target);
 
-        return 1;
+        return 0;
     }
 
     private function generate(string $source, string $target, string $format, string $config): int

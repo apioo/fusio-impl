@@ -122,7 +122,7 @@ class SdkCommand extends Command
 
         $output->writeln('Successful!');
 
-        return 1;
+        return 0;
     }
 
     private function getConfig(InputInterface $input): ?string
