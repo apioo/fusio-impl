@@ -47,7 +47,7 @@ class DataSyncronizer
             ]);
 
             if (empty($configId)) {
-                $connection->insert('fusio_config', $config);
+                self::insert($connection, 'fusio_config', $config);
             }
         }
 
@@ -59,19 +59,19 @@ class DataSyncronizer
             ]);
 
             if (empty($routeId)) {
-                $connection->insert('fusio_routes', $row);
+                self::insert($connection, 'fusio_routes', $row);
                 $routeId = $connection->lastInsertId();
 
                 $methods = $data->getData('fusio_routes_method', 'route_id', $data->getId('fusio_routes', $row['path']));
                 foreach ($methods as $method) {
                     $method['route_id'] = $routeId;
-                    $connection->insert('fusio_routes_method', $method);
+                    self::insert($connection, 'fusio_routes_method', $method);
 
                     $methodId = $connection->lastInsertId();
                     $responses = $data->getData('fusio_routes_response', 'method_id', $data->getId('fusio_routes_method', $row['path'] . $method['method']));
                     foreach ($responses as $response) {
                         $response['method_id'] = $methodId;
-                        $connection->insert('fusio_routes_response', $response);
+                        self::insert($connection, 'fusio_routes_response', $response);
                     }
                 }
             }
@@ -86,7 +86,7 @@ class DataSyncronizer
             ]);
 
             if (empty($actionId)) {
-                $connection->insert('fusio_action', $action);
+                self::insert($connection, 'fusio_action', $action);
             }
         }
 
@@ -97,7 +97,7 @@ class DataSyncronizer
             ]);
 
             if (empty($schemaId)) {
-                $connection->insert('fusio_schema', $schema);
+                self::insert($connection, 'fusio_schema', $schema);
             }
         }
 
@@ -108,7 +108,7 @@ class DataSyncronizer
             ]);
 
             if (empty($eventId)) {
-                $connection->insert('fusio_event', $event);
+                self::insert($connection, 'fusio_event', $event);
             }
         }
 
@@ -119,7 +119,7 @@ class DataSyncronizer
             ]);
 
             if (empty($cronjobId)) {
-                $connection->insert('fusio_cronjob', $cronjob);
+                self::insert($connection, 'fusio_cronjob', $cronjob);
             }
         }
 
@@ -131,7 +131,7 @@ class DataSyncronizer
             ]);
 
             if (empty($scopeId)) {
-                $connection->insert('fusio_scope', $scope);
+                self::insert($connection, 'fusio_scope', $scope);
                 $scopeId = $connection->lastInsertId();
             }
 
@@ -156,8 +156,21 @@ class DataSyncronizer
                 $scopeRoute['scope_id'] = $scopeId;
                 $scopeRoute['route_id'] = $routeId;
 
-                $connection->insert('fusio_scope_routes', $scopeRoute);
+                self::insert($connection, 'fusio_scope_routes', $scopeRoute);
             }
         }
+    }
+
+    private static function insert(Connection $connection, string $tableName, array $data): void
+    {
+        $row = [];
+        $columns = $connection->getSchemaManager()->listTableColumns($tableName);
+        foreach ($columns as $column) {
+            if (isset($data[$column->getName()])) {
+                $row[$column->getName()] = $data[$column->getName()];
+            }
+        }
+
+        $connection->insert($tableName, $row);
     }
 }
