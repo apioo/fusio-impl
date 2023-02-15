@@ -421,6 +421,15 @@ final class Version20200905081453 extends AbstractMigration
             $scopeTable->addUniqueIndex(['name']);
         }
 
+        if (!$schema->hasTable('fusio_system_usage')) {
+            $systemUsageTable = $schema->createTable('fusio_system_usage');
+            $systemUsageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $systemUsageTable->addColumn('cpu_usage', 'integer');
+            $systemUsageTable->addColumn('memory_usage', 'integer');
+            $systemUsageTable->addColumn('insert_date', 'datetime');
+            $systemUsageTable->setPrimaryKey(['id']);
+        }
+
         if (!$schema->hasTable('fusio_scope_routes')) {
             $scopeRoutesTable = $schema->createTable('fusio_scope_routes');
             $scopeRoutesTable->addColumn('id', 'integer', ['autoincrement' => true]);

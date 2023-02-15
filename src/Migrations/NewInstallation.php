@@ -127,6 +127,7 @@ class NewInstallation
         $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
         $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
         $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', 'Backend_Action_Connection_RenewToken');
+        $bag->addCronjob('backend', 'Usage_Collector', '*/5 * * * *', 'Backend_Action_System_UsageCollector');
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
@@ -424,6 +425,12 @@ class NewInstallation
                 ],
                 '/statistic/used_points' => [
                     'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\PlanUsageCollectionQuery::class, 'backend.statistic'),
+                ],
+                '/statistic/cpu_usage' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetCpuUsage::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\LogCollectionQuery::class, 'backend.statistic'),
+                ],
+                '/statistic/memory_usage' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetMemoryUsage::class, null, [200 => Model\Backend\StatisticChart::class], Model\Backend\LogCollectionQuery::class, 'backend.statistic'),
                 ],
                 '/transaction' => [
                     'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Model\Backend\TransactionCollection::class], Model\Backend\TransactionCollectionQuery::class, 'backend.transaction'),

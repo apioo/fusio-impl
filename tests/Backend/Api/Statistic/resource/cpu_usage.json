@@ -1,0 +1,116 @@
+{
+  "status": 1,
+  "path": "\/backend\/statistic\/cpu_usage",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Statistic_GetCpuUsage",
+      "security": {
+        "app": [
+          "backend.statistic"
+        ]
+      },
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_LogCollectionQuery",
+      "responses": {
+        "200": "Backend_StatisticChart"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_LogCollectionQuery": {
+      "$ref": "LogCollectionQuery"
+    },
+    "Backend_StatisticChart": {
+      "$ref": "StatisticChart"
+    },
+    "CollectionQuery": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "LogCollectionQuery": {
+      "$extends": "CollectionQuery",
+      "type": "object",
+      "properties": {
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "StatisticChart": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "StatisticChartData"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "StatisticChartData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    }
+  }
+}
