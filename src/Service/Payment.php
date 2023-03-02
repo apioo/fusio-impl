@@ -33,6 +33,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Service\Payment\Webhook;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\PaymentCheckoutRequest;
+use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\RequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -51,15 +52,17 @@ class Payment
     private Webhook $webhook;
     private Service\Config $configService;
     private Table\Plan $planTable;
+    private Config $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, Config $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
         $this->providerFactory = $providerFactory;
         $this->webhook = $webhook;
         $this->configService = $configService;
         $this->planTable = $planTable;
+        $this->config = $config;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -100,8 +103,9 @@ class Payment
         }
 
         $webhookSecret = $this->configService->getValue('payment_' . strtolower($name) . '_secret');
+        $domain = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
 
-        $provider->webhook($request, $this->webhook, $webhookSecret);
+        $provider->webhook($request, $this->webhook, $webhookSecret, $domain);
     }
 
     public function portal(string $name, UserInterface $user, string $returnUrl): ?string
@@ -142,10 +146,13 @@ class Payment
             $currency = 'EUR';
         }
 
+        $domain = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
+
         return new CheckoutContext(
             $returnUrl,
             $returnUrl,
-            $currency
+            $currency,
+            $domain
         );
     }
 }

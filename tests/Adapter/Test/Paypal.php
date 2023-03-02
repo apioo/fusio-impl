@@ -44,7 +44,7 @@ class Paypal implements ProviderInterface
         return $approvalUrl;
     }
 
-    public function webhook(RequestInterface $request, WebhookInterface $handler, ?string $webhookSecret = null): void
+    public function webhook(RequestInterface $request, WebhookInterface $handler, ?string $webhookSecret = null, ?string $domain = null): void
     {
     }
 

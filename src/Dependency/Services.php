@@ -447,6 +447,7 @@ trait Services
             $this->get('payment_webhook_service'),
             $this->get('config_service'),
             $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('config'),
             $this->get('event_dispatcher')
         );
     }
