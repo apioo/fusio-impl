@@ -6149,6 +6149,9 @@
           },
           "sha1Hash": {
             "type": "string"
+          },
+          "startUrl": {
+            "type": "string"
           }
         }
       },
