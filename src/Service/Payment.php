@@ -103,9 +103,8 @@ class Payment
         }
 
         $webhookSecret = $this->configService->getValue('payment_' . strtolower($name) . '_secret');
-        $domain = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
 
-        $provider->webhook($request, $this->webhook, $webhookSecret, $domain);
+        $provider->webhook($request, $this->webhook, $webhookSecret, $this->config->get('psx_url'));
     }
 
     public function portal(string $name, UserInterface $user, string $returnUrl): ?string
@@ -146,13 +145,11 @@ class Payment
             $currency = 'EUR';
         }
 
-        $domain = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
-
         return new CheckoutContext(
             $returnUrl,
             $returnUrl,
             $currency,
-            $domain
+            $this->config->get('psx_url')
         );
     }
 }
