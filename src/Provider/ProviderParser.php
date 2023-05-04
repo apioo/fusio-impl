@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Provider;
 
+use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Factory\FactoryInterface;
 use Fusio\Engine\Form;
 use Fusio\Engine\Parser\ParserAbstract;
@@ -32,34 +33,25 @@ use Fusio\Engine\Parser\ParserAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ProviderParser extends ParserAbstract
+abstract class ProviderParser extends ParserAbstract
 {
-    private ProviderLoader $providerLoader;
-    private string $type;
-    private string $instanceOf;
+    private iterable $objects;
 
-    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader, string $type, string $instanceOf)
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, iterable $objects)
     {
         parent::__construct($factory, $elementFactory);
 
-        $this->providerLoader = $providerLoader;
-        $this->type           = $type;
-        $this->instanceOf     = $instanceOf;
+        $this->objects = $objects;
     }
 
     public function getClasses(): array
     {
-        $classes = $this->providerLoader->getConfig()->getClasses($this->type);
-        $result  = [];
-
-        foreach ($classes as $class) {
-            $object     = $this->getObject($class);
-            $instanceOf = $this->instanceOf;
-
-            if ($object instanceof $instanceOf) {
+        $result = [];
+        foreach ($this->objects as $object) {
+            if ($object instanceof ConfigurableInterface) {
                 $result[] = [
                     'name'  => $object->getName(),
-                    'class' => $class,
+                    'class' => $object::class,
                 ];
             }
         }
@@ -69,5 +61,16 @@ class ProviderParser extends ParserAbstract
         });
 
         return $result;
+    }
+
+    public function getInstance(string $class): ?object
+    {
+        foreach ($this->objects as $object) {
+            if ($object::class === $class) {
+                return $object;
+            }
+        }
+
+        return null;
     }
 }

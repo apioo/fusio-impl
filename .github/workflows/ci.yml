@@ -12,7 +12,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.1
           coverage: none
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
@@ -25,16 +25,12 @@ jobs:
     strategy:
       matrix:
         php-versions:
-          - 8.0
           - 8.1
+          - 8.2
         database:
           - sqlite
           - postgres
           - mysql
-        exclude:
-          # exclude PHP 8.0 mysql build which is really slow
-          - php-versions: 8.0
-            database: mysql
     services:
       postgres:
         image: postgres

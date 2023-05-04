@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service\Connection as ConnectionService;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * ConnectionDatabase
@@ -36,12 +37,12 @@ use Fusio\Impl\Service\Connection as ConnectionService;
 class ConnectionDatabase implements Repository\ConnectionInterface
 {
     private DBALConnection $connection;
-    private string $secretKey;
+    private ConfigInterface $config;
 
-    public function __construct(DBALConnection $connection, string $secretKey)
+    public function __construct(DBALConnection $connection, ConfigInterface $config)
     {
         $this->connection = $connection;
-        $this->secretKey  = $secretKey;
+        $this->config = $config;
     }
 
     public function getAll(): array
@@ -53,7 +54,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
               ORDER BY name ASC';
 
         $connections = [];
-        $result = $this->connection->fetchAll($sql);
+        $result = $this->connection->fetchAllAssociative($sql);
 
         foreach ($result as $row) {
             $connections[] = $this->newConnection($row);
@@ -77,7 +78,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                   FROM fusio_connection 
                  WHERE ' . $column . ' = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
+        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
 
         if (!empty($row)) {
             return $this->newConnection($row);
@@ -88,7 +89,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
 
     private function newConnection(array $row): Model\ConnectionInterface
     {
-        $config = !empty($row['config']) ? ConnectionService\Encrypter::decrypt($row['config'], $this->secretKey) : [];
+        $config = !empty($row['config']) ? ConnectionService\Encrypter::decrypt($row['config'], $this->config->get('fusio_project_key')) : [];
 
         return new Model\Connection(
             $row['id'],

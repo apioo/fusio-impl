@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\Http\Action\HttpEngine;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Factory\ResolverInterface;
 
@@ -34,8 +35,17 @@ use Fusio\Engine\Factory\ResolverInterface;
  */
 class HttpUrl implements ResolverInterface
 {
+    private RuntimeInterface $runtime;
+
+    public function __construct(RuntimeInterface $runtime)
+    {
+        $this->runtime = $runtime;
+    }
+
     public function resolve(string $className): ActionInterface
     {
-        return new HttpEngine($className);
+        $engine = new HttpEngine($this->runtime);
+        $engine->setUrl($className);
+        return $engine;
     }
 }

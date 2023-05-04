@@ -19,25 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Factory\Resolver;
+namespace Fusio\Impl\Provider;
 
-use Fusio\Adapter\File\Action\FileEngine;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\Factory\ResolverInterface;
+use Fusio\Engine\ConnectionInterface;
+use Fusio\Engine\Factory;
+use Fusio\Engine\Form;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
- * StaticFile
+ * UserProvider
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class StaticFile implements ResolverInterface
+class UserProvider extends ProviderParser
 {
-    public function resolve(string $className): ActionInterface
+    public function __construct(Factory\ConnectionInterface $factory, Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.user')] iterable $objects)
     {
-        $engine = new FileEngine($className);
-        $engine->setFile($className);
-        return $engine;
+        parent::__construct($factory, $elementFactory, $objects);
     }
 }
+

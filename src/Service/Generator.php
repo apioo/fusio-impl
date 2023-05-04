@@ -24,15 +24,14 @@ namespace Fusio\Impl\Service;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Form;
 use Fusio\Engine\Form\ElementFactoryInterface;
-use Fusio\Engine\Parameters;
 use Fusio\Engine\Generator\ExecutableInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\Setup;
+use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Provider\ProviderFactory;
+use Fusio\Impl\Provider\GeneratorProvider;
 use Fusio\Impl\Service\Generator\EntityCreator;
-use Fusio\Model\Backend\GeneratorProvider;
-use Fusio\Model\Backend\GeneratorProviderConfig;
+use Fusio\Model\Backend;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -45,19 +44,19 @@ use PSX\Http\Exception as StatusCode;
 class Generator
 {
     private Connection $connection;
-    private ProviderFactory $providerFactory;
+    private GeneratorProvider $generatorProvider;
     private EntityCreator $entityCreator;
     private ElementFactoryInterface $elementFactory;
 
-    public function __construct(Connection $connection, ProviderFactory $providerFactory, EntityCreator $entityCreator, ElementFactoryInterface $elementFactory)
+    public function __construct(Connection $connection, GeneratorProvider $generatorProvider, EntityCreator $entityCreator, ElementFactoryInterface $elementFactory)
     {
         $this->connection = $connection;
-        $this->providerFactory = $providerFactory;
+        $this->generatorProvider = $generatorProvider;
         $this->entityCreator = $entityCreator;
         $this->elementFactory = $elementFactory;
     }
 
-    public function create(string $providerName, int $categoryId, GeneratorProvider $config, UserContext $context): void
+    public function create(string $providerName, int $categoryId, Backend\GeneratorProvider $config, UserContext $context): void
     {
         $setup = new Setup();
         $basePath = $config->getPath() ?? '';
@@ -100,7 +99,7 @@ class Generator
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName, GeneratorProviderConfig $config): array
+    public function getChangelog(string $providerName, Backend\GeneratorProviderConfig $config): array
     {
         $setup = new Setup();
 
@@ -116,7 +115,7 @@ class Generator
 
     private function getProvider(string $providerName): ProviderInterface
     {
-        $provider = $this->providerFactory->factory($providerName);
+        $provider = $this->generatorProvider->getInstance($providerName);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }

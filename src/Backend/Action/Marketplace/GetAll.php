@@ -21,13 +21,14 @@
 
 namespace Fusio\Impl\Backend\Action\Marketplace;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Service\Marketplace\App;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * GetAll
@@ -40,10 +41,12 @@ class GetAll extends ActionAbstract
 {
     private Marketplace\Repository\Remote $remoteRepository;
     private Marketplace\Repository\Local $localRepository;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, Config $config)
+    public function __construct(RuntimeInterface $runtime, Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, ConfigInterface $config)
     {
+        parent::__construct($runtime);
+
         $this->remoteRepository = $remoteRepository;
         $this->localRepository = $localRepository;
         $this->config = $config;

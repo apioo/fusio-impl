@@ -32,8 +32,8 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Impl\Factory\Resolver;
-use Fusio\Impl\Provider\ActionProviderParser;
-use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Impl\Provider\ActionProvider;
+use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue;
 use Fusio\Impl\Service\Event\Dispatcher;
@@ -52,9 +52,9 @@ use Symfony\Component\Cache\Psr16Cache;
  */
 trait Engine
 {
-    public function getActionParser(): ActionProviderParser
+    public function getActionParser(): ActionProvider
     {
-        return new ActionProviderParser(
+        return new ActionProvider(
             $this->get('action_factory'),
             $this->get('form_element_factory'),
             $this->get('provider_loader')
@@ -114,9 +114,9 @@ trait Engine
         );
     }
 
-    public function getConnectionParser(): ConnectionProviderParser
+    public function getConnectionParser(): ConnectionProvider
     {
-        return new ConnectionProviderParser(
+        return new ConnectionProvider(
             $this->get('connection_factory'),
             $this->get('form_element_factory'),
             $this->get('provider_loader')

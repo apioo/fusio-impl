@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\Php\Action\PhpEngine;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Factory\ResolverInterface;
 
@@ -34,8 +35,17 @@ use Fusio\Engine\Factory\ResolverInterface;
  */
 class PhpFile implements ResolverInterface
 {
+    private RuntimeInterface $runtime;
+
+    public function __construct(RuntimeInterface $runtime)
+    {
+        $this->runtime = $runtime;
+    }
+
     public function resolve(string $className): ActionInterface
     {
-        return new PhpEngine($className);
+        $engine = new PhpEngine($this->runtime);
+        $engine->setFile($className);
+        return $engine;
     }
 }

@@ -24,10 +24,10 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Provider\ProviderFactory;
+use Fusio\Impl\Provider\UserProvider;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\UserRemote;
-use Fusio\Model\Consumer\UserProvider;
+use Fusio\Model\Consumer;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
@@ -43,18 +43,18 @@ class Provider
 {
     private Service\User $userService;
     private Service\App\Token $appTokenService;
-    private ProviderFactory $providerFactory;
+    private UserProvider $userProvider;
     private Config $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, Config $config)
     {
         $this->userService     = $userService;
         $this->appTokenService = $appTokenService;
-        $this->providerFactory = $providerFactory;
+        $this->userProvider    = $userProvider;
         $this->config          = $config;
     }
 
-    public function provider(string $providerName, UserProvider $request): AccessToken
+    public function provider(string $providerName, Consumer\UserProvider $request): AccessToken
     {
         $code = $request->getCode();
         if (empty($code)) {
@@ -72,7 +72,7 @@ class Provider
         }
 
         /** @var ProviderInterface $provider */
-        $provider = $this->providerFactory->factory($providerName);
+        $provider = $this->userProvider->getInstance($providerName);
         $user     = $provider->requestUser($code, $clientId, $redirectUri);
 
         if (!$user instanceof UserDetails) {

@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Provider\ActionProviderParser;
+use Fusio\Impl\Provider\ActionProvider;
 
 /**
  * GetIndex
@@ -36,9 +36,9 @@ use Fusio\Impl\Provider\ActionProviderParser;
  */
 class GetIndex extends ActionAbstract
 {
-    private ActionProviderParser $actionParser;
+    private ActionProvider $actionParser;
 
-    public function __construct(ActionProviderParser $actionParser)
+    public function __construct(ActionProvider $actionParser)
     {
         $this->actionParser = $actionParser;
     }

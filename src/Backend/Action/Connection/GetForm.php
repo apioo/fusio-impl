@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Impl\Provider\ConnectionProvider;
 
 /**
  * GetForm
@@ -37,9 +37,9 @@ use Fusio\Impl\Provider\ConnectionProviderParser;
  */
 class GetForm extends ActionAbstract
 {
-    private ConnectionProviderParser $connectionParser;
+    private ConnectionProvider $connectionParser;
 
-    public function __construct(ConnectionProviderParser $connectionParser)
+    public function __construct(ConnectionProvider $connectionParser)
     {
         $this->connectionParser = $connectionParser;
     }

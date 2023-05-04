@@ -21,15 +21,17 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service\Connection\Token;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
 
@@ -43,12 +45,14 @@ use PSX\Sql\TableManagerInterface;
 class Get extends ActionAbstract
 {
     private View\Connection $table;
-    private Config $config;
-    private ConnectionProviderParser $connectionParser;
+    private ConfigInterface $config;
+    private ConnectionProvider $connectionParser;
     private Token $tokenService;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config, ConnectionProviderParser $connectionParser, Token $tokenService)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
     {
+        parent::__construct($runtime);
+
         $this->table = $tableManager->getTable(View\Connection::class);
         $this->config = $config;
         $this->connectionParser = $connectionParser;

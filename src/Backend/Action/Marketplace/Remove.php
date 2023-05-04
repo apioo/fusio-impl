@@ -21,13 +21,14 @@
 
 namespace Fusio\Impl\Backend\Action\Marketplace;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -40,10 +41,12 @@ use PSX\Http\Exception as StatusCode;
 class Remove extends ActionAbstract
 {
     private Installer $installerService;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Installer $installerService, Config $config)
+    public function __construct(RuntimeInterface $runtime, Installer $installerService, ConfigInterface $config)
     {
+        parent::__construct($runtime);
+
         $this->installerService = $installerService;
         $this->config = $config;
     }

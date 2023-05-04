@@ -26,6 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Provider\GeneratorProvider;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderLoader;
 use PSX\Dependency\AutowireResolverInterface;
@@ -39,32 +40,17 @@ use PSX\Dependency\AutowireResolverInterface;
  */
 class Index extends ActionAbstract
 {
-    private ProviderLoader $loader;
-    private AutowireResolverInterface $resolver;
+    private GeneratorProvider $provider;
 
-    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver)
+    public function __construct(GeneratorProvider $provider)
     {
-        $this->loader = $loader;
-        $this->resolver = $resolver;
+        $this->provider = $provider;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $classes = $this->loader->getConfig()->getClasses(ProviderConfig::TYPE_GENERATOR);
-        $result  = [];
-
-        foreach ($classes as $name => $class) {
-            $provider = $this->resolver->getObject($class);
-            if ($provider instanceof ProviderInterface) {
-                $result[] = [
-                    'name' => $provider->getName(),
-                    'class' => $name,
-                ];
-            }
-        }
-
         return [
-            'providers' => $result
+            'providers' => $this->provider->getClasses()
         ];
     }
 }

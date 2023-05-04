@@ -47,17 +47,15 @@ class RegisterCommand extends Command
     use TypeSafeTrait;
 
     private Installer $installer;
-    private InstructionParser $parser;
 
-    public function __construct(ProviderWriter $providerWriter)
+    public function __construct(Installer $installer)
     {
         parent::__construct();
 
-        $this->installer = new Installer($providerWriter);
-        $this->parser    = new InstructionParser();
+        $this->installer = $installer;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:register')
@@ -67,7 +65,7 @@ class RegisterCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $class = $this->getArgumentAsString($input, 'class');
         if (!class_exists($class)) {
@@ -76,54 +74,22 @@ class RegisterCommand extends Command
         }
 
         $adapter = new $class();
-        $helper  = $this->getHelper('question');
-
         if (!$adapter instanceof AdapterInterface) {
             $output->writeln('Class does not implement the AdapterInterface');
             return 1;
         }
 
-        // parse definition
-        $definition   = file_get_contents($adapter->getDefinition());
-        $definition   = Parser::decode($definition, false);
-        $instructions = $this->parser->parse($definition);
-        $rows         = array();
-
-        foreach ($instructions as $instruction) {
-            $rows[] = [$instruction->getName(), $instruction->getDescription()];
-        }
-
-        $output->writeLn('Loaded definition ' . $adapter->getDefinition());
-
-        // confirm
-        $autoConfirm = $input->getOption('yes');
-        $confirmed   = $autoConfirm;
-        if (!$confirmed) {
-            // show instructions
-            $output->writeLn('');
-            $output->writeLn('The adapter will install the following entries into the system.');
-
-            $table = new Table($output);
-            $table
-                ->setHeaders(['Type', 'Description'])
-                ->setRows($rows);
-
-            $table->render();
-
-            $question  = new ConfirmationQuestion('Do you want to continue (y/n)? ', false);
-            $confirmed = $helper->ask($input, $output, $question);
-        }
-
-        if (!$confirmed) {
-            $output->writeln('Abort');
+        $containerFile = $adapter->getContainerFile();
+        if (!is_file($containerFile)) {
+            $output->writeln('The adapter returned an invalid container file');
             return 1;
         }
 
-        $this->installer->install($instructions);
+        $this->installer->install($containerFile);
 
         $output->writeln('Registration successful!');
         $output->writeln('');
 
-        return 0;
+        return self::SUCCESS;
     }
 }

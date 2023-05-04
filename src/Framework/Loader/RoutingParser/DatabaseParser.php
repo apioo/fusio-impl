@@ -71,10 +71,10 @@ class DatabaseParser implements RoutingParserInterface
         $sql.= ' ORDER BY priority DESC';
 
         $collection = new RoutingCollection();
-        $result     = $this->connection->fetchAll($sql, $params);
+        $result     = $this->connection->fetchAllAssociative($sql, $params);
 
         foreach ($result as $row) {
-            $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id'], $row['category_id']);
+            $collection->add(explode('|', $row['methods']), $row['path'], [$row['controller'], 'execute'], $row['id'], $row['category_id']);
         }
 
         return $this->collection[$key] = $collection;

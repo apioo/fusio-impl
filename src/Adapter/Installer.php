@@ -21,9 +21,6 @@
 
 namespace Fusio\Impl\Adapter;
 
-use Fusio\Impl\Provider\ProviderWriter;
-use stdClass;
-
 /**
  * The installer inserts only the action and connection classes through the database connection. All other entries are
  * inserted through the API endpoint
@@ -34,48 +31,8 @@ use stdClass;
  */
 class Installer
 {
-    private ProviderWriter $providerWriter;
-
-    public function __construct(ProviderWriter $providerWriter)
+    public function install(string $containerFile): void
     {
-        $this->providerWriter = $providerWriter;
-    }
-
-    public function install(array $instructions): void
-    {
-        $data = new stdClass();
-
-        foreach ($instructions as $instruction) {
-            $key   = $instruction->getKey();
-            $value = $instruction->getPayload();
-
-            if (!isset($data->$key)) {
-                $data->$key = [];
-            }
-
-            $data->$key[] = $value;
-        }
-
-        $this->importProvider($data);
-    }
-
-    private function importProvider(stdClass $data): void
-    {
-        $providerTypes  = $this->providerWriter->getAvailableTypes();
-        $providerConfig = [];
-        $newClasses     = [];
-
-        foreach ($providerTypes as $providerType) {
-            $name    = $providerType . 'Class';
-            $classes = isset($data->{$name}) ? $data->{$name} : null;
-            if (!empty($classes) && is_array($classes)) {
-                $classes    = array_filter($classes, 'class_exists');
-                $newClasses = array_merge($newClasses, $classes);
-
-                $providerConfig[$providerType] = $classes;
-            }
-        }
-
-        $this->providerWriter->write($providerConfig);
+        // @TODO write container file to container.php
     }
 }

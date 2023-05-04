@@ -19,25 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Factory\Resolver;
+namespace Fusio\Impl\Framework\Loader;
 
-use Fusio\Adapter\File\Action\FileEngine;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\Factory\ResolverInterface;
+use PSX\Framework\Loader\ContextFactoryInterface;
 
 /**
- * StaticFile
+ * Context
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class StaticFile implements ResolverInterface
+class ContextFactory implements ContextFactoryInterface
 {
-    public function resolve(string $className): ActionInterface
+    public function factory(): Context
     {
-        $engine = new FileEngine($className);
-        $engine->setFile($className);
-        return $engine;
+        return new Context();
     }
 }

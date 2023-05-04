@@ -28,6 +28,7 @@ use Fusio\Engine\Model\UserInterface;
 use Fusio\Engine\Payment\CheckoutContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Provider\PaymentProvider;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Payment\Webhook;
@@ -48,17 +49,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Payment
 {
     private ConnectorInterface $connector;
-    private ProviderFactory $providerFactory;
+    private PaymentProvider $paymentProvider;
     private Webhook $webhook;
     private Service\Config $configService;
     private Table\Plan $planTable;
     private Config $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, Config $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, Config $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
-        $this->providerFactory = $providerFactory;
+        $this->paymentProvider = $paymentProvider;
         $this->webhook = $webhook;
         $this->configService = $configService;
         $this->planTable = $planTable;
@@ -68,7 +69,7 @@ class Payment
 
     public function checkout(string $name, PaymentCheckoutRequest $checkout, UserInterface $user, UserContext $context): string
     {
-        $provider = $this->providerFactory->factory($name);
+        $provider = $this->paymentProvider->getInstance($name);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
@@ -97,7 +98,7 @@ class Payment
 
     public function webhook(string $name, RequestInterface $request): void
     {
-        $provider = $this->providerFactory->factory($name);
+        $provider = $this->paymentProvider->getInstance($name);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
@@ -109,7 +110,7 @@ class Payment
 
     public function portal(string $name, UserInterface $user, string $returnUrl): ?string
     {
-        $provider = $this->providerFactory->factory($name);
+        $provider = $this->paymentProvider->getInstance($name);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }

@@ -68,35 +68,43 @@ class SchemaApiController extends ControllerAbstract
     #[Inject]
     private Invoker $actionInvokerService;
 
+    public function __construct(Loader $schemaLoader, Invoker $actionInvokerService)
+    {
+
+    }
+
     public function getPreFilter(): array
     {
         $filter = parent::getPreFilter();
 
         $filter[] = new UserAgentEnforcer();
 
-        if ($this->context instanceof Context) {
-            $filter[] = new Filter\AssertMethod(
-                $this->routesMethodService,
-                $this->context
-            );
+        $filter[] = new Filter\AssertMethod(
+            $this->routesMethodService,
+            $this->context
+        );
 
-            $filter[] = new Filter\Authentication(
-                $this->securityTokenValidator,
-                $this->context
-            );
+        $filter[] = new Filter\Authentication(
+            $this->securityTokenValidator,
+            $this->context
+        );
 
-            $filter[] = new Filter\RequestLimit(
-                $this->rateService,
-                $this->context
-            );
+        $filter[] = new Filter\RequestLimit(
+            $this->rateService,
+            $this->context
+        );
 
-            $filter[] = new Filter\Logger(
-                $this->logService,
-                $this->context
-            );
-        }
+        $filter[] = new Filter\Logger(
+            $this->logService,
+            $this->context
+        );
 
         return $filter;
+    }
+
+    public function execute()
+    {
+
     }
 
     protected function doGet(HttpContextInterface $context): mixed
