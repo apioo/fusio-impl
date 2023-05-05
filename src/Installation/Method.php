@@ -24,6 +24,7 @@ namespace Fusio\Impl\Installation;
 use Fusio\Adapter;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
+use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
 
 /**
@@ -44,9 +45,9 @@ class Method
     private bool $public;
     private ?int $costs;
     private ?string $operationId;
-    private int $status;
+    private int $stability;
 
-    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null, int $status = Resource::STATUS_ACTIVE)
+    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null, int $stability = OperationInterface::STABILITY_STABLE)
     {
         $this->action = $action;
         $this->request = $request;
@@ -57,7 +58,7 @@ class Method
         $this->public = $public;
         $this->costs = $costs;
         $this->operationId = $operationId;
-        $this->status = $status;
+        $this->stability = $stability;
     }
 
     public function getAction(): string
@@ -105,8 +106,8 @@ class Method
         return $this->operationId;
     }
 
-    public function getStatus(): int
+    public function getStability(): int
     {
-        return $this->status;
+        return $this->stability;
     }
 }

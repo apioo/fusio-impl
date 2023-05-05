@@ -501,7 +501,7 @@ class DataBag
             'route_id' => self::getId('fusio_routes', $path),
             'method' => $methodName,
             'version' => 1,
-            'status' => $method->getStatus(),
+            'status' => $method->getStability(),
             'active' => 1,
             'public' => $method->isPublic() ? 1 : 0,
             'operation_id' => $method->getOperationId(),

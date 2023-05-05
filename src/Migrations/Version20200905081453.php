@@ -7,6 +7,7 @@ namespace Fusio\Impl\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Table;
 
 /**
@@ -609,7 +610,7 @@ final class Version20200905081453 extends AbstractMigration
 
         foreach ($inserts as $tableName => $rows) {
             if (!empty($rows)) {
-                $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+                $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName);
                 if ($count > 0) {
                     continue;
                 }

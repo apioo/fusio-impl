@@ -6,6 +6,7 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Table;
 
 /**

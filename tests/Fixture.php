@@ -26,15 +26,14 @@ use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Connection\Native;
-use Fusio\Impl\Migrations\DataBag;
-use Fusio\Impl\Migrations\Method;
-use Fusio\Impl\Migrations\NewInstallation;
+use Fusio\Impl\Installation\DataBag;
+use Fusio\Impl\Installation\Method;
+use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\Plan\Invoice;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
-use PSX\Api\Resource;
+use PSX\Api\OperationInterface;
 
 /**
  * Fixture
@@ -137,8 +136,8 @@ class Fixture
 
         $data->addRoutes('default', [
             '/foo' => [
-                'GET' => new Method('Sql-Select-All', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', Resource::STATUS_DEVELOPMENT),
-                'POST' => new Method('Sql-Insert', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', Resource::STATUS_DEVELOPMENT),
+                'GET' => new Method('Sql-Select-All', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', OperationInterface::STABILITY_STABLE),
+                'POST' => new Method('Sql-Insert', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', OperationInterface::STABILITY_STABLE),
             ],
             '/inspect/:foo' => [
                 'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
