@@ -32,8 +32,8 @@ use Fusio\Engine\AdapterInterface;
  */
 class TestAdapter implements AdapterInterface
 {
-    public function getDefinition(): string
+    public function getContainerFile(): string
     {
-        return __DIR__ . '/definition.json';
+        return __DIR__ . '/container.php';
     }
 }

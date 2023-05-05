@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Adapter\Test;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\RequestInterface;
 use PSX\Http\Exception as StatusCode;
 
@@ -43,16 +44,22 @@ class InspectAction extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $throw = $request->getParameter('throw');
+        $throw = $request->get('throw');
         if ($throw) {
             throw new StatusCode\InternalServerErrorException('Foobar');
         }
 
-        return $this->response->build(200, [], [
-            'method' => $request->getMethod(),
-            'headers' => $request->getHeaders(),
-            'uri_fragments' => $request->getUriFragments(),
-            'parameters' => $request->getParameters(),
-        ]);
+        $data = [];
+        $context = $request->getContext();
+        if ($context instanceof HttpRequest) {
+            $data = [
+                'method' => $context->getMethod(),
+                'headers' => $context->getHeaders(),
+                'uri_fragments' => $context->getUriFragments(),
+                'parameters' => $context->getParameters(),
+            ];
+        }
+
+        return $this->response->build(200, [], $data);
     }
 }
