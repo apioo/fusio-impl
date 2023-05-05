@@ -28,9 +28,9 @@ use Fusio\Impl\Event\Cronjob\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\CronjobCreate;
 use Fusio\Model\Backend\CronjobUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Cronjob

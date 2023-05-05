@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Tests\Mail;
 
-use Fusio\Impl\Mail\MailerInterface;
+use Fusio\Impl\Service\Mail\MailerInterface;
 use Fusio\Impl\Mail\Message;
-use Fusio\Impl\Mail\SenderFactory;
+use Fusio\Impl\Service\Mail\SenderFactory;
 use Fusio\Impl\Mail\SenderInterface;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;

@@ -27,7 +27,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Marketplace;
-use Fusio\Impl\Service\Marketplace\App;
+use Fusio\Impl\Dto\Marketplace\App;
 use PSX\Framework\Config\ConfigInterface;
 
 /**

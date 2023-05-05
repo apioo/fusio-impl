@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
-use Fusio\Impl\Backend\View\Plan\Usage\QueryFilter;
+use Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter;
 use PSX\Sql\ViewAbstract;
 
 /**

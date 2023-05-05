@@ -22,11 +22,11 @@
 namespace Fusio\Impl\Rpc;
 
 use Fusio\Engine\Request\HttpRequest;
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Action\Invoker as ActionInvoker;
 use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpContextInterface;
+use Service\Schema\Loader;
 
 /**
  * InvokerFactory

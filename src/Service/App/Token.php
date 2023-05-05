@@ -29,11 +29,11 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Token
@@ -47,10 +47,10 @@ class Token
     private Table\App $appTable;
     private Table\User $userTable;
     private Table\App\Token $appTokenTable;
-    private Config $config;
+    private ConfigInterface $config;
     private EventDispatcherInterface  $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, Config $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
         $this->userTable       = $userTable;

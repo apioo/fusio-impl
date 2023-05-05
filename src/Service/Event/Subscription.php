@@ -28,8 +28,8 @@ use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\EventSubscriptionCreate;
 use Fusio\Model\Backend\EventSubscriptionUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Subscription

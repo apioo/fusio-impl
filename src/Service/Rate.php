@@ -30,10 +30,10 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\RateAllocation;
 use Fusio\Model\Backend\RateCreate;
 use Fusio\Model\Backend\RateUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Rate

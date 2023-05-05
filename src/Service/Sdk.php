@@ -24,7 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Model\Backend\SdkGenerate;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\GeneratorFactoryInterface;
-use PSX\Framework\Config\Config as FrameworkConfig;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -40,9 +40,9 @@ use Symfony\Component\Console\Output\NullOutput;
 class Sdk
 {
     private Application $console;
-    private FrameworkConfig $config;
+    private ConfigInterface $config;
 
-    public function __construct(Application $console, FrameworkConfig $config)
+    public function __construct(Application $console, ConfigInterface $config)
     {
         $this->console = $console;
         $this->config = $config;

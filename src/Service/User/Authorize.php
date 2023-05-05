@@ -24,7 +24,7 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -44,9 +44,9 @@ class Authorize
     private Service\App\Code $appCodeService;
     private Table\App $appTable;
     private Table\User\Grant $userGrantTable;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Config $config)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
@@ -74,7 +74,7 @@ class Authorize
         // redirect uri
         $redirectUri = $request->getRedirectUri();
         if (!empty($redirectUri)) {
-            $redirectUri = new Uri($redirectUri);
+            $redirectUri = Uri::parse($redirectUri);
 
             if (!$redirectUri->isAbsolute()) {
                 throw new StatusCode\BadRequestException('Redirect uri must be an absolute url');
@@ -86,7 +86,7 @@ class Authorize
 
             $url = $app->getUrl();
             if (!empty($url)) {
-                $url = new Url($url);
+                $url = Url::parse($url);
                 if ($url->getHost() != $redirectUri->getHost()) {
                     throw new StatusCode\BadRequestException('Redirect uri must have the same host as the app url');
                 }

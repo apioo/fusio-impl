@@ -24,10 +24,10 @@ namespace Fusio\Impl\Rpc\Middleware;
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request\RpcRequest;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Schema\Loader;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\SchemaTraverser;
 use PSX\Schema\Visitor\TypeVisitor;
+use Service\Schema\Loader;
 
 /**
  * ValidateSchema

@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
 
@@ -41,9 +42,9 @@ use PSX\Sql\TableManagerInterface;
 class GetApp extends ActionAbstract
 {
     private View\App $table;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config)
+    public function __construct(TableManagerInterface $tableManager, ConfigInterface $config)
     {
         $this->table = $tableManager->getTable(View\App::class);
         $this->config = $config;

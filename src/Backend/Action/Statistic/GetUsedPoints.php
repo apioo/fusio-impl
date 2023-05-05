@@ -47,7 +47,7 @@ class GetUsedPoints extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
-            View\Plan\Usage\QueryFilter::create($request)
+            \Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter::create($request)
         );
     }
 }

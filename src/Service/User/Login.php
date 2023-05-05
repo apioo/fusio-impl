@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
@@ -39,9 +40,9 @@ class Login
 {
     private Service\User $userService;
     private Service\App\Token $appTokenService;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config)
     {
         $this->userService     = $userService;
         $this->appTokenService = $appTokenService;

@@ -28,9 +28,9 @@ use Fusio\Impl\Event\Event\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\EventCreate;
 use Fusio\Model\Backend\EventUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Event

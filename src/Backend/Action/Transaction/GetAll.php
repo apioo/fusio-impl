@@ -49,7 +49,7 @@ class GetAll extends ActionAbstract
         return $this->table->getCollection(
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
-            View\Transaction\QueryFilter::create($request)
+            \Fusio\Impl\Backend\Filter\Transaction\QueryFilter::create($request)
         );
     }
 }

@@ -33,6 +33,7 @@ use Fusio\Impl\Service;
 use Fusio\Model\Backend\ConnectionConfig;
 use Fusio\Model\Backend\ConnectionUpdate;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
@@ -53,9 +54,9 @@ class Token
     private Repository\ConnectionInterface $repository;
     private ClientInterface $httpClient;
     private Service\Connection $connectionService;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Config $config)
+    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, ConfigInterface $config)
     {
         $this->factory = $factory;
         $this->repository = $repository;
@@ -90,7 +91,7 @@ class Token
         $redirectUri = $this->newRedirectUri($connectionId);
         $state = $this->newState();
 
-        $url = new Url($implementation->getAuthorizationUrl());
+        $url = Url::parse($implementation->getAuthorizationUrl());
         $url = $url->withParameters(array_merge([
             'response_type' => 'code',
             'client_id' => $config['client_id'] ?? null,

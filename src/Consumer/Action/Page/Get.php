@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -39,9 +39,9 @@ use PSX\Sql\TableManagerInterface;
 class Get extends ActionAbstract
 {
     private View\Page $table;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config)
+    public function __construct(TableManagerInterface $tableManager, ConfigInterface $config)
     {
         $this->table = $tableManager->getTable(View\Page::class);
         $this->config = $config;

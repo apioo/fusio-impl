@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
+use Fusio\Impl\Dto\Marketplace\App;
+
 /**
  * RepositoryInterface
  *

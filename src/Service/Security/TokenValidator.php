@@ -27,6 +27,7 @@ use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
@@ -44,10 +45,10 @@ class TokenValidator
     private Repository\AppInterface $appRepository;
     private Repository\UserInterface $userRepository;
 
-    public function __construct(Connection $connection, string $projectKey, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(Connection $connection, ConfigInterface $config, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->connection = $connection;
-        $this->projectKey = $projectKey;
+        $this->projectKey = $config->get('fusio_project_key');
         $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
     }

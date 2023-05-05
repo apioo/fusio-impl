@@ -37,12 +37,10 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
-use PSX\Dependency\Exception\AutowiredException;
-use PSX\Dependency\Exception\NotFoundException;
-use PSX\Framework\Config\Config as FrameworkConfig;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Action
@@ -56,10 +54,10 @@ class Action
     private Table\Action $actionTable;
     private Table\Route\Method $routeMethodTable;
     private Factory\ActionInterface $actionFactory;
-    private FrameworkConfig $config;
+    private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, FrameworkConfig $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable      = $actionTable;
         $this->routeMethodTable = $routeMethodTable;

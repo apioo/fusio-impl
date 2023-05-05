@@ -16,11 +16,13 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Provider\ActionProvider;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue\Producer;
+use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Framework\Controller\ControllerInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
@@ -34,6 +36,14 @@ return static function (ContainerConfigurator $container) {
     $services
         ->instanceof(ControllerInterface::class)
         ->tag('psx.controller');
+
+    $services
+        ->instanceof(MailSenderInterface::class)
+        ->tag('fusio.mailer.sender');
+
+    $services
+        ->instanceof(WebhookSenderInterface::class)
+        ->tag('fusio.webhook.sender');
 
     // engine
     $services->set(ImplRepository\ActionDatabase::class);
@@ -90,17 +100,27 @@ return static function (ContainerConfigurator $container) {
     $services->alias(RuntimeInterface::class, Action\Runtime::class);
 
     // impl
-    $services->load('Fusio\\Impl\\Backend\\', __DIR__ . '/../src/Backend')
+    $services->load('Fusio\\Impl\\Backend\\Action\\', __DIR__ . '/../src/Backend/Action')
         ->public();
 
-    $services->load('Fusio\\Impl\\Consumer\\', __DIR__ . '/../src/Consumer')
+    $services->load('Fusio\\Impl\\Backend\\View\\', __DIR__ . '/../src/Backend/View')
+        ->public();
+
+    $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action')
+        ->public();
+
+    $services->load('Fusio\\Impl\\Consumer\\View\\', __DIR__ . '/../src/Consumer/View')
         ->public();
 
     $services->load('Fusio\\Impl\\Service\\', __DIR__ . '/../src/Service')
         ->public();
 
-    $services->load('Fusio\\Impl\\Table\\', __DIR__ . '/../src/Table/*.php')
+    $services->load('Fusio\\Impl\\Table\\', __DIR__ . '/../src/Table')
+        ->exclude('Generated')
         ->public();
+
+    $services->load('Fusio\\Impl\\Mail\\Sender\\', __DIR__ . '/../src/Mail/Sender');
+    $services->load('Fusio\\Impl\\Webhook\\Sender\\', __DIR__ . '/../src/Webhook/Sender');
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);

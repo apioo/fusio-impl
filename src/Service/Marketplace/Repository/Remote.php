@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Service\Marketplace\Repository;
 
-use Fusio\Impl\Service\Marketplace\App;
+use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
@@ -37,48 +38,23 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Remote implements RepositoryInterface
 {
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
+    private string $marketplaceUrl;
+    private bool $sslVerify;
+    private ?array $apps = null;
 
-    /**
-     * @var string
-     */
-    private $marketplaceUrl;
-
-    /**
-     * @var boolean
-     */
-    private $sslVerify;
-
-    /**
-     * @var array
-     */
-    private $apps;
-
-    /**
-     * @param ClientInterface $httpClient
-     * @param string $marketplaceUrl
-     */
-    public function __construct(ClientInterface $httpClient, string $marketplaceUrl)
+    public function __construct(ClientInterface $httpClient, ConfigInterface $config)
     {
         $this->httpClient = $httpClient;
-        $this->marketplaceUrl = $marketplaceUrl;
+        $this->marketplaceUrl = $config->get('fusio_marketplace_url');
         $this->sslVerify = true;
     }
 
-    /**
-     * @param bool $sslVerify
-     */
-    public function setSslVerify(bool $sslVerify)
+    public function setSslVerify(bool $sslVerify): void
     {
         $this->sslVerify = $sslVerify;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function fetchAll(): array
     {
         if (!$this->apps) {
@@ -88,9 +64,6 @@ class Remote implements RepositoryInterface
         return $this->apps;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function fetchByName(string $name): ?App
     {
         $apps = $this->fetchAll();
@@ -100,9 +73,6 @@ class Remote implements RepositoryInterface
 
     /**
      * Downloads the provided app to the app file
-     * 
-     * @param App $app
-     * @param string $appFile
      */
     public function downloadZip(App $app, string $appFile): void
     {

@@ -21,7 +21,8 @@
 
 namespace Fusio\Impl\Service\Event;
 
-use PSX\Data\Util\PriorityQueue;
+use Fusio\Impl\Webhook\SenderInterface;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
  * SenderFactory
@@ -32,16 +33,11 @@ use PSX\Data\Util\PriorityQueue;
  */
 class SenderFactory
 {
-    private PriorityQueue $senders;
+    private iterable $senders;
 
-    public function __construct()
+    public function __construct(#[TaggedIterator('fusio.webhook.sender')] iterable $senders)
     {
-        $this->senders = new PriorityQueue();
-    }
-
-    public function add(SenderInterface $sender, int $priority)
-    {
-        $this->senders->insert($sender, $priority);
+        $this->senders = $senders;
     }
 
     public function factory(mixed $dispatcher): ?SenderInterface
@@ -55,4 +51,3 @@ class SenderFactory
         return null;
     }
 }
-

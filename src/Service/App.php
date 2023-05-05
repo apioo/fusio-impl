@@ -29,10 +29,10 @@ use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\AppCreate;
 use Fusio\Model\Backend\AppUpdate;
-use PSX\DateTime\DateTime;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * App
@@ -50,13 +50,13 @@ class App
     private string $tokenSecret;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, string $tokenSecret, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
         $this->scopeTable      = $scopeTable;
         $this->appScopeTable   = $appScopeTable;
         $this->appTokenTable   = $appTokenTable;
-        $this->tokenSecret     = $tokenSecret;
+        $this->tokenSecret     = $config->get('fusio_project_key');
         $this->eventDispatcher = $eventDispatcher;
     }
 

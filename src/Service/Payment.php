@@ -29,15 +29,14 @@ use Fusio\Engine\Payment\CheckoutContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\PaymentProvider;
-use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Payment\Webhook;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\PaymentCheckoutRequest;
-use PSX\Framework\Config\Config;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\RequestInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Payment
@@ -53,10 +52,10 @@ class Payment
     private Webhook $webhook;
     private Service\Config $configService;
     private Table\Plan $planTable;
-    private Config $config;
+    private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, Config $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
         $this->paymentProvider = $paymentProvider;

@@ -50,7 +50,7 @@ class GetAll extends ActionAbstract
             $context->getUser()->getCategoryId(),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
-            View\Log\QueryFilter::create($request)
+            \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );
     }
 }

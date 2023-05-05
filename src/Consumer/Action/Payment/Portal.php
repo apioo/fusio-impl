@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Payment;
 use Fusio\Model\Consumer\PaymentPortalRequest;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * Portal
@@ -39,9 +40,9 @@ use PSX\Framework\Config\Config;
 class Portal extends ActionAbstract
 {
     private Payment $transactionService;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Payment $transactionService, Config $config)
+    public function __construct(Payment $transactionService, ConfigInterface $config)
     {
         $this->transactionService = $transactionService;
         $this->config = $config;

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\Route;
 
-use Fusio\Impl\Schema\Loader;
+use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 

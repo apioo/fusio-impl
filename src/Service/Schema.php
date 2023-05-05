@@ -25,17 +25,17 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Schema\Parser;
+use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\SchemaCreate;
 use Fusio\Model\Backend\SchemaForm;
 use Fusio\Model\Backend\SchemaUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Schema

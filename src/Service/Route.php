@@ -30,9 +30,9 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\RouteCreate;
 use Fusio\Model\Backend\RouteUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Route

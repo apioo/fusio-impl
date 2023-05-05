@@ -24,7 +24,6 @@ namespace Fusio\Impl\Controller;
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Log;
 use Fusio\Impl\Service\Rate;
@@ -38,6 +37,7 @@ use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
+use Service\Schema\Loader;
 
 /**
  * SchemaApiController

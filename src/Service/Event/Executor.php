@@ -23,6 +23,9 @@ namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Service\Connection\Resolver;
 use Fusio\Impl\Table;
+use Fusio\Impl\Webhook\Message;
+use Fusio\Impl\Service\Event\SenderFactory;
+use Fusio\Impl\Webhook\SenderInterface;
 use PSX\Http\Client\ClientInterface;
 
 /**

@@ -29,9 +29,9 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\ScopeCreate;
 use Fusio\Model\Backend\ScopeRoute;
 use Fusio\Model\Backend\ScopeUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Scope

@@ -64,7 +64,7 @@ class ListCommand extends Command
 
         $rows = [];
         foreach ($apps as $name => $app) {
-            /** @var Service\Marketplace\App $app */
+            /** @var \Fusio\Impl\Dto\Marketplace\App $app */
             $rows[] = [$name, $app->getVersion()];
         }
 

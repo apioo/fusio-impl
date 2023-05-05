@@ -27,6 +27,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -40,9 +41,9 @@ class Invoker
 {
     private Processor $processor;
     private Service\Plan\Payer $planPayerService;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Config $config)
+    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, ConfigInterface $config)
     {
         $this->processor = $processor;
         $this->planPayerService = $planPayerService;

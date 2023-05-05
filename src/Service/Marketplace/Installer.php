@@ -22,9 +22,11 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -40,11 +42,11 @@ class Installer
 {
     private Repository\Local $localRepository;
     private Repository\Remote $remoteRepository;
-    private Config $config;
+    private ConfigInterface $config;
     private Service\Config $configService;
     private Filesystem $filesystem;
 
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Config $config)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, ConfigInterface $config)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;

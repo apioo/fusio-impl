@@ -28,9 +28,9 @@ use Fusio\Impl\Event\Plan\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\PlanCreate;
 use Fusio\Model\Backend\PlanUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plan

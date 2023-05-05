@@ -37,11 +37,11 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    private View\Log\Error $table;
+    private \Fusio\Impl\Backend\Filter\Log\Error $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->table = $tableManager->getTable(View\Log\Error::class);
+        $this->table = $tableManager->getTable(\Fusio\Impl\Backend\Filter\Log\Error::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

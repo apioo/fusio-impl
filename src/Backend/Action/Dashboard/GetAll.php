@@ -62,8 +62,8 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $logFilter = View\Log\QueryFilter::create($request);
-        $transactionFilter = View\Transaction\QueryFilter::create($request);
+        $logFilter = \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request);
+        $transactionFilter = \Fusio\Impl\Backend\Filter\Transaction\QueryFilter::create($request);
 
         return [
             'errorsPerRoute' => $this->errorsPerRoute->getView($context->getUser()->getCategoryId(), $logFilter),

@@ -24,7 +24,6 @@ namespace Fusio\Impl\Framework\Api;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Api\Exception\InvalidMethodException;
 use PSX\Api\Listing\FilterInterface;
@@ -45,6 +44,7 @@ use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 use PSX\Schema\TypeInterface;
+use Service\Schema\Loader;
 
 /**
  * ResourceListing

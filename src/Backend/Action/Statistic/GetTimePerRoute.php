@@ -48,7 +48,7 @@ class GetTimePerRoute extends ActionAbstract
     {
         return $this->table->getView(
             $context->getUser()->getCategoryId(),
-            View\Log\QueryFilter::create($request)
+            \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );
     }
 }

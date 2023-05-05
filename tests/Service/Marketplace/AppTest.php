@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Service\Marketplace;
 
-use Fusio\Impl\Service\Marketplace\App;
+use Fusio\Impl\Dto\Marketplace\App;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 

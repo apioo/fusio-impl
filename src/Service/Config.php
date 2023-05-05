@@ -25,8 +25,8 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Config\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConfigUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Config

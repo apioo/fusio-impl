@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\App;
 
-use Fusio\Impl\Backend\View\App\Token\QueryFilter;
+use Fusio\Impl\Backend\Filter\App\Token\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Sql\Reference;
 use PSX\Sql\Sql;

@@ -36,10 +36,9 @@ use Fusio\Model\Backend\AccountChangePassword;
 use Fusio\Model\Backend\UserCreate;
 use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Backend\UserUpdate;
-use PSX\DateTime\DateTime;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * User

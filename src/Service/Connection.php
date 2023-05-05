@@ -36,9 +36,10 @@ use Fusio\Impl\Event\Connection\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConnectionCreate;
 use Fusio\Model\Backend\ConnectionUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Connection
@@ -54,11 +55,11 @@ class Connection
     private string $secretKey;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->connectionTable   = $connectionTable;
         $this->connectionFactory = $connectionFactory;
-        $this->secretKey         = $secretKey;
+        $this->secretKey         = $config->get('fusio_project_key');
         $this->eventDispatcher   = $eventDispatcher;
     }
 

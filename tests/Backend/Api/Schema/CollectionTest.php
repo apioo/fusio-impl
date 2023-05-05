@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
-use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Schema\SchemaInterface;
+use Service\Schema\Loader;
 
 /**
  * CollectionTest

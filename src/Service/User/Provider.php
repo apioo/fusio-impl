@@ -29,6 +29,7 @@ use Fusio\Impl\Service;
 use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Consumer;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 
@@ -44,9 +45,9 @@ class Provider
     private Service\User $userService;
     private Service\App\Token $appTokenService;
     private UserProvider $userProvider;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, ConfigInterface $config)
     {
         $this->userService     = $userService;
         $this->appTokenService = $appTokenService;

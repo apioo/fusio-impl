@@ -25,6 +25,7 @@ use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -37,12 +38,12 @@ use PSX\Http\Exception as StatusCode;
 class Token
 {
     private Table\User $userTable;
-    private Config $psxConfig;
+    private ConfigInterface $config;
 
-    public function __construct(Table\User $userTable, Config $psxConfig)
+    public function __construct(Table\User $userTable, ConfigInterface $config)
     {
         $this->userTable = $userTable;
-        $this->psxConfig = $psxConfig;
+        $this->config = $config;
     }
 
     /**
@@ -51,7 +52,7 @@ class Token
     public function getUser(string $token): int
     {
         try {
-            JWT::decode($token, $this->psxConfig->get('fusio_project_key'), ['HS256']);
+            JWT::decode($token, $this->config->get('fusio_project_key'), ['HS256']);
         } catch (\RuntimeException $e) {
             throw new StatusCode\BadRequestException('Invalid token provided');
         }
@@ -76,7 +77,7 @@ class Token
             'jti' => TokenGenerator::generateCode(),
         ];
 
-        $token = JWT::encode($payload, $this->psxConfig->get('fusio_project_key'), 'HS256');
+        $token = JWT::encode($payload, $this->config->get('fusio_project_key'), 'HS256');
 
         $record = new Table\Generated\UserRow([
             Table\Generated\UserTable::COLUMN_ID => $userId,

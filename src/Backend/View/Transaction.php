@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\View;
 
-use Fusio\Impl\Backend\View\Transaction\QueryFilter;
+use Fusio\Impl\Backend\Filter\Transaction\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;

@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Mail\MailerInterface;
+use Fusio\Impl\Service\Mail\MailerInterface;
 use Fusio\Impl\Service;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * Mailer
@@ -36,9 +36,9 @@ class Mailer
 {
     private Service\Config $configService;
     private MailerInterface $mailer;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Service\Config $configService, MailerInterface $mailer, Config $config)
+    public function __construct(Service\Config $configService, MailerInterface $mailer, ConfigInterface $config)
     {
         $this->configService = $configService;
         $this->mailer = $mailer;

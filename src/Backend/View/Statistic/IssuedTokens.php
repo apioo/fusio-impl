@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
-use Fusio\Impl\Backend\View\App;
+use Fusio\Impl\Backend\Filter\App;
 use PSX\Sql\ViewAbstract;
 
 /**

@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Service\Marketplace\Repository;
 
-use Fusio\Impl\Service\Marketplace\App;
+use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
+use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -37,9 +38,9 @@ class Local implements RepositoryInterface
     private string $appsPath;
     private array $apps = [];
 
-    public function __construct(string $appsPath)
+    public function __construct(ConfigInterface $config)
     {
-        $this->appsPath = $appsPath;
+        $this->appsPath = $config->get('fusio_apps_dir');
     }
 
     /**

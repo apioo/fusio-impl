@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Console\TypeSafeTrait;
-use Fusio\Impl\Mail\Mailer;
+use Fusio\Impl\Service\Mail\Mailer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

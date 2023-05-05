@@ -26,11 +26,11 @@ use Fusio\Impl\Framework\Filter\Filter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\RouteMethod;
 use Fusio\Model\Backend\RouteVersion;
-use PSX\Api\Listing\CachedListing;
-use PSX\Api\ListingInterface;
-use PSX\Api\Resource;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Api\Operation;
+use PSX\Api\OperationInterface;
+use PSX\Api\ScannerInterface;
 use PSX\Http\Exception as StatusCode;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Config
@@ -43,14 +43,14 @@ class Config
 {
     private Table\Route\Method $methodTable;
     private Table\Route\Response $responseTable;
-    private ListingInterface $listing;
+    private ScannerInterface $scanner;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, ScannerInterface $scanner, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;
         $this->responseTable   = $responseTable;
-        $this->listing         = $listing;
+        $this->scanner         = $scanner;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -73,7 +73,7 @@ class Config
 
             // check status
             $status = $version->getStatus() ?? 0;
-            if (!in_array($status, [Resource::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
+            if (!in_array($status, [Operation::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
                 throw new StatusCode\BadRequestException('Invalid status value');
             }
 
@@ -81,8 +81,8 @@ class Config
 
             if ($status == Resource::STATUS_DEVELOPMENT) {
                 // invalidate resource cache
-                if ($this->listing instanceof CachedListing) {
-                    $this->listing->invalidateResource($path, (string) $ver);
+                if ($this->scanner instanceof CachedListing) {
+                    $this->scanner->invalidateResource($path, (string) $ver);
                 }
                 
                 // delete all responses from existing responses
@@ -121,10 +121,10 @@ class Config
         }
 
         // invalidate resource cache
-        if ($this->listing instanceof CachedListing) {
-            $this->listing->invalidateResourceIndex(new Filter($categoryId));
-            $this->listing->invalidateResourceCollection(null, new Filter($categoryId));
-            $this->listing->invalidateResource($path);
+        if ($this->scanner instanceof CachedListing) {
+            $this->scanner->invalidateResourceIndex(new Filter($categoryId));
+            $this->scanner->invalidateResourceCollection(null, new Filter($categoryId));
+            $this->scanner->invalidateResource($path);
         }
     }
 

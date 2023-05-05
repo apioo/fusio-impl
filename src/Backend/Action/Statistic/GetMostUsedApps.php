@@ -47,7 +47,7 @@ class GetMostUsedApps extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
-            View\Log\QueryFilter::create($request)
+            \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );
     }
 }

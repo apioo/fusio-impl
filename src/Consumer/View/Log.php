@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Consumer\View;
 
-use Fusio\Impl\Backend\View\Log\QueryFilter;
+use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 use PSX\Sql\Sql;

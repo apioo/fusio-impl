@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Tests\Service\Event\Sender;
 
-use Fusio\Impl\Service\Event\Message;
-use Fusio\Impl\Service\Event\Sender\HTTP;
+use Fusio\Impl\Webhook\Message;
+use Fusio\Impl\Webhook\Sender\HTTP;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
