@@ -25,8 +25,7 @@ use Fusio\Adapter;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Controller\ActionExecutor;
-use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Table;
 
 /**
@@ -100,7 +99,7 @@ class DataBag
             } else {
                 $path = $route;
             }
-            $this->addRoute($category, self::$priorities[$category], $path, [ActionExecutor::class, 'execute']);
+            $this->addRoute($category, self::$priorities[$category], $path, [ActionController::class, 'execute']);
 
             foreach ($config as $methodName => $method) {
                 /** @var Method $method */

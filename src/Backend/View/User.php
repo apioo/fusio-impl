@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -51,68 +52,72 @@ class User extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->notEquals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_DELETED);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\UserTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\User::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
-                'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
-                'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\User::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+                'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
                 'provider' => Table\Generated\UserTable::COLUMN_PROVIDER,
-                'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+                'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
                 'email' => Table\Generated\UserTable::COLUMN_EMAIL,
-                'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
-                'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
-                'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
+                'points' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
+                'metadata' => $builder->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
+                'date' => $builder->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(int $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
-            'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
-            'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
-            'provider' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PROVIDER),
-            'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+            'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
+            'provider' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PROVIDER),
+            'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
             'name' => Table\Generated\UserTable::COLUMN_NAME,
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
-            'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
-            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
-            'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'plans' => $this->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'points' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
+            'metadata' => $builder->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
+            'scopes' => $builder->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'plans' => $builder->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
-                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
-            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'findByUserId'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+            'apps' => $builder->doCollection([$this->getTable(Table\App::class), 'findByUserId'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
                 'url' => Table\Generated\AppTable::COLUMN_URL,
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
                 'date' => Table\Generated\AppTable::COLUMN_DATE,
             ]),
-            'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

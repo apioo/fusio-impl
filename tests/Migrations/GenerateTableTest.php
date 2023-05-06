@@ -35,7 +35,7 @@ use PSX\Sql\Generator\Generator;
  */
 class GenerateTableTest extends DbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
