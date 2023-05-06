@@ -2,30 +2,54 @@
 
 namespace Fusio\Impl\Table\Generated;
 
-class ProviderRow extends \PSX\Record\Record
+class ProviderRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
+    private ?int $id = null;
+    private ?string $type = null;
+    private ?string $class = null;
     public function setId(int $id) : void
     {
-        $this->setProperty('id', $id);
+        $this->id = $id;
     }
     public function getId() : int
     {
-        return $this->getProperty('id');
+        return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
     public function setType(string $type) : void
     {
-        $this->setProperty('type', $type);
+        $this->type = $type;
     }
     public function getType() : string
     {
-        return $this->getProperty('type');
+        return $this->type ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "type" was provided');
     }
     public function setClass(string $class) : void
     {
-        $this->setProperty('class', $class);
+        $this->class = $class;
     }
     public function getClass() : string
     {
-        return $this->getProperty('class');
+        return $this->class ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "class" was provided');
+    }
+    public function toRecord() : \PSX\Record\RecordInterface
+    {
+        /** @var \PSX\Record\Record<mixed> $record */
+        $record = new \PSX\Record\Record();
+        $record->put('id', $this->id);
+        $record->put('type', $this->type);
+        $record->put('class', $this->class);
+        return $record;
+    }
+    public function jsonSerialize() : object
+    {
+        return (object) $this->toRecord()->getAll();
+    }
+    public static function from(array|\ArrayAccess $data) : self
+    {
+        $row = new self();
+        $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
+        $row->type = isset($data['type']) && is_string($data['type']) ? $data['type'] : null;
+        $row->class = isset($data['class']) && is_string($data['class']) ? $data['class'] : null;
+        return $row;
     }
 }
