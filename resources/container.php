@@ -14,8 +14,10 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
-use Fusio\Impl\Controller\ActionExecutor;
 use Fusio\Impl\Factory\Resolver;
+use Fusio\Impl\Framework\Api\Parser\DatabaseSchema;
+use Fusio\Impl\Framework\Filter\ActionExecutorFactory;
+use Fusio\Impl\Framework\Filter\CompositeExecutorFactory;
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
 use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
@@ -29,7 +31,9 @@ use Fusio\Impl\Service\Action\Queue\Producer;
 use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
+use PSX\Api\ParserInterface;
 use PSX\Framework\Controller\ControllerInterface;
+use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParser\CachedParser;
@@ -158,10 +162,16 @@ return static function (ContainerConfigurator $container) {
     $services->set(DatabaseFinder::class);
     $services->alias(LocationFinderInterface::class, DatabaseFinder::class);
 
+    $services->set(DatabaseSchema::class);
+    $services->alias(ParserInterface::class, DatabaseSchema::class);
+
     $services->set(UserAgentEnforcer::class)
         ->public();
 
     $services->set(Psr16Cache::class);
     $services->alias(CacheInterface::class, Psr16Cache::class);
 
+    $services->set(ActionExecutorFactory::class);
+    $services->set(CompositeExecutorFactory::class);
+    $services->alias(ControllerExecutorFactoryInterface::class, CompositeExecutorFactory::class);
 };
