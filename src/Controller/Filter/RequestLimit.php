@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
@@ -39,21 +40,23 @@ use PSX\Http\ResponseInterface;
 class RequestLimit implements FilterInterface
 {
     private Service\Rate $rateService;
-    private Context $context;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Rate $rateService, Context $context)
+    public function __construct(Service\Rate $rateService, ContextFactory $contextFactory)
     {
-        $this->rateService   = $rateService;
-        $this->context       = $context;
+        $this->rateService    = $rateService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
+        $context = $this->contextFactory->getActive();
+
         $success = $this->rateService->assertLimit(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
-            $this->context->getRouteId(),
-            $this->context->getApp(),
-            $this->context->getUser(),
+            $context->getRouteId(),
+            $context->getApp(),
+            $context->getUser(),
             $response
         );
 

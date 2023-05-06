@@ -21,29 +21,28 @@
 
 namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Controller\ActionExecutor;
-use Fusio\Impl\Framework\Filter\Filter;
-use Fusio\Impl\Table\Route as TableRoutes;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
+use PSX\Framework\Loader\RoutingParser\AttributeParser;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
- * DatabaseParser
+ * CompositeParser
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class DatabaseParser implements RoutingParserInterface
+class CompositeParser implements RoutingParserInterface
 {
-    private Connection $connection;
     private array $collection = [];
+    private DatabaseParser $databaseParser;
+    private AttributeParser $attributeParser;
 
-    public function __construct(Connection $connection)
+    public function __construct(DatabaseParser $databaseParser, AttributeParser $attributeParser)
     {
-        $this->connection = $connection;
+        $this->databaseParser = $databaseParser;
+        $this->attributeParser = $attributeParser;
     }
 
     public function getCollection(?FilterInterface $filter = null): RoutingCollection
@@ -54,39 +53,16 @@ class DatabaseParser implements RoutingParserInterface
             return $this->collection[$key];
         }
 
-        $sql = 'SELECT routes.id,
-                       routes.category_id,
-                       routes.methods,
-                       routes.path,
-                       routes.controller
-                  FROM fusio_routes routes
-                 WHERE routes.status = :status';
+        $collection = new RoutingCollection();
 
-        $params = ['status' => TableRoutes::STATUS_ACTIVE];
-
-        if ($filter instanceof Filter) {
-            $sql.= ' AND category_id = :category_id';
-            $params['category_id'] = $filter->getId();
+        foreach ($this->databaseParser->getCollection($filter) as $row) {
+            $collection->add(...$row);
         }
 
-        $sql.= ' ORDER BY priority DESC';
-
-        $collection = new RoutingCollection();
-        $result = $this->connection->fetchAllAssociative($sql, $params);
-
-        foreach ($result as $row) {
-            $parts = explode('::', $row['controller']);
-            $controller = $parts[0] ?? null;
-            $method = $parts[1] ?? null;
-
-            $collection->add(explode('|', $row['methods']), $row['path'], [$controller, $method], $row['id'], $row['category_id']);
+        foreach ($this->attributeParser->getCollection($filter) as $row) {
+            $collection->add(...$row);
         }
 
         return $this->collection[$key] = $collection;
-    }
-
-    public function clear()
-    {
-        $this->collection = [];
     }
 }

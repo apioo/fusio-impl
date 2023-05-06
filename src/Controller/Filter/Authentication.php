@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Security\TokenValidator;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
@@ -39,12 +40,12 @@ use PSX\Http\ResponseInterface;
 class Authentication implements FilterInterface
 {
     private TokenValidator $tokenValidator;
-    private Context $context;
+    private ContextFactory $contextFactory;
 
-    public function __construct(TokenValidator $tokenValidator, Context $context)
+    public function __construct(TokenValidator $tokenValidator, ContextFactory $contextFactory)
     {
         $this->tokenValidator = $tokenValidator;
-        $this->context        = $context;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
@@ -52,7 +53,7 @@ class Authentication implements FilterInterface
         $success = $this->tokenValidator->assertAuthorization(
             $request->getMethod(),
             $request->getHeader('Authorization'),
-            $this->context
+            $this->contextFactory->getActive()
         );
 
         if ($success) {

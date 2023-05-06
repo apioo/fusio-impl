@@ -184,7 +184,7 @@ class Rate
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition  = Condition::withAnd();
         $condition->notEquals(Table\Generated\RateTable::COLUMN_STATUS, Table\Rate::STATUS_DELETED);
         $condition->equals(Table\Generated\RateTable::COLUMN_NAME, $name);
 
@@ -207,7 +207,7 @@ class Rate
         $past = new \DateTime();
         $past->sub(new \DateInterval($timespan));
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         // we count only requests to the default category
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, 1);
 

@@ -32,8 +32,15 @@ use PSX\Framework\Loader\ContextFactoryInterface;
  */
 class ContextFactory implements ContextFactoryInterface
 {
+    private ?Context $context = null;
+
     public function factory(): Context
     {
-        return new Context();
+        return $this->context = new Context();
+    }
+
+    public function getActive(): Context
+    {
+        return $this->context ?? throw new \RuntimeException('No active context was set');
     }
 }

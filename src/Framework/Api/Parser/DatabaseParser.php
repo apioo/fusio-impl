@@ -19,22 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Framework\Api;
+namespace Fusio\Impl\Framework\Api\Parser;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table;
 use PSX\Api\Exception\InvalidMethodException;
-use PSX\Api\Listing\FilterInterface;
-use PSX\Api\Listing\Route;
+use PSX\Api\Exception\ParserException;
 use PSX\Api\Parser\Attribute;
-use PSX\Api\Resource;
-use PSX\Api\ResourceCollection;
+use PSX\Api\ParserInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Api\Util\Inflection;
-use PSX\Framework\Api\ControllerDocumentation;
 use PSX\Framework\Loader\PathMatcher;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Schema\Definitions;
@@ -44,7 +41,6 @@ use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 use PSX\Schema\TypeInterface;
-use Service\Schema\Loader;
 
 /**
  * ResourceListing
@@ -53,7 +49,7 @@ use Service\Schema\Loader;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ResourceListing extends ControllerDocumentation
+class DatabaseParser implements ParserInterface
 {
     private RoutingParserInterface $routingParser;
     private Table\Route\Method $methodTable;
@@ -73,6 +69,12 @@ class ResourceListing extends ControllerDocumentation
         $this->schemaLoader = $schemaLoader;
         $this->attributeParser = new Attribute($schemaManager);
     }
+
+    public function parse(string $schema): SpecificationInterface
+    {
+        // TODO: Implement parse() method.
+    }
+
 
     public function getAvailableRoutes(?FilterInterface $filter = null): iterable
     {

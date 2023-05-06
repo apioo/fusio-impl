@@ -58,7 +58,7 @@ class ActionDatabase implements Repository\ActionInterface
               ORDER BY name ASC';
 
         $actions = [];
-        $result  = $this->connection->fetchAll($sql, [
+        $result  = $this->connection->fetchAllAssociative($sql, [
             'status' => Table\Action::STATUS_ACTIVE
         ]);
 
@@ -91,7 +91,7 @@ class ActionDatabase implements Repository\ActionInterface
                   FROM fusio_action
                  WHERE ' . $column . ' = :id';
 
-        $row = $this->connection->fetchAssoc($sql, ['id' => $id]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
 
         if (!empty($row)) {
             return $this->newAction($row);

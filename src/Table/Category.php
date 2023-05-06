@@ -42,7 +42,7 @@ class Category extends Generated\CategoryTable
             return 1;
         }
 
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+        $categoryId = (int) $this->connection->fetchOne('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
         if (empty($categoryId)) {
             return 1;
         }

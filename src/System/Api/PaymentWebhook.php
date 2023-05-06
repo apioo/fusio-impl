@@ -22,13 +22,13 @@
 namespace Fusio\Impl\System\Api;
 
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Log;
 use Fusio\Impl\Service\Payment;
-use PSX\Dependency\Attribute\Inject;
+use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Http\Exception\MethodNotAllowedException;
 use PSX\Http\FilterChainInterface;
-use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
@@ -39,25 +39,22 @@ use PSX\Http\ResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class PaymentWebhook implements FilterInterface
+class PaymentWebhook extends ControllerAbstract
 {
-    #[Inject]
     private Payment $transactionService;
-
-    #[Inject]
     private ResponseWriter $responseWriter;
-
-    #[Inject]
     private Log $logService;
-
     private Context $context;
 
-    public function __construct(Context $context)
+    public function __construct(ContextFactory $contextFactory, Payment $transactionService, ResponseWriter $responseWriter, Log $logService)
     {
-        $this->context = $context;
+        $this->transactionService = $transactionService;
+        $this->responseWriter = $responseWriter;
+        $this->logService = $logService;
+        $this->context = $contextFactory->factory();
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
+    public function callback(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         if (!in_array($request->getMethod(), ['GET', 'POST'])) {
             throw new MethodNotAllowedException('Provided request method not allowed', ['GET', 'POST']);

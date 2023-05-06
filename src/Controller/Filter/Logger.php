@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -38,12 +39,12 @@ use PSX\Http\ResponseInterface;
 class Logger implements FilterInterface
 {
     private Service\Log $logService;
-    private Context $context;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Log $logService, Context $context)
+    public function __construct(Service\Log $logService, ContextFactory $contextFactory)
     {
         $this->logService = $logService;
-        $this->context    = $context;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
@@ -53,7 +54,7 @@ class Logger implements FilterInterface
             $request->getMethod(),
             $request->getRequestTarget(),
             $request->getHeader('User-Agent'),
-            $this->context,
+            $this->contextFactory->getActive(),
             $request
         );
 

@@ -14,8 +14,12 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
+use Fusio\Impl\Controller\ActionExecutor;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
+use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
+use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Provider\ActionProvider;
@@ -23,11 +27,17 @@ use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue\Producer;
 use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Framework\Controller\ControllerInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
+use PSX\Framework\Loader\LocationFinderInterface;
+use PSX\Framework\Loader\RoutingParser\CachedParser;
+use PSX\Framework\Loader\RoutingParserInterface;
+use PSX\Http\Filter\UserAgentEnforcer;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container) {
@@ -115,6 +125,9 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\Service\\', __DIR__ . '/../src/Service')
         ->public();
 
+    $services->load('Fusio\\Impl\\Controller\\', __DIR__ . '/../src/Controller')
+        ->public();
+
     $services->load('Fusio\\Impl\\Table\\', __DIR__ . '/../src/Table')
         ->exclude('Generated')
         ->public();
@@ -130,6 +143,23 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ContextFactory::class);
     $services->alias(ContextFactoryInterface::class, ContextFactory::class);
+
+    // psx
+    $services->set(DatabaseParser::class);
+    $services->set(CompositeParser::class);
+    $services->set(CachedParser::class)
+        ->args([
+            service(CompositeParser::class),
+            service(CacheItemPoolInterface::class),
+            param('psx_debug'),
+        ]);
+    $services->alias(RoutingParserInterface::class, CachedParser::class);
+
+    $services->set(DatabaseFinder::class);
+    $services->alias(LocationFinderInterface::class, DatabaseFinder::class);
+
+    $services->set(UserAgentEnforcer::class)
+        ->public();
 
     $services->set(Psr16Cache::class);
     $services->alias(CacheInterface::class, Psr16Cache::class);

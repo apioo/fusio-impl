@@ -57,7 +57,7 @@ class UserDatabase implements Repository\UserInterface
               ORDER BY id DESC';
 
         $users  = [];
-        $result = $this->connection->fetchAll($sql, [
+        $result = $this->connection->fetchAllAssociative($sql, [
             'status' => Table\User::STATUS_ACTIVE,
         ]);
 
@@ -85,7 +85,7 @@ class UserDatabase implements Repository\UserInterface
                   FROM fusio_user
                  WHERE id = :id';
 
-        $row = $this->connection->fetchAssoc($sql, ['id' => $id]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
 
         if (!empty($row)) {
             return $this->newUser($row);

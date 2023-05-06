@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table\Route;
 
 use Fusio\Impl\Table\Generated;
+use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
 
 /**
@@ -120,7 +121,7 @@ class Method extends Generated\RoutesMethodTable
             'route_id' => $routeId,
             'version' => $version,
             'method' => $method,
-            'active' => Resource::STATUS_ACTIVE,
+            'active' => 1,
         ]);
     }
 
@@ -141,7 +142,7 @@ class Method extends Generated\RoutesMethodTable
 
         return $this->connection->fetchAssociative($sql, [
             'operation_id' => $operationId,
-            'active' => Resource::STATUS_ACTIVE,
+            'active' => 1,
         ]);
     }
 
@@ -167,7 +168,7 @@ class Method extends Generated\RoutesMethodTable
 
         $version = $this->connection->fetchOne($sql, [
             'route_id' => $routeId,
-            'status' => Resource::STATUS_ACTIVE,
+            'status' => OperationInterface::STABILITY_STABLE,
         ]);
 
         if (empty($version)) {

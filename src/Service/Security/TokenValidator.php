@@ -29,7 +29,7 @@ use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
-use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\OAuth2\Exception\InvalidScopeException;
 
 /**
  * TokenValidator
@@ -134,7 +134,7 @@ class TokenValidator
                    AND app_token.status = :status
                    AND (app_token.expire IS NULL OR app_token.expire > :now)';
 
-        $accessToken = $this->connection->fetchAssoc($sql, array(
+        $accessToken = $this->connection->fetchAssociative($sql, array(
             'token'  => $token,
             'status' => AppToken::STATUS_ACTIVE,
             'now'    => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
@@ -152,14 +152,14 @@ class TokenValidator
 
         // get all scopes which are assigned to this route
         $sql = '    SELECT scope.name,
-                               scope_routes.allow,
-                               scope_routes.methods
-                          FROM fusio_scope_routes scope_routes
-                    INNER JOIN fusio_scope scope
-                            ON scope.id = scope_routes.scope_id
-                         WHERE scope_routes.route_id = :route';
+                           scope_routes.allow,
+                           scope_routes.methods
+                      FROM fusio_scope_routes scope_routes
+                INNER JOIN fusio_scope scope
+                        ON scope.id = scope_routes.scope_id
+                     WHERE scope_routes.route_id = :route';
 
-        $availableScopes = $this->connection->fetchAll($sql, array('route' => $routeId));
+        $availableScopes = $this->connection->fetchAllAssociative($sql, array('route' => $routeId));
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request
@@ -203,7 +203,7 @@ class TokenValidator
                 $sql = 'SELECT scope.name
                           FROM fusio_scope scope
                          WHERE scope.name LIKE :name';
-                $result = $this->connection->fetchAll($sql, ['name' => $scope . '.%']);
+                $result = $this->connection->fetchAllAssociative($sql, ['name' => $scope . '.%']);
                 foreach ($result as $row) {
                     $scopes[] = $row['name'];
                 }

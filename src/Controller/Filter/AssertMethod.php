@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
+use PSX\Framework\Loader\ContextFactoryInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
@@ -40,17 +42,18 @@ use PSX\Http\ResponseInterface;
 class AssertMethod implements FilterInterface
 {
     private Service\Route\Method $routesMethodService;
-    private Context $context;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Route\Method $routesMethodService, Context $context)
+    public function __construct(Service\Route\Method $routesMethodService, ContextFactory $contextFactory)
     {
         $this->routesMethodService = $routesMethodService;
-        $this->context = $context;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        $routeId    = $this->context->getRouteId();
+        $context    = $this->contextFactory->getActive();
+        $routeId    = $context->getRouteId();
         $methodName = $request->getMethod();
 
         if ($methodName === 'HEAD') {
@@ -77,7 +80,7 @@ class AssertMethod implements FilterInterface
             throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $allowedMethods);
         }
 
-        $this->context->setMethod($method);
+        $context->setMethod($method);
 
         // add request id
         $request->setHeader('X-Request-Id', Uuid::pseudoRandom());

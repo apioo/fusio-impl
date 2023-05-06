@@ -31,9 +31,7 @@ use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use Fusio\Model\Message;
-use PSX\Framework\Controller\Generator;
-use PSX\Framework\Controller\Tool;
-use PSX\Framework\Schema\Passthru;
+use PSX\Api\Model\Passthru;
 
 /**
  * NewInstallation
@@ -137,12 +135,8 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'default');
-        $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
-        $bag->addRoute('system', 3, '/system/payment/:provider/webhook', System\Api\PaymentWebhook::class);
-        $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
-        $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
-        $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
-        $bag->addRoute('authorization', 0, '/authorization/token', Authorization\Token::class);
+        $bag->addRoute('system', 0, '/system/jsonrpc', [System\Api\JsonRpc::class, 'invoke']);
+        $bag->addRoute('system', 3, '/system/payment/:provider/webhook', [System\Api\PaymentWebhook::class, 'callback']);
         $bag->addSchema('default', 'Passthru', Passthru::class);
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');

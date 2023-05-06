@@ -69,7 +69,7 @@ class DatabaseFinder implements LocationFinderInterface
 
         $method      = $request->getMethod();
         $pathMatcher = new PathMatcher($path);
-        $result      = $this->connection->fetchAll($sql, $params);
+        $result      = $this->connection->fetchAllAssociative($sql, $params);
 
         foreach ($result as $row) {
             $parameters = array();
@@ -78,7 +78,7 @@ class DatabaseFinder implements LocationFinderInterface
                 $pathMatcher->match($row['path'], $parameters)) {
                 $context->setParameters($parameters);
                 $context->setPath($row['path']);
-                $context->setSource($row['controller']);
+                $context->setSource(explode('::', $row['controller']));
                 if ($context instanceof FusioContext) {
                     $context->setRouteId($row['id']);
                     $context->setCategoryId($row['category_id']);

@@ -39,7 +39,7 @@ class Allocation extends Generated\RateAllocationTable
         $sql = 'DELETE FROM fusio_rate_allocation 
                       WHERE rate_id = :rate_id';
 
-        $this->connection->executeUpdate($sql, ['rate_id' => $rateId]);
+        $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
     public function getRateForRequest(int $routeId, Model\AppInterface $app, Model\UserInterface $user)
@@ -67,6 +67,6 @@ class Allocation extends Generated\RateAllocationTable
 
         $sql.= ' ORDER BY rate.priority DESC';
 
-        return $this->connection->fetchAssoc($sql, $params);
+        return $this->connection->fetchAssociative($sql, $params);
     }
 }

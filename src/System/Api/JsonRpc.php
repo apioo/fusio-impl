@@ -29,9 +29,8 @@ use Fusio\Model\System;
 use PSX\Api\Attribute\Description;
 use PSX\Api\Attribute\Incoming;
 use PSX\Api\Attribute\Outgoing;
-use PSX\Dependency\Attribute\Inject;
+use PSX\Api\Model\Passthru;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Framework\Schema\Passthru;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Json\Rpc\Server;
@@ -72,7 +71,7 @@ class JsonRpc extends ControllerAbstract
     #[Description('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification')]
     #[Incoming(schema: Passthru::class)]
     #[Outgoing(code: 200, schema: System\RpcResponseSuccess::class)]
-    protected function doPost($record, HttpContextInterface $context): mixed
+    public function invoke($record, HttpContextInterface $context): mixed
     {
         $invoker = $this->rpcInvokerFactory->createByFramework($context);
 

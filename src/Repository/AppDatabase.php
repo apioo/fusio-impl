@@ -56,7 +56,7 @@ class AppDatabase implements Repository\AppInterface
               ORDER BY id DESC';
 
         $apps   = [];
-        $result = $this->connection->fetchAll($sql, [
+        $result = $this->connection->fetchAllAssociative($sql, [
             'status' => Table\App::STATUS_ACTIVE
         ]);
 
@@ -83,7 +83,7 @@ class AppDatabase implements Repository\AppInterface
                   FROM fusio_app
                  WHERE id = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
+        $row = $this->connection->fetchAssociative($sql, array('id' => $id));
 
         if (!empty($row)) {
             return $this->newApp($row, $this->getScopes($row['id']));
@@ -100,7 +100,7 @@ class AppDatabase implements Repository\AppInterface
                         ON scope.id = app_scope.scope_id
                      WHERE app_scope.app_id = :app_id';
 
-        $result = $this->connection->fetchAll($sql, array('app_id' => $appId)) ?: array();
+        $result = $this->connection->fetchAllAssociative($sql, array('app_id' => $appId)) ?: array();
         $names  = array();
 
         foreach ($result as $row) {
