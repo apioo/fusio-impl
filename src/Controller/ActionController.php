@@ -21,31 +21,26 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Action\Invoker;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Filter\UserAgentEnforcer;
-use PSX\Record\Record;
-use PSX\Record\RecordInterface;
 
 /**
- * ActionExecutor
+ * ActionController
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ActionExecutor extends ControllerAbstract
+class ActionController extends ControllerAbstract
 {
     private Invoker $actionInvokerService;
-    private ContextFactory $contextFactory;
 
-    public function __construct(Invoker $actionInvokerService, ContextFactory $contextFactory)
+    public function __construct(Invoker $actionInvokerService)
     {
         $this->actionInvokerService = $actionInvokerService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function getPreFilter(): array
@@ -60,20 +55,8 @@ class ActionExecutor extends ControllerAbstract
         ];
     }
 
-    public function execute(...$arguments): mixed
+    public function execute(Request $request, Context $context): mixed
     {
-        $context = $this->contextFactory->getActive();
-
-        $payload = new Record();
-        if (isset($arguments['payload'])) {
-            $payload = $arguments['payload'];
-            if (!$payload instanceof RecordInterface) {
-                $payload = PassthruRecord::fromPayload($payload);
-            }
-        }
-
-        $requestContext = new Request\RpcRequest(__METHOD__);
-
-        return $this->actionInvokerService->invoke(new Request($arguments, $payload, $requestContext), $context);
+        return $this->actionInvokerService->invoke($request, $context);
     }
 }

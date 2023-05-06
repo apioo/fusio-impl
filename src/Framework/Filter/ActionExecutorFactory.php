@@ -21,42 +21,46 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
-use PSX\Api\ApiManagerInterface;
-use PSX\Framework\Filter\ControllerExecutor;
+use Fusio\Impl\Controller\ActionController;
+use Fusio\Impl\Framework\Loader\Context as FusioContext;
+use Fusio\Impl\Service\Action\Invoker;
+use Fusio\Impl\Service\Schema\Loader;
+use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Http\RequestReader;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Framework\Loader\Context;
 use PSX\Http\FilterInterface;
 
 /**
- * ControllerExecutor
+ * ActionExecutorFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ControllerExecutorFactory
+class ActionExecutorFactory implements ControllerExecutorFactoryInterface
 {
+    private Loader $schemaLoader;
     private RequestReader $requestReader;
     private ResponseWriter $responseWriter;
-    private ApiManagerInterface $apiManager;
 
-    public function __construct(RequestReader $requestReader, ResponseWriter $responseWriter, ApiManagerInterface $apiManager)
+    public function __construct(Loader $schemaLoader, RequestReader $requestReader, ResponseWriter $responseWriter)
     {
+        $this->schemaLoader = $schemaLoader;
         $this->requestReader = $requestReader;
         $this->responseWriter = $responseWriter;
-        $this->apiManager = $apiManager;
     }
 
     public function factory(object $controller, string $methodName, Context $context): FilterInterface
     {
-        return new ControllerExecutor(
-            $controller,
-            $methodName,
-            $context,
-            $this->requestReader,
-            $this->responseWriter,
-            $this->apiManager
-        );
+        if (!$controller instanceof ActionController) {
+            throw new \RuntimeException('Provided an invalid controller');
+        }
+
+        if (!$context instanceof FusioContext) {
+            throw new \RuntimeException('Provided an invalid context');
+        }
+
+        return new ActionExecutor($controller, $context, $this->schemaLoader, $this->requestReader, $this->responseWriter);
     }
 }

@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Controller\Filter;
 
-use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
-use PSX\Framework\Loader\ContextFactoryInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
