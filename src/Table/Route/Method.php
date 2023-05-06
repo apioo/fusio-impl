@@ -56,6 +56,8 @@ class Method extends Generated\RoutesMethodTable
 
     /**
      * Returns only active methods for the route
+     *
+     * @return Generated\RoutesMethodRow[]
      */
     public function getMethods(int $routeId, ?int $version = null, ?bool $active = true): array
     {
@@ -97,7 +99,7 @@ class Method extends Generated\RoutesMethodTable
         $names   = [];
 
         foreach ($methods as $method) {
-            $names[] = $method['method'];
+            $names[] = $method->getMethod();
         }
 
         return $names;
