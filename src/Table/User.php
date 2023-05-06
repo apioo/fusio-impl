@@ -34,10 +34,9 @@ class User extends Generated\UserTable
     public const STATUS_ACTIVE   = 1;
     public const STATUS_DELETED  = 0;
 
-    public function changePassword($userId, $oldPassword, $newPassword, $verifyOld = true)
+    public function changePassword(int $userId, string $oldPassword, string $newPassword, bool $verifyOld = true): bool
     {
         $password = $this->connection->fetchColumn('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);
-
         if (empty($password)) {
             return false;
         }
@@ -55,55 +54,19 @@ class User extends Generated\UserTable
         }
     }
 
-    /**
-     * @param integer $userId
-     * @param integer $points
-     */
-    public function payPoints($userId, $points)
+    public function payPoints(int $userId, int $points): void
     {
-        $this->connection->executeUpdate('UPDATE fusio_user SET points = COALESCE(points, 0) - :points WHERE id = :id', [
+        $this->connection->executeStatement('UPDATE fusio_user SET points = COALESCE(points, 0) - :points WHERE id = :id', [
             'id' => $userId,
             'points' => $points,
         ]);
     }
 
-    /**
-     * @param integer $userId
-     * @param integer $points
-     */
-    public function creditPoints($userId, $points)
+    public function creditPoints(int $userId, int $points): void
     {
-        $this->connection->executeUpdate('UPDATE fusio_user SET points = COALESCE(points, 0) + :points WHERE id = :id', [
+        $this->connection->executeStatement('UPDATE fusio_user SET points = COALESCE(points, 0) + :points WHERE id = :id', [
             'id' => $userId,
             'points' => $points,
         ]);
-    }
-
-    /**
-     * Sets a specific user attribute
-     * 
-     * @param integer $userId
-     * @param string $name
-     * @param string $value
-     */
-    public function setAttribute($userId, $name, $value)
-    {
-        $row = $this->connection->fetchAssoc('SELECT id FROM fusio_user_attribute WHERE user_id = :user_id AND name = :name', ['user_id' => $userId, 'name' => $name]);
-
-        if (empty($row)) {
-            $this->connection->insert('fusio_user_attribute', [
-                'user_id' => $userId,
-                'name' => $name,
-                'value' => $value,
-            ]);
-        } else {
-            $this->connection->update('fusio_user_attribute', [
-                'user_id' => $userId,
-                'name' => $name,
-                'value' => $value,
-            ], [
-                'id' => $row['id']
-            ]);
-        }
     }
 }

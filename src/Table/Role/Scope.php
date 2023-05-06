@@ -37,13 +37,13 @@ class Scope extends Generated\RoleScopeTable
         $sql = 'DELETE FROM fusio_role_scope
                       WHERE role_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $roleId));
+        $this->connection->executeQuery($sql, ['id' => $roleId]);
     }
 
     public function getValidScopes($roleId, array $scopes)
     {
         $result = $this->getAvailableScopes($roleId);
-        $data   = array();
+        $data = [];
 
         foreach ($result as $scope) {
             if (in_array($scope['name'], $scopes)) {
@@ -64,20 +64,20 @@ class Scope extends Generated\RoleScopeTable
                         ON scope.id = role_scope.scope_id
                      WHERE role_scope.role_id = :role_id
                   ORDER BY scope.id ASC';
-        $assignedScopes = $this->connection->fetchAll($sql, array('role_id' => $roleId)) ?: [];
+        $assignedScopes = $this->connection->fetchAllAssociative($sql, ['role_id' => $roleId]) ?: [];
 
         $scopes = [];
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (strpos($assignedScope['name'], '.') === false) {
+            if (!str_contains($assignedScope['name'], '.')) {
                 // load all sub scopes
                 $sql = 'SELECT scope.id,
                                scope.name,
                                scope.description
                           FROM fusio_scope scope
                          WHERE scope.name LIKE :name';
-                $subScopes = $this->connection->fetchAll($sql, ['name' => $assignedScope['name'] . '.%']);
+                $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;
                 }

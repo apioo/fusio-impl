@@ -37,7 +37,7 @@ class Scope extends Generated\UserScopeTable
         $sql = 'DELETE FROM fusio_user_scope
                       WHERE user_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $userId));
+        $this->connection->executeStatement($sql, ['id' => $userId]);
     }
 
     public function getValidScopes(int $userId, array $scopes): array
@@ -74,7 +74,7 @@ class Scope extends Generated\UserScopeTable
                                scope.description
                           FROM fusio_scope scope
                          WHERE scope.name LIKE :name';
-                $subScopes = $this->connection->fetchAll($sql, ['name' => $assignedScope['name'] . '.%']);
+                $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;
                 }
@@ -94,7 +94,7 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = user_scope.scope_id
                      WHERE user_scope.user_id = :user_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['user_id' => $userId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['user_id' => $userId]) ?: [];
     }
 
     private function getScopesForPlan(int $userId): array
@@ -112,6 +112,6 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = plan_scope.scope_id
                      WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['plan_id' => $planId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
     }
 }

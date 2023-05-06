@@ -37,7 +37,7 @@ class Scope extends Generated\PlanScopeTable
         $sql = 'DELETE FROM fusio_plan_scope
                       WHERE plan_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $planId));
+        $this->connection->executeQuery($sql, ['id' => $planId]);
     }
 
     public function getAvailableScopes(int $planId): array
@@ -51,6 +51,6 @@ class Scope extends Generated\PlanScopeTable
                      WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
 
-        return $this->connection->fetchAll($sql, array('plan_id' => $planId)) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
     }
 }

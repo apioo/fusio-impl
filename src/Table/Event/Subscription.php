@@ -43,7 +43,7 @@ class Subscription extends Generated\EventSubscriptionTable
                    AND status = :status
               ORDER BY id ASC';
 
-        return $this->connection->fetchAll($sql, [
+        return $this->connection->fetchAllAssociative($sql, [
             'event_id' => $eventId,
             'status'   => self::STATUS_ACTIVE,
         ]);
@@ -51,7 +51,7 @@ class Subscription extends Generated\EventSubscriptionTable
 
     public function getSubscriptionCount($userId)
     {
-        return $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE user_id = :user_id', [
+        return $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE user_id = :user_id', [
             'user_id' => $userId
         ]);
     }

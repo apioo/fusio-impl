@@ -74,7 +74,7 @@ class Scope extends Generated\AppScopeTable
                                scope.description
                           FROM fusio_scope scope
                          WHERE scope.name LIKE :name';
-                $subScopes = $this->connection->fetchAll($sql, ['name' => $assignedScope['name'] . '.%']);
+                $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;
                 }
@@ -94,7 +94,7 @@ class Scope extends Generated\AppScopeTable
                         ON scope.id = app_scope.scope_id
                      WHERE app_scope.app_id = :app_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['app_id' => $appId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['app_id' => $appId]) ?: [];
     }
 
     private function getScopesForPlan(int $appId): array
@@ -117,6 +117,6 @@ class Scope extends Generated\AppScopeTable
                         ON scope.id = plan_scope.scope_id
                      WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['plan_id' => $planId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
     }
 }

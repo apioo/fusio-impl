@@ -55,7 +55,7 @@ class Response extends Generated\EventResponseTable
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, self::RESPONSE_LIMIT);
 
-        return $this->connection->fetchAll($sql, [
+        return $this->connection->fetchAllAssociative($sql, [
             'status' => Table\Event\Response::STATUS_PENDING
         ]);
     }
@@ -74,7 +74,7 @@ class Response extends Generated\EventResponseTable
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 8);
 
-        return $this->connection->fetchAll($sql, [
+        return $this->connection->fetchAllAssociative($sql, [
             'id' => $subscriptionId
         ]);
     }

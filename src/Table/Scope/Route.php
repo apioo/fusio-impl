@@ -58,7 +58,7 @@ class Route extends Generated\ScopeRoutesTable
                    AND routes.allow = 1
               ORDER BY routes.id ASC';
 
-        return $this->connection->fetchAll($sql, ['id' => $routeId]);
+        return $this->connection->fetchAllAssociative($sql, ['id' => $routeId]);
     }
 
     public function getScopesForRoute($routeId)
@@ -72,7 +72,7 @@ class Route extends Generated\ScopeRoutesTable
                    AND routes.allow = 1
               ORDER BY routes.id ASC';
 
-        $result = $this->connection->fetchAll($sql, ['id' => $routeId]);
+        $result = $this->connection->fetchAllAssociative($sql, ['id' => $routeId]);
         $scopes = [];
 
         foreach ($result as $row) {

@@ -32,20 +32,24 @@ use Fusio\Impl\Table\Generated;
  */
 class Response extends Generated\RoutesResponseTable
 {
-    public function getResponses($methodId)
+    public function getResponses(int $methodId, int $startCode, int $endCode): array
     {
         $sql = 'SELECT response.id, 
                        response.code, 
                        response.response 
                   FROM fusio_routes_response response
-                 WHERE response.method_id = :id';
+                 WHERE response.method_id = :id
+                   AND response.code >= :start
+                   AND response.code <= :end';
 
-        return $this->connection->fetchAll($sql, [
-            'id' => $methodId
+        return $this->connection->fetchAllAssociative($sql, [
+            'id' => $methodId,
+            'start' => $startCode,
+            'end' => $endCode,
         ]);
     }
 
-    public function deleteAllFromMethod($methodId)
+    public function deleteAllFromMethod(int $methodId): void
     {
         $sql = 'DELETE FROM fusio_routes_response
                       WHERE method_id = :id';

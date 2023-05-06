@@ -49,7 +49,7 @@ class Code extends Generated\AppCodeTable
                        AND code.code = :code
                        AND code.redirect_uri = :redirect_uri';
 
-        return $this->connection->fetchAssoc($sql, array(
+        return $this->connection->fetchAssociative($sql, array(
             'app_key'      => $appKey,
             'app_secret'   => $appSecret,
             'status'       => App::STATUS_ACTIVE,

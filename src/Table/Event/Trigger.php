@@ -44,7 +44,7 @@ class Trigger extends Generated\EventTriggerTable
                  WHERE status = :status
               ORDER BY id ASC';
 
-        return $this->connection->fetchAll($sql, [
+        return $this->connection->fetchAllAssociative($sql, [
             'status' => Table\Event\Trigger::STATUS_PENDING
         ]);
     }
