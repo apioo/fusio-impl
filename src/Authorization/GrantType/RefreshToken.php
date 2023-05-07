@@ -19,14 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Authorization;
+namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Oauth2\Credentials;
-use PSX\Framework\Oauth2\GrantType\RefreshTokenAbstract;
-use PSX\Oauth2\Authorization\Exception\ServerErrorException;
-use PSX\Oauth2\Grant;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Framework\OAuth2\Credentials;
+use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
+use PSX\OAuth2\Exception\ServerErrorException;
+use PSX\OAuth2\Grant;
 use PSX\Sql\Condition;
 
 /**
@@ -43,17 +44,17 @@ class RefreshToken extends RefreshTokenAbstract
     private string $expireApp;
     private string $expireRefresh;
 
-    public function __construct(Service\App\Token $appTokenService, Table\App $appTable, string $expireApp, ?string $expireRefresh = null)
+    public function __construct(Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->appTable        = $appTable;
-        $this->expireApp       = $expireApp;
-        $this->expireRefresh   = $expireRefresh ?? 'P3D';
+        $this->expireApp       = $config->get('fusio_expire_token');
+        $this->expireRefresh   = $config->get('fusio_expire_refresh') ?? 'P3D';
     }
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('app_key', $credentials->getClientId());
         $condition->equals('app_secret', $credentials->getClientSecret());
         $condition->equals('status', Table\App::STATUS_ACTIVE);
@@ -67,7 +68,7 @@ class RefreshToken extends RefreshTokenAbstract
         return $this->appTokenService->refreshAccessToken(
             $app['id'],
             $grant->getRefreshToken(),
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->expireApp),
             new \DateInterval($this->expireRefresh)
         );

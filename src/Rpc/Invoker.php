@@ -28,7 +28,6 @@ use Fusio\Impl\Table;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Rpc\Exception\MethodNotFoundException;
 use PSX\Json\Rpc\Exception\ServerErrorException;
-use PSX\Record\Record;
 use PSX\Schema\Exception\ValidationException;
 
 /**
@@ -51,7 +50,7 @@ class Invoker
         $this->middlewares   = [];
     }
 
-    public function addMiddleware(callable $middleware)
+    public function addMiddleware(callable $middleware): void
     {
         $this->middlewares[] = $middleware;
     }
@@ -85,7 +84,12 @@ class Invoker
         $context->setRouteId((int) $method['route_id']);
         $context->setMethod($method);
 
-        $request = new Request\RpcRequest($operationId, Record::from($arguments));
+        if (!$arguments instanceof \stdClass) {
+
+        }
+
+        $payload = $arguments->payload ?? null;
+        $request = new Request($arguments, $payload, new Request\RpcRequest($operationId));
 
         foreach ($this->middlewares as $middleware) {
             $middleware($request, $context);

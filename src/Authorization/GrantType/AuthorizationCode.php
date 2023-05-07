@@ -19,16 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Authorization;
+namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Oauth2\Credentials;
-use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
-use PSX\Oauth2\Authorization\Exception\InvalidClientException;
-use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
-use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
-use PSX\Oauth2\Grant;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Framework\OAuth2\Credentials;
+use PSX\Framework\OAuth2\GrantType\AuthorizationCodeAbstract;
+use PSX\OAuth2\Exception\InvalidClientException;
+use PSX\OAuth2\Exception\InvalidGrantException;
+use PSX\OAuth2\Exception\InvalidScopeException;
+use PSX\OAuth2\Grant;
 
 /**
  * AuthorizationCode
@@ -44,12 +45,12 @@ class AuthorizationCode extends AuthorizationCodeAbstract
     private Table\App\Code $appCodeTable;
     private string $expireToken;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, string $expireToken)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->appCodeTable    = $appCodeTable;
-        $this->expireToken     = $expireToken;
+        $this->expireToken     = $config->get('fusio_expire_token');
     }
 
     protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)

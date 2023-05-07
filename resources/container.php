@@ -159,8 +159,8 @@ return static function (ContainerConfigurator $container) {
         ]);
     $services->alias(RoutingParserInterface::class, CachedParser::class);
 
-    $services->set(DatabaseFinder::class);
-    $services->alias(LocationFinderInterface::class, DatabaseFinder::class);
+    //$services->set(DatabaseFinder::class);
+    //$services->alias(LocationFinderInterface::class, DatabaseFinder::class);
 
     $services->set(DatabaseSchema::class);
     $services->alias(ParserInterface::class, DatabaseSchema::class);
@@ -174,4 +174,13 @@ return static function (ContainerConfigurator $container) {
     $services->set(ActionExecutorFactory::class);
     $services->set(CompositeExecutorFactory::class);
     $services->alias(ControllerExecutorFactoryInterface::class, CompositeExecutorFactory::class);
+
+    $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
+        ->public();
+
+    $services->load('PSX\\Framework\\Controller\\OAuth2\\', __DIR__ . '/../vendor/psx/framework/src/Controller/OAuth2')
+        ->public();
+
+    $services->load('PSX\\Framework\\Controller\\Tool\\', __DIR__ . '/../vendor/psx/framework/src/Controller/Tool')
+        ->public();
 };

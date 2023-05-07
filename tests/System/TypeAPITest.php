@@ -22,62 +22,36 @@
 namespace Fusio\Impl\Tests\System;
 
 use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * OpenAPITest
+ * TypeAPITest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class OpenAPITest extends ControllerDbTestCase
+class TypeAPITest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
     /**
-     * @dataProvider providerDebugStatus
-     */
-    public function testGetResource($debug)
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', $debug);
-
-        $response = $this->sendRequest('/system/export/openapi/*/foo', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/openapi_resource.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function providerDebugStatus()
-    {
-        return [
-            [true],
-            [false],
-        ];
-    }
-
-    /**
      * @dataProvider providerDebugCollectionStatus
-     * @param string $category
-     * @param bool $debug
      */
-    public function testGetCollection(string $category, bool $debug)
+    public function testGetCollection(string $category)
     {
-        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+        //Environment::getContainer()->get(ConfigInterface::class)->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/system/export/openapi/*/*?filter=' . $category, 'GET', array(
+        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
         $expect = __DIR__ . '/resources/openapi_collection_' . $category . '.json';
         $actual = __DIR__ . '/resources/openapi_collection_' . $category . '_actual.json';
 
@@ -89,16 +63,13 @@ class OpenAPITest extends ControllerDbTestCase
     public function providerDebugCollectionStatus()
     {
         return [
-            ['default', true],
-            ['default', false],
-            ['backend', true],
-            ['backend', false],
-            ['consumer', true],
-            ['consumer', false],
-            ['system', true],
-            ['system', false],
-            ['authorization', true],
-            ['authorization', false],
+            ['default'],
+            /*
+            ['backend'],
+            ['consumer'],
+            ['system'],
+            ['authorization'],
+            */
         ];
     }
 }

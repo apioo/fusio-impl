@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Schema;
 
 use Doctrine\DBAL\Connection;
+use PSX\Framework\Config\DirectoryInterface;
 use PSX\Schema\Exception\InvalidSchemaException;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
@@ -37,11 +38,13 @@ class Loader
 {
     private Connection $connection;
     private SchemaManagerInterface $schemaManager;
+    private DirectoryInterface $directory;
 
-    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager, DirectoryInterface $directory)
     {
         $this->connection = $connection;
         $this->schemaManager = $schemaManager;
+        $this->directory = $directory;
     }
 
     public function getSchema(string|int $schemaId): SchemaInterface
@@ -71,7 +74,7 @@ class Loader
         if (strpos($source, '{') !== false) {
             // in case the source is a schema write it to a file
             $hash = md5($source);
-            $schemaFile = PSX_PATH_CACHE . '/schema-' . $row['name'] . '-' . $hash . '.json';
+            $schemaFile = $this->directory->getCacheDir() . '/schema-' . $row['name'] . '-' . $hash . '.json';
             if (!is_file($schemaFile) || md5_file($schemaFile) !== $hash) {
                 file_put_contents($schemaFile, $source);
             }

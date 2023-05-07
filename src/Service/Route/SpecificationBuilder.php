@@ -76,28 +76,28 @@ class SpecificationBuilder
         $scopes = $this->scopeTable->getScopesForRoute($routeId);
 
         foreach ($methods as $method) {
-            $return = $this->getReturn($method['id'], $specification->getDefinitions());
+            $return = $this->getReturn($method->getId(), $specification->getDefinitions());
             if (empty($return)) {
                 continue;
             }
 
-            $operation = new Operation($method['method'], $path, $return);
+            $operation = new Operation($method->getMethod(), $path, $return);
             $operation->setArguments($this->getArguments($path, $method, $specification->getDefinitions()));
-            $operation->setThrows($this->getThrows($method['id'], $specification->getDefinitions()));
+            $operation->setThrows($this->getThrows($method->getId(), $specification->getDefinitions()));
 
-            if (!empty($method['description'])) {
-                $operation->setDescription($method['description']);
+            if (!empty($method->getDescription())) {
+                $operation->setDescription($method->getDescription());
             }
 
-            if (isset($scopes[$method['method']])) {
-                $operation->setTags($scopes[$method['method']]);
+            if (isset($scopes[$method->getMethod()])) {
+                $operation->setTags($scopes[$method->getMethod()]);
 
-                if (!$method['public']) {
-                    $operation->setSecurity($scopes[$method['method']]);
+                if (!$method->getPublic()) {
+                    $operation->setSecurity($scopes[$method->getMethod()]);
                 }
             }
 
-            $operationId = !empty($method['operation_id']) ? $method['operation_id'] : $method['action'];
+            $operationId = !empty($method->getOperationId()) ? $method->getOperationId() : $method->getAction();
             $specification->getOperations()->add($operationId, $operation);
         }
 
@@ -117,24 +117,26 @@ class SpecificationBuilder
         return new Operation\Response($response['code'], TypeFactory::getReference($response['response']));
     }
 
-    private function getArguments(string $path, array $method, DefinitionsInterface $definitions): Operation\Arguments
+    private function getArguments(string $path, Table\Generated\RoutesMethodRow $method, DefinitionsInterface $definitions): Operation\Arguments
     {
         $arguments = new Operation\Arguments();
 
         $this->buildPathParameters($arguments, $path);
 
-        if (!empty($method['request'])) {
-            $definitions->addSchema($method['request'], $this->schemaLoader->getSchema($method['request']));
+        $request = $method->getRequest();
+        if (!empty($request)) {
+            $definitions->addSchema($request, $this->schemaLoader->getSchema($request));
 
-            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($method['request'])));
+            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($request)));
         }
 
-        if (!empty($method['parameters'])) {
-            $parameters = \json_decode($method['parameters']);
-            if ($parameters instanceof \stdClass) {
-                $this->buildQueryParametersFromJson($arguments, $parameters);
+        $parameters = $method->getParameters();
+        if (!empty($parameters)) {
+            $parametersObject = \json_decode($parameters);
+            if ($parametersObject instanceof \stdClass) {
+                $this->buildQueryParametersFromJson($arguments, $parametersObject);
             } else {
-                $this->buildQueryParametersFromSchema($arguments, $method['parameters']);
+                $this->buildQueryParametersFromSchema($arguments, $parameters);
 
             }
         }

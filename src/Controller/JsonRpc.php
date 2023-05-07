@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Api;
+namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Controller\Filter;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Rpc\InvokerFactory;
+use Fusio\Impl\Service\Rpc\InvokerFactory;
 use Fusio\Impl\Service\Log;
 use Fusio\Model\System;
 use PSX\Api\Attribute\Description;
@@ -44,28 +44,20 @@ use PSX\Json\Rpc\Server;
  */
 class JsonRpc extends ControllerAbstract
 {
-    #[Inject]
     private InvokerFactory $rpcInvokerFactory;
 
-    #[Inject]
-    private Log $logService;
+    public function __construct(InvokerFactory $rpcInvokerFactory)
+    {
+        $this->rpcInvokerFactory = $rpcInvokerFactory;
+    }
 
     public function getPreFilter(): array
     {
-        $filter = [];
-
-        // it is required for every request to have an user agent which
-        // identifies the client
-        $filter[] = new UserAgentEnforcer();
-
-        if ($this->context instanceof Context) {
-            $filter[] = new Filter\Logger(
-                $this->logService,
-                $this->context
-            );
-        }
-
-        return $filter;
+        return [
+            ...parent::getPreFilter(),
+            UserAgentEnforcer::class,
+            Filter\Logger::class,
+        ];
     }
 
     #[Description('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification')]

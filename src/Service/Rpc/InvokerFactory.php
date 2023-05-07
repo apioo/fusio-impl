@@ -19,14 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Rpc;
+namespace Fusio\Impl\Service\Rpc;
 
 use Fusio\Engine\Request\HttpRequest;
+use Fusio\Impl\Rpc\Invoker;
+use Fusio\Impl\Rpc\Middleware;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Action\Invoker as ActionInvoker;
 use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpContextInterface;
-use Service\Schema\Loader;
 
 /**
  * InvokerFactory
@@ -39,11 +40,11 @@ class InvokerFactory
 {
     private ActionInvoker $actionInvoker;
     private Table\Route\Method $methodTable;
-    private Loader $schemaLoader;
+    private Service\Schema\Loader $schemaLoader;
     private Service\Security\TokenValidator $tokenValidator;
     private Service\Rate $rateService;
 
-    public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable, Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
+    public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable, Service\Schema\Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
     {
         $this->actionInvoker  = $actionInvoker;
         $this->methodTable    = $methodTable;

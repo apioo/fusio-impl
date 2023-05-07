@@ -19,27 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Authorization;
+namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Oauth2\Credentials;
-use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
-use PSX\Oauth2\AccessToken;
-use PSX\Oauth2\Authorization\Exception\InvalidClientException;
-use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
-use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
-use PSX\Oauth2\Grant;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Framework\OAuth2\Credentials;
+use PSX\Framework\OAuth2\GrantType\ClientCredentialsAbstract;
+use PSX\OAuth2\Exception\InvalidClientException;
+use PSX\OAuth2\Exception\InvalidScopeException;
+use PSX\OAuth2\Grant;
 use PSX\Sql\Condition;
 
 /**
- * Password
+ * ClientCredentials
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Password extends PasswordAbstract
+class ClientCredentials extends ClientCredentialsAbstract
 {
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
@@ -47,31 +46,30 @@ class Password extends PasswordAbstract
     private Table\App $appTable;
     private string $expireToken;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, string $expireToken)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->userService     = $userService;
         $this->appTable        = $appTable;
-        $this->expireToken     = $expireToken;
+        $this->expireToken     = $config->get('fusio_expire_token');
     }
 
-    protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
+    protected function generate(Credentials $credentials, Grant\ClientCredentials $grant)
     {
-        $condition = new Condition();
-        $condition->equals('app_key', $credentials->getClientId());
-        $condition->equals('app_secret', $credentials->getClientSecret());
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->findOneBy($condition);
-        if (empty($app)) {
-            throw new InvalidClientException('Unknown credentials');
+        // check whether the credentials contain an app key and secret
+        $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
+        if (!empty($app)) {
+            $appId  = $app['id'];
+            $userId = $app['user_id'];
+        } else {
+            // otherwise try to authenticate the user credentials
+            $appId  = null;
+            $userId = $this->userService->authenticateUser($credentials->getClientId(), $credentials->getClientSecret());
         }
 
-        // check user
-        $userId = $this->userService->authenticateUser($grant->getUsername(), $grant->getPassword());
         if (empty($userId)) {
-            throw new InvalidGrantException('Unknown user');
+            throw new InvalidClientException('Unknown credentials');
         }
 
         $scope = $grant->getScope();
@@ -81,18 +79,33 @@ class Password extends PasswordAbstract
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($scope, (int) $app['id'], $userId);
+        $scopes = $this->scopeService->getValidScopes($scope, $appId, $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
-            $app['id'],
+            $appId === null ? 1 : $appId,
             $userId,
             $scopes,
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->expireToken)
         );
+    }
+
+    private function getApp(string $appKey, string $appSecret)
+    {
+        $condition = Condition::withAnd();
+        $condition->equals('app_key', $appKey);
+        $condition->equals('app_secret', $appSecret);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $app = $this->appTable->findOneBy($condition);
+        if (empty($app)) {
+            return null;
+        }
+
+        return $app;
     }
 }

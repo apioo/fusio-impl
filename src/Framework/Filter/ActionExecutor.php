@@ -21,11 +21,9 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
-use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
 use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Schema\Loader;
 use PSX\Framework\Http\RequestReader;
 use PSX\Framework\Http\ResponseWriter;
@@ -35,7 +33,6 @@ use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 use PSX\Record\Record;
-use PSX\Record\RecordInterface;
 
 /**
  * ControllerExecutor
@@ -68,9 +65,7 @@ class ActionExecutor implements FilterInterface
             return;
         }
 
-        $arguments = [];
-        $arguments = array_merge($arguments, $request->getUri()->getParameters());
-        $arguments = array_merge($arguments, $this->context->getParameters());
+        $arguments = array_merge($request->getUri()->getParameters(), $this->context->getParameters());
 
         $context = new HttpContext($request, $this->context->getParameters());
         $requestContext = new Request\HttpRequest($context);
@@ -79,14 +74,11 @@ class ActionExecutor implements FilterInterface
         if (!empty($method['request']) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
             $schema = $this->schemaLoader->getSchema($method['request']);
             $payload = $this->requestReader->getBodyAs($request, $schema);
-            if (!$payload instanceof RecordInterface) {
-                $payload = PassthruRecord::fromPayload($payload);
-            }
         } else {
             $payload = new Record();
         }
 
-        $result = $this->controller->execute(new Request(Record::fromArray($arguments), $payload, $requestContext), $this->context);
+        $result = $this->controller->execute(new Request($arguments, $payload, $requestContext), $this->context);
 
         $this->responseWriter->setBody($response, $result, $request);
 

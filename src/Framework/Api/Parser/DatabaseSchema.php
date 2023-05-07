@@ -38,13 +38,11 @@ use PSX\Framework\Loader\RoutingParserInterface;
  */
 class DatabaseSchema implements ParserInterface
 {
-    private RoutingParserInterface $routingParser;
     private SpecificationBuilder $builder;
     private Attribute $attributeParser;
 
-    public function __construct(RoutingParserInterface $routingParser, SpecificationBuilder $builder, Attribute $attributeParser)
+    public function __construct(SpecificationBuilder $builder, Attribute $attributeParser)
     {
-        $this->routingParser = $routingParser;
         $this->builder = $builder;
         $this->attributeParser = $attributeParser;
     }
@@ -52,24 +50,11 @@ class DatabaseSchema implements ParserInterface
     public function parse(string $schema): SpecificationInterface
     {
         if ($schema === ActionController::class) {
-            return $this->buildAll();
+            [$methods, $path, $source, $routeId, $categoryId] = $row;
+
+            return $this->builder->build($routeId);
         } else {
             return $this->attributeParser->parse($schema);
         }
     }
-
-    private function buildAll(): SpecificationInterface
-    {
-        $specification = new Specification();
-
-        $collection = $this->routingParser->getCollection();
-        foreach ($collection as $row) {
-            [$methods, $path, $source, $routeId, $categoryId] = $row;
-
-            $specification->merge($this->builder->build($routeId));
-        }
-
-        return $specification;
-    }
-
 }

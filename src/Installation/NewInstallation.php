@@ -135,8 +135,6 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'default');
-        $bag->addRoute('system', 0, '/system/jsonrpc', [System\Api\JsonRpc::class, 'invoke']);
-        $bag->addRoute('system', 3, '/system/payment/:provider/webhook', [System\Api\PaymentWebhook::class, 'callback']);
         $bag->addSchema('default', 'Passthru', Passthru::class);
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');

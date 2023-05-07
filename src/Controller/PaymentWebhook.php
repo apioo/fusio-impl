@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Api;
+namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Framework\Loader\ContextFactory;
