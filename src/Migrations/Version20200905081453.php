@@ -250,6 +250,30 @@ final class Version20200905081453 extends AbstractMigration
             $logErrorTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_operation')) {
+            $operationTable = $schema->createTable('fusio_operation');
+            $operationTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $operationTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $operationTable->addColumn('status', 'integer', ['default' => Table\Route::STATUS_ACTIVE]);
+            $operationTable->addColumn('active', 'integer', ['default' => 0]);
+            $operationTable->addColumn('public', 'integer', ['default' => 0]);
+            $operationTable->addColumn('stability', 'integer', ['default' => 0]);
+            $operationTable->addColumn('description', 'string', ['length' => 500, 'notnull' => false]);
+            $operationTable->addColumn('http_method', 'string', ['length' => 16]);
+            $operationTable->addColumn('http_path', 'string', ['length' => 255]);
+            $operationTable->addColumn('name', 'string', ['length' => 255]);
+            $operationTable->addColumn('arguments', 'text', ['notnull' => false]);
+            $operationTable->addColumn('return', 'string', ['length' => 255]);
+            $operationTable->addColumn('throws', 'text', ['notnull' => false]);
+            $operationTable->addColumn('action', 'string', ['length' => 255]);
+            $operationTable->addColumn('costs', 'integer', ['notnull' => false]);
+            $operationTable->addColumn('metadata', 'text', ['notnull' => false]);
+            $operationTable->setPrimaryKey(['id']);
+            $operationTable->addUniqueIndex(['name']);
+            $operationTable->addIndex(['status'], 'IDX_OPERATION_S');
+            $operationTable->addIndex(['category_id', 'status'], 'IDX_OPERATION_CS');
+        }
+
         if (!$schema->hasTable('fusio_page')) {
             $pageTable = $schema->createTable('fusio_page');
             $pageTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -578,6 +602,7 @@ final class Version20200905081453 extends AbstractMigration
         $schema->dropTable('fusio_event_trigger');
         $schema->dropTable('fusio_log');
         $schema->dropTable('fusio_log_error');
+        $schema->dropTable('fusio_operation');
         $schema->dropTable('fusio_plan');
         $schema->dropTable('fusio_plan_usage');
         $schema->dropTable('fusio_provider');

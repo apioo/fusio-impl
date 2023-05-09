@@ -74,9 +74,8 @@ class DatabaseParser implements RoutingParserInterface
         $result = $this->connection->fetchAllAssociative($sql, $params);
 
         foreach ($result as $row) {
-            $parts = explode('::', $row['controller']);
-            $controller = $parts[0] ?? null;
-            $method = $parts[1] ?? null;
+            $controller = 'operation:' . $row['id'];
+            $method = $row['category_id'];
 
             $collection->add(explode('|', $row['methods']), $row['path'], [$controller, $method], $row['id'], $row['category_id']);
         }

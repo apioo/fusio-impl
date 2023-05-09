@@ -19,40 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Framework\Api\Parser;
+namespace Fusio\Impl\Framework\Api\Scanner;
 
-use Fusio\Impl\Controller\ActionController;
-use Fusio\Impl\Service\Route\SpecificationBuilder;
-use PSX\Api\Parser\Attribute;
-use PSX\Api\ParserInterface;
-use PSX\Api\Specification;
-use PSX\Api\SpecificationInterface;
-use PSX\Framework\Loader\RoutingParserInterface;
+use PSX\Api\OperationInterface;
+use PSX\Api\Scanner\FilterInterface;
 
 /**
- * DatabaseSchema
+ * Filter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class DatabaseSchema implements ParserInterface
+class Filter implements FilterInterface
 {
-    private SpecificationBuilder $builder;
-    private Attribute $attributeParser;
+    private int $id;
 
-    public function __construct(SpecificationBuilder $builder, Attribute $attributeParser)
+    public function __construct(int $id)
     {
-        $this->builder = $builder;
-        $this->attributeParser = $attributeParser;
+        $this->id = $id;
     }
 
-    public function parse(string $schema): SpecificationInterface
+    public function match(OperationInterface $operation): bool
     {
-        if (str_starts_with($schema, 'operation:')) {
-            return $this->builder->build(substr($schema, 10));
-        } else {
-            return $this->attributeParser->parse($schema);
-        }
+        // we dont need to filter any values since we already filter at the query
+        return true;
+    }
+
+    public function getId(): string
+    {
+        return '' . $this->id;
     }
 }

@@ -19,34 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Framework\Filter;
+namespace Fusio\Impl\Framework\Api\Scanner;
 
-use PSX\Api\Listing\FilterInterface;
+use Doctrine\DBAL\Connection;
+use PSX\Api\Scanner\FilterFactory as PSXFilterFactory;
+use PSX\Api\Scanner\FilterInterface;
 
 /**
- * Filter
+ * FilterFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Filter implements FilterInterface
+class FilterFactory extends PSXFilterFactory
 {
-    private int $id;
+    private Connection $connection;
+    private bool $loaded = false;
 
-    public function __construct(int $id)
+    public function __construct(Connection $connection)
     {
-        $this->id = $id;
+        parent::__construct();
+
+        $this->connection = $connection;
     }
 
-    public function match(string $path): bool
+    public function getFilter(string $name): ?FilterInterface
     {
-        // we dont need to filter any values since we already filter at the query
-        return true;
+        $this->load();
+        return parent::getFilter($name);
     }
 
-    public function getId(): string
+    private function load(): void
     {
-        return '' . $this->id;
+        if ($this->loaded) {
+            return;
+        }
+
+        $result = $this->connection->fetchAllAssociative('SELECT id, name FROM fusio_category');
+        foreach ($result as $row) {
+            $this->addFilter($row['name'], new Filter((int) $row['id']));
+        }
+
+        $this->loaded = true;
     }
 }

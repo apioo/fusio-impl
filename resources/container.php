@@ -16,6 +16,7 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Framework\Api\Parser\DatabaseSchema;
+use Fusio\Impl\Framework\Api\Scanner\FilterFactory;
 use Fusio\Impl\Framework\Filter\ActionExecutorFactory;
 use Fusio\Impl\Framework\Filter\CompositeExecutorFactory;
 use Fusio\Impl\Framework\Loader\ContextFactory;
@@ -32,6 +33,7 @@ use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Api\ParserInterface;
+use PSX\Api\Scanner\FilterFactoryInterface;
 use PSX\Framework\Controller\ControllerInterface;
 use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
@@ -174,6 +176,9 @@ return static function (ContainerConfigurator $container) {
     $services->set(ActionExecutorFactory::class);
     $services->set(CompositeExecutorFactory::class);
     $services->alias(ControllerExecutorFactoryInterface::class, CompositeExecutorFactory::class);
+
+    $services->set(FilterFactory::class);
+    $services->alias(FilterFactoryInterface::class, FilterFactory::class);
 
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();

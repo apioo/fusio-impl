@@ -19,48 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Framework\Filter;
-
-use Doctrine\DBAL\Connection;
-use PSX\Api\Listing\FilterFactory as PSXFilterFactory;
-use PSX\Api\Listing\FilterInterface;
+namespace Fusio\Impl\Table;
 
 /**
- * FilterFactory
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class FilterFactory extends PSXFilterFactory
+class Operation extends Generated\OperationTable
 {
-    private Connection $connection;
-    private bool $loaded = false;
-
-    public function __construct(Connection $connection)
-    {
-        parent::__construct();
-
-        $this->connection = $connection;
-    }
-
-    public function getFilter(string $name): ?FilterInterface
-    {
-        $this->load();
-        return parent::getFilter($name);
-    }
-
-    private function load()
-    {
-        if ($this->loaded) {
-            return;
-        }
-
-        $result = $this->connection->fetchAll('SELECT id, name FROM fusio_category');
-        foreach ($result as $row) {
-            $this->addFilter($row['name'], new Filter((int) $row['id']));
-        }
-
-        $this->loaded = true;
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 }

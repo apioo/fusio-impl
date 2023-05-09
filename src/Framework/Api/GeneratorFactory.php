@@ -22,12 +22,13 @@
 namespace Fusio\Impl\Framework\Api;
 
 use Fusio\Impl\Authorization\Authorization;
+use Fusio\Impl\Provider\Generator\OpenAPI;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Generator;
 use PSX\Api\GeneratorFactory as ApiGeneratorFactory;
 use PSX\Api\GeneratorInterface;
-use PSX\Api\Listing\FilterInterface;
+use PSX\Api\Scanner\FilterInterface;
 
 /**
  * GeneratorFactory
@@ -51,7 +52,8 @@ class GeneratorFactory extends ApiGeneratorFactory
 
     protected function configure(GeneratorInterface $generator, ?FilterInterface $filter = null): void
     {
-        if ($generator instanceof Generator\Spec\OpenAPIAbstract) {
+        /*
+        if ($generator instanceof OpenAPI) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
             $generator->setDescription($this->configService->getValue('info_description') ?: null);
             $generator->setTermsOfService($this->configService->getValue('info_tos') ?: null);
@@ -69,5 +71,6 @@ class GeneratorFactory extends ApiGeneratorFactory
         } elseif ($generator instanceof Generator\Spec\Raml) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
         }
+        */
     }
 }
