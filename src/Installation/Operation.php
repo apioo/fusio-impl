@@ -30,7 +30,7 @@ namespace Fusio\Impl\Installation;
  */
 class Operation
 {
-    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $return, array $arguments = [], array $throws = [], ?string $eventName = null)
+    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $return, array $arguments = [], array $throws = [], ?string $eventName = null, bool $public = false)
     {
     }
 }
