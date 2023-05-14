@@ -70,16 +70,14 @@ class Cronjob
         try {
             $this->cronjobTable->beginTransaction();
 
-            $record = new Table\Generated\CronjobRow([
-                Table\Generated\CronjobTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\CronjobTable::COLUMN_STATUS => Table\Cronjob::STATUS_ACTIVE,
-                Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
-                Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
-                Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
-                Table\Generated\CronjobTable::COLUMN_METADATA => $cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null,
-            ]);
-
-            $this->cronjobTable->create($record);
+            $row = new Table\Generated\CronjobRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Cronjob::STATUS_ACTIVE);
+            $row->setName($cronjob->getName());
+            $row->setCron($cronjob->getCron());
+            $row->setAction($cronjob->getAction());
+            $row->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null);
+            $this->cronjobTable->create($row);
 
             $cronjobId = $this->cronjobTable->getLastInsertId();
             $cronjob->setId($cronjobId);
@@ -111,15 +109,11 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $record = new Table\Generated\CronjobRow([
-            Table\Generated\CronjobTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
-            Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
-            Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
-            Table\Generated\CronjobTable::COLUMN_METADATA => $cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null,
-        ]);
-
-        $this->cronjobTable->update($record);
+        $existing->setName($cronjob->getName());
+        $existing->setCron($cronjob->getCron());
+        $existing->setAction($cronjob->getAction());
+        $existing->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null);
+        $this->cronjobTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
 
@@ -137,12 +131,8 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $record = new Table\Generated\CronjobRow([
-            Table\Generated\CronjobTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\CronjobTable::COLUMN_STATUS => Table\Cronjob::STATUS_DELETED,
-        ]);
-
-        $this->cronjobTable->update($record);
+        $existing->setStatus(Table\Cronjob::STATUS_DELETED);
+        $this->cronjobTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

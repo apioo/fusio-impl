@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Impl\Table;
+use PSX\DateTime\LocalDateTime;
 use PSX\Sql\Condition;
 
 /**
@@ -54,13 +55,11 @@ class Dispatcher implements DispatcherInterface
             throw new \RuntimeException('Invalid event name');
         }
 
-        $record = new Table\Generated\EventTriggerRow([
-            Table\Generated\EventTriggerTable::COLUMN_EVENT_ID => $event->getId(),
-            Table\Generated\EventTriggerTable::COLUMN_STATUS => Table\Event\Trigger::STATUS_PENDING,
-            Table\Generated\EventTriggerTable::COLUMN_PAYLOAD => json_encode($payload),
-            Table\Generated\EventTriggerTable::COLUMN_INSERT_DATE => new \DateTime(),
-        ]);
-
-        $this->triggerTable->create($record);
+        $row = new Table\Generated\EventTriggerRow();
+        $row->setEventId($event->getId());
+        $row->setStatus(Table\Event\Trigger::STATUS_PENDING);
+        $row->setPayload(json_encode($payload));
+        $row->setInsertDate(LocalDateTime::now());
+        $this->triggerTable->create($row);
     }
 }

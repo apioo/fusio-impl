@@ -75,16 +75,14 @@ class Schema
         try {
             $this->schemaTable->beginTransaction();
 
-            $record = new Table\Generated\SchemaRow([
-                Table\Generated\SchemaTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_ACTIVE,
-                Table\Generated\SchemaTable::COLUMN_NAME => $name,
-                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
-                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
-                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
-            ]);
-
-            $this->schemaTable->create($record);
+            $row = new Table\Generated\SchemaRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Schema::STATUS_ACTIVE);
+            $row->setName($name);
+            $row->setSource($this->parseSource($schema->getSource()));
+            $row->setForm($this->parseForm($schema->getForm()));
+            $row->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
+            $this->schemaTable->create($row);
 
             $schemaId = $this->schemaTable->getLastInsertId();
             $schema->setId($schemaId);
@@ -123,15 +121,11 @@ class Schema
         try {
             $this->schemaTable->beginTransaction();
 
-            $record = new Table\Generated\SchemaRow([
-                Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\SchemaTable::COLUMN_NAME => $name,
-                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
-                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
-                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
-            ]);
-
-            $this->schemaTable->update($record);
+            $existing->setName($name);
+            $existing->setSource($this->parseSource($schema->getSource()));
+            $existing->setForm($this->parseForm($schema->getForm()));
+            $existing->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
+            $this->schemaTable->update($existing);
 
             // check whether we can load the schema
             $this->schemaLoader->getSchema($name);
@@ -159,12 +153,8 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = new Table\Generated\SchemaRow([
-            Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_DELETED,
-        ]);
-
-        $this->schemaTable->update($record);
+        $existing->setStatus(Table\Schema::STATUS_DELETED);
+        $this->schemaTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
@@ -182,12 +172,8 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = new Table\Generated\SchemaRow([
-            Table\Generated\SchemaTable::COLUMN_ID => $schema->getId(),
-            Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($form),
-        ]);
-
-        $this->schemaTable->update($record);
+        $schema->setForm($this->parseForm($form));
+        $this->schemaTable->update($schema);
     }
 
     public function generatePreview(int $schemaId): Generator\Code\Chunks|string

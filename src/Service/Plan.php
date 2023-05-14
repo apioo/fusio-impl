@@ -70,18 +70,16 @@ class Plan
         try {
             $this->planTable->beginTransaction();
 
-            $record = new Table\Generated\PlanRow([
-                Table\Generated\PlanTable::COLUMN_STATUS => Table\Plan::STATUS_ACTIVE,
-                Table\Generated\PlanTable::COLUMN_NAME => $plan->getName(),
-                Table\Generated\PlanTable::COLUMN_DESCRIPTION => $plan->getDescription(),
-                Table\Generated\PlanTable::COLUMN_PRICE => $plan->getPrice(),
-                Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
-                Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
-                Table\Generated\PlanTable::COLUMN_EXTERNAL_ID => $plan->getExternalId(),
-                Table\Generated\PlanTable::COLUMN_METADATA => $plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null,
-            ]);
-
-            $this->planTable->create($record);
+            $row = new Table\Generated\PlanRow();
+            $row->setStatus(Table\Plan::STATUS_ACTIVE);
+            $row->setName($plan->getName());
+            $row->setDescription($plan->getDescription());
+            $row->setPrice($plan->getPrice());
+            $row->setPoints($plan->getPoints());
+            $row->setPeriodType($plan->getPeriod());
+            $row->setExternalId($plan->getExternalId());
+            $row->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null);
+            $this->planTable->create($row);
 
             $planId = $this->planTable->getLastInsertId();
             $plan->setId($planId);
@@ -116,18 +114,14 @@ class Plan
         }
 
         // update event
-        $record = new Table\Generated\PlanRow([
-            Table\Generated\PlanTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\PlanTable::COLUMN_NAME => $plan->getName(),
-            Table\Generated\PlanTable::COLUMN_DESCRIPTION => $plan->getDescription(),
-            Table\Generated\PlanTable::COLUMN_PRICE => $plan->getPrice(),
-            Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
-            Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
-            Table\Generated\PlanTable::COLUMN_EXTERNAL_ID => $plan->getExternalId(),
-            Table\Generated\PlanTable::COLUMN_METADATA => $plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null,
-        ]);
-
-        $this->planTable->update($record);
+        $existing->setName($plan->getName());
+        $existing->setDescription($plan->getDescription());
+        $existing->setPrice($plan->getPrice());
+        $existing->setPoints($plan->getPoints());
+        $existing->setPeriodType($plan->getPeriod());
+        $existing->setExternalId($plan->getExternalId());
+        $existing->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null);
+        $this->planTable->update($existing);
 
         $scopes = $plan->getScopes();
         if ($scopes !== null) {
@@ -150,12 +144,8 @@ class Plan
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
-        $record = new Table\Generated\PlanRow([
-            Table\Generated\PlanTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\PlanTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
-        ]);
-
-        $this->planTable->update($record);
+        $existing->setStatus(Table\Rate::STATUS_DELETED);
+        $this->planTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

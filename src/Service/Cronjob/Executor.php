@@ -25,6 +25,7 @@ use Cron\CronExpression;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ActionExecuteRequest;
+use PSX\DateTime\LocalDateTime;
 
 /**
  * Executor
@@ -92,24 +93,20 @@ class Executor
 
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
-            $this->errorTable->create(new Table\Generated\CronjobErrorRow([
-                Table\Generated\CronjobErrorTable::COLUMN_CRONJOB_ID => $cronjob->getId(),
-                Table\Generated\CronjobErrorTable::COLUMN_MESSAGE => $e->getMessage(),
-                Table\Generated\CronjobErrorTable::COLUMN_TRACE => $e->getTraceAsString(),
-                Table\Generated\CronjobErrorTable::COLUMN_FILE => $e->getFile(),
-                Table\Generated\CronjobErrorTable::COLUMN_LINE => $e->getLine(),
-            ]));
+            $row = new Table\Generated\CronjobErrorRow();
+            $row->setCronjobId($cronjob->getId());
+            $row->setMessage($e->getMessage());
+            $row->setTrace($e->getTraceAsString());
+            $row->setFile($e->getFile());
+            $row->setLine($e->getLine());
+            $this->errorTable->create($row);
 
             $exitCode = Table\Cronjob::CODE_ERROR;
         }
 
         // set execute date
-        $record = new Table\Generated\CronjobRow([
-            Table\Generated\CronjobTable::COLUMN_ID => $cronjob->getId(),
-            Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE => new \DateTime(),
-            Table\Generated\CronjobTable::COLUMN_EXIT_CODE => $exitCode,
-        ]);
-
-        $this->cronjobTable->update($record);
+        $cronjob->setExecuteDate(LocalDateTime::now());
+        $cronjob->setExitCode($exitCode);
+        $this->cronjobTable->update($cronjob);
     }
 }

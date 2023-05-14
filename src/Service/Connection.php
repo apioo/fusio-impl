@@ -98,15 +98,13 @@ class Connection
         try {
             $this->connectionTable->beginTransaction();
 
-            $record = new Table\Generated\ConnectionRow([
-                Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_ACTIVE,
-                Table\Generated\ConnectionTable::COLUMN_NAME => $connection->getName(),
-                Table\Generated\ConnectionTable::COLUMN_CLASS => $connection->getClass(),
-                Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-                Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
-            ]);
-
-            $this->connectionTable->create($record);
+            $row = new Table\Generated\ConnectionRow();
+            $row->setStatus(Table\Connection::STATUS_ACTIVE);
+            $row->setName($connection->getName());
+            $row->setClass($connection->getClass());
+            $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+            $row->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
+            $this->connectionTable->create($row);
 
             $connectionId = $this->connectionTable->getLastInsertId();
             $connection->setId($connectionId);
@@ -149,13 +147,9 @@ class Connection
         }
 
         // update connection
-        $record = new Table\Generated\ConnectionRow([
-            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-            Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
-        ]);
-
-        $this->connectionTable->update($record);
+        $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+        $existing->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
+        $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
 
@@ -190,12 +184,8 @@ class Connection
             $factory->onDelete($existing->getName(), $parameters, $conn);
         }
 
-        $record = new Table\Generated\ConnectionRow([
-            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_DELETED,
-        ]);
-
-        $this->connectionTable->update($record);
+        $existing->setStatus(Table\Connection::STATUS_DELETED);
+        $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

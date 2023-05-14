@@ -70,13 +70,11 @@ class Role
             $this->roleTable->beginTransaction();
 
             // create role
-            $record = new Table\Generated\RoleRow([
-                Table\Generated\RoleTable::COLUMN_CATEGORY_ID => $role->getCategoryId(),
-                Table\Generated\RoleTable::COLUMN_STATUS => Table\Role::STATUS_ACTIVE,
-                Table\Generated\RoleTable::COLUMN_NAME => $role->getName(),
-            ]);
-
-            $this->roleTable->create($record);
+            $row = new Table\Generated\RoleRow();
+            $row->setCategoryId($role->getCategoryId());
+            $row->setStatus(Table\Role::STATUS_ACTIVE);
+            $row->setName($role->getName());
+            $this->roleTable->create($row);
 
             // get last insert id
             $roleId = $this->roleTable->getLastInsertId();
@@ -112,13 +110,9 @@ class Role
             $this->roleTable->beginTransaction();
 
             // update role
-            $record = new Table\Generated\RoleRow([
-                Table\Generated\RoleTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\RoleTable::COLUMN_CATEGORY_ID => $role->getCategoryId(),
-                Table\Generated\RoleTable::COLUMN_NAME => $role->getName(),
-            ]);
-
-            $this->roleTable->update($record);
+            $existing->setCategoryId($role->getCategoryId());
+            $existing->setName($role->getName());
+            $this->roleTable->update($existing);
 
             if ($role->getScopes() !== null) {
                 // delete existing scopes
@@ -147,12 +141,8 @@ class Role
             throw new StatusCode\NotFoundException('Could not find role');
         }
 
-        $record = new Table\Generated\RoleRow([
-            Table\Generated\RoleTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\RoleTable::COLUMN_STATUS => Table\Role::STATUS_DELETED,
-        ]);
-
-        $this->roleTable->update($record);
+        $existing->setStatus(Table\Role::STATUS_DELETED);
+        $this->roleTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

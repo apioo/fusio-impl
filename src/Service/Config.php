@@ -53,12 +53,8 @@ class Config
             throw new StatusCode\NotFoundException('Could not find config');
         }
 
-        $record = new Table\Generated\ConfigRow([
-            Table\Generated\ConfigTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ConfigTable::COLUMN_VALUE => $config->getValue(),
-        ]);
-
-        $this->configTable->update($record);
+        $existing->setValue($config->getValue());
+        $this->configTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($config, $context));
 

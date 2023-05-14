@@ -66,12 +66,10 @@ class Category
             $this->categoryTable->beginTransaction();
 
             // create category
-            $record = new Table\Generated\CategoryRow([
-                Table\Generated\CategoryTable::COLUMN_STATUS => Table\Rate::STATUS_ACTIVE,
-                Table\Generated\CategoryTable::COLUMN_NAME => $category->getName(),
-            ]);
-
-            $this->categoryTable->create($record);
+            $row = new Table\Generated\CategoryRow();
+            $row->setStatus(Table\Rate::STATUS_ACTIVE);
+            $row->setName($category->getName());
+            $this->categoryTable->create($row);
 
             $categoryId = $this->categoryTable->getLastInsertId();
             $category->setId($categoryId);
@@ -103,12 +101,8 @@ class Category
             $this->categoryTable->beginTransaction();
 
             // update category
-            $record = new Table\Generated\CategoryRow([
-                Table\Generated\CategoryTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\CategoryTable::COLUMN_NAME => $category->getName(),
-            ]);
-
-            $this->categoryTable->update($record);
+            $existing->setName($category->getName());
+            $this->categoryTable->update($existing);
 
             $this->categoryTable->commit();
         } catch (\Throwable $e) {
@@ -129,12 +123,8 @@ class Category
             throw new StatusCode\NotFoundException('Could not find category');
         }
 
-        $record = new Table\Generated\CategoryRow([
-            Table\Generated\CategoryTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\CategoryTable::COLUMN_STATUS => Table\Category::STATUS_DELETED,
-        ]);
-
-        $this->categoryTable->update($record);
+        $existing->setStatus(Table\Category::STATUS_DELETED);
+        $this->categoryTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

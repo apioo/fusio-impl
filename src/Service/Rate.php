@@ -73,16 +73,14 @@ class Rate
         try {
             $this->rateTable->beginTransaction();
 
-            $record = new Table\Generated\RateRow([
-                Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_ACTIVE,
-                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
-                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
-                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
-                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
-                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
-            ]);
-
-            $this->rateTable->create($record);
+            $row = new Table\Generated\RateRow();
+            $row->setStatus(Table\Rate::STATUS_ACTIVE);
+            $row->setPriority($rate->getPriority());
+            $row->setName($rate->getName());
+            $row->setRateLimit($rate->getRateLimit());
+            $row->setTimespan($rate->getTimespan());
+            $row->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
+            $this->rateTable->create($row);
 
             $rateId = $this->rateTable->getLastInsertId();
             $rate->setId($rateId);
@@ -116,16 +114,12 @@ class Rate
             $this->rateTable->beginTransaction();
 
             // update rate
-            $record = new Table\Generated\RateRow([
-                Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
-                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
-                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
-                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
-                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
-            ]);
-
-            $this->rateTable->update($record);
+            $existing->setPriority($rate->getPriority());
+            $existing->setName($rate->getName());
+            $existing->setRateLimit($rate->getRateLimit());
+            $existing->setTimespan($rate->getTimespan());
+            $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
+            $this->rateTable->update($existing);
 
             $this->handleAllocations($existing->getId(), $rate->getAllocation());
 
@@ -148,12 +142,8 @@ class Rate
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
-        $record = new Table\Generated\RateRow([
-            Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
-        ]);
-
-        $this->rateTable->update($record);
+        $existing->setStatus(Table\Rate::STATUS_DELETED);
+        $this->rateTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

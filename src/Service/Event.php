@@ -66,16 +66,14 @@ class Event
         try {
             $this->eventTable->beginTransaction();
 
-            $record = new Table\Generated\EventRow([
-                Table\Generated\EventTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\EventTable::COLUMN_STATUS => Table\Event::STATUS_ACTIVE,
-                Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
-                Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
-                Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
-                Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
-            ]);
-
-            $this->eventTable->create($record);
+            $row = new Table\Generated\EventRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Event::STATUS_ACTIVE);
+            $row->setName($event->getName());
+            $row->setDescription($event->getDescription());
+            $row->setEventSchema($event->getSchema());
+            $row->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
+            $this->eventTable->create($row);
 
             $eventId = $this->eventTable->getLastInsertId();
             $event->setId($eventId);
@@ -104,15 +102,11 @@ class Event
         }
 
         // update event
-        $record = new Table\Generated\EventRow([
-            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
-            Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
-            Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
-            Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
-        ]);
-
-        $this->eventTable->update($record);
+        $existing->setName($event->getName());
+        $existing->setDescription($event->getDescription());
+        $existing->setEventSchema($event->getSchema());
+        $existing->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
+        $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
 
@@ -126,12 +120,8 @@ class Event
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
-        $record = new Table\Generated\EventRow([
-            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\EventTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
-        ]);
-
-        $this->eventTable->update($record);
+        $existing->setStatus(Table\Rate::STATUS_DELETED);
+        $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

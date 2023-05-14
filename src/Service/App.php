@@ -30,6 +30,7 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\AppCreate;
 use Fusio\Model\Backend\AppUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -86,19 +87,17 @@ class App
             $appKey    = TokenGenerator::generateAppKey();
             $appSecret = TokenGenerator::generateAppSecret();
 
-            $record = new Table\Generated\AppRow([
-                Table\Generated\AppTable::COLUMN_USER_ID => $app->getUserId(),
-                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
-                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
-                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
-                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
-                Table\Generated\AppTable::COLUMN_APP_KEY => $appKey,
-                Table\Generated\AppTable::COLUMN_APP_SECRET => $appSecret,
-                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
-                Table\Generated\AppTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->appTable->create($record);
+            $row = new Table\Generated\AppRow();
+            $row->setUserId($app->getUserId());
+            $row->setStatus($app->getStatus());
+            $row->setName($app->getName());
+            $row->setUrl($app->getUrl());
+            $row->setParameters($parameters);
+            $row->setAppKey($appKey);
+            $row->setAppSecret($appSecret);
+            $row->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->appTable->create($row);
 
             $appId = $this->appTable->getLastInsertId();
             $app->setId($appId);
@@ -142,16 +141,12 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $record = new Table\Generated\AppRow([
-                Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
-                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
-                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
-                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
-                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
-            ]);
-
-            $this->appTable->update($record);
+            $existing->setStatus($app->getStatus());
+            $existing->setName($app->getName());
+            $existing->setUrl($app->getUrl());
+            $existing->setParameters($parameters);
+            $existing->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : null);
+            $this->appTable->update($existing);
 
             $scopes = $app->getScopes();
             if ($scopes !== null) {
@@ -185,12 +180,8 @@ class App
             throw new StatusCode\GoneException('App was deleted');
         }
 
-        $record = new Table\Generated\AppRow([
-            Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\AppTable::COLUMN_STATUS => Table\App::STATUS_DELETED,
-        ]);
-
-        $this->appTable->update($record);
+        $existing->setStatus(Table\App::STATUS_DELETED);
+        $this->appTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

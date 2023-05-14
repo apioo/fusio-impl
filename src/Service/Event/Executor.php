@@ -22,10 +22,12 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Service\Connection\Resolver;
+use Fusio\Impl\Service\Marketplace\Repository\Local;
 use Fusio\Impl\Table;
 use Fusio\Impl\Webhook\Message;
 use Fusio\Impl\Service\Event\SenderFactory;
 use Fusio\Impl\Webhook\SenderInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Client\ClientInterface;
 
 /**
@@ -70,15 +72,13 @@ class Executor
             $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['event_id']);
 
             foreach ($subscriptions as $subscription) {
-                $record = new Table\Generated\EventResponseRow([
-                    Table\Generated\EventResponseTable::COLUMN_TRIGGER_ID => $trigger['id'],
-                    Table\Generated\EventResponseTable::COLUMN_SUBSCRIPTION_ID => $subscription['id'],
-                    Table\Generated\EventResponseTable::COLUMN_STATUS => Table\Event\Response::STATUS_PENDING,
-                    Table\Generated\EventResponseTable::COLUMN_ATTEMPTS => 0,
-                    Table\Generated\EventResponseTable::COLUMN_INSERT_DATE => new \DateTime(),
-                ]);
-
-                $this->responseTable->create($record);
+                $row = new Table\Generated\EventResponseRow();
+                $row->setTriggerId($trigger['id']);
+                $row->setSubscriptionId($subscription['id']);
+                $row->setStatus(Table\Event\Response::STATUS_PENDING);
+                $row->setAttempts(0);
+                $row->setInsertDate(LocalDateTime::now());
+                $this->responseTable->create($row);
             }
 
             $this->triggerTable->markDone($trigger['id']);

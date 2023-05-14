@@ -38,6 +38,7 @@ use Fusio\Model\Backend;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -102,19 +103,17 @@ class Action
         try {
             $this->actionTable->beginTransaction();
 
-            $record = new Table\Generated\ActionRow([
-                Table\Generated\ActionTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_ACTIVE,
-                Table\Generated\ActionTable::COLUMN_NAME => $action->getName(),
-                Table\Generated\ActionTable::COLUMN_CLASS => $class,
-                Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
-                Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
-                Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
-                Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
-                Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
-            ]);
-
-            $this->actionTable->create($record);
+            $row = new Table\Generated\ActionRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Action::STATUS_ACTIVE);
+            $row->setName($action->getName());
+            $row->setClass($class);
+            $row->setAsync($action->getAsync());
+            $row->setEngine($engine);
+            $row->setConfig(self::serializeConfig($config));
+            $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->actionTable->create($row);
 
             $actionId = $this->actionTable->getLastInsertId();
             $action->setId($actionId);
@@ -171,18 +170,14 @@ class Action
         }
 
         // update action
-        $record = new Table\Generated\ActionRow([
-            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ActionTable::COLUMN_NAME => $name,
-            Table\Generated\ActionTable::COLUMN_CLASS => $class,
-            Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
-            Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
-            Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
-            Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
-            Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
-        ]);
-
-        $this->actionTable->update($record);
+        $existing->setName($name);
+        $existing->setClass($class);
+        $existing->setAsync($action->getAsync());
+        $existing->setEngine($engine);
+        $existing->setConfig(self::serializeConfig($config));
+        $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
+        $existing->setDate(LocalDateTime::now());
+        $this->actionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
 
@@ -209,12 +204,8 @@ class Action
             $handler->onDelete($existing->getName(), $parameters);
         }
 
-        $record = new Table\Generated\ActionRow([
-            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_DELETED,
-        ]);
-
-        $this->actionTable->update($record);
+        $existing->setStatus(Table\Action::STATUS_DELETED);
+        $this->actionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

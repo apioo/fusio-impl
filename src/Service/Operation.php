@@ -156,22 +156,15 @@ class Operation
             $this->operationTable->beginTransaction();
 
             // update route
-            $record = new Table\Generated\RoutesRow([
-                Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\RoutesTable::COLUMN_PRIORITY => $priority,
-                Table\Generated\RoutesTable::COLUMN_METADATA => $operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null,
-            ]);
-
-            $this->operationTable->update($record);
+            $existing->setName($operation->getName());
+            $existing->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
+            $this->operationTable->update($existing);
 
             // assign scopes
             $scopes = $operation->getScopes();
             if (!empty($scopes)) {
                 $this->scopeService->createFromRoute($existing->getCategoryId(), $existing->getId(), $scopes, $context);
             }
-
-            // handle config
-            $this->configService->handleConfig($existing->getCategoryId(), $existing->getId(), $existing->getPath(), $config, $context);
 
             $this->operationTable->commit();
         } catch (\Throwable $e) {
@@ -202,12 +195,8 @@ class Operation
         }
 
         // delete route
-        $record = new Table\Generated\RoutesRow([
-            Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\RoutesTable::COLUMN_STATUS => Table\Operation::STATUS_DELETED
-        ]);
-
-        $this->operationTable->update($record);
+        $existing->setStatus(Table\Operation::STATUS_DELETED);
+        $this->operationTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

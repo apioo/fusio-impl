@@ -30,6 +30,7 @@ use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
 use Fusio\Impl\Table;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
@@ -76,19 +77,17 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $record = new Table\Generated\AppTokenRow([
-            Table\Generated\AppTokenTable::COLUMN_APP_ID => $app->getId(),
-            Table\Generated\AppTokenTable::COLUMN_USER_ID => $user->getId(),
-            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
-            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
-            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
-            Table\Generated\AppTokenTable::COLUMN_SCOPE => implode(',', $scopes),
-            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
-            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
-            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
-        ]);
-
-        $this->appTokenTable->create($record);
+        $row = new Table\Generated\AppTokenRow();
+        $row->setAppId($app->getId());
+        $row->setUserId($user->getId());
+        $row->setStatus(Table\App\Token::STATUS_ACTIVE);
+        $row->setToken($accessToken);
+        $row->setRefresh($refreshToken);
+        $row->setScope(implode(',', $scopes));
+        $row->setIp($ip);
+        $row->setExpire(LocalDateTime::from($expires));
+        $row->setDate(LocalDateTime::now());
+        $this->appTokenTable->create($row);
 
         $tokenId = $this->appTokenTable->getLastInsertId();
 
@@ -148,17 +147,14 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $record = new Table\Generated\AppTokenRow([
-            Table\Generated\AppTokenTable::COLUMN_ID => $token->getId(),
-            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
-            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
-            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
-            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
-            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
-            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
-        ]);
-
-        $this->appTokenTable->update($record);
+        $row = new Table\Generated\AppTokenRow();
+        $row->setStatus(Table\App\Token::STATUS_ACTIVE);
+        $row->setToken($accessToken);
+        $row->setRefresh($refreshToken);
+        $row->setIp($ip);
+        $row->setExpire(LocalDateTime::from($expires));
+        $row->setDate(LocalDateTime::from($now));
+        $this->appTokenTable->update($row);
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(

@@ -29,6 +29,7 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\PageCreate;
 use Fusio\Model\Backend\PageUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -70,16 +71,14 @@ class Page
         try {
             $this->pageTable->beginTransaction();
 
-            $record = new Table\Generated\PageRow([
-                Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
-                Table\Generated\PageTable::COLUMN_TITLE => $title,
-                Table\Generated\PageTable::COLUMN_SLUG => $slug,
-                Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
-                Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,
-                Table\Generated\PageTable::COLUMN_DATE => new \DateTime(),
-            ]);
-
-            $this->pageTable->create($record);
+            $row = new Table\Generated\PageRow();
+            $row->setStatus($page->getStatus());
+            $row->setTitle($title);
+            $row->setSlug($slug);
+            $row->setContent($page->getContent());
+            $row->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->pageTable->create($row);
 
             $pageId = $this->pageTable->getLastInsertId();
             $page->setId($pageId);
@@ -117,16 +116,12 @@ class Page
         $this->assertStatus($page);
 
         // update action
-        $record = new Table\Generated\PageRow([
-            Table\Generated\PageTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
-            Table\Generated\PageTable::COLUMN_TITLE => $title,
-            Table\Generated\PageTable::COLUMN_SLUG => $slug,
-            Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
-            Table\Generated\PageTable::COLUMN_METADATA => $page->getMetadata() !== null ? json_encode($page->getMetadata()) : null,
-        ]);
-
-        $this->pageTable->update($record);
+        $existing->setStatus($page->getStatus());
+        $existing->setTitle($title);
+        $existing->setSlug($slug);
+        $existing->setContent($page->getContent());
+        $existing->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : null);
+        $this->pageTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($page, $existing, $context));
 
@@ -144,12 +139,8 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
-        $record = new Table\Generated\PageRow([
-            Table\Generated\PageTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\PageTable::COLUMN_STATUS => Table\Page::STATUS_DELETED,
-        ]);
-
-        $this->pageTable->update($record);
+        $existing->setStatus(Table\Page::STATUS_DELETED);
+        $this->pageTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
