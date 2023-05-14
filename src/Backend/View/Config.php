@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -50,31 +52,33 @@ class Config extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::ASC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ConfigTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
-                'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
+            'entry' => $builder->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
+                'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
                 'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-                'value' => $this->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
+                'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
                     return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
                 }),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -87,16 +91,18 @@ class Config extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Config::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
-            'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Config::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
+            'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,
             'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-            'value' => $this->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
+            'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
                 return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
             }),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

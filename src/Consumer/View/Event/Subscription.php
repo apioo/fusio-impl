@@ -22,8 +22,9 @@
 namespace Fusio\Impl\Consumer\View\Event;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -43,50 +44,53 @@ class Subscription extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('event_subscription.user_id', $userId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
+            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
+                'id' => $builder->fieldInteger('id'),
+                'status' => $builder->fieldInteger('status'),
                 'event' => 'name',
                 'endpoint' => 'endpoint',
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $subscriptionId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('event_subscription.id', $subscriptionId);
         $condition->equals('event_subscription.user_id', $userId);
 
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition, 'event_subscription.id DESC');
+        $builder = new Builder($this->connection);
 
-        $definition = $this->doEntity($querySql, $condition->getValues(), [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
+        $definition = $builder->doEntity($querySql, $condition->getValues(), [
+            'id' => $builder->fieldInteger('id'),
+            'status' => $builder->fieldInteger('status'),
             'event' => 'name',
             'endpoint' => 'endpoint',
-            'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
-                'status' => $this->fieldInteger('status'),
-                'code' => $this->fieldInteger('code'),
-                'attempts' => $this->fieldInteger('attempts'),
-                'executeDate' => $this->fieldDateTime('execute_date'),
+            'responses' => $builder->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
+                'status' => $builder->fieldInteger('status'),
+                'code' => $builder->fieldInteger('code'),
+                'attempts' => $builder->fieldInteger('attempts'),
+                'executeDate' => $builder->fieldDateTime('execute_date'),
             ]),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     /**

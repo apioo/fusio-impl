@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -50,10 +52,10 @@ class Schema extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('category_id', $categoryId ?: 1);
         $condition->equals('status', Table\Schema::STATUS_ACTIVE);
 
@@ -61,19 +63,21 @@ class Schema extends ViewAbstract
             $condition->like('name', '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Schema::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Schema::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
                 'name' => Table\Generated\SchemaTable::COLUMN_NAME,
-                'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -86,16 +90,18 @@ class Schema extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,
-            'metadata' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\SchemaTable::COLUMN_METADATA),
             'source' => Table\Generated\SchemaTable::COLUMN_SOURCE,
-            'form' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
+            'form' => $builder->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntityWithForm($name)
@@ -106,13 +112,15 @@ class Schema extends ViewAbstract
             $method = 'findOneByName';
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
-            'id' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
+            'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,
-            'form' => $this->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
+            'form' => $builder->fieldJson(Table\Generated\SchemaTable::COLUMN_FORM),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

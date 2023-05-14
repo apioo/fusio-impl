@@ -22,7 +22,8 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
-use PSX\Sql\Reference;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -36,26 +37,28 @@ class User extends ViewAbstract
 {
     public function getEntity(int $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
-            'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
-            'planId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
-            'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+            'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
             'name' => Table\Generated\UserTable::COLUMN_NAME,
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
-            'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
-            'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id'), true], 'name'),
-            'plans' => $this->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'points' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
+            'scopes' => $builder->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id'), true], 'name'),
+            'plans' => $builder->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
-                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
-            'metadata' => $this->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
-            'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
+            'metadata' => $builder->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
+            'date' => $builder->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

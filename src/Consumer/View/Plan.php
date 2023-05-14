@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -44,43 +46,47 @@ class Plan extends ViewAbstract
         $count = 16;
         $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
+
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_ASC], [
-                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::ASC], [
+                'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
-                'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
+                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'metadata' => $builder->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $planId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_ID, $planId);
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneBy'], [$condition], [
+            'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,
             'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-            'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-            'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-            'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
-            'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
+            'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+            'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+            'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+            'metadata' => $builder->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

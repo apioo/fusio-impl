@@ -37,6 +37,7 @@ use Fusio\Model\Backend\UserCreate;
 use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Backend\UserUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -87,7 +88,7 @@ class User
             $column = Table\Generated\UserTable::COLUMN_EMAIL;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals($column, $username);
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
@@ -119,12 +120,16 @@ class User
     public function create(UserCreate $user, UserContext $context): int
     {
         // check whether user name exists
-        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_NAME, '=', $user->getName()])) > 0) {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_NAME, $user->getName());
+        if ($this->userTable->getCount($condition) > 0) {
             throw new StatusCode\BadRequestException('User name already exists');
         }
 
         // check whether user email exists
-        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_EMAIL, '=', $user->getEmail()])) > 0) {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_EMAIL, $user->getEmail());
+        if ($this->userTable->getCount($condition) > 0) {
             throw new StatusCode\BadRequestException('User email already exists');
         }
 
@@ -142,20 +147,18 @@ class User
 
             $password = $user->getPassword();
 
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\UserTable::COLUMN_PROVIDER => ProviderInterface::PROVIDER_SYSTEM,
-                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
-                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
-                Table\Generated\UserTable::COLUMN_PASSWORD => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
-                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
-                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
-                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->userTable->create($record);
+            $row = new Table\Generated\UserRow();
+            $row->setRoleId($roleId);
+            $row->setPlanId($planId);
+            $row->setProvider(ProviderInterface::PROVIDER_SYSTEM);
+            $row->setStatus($user->getStatus());
+            $row->setName($user->getName());
+            $row->setEmail($user->getEmail());
+            $row->setPassword($password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null);
+            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->userTable->create($row);
 
             $userId = $this->userTable->getLastInsertId();
             $user->setId($userId);
@@ -178,7 +181,7 @@ class User
     public function createRemote(UserRemote $remote, UserContext $context): int
     {
         // check whether user exists
-        $condition  = new Condition();
+        $condition  = Condition::withAnd();
         $condition->equals(Table\Generated\UserTable::COLUMN_PROVIDER, $remote->getProvider());
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remote->getRemoteId());
 
@@ -208,19 +211,17 @@ class User
             $roleId = $role->getId();
 
             // create user
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PROVIDER => $remote->getProvider(),
-                Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_ACTIVE,
-                Table\Generated\UserTable::COLUMN_REMOTE_ID => $remote->getRemoteId(),
-                Table\Generated\UserTable::COLUMN_NAME => $remote->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $remote->getEmail(),
-                Table\Generated\UserTable::COLUMN_PASSWORD => null,
-                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
-                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->userTable->create($record);
+            $row = new Table\Generated\UserRow();
+            $row->setRoleId($roleId);
+            $row->setProvider($remote->getProvider());
+            $row->setStatus(Table\User::STATUS_ACTIVE);
+            $row->setRemoteId($remote->getRemoteId());
+            $row->setName($remote->getName());
+            $row->setEmail($remote->getEmail());
+            $row->setPassword(null);
+            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setDate(LocalDateTime::now());
+            $this->userTable->create($row);
 
             $userId = $this->userTable->getLastInsertId();
 
@@ -278,17 +279,15 @@ class User
             $this->userTable->beginTransaction();
 
             // update user
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
-                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
-                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
-            ]);
-
-            $this->userTable->update($record);
+            $row = new Table\Generated\UserRow();
+            $row->setId($existing->getId());
+            $row->setRoleId($roleId);
+            $row->setPlanId($planId);
+            $row->setStatus($user->getStatus());
+            $row->setName($user->getName());
+            $row->setEmail($user->getEmail());
+            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $this->userTable->update($row);
 
             $scopes = $user->getScopes();
             if ($scopes !== null) {
@@ -318,12 +317,10 @@ class User
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_DELETED,
-        ]);
-
-        $this->userTable->update($record);
+        $row = new Table\Generated\UserRow();
+        $row->setId($existing->getId());
+        $row->setStatus(Table\User::STATUS_DELETED);
+        $this->userTable->update($row);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
@@ -337,12 +334,10 @@ class User
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $user->getId(),
-            Table\Generated\UserTable::COLUMN_STATUS => $status,
-        ]);
-
-        $this->userTable->update($record);
+        $row = new Table\Generated\UserRow();
+        $row->setId($user->getId());
+        $row->setStatus($status);
+        $this->userTable->update($row);
 
         $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user->getStatus(), $status, $context));
     }
@@ -398,12 +393,11 @@ class User
     private function insertScopes(int $userId, array $scopes): void
     {
         $scopes = $this->scopeTable->getValidScopes($scopes);
-
         foreach ($scopes as $scope) {
-            $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
-                Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-            ]));
+            $row = new Table\Generated\UserScopeRow();
+            $row->setUserId($userId);
+            $row->setScopeId($scope->getId());
+            $this->userScopeTable->create($row);
         }
     }
 
@@ -412,10 +406,10 @@ class User
         $scopes = $this->roleScopeTable->getAvailableScopes($roleId);
         if (!empty($scopes)) {
             foreach ($scopes as $scope) {
-                $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                    Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
-                    Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope['id'],
-                ]));
+                $row = new Table\Generated\UserScopeRow();
+                $row->setUserId($userId);
+                $row->setScopeId($scope['id']);
+                $this->userScopeTable->create($row);
             }
         }
     }

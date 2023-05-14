@@ -161,7 +161,7 @@ class Role
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->notEquals(Table\Generated\RoleTable::COLUMN_STATUS, Table\Role::STATUS_DELETED);
         $condition->equals(Table\Generated\RoleTable::COLUMN_NAME, $name);
 

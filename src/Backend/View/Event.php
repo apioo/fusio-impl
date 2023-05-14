@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -50,10 +52,10 @@ class Event extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::ASC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->in(Table\Generated\EventTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);
 
@@ -61,20 +63,22 @@ class Event extends ViewAbstract
             $condition->like(Table\Generated\EventTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
-                'metadata' => $this->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -87,15 +91,17 @@ class Event extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Event::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Event::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
             'name' => Table\Generated\EventTable::COLUMN_NAME,
             'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
             'schema' => Table\Generated\EventTable::COLUMN_EVENT_SCHEMA,
-            'metadata' => $this->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

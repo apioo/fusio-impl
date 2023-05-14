@@ -201,7 +201,7 @@ class Schema
      */
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
         $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, $name);
 

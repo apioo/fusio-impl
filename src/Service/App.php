@@ -63,7 +63,7 @@ class App
     public function create(AppCreate $app, UserContext $context): int
     {
         // check whether app exists
-        $condition  = new Condition();
+        $condition  = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $app->getUserId());
         $condition->notEquals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_DELETED);
         $condition->equals(Table\Generated\AppTable::COLUMN_NAME, $app->getName());

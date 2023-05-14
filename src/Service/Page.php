@@ -158,7 +158,7 @@ class Page
 
     public function exists(string $slug): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
         $condition->equals(Table\Generated\PageTable::COLUMN_SLUG, $slug);
 

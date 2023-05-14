@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\View\Dashboard;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -43,15 +44,16 @@ class LatestApps extends ViewAbstract
                 ORDER BY app.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['status' => Table\App::STATUS_ACTIVE], [
-                'id' => $this->fieldInteger('id'),
+            'entry' => $builder->doCollection($sql, ['status' => Table\App::STATUS_ACTIVE], [
+                'id' => $builder->fieldInteger('id'),
                 'name' => 'name',
-                'date' => $this->fieldDateTime('date'),
+                'date' => $builder->fieldDateTime('date'),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

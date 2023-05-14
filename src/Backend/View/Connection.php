@@ -25,7 +25,9 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -53,29 +55,31 @@ class Connection extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ConnectionTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
-                'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -88,15 +92,17 @@ class Connection extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
-            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntityWithConfig(string $id, string $secretKey, ParserInterface $connectionParser)
@@ -109,12 +115,14 @@ class Connection extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
-            'config' => $this->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
+            'config' => $builder->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
                 $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
@@ -136,9 +144,9 @@ class Connection extends ViewAbstract
                     return new \stdClass();
                 }
             }),
-            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

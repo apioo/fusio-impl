@@ -23,8 +23,8 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Nested\Builder;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -51,46 +51,50 @@ class Log extends ViewAbstract
         $condition = $filter->getCondition();
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-                'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
-                'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+                'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
                 'ip' => Table\Generated\LogTable::COLUMN_IP,
                 'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
                 'method' => Table\Generated\LogTable::COLUMN_METHOD,
                 'path' => Table\Generated\LogTable::COLUMN_PATH,
-                'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-            'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
-            'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+            'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+            'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
             'ip' => Table\Generated\LogTable::COLUMN_IP,
             'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
             'method' => Table\Generated\LogTable::COLUMN_METHOD,
             'path' => Table\Generated\LogTable::COLUMN_PATH,
             'header' => Table\Generated\LogTable::COLUMN_HEADER,
             'body' => Table\Generated\LogTable::COLUMN_BODY,
-            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
+            'errors' => $builder->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
                 'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
                 'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
                 'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
             ]),
-            'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

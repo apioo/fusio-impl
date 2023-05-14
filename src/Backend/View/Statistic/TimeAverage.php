@@ -60,7 +60,7 @@ class TimeAverage extends ViewAbstract
                      AND ' . $expression . '
                 GROUP BY DATE(log.date)';
 
-        $result = $this->connection->fetchAll($sql, array_merge([$categoryId], $condition->getValues()));
+        $result = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

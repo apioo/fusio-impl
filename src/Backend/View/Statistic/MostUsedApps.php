@@ -48,7 +48,7 @@ class MostUsedApps extends ViewAbstract
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
         $appIds = array();
         $data   = [];
         $series = [];

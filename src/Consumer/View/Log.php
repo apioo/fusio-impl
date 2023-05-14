@@ -23,7 +23,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -48,42 +50,46 @@ class Log extends ViewAbstract
         $condition = $filter->getCondition();
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-                'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
                 'ip' => Table\Generated\LogTable::COLUMN_IP,
                 'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
                 'method' => Table\Generated\LogTable::COLUMN_METHOD,
                 'path' => Table\Generated\LogTable::COLUMN_PATH,
-                'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $logId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-            'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneBy'], [$condition], [
+            'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+            'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
             'ip' => Table\Generated\LogTable::COLUMN_IP,
             'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
             'method' => Table\Generated\LogTable::COLUMN_METHOD,
             'path' => Table\Generated\LogTable::COLUMN_PATH,
             'header' => Table\Generated\LogTable::COLUMN_HEADER,
             'body' => Table\Generated\LogTable::COLUMN_BODY,
-            'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

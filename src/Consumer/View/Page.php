@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -44,23 +46,24 @@ class Page extends ViewAbstract
         $count = 32;
         $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PageTable::COLUMN_STATUS, Table\Page::STATUS_VISIBLE);
+
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_ASC], [
-                'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::ASC], [
+                'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
                 'title' => Table\Generated\PageTable::COLUMN_TITLE,
                 'slug' => Table\Generated\PageTable::COLUMN_SLUG,
-                'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
-                'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $pageId)
@@ -73,15 +76,16 @@ class Page extends ViewAbstract
             $pageId = (int) $pageId;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), $method], [$pageId], [
-            'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Page::class), $method], [$pageId], [
+            'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,
-            'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
             'content' => Table\Generated\PageTable::COLUMN_CONTENT,
-            'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

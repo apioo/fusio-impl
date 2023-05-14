@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -44,55 +45,59 @@ class Transaction extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('user_id', $userId);
+
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
-                'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
-                'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
-                'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
-                'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-                'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
-                'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
-                'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
-                'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
+            'entry' => $builder->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, 'id', OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+                'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+                'transactionId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
+                'amount' => $builder->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+                'points' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+                'periodStart' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+                'periodEnd' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
+                'insertDate' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $transactionId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('id', $transactionId);
         $condition->equals('user_id', $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
-            'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
-            'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
-            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'findOneBy'], [$condition], [
+            'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+            'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+            'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+            'plan' => $builder->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
-            'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
-            'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-            'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
-            'periodStart' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
-            'periodEnd' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
-            'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
+            'transactionId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
+            'amount' => $builder->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+            'points' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
+            'periodStart' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_START),
+            'periodEnd' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_PERIOD_END),
+            'insertDate' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -51,34 +52,36 @@ class Plan extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::ASC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\PlanTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
                 'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
-                'metadata' => $this->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\PlanTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -91,18 +94,20 @@ class Plan extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,
             'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-            'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
-            'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
-            'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
+            'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+            'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+            'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
-            'scopes' => $this->doColumn([$this->getTable(Table\Plan\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'scopes' => $builder->doColumn([$this->getTable(Table\Plan\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

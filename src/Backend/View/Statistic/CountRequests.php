@@ -47,8 +47,8 @@ class CountRequests extends ViewAbstract
 
         return [
             'count' => (int) ($row['cnt'] ?? 0),
-            'from'  => $filter->getFrom()->format(\DateTime::RFC3339),
-            'to'    => $filter->getTo()->format(\DateTime::RFC3339),
+            'from'  => $filter->getFrom()->format(\DateTimeInterface::RFC3339),
+            'to'    => $filter->getTo()->format(\DateTimeInterface::RFC3339),
         ];
     }
 }

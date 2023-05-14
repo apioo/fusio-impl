@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
@@ -42,7 +43,7 @@ class Grant extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('user_grant.user_id', $userId);
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
@@ -50,23 +51,25 @@ class Grant extends ViewAbstract
         $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition, 'user_grant.id DESC');
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => $this->fieldInteger('id'),
-                'allow' => $this->fieldInteger('allow'),
-                'createDate' => $this->fieldDateTime('date'),
+            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
+                'id' => $builder->fieldInteger('id'),
+                'allow' => $builder->fieldInteger('allow'),
+                'createDate' => $builder->fieldDateTime('date'),
                 'app' => [
-                    'id' => $this->fieldInteger('app_id'),
+                    'id' => $builder->fieldInteger('app_id'),
                     'name' => 'app_name',
                     'url' => 'app_url',
                 ],
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null)

@@ -223,7 +223,7 @@ class Action
 
     public function exists(string $name): int|false
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
         $condition->equals(Table\Generated\ActionTable::COLUMN_NAME, $name);
 

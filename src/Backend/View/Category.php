@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -50,38 +52,42 @@ class Category extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->in(Table\Generated\CategoryTable::COLUMN_STATUS, [Table\Category::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\CategoryTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Category::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Category::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
             'name' => Table\Generated\CategoryTable::COLUMN_NAME,
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

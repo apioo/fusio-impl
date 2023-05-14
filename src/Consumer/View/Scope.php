@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
@@ -41,7 +42,7 @@ class Scope extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('scope.category_id', $categoryId ?: 1);
         $condition->equals('user_scope.user_id', $userId);
 
@@ -49,19 +50,21 @@ class Scope extends ViewAbstract
         $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description', 'scope.metadata'], $condition, 'user_scope.id ASC');
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => $this->fieldInteger('id'),
+            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
+                'id' => $builder->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
-                'metadata' => $this->fieldJson('metadata'),
+                'metadata' => $builder->fieldJson('metadata'),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null): string

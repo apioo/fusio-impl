@@ -61,7 +61,7 @@ class Subscription
         }
 
         // check whether the event exists
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $subscription->getEvent());
 
         $event = $this->eventTable->findOneBy($condition);

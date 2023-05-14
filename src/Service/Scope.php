@@ -238,7 +238,7 @@ class Scope
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_NAME, $name);
 
         $scope = $this->scopeTable->findOneBy($condition);

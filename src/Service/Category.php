@@ -143,7 +143,7 @@ class Category
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->notEquals(Table\Generated\CategoryTable::COLUMN_STATUS, Table\Category::STATUS_DELETED);
         $condition->equals(Table\Generated\CategoryTable::COLUMN_NAME, $name);
 

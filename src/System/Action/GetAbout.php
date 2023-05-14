@@ -32,6 +32,7 @@ use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 
 /**
  * GetAbout
@@ -106,9 +107,9 @@ class GetAbout extends ActionAbstract
 
     private function getScopes(): array
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('category_id', 1);
-        $categories = $this->scopeTable->findAll($condition, 0, 1024, 'name', Sql::SORT_ASC);
+        $categories = $this->scopeTable->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
 
         $result = [];
         foreach ($categories as $row) {

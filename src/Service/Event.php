@@ -140,7 +140,7 @@ class Event
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
         $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $name);
 

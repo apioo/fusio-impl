@@ -36,7 +36,7 @@ class User extends Generated\UserTable
 
     public function changePassword(int $userId, string $oldPassword, string $newPassword, bool $verifyOld = true): bool
     {
-        $password = $this->connection->fetchColumn('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);
+        $password = $this->connection->fetchOne('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);
         if (empty($password)) {
             return false;
         }

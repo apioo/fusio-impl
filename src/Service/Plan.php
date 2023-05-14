@@ -164,7 +164,7 @@ class Plan
     
     public function exists(string $name): int|false
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
         $condition->equals(Table\Generated\PlanTable::COLUMN_NAME, $name);
 

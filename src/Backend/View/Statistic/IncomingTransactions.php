@@ -59,7 +59,7 @@ class IncomingTransactions extends ViewAbstract
                    WHERE ' . $expression . '
                 GROUP BY DATE(trans.insert_date)';
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

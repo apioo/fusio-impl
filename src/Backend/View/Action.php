@@ -23,7 +23,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -51,10 +53,10 @@ class Action extends ViewAbstract
         }
         
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ActionTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
 
@@ -62,20 +64,22 @@ class Action extends ViewAbstract
             $condition->like(Table\Generated\ActionTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Action::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Action::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ActionTable::COLUMN_NAME,
-                'metadata' => $this->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
-                'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
+                'metadata' => $builder->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
+                'date' => $builder->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -88,20 +92,22 @@ class Action extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Action::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Action::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
             'name' => Table\Generated\ActionTable::COLUMN_NAME,
             'class' => Table\Generated\ActionTable::COLUMN_CLASS,
             'async' => Table\Generated\ActionTable::COLUMN_ASYNC,
             'engine' => Table\Generated\ActionTable::COLUMN_ENGINE,
-            'config' => $this->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
+            'config' => $builder->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
                 return Service\Action::unserializeConfig($config);
             }),
-            'metadata' => $this->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
-            'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
+            'metadata' => $builder->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
+            'date' => $builder->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

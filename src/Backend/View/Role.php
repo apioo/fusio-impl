@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -51,29 +52,31 @@ class Role extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::ASC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->in(Table\Generated\RoleTable::COLUMN_STATUS, [Table\Role::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\RoleTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Role::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Role::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
-                'categoryId' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
-                'status' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Role::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
+                'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
+                'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
                 'name' => Table\Generated\RoleTable::COLUMN_NAME,
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -86,14 +89,16 @@ class Role extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Role::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
-            'categoryId' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
-            'status' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Role::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
+            'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
+            'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
             'name' => Table\Generated\RoleTable::COLUMN_NAME,
-            'scopes' => $this->doColumn([$this->getTable(Table\Role\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'scopes' => $builder->doColumn([$this->getTable(Table\Role\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

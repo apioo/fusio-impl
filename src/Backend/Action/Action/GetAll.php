@@ -49,7 +49,7 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
+        return $this->view->getCollection(
             $context->getUser()->getCategoryId(),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),

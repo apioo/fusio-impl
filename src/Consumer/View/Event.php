@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -43,22 +45,23 @@ class Event extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
+
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, 'name', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, 'name', OrderBy::ASC], [
+                'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
-                'metadata' => $this->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

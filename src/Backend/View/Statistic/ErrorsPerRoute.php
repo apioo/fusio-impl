@@ -51,7 +51,7 @@ class ErrorsPerRoute extends ViewAbstract
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result   = $this->connection->fetchAll($sql, array_merge([$categoryId], $condition->getValues()));
+        $result   = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
         $routeIds = array();
         $data     = [];
         $series   = [];

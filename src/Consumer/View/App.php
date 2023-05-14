@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -38,7 +39,7 @@ class App extends ViewAbstract
 {
     public function getCollection(int $userId, int $startIndex = 0, ?string $search = null)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
@@ -46,74 +47,80 @@ class App extends ViewAbstract
             $condition->like(Table\Generated\AppTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
-            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, 16, null, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
-                'userId' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
-                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, 16, null, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
-                'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
-                'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
+                'metadata' => $builder->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
+                'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $appId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $appId);
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
-            'userId' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
-            'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
+            'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+            'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
+            'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
             'name' => Table\Generated\AppTable::COLUMN_NAME,
             'url' => Table\Generated\AppTable::COLUMN_URL,
             'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
             'appSecret' => Table\Generated\AppTable::COLUMN_APP_SECRET,
-            'metadata' => $this->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
-            'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
-                'userId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
-                'status' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
+            'metadata' => $builder->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
+            'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'tokens' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
                 'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
-                'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+                'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
                 'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
                 'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
-                'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
-            'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntityByAppKey($appKey, $scope)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
         $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $appKey);
 
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
+            'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'name' => Table\Generated\AppTable::COLUMN_NAME,
             'url' => Table\Generated\AppTable::COLUMN_URL,
-            'scopes' => $this->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [new Reference('id'), explode(',', $scope), ['backend']], [
-                'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+            'scopes' => $builder->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [new Reference('id'), explode(',', $scope), ['backend']], [
+                'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             ]),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

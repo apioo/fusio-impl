@@ -166,7 +166,7 @@ class App
     {
         $appCount = $this->configService->getValue('app_consumer');
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
 

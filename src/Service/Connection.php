@@ -204,7 +204,7 @@ class Connection
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_NAME, $name);
 

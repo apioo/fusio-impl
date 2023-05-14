@@ -217,15 +217,15 @@ class Operation
     /**
      * Checks whether the provided path already exists
      */
-    public function exists(string $path): int|false
+    public function exists(string $name): int|false
     {
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\RoutesTable::COLUMN_PATH, $path);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_NAME, $name);
 
         $route = $this->operationTable->findOneBy($condition);
 
-        if ($route instanceof Table\Generated\RoutesRow) {
+        if ($route instanceof Table\Generated\OperationRow) {
             return $route->getId();
         } else {
             return false;

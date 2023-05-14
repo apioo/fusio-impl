@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use PSX\Nested\Builder;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -44,20 +45,21 @@ class LatestTransactions extends ViewAbstract
                 ORDER BY trans.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $this->doCollection($sql, [], [
-                'id' => $this->fieldInteger('id'),
-                'user_id' => $this->fieldInteger('user_id'),
-                'plan_id' => $this->fieldInteger('plan_id'),
+            'entry' => $builder->doCollection($sql, [], [
+                'id' => $builder->fieldInteger('id'),
+                'user_id' => $builder->fieldInteger('user_id'),
+                'plan_id' => $builder->fieldInteger('plan_id'),
                 'transactionId' => 'transaction_id',
-                'amount' => $this->fieldCallback('amount', function($value){
+                'amount' => $builder->fieldCallback('amount', function($value){
                     return round($value / 100, 2);
                 }),
-                'date' => $this->fieldDateTime('insert_date'),
+                'date' => $builder->fieldDateTime('insert_date'),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

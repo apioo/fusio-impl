@@ -41,8 +41,6 @@ class DataBag
 {
     private array $data;
 
-    private static array $priorities = [];
-
     public function __construct()
     {
         $this->data = [
@@ -103,15 +101,31 @@ class DataBag
                 $this->addAction($category, $actionName, $operation->action);
             }
 
+            $incomingName = null;
+            if (isset($operation->incoming)) {
+                $incomingName = $this->getSchemaName($operation->incoming);
+                if (!$this->hasId('fusio_schema', $incomingName)) {
+                    $this->addSchema($category, $incomingName, $operation->incoming);
+                }
+            }
+
+            $outgoingName = null;
+            if (isset($operation->outgoing)) {
+                $outgoingName = $this->getSchemaName($operation->outgoing);
+                if (!$this->hasId('fusio_schema', $outgoingName)) {
+                    $this->addSchema($category, $outgoingName, $operation->outgoing);
+                }
+            }
+
             $this->addOperation(
                 $category,
                 $operationName,
                 $operation->httpMethod,
                 $path,
                 $this->normalizeParameters($operation->parameters),
-                isset($operation->incoming) ? $this->getSchemaName($operation->incoming) : null,
-                isset($operation->outgoing) ? $this->getSchemaName($operation->outgoing) : null,
-                $this->normalizeThrows($operation->throws),
+                $incomingName,
+                $outgoingName,
+                $this->normalizeThrows($operation->throws, $category),
                 $actionName
             );
 
@@ -140,11 +154,17 @@ class DataBag
         return $result;
     }
 
-    private function normalizeThrows(array $throws): array
+    private function normalizeThrows(array $throws, string $category): array
     {
         $result = [];
         foreach ($throws as $code => $class) {
-            $result[$code] = $this->getSchemaName($class);
+            $schemaName = $this->getSchemaName($class);
+
+            if (!$this->hasId('fusio_schema', $schemaName)) {
+                $this->addSchema($category, $schemaName, $class);
+            }
+
+            $result[$code] = $schemaName;
         }
 
         return $result;

@@ -196,7 +196,7 @@ class Authorize
 
     protected function saveUserDecision($userId, $appId, $allow)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('user_id', $userId);
         $condition->equals('app_id', $appId);
 
@@ -226,7 +226,7 @@ class Authorize
     
     private function getApp(string $clientId): Table\Generated\AppRow
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('app_key', $clientId);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 

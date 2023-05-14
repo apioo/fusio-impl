@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use PSX\Nested\Builder;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -43,16 +44,17 @@ class LatestRequests extends ViewAbstract
                 ORDER BY log.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['category_id' => $categoryId], [
-                'id' => $this->fieldInteger('id'),
+            'entry' => $builder->doCollection($sql, ['category_id' => $categoryId], [
+                'id' => $builder->fieldInteger('id'),
                 'path' => 'path',
                 'ip' => 'ip',
-                'date' => $this->fieldDateTime('date'),
+                'date' => $builder->fieldDateTime('date'),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

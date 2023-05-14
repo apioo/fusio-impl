@@ -22,9 +22,10 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -51,29 +52,31 @@ class Scope extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ScopeTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Scope::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
-                'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -86,37 +89,41 @@ class Scope extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Scope::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Scope::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
-            'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
-            'routes' => $this->doCollection([$this->getTable(Table\Scope\Operation::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
-                'id' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ID),
-                'scopeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID),
-                'routeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID),
-                'allow' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ALLOW),
-                'methods' => Table\Generated\ScopeRoutesTable::COLUMN_METHODS,
+            'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
+            'routes' => $builder->doCollection([$this->getTable(Table\Scope\Operation::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
+                'id' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ID),
+                'scopeId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_SCOPE_ID),
+                'operationId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_OPERATION_ID),
+                'allow' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ALLOW),
+                'methods' => Table\Generated\ScopeOperationTable::COLUMN_METHODS,
             ]),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getCategories()
     {
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [null, 0, 1024, 'name', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [null, 0, 1024, 'name', OrderBy::ASC], [
+                'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,
-                'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', Sql::SORT_ASC], [
-                    'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+                'scopes' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', OrderBy::ASC], [
+                    'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                     'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                     'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
                 ])
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

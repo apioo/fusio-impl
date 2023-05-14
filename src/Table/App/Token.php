@@ -38,46 +38,46 @@ class Token extends Generated\AppTokenTable
     const STATUS_ACTIVE  = 0x1;
     const STATUS_DELETED = 0x2;
 
-    public function getTokensByApp($appId)
+    public function getTokensByApp(int $appId): array
     {
         $now = new DateTime();
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('status', '=', self::STATUS_ACTIVE);
-        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('status', self::STATUS_ACTIVE);
+        $con->greater('expire', $now->format('Y-m-d H:i:s'));
 
         return $this->findBy($con);
     }
 
-    public function getTokenByRefreshToken($appId, $refreshToken)
+    public function getTokenByRefreshToken(int $appId, string $refreshToken): ?Generated\AppTokenRow
     {
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('refresh', '=', $refreshToken);
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('refresh', $refreshToken);
 
         return $this->findOneBy($con);
     }
 
-    public function getTokenByToken($appId, $token)
+    public function getTokenByToken(int $appId, string $token): ?Generated\AppTokenRow
     {
         $now = new DateTime();
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('status', '=', self::STATUS_ACTIVE);
-        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
-        $con->add('token', '=', $token);
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('status', self::STATUS_ACTIVE);
+        $con->greater('expire', $now->format('Y-m-d H:i:s'));
+        $con->equals('token', $token);
 
         return $this->findOneBy($con);
     }
 
-    public function removeTokenFromApp($appId, $tokenId)
+    public function removeTokenFromApp(int $appId, int $tokenId): void
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
                  WHERE app_id = :app_id
                    AND id = :id';
 
-        $affectedRows = $this->connection->executeUpdate($sql, array(
+        $affectedRows = $this->connection->executeStatement($sql, array(
             'status' => self::STATUS_DELETED,
             'app_id' => $appId,
             'id'     => $tokenId
@@ -88,14 +88,14 @@ class Token extends Generated\AppTokenTable
         }
     }
 
-    public function removeAllTokensFromAppAndUser($appId, $userId)
+    public function removeAllTokensFromAppAndUser(int $appId, int $userId): void
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
                  WHERE app_id = :app_id
                    AND user_id = :user_id';
 
-        $this->connection->executeUpdate($sql, array(
+        $this->connection->executeStatement($sql, array(
             'status'  => self::STATUS_DELETED,
             'app_id'  => $appId,
             'user_id' => $userId

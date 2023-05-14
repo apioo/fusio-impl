@@ -46,7 +46,7 @@ class Dispatcher implements DispatcherInterface
     public function dispatch(string $eventName, mixed $payload): void
     {
         // check whether event exists
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $eventName);
 
         $event = $this->eventTable->findOneBy($condition);

@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -50,45 +52,49 @@ class Page extends ViewAbstract
         }
         
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
+            $sortOrder = OrderBy::ASC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\PageTable::COLUMN_TITLE, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
                 'title' => Table\Generated\PageTable::COLUMN_TITLE,
                 'slug' => Table\Generated\PageTable::COLUMN_SLUG,
-                'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
-                'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
+                'metadata' => $builder->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
+                'date' => $builder->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,
             'content' => Table\Generated\PageTable::COLUMN_CONTENT,
-            'metadata' => $this->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
-            'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
+            'metadata' => $builder->fieldJson(Table\Generated\PageTable::COLUMN_METADATA),
+            'date' => $builder->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

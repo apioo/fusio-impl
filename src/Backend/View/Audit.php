@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Backend\View;
 
-use Backend\Filter\Audit\QueryFilter;
+use Fusio\Impl\Backend\Filter\Audit\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -49,45 +50,48 @@ class Audit extends ViewAbstract
         $sortBy = Table\Generated\AuditTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
                 'event' => Table\Generated\AuditTable::COLUMN_EVENT,
                 'ip' => Table\Generated\AuditTable::COLUMN_IP,
                 'message' => Table\Generated\AuditTable::COLUMN_MESSAGE,
-                'date' => $this->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
-                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
+            'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
+                'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+            'user' => $builder->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
+                'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
             'refId' => Table\Generated\AuditTable::COLUMN_REF_ID,
             'event' => Table\Generated\AuditTable::COLUMN_EVENT,
             'ip' => Table\Generated\AuditTable::COLUMN_IP,
             'message' => Table\Generated\AuditTable::COLUMN_MESSAGE,
-            'content' => $this->fieldJson(Table\Generated\AuditTable::COLUMN_CONTENT),
-            'date' => $this->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
+            'content' => $builder->fieldJson(Table\Generated\AuditTable::COLUMN_CONTENT),
+            'date' => $builder->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

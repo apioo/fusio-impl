@@ -159,7 +159,7 @@ class Cronjob
 
     public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
         $condition->equals(Table\Generated\CronjobTable::COLUMN_NAME, $name);
 
