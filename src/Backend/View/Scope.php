@@ -91,7 +91,7 @@ class Scope extends ViewAbstract
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             'metadata' => $this->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
-            'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
+            'routes' => $this->doCollection([$this->getTable(Table\Scope\Operation::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
                 'id' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ID),
                 'scopeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID),
                 'routeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID),

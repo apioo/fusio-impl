@@ -23,7 +23,7 @@ namespace Fusio\Impl\Service\Generator;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Action;
-use Fusio\Impl\Service\Route;
+use Fusio\Impl\Service\Operation;
 use Fusio\Impl\Service\Schema;
 use Fusio\Model;
 use Fusio\Model\Backend\RouteMethod;
@@ -41,7 +41,7 @@ use PSX\Http\Exception as StatusCode;
  */
 class EntityCreator
 {
-    private Route $routeService;
+    private Operation $routeService;
     private Schema $schemaService;
     private Action $actionService;
 
@@ -49,7 +49,7 @@ class EntityCreator
     private array $actions;
     private array $routes;
 
-    public function __construct(Route $routeService, Schema $schemaService, Action $actionService)
+    public function __construct(Operation $routeService, Schema $schemaService, Action $actionService)
     {
         $this->routeService = $routeService;
         $this->schemaService = $schemaService;

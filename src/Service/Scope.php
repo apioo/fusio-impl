@@ -43,12 +43,12 @@ use PSX\Sql\Condition;
 class Scope
 {
     private Table\Scope $scopeTable;
-    private Table\Scope\Route $scopeRouteTable;
+    private Table\Scope\Operation $scopeRouteTable;
     private Table\App\Scope $appScopeTable;
     private Table\User\Scope $userScopeTable;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Scope $scopeTable, Table\Scope\Route $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->scopeTable      = $scopeTable;
         $this->scopeRouteTable = $scopeRouteTable;
@@ -102,7 +102,7 @@ class Scope
     public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
-        $this->scopeRouteTable->deleteAllFromRoute($routeId);
+        $this->scopeRouteTable->deleteAllFromOperation($routeId);
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {

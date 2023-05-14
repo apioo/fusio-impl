@@ -51,7 +51,7 @@ class ValidateSchema
 
     public function __invoke(RpcRequest $request, Context $context)
     {
-        $method    = $context->getMethod();
+        $method    = $context->getOperation();
         $arguments = $request->getArguments();
 
         if (!empty($method['request'])) {

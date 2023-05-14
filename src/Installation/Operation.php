@@ -30,7 +30,28 @@ namespace Fusio\Impl\Installation;
  */
 class Operation
 {
-    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $return, array $arguments = [], array $throws = [], ?string $eventName = null, bool $public = false)
+    public string $action;
+    public string $httpMethod;
+    public string $httpPath;
+    public int $httpCode;
+    public string $outgoing;
+    public array $parameters;
+    public ?string $incoming;
+    public array $throws;
+    public ?string $eventName;
+    public bool $public;
+
+    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false)
     {
+        $this->action = $action;
+        $this->httpMethod = $httpMethod;
+        $this->httpPath = $httpPath;
+        $this->httpCode = $httpCode;
+        $this->outgoing = $outgoing;
+        $this->parameters = $parameters;
+        $this->incoming = $incoming;
+        $this->throws = $throws;
+        $this->eventName = $eventName;
+        $this->public = $public;
     }
 }

@@ -29,6 +29,7 @@ use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Installation\DataBag;
 use Fusio\Impl\Installation\Method;
 use Fusio\Impl\Installation\NewInstallation;
+use Fusio\Impl\Installation\Operation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
@@ -134,29 +135,74 @@ class Fixture
         $data->addUserScope('Developer', 'bar');
         $data->addUserGrant('Administrator', 'Backend', true, '2015-02-27 19:59:15');
 
-        $data->addRoutes('default', [
-            '/foo' => [
-                'GET' => new Method('Sql-Select-All', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', OperationInterface::STABILITY_STABLE),
-                'POST' => new Method('Sql-Insert', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', OperationInterface::STABILITY_STABLE),
-            ],
-            '/inspect/:foo' => [
-                'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'POST' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'PUT' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'DELETE' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'PATCH' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-            ]
+        $data->addOperations('default', [
+            'test.listFoo' => new Operation(
+                action: 'Sql-Select-All',
+                httpMethod: 'GET',
+                httpPath: '/foo',
+                httpCode: 200,
+                outgoing: 'Collection-Schema',
+            ),
+            'test.createFoo' => new Operation(
+                action: 'Sql-Insert',
+                httpMethod: 'POST',
+                httpPath: '/foo',
+                httpCode: 201,
+                outgoing: 'Passthru',
+                incoming: 'Entry-Schema'
+            ),
+            'inspect.get' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'GET',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.post' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'POST',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.put' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'PUT',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.patch' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'PATCH',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.delete' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'DELETE',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
         ]);
 
-        $data->addLog('default', 'Foo-App', '/foo');
-        $data->addLog('default', 'Foo-App', '/foo');
+        $data->addLog('default', 'Foo-App', 'test.listFoo');
+        $data->addLog('default', 'Foo-App', 'test.listFoo');
         $data->addLogError(0);
-        $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
-        $data->addRateAllocation('silver', '/foo');
-        $data->addRateAllocation('gold', '/foo', null, null, null, true);
-        $data->addScopeRoute('bar', '/foo');
-        $data->addScopeRoute('foo', '/inspect/:foo');
-        $data->addScopeRoute('bar', '/inspect/:foo');
+        $data->addPlanUsage('test.listFoo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
+        $data->addRateAllocation('silver', 'test.listFoo');
+        $data->addRateAllocation('gold', 'test.createFoo', null, null, null, true);
+        $data->addScopeOperation('bar', 'test.listFoo');
+        $data->addScopeOperation('bar', 'test.createFoo');
+        $data->addScopeOperation('foo', 'inspect.get');
+        $data->addScopeOperation('bar', 'inspect.post');
 
         $data->addTable('app_news', [
             ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],

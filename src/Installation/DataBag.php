@@ -27,6 +27,8 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Table;
+use PSX\Api\OperationInterface;
+use PSX\Schema\TypeInterface;
 
 /**
  * DataBag
@@ -59,7 +61,7 @@ class DataBag
             'fusio_page' => [],
             'fusio_role' => [],
             'fusio_rate' => [],
-            'fusio_routes' => [],
+            'fusio_operation' => [],
             'fusio_schema' => [],
             'fusio_scope' => [],
             'fusio_transaction' => [],
@@ -73,9 +75,7 @@ class DataBag
             'fusio_log_error' => [],
             'fusio_plan_usage' => [],
             'fusio_rate_allocation' => [],
-            'fusio_routes_method' => [],
-            'fusio_routes_response' => [],
-            'fusio_scope_routes' => [],
+            'fusio_scope_operation' => [],
             'fusio_user_grant' => [],
             'fusio_user_scope' => [],
             'fusio_user_attribute' => [],
@@ -83,92 +83,69 @@ class DataBag
         ];
     }
 
-    public function addRoutes(string $category, array $routes)
+    public function addOperations(string $category, array $operations): void
     {
         $this->addCategory($category);
         $this->addScope($category, $category);
 
-        if (!isset(self::$priorities[$category])) {
-            $categoryId = $this->getId('fusio_category', $category);
-            self::$priorities[$category] = $categoryId * 1000;
-        }
-
-        foreach ($routes as $route => $config) {
+        foreach ($operations as $name => $operation) {
+            /** @var Operation $operation */
             if ($category !== 'default') {
-                $path = '/' . $category . $route;
+                $path = '/' . $category . $operation->httpPath;
+                $operationName = $category . '.' . $name;
             } else {
-                $path = $route;
+                $path = $operation->httpPath;
+                $operationName = $name;
             }
-            $this->addRoute($category, self::$priorities[$category], $path, [ActionController::class, 'execute']);
 
-            foreach ($config as $methodName => $method) {
-                /** @var Method $method */
-                if (!$this->hasId('fusio_action', $method->getAction())) {
-                    $actionName = $this->getActionName($method->getAction());
-                    $this->addAction($category, $actionName, $method->getAction());
-                } else {
-                    $actionName = $method->getAction();
-                }
+            $this->addOperation(
+                $category,
+                $operationName,
+                $operation->httpMethod,
+                $path,
+                $this->normalizeParameters($operation->parameters),
+                isset($operation->incoming) ? $this->getSchemaName($operation->incoming) : null,
+                isset($operation->outgoing) ? $this->getSchemaName($operation->outgoing) : null,
+                $this->normalizeThrows($operation->throws),
+                $this->getActionName($operation->action)
+            );
 
-                $parametersName = null;
-                $parameters = $method->getParameters();
-                if (!empty($parameters)) {
-                    if (!$this->hasId('fusio_schema', $parameters)) {
-                        $parametersName = $this->getSchemaName($parameters);
-                        $this->addSchema($category, $parametersName, $parameters);
-                    } else {
-                        $parametersName = $parameters;
-                    }
-                }
+            if (in_array($category, ['backend', 'consumer'])) {
+                $parts = explode('.', $name);
+                $scope = $category . '.' . $parts[0];
+                $this->addScope($category, $scope);
+                $this->addScopeOperation($scope, $operationName);
 
-                $requestName = null;
-                $request = $method->getRequest();
-                if (!empty($request)) {
-                    if (!$this->hasId('fusio_schema', $request)) {
-                        $requestName = $this->getSchemaName($request);
-                        $this->addSchema($category, $requestName, $request);
-                    } else {
-                        $requestName = $request;
-                    }
-                }
-
-                $scope = $method->getScope();
-                if (!empty($scope)) {
-                    $this->addScope($category, $scope);
-                    $this->addScopeRoute($scope, $path);
-                }
-
-                $eventName = $method->getEventName();
-                if (!empty($eventName)) {
+                if (in_array($parts[1], ['create', 'update', 'delete'])) {
+                    $eventName = 'fusio.' . $parts[0] . '.' . $parts[1];
                     $this->addEvent($category, $eventName);
                 }
-
-                $this->addRouteMethod(
-                    $path,
-                    $methodName,
-                    $parametersName,
-                    $requestName,
-                    $actionName,
-                    $method
-                );
-
-                foreach ($method->getResponses() as $code => $response) {
-                    if (!$this->hasId('fusio_schema', $response)) {
-                        $responseName = $this->getSchemaName($response);
-                        $this->addSchema($category, $responseName, $response);
-                    } else {
-                        $responseName = $response;
-                    }
-
-                    $this->addRouteMethodResponse($path, $methodName, $code, $responseName);
-                }
             }
-
-            self::$priorities[$category]++;
         }
     }
 
-    public function toArray()
+    private function normalizeParameters(array $parameters): array
+    {
+        $result = [];
+        foreach ($parameters as $name => $type) {
+            /** @var TypeInterface $type */
+            $result[$name] = $type->toArray();
+        }
+
+        return $result;
+    }
+
+    private function normalizeThrows(array $throws): array
+    {
+        $result = [];
+        foreach ($throws as $code => $class) {
+            $result[$code] = $this->getSchemaName($class);
+        }
+
+        return $result;
+    }
+
+    public function toArray(): array
     {
         $result = [];
         foreach ($this->data as $key => $value) {
@@ -178,7 +155,7 @@ class DataBag
         return $result;
     }
 
-    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null)
+    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null): void
     {
         $this->data['fusio_action'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -192,7 +169,7 @@ class DataBag
         ];
     }
 
-    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null)
+    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null): void
     {
         $this->data['fusio_app'][$name] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -207,7 +184,7 @@ class DataBag
         ];
     }
 
-    public function addAppCode(string $app, string $user, string $code, string $scope, ?string $date = null)
+    public function addAppCode(string $app, string $user, string $code, string $scope, ?string $date = null): void
     {
         $this->data['fusio_app_code'][] = [
             'app_id' => $this->getId('fusio_app', $app),
@@ -219,7 +196,7 @@ class DataBag
         ];
     }
 
-    public function addAppScope(string $app, string $scope)
+    public function addAppScope(string $app, string $scope): void
     {
         $this->data['fusio_app_scope'][] = [
             'app_id' => $this->getId('fusio_app', $app),
@@ -227,7 +204,7 @@ class DataBag
         ];
     }
 
-    public function addAppToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null)
+    public function addAppToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null): void
     {
         $this->data['fusio_app_token'][] = [
             'app_id' => $this->getId('fusio_app', $app),
@@ -242,7 +219,7 @@ class DataBag
         ];
     }
 
-    public function addAudit(string $app, string $user, int $ref, string $event, string $message, ?string $date = null)
+    public function addAudit(string $app, string $user, int $ref, string $event, string $message, ?string $date = null): void
     {
         $this->data['fusio_audit'][] = [
             'app_id' => $this->getId('fusio_app', $app),
@@ -256,7 +233,7 @@ class DataBag
         ];
     }
 
-    public function addCategory(string $category)
+    public function addCategory(string $category): void
     {
         $this->data['fusio_category'][$category] = [
             'status' => Table\Category::STATUS_ACTIVE,
@@ -264,7 +241,7 @@ class DataBag
         ];
     }
 
-    public function addConfig(string $name, int $type, $value, string $description)
+    public function addConfig(string $name, int $type, $value, string $description): void
     {
         $this->data['fusio_config'][$name] = [
             'name' => $name,
@@ -274,7 +251,7 @@ class DataBag
         ];
     }
 
-    public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null)
+    public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null): void
     {
         $this->data['fusio_connection'][$name] = [
             'status' => Table\Connection::STATUS_ACTIVE,
@@ -285,7 +262,7 @@ class DataBag
         ];
     }
 
-    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null)
+    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null): void
     {
         $this->data['fusio_cronjob'][$name] = [
             'category_id' => $this->getId('fusio_category', $category),
@@ -299,7 +276,7 @@ class DataBag
         ];
     }
 
-    public function addCronjobError(string $cronjob, string $message)
+    public function addCronjobError(string $cronjob, string $message): void
     {
         $this->data['fusio_cronjob_error'][] = [
             'cronjob_id' => $this->getId('fusio_cronjob', $cronjob),
@@ -310,7 +287,7 @@ class DataBag
         ];
     }
 
-    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null)
+    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null): void
     {
         $this->data['fusio_event'][$name] = [
             'category_id' => $this->getId('fusio_category', $category),
@@ -321,7 +298,7 @@ class DataBag
         ];
     }
 
-    public function addEventResponse(int $trigger, int $subscription, ?string $executeDate = null, ?string $insertDate = null)
+    public function addEventResponse(int $trigger, int $subscription, ?string $executeDate = null, ?string $insertDate = null): void
     {
         $this->data['fusio_event_response'][] = [
             'trigger_id' => $this->getId('fusio_event_trigger', $trigger),
@@ -334,7 +311,7 @@ class DataBag
         ];
     }
 
-    public function addEventSubscription(string $event, string $user, string $endpoint)
+    public function addEventSubscription(string $event, string $user, string $endpoint): void
     {
         $this->data['fusio_event_subscription'][] = [
             'event_id' => $this->getId('fusio_event', $event),
@@ -344,7 +321,7 @@ class DataBag
         ];
     }
 
-    public function addEventTrigger(string $event, string $payload, ?string $date = null)
+    public function addEventTrigger(string $event, string $payload, ?string $date = null): void
     {
         $this->data['fusio_event_trigger'][] = [
             'event_id' => $this->getId('fusio_event', $event),
@@ -354,12 +331,12 @@ class DataBag
         ];
     }
 
-    public function addLog(string $category, string $app, string $route)
+    public function addLog(string $category, string $app, string $operation): void
     {
         $this->data['fusio_log'][] = [
             'category_id' => $this->getId('fusio_category', $category),
             'app_id' => $this->getId('fusio_app', $app),
-            'route_id' => $this->getId('fusio_routes', $route),
+            'operation_id' => $this->getId('fusio_operation', $operation),
             'ip' => '127.0.0.1',
             'user_agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36',
             'method' => 'GET',
@@ -371,7 +348,7 @@ class DataBag
         ];
     }
 
-    public function addLogError(int $log)
+    public function addLogError(int $log): void
     {
         $this->data['fusio_log_error'][] = [
             'log_id' => $this->getId('fusio_log', $log),
@@ -382,7 +359,7 @@ class DataBag
         ];
     }
 
-    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null)
+    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null): void
     {
         $this->data['fusio_page'][$slug] = [
             'status' => $status,
@@ -394,7 +371,7 @@ class DataBag
         ];
     }
 
-    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null)
+    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null): void
     {
         $this->data['fusio_plan'][$name] = [
             'status' => Table\Plan::STATUS_ACTIVE,
@@ -408,10 +385,10 @@ class DataBag
         ];
     }
 
-    public function addPlanUsage(string $route, string $user, string $app, int $points, ?string $date = null)
+    public function addPlanUsage(string $operation, string $user, string $app, int $points, ?string $date = null): void
     {
         $this->data['fusio_plan_usage'][] = [
-            'route_id' => $this->getId('fusio_routes', $route),
+            'operation_id' => $this->getId('fusio_operation', $operation),
             'user_id' => $this->getId('fusio_user', $user),
             'app_id' => $this->getId('fusio_app', $app),
             'points' => $points,
@@ -419,7 +396,7 @@ class DataBag
         ];
     }
 
-    public function addPlanScope(string $plan, string $scope)
+    public function addPlanScope(string $plan, string $scope): void
     {
         $this->data['fusio_plan_scope'][] = [
             'plan_id' => $this->getId('fusio_plan', $plan),
@@ -427,7 +404,7 @@ class DataBag
         ];
     }
 
-    public function addTransaction(string $user, string $plan, int $amount, string $periodStart, string $periodEnd, ?string $date = null)
+    public function addTransaction(string $user, string $plan, int $amount, string $periodStart, string $periodEnd, ?string $date = null): void
     {
         $this->data['fusio_transaction'][] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -441,7 +418,7 @@ class DataBag
         ];
     }
 
-    public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null)
+    public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null): void
     {
         $this->data['fusio_rate'][$name] = [
             'status' => Table\Rate::STATUS_ACTIVE,
@@ -453,11 +430,11 @@ class DataBag
         ];
     }
 
-    public function addRateAllocation(string $rate, ?string $route = null, ?string $user = null, ?string $plan = null, ?string $app = null, ?bool $authenticated = null)
+    public function addRateAllocation(string $rate, ?string $operation = null, ?string $user = null, ?string $plan = null, ?string $app = null, ?bool $authenticated = null): void
     {
         $this->data['fusio_rate_allocation'][] = [
             'rate_id' => $this->getId('fusio_rate', $rate),
-            'route_id' => $route !== null ? $this->getId('fusio_routes', $route) : null,
+            'operation_id' => $operation !== null ? $this->getId('fusio_operation', $operation) : null,
             'user_id' => $user !== null ? $this->getId('fusio_user', $user) : null,
             'plan_id' => $plan !== null ? $this->getId('fusio_plan', $plan) : null,
             'app_id' => $app !== null ? $this->getId('fusio_app', $app) : null,
@@ -465,7 +442,7 @@ class DataBag
         ];
     }
 
-    public function addRole(string $category, string $name)
+    public function addRole(string $category, string $name): void
     {
         $this->data['fusio_role'][$name] = [
             'category_id' => $this->getId('fusio_category', $category),
@@ -474,7 +451,7 @@ class DataBag
         ];
     }
 
-    public function addRoleScope(string $role, string $scope)
+    public function addRoleScope(string $role, string $scope): void
     {
         $this->data['fusio_role_scope'][$role . $scope] = [
             'role_id' => $this->getId('fusio_role', $role),
@@ -482,46 +459,29 @@ class DataBag
         ];
     }
 
-    public function addRoute(string $category, int $prio, string $path, array $controller, ?array $metadata = null)
+    public function addOperation(string $category, string $name, string $httpMethod, string $httpPath, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
     {
-        $this->data['fusio_routes'][$path] = [
+        $this->data['fusio_operation'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
-            'status' => Table\Route::STATUS_ACTIVE,
-            'priority' => $prio,
-            'methods' => 'ANY',
-            'path' => $path,
-            'controller' => implode('::', $controller),
+            'status' => Table\Operation::STATUS_ACTIVE,
+            'active' => 1,
+            'public' => 0,
+            'stability' => OperationInterface::STABILITY_STABLE,
+            'description' => '',
+            'http_method' => $httpMethod,
+            'http_path' => $httpPath,
+            'name' => $name,
+            'parameters' => \json_encode($parameters),
+            'incoming' => $incoming,
+            'outgoing' => $outgoing,
+            'throws' => \json_encode($throws),
+            'action' => $action,
+            'costs' => 0,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
-    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, Method $method)
-    {
-        $this->data['fusio_routes_method'][$path . $methodName] = [
-            'route_id' => self::getId('fusio_routes', $path),
-            'method' => $methodName,
-            'version' => 1,
-            'status' => $method->getStability(),
-            'active' => 1,
-            'public' => $method->isPublic() ? 1 : 0,
-            'operation_id' => $method->getOperationId(),
-            'parameters' => $parameters,
-            'request' => $request,
-            'action' => $action,
-            'costs' => $method->getCosts()
-        ];
-    }
-
-    public function addRouteMethodResponse(string $path, string $methodName, string $code, string $response)
-    {
-        $this->data['fusio_routes_response'][$path . $methodName . $code] = [
-            'method_id' => self::getId('fusio_routes_method', $path . $methodName),
-            'code' => $code,
-            'response' => $response
-        ];
-    }
-
-    public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null)
+    public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null): void
     {
         $this->data['fusio_schema'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -533,7 +493,7 @@ class DataBag
         ];
     }
 
-    public function addScope(string $category, string $name, string $description = '', ?array $metadata = null)
+    public function addScope(string $category, string $name, string $description = '', ?array $metadata = null): void
     {
         $this->data['fusio_scope'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -543,17 +503,17 @@ class DataBag
         ];
     }
 
-    public function addScopeRoute(string $scope, string $path)
+    public function addScopeOperation(string $scope, string $operation): void
     {
-        $this->data['fusio_scope_routes'][$scope . $path] = [
+        $this->data['fusio_scope_operation'][$scope . $operation] = [
             'scope_id' => self::getId('fusio_scope', $scope),
-            'route_id' => self::getId('fusio_routes', $path),
+            'operation_id' => self::getId('fusio_operation', $operation),
             'allow' => 1,
             'methods' => 'GET|POST|PUT|PATCH|DELETE'
         ];
     }
 
-    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null)
+    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null): void
     {
         $this->data['fusio_user'][$name] = [
             'role_id' => self::getId('fusio_role', $role),
@@ -568,7 +528,7 @@ class DataBag
         ];
     }
 
-    public function addUserScope(string $user, string $scope)
+    public function addUserScope(string $user, string $scope): void
     {
         $this->data['fusio_user_scope'][] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -576,7 +536,7 @@ class DataBag
         ];
     }
 
-    public function addUserGrant(string $user, string $app, bool $allow, ?string $date = null)
+    public function addUserGrant(string $user, string $app, bool $allow, ?string $date = null): void
     {
         $this->data['fusio_user_grant'][] = [
             'user_id' => $this->getId('fusio_user', $user),
@@ -586,7 +546,7 @@ class DataBag
         ];
     }
 
-    public function addTable(string $table, array $rows)
+    public function addTable(string $table, array $rows): void
     {
         if (isset($this->data[$table])) {
             throw new \RuntimeException('Table ' . $table . ' already exists');

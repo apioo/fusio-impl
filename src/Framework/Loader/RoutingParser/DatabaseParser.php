@@ -23,7 +23,7 @@ namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Filter\Filter;
-use Fusio\Impl\Table\Route as TableRoutes;
+use Fusio\Impl\Table\Operation as TableRoutes;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
 use PSX\Framework\Loader\RoutingParserInterface;

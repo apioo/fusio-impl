@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Route;
+use Fusio\Impl\Service\Operation;
 
 /**
  * Delete
@@ -37,9 +37,9 @@ use Fusio\Impl\Service\Route;
  */
 class Delete extends ActionAbstract
 {
-    private Route $routeService;
+    private Operation $routeService;
 
-    public function __construct(Route $routeService)
+    public function __construct(Operation $routeService)
     {
         $this->routeService = $routeService;
     }

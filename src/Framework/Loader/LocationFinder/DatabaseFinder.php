@@ -24,7 +24,7 @@ namespace Fusio\Impl\Framework\Loader\LocationFinder;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Loader\Context as FusioContext;
 use Fusio\Impl\Table\Category as TableCategory;
-use Fusio\Impl\Table\Route as TableRoutes;
+use Fusio\Impl\Table\Operation as TableRoutes;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\PathMatcher;
@@ -80,7 +80,7 @@ class DatabaseFinder implements LocationFinderInterface
                 $context->setPath($row['path']);
                 $context->setSource(explode('::', $row['controller']));
                 if ($context instanceof FusioContext) {
-                    $context->setRouteId($row['id']);
+                    $context->setOperationId($row['id']);
                     $context->setCategoryId($row['category_id']);
                 }
 

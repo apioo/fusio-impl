@@ -47,16 +47,16 @@ use PSX\Sql\Condition;
 class Schema
 {
     private Table\Schema $schemaTable;
-    private Table\Route\Method $routesMethodTable;
+    private Table\Operation $operationTable;
     private Loader $schemaLoader;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Operation $operationTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
     {
-        $this->schemaTable       = $schemaTable;
-        $this->routesMethodTable = $routesMethodTable;
-        $this->schemaLoader      = $schemaLoader;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->schemaTable     = $schemaTable;
+        $this->operationTable  = $operationTable;
+        $this->schemaLoader    = $schemaLoader;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int

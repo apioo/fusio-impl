@@ -22,52 +22,45 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Event\Route\CreatedEvent;
-use Fusio\Impl\Event\Route\DeletedEvent;
-use Fusio\Impl\Event\Route\UpdatedEvent;
+use Fusio\Impl\Event\Operation\CreatedEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\RouteCreate;
-use Fusio\Model\Backend\RouteUpdate;
+use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\OperationUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
 /**
- * Route
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Route
+class Operation
 {
-    private Table\Route $routesTable;
-    private Table\Route\Method $methodTable;
+    private Table\Operation $operationTable;
     private Service\Scope $scopeService;
-    private Route\Config $configService;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Route $routesTable, Table\Route\Method $methodTable, Service\Scope $scopeService, Route\Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Operation $operationTable, Service\Scope $scopeService, EventDispatcherInterface $eventDispatcher)
     {
-        $this->routesTable     = $routesTable;
-        $this->methodTable     = $methodTable;
+        $this->operationTable  = $operationTable;
         $this->scopeService    = $scopeService;
-        $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, RouteCreate $route, UserContext $context): int
+    public function create(int $categoryId, OperationCreate $operation, UserContext $context): int
     {
-        $path = $route->getPath();
+        $path = $operation->getPath();
         if (empty($path)) {
             throw new StatusCode\BadRequestException('Path not provided');
         }
 
         Route\Validator::assertPath($path);
 
-        $config = $route->getConfig();
+        $config = $operation->getConfig();
         if (empty($config)) {
             throw new StatusCode\BadRequestException('Config not provided');
         }
@@ -77,13 +70,13 @@ class Route
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
-        if ($route->getPriority() === null) {
-            $route->setPriority($this->routesTable->getMaxPriority() + 1);
-        } elseif ($route->getPriority()>= 0x1000000) {
+        if ($operation->getPriority() === null) {
+            $operation->setPriority($this->operationTable->getMaxPriority() + 1);
+        } elseif ($operation->getPriority()>= 0x1000000) {
             throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
         }
 
-        $controller = $route->getController();
+        $controller = $operation->getController();
         if (!empty($controller)) {
             if (!class_exists($controller)) {
                 throw new StatusCode\BadRequestException('Provided controller does not exist');
@@ -94,81 +87,85 @@ class Route
 
         // create route
         try {
-            $this->routesTable->beginTransaction();
+            $this->operationTable->beginTransaction();
 
-            $record = new Table\Generated\RoutesRow([
-                Table\Generated\RoutesTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\RoutesTable::COLUMN_STATUS => Table\Route::STATUS_ACTIVE,
-                Table\Generated\RoutesTable::COLUMN_PRIORITY => $route->getPriority(),
-                Table\Generated\RoutesTable::COLUMN_METHODS => 'ANY',
-                Table\Generated\RoutesTable::COLUMN_PATH => $path,
-                Table\Generated\RoutesTable::COLUMN_CONTROLLER => $controller,
-                Table\Generated\RoutesTable::COLUMN_METADATA => $route->getMetadata() !== null ? json_encode($route->getMetadata()) : null,
-            ]);
+            $row = new Table\Generated\OperationRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Operation::STATUS_ACTIVE);
+            $row->setActive($operation->getActive());
+            $row->setPublic($operation->getPublic());
+            $row->setStability($operation->getStability());
+            $row->setDescription($operation->getDescription());
+            $row->setHttpMethod($operation->getHttpMethod());
+            $row->setHttpPath($operation->getHttpPath());
+            $row->setName($operation->getName());
+            $row->setParameters(\json_encode($operation->getParameters()));
+            $row->setIncoming($operation->getIncoming());
+            $row->setOutgoing($operation->getOutgoing());
+            $row->setThrows(\json_encode($operation->getThrows()));
+            $row->setAction($operation->getAction());
+            $row->setCosts($operation->getCosts());
+            $row->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
+            $this->operationTable->create($row);
 
-            $this->routesTable->create($record);
-
-            $routeId = $this->routesTable->getLastInsertId();
-            $route->setId($routeId);
+            $operationId = $this->operationTable->getLastInsertId();
+            $operation->setId($operationId);
 
             // assign scopes
-            $scopes = $route->getScopes();
+            $scopes = $operation->getScopes();
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($categoryId, $routeId, $scopes, $context);
+                $this->scopeService->createFromRoute($categoryId, $operationId, $scopes, $context);
             }
 
-            // handle config
-            $this->configService->handleConfig($categoryId, $routeId, $path, $config, $context);
-
-            $this->routesTable->commit();
+            $this->operationTable->commit();
         } catch (\Throwable $e) {
-            $this->routesTable->rollBack();
+            $this->operationTable->rollBack();
 
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($route, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($operation, $context));
 
-        return $routeId;
+        return $operationId;
     }
 
-    public function update(int $routeId, RouteUpdate $route, UserContext $context): int
+    public function update(int $operationId, OperationUpdate $operation, UserContext $context): int
     {
-        $existing = $this->routesTable->find($routeId);
+        $existing = $this->operationTable->find($operationId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($existing->getStatus() == Table\Route::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Operation::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
-        $config = $route->getConfig();
+        $config = $operation->getConfig();
         if (empty($config)) {
             throw new StatusCode\BadRequestException('Config not provided');
         }
 
-        $priority = $route->getPriority();
+        $priority = $operation->getPriority();
         if ($priority === null) {
-            $priority = $this->routesTable->getMaxPriority() + 1;
+            $priority = $this->operationTable->getMaxPriority() + 1;
         } elseif ($priority >= 0x1000000) {
             throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
         }
 
         try {
-            $this->routesTable->beginTransaction();
+            $this->operationTable->beginTransaction();
 
             // update route
             $record = new Table\Generated\RoutesRow([
                 Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
                 Table\Generated\RoutesTable::COLUMN_PRIORITY => $priority,
-                Table\Generated\RoutesTable::COLUMN_METADATA => $route->getMetadata() !== null ? json_encode($route->getMetadata()) : null,
+                Table\Generated\RoutesTable::COLUMN_METADATA => $operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null,
             ]);
 
-            $this->routesTable->update($record);
+            $this->operationTable->update($record);
 
             // assign scopes
-            $scopes = $route->getScopes();
+            $scopes = $operation->getScopes();
             if (!empty($scopes)) {
                 $this->scopeService->createFromRoute($existing->getCategoryId(), $existing->getId(), $scopes, $context);
             }
@@ -176,26 +173,26 @@ class Route
             // handle config
             $this->configService->handleConfig($existing->getCategoryId(), $existing->getId(), $existing->getPath(), $config, $context);
 
-            $this->routesTable->commit();
+            $this->operationTable->commit();
         } catch (\Throwable $e) {
-            $this->routesTable->rollBack();
+            $this->operationTable->rollBack();
 
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($route, $existing, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($operation, $existing, $context));
 
-        return $routeId;
+        return $operationId;
     }
 
     public function delete(int $routeId, UserContext $context): int
     {
-        $existing = $this->routesTable->find($routeId);
+        $existing = $this->operationTable->find($routeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($existing->getStatus() == Table\Route::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Operation::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
@@ -207,10 +204,10 @@ class Route
         // delete route
         $record = new Table\Generated\RoutesRow([
             Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\RoutesTable::COLUMN_STATUS => Table\Route::STATUS_DELETED
+            Table\Generated\RoutesTable::COLUMN_STATUS => Table\Operation::STATUS_DELETED
         ]);
 
-        $this->routesTable->update($record);
+        $this->operationTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
@@ -223,10 +220,10 @@ class Route
     public function exists(string $path): int|false
     {
         $condition  = new Condition();
-        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Route::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
         $condition->equals(Table\Generated\RoutesTable::COLUMN_PATH, $path);
 
-        $route = $this->routesTable->findOneBy($condition);
+        $route = $this->operationTable->findOneBy($condition);
 
         if ($route instanceof Table\Generated\RoutesRow) {
             return $route->getId();

@@ -10,7 +10,7 @@ class LogTable extends \PSX\Sql\TableAbstract
     public const NAME = 'fusio_log';
     public const COLUMN_ID = 'id';
     public const COLUMN_CATEGORY_ID = 'category_id';
-    public const COLUMN_ROUTE_ID = 'route_id';
+    public const COLUMN_OPERATION_ID = 'operation_id';
     public const COLUMN_APP_ID = 'app_id';
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_IP = 'ip';
@@ -27,7 +27,7 @@ class LogTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_ROUTE_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogRow>
@@ -139,37 +139,37 @@ class LogTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRouteId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByOperationId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByRouteId(int $value) : ?\Fusio\Impl\Table\Generated\LogRow
+    public function findOneByOperationId(int $value) : ?\Fusio\Impl\Table\Generated\LogRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByRouteId(int $value, \Fusio\Impl\Table\Generated\LogRow $record) : int
+    public function updateByOperationId(int $value, \Fusio\Impl\Table\Generated\LogRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByRouteId(int $value) : int
+    public function deleteByOperationId(int $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

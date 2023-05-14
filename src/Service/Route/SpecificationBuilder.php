@@ -41,18 +41,14 @@ use PSX\Schema\TypeFactory;
  */
 class SpecificationBuilder
 {
-    private Table\Route $routeTable;
-    private Table\Route\Method $methodTable;
-    private Table\Route\Response $responseTable;
-    private Table\Scope\Route $scopeTable;
+    private Table\Operation $operationTable;
+    private Table\Scope\Operation $scopeTable;
     private Loader $schemaLoader;
     private TypeSchema $schemaParser;
 
-    public function __construct(Table\Route $routeTable, Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Loader $schemaLoader)
+    public function __construct(Table\Operation $operationTable, Table\Scope\Operation $scopeTable, Loader $schemaLoader)
     {
-        $this->routeTable = $routeTable;
-        $this->methodTable = $methodTable;
-        $this->responseTable = $responseTable;
+        $this->operationTable = $operationTable;
         $this->scopeTable = $scopeTable;
         $this->schemaLoader = $schemaLoader;
         $this->schemaParser = new TypeSchema();
@@ -60,7 +56,7 @@ class SpecificationBuilder
 
     public function build(int $routeId): SpecificationInterface
     {
-        $route = $this->routeTable->find($routeId);
+        $route = $this->operationTable->find($routeId);
         if (!$route instanceof Table\Generated\RoutesRow) {
             throw new \RuntimeException('Provided an invalid route');
         }
@@ -73,7 +69,7 @@ class SpecificationBuilder
         $specification = new Specification();
         $path = $route->getPath();
         $methods = $this->methodTable->getMethods($routeId, $version, true);
-        $scopes = $this->scopeTable->getScopesForRoute($routeId);
+        $scopes = $this->scopeTable->getScopesForOperation($routeId);
 
         foreach ($methods as $method) {
             $return = $this->getReturn($method->getId(), $specification->getDefinitions());

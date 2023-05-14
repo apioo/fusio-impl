@@ -23,18 +23,19 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Route
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Route extends ViewAbstract
+class Operation extends ViewAbstract
 {
     public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
@@ -47,26 +48,26 @@ class Route extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = Table\Generated\RoutesTable::COLUMN_PRIORITY;
+            $sortBy = Table\Generated\OperationTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\RoutesTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
-        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Route::STATUS_ACTIVE);
+        $condition  = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like(Table\Generated\RoutesTable::COLUMN_PATH, '%' . $search . '%');
+            $condition->like(Table\Generated\OperationTable::COLUMN_HTTP_PATH, '%' . $search . '%');
         }
 
         $definition = [
-            'totalResults' => $this->getTable(Table\Route::class)->getCount($condition),
+            'totalResults' => $this->getTable(Table\Operation::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Route::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+            'entry' => $this->doCollection([$this->getTable(Table\Operation::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
                 'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
                 'path' => Table\Generated\RoutesTable::COLUMN_PATH,
@@ -88,13 +89,13 @@ class Route extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Route::class), $method], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Operation::class), $method], [$id], [
             'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
             'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
             'path' => Table\Generated\RoutesTable::COLUMN_PATH,
             'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
             'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
-            'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
+            'scopes' => $this->doColumn([$this->getTable(Table\Scope\Operation::class), 'getScopeNamesForOperation'], [new Reference('id')], 'name'),
             'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id'), null, null], [
                 'version' => Table\Generated\RoutesMethodTable::COLUMN_VERSION,
                 'status' => Table\Generated\RoutesMethodTable::COLUMN_STATUS,

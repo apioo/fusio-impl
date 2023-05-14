@@ -2,11 +2,11 @@
 
 namespace Fusio\Impl\Table\Generated;
 
-class ScopeRoutesRow implements \JsonSerializable, \PSX\Record\RecordableInterface
+class ScopeOperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
     private ?int $scopeId = null;
-    private ?int $routeId = null;
+    private ?int $operationId = null;
     private ?int $allow = null;
     private ?string $methods = null;
     public function setId(int $id) : void
@@ -25,13 +25,13 @@ class ScopeRoutesRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
     {
         return $this->scopeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope_id" was provided');
     }
-    public function setRouteId(int $routeId) : void
+    public function setOperationId(int $operationId) : void
     {
-        $this->routeId = $routeId;
+        $this->operationId = $operationId;
     }
-    public function getRouteId() : int
+    public function getOperationId() : int
     {
-        return $this->routeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "route_id" was provided');
+        return $this->operationId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "operation_id" was provided');
     }
     public function setAllow(int $allow) : void
     {
@@ -55,7 +55,7 @@ class ScopeRoutesRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('scope_id', $this->scopeId);
-        $record->put('route_id', $this->routeId);
+        $record->put('operation_id', $this->operationId);
         $record->put('allow', $this->allow);
         $record->put('methods', $this->methods);
         return $record;
@@ -69,7 +69,7 @@ class ScopeRoutesRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->scopeId = isset($data['scope_id']) && is_int($data['scope_id']) ? $data['scope_id'] : null;
-        $row->routeId = isset($data['route_id']) && is_int($data['route_id']) ? $data['route_id'] : null;
+        $row->operationId = isset($data['operation_id']) && is_int($data['operation_id']) ? $data['operation_id'] : null;
         $row->allow = isset($data['allow']) && is_int($data['allow']) ? $data['allow'] : null;
         $row->methods = isset($data['methods']) && is_string($data['methods']) ? $data['methods'] : null;
         return $row;

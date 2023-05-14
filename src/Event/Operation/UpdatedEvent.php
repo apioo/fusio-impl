@@ -19,32 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Route;
+namespace Fusio\Impl\Event\Operation;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Fusio\Model\Backend\RouteCreate;
+use Fusio\Impl\Table\Generated\OperationRow;
+use Fusio\Model\Backend\OperationUpdate;
 
 /**
- * CreatedEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
-    private RouteCreate $route;
+    private OperationUpdate $operation;
+    private OperationRow $existing;
 
-    public function __construct(RouteCreate $route, UserContext $context)
+    public function __construct(OperationUpdate $operation, OperationRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->route = $route;
+        $this->operation = $operation;
+        $this->existing  = $existing;
     }
 
-    public function getRoute(): RouteCreate
+    public function getOperation(): OperationUpdate
     {
-        return $this->route;
+        return $this->operation;
+    }
+
+    public function getExisting(): OperationRow
+    {
+        return $this->existing;
     }
 }

@@ -58,7 +58,7 @@ class TokenValidator
         if ($requestMethod === 'OPTIONS') {
             $needsAuth = false;
         } else {
-            $method = $context->getMethod();
+            $method = $context->getOperation();
             $needsAuth = !$method['public'];
         }
 
@@ -78,7 +78,7 @@ class TokenValidator
 
             if ($type == 'Bearer' && !empty($accessToken)) {
                 try {
-                    $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
+                    $token = $this->getToken($accessToken, $context->getOperationId(), $requestMethod);
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }

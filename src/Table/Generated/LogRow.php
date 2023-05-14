@@ -6,7 +6,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
     private ?int $categoryId = null;
-    private ?int $routeId = null;
+    private ?int $operationId = null;
     private ?int $appId = null;
     private ?int $userId = null;
     private ?string $ip = null;
@@ -33,13 +33,13 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setRouteId(?int $routeId) : void
+    public function setOperationId(?int $operationId) : void
     {
-        $this->routeId = $routeId;
+        $this->operationId = $operationId;
     }
-    public function getRouteId() : ?int
+    public function getOperationId() : ?int
     {
-        return $this->routeId;
+        return $this->operationId;
     }
     public function setAppId(?int $appId) : void
     {
@@ -127,7 +127,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('category_id', $this->categoryId);
-        $record->put('route_id', $this->routeId);
+        $record->put('operation_id', $this->operationId);
         $record->put('app_id', $this->appId);
         $record->put('user_id', $this->userId);
         $record->put('ip', $this->ip);
@@ -149,7 +149,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->categoryId = isset($data['category_id']) && is_int($data['category_id']) ? $data['category_id'] : null;
-        $row->routeId = isset($data['route_id']) && is_int($data['route_id']) ? $data['route_id'] : null;
+        $row->operationId = isset($data['operation_id']) && is_int($data['operation_id']) ? $data['operation_id'] : null;
         $row->appId = isset($data['app_id']) && is_int($data['app_id']) ? $data['app_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->ip = isset($data['ip']) && is_string($data['ip']) ? $data['ip'] : null;

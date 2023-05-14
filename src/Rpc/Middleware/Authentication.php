@@ -46,7 +46,7 @@ class Authentication
 
     public function __invoke(RpcRequest $request, Context $context)
     {
-        $method = $context->getMethod();
+        $method = $context->getOperation();
 
         $success = $this->tokenValidator->assertAuthorization(
             $method['method'],

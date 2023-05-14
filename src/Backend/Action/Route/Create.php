@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Route;
+use Fusio\Impl\Service\Operation;
 use Fusio\Model\Backend\RouteCreate;
 use PSX\Http\Environment\HttpResponse;
 
@@ -39,9 +39,9 @@ use PSX\Http\Environment\HttpResponse;
  */
 class Create extends ActionAbstract
 {
-    private Route $routeService;
+    private Operation $routeService;
 
-    public function __construct(Route $routeService)
+    public function __construct(Operation $routeService)
     {
         $this->routeService = $routeService;
     }

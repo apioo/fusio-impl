@@ -39,11 +39,11 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Route $table;
+    private View\Operation $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->table = $tableManager->getTable(View\Route::class);
+        $this->table = $tableManager->getTable(View\Operation::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -56,7 +56,7 @@ class Get extends ActionAbstract
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($route['status'] == Table\Route::STATUS_DELETED) {
+        if ($route['status'] == Table\Operation::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 

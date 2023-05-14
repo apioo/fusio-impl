@@ -24,55 +24,55 @@ namespace Fusio\Impl\Table\Scope;
 use Fusio\Impl\Table\Generated;
 
 /**
- * Route
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Route extends Generated\ScopeRoutesTable
+class Operation extends Generated\ScopeOperationTable
 {
-    public function deleteAllFromScope($scopeId)
+    public function deleteAllFromScope(int $scopeId): void
     {
-        $sql = 'DELETE FROM fusio_scope_routes
+        $sql = 'DELETE FROM fusio_scope_operation
                       WHERE scope_id = :id';
 
         $this->connection->executeQuery($sql, array('id' => $scopeId));
     }
 
-    public function deleteAllFromRoute($routeId)
+    public function deleteAllFromOperation(int $operationId): void
     {
-        $sql = 'DELETE FROM fusio_scope_routes
+        $sql = 'DELETE FROM fusio_scope_operation
                       WHERE route_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $routeId));
+        $this->connection->executeQuery($sql, array('id' => $operationId));
     }
 
-    public function getScopeNamesForRoute($routeId)
+    public function getScopeNamesForOperation(int $operationId): array
     {
         $sql = 'SELECT scope.name
-                  FROM fusio_scope_routes routes
+                  FROM fusio_scope_operation operation
             INNER JOIN fusio_scope scope
-                    ON scope.id = routes.scope_id
-                 WHERE routes.route_id = :id
-                   AND routes.allow = 1
-              ORDER BY routes.id ASC';
+                    ON scope.id = operation.scope_id
+                 WHERE operation.route_id = :id
+                   AND operation.allow = 1
+              ORDER BY operation.id ASC';
 
-        return $this->connection->fetchAllAssociative($sql, ['id' => $routeId]);
+        return $this->connection->fetchAllAssociative($sql, ['id' => $operationId]);
     }
 
-    public function getScopesForRoute($routeId)
+    public function getScopesForOperation(int $operationId): array
     {
         $sql = 'SELECT scope.name,
-                       routes.methods
-                  FROM fusio_scope_routes routes
+                       operation.methods
+                  FROM fusio_scope_operation operation
             INNER JOIN fusio_scope scope
-                    ON scope.id = routes.scope_id
-                 WHERE routes.route_id = :id
-                   AND routes.allow = 1
-              ORDER BY routes.id ASC';
+                    ON scope.id = operation.scope_id
+                 WHERE operation.route_id = :id
+                   AND operation.allow = 1
+              ORDER BY operation.id ASC';
 
-        $result = $this->connection->fetchAllAssociative($sql, ['id' => $routeId]);
+        $result = $this->connection->fetchAllAssociative($sql, ['id' => $operationId]);
         $scopes = [];
 
         foreach ($result as $row) {

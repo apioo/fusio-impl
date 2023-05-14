@@ -19,43 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Route;
+namespace Fusio\Impl\Event\Operation;
 
-use Fusio\Impl\Table\Generated;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\OperationRow;
 
 /**
- * Response
+ * DeletedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Response extends Generated\RoutesResponseTable
+class DeletedEvent extends EventAbstract
 {
-    public function getResponses(int $methodId, int $startCode, int $endCode): array
-    {
-        $sql = 'SELECT response.id, 
-                       response.code, 
-                       response.response 
-                  FROM fusio_routes_response response
-                 WHERE response.method_id = :id
-                   AND response.code >= :start
-                   AND response.code <= :end';
+    private OperationRow $existing;
 
-        return $this->connection->fetchAllAssociative($sql, [
-            'id' => $methodId,
-            'start' => $startCode,
-            'end' => $endCode,
-        ]);
+    public function __construct(OperationRow $existing, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->existing = $existing;
     }
 
-    public function deleteAllFromMethod(int $methodId): void
+    public function getExisting(): OperationRow
     {
-        $sql = 'DELETE FROM fusio_routes_response
-                      WHERE method_id = :id';
-
-        $params = ['id' => $methodId];
-
-        $this->connection->executeQuery($sql, $params);
+        return $this->existing;
     }
 }

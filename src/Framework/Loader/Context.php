@@ -25,6 +25,7 @@ use Fusio\Engine\Model\AppInterface;
 use Fusio\Engine\Model\TokenInterface;
 use Fusio\Engine\Model\UserInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Framework\Loader\Context as FrameworkContext;
 
 /**
@@ -36,27 +37,27 @@ use PSX\Framework\Loader\Context as FrameworkContext;
  */
 class Context extends FrameworkContext
 {
-    private ?int $routeId = null;
+    private ?int $operationId = null;
     private ?int $categoryId = null;
     private ?AppInterface $app = null;
     private ?UserInterface $user = null;
     private ?TokenInterface $token = null;
     private ?int $logId = null;
-    private ?array $method = null;
+    private ?OperationRow $operation = null;
     private ?UserContext $userContext = null;
 
-    public function getRouteId(): int
+    public function getOperationId(): int
     {
-        if ($this->routeId === null) {
+        if ($this->operationId === null) {
             throw new \RuntimeException('Context route id not available');
         }
 
-        return $this->routeId;
+        return $this->operationId;
     }
 
-    public function setRouteId(int $routeId): void
+    public function setOperationId(int $operationId): void
     {
-        $this->routeId = $routeId;
+        $this->operationId = $operationId;
     }
 
     public function getCategoryId(): int
@@ -139,18 +140,18 @@ class Context extends FrameworkContext
         $this->logId = $logId;
     }
 
-    public function getMethod(): array
+    public function getOperation(): OperationRow
     {
-        if ($this->method === null) {
-            throw new \RuntimeException('Context method not available');
+        if ($this->operation === null) {
+            throw new \RuntimeException('Context operation not available');
         }
 
-        return $this->method;
+        return $this->operation;
     }
 
-    public function setMethod(array $method): void
+    public function setOperation(OperationRow $operation): void
     {
-        $this->method = $method;
+        $this->operation = $operation;
     }
 
     public function getUserContext(): UserContext

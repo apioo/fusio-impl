@@ -45,7 +45,7 @@ class GetAbout extends ActionAbstract
 {
     private Service\Config $configService;
     private Config $config;
-    private Table\Route $routeTable;
+    private Table\Operation $routeTable;
     private Table\Category $categoryTable;
     private Table\Scope $scopeTable;
     private Marketplace\Repository\Local $localRepository;
@@ -54,7 +54,7 @@ class GetAbout extends ActionAbstract
     {
         $this->configService = $configService;
         $this->config = $config;
-        $this->routeTable = $tableManager->getTable(Table\Route::class);
+        $this->routeTable = $tableManager->getTable(Table\Operation::class);
         $this->categoryTable = $tableManager->getTable(Table\Category::class);
         $this->scopeTable = $tableManager->getTable(Table\Scope::class);
         $this->localRepository = $localRepository;

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Route;
 
-use Fusio\Impl\Table\Route as TableRoutes;
+use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;

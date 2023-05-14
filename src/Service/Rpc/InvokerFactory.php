@@ -39,15 +39,15 @@ use PSX\Http\Environment\HttpContextInterface;
 class InvokerFactory
 {
     private ActionInvoker $actionInvoker;
-    private Table\Route\Method $methodTable;
+    private Table\Operation $operationTable;
     private Service\Schema\Loader $schemaLoader;
     private Service\Security\TokenValidator $tokenValidator;
     private Service\Rate $rateService;
 
-    public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable, Service\Schema\Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
+    public function __construct(ActionInvoker $actionInvoker, Table\Operation $operationTable, Service\Schema\Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
     {
         $this->actionInvoker  = $actionInvoker;
-        $this->methodTable    = $methodTable;
+        $this->operationTable    = $operationTable;
         $this->schemaLoader   = $schemaLoader;
         $this->tokenValidator = $tokenValidator;
         $this->rateService    = $rateService;
@@ -55,7 +55,7 @@ class InvokerFactory
 
     public function createByFramework(HttpContextInterface $context): Invoker
     {
-        $invoker = new Invoker($this->actionInvoker, $this->methodTable);
+        $invoker = new Invoker($this->actionInvoker, $this->operationTable);
         $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $context->getHeader('Authorization')));
         $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'));
         $invoker->addMiddleware(new Middleware\ValidateSchema($this->schemaLoader));
@@ -65,7 +65,7 @@ class InvokerFactory
 
     public function createByEngine(HttpRequest $request): Invoker
     {
-        $invoker = new Invoker($this->actionInvoker, $this->methodTable);
+        $invoker = new Invoker($this->actionInvoker, $this->operationTable);
         $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $request->getHeader('Authorization')));
         $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'));
         $invoker->addMiddleware(new Middleware\ValidateSchema($this->schemaLoader));

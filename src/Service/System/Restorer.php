@@ -200,7 +200,7 @@ class Restorer
                 Table\Generated\RoutesTable::NAME,
                 Table\Generated\RoutesTable::COLUMN_PATH,
                 Table\Generated\RoutesTable::COLUMN_STATUS,
-                Table\Route::STATUS_ACTIVE,
+                Table\Operation::STATUS_ACTIVE,
             ],
             'schema' => [
                 Table\Generated\SchemaTable::NAME,

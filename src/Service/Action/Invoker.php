@@ -52,7 +52,7 @@ class Invoker
 
     public function invoke(RequestInterface $request, Context $context): mixed
     {
-        $method = $context->getMethod();
+        $method = $context->getOperation();
         $action = $method['action'];
         $costs  = (int) $method['costs'];
 

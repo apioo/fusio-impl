@@ -52,15 +52,13 @@ use PSX\Sql\Condition;
 class Action
 {
     private Table\Action $actionTable;
-    private Table\Route\Method $routeMethodTable;
     private Factory\ActionInterface $actionFactory;
     private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Factory\ActionInterface $actionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable      = $actionTable;
-        $this->routeMethodTable = $routeMethodTable;
         $this->actionFactory    = $actionFactory;
         $this->config           = $config;
         $this->eventDispatcher  = $eventDispatcher;

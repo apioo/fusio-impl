@@ -22,37 +22,36 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Util\Uuid;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * AssertMethod
+ * AssertOperation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class AssertMethod implements FilterInterface
+class AssertOperation implements FilterInterface
 {
-    private Service\Route\Method $routesMethodService;
+    private Table\Operation $operationTable;
     private ContextFactory $contextFactory;
 
-    public function __construct(Service\Route\Method $routesMethodService, ContextFactory $contextFactory)
+    public function __construct(Table\Operation $operationTable, ContextFactory $contextFactory)
     {
-        $this->routesMethodService = $routesMethodService;
+        $this->operationTable = $operationTable;
         $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        $context    = $this->contextFactory->getActive();
-        $routeId    = $context->getRouteId();
-        $methodName = $request->getMethod();
+        $context     = $this->contextFactory->getActive();
+        $operationId = $context->getOperationId();
+        $methodName  = $request->getMethod();
 
         if ($methodName === 'HEAD') {
             // in case of HEAD we use the schema of the GET request
@@ -63,39 +62,18 @@ class AssertMethod implements FilterInterface
             return;
         }
 
-        $version = $this->getSubmittedVersionNumber($request);
-        $method  = $this->routesMethodService->getMethod($routeId, $version, $methodName);
+        $operation = $this->operationTable->find($operationId);
 
-        if (empty($method)) {
-            $methods = $this->routesMethodService->getAllowedMethods($routeId, $version);
-            $allowed = ['OPTIONS'];
-            if (in_array('GET', $methods)) {
-                $allowed[] = 'HEAD';
-            }
-
-            $allowedMethods = array_merge($allowed, $methods);
-
-            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $allowedMethods);
-        }
-
-        $context->setMethod($method);
+        $context->setOperation($operation);
 
         // add request id
         $request->setHeader('X-Request-Id', Uuid::pseudoRandom());
+        $request->setHeader('X-Operation-Id', $operation->getName());
+        $request->setHeader('X-Stability', match ($operation->getStability()) {
+            1 => '',
+        });
+        $request->setHeader('X-Powered-By', 'Fusio');
 
         $filterChain->handle($request, $response);
-    }
-
-    /**
-     * Returns the version number which was submitted by the client in the accept header field
-     */
-    private function getSubmittedVersionNumber(RequestInterface $request): ?string
-    {
-        $accept  = $request->getHeader('Accept');
-        $matches = array();
-
-        preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
-
-        return $matches[2] ?? null;
     }
 }

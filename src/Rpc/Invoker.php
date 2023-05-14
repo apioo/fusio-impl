@@ -81,8 +81,8 @@ class Invoker
         }
 
         $context = new Context();
-        $context->setRouteId((int) $method['route_id']);
-        $context->setMethod($method);
+        $context->setOperationId((int) $method['route_id']);
+        $context->setOperation($method);
 
         if (!$arguments instanceof \stdClass) {
 

@@ -6,7 +6,7 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
 {
     private ?int $id = null;
     private ?int $rateId = null;
-    private ?int $routeId = null;
+    private ?int $operationId = null;
     private ?int $appId = null;
     private ?int $userId = null;
     private ?int $planId = null;
@@ -27,13 +27,13 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
     {
         return $this->rateId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "rate_id" was provided');
     }
-    public function setRouteId(?int $routeId) : void
+    public function setOperationId(?int $operationId) : void
     {
-        $this->routeId = $routeId;
+        $this->operationId = $operationId;
     }
-    public function getRouteId() : ?int
+    public function getOperationId() : ?int
     {
-        return $this->routeId;
+        return $this->operationId;
     }
     public function setAppId(?int $appId) : void
     {
@@ -73,7 +73,7 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('rate_id', $this->rateId);
-        $record->put('route_id', $this->routeId);
+        $record->put('operation_id', $this->operationId);
         $record->put('app_id', $this->appId);
         $record->put('user_id', $this->userId);
         $record->put('plan_id', $this->planId);
@@ -89,7 +89,7 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->rateId = isset($data['rate_id']) && is_int($data['rate_id']) ? $data['rate_id'] : null;
-        $row->routeId = isset($data['route_id']) && is_int($data['route_id']) ? $data['route_id'] : null;
+        $row->operationId = isset($data['operation_id']) && is_int($data['operation_id']) ? $data['operation_id'] : null;
         $row->appId = isset($data['app_id']) && is_int($data['app_id']) ? $data['app_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->planId = isset($data['plan_id']) && is_int($data['plan_id']) ? $data['plan_id'] : null;

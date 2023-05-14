@@ -9,7 +9,7 @@ class PlanUsageTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_plan_usage';
     public const COLUMN_ID = 'id';
-    public const COLUMN_ROUTE_ID = 'route_id';
+    public const COLUMN_OPERATION_ID = 'operation_id';
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_APP_ID = 'app_id';
     public const COLUMN_POINTS = 'points';
@@ -20,7 +20,7 @@ class PlanUsageTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_ROUTE_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_OPERATION_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\PlanUsageRow>
@@ -95,37 +95,37 @@ class PlanUsageTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\PlanUsageRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRouteId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByOperationId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByRouteId(int $value) : ?\Fusio\Impl\Table\Generated\PlanUsageRow
+    public function findOneByOperationId(int $value) : ?\Fusio\Impl\Table\Generated\PlanUsageRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByRouteId(int $value, \Fusio\Impl\Table\Generated\PlanUsageRow $record) : int
+    public function updateByOperationId(int $value, \Fusio\Impl\Table\Generated\PlanUsageRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByRouteId(int $value) : int
+    public function deleteByOperationId(int $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('route_id', $value);
+        $condition->equals('operation_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

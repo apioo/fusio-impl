@@ -51,32 +51,18 @@ class DataSyncronizer
             }
         }
 
-        $routes = $data->getData('fusio_routes');
-        $routeMap = [];
-        foreach ($routes as $row) {
-            $routeId = $connection->fetchOne('SELECT id FROM fusio_routes WHERE path = :path', [
-                'path' => $row['path']
+        $operations = $data->getData('fusio_operation');
+        $operationMap = [];
+        foreach ($operations as $row) {
+            $operationId = $connection->fetchOne('SELECT id FROM fusio_operation WHERE name = :name', [
+                'name' => $row['name']
             ]);
 
-            if (empty($routeId)) {
-                self::insert($connection, 'fusio_routes', $row);
-                $routeId = $connection->lastInsertId();
-
-                $methods = $data->getData('fusio_routes_method', 'route_id', $data->getId('fusio_routes', $row['path']));
-                foreach ($methods as $method) {
-                    $method['route_id'] = $routeId;
-                    self::insert($connection, 'fusio_routes_method', $method);
-
-                    $methodId = $connection->lastInsertId();
-                    $responses = $data->getData('fusio_routes_response', 'method_id', $data->getId('fusio_routes_method', $row['path'] . $method['method']));
-                    foreach ($responses as $response) {
-                        $response['method_id'] = $methodId;
-                        self::insert($connection, 'fusio_routes_response', $response);
-                    }
-                }
+            if (empty($operationId)) {
+                self::insert($connection, 'fusio_operation', $row);
             }
 
-            $routeMap[$data->getId('fusio_routes', $row['path'])] = $routeId;
+            $operationMap[$data->getId('fusio_operation', $row['name'])] = $operationId;
         }
 
         $actions = $data->getData('fusio_action');
@@ -138,25 +124,25 @@ class DataSyncronizer
             $scopeMap[$data->getId('fusio_scope', $scope['name'])] = $scopeId;
         }
 
-        $scopeRoutes = $data->getData('fusio_scope_routes');
-        foreach ($scopeRoutes as $scopeRoute) {
-            $scopeId = $scopeMap[$scopeRoute['scope_id']] ?? null;
-            $routeId = $routeMap[$scopeRoute['route_id']] ?? null;
+        $scopeOperations = $data->getData('fusio_scope_operation');
+        foreach ($scopeOperations as $scopeOperation) {
+            $scopeId = $scopeMap[$scopeOperation['scope_id']] ?? null;
+            $operationId = $operationMap[$scopeOperation['operation_id']] ?? null;
 
-            if (empty($scopeId) || empty($routeId)) {
+            if (empty($scopeId) || empty($operationId)) {
                 continue;
             }
 
-            $id = $connection->fetchOne('SELECT id FROM fusio_scope_routes WHERE scope_id = :scope AND route_id = :route', [
+            $id = $connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope AND operation_id = :operation', [
                 'scope' => $scopeId,
-                'route' => $routeId,
+                'operation' => $operationId,
             ]);
 
             if (empty($id)) {
-                $scopeRoute['scope_id'] = $scopeId;
-                $scopeRoute['route_id'] = $routeId;
+                $scopeOperation['scope_id'] = $scopeId;
+                $scopeOperation['operation_id'] = $operationId;
 
-                self::insert($connection, 'fusio_scope_routes', $scopeRoute);
+                self::insert($connection, 'fusio_scope_operation', $scopeOperation);
             }
         }
     }
@@ -164,7 +150,7 @@ class DataSyncronizer
     private static function insert(Connection $connection, string $tableName, array $data): void
     {
         $row = [];
-        $columns = $connection->getSchemaManager()->listTableColumns($tableName);
+        $columns = $connection->createSchemaManager()->listTableColumns($tableName);
         foreach ($columns as $column) {
             if (isset($data[$column->getName()])) {
                 $row[$column->getName()] = $data[$column->getName()];
