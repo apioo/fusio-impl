@@ -46,22 +46,9 @@ class EntityTest extends ControllerDbTestCase
         $this->routeId = Fixture::getId('fusio_routes', '/foo');
     }
 
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/rate/' . $this->id, 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Cronjob;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -40,8 +41,10 @@ class Update extends ActionAbstract
 {
     private Cronjob $cronjobService;
 
-    public function __construct(Cronjob $cronjobService)
+    public function __construct(RuntimeInterface $runtime, Cronjob $cronjobService)
     {
+        parent::__construct($runtime);
+
         $this->cronjobService = $cronjobService;
     }
 

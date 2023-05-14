@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Event\Subscription;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,16 +39,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Event\Subscription $table;
+    private View\Event\Subscription $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Event\Subscription $view)
     {
-        $this->table = $tableManager->getTable(View\Event\Subscription::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $subscription = $this->table->getEntity(
+        $subscription = $this->view->getEntity(
             (int) $request->get('subscription_id')
         );
 

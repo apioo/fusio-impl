@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetErrorsPerRoute extends ActionAbstract
 {
-    private View\Statistic\ErrorsPerRoute $table;
+    private View\Statistic\ErrorsPerRoute $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Statistic\ErrorsPerRoute $view)
     {
-        $this->table = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getView(
+        return $this->view->getView(
             $context->getUser()->getCategoryId(),
             \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );

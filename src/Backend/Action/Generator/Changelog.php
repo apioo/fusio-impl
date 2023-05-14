@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Generator;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Changelog extends ActionAbstract
 {
     private Generator $generatorService;
 
-    public function __construct(Generator $generatorService)
+    public function __construct(RuntimeInterface $runtime, Generator $generatorService)
     {
+        parent::__construct($runtime);
+
         $this->generatorService = $generatorService;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class ConnectionCallback extends ActionAbstract
 {
     private Connection\Token $tokenService;
 
-    public function __construct(Connection\Token $tokenService)
+    public function __construct(RuntimeInterface $runtime, Connection\Token $tokenService)
     {
+        parent::__construct($runtime);
+
         $this->tokenService = $tokenService;
     }
 

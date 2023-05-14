@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -29,10 +30,8 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
-use PSX\Sql\Sql;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAbout
@@ -44,19 +43,19 @@ use PSX\Sql\TableManagerInterface;
 class GetAbout extends ActionAbstract
 {
     private Service\Config $configService;
-    private Config $config;
-    private Table\Operation $routeTable;
+    private ConfigInterface $config;
     private Table\Category $categoryTable;
     private Table\Scope $scopeTable;
     private Marketplace\Repository\Local $localRepository;
 
-    public function __construct(Service\Config $configService, Config $config, TableManagerInterface $tableManager, Marketplace\Repository\Local $localRepository)
+    public function __construct(RuntimeInterface $runtime, Service\Config $configService, ConfigInterface $config, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
     {
+        parent::__construct($runtime);
+
         $this->configService = $configService;
         $this->config = $config;
-        $this->routeTable = $tableManager->getTable(Table\Operation::class);
-        $this->categoryTable = $tableManager->getTable(Table\Category::class);
-        $this->scopeTable = $tableManager->getTable(Table\Scope::class);
+        $this->categoryTable = $categoryTable;
+        $this->scopeTable = $scopeTable;
         $this->localRepository = $localRepository;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Provider extends ActionAbstract
 {
     private UserProvider $providerService;
 
-    public function __construct(UserProvider $providerService)
+    public function __construct(RuntimeInterface $runtime, UserProvider $providerService)
     {
+        parent::__construct($runtime);
+
         $this->providerService = $providerService;
     }
 

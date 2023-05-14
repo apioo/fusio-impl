@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,16 +40,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\User $table;
+    private View\User $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\User $view)
     {
-        $this->table = $tableManager->getTable(View\User::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $user = $this->table->getEntity(
+        $user = $this->view->getEntity(
             (int) $request->get('user_id')
         );
 

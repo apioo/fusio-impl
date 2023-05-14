@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Scope;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Create extends ActionAbstract
 {
     private Scope $scopeService;
 
-    public function __construct(Scope $scopeService)
+    public function __construct(RuntimeInterface $runtime, Scope $scopeService)
     {
+        parent::__construct($runtime);
+
         $this->scopeService = $scopeService;
     }
 

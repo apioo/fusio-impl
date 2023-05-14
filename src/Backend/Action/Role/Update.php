@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Role;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -40,8 +41,10 @@ class Update extends ActionAbstract
 {
     private Role $roleService;
 
-    public function __construct(Role $roleService)
+    public function __construct(RuntimeInterface $runtime, Role $roleService)
     {
+        parent::__construct($runtime);
+
         $this->roleService = $roleService;
     }
 

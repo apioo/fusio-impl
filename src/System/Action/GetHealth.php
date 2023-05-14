@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class GetHealth extends ActionAbstract
 {
     private Health $healthService;
 
-    public function __construct(Health $healthService)
+    public function __construct(RuntimeInterface $runtime, Health $healthService)
     {
+        parent::__construct($runtime);
+
         $this->healthService = $healthService;
     }
 

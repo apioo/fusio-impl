@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetIncomingRequests extends ActionAbstract
 {
-    private View\Statistic\IncomingRequests $table;
+    private View\Statistic\IncomingRequests $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Statistic\IncomingRequests $view)
     {
-        $this->table = $tableManager->getTable(View\Statistic\IncomingRequests::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getView(
+        return $this->view->getView(
             $context->getUser()->getCategoryId(),
             \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );

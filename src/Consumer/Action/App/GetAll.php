@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\App;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    private View\App $table;
+    private View\App $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\App $view)
     {
-        $this->table = $tableManager->getTable(View\App::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
+        return $this->view->getCollection(
             $context->getUser()->getId(),
             (int) $request->get('startIndex'),
             $request->get('search')

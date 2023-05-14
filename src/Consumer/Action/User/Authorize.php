@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Authorize extends ActionAbstract
 {
     private UserAuthorize $authorizeService;
 
-    public function __construct(UserAuthorize $authorizeService)
+    public function __construct(RuntimeInterface $runtime, UserAuthorize $authorizeService)
     {
+        parent::__construct($runtime);
+
         $this->authorizeService = $authorizeService;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Page;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,18 +39,20 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Page $table;
+    private View\Page $view;
     private ConfigInterface $config;
 
-    public function __construct(TableManagerInterface $tableManager, ConfigInterface $config)
+    public function __construct(RuntimeInterface $runtime, View\Page $view, ConfigInterface $config)
     {
-        $this->table = $tableManager->getTable(View\Page::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
         $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $entity = $this->table->getEntity(
+        $entity = $this->view->getEntity(
             $request->get('page_id')
         );
 

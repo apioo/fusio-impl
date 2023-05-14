@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Execute extends ActionAbstract
 {
     private UserResetPassword $resetService;
 
-    public function __construct(UserResetPassword $resetService)
+    public function __construct(RuntimeInterface $runtime, UserResetPassword $resetService)
     {
+        parent::__construct($runtime);
+
         $this->resetService = $resetService;
     }
 

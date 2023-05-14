@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Sdk;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class GetAll extends ActionAbstract
 {
     private Sdk $sdkService;
 
-    public function __construct(Sdk $sdkService)
+    public function __construct(RuntimeInterface $runtime, Sdk $sdkService)
     {
+        parent::__construct($runtime);
+
         $this->sdkService = $sdkService;
     }
 

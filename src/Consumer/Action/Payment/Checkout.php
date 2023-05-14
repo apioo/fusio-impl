@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Payment;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -40,8 +41,10 @@ class Checkout extends ActionAbstract
 {
     private Payment $paymentService;
 
-    public function __construct(Payment $paymentService)
+    public function __construct(RuntimeInterface $runtime, Payment $paymentService)
     {
+        parent::__construct($runtime);
+
         $this->paymentService = $paymentService;
     }
 

@@ -35,7 +35,7 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -44,22 +44,9 @@ class EntityTest extends ControllerDbTestCase
         $this->id = Fixture::getId('fusio_role', 'Consumer');
     }
 
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/role/' . $this->id, 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Trash;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -40,8 +41,10 @@ class Restore extends ActionAbstract
 {
     private Restorer $restorer;
 
-    public function __construct(Restorer $restorer)
+    public function __construct(RuntimeInterface $runtime, Restorer $restorer)
     {
+        parent::__construct($runtime);
+
         $this->restorer = $restorer;
     }
 

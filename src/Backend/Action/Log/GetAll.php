@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Log;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    private View\Log $table;
+    private View\Log $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Log $view)
     {
-        $this->table = $tableManager->getTable(View\Log::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
+        return $this->view->getCollection(
             $context->getUser()->getCategoryId(),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),

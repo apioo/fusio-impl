@@ -21,16 +21,16 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
-use PSX\Sql\TableManagerInterface;
-use Service\Schema\Loader;
 
 /**
  * GetSchema
@@ -41,18 +41,20 @@ use Service\Schema\Loader;
  */
 class GetSchema extends ActionAbstract
 {
-    private View\Schema $table;
+    private View\Schema $view;
     private Loader $loader;
 
-    public function __construct(TableManagerInterface $tableManager, Loader $loader)
+    public function __construct(RuntimeInterface $runtime, View\Schema $view, Loader $loader)
     {
-        $this->table = $tableManager->getTable(View\Schema::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
         $this->loader = $loader;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $schema = $this->table->getEntityWithForm(
+        $schema = $this->view->getEntityWithForm(
             $request->get('name')
         );
 

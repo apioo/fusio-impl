@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Event;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class Execute extends ActionAbstract
 {
     private Event\Executor $executor;
 
-    public function __construct(Event\Executor $executor)
+    public function __construct(RuntimeInterface $runtime, Event\Executor $executor)
     {
+        parent::__construct($runtime);
+
         $this->executor = $executor;
     }
 

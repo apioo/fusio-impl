@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Grant;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Delete extends ActionAbstract
 {
     private Grant $grantService;
 
-    public function __construct(Grant $grantService)
+    public function __construct(RuntimeInterface $runtime, Grant $grantService)
     {
+        parent::__construct($runtime);
+
         $this->grantService = $grantService;
     }
 

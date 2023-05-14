@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Rate;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Delete extends ActionAbstract
 {
     private Rate $rateService;
 
-    public function __construct(Rate $rateService)
+    public function __construct(RuntimeInterface $runtime, Rate $rateService)
     {
+        parent::__construct($runtime);
+
         $this->rateService = $rateService;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Log\Error;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,16 +39,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private \Fusio\Impl\Backend\Filter\Log\Error $table;
+    private View\Log\Error $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Log\Error $view)
     {
-        $this->table = $tableManager->getTable(\Fusio\Impl\Backend\Filter\Log\Error::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $error = $this->table->getEntity(
+        $error = $this->view->getEntity(
             (int) $request->get('error_id')
         );
 

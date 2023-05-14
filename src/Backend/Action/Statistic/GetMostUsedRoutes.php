@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetMostUsedRoutes extends ActionAbstract
 {
-    private View\Statistic\MostUsedRoutes $table;
+    private View\Statistic\MostUsedRoutes $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Statistic\MostUsedRoutes $view)
     {
-        $this->table = $tableManager->getTable(View\Statistic\MostUsedRoutes::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getView(
+        return $this->view->getView(
             $context->getUser()->getCategoryId(),
             \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
         );

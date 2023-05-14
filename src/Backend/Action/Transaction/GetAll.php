@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Transaction;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    private View\Transaction $table;
+    private View\Transaction $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Transaction $view)
     {
-        $this->table = $tableManager->getTable(View\Transaction::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
+        return $this->view->getCollection(
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
             \Fusio\Impl\Backend\Filter\Transaction\QueryFilter::create($request)

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Event\Subscription;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Create extends ActionAbstract
 {
     private Event\Subscription $subscriptionService;
 
-    public function __construct(Event\Subscription $subscriptionService)
+    public function __construct(RuntimeInterface $runtime, Event\Subscription $subscriptionService)
     {
+        parent::__construct($runtime);
+
         $this->subscriptionService = $subscriptionService;
     }
 

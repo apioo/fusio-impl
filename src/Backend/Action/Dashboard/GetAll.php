@@ -21,10 +21,12 @@
 
 namespace Fusio\Impl\Backend\Action\Dashboard;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter;
 use Fusio\Impl\Backend\View;
 use PSX\Sql\TableManagerInterface;
 
@@ -47,8 +49,10 @@ class GetAll extends ActionAbstract
     private View\Dashboard\LatestUsers $latestUsers;
     private View\Dashboard\LatestTransactions $latestTransactions;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
     {
+        parent::__construct($runtime);
+
         $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
         $this->incomingRequests = $tableManager->getTable(View\Statistic\IncomingRequests::class);
         $this->incomingTransactions = $tableManager->getTable(View\Statistic\IncomingTransactions::class);
@@ -62,8 +66,8 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $logFilter = \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request);
-        $transactionFilter = \Fusio\Impl\Backend\Filter\Transaction\QueryFilter::create($request);
+        $logFilter = Filter\Log\QueryFilter::create($request);
+        $transactionFilter = Filter\Transaction\QueryFilter::create($request);
 
         return [
             'errorsPerRoute' => $this->errorsPerRoute->getView($context->getUser()->getCategoryId(), $logFilter),

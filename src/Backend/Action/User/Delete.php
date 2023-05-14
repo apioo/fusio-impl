@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Delete extends ActionAbstract
 {
     private User $userService;
 
-    public function __construct(User $userService)
+    public function __construct(RuntimeInterface $runtime, User $userService)
     {
+        parent::__construct($runtime);
+
         $this->userService = $userService;
     }
 

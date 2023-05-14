@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Payment;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -42,8 +43,10 @@ class Portal extends ActionAbstract
     private Payment $transactionService;
     private ConfigInterface $config;
 
-    public function __construct(Payment $transactionService, ConfigInterface $config)
+    public function __construct(RuntimeInterface $runtime, Payment $transactionService, ConfigInterface $config)
     {
+        parent::__construct($runtime);
+
         $this->transactionService = $transactionService;
         $this->config = $config;
     }

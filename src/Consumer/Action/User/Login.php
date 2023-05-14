@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Login extends ActionAbstract
 {
     private UserLogin $loginService;
 
-    public function __construct(UserLogin $loginService)
+    public function __construct(RuntimeInterface $runtime, UserLogin $loginService)
     {
+        parent::__construct($runtime);
+
         $this->loginService = $loginService;
     }
 

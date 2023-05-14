@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Cronjob;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,16 +40,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Cronjob $table;
+    private View\Cronjob $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Cronjob $view)
     {
-        $this->table = $tableManager->getTable(View\Cronjob::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $cronjob = $this->table->getEntity(
+        $cronjob = $this->view->getEntity(
             $request->get('cronjob_id')
         );
 

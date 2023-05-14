@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Generator;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Generator\ProviderInterface;
@@ -42,8 +43,10 @@ class Index extends ActionAbstract
 {
     private GeneratorProvider $provider;
 
-    public function __construct(GeneratorProvider $provider)
+    public function __construct(RuntimeInterface $runtime, GeneratorProvider $provider)
     {
+        parent::__construct($runtime);
+
         $this->provider = $provider;
     }
 

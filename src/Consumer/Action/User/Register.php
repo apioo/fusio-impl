@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Register extends ActionAbstract
 {
     private UserRegister $registerService;
 
-    public function __construct(UserRegister $registerService)
+    public function __construct(RuntimeInterface $runtime, UserRegister $registerService)
     {
+        parent::__construct($runtime);
+
         $this->registerService = $registerService;
     }
 

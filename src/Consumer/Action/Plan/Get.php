@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Plan;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Plan $table;
+    private View\Plan $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Plan $view)
     {
-        $this->table = $tableManager->getTable(View\Plan::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getEntity(
+        return $this->view->getEntity(
             $context->getUser()->getId(),
             (int) $request->get('plan_id')
         );

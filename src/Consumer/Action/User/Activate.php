@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Activate extends ActionAbstract
 {
     private UserActivate $activateService;
 
-    public function __construct(UserActivate $activateService)
+    public function __construct(RuntimeInterface $runtime, UserActivate $activateService)
     {
+        parent::__construct($runtime);
+
         $this->activateService = $activateService;
     }
 

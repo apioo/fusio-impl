@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetUsedPoints extends ActionAbstract
 {
-    private View\Statistic\UsedPoints $table;
+    private View\Statistic\UsedPoints $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Statistic\UsedPoints $view)
     {
-        $this->table = $tableManager->getTable(View\Statistic\UsedPoints::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getView(
+        return $this->view->getView(
             \Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter::create($request)
         );
     }

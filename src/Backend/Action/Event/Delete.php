@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Event;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Delete extends ActionAbstract
 {
     private Event $eventService;
 
-    public function __construct(Event $eventService)
+    public function __construct(RuntimeInterface $runtime, Event $eventService)
     {
+        parent::__construct($runtime);
+
         $this->eventService = $eventService;
     }
 

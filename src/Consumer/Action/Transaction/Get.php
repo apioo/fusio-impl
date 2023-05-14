@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\Transaction;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,16 +38,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Transaction $table;
+    private View\Transaction $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Transaction $view)
     {
-        $this->table = $tableManager->getTable(View\Transaction::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getEntity(
+        return $this->view->getEntity(
             $context->getUser()->getId(),
             (int) $request->get('transaction_id')
         );

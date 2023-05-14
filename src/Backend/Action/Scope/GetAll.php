@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Scope;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -37,11 +38,13 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    private View\Scope $table;
+    private View\Scope $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Scope $view)
     {
-        $this->table = $tableManager->getTable(View\Scope::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -51,7 +54,7 @@ class GetAll extends ActionAbstract
             $categoryId = $context->getUser()->getCategoryId();
         }
 
-        return $this->table->getCollection(
+        return $this->view->getCollection(
             $categoryId,
             (int) $request->get('startIndex'),
             (int) $request->get('count'),

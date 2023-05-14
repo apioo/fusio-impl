@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,18 +42,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetApp extends ActionAbstract
 {
-    private View\App $table;
-    private ConfigInterface $config;
+    private View\App $view;
 
-    public function __construct(TableManagerInterface $tableManager, ConfigInterface $config)
+    public function __construct(RuntimeInterface $runtime, View\App $view)
     {
-        $this->table = $tableManager->getTable(View\App::class);
-        $this->config = $config;
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $app = $this->table->getEntityByAppKey(
+        $app = $this->view->getEntityByAppKey(
             $request->get('client_id'),
             $request->get('scope')
         );

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Page;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Create extends ActionAbstract
 {
     private Page $pageService;
 
-    public function __construct(Page $pageService)
+    public function __construct(RuntimeInterface $runtime, Page $pageService)
     {
+        parent::__construct($runtime);
+
         $this->pageService = $pageService;
     }
 

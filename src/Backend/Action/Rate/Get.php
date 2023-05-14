@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Rate;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,16 +40,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Rate $table;
+    private View\Rate $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Rate $view)
     {
-        $this->table = $tableManager->getTable(View\Rate::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $rate = $this->table->getEntity(
+        $rate = $this->view->getEntity(
             $request->get('rate_id')
         );
 

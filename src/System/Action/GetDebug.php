@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -43,8 +44,10 @@ class GetDebug extends ActionAbstract
     private View\User $table;
     private Config $config;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager, Config $config)
     {
+        parent::__construct($runtime);
+
         $this->table = $tableManager->getTable(View\User::class);
         $this->config = $config;
     }

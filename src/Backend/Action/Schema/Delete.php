@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Schema;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class Delete extends ActionAbstract
 {
     private Schema $schemaService;
 
-    public function __construct(Schema $schemaService)
+    public function __construct(RuntimeInterface $runtime, Schema $schemaService)
     {
+        parent::__construct($runtime);
+
         $this->schemaService = $schemaService;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Schema;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,16 +40,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Schema $table;
+    private View\Schema $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Schema $view)
     {
-        $this->table = $tableManager->getTable(View\Schema::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $schema = $this->table->getEntity(
+        $schema = $this->view->getEntity(
             $request->get('schema_id')
         );
 

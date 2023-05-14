@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\System\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class GetAllRoute extends ActionAbstract
 {
     private View\Operation $table;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
     {
+        parent::__construct($runtime);
+
         $this->table = $tableManager->getTable(View\Operation::class);
     }
 
