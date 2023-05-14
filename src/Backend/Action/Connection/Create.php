@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Create extends ActionAbstract
 {
     private Connection $connectionService;
 
-    public function __construct(Connection $connectionService)
+    public function __construct(RuntimeInterface $runtime, Connection $connectionService)
     {
+        parent::__construct($runtime);
+
         $this->connectionService = $connectionService;
     }
 

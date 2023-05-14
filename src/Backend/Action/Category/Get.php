@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Category;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,16 +40,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Category $table;
+    private View\Category $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Category $view)
     {
-        $this->table = $tableManager->getTable(View\Category::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $category = $this->table->getEntity(
+        $category = $this->view->getEntity(
             (int) $request->get('category_id')
         );
 

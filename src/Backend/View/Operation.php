@@ -22,10 +22,9 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -63,110 +62,60 @@ class Operation extends ViewAbstract
             $condition->like(Table\Generated\OperationTable::COLUMN_HTTP_PATH, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Operation::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Operation::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
-                'path' => Table\Generated\RoutesTable::COLUMN_PATH,
-                'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
-                'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
+            'entry' => $builder->doCollection([$this->getTable(Table\Operation::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
+                'active' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ACTIVE),
+                'public' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_PUBLIC),
+                'stability' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STABILITY),
+                'httpMethod' => Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
+                'httpPath' => Table\Generated\OperationTable::COLUMN_HTTP_PATH,
+                'name' => Table\Generated\OperationTable::COLUMN_NAME,
+                'action' => Table\Generated\OperationTable::COLUMN_ACTION,
+                'metadata' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
     {
         if (str_starts_with($id, '~')) {
-            $method = 'findOneByPath';
+            $method = 'findOneByName';
             $id = urldecode(substr($id, 1));
         } else {
             $method = 'find';
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Operation::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
-            'path' => Table\Generated\RoutesTable::COLUMN_PATH,
-            'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
-            'metadata' => $this->fieldJson(Table\Generated\RoutesTable::COLUMN_METADATA),
-            'scopes' => $this->doColumn([$this->getTable(Table\Scope\Operation::class), 'getScopeNamesForOperation'], [new Reference('id')], 'name'),
-            'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id'), null, null], [
-                'version' => Table\Generated\RoutesMethodTable::COLUMN_VERSION,
-                'status' => Table\Generated\RoutesMethodTable::COLUMN_STATUS,
-                'method' => Table\Generated\RoutesMethodTable::COLUMN_METHOD,
-                'active' => Table\Generated\RoutesMethodTable::COLUMN_ACTIVE,
-                'public' => Table\Generated\RoutesMethodTable::COLUMN_PUBLIC,
-                'description' => Table\Generated\RoutesMethodTable::COLUMN_DESCRIPTION,
-                'operationId' => Table\Generated\RoutesMethodTable::COLUMN_OPERATION_ID,
-                'parameters' => Table\Generated\RoutesMethodTable::COLUMN_PARAMETERS,
-                'request' => Table\Generated\RoutesMethodTable::COLUMN_REQUEST,
-                'responses' => $this->doCollection([$this->getTable(Table\Route\Response::class), 'getResponses'], [new Reference('id')], [
-                    'code' => Table\Generated\RoutesResponseTable::COLUMN_CODE,
-                    'response' => Table\Generated\RoutesResponseTable::COLUMN_RESPONSE,
-                ]),
-                'action' => 'action',
-                'costs' => 'costs',
-            ], null, function (array $result) {
-                $data = [];
-                foreach ($result as $row) {
-                    if (!isset($data[$row['version']])) {
-                        $data[$row['version']] = [
-                            'version' => (int) $row['version'],
-                            'status'  => (int) $row['status'],
-                            'methods' => new \stdClass(),
-                        ];
-                    }
+        $builder = new Builder($this->connection);
 
-                    $method = new \stdClass();
-                    $method->active = (bool) $row['active'];
-                    $method->public = (bool) $row['public'];
-
-                    if (!empty($row['description'])) {
-                        $method->description = $row['description'];
-                    }
-
-                    if (!empty($row['operationId'])) {
-                        $method->operationId = $row['operationId'];
-                    }
-
-                    if (!empty($row['parameters'])) {
-                        $method->parameters = $row['parameters'];
-                    }
-
-                    if (!empty($row['request'])) {
-                        $method->request = $row['request'];
-                    }
-
-                    if (!empty($row['responses'])) {
-                        $responses = [];
-                        foreach ($row['responses'] as $response) {
-                            $responses[$response['code']] = $response['response'];
-                        }
-                        $method->responses = $responses;
-                    }
-
-                    if (!empty($row['action'])) {
-                        $method->action = $row['action'];
-                    }
-
-                    if (!empty($row['costs'])) {
-                        $method->costs = (int) $row['costs'];
-                    }
-
-                    $data[$row['version']]['methods']->{$row['method']} = $method;
-                }
-
-                return array_values($data);
-            }),
+        $definition = $builder->doEntity([$this->getTable(Table\Operation::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
+            'active' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ACTIVE),
+            'public' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_PUBLIC),
+            'stability' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STABILITY),
+            'httpMethod' => Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
+            'httpPath' => Table\Generated\OperationTable::COLUMN_HTTP_PATH,
+            'name' => Table\Generated\OperationTable::COLUMN_NAME,
+            'parameters' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_PARAMETERS),
+            'incoming' => Table\Generated\OperationTable::COLUMN_INCOMING,
+            'outgoing' => Table\Generated\OperationTable::COLUMN_OUTGOING,
+            'throws' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_THROWS),
+            'action' => Table\Generated\OperationTable::COLUMN_ACTION,
+            'costs' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_COSTS),
+            'metadata' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getPublic(?string $category)
@@ -177,34 +126,35 @@ class Operation extends ViewAbstract
             $categoryId = 1;
         }
 
-        $builder = $this->connection->createQueryBuilder()
-            ->select(['route.path', 'method.method', 'method.action'])
-            ->from('fusio_routes', 'route')
-            ->innerJoin('route', 'fusio_routes_method', 'method', 'route.id = method.route_id')
-            ->where('(route.category_id = :category_id)')
-            ->orderBy('route.id', 'ASC')
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select(['operation.http_method', 'operation.http_path', 'operation.name'])
+            ->from('fusio_operation', 'operation')
+            ->where('(operation.category_id = :category_id)')
+            ->orderBy('operation.id', 'ASC')
             ->setParameter('category_id', $categoryId);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'routes' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
-                'path' => 'path',
-                'method' => 'method',
-                'action' => 'action',
+            'routes' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'path' => 'http_path',
+                'method' => 'http_method',
+                'operation' => 'name',
             ], null, function (array $result) {
                 $data = [];
 
                 foreach ($result as $row) {
-                    if (!isset($data[$row['path']])) {
-                        $data[$row['path']] = [];
+                    if (!isset($data[$row['http_path']])) {
+                        $data[$row['http_method']] = [];
                     }
 
-                    $data[$row['path']][$row['method']] = $row['action'];
+                    $data[$row['http_path']][$row['http_method']] = $row['name'];
                 }
 
                 return $data;
             }),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

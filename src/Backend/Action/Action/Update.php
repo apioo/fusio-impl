@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -40,8 +41,10 @@ class Update extends ActionAbstract
 {
     private Action $actionService;
 
-    public function __construct(Action $actionService)
+    public function __construct(RuntimeInterface $runtime, Action $actionService)
     {
+        parent::__construct($runtime);
+
         $this->actionService = $actionService;
     }
 

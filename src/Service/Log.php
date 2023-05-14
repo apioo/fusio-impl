@@ -71,8 +71,8 @@ class Log
         }
 
         $this->connection->insert(Table\Generated\LogTable::NAME, array(
-            Table\Generated\LogTable::COLUMN_CATEGORY_ID => $context->getCategoryId(),
-            Table\Generated\LogTable::COLUMN_ROUTE_ID => $context->getOperationId(),
+            Table\Generated\LogTable::COLUMN_CATEGORY_ID => $context->getOperation()->getCategoryId(),
+            Table\Generated\LogTable::COLUMN_OPERATION_ID => $context->getOperation()->getId(),
             Table\Generated\LogTable::COLUMN_APP_ID => $context->getAppId(),
             Table\Generated\LogTable::COLUMN_USER_ID => $context->getUserId(),
             Table\Generated\LogTable::COLUMN_IP => $remoteIp,

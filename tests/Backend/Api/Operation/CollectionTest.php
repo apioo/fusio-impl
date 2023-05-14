@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Route;
+namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -35,27 +34,14 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class CollectionTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/routes', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/routes', 'GET', array(
+        $response = $this->sendRequest('/backend/operation', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -63,27 +49,97 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 117,
+            "id": 178,
             "status": 1,
-            "path": "\/inspect\/:foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "DELETE",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.delete",
+            "action": ""
         },
         {
-            "id": 116,
+            "id": 177,
             "status": 1,
-            "path": "\/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PATCH",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.patch",
+            "action": ""
         },
         {
-            "id": 7,
+            "id": 176,
             "status": 1,
-            "path": "\/",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PUT",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.put",
+            "action": ""
+        },
+        {
+            "id": 175,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.post",
+            "action": ""
+        },
+        {
+            "id": 174,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.get",
+            "action": ""
+        },
+        {
+            "id": 173,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/foo",
+            "name": "test.createFoo",
+            "action": ""
+        },
+        {
+            "id": 172,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "name": "test.listFoo",
+            "action": ""
+        },
+        {
+            "id": 1,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/",
+            "name": "getAbout",
+            "action": "System_Action_GetAbout"
         }
     ]
 }
@@ -95,7 +151,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/backend/routes?search=inspec', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?search=inspec', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -103,15 +159,64 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 117,
+            "id": 178,
             "status": 1,
-            "path": "\/inspect\/:foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "DELETE",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.delete",
+            "action": ""
+        },
+        {
+            "id": 177,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PATCH",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.patch",
+            "action": ""
+        },
+        {
+            "id": 176,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PUT",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.put",
+            "action": ""
+        },
+        {
+            "id": 175,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.post",
+            "action": ""
+        },
+        {
+            "id": 174,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.get",
+            "action": ""
         }
     ]
 }
@@ -123,7 +228,7 @@ JSON;
 
     public function testGetCount()
     {
-        $response = $this->sendRequest('/backend/routes?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?count=80', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -167,7 +272,7 @@ JSON;
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/routes', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -249,7 +354,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/routes', 'PUT', array(
+        $response = $this->sendRequest('/backend/operation', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -263,7 +368,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/routes', 'DELETE', array(
+        $response = $this->sendRequest('/backend/operation', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

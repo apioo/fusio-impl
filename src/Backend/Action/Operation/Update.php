@@ -19,41 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route;
+namespace Fusio\Impl\Backend\Action\Operation;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Operation;
+use Fusio\Model\Backend\OperationUpdate;
 
 /**
- * Delete
+ * Update
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Delete extends ActionAbstract
+class Update extends ActionAbstract
 {
-    private Operation $routeService;
+    private Operation $operationService;
 
-    public function __construct(Operation $routeService)
+    public function __construct(RuntimeInterface $runtime, Operation $operationService)
     {
-        $this->routeService = $routeService;
+        parent::__construct($runtime);
+
+        $this->operationService = $operationService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->routeService->delete(
-            (int) $request->get('route_id'),
+        $body = $request->getPayload();
+
+        assert($body instanceof OperationUpdate);
+
+        $this->operationService->update(
+            (int) $request->get('operation_id'),
+            $body,
             UserContext::newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'Route successfully deleted',
+            'message' => 'Route successfully updated',
         ];
     }
 }

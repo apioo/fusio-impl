@@ -42,7 +42,7 @@ class Allocation extends Generated\RateAllocationTable
         $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
-    public function getRateForRequest(int $routeId, Model\AppInterface $app, Model\UserInterface $user)
+    public function getRateForRequest(Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
     {
         $sql = '    SELECT rate.rate_limit,
                            rate.timespan
@@ -50,7 +50,7 @@ class Allocation extends Generated\RateAllocationTable
                 INNER JOIN fusio_rate rate
                         ON rate_allocation.rate_id = rate.id 
                      WHERE rate.status = :status
-                       AND (rate_allocation.route_id IS NULL OR rate_allocation.route_id = :route_id)
+                       AND (rate_allocation.operation_id IS NULL OR rate_allocation.operation_id = :operation_id)
                        AND (rate_allocation.user_id IS NULL OR rate_allocation.user_id = :user_id)
                        AND (rate_allocation.plan_id IS NULL OR rate_allocation.plan_id = :plan_id)
                        AND (rate_allocation.app_id IS NULL OR rate_allocation.app_id = :app_id)
@@ -58,7 +58,7 @@ class Allocation extends Generated\RateAllocationTable
 
         $params = [
             'status' => Rate::STATUS_ACTIVE,
-            'route_id' => $routeId,
+            'operation_id' => $operation->getId(),
             'user_id' => $user->getId(),
             'plan_id' => $user->getPlanId(),
             'app_id' => $app->getId(),

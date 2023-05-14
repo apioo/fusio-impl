@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Framework\Filter\Filter;
-use Fusio\Impl\Table\Operation as TableRoutes;
+use Fusio\Impl\Framework\Api\Scanner\Filter;
+use Fusio\Impl\Table\Operation as TableOperation;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
 use PSX\Framework\Loader\RoutingParserInterface;
@@ -53,31 +53,29 @@ class DatabaseParser implements RoutingParserInterface
             return $this->collection[$key];
         }
 
-        $sql = 'SELECT routes.id,
-                       routes.category_id,
-                       routes.methods,
-                       routes.path,
-                       routes.controller
-                  FROM fusio_routes routes
-                 WHERE routes.status = :status';
+        $sql = 'SELECT operation.id,
+                       operation.http_method,
+                       operation.http_path
+                  FROM fusio_operation operation
+                 WHERE operation.status = :status';
 
-        $params = ['status' => TableRoutes::STATUS_ACTIVE];
+        $params = ['status' => TableOperation::STATUS_ACTIVE];
 
         if ($filter instanceof Filter) {
             $sql.= ' AND category_id = :category_id';
             $params['category_id'] = $filter->getId();
         }
 
-        $sql.= ' ORDER BY priority DESC';
+        $sql.= ' ORDER BY operation.id DESC';
 
         $collection = new RoutingCollection();
         $result = $this->connection->fetchAllAssociative($sql, $params);
 
         foreach ($result as $row) {
             $controller = 'operation:' . $row['id'];
-            $method = $row['category_id'];
+            $method = $row['id'];
 
-            $collection->add(explode('|', $row['methods']), $row['path'], [$controller, $method], $row['id'], $row['category_id']);
+            $collection->add([$row['http_method']], $row['http_path'], [$controller, $method]);
         }
 
         return $this->collection[$key] = $collection;

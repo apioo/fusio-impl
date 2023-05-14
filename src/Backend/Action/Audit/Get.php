@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Audit;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,16 +39,18 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Audit $table;
+    private View\Audit $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, View\Audit $view)
     {
-        $this->table = $tableManager->getTable(View\Audit::class);
+        parent::__construct($runtime);
+
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $audit = $this->table->getEntity(
+        $audit = $this->view->getEntity(
             (int) $request->get('audit_id')
         );
 

@@ -44,14 +44,14 @@ class PaymentWebhook extends ControllerAbstract
     private Payment $transactionService;
     private ResponseWriter $responseWriter;
     private Log $logService;
-    private Context $context;
+    private ContextFactory $contextFactory;
 
     public function __construct(ContextFactory $contextFactory, Payment $transactionService, ResponseWriter $responseWriter, Log $logService)
     {
         $this->transactionService = $transactionService;
         $this->responseWriter = $responseWriter;
         $this->logService = $logService;
-        $this->context = $contextFactory->factory();
+        $this->contextFactory = $contextFactory;
     }
 
     public function callback(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
@@ -60,17 +60,19 @@ class PaymentWebhook extends ControllerAbstract
             throw new MethodNotAllowedException('Provided request method not allowed', ['GET', 'POST']);
         }
 
+        $context = $this->contextFactory->getActive();
+
         $this->logService->log(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
             $request->getMethod(),
             $request->getRequestTarget(),
             $request->getHeader('User-Agent'),
-            $this->context,
+            $context,
             $request
         );
 
         try {
-            $this->transactionService->webhook($this->context->getParameter('provider'), $request);
+            $this->transactionService->webhook($context->getParameter('provider'), $request);
         } catch (\Throwable $e) {
             $this->logService->error($e);
 

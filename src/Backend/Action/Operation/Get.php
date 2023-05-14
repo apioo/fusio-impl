@@ -19,40 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route;
+namespace Fusio\Impl\Backend\Action\Operation;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
 
 /**
- * GetAll
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends ActionAbstract
+class Get extends ActionAbstract
 {
     private View\Operation $table;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
     {
+        parent::__construct($runtime);
+
         $this->table = $tableManager->getTable(View\Operation::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
-            $context->getUser()->getCategoryId(),
-            (int) $request->get('startIndex'),
-            (int) $request->get('count'),
-            $request->get('search'),
-            $request->get('sortBy'),
-            $request->get('sortOrder')
+        $route = $this->table->getEntity(
+            $request->get('operation_id')
         );
+
+        if (empty($route)) {
+            throw new StatusCode\NotFoundException('Could not find route');
+        }
+
+        if ($route['status'] == Table\Operation::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Route was deleted');
+        }
+
+        return $route;
     }
 }

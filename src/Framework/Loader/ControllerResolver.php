@@ -19,47 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route;
+namespace Fusio\Impl\Framework\Loader;
 
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Operation;
-use Fusio\Model\Backend\RouteUpdate;
+use Fusio\Impl\Controller\ActionController;
+use PSX\Framework\Loader\ControllerResolver as FrameworkControllerResolver;
+use PSX\Framework\Loader\ControllerResolverInterface;
 
 /**
- * Update
+ * ControllerResolver
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Update extends ActionAbstract
+class ControllerResolver implements ControllerResolverInterface
 {
-    private Operation $routeService;
+    private ActionController $controller;
+    private FrameworkControllerResolver $controllerResolver;
 
-    public function __construct(Operation $routeService)
+    public function __construct(ActionController $controller, FrameworkControllerResolver $controllerResolver)
     {
-        $this->routeService = $routeService;
+        $this->controller = $controller;
+        $this->controllerResolver = $controllerResolver;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function resolve(mixed $source): array
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof RouteUpdate);
-
-        $this->routeService->update(
-            (int) $request->get('route_id'),
-            $body,
-            UserContext::newActionContext($context)
-        );
-
-        return [
-            'success' => true,
-            'message' => 'Route successfully updated',
-        ];
+        if (str_starts_with($source[0], 'operation:')) {
+            return [$this->controller, 'execute'];
+        } else {
+            return $this->controllerResolver->resolve($source);
+        }
     }
 }

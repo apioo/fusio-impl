@@ -44,16 +44,16 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    private View\Connection $table;
+    private View\Connection $view;
     private ConfigInterface $config;
     private ConnectionProvider $connectionParser;
     private Token $tokenService;
 
-    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
+    public function __construct(RuntimeInterface $runtime, View\Connection $view, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
     {
         parent::__construct($runtime);
 
-        $this->table = $tableManager->getTable(View\Connection::class);
+        $this->view = $view;
         $this->config = $config;
         $this->connectionParser = $connectionParser;
         $this->tokenService = $tokenService;
@@ -61,7 +61,7 @@ class Get extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $connection = $this->table->getEntityWithConfig(
+        $connection = $this->view->getEntityWithConfig(
             $request->get('connection_id'),
             $this->config->get('fusio_project_key'),
             $this->connectionParser

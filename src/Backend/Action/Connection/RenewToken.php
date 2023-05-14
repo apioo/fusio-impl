@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class RenewToken extends ActionAbstract
 {
     private Token $tokenService;
 
-    public function __construct(Token $tokenService)
+    public function __construct(RuntimeInterface $runtime, Token $tokenService)
     {
+        parent::__construct($runtime);
+
         $this->tokenService = $tokenService;
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class Async extends ActionAbstract
 {
     private Consumer $consumer;
 
-    public function __construct(Consumer $consumer)
+    public function __construct(RuntimeInterface $runtime, Consumer $consumer)
     {
+        parent::__construct($runtime);
+
         $this->consumer = $consumer;
     }
 

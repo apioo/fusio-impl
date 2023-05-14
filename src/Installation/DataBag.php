@@ -98,6 +98,11 @@ class DataBag
                 $operationName = $name;
             }
 
+            $actionName = $this->getActionName($operation->action);
+            if (!$this->hasId('fusio_action', $actionName)) {
+                $this->addAction($category, $actionName, $operation->action);
+            }
+
             $this->addOperation(
                 $category,
                 $operationName,
@@ -107,7 +112,7 @@ class DataBag
                 isset($operation->incoming) ? $this->getSchemaName($operation->incoming) : null,
                 isset($operation->outgoing) ? $this->getSchemaName($operation->outgoing) : null,
                 $this->normalizeThrows($operation->throws),
-                $this->getActionName($operation->action)
+                $actionName
             );
 
             if (in_array($category, ['backend', 'consumer'])) {
@@ -605,8 +610,8 @@ class DataBag
     private function getActionName(string $class): string
     {
         $parts = explode('\\', $class);
-        array_shift($parts);
-        array_shift($parts);
+        array_shift($parts); // Fusio
+        array_shift($parts); // Impl
         return implode('_', $parts);
     }
 

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Table;
+use PSX\Api\OperationInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -50,7 +51,7 @@ class AssertOperation implements FilterInterface
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $context     = $this->contextFactory->getActive();
-        $operationId = $context->getOperationId();
+        $operationId = $context->getSource()[1] ?? null;
         $methodName  = $request->getMethod();
 
         if ($methodName === 'HEAD') {
@@ -70,7 +71,11 @@ class AssertOperation implements FilterInterface
         $request->setHeader('X-Request-Id', Uuid::pseudoRandom());
         $request->setHeader('X-Operation-Id', $operation->getName());
         $request->setHeader('X-Stability', match ($operation->getStability()) {
-            1 => '',
+            OperationInterface::STABILITY_DEPRECATED => 'deprecated',
+            OperationInterface::STABILITY_EXPERIMENTAL => 'experimental',
+            OperationInterface::STABILITY_STABLE => 'stable',
+            OperationInterface::STABILITY_LEGACY => 'legacy',
+            default => 'unknown',
         });
         $request->setHeader('X-Powered-By', 'Fusio');
 

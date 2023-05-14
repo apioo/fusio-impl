@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\App;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,8 +40,10 @@ class DeleteToken extends ActionAbstract
 {
     private App\Token $tokenService;
 
-    public function __construct(App\Token $tokenService)
+    public function __construct(RuntimeInterface $runtime, App\Token $tokenService)
     {
+        parent::__construct($runtime);
+
         $this->tokenService = $tokenService;
     }
 

@@ -48,7 +48,7 @@ class RequestLimit
     {
         $success = $this->rateService->assertLimit(
             $this->remoteIp,
-            $context->getOperationId(),
+            $context->getOperation(),
             $context->getApp(),
             $context->getUser(),
         );

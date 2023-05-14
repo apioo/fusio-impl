@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -38,8 +39,10 @@ class GetIndex extends ActionAbstract
 {
     private ConnectionProvider $connectionParser;
 
-    public function __construct(ConnectionProvider $connectionParser)
+    public function __construct(RuntimeInterface $runtime, ConnectionProvider $connectionParser)
     {
+        parent::__construct($runtime);
+
         $this->connectionParser = $connectionParser;
     }
 

@@ -26,7 +26,6 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
@@ -52,12 +51,12 @@ class Invoker
 
     public function invoke(RequestInterface $request, Context $context): mixed
     {
-        $method = $context->getOperation();
-        $action = $method['action'];
-        $costs  = (int) $method['costs'];
+        $operation = $context->getOperation();
+        $action = $operation->getAction();
+        $costs = $operation->getCosts();
 
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context = new EngineContext($method['route_id'], $baseUrl, $context->getApp(), $context->getUser());
+        $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser());
 
         if ($costs > 0) {
             // as anonymous user it is not possible to pay

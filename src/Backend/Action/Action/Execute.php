@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Execute extends ActionAbstract
 {
     private Action\Executor $actionExecutorService;
 
-    public function __construct(Action\Executor $actionExecutorService)
+    public function __construct(RuntimeInterface $runtime, Action\Executor $actionExecutorService)
     {
+        parent::__construct($runtime);
+
         $this->actionExecutorService = $actionExecutorService;
     }
 

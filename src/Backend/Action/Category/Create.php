@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Category;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -41,8 +42,10 @@ class Create extends ActionAbstract
 {
     private Category $categoryService;
 
-    public function __construct(Category $categoryService)
+    public function __construct(RuntimeInterface $runtime, Category $categoryService)
     {
+        parent::__construct($runtime);
+
         $this->categoryService = $categoryService;
     }
 

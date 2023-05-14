@@ -19,47 +19,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route;
+namespace Fusio\Impl\Backend\Action\Operation;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Operation;
+use Fusio\Model\Backend\OperationCreate;
+use PSX\Http\Environment\HttpResponse;
 
 /**
- * Get
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Get extends ActionAbstract
+class Create extends ActionAbstract
 {
-    private View\Operation $table;
+    private Operation $operationService;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, Operation $operationService)
     {
-        $this->table = $tableManager->getTable(View\Operation::class);
+        parent::__construct($runtime);
+
+        $this->operationService = $operationService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $route = $this->table->getEntity(
-            $request->get('route_id')
+        $body = $request->getPayload();
+
+        assert($body instanceof OperationCreate);
+
+        $this->operationService->create(
+            $context->getUser()->getCategoryId(),
+            $body,
+            UserContext::newActionContext($context)
         );
 
-        if (empty($route)) {
-            throw new StatusCode\NotFoundException('Could not find route');
-        }
-
-        if ($route['status'] == Table\Operation::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Route was deleted');
-        }
-
-        return $route;
+        return new HttpResponse(201, [], [
+            'success' => true,
+            'message' => 'Route successfully created',
+        ]);
     }
 }

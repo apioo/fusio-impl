@@ -160,9 +160,9 @@ class Rate
         return $rateId;
     }
 
-    public function assertLimit(string $ip, int $routeId, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
+    public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
     {
-        $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app, $user);
+        $rate = $this->rateAllocationTable->getRateForRequest($operation, $app, $user);
         if (empty($rate)) {
             return false;
         }

@@ -19,42 +19,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection;
+namespace Fusio\Impl\Backend\Action\Operation;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Operation;
 
 /**
- * GetAll
+ * Delete
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends ActionAbstract
+class Delete extends ActionAbstract
 {
-    private View\Connection $table;
+    private Operation $operationService;
 
-    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
+    public function __construct(RuntimeInterface $runtime, Operation $operationService)
     {
         parent::__construct($runtime);
 
-        $this->table = $tableManager->getTable(View\Connection::class);
+        $this->operationService = $operationService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getCollection(
-            (int) $request->get('startIndex'),
-            (int) $request->get('count'),
-            $request->get('search'),
-            $request->get('sortBy'),
-            $request->get('sortOrder')
+        $this->operationService->delete(
+            (int) $request->get('operation_id'),
+            UserContext::newActionContext($context)
         );
+
+        return [
+            'success' => true,
+            'message' => 'Route successfully deleted',
+        ];
     }
 }

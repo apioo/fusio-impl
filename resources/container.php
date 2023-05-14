@@ -20,7 +20,7 @@ use Fusio\Impl\Framework\Api\Scanner\FilterFactory;
 use Fusio\Impl\Framework\Filter\ActionExecutorFactory;
 use Fusio\Impl\Framework\Filter\CompositeExecutorFactory;
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
+use Fusio\Impl\Framework\Loader\ControllerResolver;
 use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
 use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
@@ -37,7 +37,7 @@ use PSX\Api\Scanner\FilterFactoryInterface;
 use PSX\Framework\Controller\ControllerInterface;
 use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
-use PSX\Framework\Loader\LocationFinderInterface;
+use PSX\Framework\Loader\ControllerResolverInterface;
 use PSX\Framework\Loader\RoutingParser\CachedParser;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
@@ -161,9 +161,6 @@ return static function (ContainerConfigurator $container) {
         ]);
     $services->alias(RoutingParserInterface::class, CachedParser::class);
 
-    //$services->set(DatabaseFinder::class);
-    //$services->alias(LocationFinderInterface::class, DatabaseFinder::class);
-
     $services->set(DatabaseSchema::class);
     $services->alias(ParserInterface::class, DatabaseSchema::class);
 
@@ -176,6 +173,9 @@ return static function (ContainerConfigurator $container) {
     $services->set(ActionExecutorFactory::class);
     $services->set(CompositeExecutorFactory::class);
     $services->alias(ControllerExecutorFactoryInterface::class, CompositeExecutorFactory::class);
+
+    $services->set(ControllerResolver::class);
+    $services->alias(ControllerResolverInterface::class, ControllerResolver::class);
 
     $services->set(FilterFactory::class);
     $services->alias(FilterFactoryInterface::class, FilterFactory::class);

@@ -58,8 +58,7 @@ class TokenValidator
         if ($requestMethod === 'OPTIONS') {
             $needsAuth = false;
         } else {
-            $method = $context->getOperation();
-            $needsAuth = !$method['public'];
+            $needsAuth = $context->getOperation()->getPublic() !== 1;
         }
 
         $requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
@@ -76,9 +75,9 @@ class TokenValidator
                 'realm' => 'Fusio',
             );
 
-            if ($type == 'Bearer' && !empty($accessToken)) {
+            if ($type === 'Bearer' && !empty($accessToken)) {
                 try {
-                    $token = $this->getToken($accessToken, $context->getOperationId(), $requestMethod);
+                    $token = $this->getToken($accessToken, $context->getOperation()->getId(), $requestMethod);
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }
@@ -114,11 +113,11 @@ class TokenValidator
         return true;
     }
 
-    private function getToken(string $token, int $routeId, string $requestMethod): ?Model\Token
+    private function getToken(string $token, int $operationId, string $requestMethod): ?Model\Token
     {
         // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
         if (strpos($token, '.') !== false) {
-            JWT::decode($token, $this->projectKey, ['HS256']);
+            JWT::decode($token, $this->projectKey);
         }
 
         $now = new \DateTime();
@@ -152,14 +151,14 @@ class TokenValidator
 
         // get all scopes which are assigned to this route
         $sql = '    SELECT scope.name,
-                           scope_routes.allow,
-                           scope_routes.methods
-                      FROM fusio_scope_routes scope_routes
+                           scope_operation.allow,
+                           scope_operation.methods
+                      FROM fusio_scope_operation scope_operation
                 INNER JOIN fusio_scope scope
-                        ON scope.id = scope_routes.scope_id
-                     WHERE scope_routes.route_id = :route';
+                        ON scope.id = scope_operation.scope_id
+                     WHERE scope_operation.operation_id = :operation';
 
-        $availableScopes = $this->connection->fetchAllAssociative($sql, array('route' => $routeId));
+        $availableScopes = $this->connection->fetchAllAssociative($sql, array('operation' => $operationId));
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request
@@ -191,9 +190,6 @@ class TokenValidator
     /**
      * If the user has as entitled scope a global scope like backend or consumer he has the right to access every sub
      * scope, so we add them to the entitled scopes
-     * 
-     * @param array $entitledScopes
-     * @return array
      */
     private function substituteGlobalScopes(array $entitledScopes): array
     {

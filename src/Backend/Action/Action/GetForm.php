@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\Container;
@@ -39,8 +40,10 @@ class GetForm extends ActionAbstract
 {
     private ActionProvider $actionParser;
 
-    public function __construct(ActionProvider $actionParser)
+    public function __construct(RuntimeInterface $runtime, ActionProvider $actionParser)
     {
+        parent::__construct($runtime);
+
         $this->actionParser = $actionParser;
     }
 

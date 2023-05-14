@@ -19,13 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Route;
+namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -44,30 +43,17 @@ class EntityTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getId('fusio_routes', '/foo');
+        $this->id = Fixture::getId('fusio_operation', 'test.listFoo');
     }
 
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/routes/' . $this->id, 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -119,7 +105,7 @@ JSON;
 
     public function testGetByName()
     {
-        $response = $this->sendRequest('/backend/routes/~' . urlencode('/foo'), 'GET', array(
+        $response = $this->sendRequest('/backend/operation/~' . urlencode('test.listFoo'), 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -173,7 +159,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/routes/1000', 'GET', array(
+        $response = $this->sendRequest('/backend/operation/1000', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -193,7 +179,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -211,7 +197,7 @@ JSON;
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -249,7 +235,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successfully updated"
+    "message": "Operation successfully updated"
 }
 JSON;
 
@@ -292,7 +278,7 @@ JSON;
 
     public function testPutDeploy()
     {
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -307,7 +293,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successfully updated"
+    "message": "Operation successfully updated"
 }
 JSON;
 
@@ -350,7 +336,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -359,7 +345,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successfully deleted"
+    "message": "Operation successfully deleted"
 }
 JSON;
 
@@ -369,7 +355,7 @@ JSON;
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
-            ->from('fusio_routes')
+            ->from('fusio_operation')
             ->where('id = ' . $this->id)
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -379,23 +365,5 @@ JSON;
 
         $this->assertEquals($this->id, $row['id']);
         $this->assertEquals(TableRoutes::STATUS_DELETED, $row['status']);
-    }
-
-    public function testDeleteUsedMethods()
-    {
-        // mark methods as closed so that we can delete them
-        $this->connection->executeUpdate('UPDATE fusio_routes_method SET status = :status WHERE route_id = :route_id', [
-            'status'   => Resource::STATUS_ACTIVE,
-            'route_id' => $this->id,
-        ]);
-
-        $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(409, $response->getStatusCode(), $body);
     }
 }

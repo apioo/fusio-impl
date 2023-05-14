@@ -19,48 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Route;
+namespace Fusio\Impl\Backend\Action\Operation;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Operation;
-use Fusio\Model\Backend\RouteCreate;
-use PSX\Http\Environment\HttpResponse;
+use Fusio\Impl\Backend\View;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Create
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Create extends ActionAbstract
+class GetAll extends ActionAbstract
 {
-    private Operation $routeService;
+    private View\Operation $table;
 
-    public function __construct(Operation $routeService)
+    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
     {
-        $this->routeService = $routeService;
+        parent::__construct($runtime);
+
+        $this->table = $tableManager->getTable(View\Operation::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof RouteCreate);
-
-        $this->routeService->create(
+        return $this->table->getCollection(
             $context->getUser()->getCategoryId(),
-            $body,
-            UserContext::newActionContext($context)
+            (int) $request->get('startIndex'),
+            (int) $request->get('count'),
+            $request->get('search'),
+            $request->get('sortBy'),
+            $request->get('sortOrder')
         );
-
-        return new HttpResponse(201, [], [
-            'success' => true,
-            'message' => 'Route successfully created',
-        ]);
     }
 }
