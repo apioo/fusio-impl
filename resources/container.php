@@ -23,6 +23,7 @@ use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Framework\Loader\ControllerResolver;
 use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
 use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
+use Fusio\Impl\Framework\Schema\Parser\Resolver as FusioResolver;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Provider\ActionProvider;
@@ -41,6 +42,8 @@ use PSX\Framework\Loader\ControllerResolverInterface;
 use PSX\Framework\Loader\RoutingParser\CachedParser;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
+use PSX\Schema\Parser\TypeSchema\ImportResolver;
+use PSX\Schema\Parser\TypeSchema\Resolver as TypeSchemaResolver;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -116,30 +119,22 @@ return static function (ContainerConfigurator $container) {
     $services->alias(RuntimeInterface::class, Action\Runtime::class);
 
     // impl
-    $services->load('Fusio\\Impl\\Backend\\Action\\', __DIR__ . '/../src/Backend/Action')
-        ->public();
-
-    $services->load('Fusio\\Impl\\Backend\\View\\', __DIR__ . '/../src/Backend/View')
-        ->public();
-
-    $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action')
-        ->public();
-
-    $services->load('Fusio\\Impl\\Consumer\\View\\', __DIR__ . '/../src/Consumer/View')
-        ->public();
-
+    $services->load('Fusio\\Impl\\Backend\\Action\\', __DIR__ . '/../src/Backend/Action');
+    $services->load('Fusio\\Impl\\Backend\\View\\', __DIR__ . '/../src/Backend/View');
+    $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action');
+    $services->load('Fusio\\Impl\\Consumer\\View\\', __DIR__ . '/../src/Consumer/View');
+    $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action');
+    $services->load('Fusio\\Impl\\System\\Action\\', __DIR__ . '/../src/System/Action');
     $services->load('Fusio\\Impl\\Service\\', __DIR__ . '/../src/Service')
         ->public();
-
     $services->load('Fusio\\Impl\\Controller\\', __DIR__ . '/../src/Controller')
         ->public();
-
     $services->load('Fusio\\Impl\\Table\\', __DIR__ . '/../src/Table')
         ->exclude('Generated')
         ->public();
-
     $services->load('Fusio\\Impl\\Mail\\Sender\\', __DIR__ . '/../src/Mail/Sender');
     $services->load('Fusio\\Impl\\Webhook\\Sender\\', __DIR__ . '/../src/Webhook/Sender');
+    $services->load('Fusio\\Impl\\Connection\\', __DIR__ . '/../src/Connection');
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);
@@ -179,6 +174,17 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(FilterFactory::class);
     $services->alias(FilterFactoryInterface::class, FilterFactory::class);
+
+    $services->set(TypeSchemaResolver\File::class);
+    $services->set(TypeSchemaResolver\Http::class);
+    $services->set(TypeSchemaResolver\TypeHub::class);
+    $services->set(FusioResolver\Database::class);
+    $services->set(ImportResolver::class)
+        ->call('addResolver', ['file', service(TypeSchemaResolver\File::class)])
+        ->call('addResolver', ['http', service(TypeSchemaResolver\Http::class)])
+        ->call('addResolver', ['https', service(TypeSchemaResolver\Http::class)])
+        ->call('addResolver', ['typehub', service(TypeSchemaResolver\TypeHub::class)])
+        ->call('addResolver', ['schema', service(FusioResolver\Database::class)]);
 
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();

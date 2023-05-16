@@ -119,13 +119,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'type', 'name', 'description', 'value')
             ->from('fusio_config')
             ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 3]);
+        $row = $this->connection->fetchAssoc($sql, ['id' => 3]);
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['type']);

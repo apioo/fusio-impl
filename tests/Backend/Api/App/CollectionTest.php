@@ -27,6 +27,7 @@ use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * CollectionTest
@@ -223,7 +224,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters', 'metadata')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
@@ -231,7 +232,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(0, $row['status']);
@@ -241,7 +242,7 @@ JSON;
         $this->assertEquals('', $row['parameters']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(6);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -273,7 +274,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
@@ -281,7 +282,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(0, $row['status']);
@@ -290,7 +291,7 @@ JSON;
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('foo=bar&bar=1', $row['parameters']);
 
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(6);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -307,7 +308,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -321,6 +322,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

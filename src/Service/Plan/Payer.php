@@ -22,8 +22,10 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\DateTime\LocalDateTime;
 
 /**
  * Payer
@@ -57,15 +59,13 @@ class Payer
         $this->userTable->payPoints($context->getUser()->getId(), $points);
 
         // add usage entry
-        $record = new Table\Generated\PlanUsageRow([
-            Table\Generated\PlanUsageTable::COLUMN_ROUTE_ID => $context->getRouteId(),
-            Table\Generated\PlanUsageTable::COLUMN_USER_ID => $context->getUser()->getId(),
-            Table\Generated\PlanUsageTable::COLUMN_APP_ID => $context->getApp()->getId(),
-            Table\Generated\PlanUsageTable::COLUMN_POINTS => $points,
-            Table\Generated\PlanUsageTable::COLUMN_INSERT_DATE => new \DateTime(),
-        ]);
-
-        $this->usageTable->create($record);
+        $row = new Table\Generated\PlanUsageRow();
+        $row->setOperationId($context->getRouteId());
+        $row->setUserId($context->getUser()->getId());
+        $row->setAppId($context->getApp()->getId());
+        $row->setPoints($points);
+        $row->setInsertDate(LocalDateTime::now());
+        $this->usageTable->create($row);
 
         // send mail in case the points crossed a specific threshold
         $threshold = $this->configService->getValue('points_threshold');

@@ -48,7 +48,7 @@ class ExecuteTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -67,24 +67,17 @@ class ExecuteTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "body": {
-        "body": {},
-        "class": "Fusio\\Engine\\Request\\HttpRequest",
-        "headers": {
-            "content-type": [
-                "application/json"
-            ]
-        },
-        "method": "GET",
-        "parameters": {
-            "count": "10"
-        },
-        "uriFragments": {
-            "news_id": "10"
-        }
-    },
+    "statusCode": 200,
     "headers": {},
-    "statusCode": 200
+    "body": {
+        "class": "Fusio\\Engine\\Request",
+        "arguments": {
+            "count": "10",
+            "news_id": "10"
+        },
+        "payload": {},
+        "context": "Fusio\\Engine\\Request\\HttpRequest"
+    }
 }
 JSON;
 
@@ -103,7 +96,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -117,6 +110,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

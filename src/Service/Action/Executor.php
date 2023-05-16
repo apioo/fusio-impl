@@ -65,14 +65,18 @@ class Executor
         $parameters   = $this->parseQueryString($request->getParameters());
         $headers      = $this->parseQueryString($request->getHeaders());
 
-        $uri = new Uri('/');
+        $uri = Uri::parse('/');
         $uri = $uri->withParameters($parameters);
 
         $httpRequest = new HttpRequest($uri, $request->getMethod() ?? 'GET', $headers);
         $httpContext = new HttpContext($httpRequest, $uriFragments);
 
+        $arguments = [];
+        $arguments = array_merge($arguments, $parameters);
+        $arguments = array_merge($arguments, $uriFragments);
+
+        $request = new Request($arguments, $body, new Request\HttpRequest($httpContext));
         $context = new Context(0, '/', $app, $user);
-        $request = new Request\HttpRequest($httpContext, $body);
 
         return $this->processor->execute($actionId, $request, $context);
     }

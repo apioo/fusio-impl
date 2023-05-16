@@ -116,7 +116,7 @@ JSON;
         // check routes
         foreach ($data->routes as $route) {
             $path = '/provider' . $route->path;
-            Assert::assertRoute($path, ['foo', 'bar', 'provider'], $this->convertConfig($route->config, $data, $path));
+            Assert::assertOperation($path, ['foo', 'bar', 'provider'], $this->convertConfig($route->config, $data, $path));
         }
     }
 
@@ -165,7 +165,7 @@ JSON;
         // check routes
         foreach ($data->routes as $route) {
             $path = '/provider' . $route->path;
-            Assert::assertRoute($path, ['provider'], $this->convertConfig($route->config, $data, $path));
+            Assert::assertOperation($path, ['provider'], $this->convertConfig($route->config, $data, $path));
         }
     }
 

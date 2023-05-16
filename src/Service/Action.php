@@ -108,7 +108,7 @@ class Action
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($action->getName());
             $row->setClass($class);
-            $row->setAsync($action->getAsync());
+            $row->setAsync($action->getAsync() ?? false);
             $row->setEngine($engine);
             $row->setConfig(self::serializeConfig($config));
             $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
@@ -172,7 +172,7 @@ class Action
         // update action
         $existing->setName($name);
         $existing->setClass($class);
-        $existing->setAsync($action->getAsync());
+        $existing->setAsync($action->getAsync() ?? false);
         $existing->setEngine($engine);
         $existing->setConfig(self::serializeConfig($config));
         $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);

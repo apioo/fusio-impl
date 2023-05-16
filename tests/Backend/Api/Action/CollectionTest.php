@@ -113,13 +113,13 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 178,
+            "id": 174,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 177,
+            "id": 173,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
@@ -185,24 +185,16 @@ JSON;
 
     public function testGetUnauthorized()
     {
-        Environment::getService('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/action', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Missing authorization header"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(false, $data->success, $body);
+        $this->assertStringStartsWith('Missing authorization header', $data->message, $body);
     }
 
     public function testPost()
@@ -243,7 +235,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Foo', UtilStaticResponse::class, json_encode(array_filter($config)), $metadata);
+        Assert::assertAction($this->connection, 'Foo', UtilStaticResponse::class, json_encode(array_filter($config)), $metadata);
     }
 
     public function testPut()
@@ -257,7 +249,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -271,6 +263,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

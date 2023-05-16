@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
+use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Impl\Service\Connection;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -87,24 +88,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/connection/10', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find connection"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find connection', $data->message);
     }
 
     public function testPost()
@@ -118,22 +112,13 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
     {
-        $connection = Environment::getConfig()->get('psx_connection');
-        if (!isset($connection['host'])) {
-            $this->markTestSkipped('Host not available in config');
-        }
-
         $config = [
-            'type'     => $connection['driver'],
-            'host'     => $connection['host'],
-            'username' => $connection['user'],
-            'password' => $connection['password'],
-            'database' => $connection['dbname'],
+            'url' => Environment::getConfig('psx_connection'),
         ];
 
         $metadata = [
@@ -145,7 +130,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'     => 'Foo',
-            'class'    => 'Fusio\Adapter\Sql\Connection\Sql',
+            'class'    => SqlAdvanced::class,
             'config'   => $config,
             'metadata' => $metadata,
         ]));
@@ -162,7 +147,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'name', 'class', 'config', 'metadata')
             ->from('fusio_connection')
             ->where('id = 1')
@@ -170,13 +155,13 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['id']);
         $this->assertNotEmpty($row['config']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $projectKey = Environment::getService('config')->get('fusio_project_key');
+        $projectKey = Environment::getConfig('fusio_project_key');
         $newConfig  = Connection\Encrypter::decrypt($row['config'], $projectKey);
 
         $this->assertEquals($config, $newConfig);
@@ -206,7 +191,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_connection')
             ->where('id = 1')
@@ -214,7 +199,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['id']);
         $this->assertEquals(0, $row['status']);

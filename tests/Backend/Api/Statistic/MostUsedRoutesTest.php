@@ -117,7 +117,7 @@ class MostUsedRoutesTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/foo"
+        "test.listFoo"
     ]
 }
 JSON;

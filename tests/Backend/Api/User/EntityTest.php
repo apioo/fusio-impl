@@ -71,6 +71,9 @@ class EntityTest extends ControllerDbTestCase
     "name": "Consumer",
     "email": "consumer@localhost.com",
     "points": 100,
+    "metadata": {
+        "foo": "bar"
+    },
     "scopes": [
         "consumer",
         "consumer.app",
@@ -83,7 +86,7 @@ class EntityTest extends ControllerDbTestCase
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.user",
+        "consumer.account",
         "authorization",
         "foo",
         "bar"
@@ -114,9 +117,6 @@ class EntityTest extends ControllerDbTestCase
             "date": "[datetime]"
         }
     ],
-    "metadata": {
-        "foo": "bar"
-    },
     "date": "[datetime]"
 }
 JSON;
@@ -127,24 +127,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/user/10', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find user"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find user', $data->message);
     }
 
     public function testPost()
@@ -158,7 +151,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -192,13 +185,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'role_id', 'plan_id', 'status', 'name', 'email', 'metadata')
             ->from('fusio_user')
             ->where('id = ' . $this->id)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(2, $row['role_id']);
         $this->assertEquals(2, $row['plan_id']);
@@ -207,14 +200,14 @@ JSON;
         $this->assertEquals('bar@bar.com', $row['email']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('user_id', 'scope_id')
             ->from('fusio_user_scope')
             ->where('user_id = :user_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
+        $scopes = $this->connection->fetchAllAssociative($sql, ['user_id' => $this->id]);
 
         $this->assertEquals(1, count($scopes));
         $this->assertEquals(2, $scopes[0]['user_id']);
@@ -240,13 +233,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_user')
             ->where('id = ' . $this->id)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(User::STATUS_DELETED, $row['status']);
     }

@@ -42,7 +42,7 @@ class GenerateTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $sdkDir = Environment::getConfig()->get('psx_path_public') . '/sdk';
+        $sdkDir = Environment::getConfig('psx_path_public') . '/sdk';
         if (is_dir($sdkDir) && count(scandir($sdkDir)) > 2) {
             $this->markTestSkipped('The SDK folder already contains a release');
         }

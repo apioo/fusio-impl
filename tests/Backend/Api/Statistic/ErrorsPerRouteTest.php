@@ -117,7 +117,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/foo"
+        "test.listFoo"
     ]
 }
 JSON;

@@ -243,7 +243,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertRoute('/foo', ['foo', 'baz'], [[
+        Assert::assertOperation('/foo', ['foo', 'baz'], [[
             'method'       => 'GET',
             'version'      => 1,
             'status'       => 4,
@@ -301,7 +301,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertRoute('/foo', ['bar'], [[
+        Assert::assertOperation('/foo', ['bar'], [[
             'method'       => 'GET',
             'version'      => 1,
             'status'       => 1,
@@ -353,7 +353,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_operation')
             ->where('id = ' . $this->id)
@@ -361,7 +361,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssoc($sql);
 
         $this->assertEquals($this->id, $row['id']);
         $this->assertEquals(TableRoutes::STATUS_DELETED, $row['status']);

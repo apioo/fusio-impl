@@ -194,10 +194,10 @@ class App
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
-                $this->appScopeTable->create(new Table\Generated\AppScopeRow([
-                    Table\Generated\AppScopeTable::COLUMN_APP_ID => $appId,
-                    Table\Generated\AppScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-                ]));
+                $row = new Table\Generated\AppScopeRow();
+                $row->setAppId($appId);
+                $row->setScopeId($scope->getId());
+                $this->appScopeTable->create($row);
             }
         }
     }

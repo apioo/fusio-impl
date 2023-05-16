@@ -196,10 +196,10 @@ class Restorer
                 Table\Generated\RoleTable::COLUMN_STATUS,
                 Table\Role::STATUS_ACTIVE,
             ],
-            'routes' => [
-                Table\Generated\RoutesTable::NAME,
-                Table\Generated\RoutesTable::COLUMN_PATH,
-                Table\Generated\RoutesTable::COLUMN_STATUS,
+            'operation' => [
+                Table\Generated\OperationTable::NAME,
+                Table\Generated\OperationTable::COLUMN_NAME,
+                Table\Generated\OperationTable::COLUMN_STATUS,
                 Table\Operation::STATUS_ACTIVE,
             ],
             'schema' => [

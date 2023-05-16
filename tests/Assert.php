@@ -35,11 +35,8 @@ use PSX\Framework\Test\Environment;
  */
 class Assert extends \PHPUnit\Framework\Assert
 {
-    public static function assertAction(string $expectName, string $expectClass, string $expectConfig, ?array $expectMetadata = null)
+    public static function assertAction(Connection $connection, string $expectName, string $expectClass, string $expectConfig, ?array $expectMetadata = null): void
     {
-        /** @var Connection $connection */
-        $connection = Environment::getService('connection');
-
         $sql = $connection->createQueryBuilder()
             ->select('id', 'name', 'class', 'config', 'metadata')
             ->from('fusio_action')
@@ -63,11 +60,8 @@ class Assert extends \PHPUnit\Framework\Assert
         }
     }
 
-    public static function assertSchema(string $expectName, string $expectSchema, ?string $expectForm = null, ?array $expectMetadata = null)
+    public static function assertSchema(Connection $connection, string $expectName, string $expectSchema, ?string $expectForm = null, ?array $expectMetadata = null): void
     {
-        /** @var Connection $connection */
-        $connection = Environment::getService('connection');
-
         $sql = $connection->createQueryBuilder()
             ->select('id', 'name', 'source', 'form', 'metadata')
             ->from('fusio_schema')
@@ -92,11 +86,8 @@ class Assert extends \PHPUnit\Framework\Assert
         }
     }
 
-    public static function assertRoute(string $expectPath, array $expectScopes, array $expectConfig, ?array $expectMetadata = null)
+    public static function assertOperation(Connection $connection, string $expectPath, array $expectScopes, array $expectConfig, ?array $expectMetadata = null)
     {
-        /** @var Connection $connection */
-        $connection = Environment::getService('connection');
-
         $sql = $connection->createQueryBuilder()
             ->select('id', 'status', 'methods', 'path', 'controller', 'metadata')
             ->from('fusio_routes')

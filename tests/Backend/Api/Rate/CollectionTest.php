@@ -197,9 +197,9 @@ JSON;
             'priority'  => 2,
             'name'      => 'Premium',
             'rateLimit' => 20,
-            'timespan'  => 'P2M',
-            'allocation'  => [[
-                'routeId' => 1,
+            'timespan'  => 'PT2H',
+            'allocation' => [[
+                'operationId' => 1,
                 'authenticated' => true,
             ]],
             'metadata'  => $metadata,
@@ -217,7 +217,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan', 'metadata')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
@@ -225,18 +225,18 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(5, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
-        $this->assertEquals('P2M', $row['timespan']);
+        $this->assertEquals('PT2H', $row['timespan']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'rate_id', 'route_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'rate_id', 'operation_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
             ->from('fusio_rate_allocation')
             ->where('rate_id = :rate_id')
             ->orderBy('id', 'DESC')
@@ -244,12 +244,12 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $result = Environment::getService('connection')->fetchAll($sql, ['rate_id' => $row['id']]);
+        $result = $this->connection->fetchAllAssociative($sql, ['rate_id' => $row['id']]);
 
         $this->assertNotEmpty($result);
         $this->assertEquals(5, $result[0]['id']);
         $this->assertEquals(5, $result[0]['rate_id']);
-        $this->assertEquals(1, $result[0]['route_id']);
+        $this->assertEquals(1, $result[0]['operation_id']);
         $this->assertEquals(null, $result[0]['user_id']);
         $this->assertEquals(null, $result[0]['plan_id']);
         $this->assertEquals(null, $result[0]['app_id']);
@@ -265,9 +265,9 @@ JSON;
             'priority'  => 2,
             'name'      => 'Premium',
             'rateLimit' => 20,
-            'timespan'  => 'P2M',
+            'timespan'  => 'PT2H',
             'allocation'  => [[
-                'routeId' => 1,
+                'operationId' => 1,
                 'userId' => 1,
                 'planId' => 1,
                 'appId' => 1,
@@ -287,7 +287,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
@@ -295,17 +295,17 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(5, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
-        $this->assertEquals('P2M', $row['timespan']);
+        $this->assertEquals('PT2H', $row['timespan']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'rate_id', 'route_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'rate_id', 'operation_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
             ->from('fusio_rate_allocation')
             ->where('rate_id = :rate_id')
             ->orderBy('id', 'DESC')
@@ -313,12 +313,12 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $result = Environment::getService('connection')->fetchAll($sql, ['rate_id' => $row['id']]);
+        $result = $this->connection->fetchAllAssociative($sql, ['rate_id' => $row['id']]);
 
         $this->assertNotEmpty($result);
         $this->assertEquals(5, $result[0]['id']);
         $this->assertEquals(5, $result[0]['rate_id']);
-        $this->assertEquals(1, $result[0]['route_id']);
+        $this->assertEquals(1, $result[0]['operation_id']);
         $this->assertEquals(1, $result[0]['user_id']);
         $this->assertEquals(1, $result[0]['plan_id']);
         $this->assertEquals(1, $result[0]['app_id']);
@@ -336,7 +336,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -350,6 +350,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

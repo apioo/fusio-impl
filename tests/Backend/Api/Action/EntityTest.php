@@ -114,24 +114,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/action/999', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find action"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(false, $data->success);
+        $this->assertStringStartsWith('Could not find action', $data->message);
     }
 
     public function testPost()
@@ -145,7 +138,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -179,23 +172,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Bar', SqlInsert::class, json_encode($config), $metadata);
+        Assert::assertAction($this->connection, 'Bar', SqlInsert::class, json_encode($config), $metadata);
     }
 
     public function testDelete()
     {
-        // remove all responses and methods so that we can delete the schema
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->delete('fusio_routes_response')
-            ->getSQL();
-        Environment::getService('connection')->executeUpdate($sql);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->delete('fusio_routes_method')
-            ->where('action = :action')
-            ->getSQL();
-        Environment::getService('connection')->executeUpdate($sql, ['action' => $this->id]);
-
         $response = $this->sendRequest('/backend/action/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -213,13 +194,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_action')
             ->where('id = ' . $this->id)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(0, $row['status']);
     }

@@ -229,14 +229,14 @@ class Rate
                     $authenticated = null;
                 }
 
-                $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
-                    Table\Generated\RateAllocationTable::COLUMN_RATE_ID => $rateId,
-                    Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID => $allocation->getRouteId(),
-                    Table\Generated\RateAllocationTable::COLUMN_USER_ID => $allocation->getUserId(),
-                    Table\Generated\RateAllocationTable::COLUMN_PLAN_ID => $allocation->getPlanId(),
-                    Table\Generated\RateAllocationTable::COLUMN_APP_ID => $allocation->getAppId(),
-                    Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $authenticated,
-                ]));
+                $row = new Table\Generated\RateAllocationRow();
+                $row->setRateId($rateId);
+                $row->setOperationId($allocation->getOperationId());
+                $row->setUserId($allocation->getUserId());
+                $row->setPlanId($allocation->getPlanId());
+                $row->setAppId($allocation->getAppId());
+                $row->setAuthenticated($authenticated);
+                $this->rateAllocationTable->create($row);
             }
         }
     }

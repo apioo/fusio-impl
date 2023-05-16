@@ -51,7 +51,7 @@ class Get extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $app = $this->table->getEntity(
+        $app = $this->view->getEntity(
             (int) $request->get('app_id')
         );
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
+use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -149,17 +150,8 @@ JSON;
 
     public function testPost()
     {
-        $connection = Environment::getConfig()->get('psx_connection');
-        if (!isset($connection['host'])) {
-            $this->markTestSkipped('Host not available in config');
-        }
-
         $config = [
-            'type'     => $connection['driver'],
-            'host'     => $connection['host'],
-            'username' => $connection['user'],
-            'password' => $connection['password'],
-            'database' => $connection['dbname'],
+            'url' => Environment::getConfig('psx_connection'),
         ];
 
         $metadata = [
@@ -171,7 +163,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'     => 'Foo',
-            'class'    => 'Fusio\Adapter\Sql\Connection\Sql',
+            'class'    => SqlAdvanced::class,
             'config'   => $config,
             'metadata' => $metadata,
         ]));
@@ -188,7 +180,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'name', 'class', 'config', 'metadata')
             ->from('fusio_connection')
             ->orderBy('id', 'DESC')
@@ -196,11 +188,11 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
+        $this->assertEquals(SqlAdvanced::class, $row['class']);
         $this->assertNotEmpty($row['config']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
@@ -216,7 +208,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -230,6 +222,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

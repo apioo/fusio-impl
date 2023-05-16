@@ -146,7 +146,7 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             $existing->setName($scope->getName());
-            $existing->setDescription($scope->getDescription());
+            $existing->setDescription($scope->getDescription() ?? '');
             $existing->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
             $this->scopeTable->update($existing);
 

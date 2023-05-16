@@ -173,11 +173,11 @@ JSON;
             'name'        => 'test',
             'description' => 'Test description',
             'routes'      => [[
-                'routeId' => Fixture::getId('fusio_routes', '/foo'),
+                'operationId' => Fixture::getId('fusio_operation', 'test.listFoo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ], [
-                'routeId' => Fixture::getId('fusio_routes', '/inspect/:foo'),
+                'operationId' => Fixture::getId('fusio_operation', 'inspect.get'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ]],
@@ -196,7 +196,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'name', 'description', 'metadata')
             ->from('fusio_scope')
             ->orderBy('id', 'DESC')
@@ -204,34 +204,39 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(45, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('scope_id', 'route_id', 'allow', 'methods')
-            ->from('fusio_scope_routes')
+        $sql = $this->connection->createQueryBuilder()
+            ->select('scope_id', 'operation_id', 'allow', 'methods')
+            ->from('fusio_scope_operation')
             ->where('scope_id = :scope_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
         $scopeId = 43;
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => $scopeId]);
+        $operations = $this->connection->fetchAllAssociative($sql, ['scope_id' => $scopeId]);
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'route_id' => 117,
-            'allow'    => 1,
-            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
+            'operation_id' => 176,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
-            'route_id' => 116,
-            'allow'    => 1,
-            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
-        ]], $routes);
+            'operation_id' => 174,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 173,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ]], $operations);
     }
 
     public function testPut()
@@ -245,7 +250,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -259,6 +264,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

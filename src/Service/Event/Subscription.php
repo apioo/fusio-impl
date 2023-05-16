@@ -57,14 +57,12 @@ class Subscription
         try {
             $this->subscriptionTable->beginTransaction();
 
-            $record = new Table\Generated\EventSubscriptionRow([
-                Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID => $subscription->getEventId(),
-                Table\Generated\EventSubscriptionTable::COLUMN_USER_ID => $subscription->getUserId(),
-                Table\Generated\EventSubscriptionTable::COLUMN_STATUS => Table\Event\Subscription::STATUS_ACTIVE,
-                Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT => $subscription->getEndpoint(),
-            ]);
-
-            $this->subscriptionTable->create($record);
+            $row = new Table\Generated\EventSubscriptionRow();
+            $row->setEventId($subscription->getEventId());
+            $row->setUserId($subscription->getUserId());
+            $row->setStatus(Table\Event\Subscription::STATUS_ACTIVE);
+            $row->setEndpoint($subscription->getEndpoint());
+            $this->subscriptionTable->create($row);
 
             $subscriptionId = $this->subscriptionTable->getLastInsertId();
             $subscription->setId($subscriptionId);
@@ -89,12 +87,8 @@ class Subscription
         }
 
         // update subscription
-        $record = new Table\Generated\EventSubscriptionRow([
-            Table\Generated\EventSubscriptionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT => $subscription->getEndpoint(),
-        ]);
-
-        $this->subscriptionTable->update($record);
+        $existing->setEndpoint($subscription->getEndpoint());
+        $this->subscriptionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($subscription, $existing, $context));
 
@@ -112,11 +106,7 @@ class Subscription
         $this->subscriptionTable->deleteAllResponses($subscriptionId);
 
         // remove subscription
-        $record = new Table\Generated\EventSubscriptionRow([
-            Table\Generated\EventSubscriptionTable::COLUMN_ID => $existing->getId(),
-        ]);
-
-        $this->subscriptionTable->delete($record);
+        $this->subscriptionTable->delete($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 

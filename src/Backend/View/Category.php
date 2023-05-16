@@ -52,7 +52,7 @@ class Category extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = OrderBy::DESC;
+            $sortOrder = OrderBy::ASC;
         }
 
         $condition = Condition::withAnd();

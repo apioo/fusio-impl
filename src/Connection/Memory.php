@@ -48,10 +48,10 @@ class Memory implements ConnectionInterface
         $key = $config->get('key') ?: 'default';
 
         if (!isset(self::$connections[$key])) {
-            self::$connections[$key] = DriverManager::getConnection(array(
+            self::$connections[$key] = DriverManager::getConnection([
                 'driver' => 'pdo_sqlite',
                 'memory' => true,
-            ));
+            ]);
         }
 
         return self::$connections[$key];

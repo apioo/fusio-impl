@@ -117,7 +117,7 @@ class TimePerRouteTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/foo (ms)"
+        "test.listFoo (ms)"
     ]
 }
 JSON;

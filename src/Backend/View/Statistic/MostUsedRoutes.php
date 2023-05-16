@@ -39,13 +39,13 @@ class MostUsedRoutes extends ViewAbstract
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most used routes and build data structure
-        $sql = '  SELECT log.route_id
+        $sql = '  SELECT log.operation_id
                     FROM fusio_log log
                    WHERE log.category_id = ?
-                     AND log.route_id IS NOT NULL
+                     AND log.operation_id IS NOT NULL
                      AND ' . $expression . '
-                GROUP BY log.route_id
-                ORDER BY COUNT(log.route_id) DESC';
+                GROUP BY log.operation_id
+                ORDER BY COUNT(log.operation_id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
@@ -55,43 +55,43 @@ class MostUsedRoutes extends ViewAbstract
         $series   = [];
 
         foreach ($result as $row) {
-            $routeIds[] = $row['route_id'];
+            $routeIds[] = $row['operation_id'];
 
-            $data[$row['route_id']] = [];
-            $series[$row['route_id']] = null;
+            $data[$row['operation_id']] = [];
+            $series[$row['operation_id']] = null;
 
             $fromDate = $filter->getFrom();
             $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
-                $data[$row['route_id']][$fromDate->format('Y-m-d')] = 0;
+                $data[$row['operation_id']][$fromDate->format('Y-m-d')] = 0;
 
                 $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
         if (!empty($routeIds)) {
-            $condition->in('log.route_id', $routeIds);
+            $condition->in('log.operation_id', $routeIds);
         }
 
         // fill data with values
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         $sql = '    SELECT COUNT(log.id) AS cnt,
-                           log.route_id,
-                           routes.path,
+                           log.operation_id,
+                           operation.name,
                            DATE(log.date) AS date
                       FROM fusio_log log
-                INNER JOIN fusio_routes routes
-                        ON log.route_id = routes.id
+                INNER JOIN fusio_operation operation
+                        ON log.operation_id = operation.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.route_id, routes.path';
+                  GROUP BY DATE(log.date), log.operation_id, operation.http_path';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            if (isset($data[$row['route_id']][$row['date']])) {
-                $series[$row['route_id']] = $row['path'];
-                $data[$row['route_id']][$row['date']] = (int) $row['cnt'];
+            if (isset($data[$row['operation_id']][$row['date']])) {
+                $series[$row['operation_id']] = $row['name'];
+                $data[$row['operation_id']][$row['date']] = (int) $row['cnt'];
             }
         }
 

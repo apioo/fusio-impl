@@ -493,7 +493,7 @@ class NewInstallation
                     httpPath: '/cronjob/$cronjob_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Message::class,
-                    incoming: Model\Backend\Cronjob::class,
+                    incoming: Model\Backend\CronjobUpdate::class,
                 ),
                 'cronjob.delete' => new Operation(
                     action: Backend\Action\Cronjob\Delete::class,
@@ -1435,6 +1435,14 @@ class NewInstallation
                     httpPath: '/route',
                     httpCode: 200,
                     outgoing: Model\System\Route::class,
+                    public: true,
+                ),
+                'getDebug' => new Operation(
+                    action: System\Action\GetDebug::class,
+                    httpMethod: 'GET',
+                    httpPath: '/debug',
+                    httpCode: 200,
+                    outgoing: Passthru::class,
                     public: true,
                 ),
                 'getHealth' => new Operation(

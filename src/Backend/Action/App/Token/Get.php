@@ -50,7 +50,7 @@ class Get extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $token = $this->table->getEntity(
+        $token = $this->view->getEntity(
             (int) $request->get('token_id')
         );
 

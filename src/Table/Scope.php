@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table;
 
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
 
 /**
@@ -36,34 +37,37 @@ class Scope extends Generated\ScopeTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function getValidScopes(array $names)
+    public function getValidScopes(array $names): array
     {
         $names = array_filter($names);
 
         if (!empty($names)) {
-            return $this->findAll(new Condition(['name', 'IN', $names]), 0, 1024);
+            $condition = Condition::withAnd();
+            $condition->in(self::COLUMN_NAME, $names);
+            return $this->findAll($condition, 0, 1024);
         } else {
             return [];
         }
     }
 
-    public function getAvailableScopes(int $categoryId)
+    public function getAvailableScopes(int $categoryId): array
     {
-        $condition = new Condition(['category_id', '=', $categoryId]);
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
 
-        $result = $this->findAll($condition, 0, 1024, 'name', Sql::SORT_ASC);
+        $result = $this->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
         $scopes = [];
         foreach ($result as $row) {
-            $scopes[$row['name']] = $row['description'];
+            $scopes[$row[self::COLUMN_NAME]] = $row[self::COLUMN_DESCRIPTION];
         }
 
         return $scopes;
     }
 
-    public static function getNames(array $result)
+    public static function getNames(array $result): array
     {
         return array_map(function ($row) {
-            return $row['name'];
+            return $row[self::COLUMN_NAME];
         }, $result);
     }
 }

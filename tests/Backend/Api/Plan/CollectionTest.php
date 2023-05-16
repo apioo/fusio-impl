@@ -116,7 +116,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type', 'external_id', 'metadata')
             ->from('fusio_plan')
             ->orderBy('id', 'DESC')
@@ -124,7 +124,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['status']);
@@ -137,13 +137,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         // check scopes
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('plan_id', 'scope_id')
             ->from('fusio_plan_scope')
             ->where('plan_id = :plan_id')
             ->getSQL();
 
-        $result = Environment::getService('connection')->fetchAll($sql, ['plan_id' => $row['id']]);
+        $result = $this->connection->fetchAllAssociative($sql, ['plan_id' => $row['id']]);
 
         $this->assertEquals(1, count($result));
         $this->assertEquals(42, $result[0]['scope_id']);
@@ -160,7 +160,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -174,6 +174,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

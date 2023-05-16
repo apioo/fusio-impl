@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
+use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -194,41 +195,34 @@ class Authorize
         }
     }
 
-    protected function saveUserDecision($userId, $appId, $allow)
+    protected function saveUserDecision(int $userId, int $appId, bool $allow): void
     {
         $condition = Condition::withAnd();
-        $condition->equals('user_id', $userId);
-        $condition->equals('app_id', $appId);
+        $condition->equals(Table\Generated\UserGrantTable::COLUMN_USER_ID, $userId);
+        $condition->equals(Table\Generated\UserGrantTable::COLUMN_APP_ID, $appId);
 
-        $userApp = $this->userGrantTable->findOneBy($condition);
-
-        if (empty($userApp)) {
-            $record = new Table\Generated\UserGrantRow([
-                'user_id' => $userId,
-                'app_id'  => $appId,
-                'allow'   => $allow ? 1 : 0,
-                'date'    => new \DateTime(),
-            ]);
-
-            $this->userGrantTable->create($record);
+        $existing = $this->userGrantTable->findOneBy($condition);
+        if (empty($existing)) {
+            $row = new Table\Generated\UserGrantRow();
+            $row->setUserId($userId);
+            $row->setAppId($appId);
+            $row->setAllow($allow ? 1 : 0);
+            $row->setDate(LocalDateTime::now());
+            $this->userGrantTable->create($row);
         } else {
-            $record = new Table\Generated\UserGrantRow([
-                'id'      => $userApp->getId(),
-                'user_id' => $userId,
-                'app_id'  => $appId,
-                'allow'   => $allow ? 1 : 0,
-                'date'    => new \DateTime(),
-            ]);
-
-            $this->userGrantTable->update($record);
+            $existing->setUserId($userId);
+            $existing->setAppId($appId);
+            $existing->setAllow($allow ? 1 : 0);
+            $existing->setDate(LocalDateTime::now());
+            $this->userGrantTable->update($existing);
         }
     }
     
     private function getApp(string $clientId): Table\Generated\AppRow
     {
         $condition = Condition::withAnd();
-        $condition->equals('app_key', $clientId);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $clientId);
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {

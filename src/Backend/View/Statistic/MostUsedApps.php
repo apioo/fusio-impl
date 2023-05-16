@@ -85,7 +85,7 @@ class MostUsedApps extends ViewAbstract
                      WHERE ' . $expression . '
                   GROUP BY DATE(log.date), log.app_id, app.name';
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['app_id']][$row['date']])) {

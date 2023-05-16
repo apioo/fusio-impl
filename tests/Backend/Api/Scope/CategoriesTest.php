@@ -136,6 +136,11 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
+                    "id": 22,
+                    "name": "backend.operation",
+                    "description": ""
+                },
+                {
                     "id": 18,
                     "name": "backend.page",
                     "description": ""
@@ -153,11 +158,6 @@ class CategoriesTest extends ControllerDbTestCase
                 {
                     "id": 21,
                     "name": "backend.role",
-                    "description": ""
-                },
-                {
-                    "id": 22,
-                    "name": "backend.route",
                     "description": ""
                 },
                 {
@@ -204,6 +204,11 @@ class CategoriesTest extends ControllerDbTestCase
                 {
                     "id": 2,
                     "name": "consumer",
+                    "description": ""
+                },
+                {
+                    "id": 40,
+                    "name": "consumer.account",
                     "description": ""
                 },
                 {
@@ -254,11 +259,6 @@ class CategoriesTest extends ControllerDbTestCase
                 {
                     "id": 39,
                     "name": "consumer.transaction",
-                    "description": ""
-                },
-                {
-                    "id": 40,
-                    "name": "consumer.user",
                     "description": ""
                 }
             ]
@@ -319,7 +319,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -333,7 +333,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -347,6 +347,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

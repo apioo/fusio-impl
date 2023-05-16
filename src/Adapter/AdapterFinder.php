@@ -19,26 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Provider;
+namespace Fusio\Impl\Adapter;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ConfigurableInterface;
-use Fusio\Engine\ConnectionInterface;
-use Fusio\Engine\Factory;
-use Fusio\Engine\Form;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Fusio\Engine\AdapterInterface;
 
 /**
- * ActionProvider
+ * AdapterFinder
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ActionProvider extends ProviderParser
+class AdapterFinder
 {
-    public function __construct(Factory\ActionInterface $factory, Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.action')] iterable $objects)
+    public static function getFiles(string $providerFile): array
     {
-        parent::__construct($factory, $elementFactory, $objects);
+        $adapterClasses = include $providerFile;
+
+        $files = [];
+        foreach ($adapterClasses as $class) {
+            if (!class_exists($class)) {
+                throw new \RuntimeException('Provided an invalid adapter class ' . $class);
+            }
+
+            $adapter = new $class();
+            if (!$adapter instanceof AdapterInterface) {
+                throw new \RuntimeException('Provided adapter class must be an instance of ' . AdapterInterface::class);
+            }
+
+            $files[] = $adapter->getContainerFile();
+        }
+
+        return $files;
     }
 }

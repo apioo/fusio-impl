@@ -176,24 +176,16 @@ JSON;
 
     public function testGetUnauthorized()
     {
-        Environment::getService('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/page', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Missing authorization header"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Missing authorization header', $data->message);
     }
 
     public function testPost()
@@ -224,13 +216,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'title', 'content', 'metadata')
             ->from('fusio_page')
             ->where('slug = :slug')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['slug' => 'my-new-page']);
+        $row = $this->connection->fetchAssociative($sql, ['slug' => 'my-new-page']);
 
         $this->assertEquals('My new page', $row['title']);
         $this->assertEquals('<p>And here some content</p>', $row['content']);
@@ -248,7 +240,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -262,6 +254,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

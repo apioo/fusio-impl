@@ -44,7 +44,7 @@ class Database implements ResolverInterface
 
     public function resolve(Uri $uri, ?string $basePath = null): \stdClass
     {
-        $result = $this->connection->fetchAll('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
+        $result = $this->connection->fetchAllAssociative('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
 
         $definitions = [];
         foreach ($result as $row) {

@@ -171,7 +171,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'category_id', 'status', 'name')
             ->from('fusio_role')
             ->orderBy('id', 'DESC')
@@ -179,20 +179,20 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['category_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('Developer', $row['name']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('scope_id')
             ->from('fusio_role_scope')
             ->where('role_id = :role_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $result = Environment::getService('connection')->fetchAll($sql, ['role_id' => $row['id']]);
+        $result = $this->connection->fetchAllAssociative($sql, ['role_id' => $row['id']]);
 
         $this->assertEquals(2, count($result));
         $this->assertEquals(6, $result[0]['scope_id']);
@@ -210,7 +210,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -224,6 +224,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

@@ -34,13 +34,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class CollectionTest extends ControllerDbTestCase
 {
-    private int $routeId;
+    private int $operationId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->routeId = Fixture::getId('fusio_routes', '/foo');
+        $this->operationId = Fixture::getId('fusio_operation', 'test.listFoo');
     }
 
     public function getDataSet(): array
@@ -66,7 +66,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 2,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -76,7 +76,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -109,7 +109,7 @@ JSON;
         {
             "id": 2,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -119,7 +119,7 @@ JSON;
         {
             "id": 1,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -152,7 +152,7 @@ JSON;
         {
             "id": 2,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -162,7 +162,7 @@ JSON;
         {
             "id": 1,
             "appId": 3,
-            "routeId": {$this->routeId},
+            "operationId": {$this->operationId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",

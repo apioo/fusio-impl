@@ -55,7 +55,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Passthru",
     "source": {
-        "$class": "PSX\\Framework\\Schema\\Passthru"
+        "$class": "PSX\\Api\\Model\\Passthru"
     },
     "readonly": true
 }
@@ -79,7 +79,7 @@ JSON;
     "status": 1,
     "name": "Passthru",
     "source": {
-        "$class": "PSX\\Framework\\Schema\\Passthru"
+        "$class": "PSX\\Api\\Model\\Passthru"
     },
     "readonly": true
 }
@@ -91,24 +91,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/schema/200', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find schema"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find schema', $data->message);
     }
 
     public function testPost()
@@ -122,7 +115,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -167,7 +160,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Test-Schema', json_encode($schema), null, $metadata);
+        Assert::assertSchema($this->connection, 'Test-Schema', json_encode($schema), null, $metadata);
     }
 
     public function testPutForm()
@@ -215,25 +208,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Form-Schema', \json_encode($schema), \json_encode($form));
+        Assert::assertSchema($this->connection, 'Form-Schema', \json_encode($schema), \json_encode($form));
     }
 
     public function testDelete()
     {
-        // remove all responses and methods so that we can delete the schema
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->delete('fusio_routes_response')
-            ->getSQL();
-
-        Environment::getService('connection')->executeUpdate($sql);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->delete('fusio_routes_method')
-            ->where('parameters = :parameters OR request = :request')
-            ->getSQL();
-
-        Environment::getService('connection')->executeUpdate($sql, ['parameters' => 2, 'request' => 2]);
-
         $response = $this->sendRequest('/backend/schema/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -251,13 +230,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_schema')
             ->where('id = 2')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(0, $row['status']);

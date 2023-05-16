@@ -24,7 +24,6 @@ namespace Fusio\Impl\Service\User;
 use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
@@ -72,6 +71,11 @@ class Token
      */
     public function generateToken(int $userId): string
     {
+        $existing = $this->userTable->find($userId);
+        if (!$existing instanceof Table\Generated\UserRow) {
+            throw new \RuntimeException('Could not find provided user id');
+        }
+
         $payload = [
             'exp' => time() + (60 * 60),
             'jti' => TokenGenerator::generateCode(),
@@ -79,12 +83,8 @@ class Token
 
         $token = JWT::encode($payload, $this->config->get('fusio_project_key'), 'HS256');
 
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $userId,
-            Table\Generated\UserTable::COLUMN_TOKEN => $token
-        ]);
-
-        $this->userTable->update($record);
+        $existing->setToken($token);
+        $this->userTable->update($existing);
 
         return $token;
     }
@@ -94,11 +94,7 @@ class Token
      */
     public function resetToken(Table\Generated\UserRow $user): void
     {
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $user->getId(),
-            Table\Generated\UserTable::COLUMN_TOKEN => ''
-        ]);
-
-        $this->userTable->update($record);
+        $user->setToken('');
+        $this->userTable->update($user);
     }
 }

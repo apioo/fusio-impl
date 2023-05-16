@@ -21,16 +21,10 @@
 
 namespace Fusio\Impl\System\Action;
 
-use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequest;
-use Fusio\Engine\Request\RpcRequest;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
-use PSX\Framework\Config\Config;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetDebug
@@ -41,47 +35,13 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetDebug extends ActionAbstract
 {
-    private View\User $table;
-    private Config $config;
-
-    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager, Config $config)
-    {
-        parent::__construct($runtime);
-
-        $this->table = $tableManager->getTable(View\User::class);
-        $this->config = $config;
-    }
-
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $data = [
-            'class' => get_class($request)
-        ];
-
-        if ($request instanceof HttpRequest) {
-            $data = array_merge($data, $this->buildHttp($request));
-        } elseif ($request instanceof RpcRequest) {
-            $data = array_merge($data, $this->buildRpc($request));
-        }
-
-        return $data;
-    }
-
-    private function buildHttp(HttpRequest $request): array
-    {
         return [
-            'method' => $request->getMethod(),
-            'uriFragments' => $request->getUriFragments(),
-            'parameters' => $request->getParameters(),
-            'headers' => $request->getHeaders(),
-            'body' => $request->getBody(),
-        ];
-    }
-
-    private function buildRpc(RpcRequest $request): array
-    {
-        return [
+            'class' => get_class($request),
             'arguments' => $request->getArguments(),
+            'payload' => $request->getPayload(),
+            'context' => get_class($request->getContext()),
         ];
     }
 }

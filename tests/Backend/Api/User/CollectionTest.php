@@ -239,7 +239,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'plan_id', 'status', 'name', 'email', 'password', 'metadata')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
@@ -247,7 +247,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(1, $row['plan_id']);
@@ -257,22 +257,20 @@ JSON;
         $this->assertTrue(password_verify('fooo123!', $row['password']));
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'user_id', 'scope_id')
             ->from('fusio_user_scope')
             ->where('user_id = :user_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
+        $routes = $this->connection->fetchAllAssociative($sql, ['user_id' => 6]);
 
         $this->assertEquals(40, count($routes));
     }
 
     public function testPostNameExists()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/user', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -286,23 +284,15 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "User name already exists"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('User name already exists', $data->message);
     }
 
     public function testPostEmailExists()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/user', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -316,17 +306,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "User email already exists"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('User email already exists', $data->message);
     }
 
     public function testPut()
@@ -340,7 +324,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -354,6 +338,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

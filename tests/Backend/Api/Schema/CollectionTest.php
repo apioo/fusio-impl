@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Schema\SchemaInterface;
-use Service\Schema\Loader;
 
 /**
  * CollectionTest
@@ -98,7 +98,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 151,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         }
@@ -199,11 +199,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Bar-Schema', $schema, null, $metadata);
+        Assert::assertSchema($this->connection, 'Bar-Schema', $schema, null, $metadata);
 
         // test schema
         /** @var Loader $schemaLoader */
-        $schemaLoader = Environment::getService('schema_loader');
+        $schemaLoader = Environment::getService(Loader::class);
         $schema = $schemaLoader->getSchema('Bar-Schema');
 
         $this->assertInstanceOf(SchemaInterface::class, $schema);
@@ -221,7 +221,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -235,6 +235,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

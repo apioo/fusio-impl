@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Connection;
 
 use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Fusio\Adapter\Sql\Introspection\Introspector;
 use Fusio\Engine\Connection\IntrospectableInterface;
@@ -31,7 +33,7 @@ use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * System
@@ -42,11 +44,13 @@ use PSX\Framework\Config\Config;
  */
 class System implements ConnectionInterface, PingableInterface, IntrospectableInterface
 {
-    private Config $config;
+    private ConfigInterface $config;
+    private DBAL\Tools\DsnParser $parser;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
+        $this->parser = new DBAL\Tools\DsnParser();
     }
 
     public function getName(): string
@@ -56,7 +60,7 @@ class System implements ConnectionInterface, PingableInterface, IntrospectableIn
 
     public function getConnection(ParametersInterface $config): DBAL\Connection
     {
-        $params = $this->config->get('psx_connection');
+        $params = $this->parser->parse($this->config->get('psx_connection'));
         $config = new DBAL\Configuration();
         $config->setSchemaAssetsFilter(static function($assetName) {
             if ($assetName instanceof AbstractAsset) {
@@ -74,11 +78,16 @@ class System implements ConnectionInterface, PingableInterface, IntrospectableIn
 
     public function ping(mixed $connection): bool
     {
-        if ($connection instanceof DBAL\Connection) {
-            return $connection->ping();
+        if ($connection instanceof Connection) {
+            try {
+                $connection->createSchemaManager()->listTableNames();
+                return true;
+            } catch (Exception $e) {
+                return false;
+            }
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public function getIntrospector(mixed $connection): IntrospectorInterface

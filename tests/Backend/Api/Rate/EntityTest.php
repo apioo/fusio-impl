@@ -161,7 +161,7 @@ JSON;
         ), json_encode([
             'name'      => 'Gold',
             'rateLimit' => 20,
-            'timespan'  => 'P2M',
+            'timespan'  => 'PT2H',
             'metadata'  => $metadata,
         ]));
 
@@ -177,7 +177,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'name', 'rate_limit', 'timespan', 'metadata')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
@@ -185,13 +185,13 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('Gold', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
-        $this->assertEquals('P2M', $row['timespan']);
+        $this->assertEquals('PT2H', $row['timespan']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
@@ -214,7 +214,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
@@ -222,7 +222,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssoc($sql);
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals(0, $row['status']);

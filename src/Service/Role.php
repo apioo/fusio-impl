@@ -170,10 +170,10 @@ class Role
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
-                $this->roleScopeTable->create(new Table\Generated\RoleScopeRow([
-                    Table\Generated\RoleScopeTable::COLUMN_ROLE_ID => $roleId,
-                    Table\Generated\RoleScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-                ]));
+                $row = new Table\Generated\RoleScopeRow();
+                $row->setRoleId($roleId);
+                $row->setScopeId($scope->getId());
+                $this->roleScopeTable->create($row);
             }
         }
     }

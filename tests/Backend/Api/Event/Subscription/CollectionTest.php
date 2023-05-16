@@ -106,7 +106,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'event_id', 'user_id', 'endpoint')
             ->from('fusio_event_subscription')
             ->orderBy('id', 'DESC')
@@ -114,7 +114,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssoc($sql);
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(46, $row['event_id']);

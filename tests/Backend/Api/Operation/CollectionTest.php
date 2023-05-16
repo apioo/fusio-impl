@@ -319,7 +319,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertRoute('/bar', ['foo', 'baz'], [[
+        Assert::assertOperation('/bar', ['foo', 'baz'], [[
             'method'       => 'GET',
             'version'      => 1,
             'status'       => 4,

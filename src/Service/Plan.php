@@ -172,10 +172,10 @@ class Plan
         $scopes = $this->scopeTable->getValidScopes($scopes);
 
         foreach ($scopes as $scope) {
-            $this->planScopeTable->create(new Table\Generated\PlanScopeRow([
-                Table\Generated\PlanScopeTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\PlanScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-            ]));
+            $row = new Table\Generated\PlanScopeRow();
+            $row->setPlanId($planId);
+            $row->setScopeId($scope->getId());
+            $this->planScopeTable->create($row);
         }
     }
 }

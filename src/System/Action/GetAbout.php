@@ -99,7 +99,7 @@ class GetAbout extends ActionAbstract
 
         $result = [];
         foreach ($categories as $row) {
-            $result[] = $row['name'];
+            $result[] = $row->getName();
         }
 
         return $result;
@@ -113,7 +113,7 @@ class GetAbout extends ActionAbstract
 
         $result = [];
         foreach ($categories as $row) {
-            $result[] = $row['name'];
+            $result[] = $row->getName();
         }
 
         return $result;

@@ -21,14 +21,13 @@
 
 namespace Fusio\Impl\Backend\Action\Audit;
 
-use Backend\Filter\Audit\QueryFilter;
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\Audit\QueryFilter;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAll
