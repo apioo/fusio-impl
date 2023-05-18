@@ -43,7 +43,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
     private $installer;
     private $remote;
 
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

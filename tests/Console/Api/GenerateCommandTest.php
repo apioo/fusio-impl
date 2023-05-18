@@ -25,6 +25,7 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -36,14 +37,14 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class GenerateCommandTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('api:generate');
+        $command = Environment::getService(Application::class)->find('generate');
         $filter = 'internal';
 
         $commandTester = new CommandTester($command);

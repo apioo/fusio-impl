@@ -38,10 +38,9 @@ class SystemTest extends TestCase
 {
     public function testConnection()
     {
-        $config = new Config(['psx_connection' => [
-            'memory' => true,
-            'driver' => 'pdo_sqlite',
-        ]]);
+        $config = new Config([
+            'psx_connection' => 'pdo-sqlite:///:memory:'
+        ]);
 
         $connection = new System($config);
 
