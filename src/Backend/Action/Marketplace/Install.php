@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Marketplace;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -40,15 +41,13 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Install extends ActionAbstract
+class Install implements ActionInterface
 {
     private Installer $installerService;
     private ConfigInterface $config;
 
-    public function __construct(RuntimeInterface $runtime, Installer $installerService, ConfigInterface $config)
+    public function __construct(Installer $installerService, ConfigInterface $config)
     {
-        parent::__construct($runtime);
-
         $this->installerService = $installerService;
         $this->config = $config;
     }

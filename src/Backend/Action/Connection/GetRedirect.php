@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Connection;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -35,14 +36,12 @@ use Fusio\Impl\Service\Connection\Token;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetRedirect extends ActionAbstract
+class GetRedirect implements ActionInterface
 {
     private Token $tokenService;
 
-    public function __construct(RuntimeInterface $runtime, Token $tokenService)
+    public function __construct(Token $tokenService)
     {
-        parent::__construct($runtime);
-
         $this->tokenService = $tokenService;
     }
 

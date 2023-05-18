@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Schema;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,14 +38,12 @@ use Fusio\Model\Backend\SchemaForm;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Form extends ActionAbstract
+class Form implements ActionInterface
 {
     private Schema $schemaService;
 
-    public function __construct(RuntimeInterface $runtime, Schema $schemaService)
+    public function __construct(Schema $schemaService)
     {
-        parent::__construct($runtime);
-
         $this->schemaService = $schemaService;
     }
 

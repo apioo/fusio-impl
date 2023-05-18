@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Authorization\Action;
 
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequest;
@@ -39,15 +40,15 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Revoke extends ActionAbstract
+class Revoke implements ActionInterface
 {
     private Service\App\Token $appTokenService;
     private Table\App\Token $table;
 
-    public function __construct(Service\App\Token $appTokenService, TableManagerInterface $tableManager)
+    public function __construct(Service\App\Token $appTokenService, Table\App\Token $table)
     {
         $this->appTokenService = $appTokenService;
-        $this->table = $tableManager->getTable(Table\App\Token::class);
+        $this->table = $table;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

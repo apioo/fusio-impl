@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Generator;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\ParametersInterface;
@@ -39,14 +40,12 @@ use PSX\Dependency\AutowireResolverInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Index extends ActionAbstract
+class Index implements ActionInterface
 {
     private GeneratorProvider $provider;
 
-    public function __construct(RuntimeInterface $runtime, GeneratorProvider $provider)
+    public function __construct(GeneratorProvider $provider)
     {
-        parent::__construct($runtime);
-
         $this->provider = $provider;
     }
 

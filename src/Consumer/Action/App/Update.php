@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\App;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,14 +38,12 @@ use Fusio\Model\Consumer\AppUpdate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Update extends ActionAbstract
+class Update implements ActionInterface
 {
     private App $appService;
 
-    public function __construct(RuntimeInterface $runtime, App $appService)
+    public function __construct(App $appService)
     {
-        parent::__construct($runtime);
-
         $this->appService = $appService;
     }
 

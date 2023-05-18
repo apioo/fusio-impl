@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Cronjob;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Impl\Service\Cronjob;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Delete extends ActionAbstract
+class Delete implements ActionInterface
 {
     private Cronjob $cronjobService;
 
-    public function __construct(RuntimeInterface $runtime, Cronjob $cronjobService)
+    public function __construct(Cronjob $cronjobService)
     {
-        parent::__construct($runtime);
-
         $this->cronjobService = $cronjobService;
     }
 

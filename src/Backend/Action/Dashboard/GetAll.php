@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Dashboard;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,7 +38,7 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends ActionAbstract
+class GetAll implements ActionInterface
 {
     private View\Statistic\ErrorsPerRoute $errorsPerRoute;
     private View\Statistic\IncomingRequests $incomingRequests;
@@ -49,10 +50,8 @@ class GetAll extends ActionAbstract
     private View\Dashboard\LatestUsers $latestUsers;
     private View\Dashboard\LatestTransactions $latestTransactions;
 
-    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
+    public function __construct(TableManagerInterface $tableManager)
     {
-        parent::__construct($runtime);
-
         $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
         $this->incomingRequests = $tableManager->getTable(View\Statistic\IncomingRequests::class);
         $this->incomingTransactions = $tableManager->getTable(View\Statistic\IncomingTransactions::class);

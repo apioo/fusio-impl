@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Authorization\Action;
 
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -35,18 +36,18 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetWhoami extends ActionAbstract
+class GetWhoami implements ActionInterface
 {
-    private View\User $table;
+    private View\User $view;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(View\User $view)
     {
-        $this->table = $tableManager->getTable(View\User::class);
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getEntity(
+        return $this->view->getEntity(
             $context->getUser()->getId()
         );
     }

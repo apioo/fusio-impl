@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Plan;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,14 +38,12 @@ use Fusio\Model\Backend\PlanUpdate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Update extends ActionAbstract
+class Update implements ActionInterface
 {
     private Plan $planService;
 
-    public function __construct(RuntimeInterface $runtime, Plan $planService)
+    public function __construct(Plan $planService)
     {
-        parent::__construct($runtime);
-
         $this->planService = $planService;
     }
 

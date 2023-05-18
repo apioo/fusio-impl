@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Trash;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,14 +38,12 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Restore extends ActionAbstract
+class Restore implements ActionInterface
 {
     private Restorer $restorer;
 
-    public function __construct(RuntimeInterface $runtime, Restorer $restorer)
+    public function __construct(Restorer $restorer)
     {
-        parent::__construct($runtime);
-
         $this->restorer = $restorer;
     }
 

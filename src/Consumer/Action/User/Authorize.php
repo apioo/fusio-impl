@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\User;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Model\Consumer\AuthorizeRequest;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Authorize extends ActionAbstract
+class Authorize implements ActionInterface
 {
     private UserAuthorize $authorizeService;
 
-    public function __construct(RuntimeInterface $runtime, UserAuthorize $authorizeService)
+    public function __construct(UserAuthorize $authorizeService)
     {
-        parent::__construct($runtime);
-
         $this->authorizeService = $authorizeService;
     }
 

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Action;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -35,14 +36,12 @@ use Fusio\Impl\Provider\ActionProvider;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetIndex extends ActionAbstract
+class GetIndex implements ActionInterface
 {
     private ActionProvider $actionParser;
 
-    public function __construct(RuntimeInterface $runtime, ActionProvider $actionParser)
+    public function __construct(ActionProvider $actionParser)
     {
-        parent::__construct($runtime);
-
         $this->actionParser = $actionParser;
     }
 

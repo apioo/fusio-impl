@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Marketplace;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -38,16 +39,14 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Get extends ActionAbstract
+class Get implements ActionInterface
 {
     private Marketplace\Repository\Remote $remoteRepository;
     private Marketplace\Repository\Local $localRepository;
     private ConfigInterface $config;
 
-    public function __construct(RuntimeInterface $runtime, Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, ConfigInterface $config)
+    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, ConfigInterface $config)
     {
-        parent::__construct($runtime);
-
         $this->remoteRepository = $remoteRepository;
         $this->localRepository = $localRepository;
         $this->config = $config;

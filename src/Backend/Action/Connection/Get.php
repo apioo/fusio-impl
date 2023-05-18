@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Connection;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -42,17 +43,15 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Get extends ActionAbstract
+class Get implements ActionInterface
 {
     private View\Connection $view;
     private ConfigInterface $config;
     private ConnectionProvider $connectionParser;
     private Token $tokenService;
 
-    public function __construct(RuntimeInterface $runtime, View\Connection $view, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
+    public function __construct(View\Connection $view, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
     {
-        parent::__construct($runtime);
-
         $this->view = $view;
         $this->config = $config;
         $this->connectionParser = $connectionParser;

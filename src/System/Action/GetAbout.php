@@ -23,6 +23,7 @@ namespace Fusio\Impl\System\Action;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -41,7 +42,7 @@ use PSX\Sql\OrderBy;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAbout extends ActionAbstract
+class GetAbout implements ActionInterface
 {
     private Service\Config $configService;
     private ConfigInterface $config;
@@ -49,10 +50,8 @@ class GetAbout extends ActionAbstract
     private Table\Scope $scopeTable;
     private Marketplace\Repository\Local $localRepository;
 
-    public function __construct(RuntimeInterface $runtime, Service\Config $configService, ConfigInterface $config, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
+    public function __construct(Service\Config $configService, ConfigInterface $config, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
     {
-        parent::__construct($runtime);
-
         $this->configService = $configService;
         $this->config = $config;
         $this->categoryTable = $categoryTable;

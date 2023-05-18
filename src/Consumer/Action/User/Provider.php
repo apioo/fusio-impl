@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\User;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -38,14 +39,12 @@ use PSX\Oauth2\AccessToken;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Provider extends ActionAbstract
+class Provider implements ActionInterface
 {
     private UserProvider $providerService;
 
-    public function __construct(RuntimeInterface $runtime, UserProvider $providerService)
+    public function __construct(UserProvider $providerService)
     {
-        parent::__construct($runtime);
-
         $this->providerService = $providerService;
     }
 

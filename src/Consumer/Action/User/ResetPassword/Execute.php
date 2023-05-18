@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Model\Consumer\UserPasswordReset;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Execute extends ActionAbstract
+class Execute implements ActionInterface
 {
     private UserResetPassword $resetService;
 
-    public function __construct(RuntimeInterface $runtime, UserResetPassword $resetService)
+    public function __construct(UserResetPassword $resetService)
     {
-        parent::__construct($runtime);
-
         $this->resetService = $resetService;
     }
 

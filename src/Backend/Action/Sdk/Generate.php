@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Sdk;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Model\Backend\SdkGenerate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Generate extends ActionAbstract
+class Generate implements ActionInterface
 {
     private Sdk $sdkService;
 
-    public function __construct(RuntimeInterface $runtime, Sdk $sdkService)
+    public function __construct(Sdk $sdkService)
     {
-        parent::__construct($runtime);
-
         $this->sdkService = $sdkService;
     }
 

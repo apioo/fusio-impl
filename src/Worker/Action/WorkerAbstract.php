@@ -21,14 +21,13 @@
 
 namespace Fusio\Impl\Worker\Action;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Model\ActionInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpInterface;
-use Fusio\Engine\Request\RpcInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Worker\ClientFactory;
 use Fusio\Impl\Worker\Generated\App;
@@ -40,6 +39,7 @@ use Fusio\Impl\Worker\Generated\Result;
 use Fusio\Impl\Worker\Generated\RpcRequest;
 use Fusio\Impl\Worker\Generated\User;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Thrift\Exception\TException;
 
@@ -52,10 +52,12 @@ use Thrift\Exception\TException;
  */
 abstract class WorkerAbstract extends ActionAbstract
 {
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Config $config)
+    public function __construct(RuntimeInterface $runtime, ConfigInterface $config)
     {
+        parent::__construct($runtime);
+
         $this->config = $config;
     }
 

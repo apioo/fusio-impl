@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Operation;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Impl\Service\Operation;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Delete extends ActionAbstract
+class Delete implements ActionInterface
 {
     private Operation $operationService;
 
-    public function __construct(RuntimeInterface $runtime, Operation $operationService)
+    public function __construct(Operation $operationService)
     {
-        parent::__construct($runtime);
-
         $this->operationService = $operationService;
     }
 

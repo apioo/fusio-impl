@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Role;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use Fusio\Impl\Service\Role;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Delete extends ActionAbstract
+class Delete implements ActionInterface
 {
     private Role $roleService;
 
-    public function __construct(RuntimeInterface $runtime, Role $roleService)
+    public function __construct(Role $roleService)
     {
-        parent::__construct($runtime);
-
         $this->roleService = $roleService;
     }
 

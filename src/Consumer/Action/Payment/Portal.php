@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\Payment;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -38,15 +39,13 @@ use PSX\Framework\Config\ConfigInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Portal extends ActionAbstract
+class Portal implements ActionInterface
 {
     private Payment $transactionService;
     private ConfigInterface $config;
 
-    public function __construct(RuntimeInterface $runtime, Payment $transactionService, ConfigInterface $config)
+    public function __construct(Payment $transactionService, ConfigInterface $config)
     {
-        parent::__construct($runtime);
-
         $this->transactionService = $transactionService;
         $this->config = $config;
     }

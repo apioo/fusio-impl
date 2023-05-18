@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Action;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -38,14 +39,12 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Execute extends ActionAbstract
+class Execute implements ActionInterface
 {
     private Action\Executor $actionExecutorService;
 
-    public function __construct(RuntimeInterface $runtime, Action\Executor $actionExecutorService)
+    public function __construct(Action\Executor $actionExecutorService)
     {
-        parent::__construct($runtime);
-
         $this->actionExecutorService = $actionExecutorService;
     }
 

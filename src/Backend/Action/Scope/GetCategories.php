@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Scope;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -36,14 +37,12 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetCategories extends ActionAbstract
+class GetCategories implements ActionInterface
 {
     private View\Scope $view;
 
-    public function __construct(RuntimeInterface $runtime, View\Scope $view)
+    public function __construct(View\Scope $view)
     {
-        parent::__construct($runtime);
-
         $this->view = $view;
     }
 

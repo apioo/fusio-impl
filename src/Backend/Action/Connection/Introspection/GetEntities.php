@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Connection\Introspection;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -35,14 +36,12 @@ use Fusio\Impl\Service\Connection;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetEntities extends ActionAbstract
+class GetEntities implements ActionInterface
 {
     private Connection $connectionService;
 
-    public function __construct(RuntimeInterface $runtime, Connection $connectionService)
+    public function __construct(Connection $connectionService)
     {
-        parent::__construct($runtime);
-
         $this->connectionService = $connectionService;
     }
 

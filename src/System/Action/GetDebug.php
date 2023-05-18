@@ -22,6 +22,7 @@
 namespace Fusio\Impl\System\Action;
 
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -33,7 +34,7 @@ use Fusio\Engine\RequestInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetDebug extends ActionAbstract
+class GetDebug implements ActionInterface
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Operation;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -38,20 +39,18 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Get extends ActionAbstract
+class Get implements ActionInterface
 {
-    private View\Operation $table;
+    private View\Operation $view;
 
-    public function __construct(RuntimeInterface $runtime, TableManagerInterface $tableManager)
+    public function __construct(View\Operation $view)
     {
-        parent::__construct($runtime);
-
-        $this->table = $tableManager->getTable(View\Operation::class);
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $operation = $this->table->getEntity(
+        $operation = $this->view->getEntity(
             $request->get('operation_id')
         );
 

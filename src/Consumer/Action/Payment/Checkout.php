@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\Action\Payment;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,14 +38,12 @@ use Fusio\Model\Consumer\PaymentCheckoutRequest;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Checkout extends ActionAbstract
+class Checkout implements ActionInterface
 {
     private Payment $paymentService;
 
-    public function __construct(RuntimeInterface $runtime, Payment $paymentService)
+    public function __construct(Payment $paymentService)
     {
-        parent::__construct($runtime);
-
         $this->paymentService = $paymentService;
     }
 
