@@ -114,7 +114,7 @@ class Rate
             $this->rateTable->beginTransaction();
 
             // update rate
-            $existing->setPriority($rate->getPriority());
+            $existing->setPriority($rate->getPriority() ?? 0);
             $existing->setName($rate->getName());
             $existing->setRateLimit($rate->getRateLimit());
             $existing->setTimespan($rate->getTimespan());

@@ -95,7 +95,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -125,7 +125,7 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssoc($sql, ['id' => 3]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 3]);
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['type']);
@@ -145,6 +145,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

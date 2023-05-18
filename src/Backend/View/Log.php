@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\View;
 use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 

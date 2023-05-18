@@ -114,10 +114,10 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = $this->connection->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['id']);
-        $this->assertEquals(46, $row['event_id']);
+        $this->assertEquals(49, $row['event_id']);
         $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('http://localhost', $row['endpoint']);
     }
@@ -133,7 +133,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -147,6 +147,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

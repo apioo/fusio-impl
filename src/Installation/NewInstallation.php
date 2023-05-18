@@ -376,7 +376,7 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                 ),
                 'config.get' => new Operation(
-                    action: Backend\Action\Config\GetAll::class,
+                    action: Backend\Action\Config\Get::class,
                     httpMethod: 'GET',
                     httpPath: '/config/$config_id<[0-9]+|^~>',
                     httpCode: 200,

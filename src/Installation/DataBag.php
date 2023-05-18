@@ -632,17 +632,25 @@ class DataBag
 
     private function getActionName(string $class): string
     {
-        $parts = explode('\\', $class);
-        array_shift($parts); // Fusio
-        array_shift($parts); // Impl
-        return implode('_', $parts);
+        if (class_exists($class)) {
+            $parts = explode('\\', $class);
+            array_shift($parts); // Fusio
+            array_shift($parts); // Impl
+            return implode('_', $parts);
+        } else {
+            return $class;
+        }
     }
 
     private function getSchemaName(string $class): string
     {
-        $parts = explode('\\', $class);
-        array_shift($parts);
-        array_shift($parts);
-        return implode('_', $parts);
+        if (class_exists($class)) {
+            $parts = explode('\\', $class);
+            array_shift($parts);
+            array_shift($parts);
+            return implode('_', $parts);
+        } else {
+            return $class;
+        }
     }
 }

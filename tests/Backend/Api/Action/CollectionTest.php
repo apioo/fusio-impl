@@ -57,35 +57,41 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 179,
+            "id": 177,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 178,
+            "id": 176,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 177,
+            "id": 175,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 176,
+            "id": 174,
             "status": 1,
             "name": "Util-Static-Response",
             "metadata": {
                 "foo": "bar"
             },
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "System_Action_GetAbout",
             "date": "[datetime]"
         }
     ]
@@ -113,13 +119,13 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 174,
+            "id": 176,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 173,
+            "id": 175,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
@@ -144,35 +150,41 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 179,
+            "id": 177,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 178,
+            "id": 176,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 177,
+            "id": 175,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 176,
+            "id": 174,
             "status": 1,
             "name": "Util-Static-Response",
             "metadata": {
                 "foo": "bar"
             },
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "System_Action_GetAbout",
             "date": "[datetime]"
         }
     ]

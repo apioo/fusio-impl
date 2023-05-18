@@ -53,22 +53,27 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 151,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 150,
+            "id": 140,
             "status": 1,
             "name": "Collection-Schema",
             "metadata": {
                 "foo": "bar"
             }
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "name": "System_About"
         },
         {
             "id": 1,
@@ -120,22 +125,27 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 151,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 150,
+            "id": 140,
             "status": 1,
             "name": "Collection-Schema",
             "metadata": {
                 "foo": "bar"
             }
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "name": "System_About"
         },
         {
             "id": 1,

@@ -63,7 +63,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "DELETE",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.delete",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 178,
@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "PATCH",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.patch",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 177,
@@ -85,7 +85,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "PUT",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.put",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 176,
@@ -96,7 +96,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "POST",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.post",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 175,
@@ -107,7 +107,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "GET",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.get",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 174,
@@ -118,18 +118,18 @@ class CollectionTest extends ControllerDbTestCase
             "httpMethod": "POST",
             "httpPath": "\/foo",
             "name": "test.createFoo",
-            "action": ""
+            "action": "Sql-Insert"
         },
         {
             "id": 173,
             "status": 1,
             "active": 1,
             "public": 0,
-            "stability": 2,
+            "stability": 1,
             "httpMethod": "GET",
             "httpPath": "\/foo",
             "name": "test.listFoo",
-            "action": ""
+            "action": "Sql-Select-All"
         },
         {
             "id": 1,
@@ -173,7 +173,7 @@ JSON;
             "httpMethod": "DELETE",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.delete",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 178,
@@ -184,7 +184,7 @@ JSON;
             "httpMethod": "PATCH",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.patch",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 177,
@@ -195,7 +195,7 @@ JSON;
             "httpMethod": "PUT",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.put",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 176,
@@ -206,7 +206,7 @@ JSON;
             "httpMethod": "POST",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.post",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 175,
@@ -217,7 +217,7 @@ JSON;
             "httpMethod": "GET",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.get",
-            "action": ""
+            "action": "Inspect-Action"
         }
     ]
 }
@@ -250,7 +250,7 @@ JSON;
             "httpMethod": "DELETE",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.delete",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 178,
@@ -261,7 +261,7 @@ JSON;
             "httpMethod": "PATCH",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.patch",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 177,
@@ -272,7 +272,7 @@ JSON;
             "httpMethod": "PUT",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.put",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 176,
@@ -283,7 +283,7 @@ JSON;
             "httpMethod": "POST",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.post",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 175,
@@ -294,7 +294,7 @@ JSON;
             "httpMethod": "GET",
             "httpPath": "\/inspect\/:foo",
             "name": "inspect.get",
-            "action": ""
+            "action": "Inspect-Action"
         },
         {
             "id": 174,
@@ -305,18 +305,18 @@ JSON;
             "httpMethod": "POST",
             "httpPath": "\/foo",
             "name": "test.createFoo",
-            "action": ""
+            "action": "Sql-Insert"
         },
         {
             "id": 173,
             "status": 1,
             "active": 1,
             "public": 0,
-            "stability": 2,
+            "stability": 1,
             "httpMethod": "GET",
             "httpPath": "\/foo",
             "name": "test.listFoo",
-            "action": ""
+            "action": "Sql-Select-All"
         },
         {
             "id": 1,

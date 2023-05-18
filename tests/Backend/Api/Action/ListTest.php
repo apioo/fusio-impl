@@ -51,72 +51,120 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
-            "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor",
-            "name": "CLI-Processor"
+            "name": "CLI-Processor",
+            "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor",
-            "name": "FastCGI-Processor"
+            "name": "Cli-Engine",
+            "class": "Fusio\\Adapter\\Cli\\Action\\CliEngine"
         },
         {
-            "class": "Fusio\\Adapter\\File\\Action\\FileProcessor",
-            "name": "File-Processor"
+            "name": "FastCGI-Processor",
+            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\GraphQL\\Action\\GraphQLProcessor",
-            "name": "GraphQL-Processor"
+            "name": "Fcgi-Engine",
+            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor",
-            "name": "HTTP-Processor"
+            "name": "File-Directory-Detail",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryDetail"
         },
         {
-            "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor",
-            "name": "PHP-Processor"
+            "name": "File-Directory-Index",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryIndex"
         },
         {
-            "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox",
-            "name": "PHP-Sandbox"
+            "name": "File-Engine",
+            "class": "Fusio\\Adapter\\File\\Action\\FileEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend",
-            "name": "SMTP-Send"
+            "name": "File-Processor",
+            "class": "Fusio\\Adapter\\File\\Action\\FileProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
-            "name": "SQL-Delete"
+            "name": "GraphQL-Processor",
+            "class": "Fusio\\Adapter\\GraphQL\\Action\\GraphQLProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
-            "name": "SQL-Insert"
+            "name": "HTTP-Composition",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpComposition"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll",
-            "name": "SQL-Query-All"
+            "name": "HTTP-Load-Balancer",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpLoadBalancer"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow",
-            "name": "SQL-Query-Row"
+            "name": "HTTP-Processor",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
-            "name": "SQL-Select-All"
+            "name": "Http-Engine",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow",
-            "name": "SQL-Select-Row"
+            "name": "PHP-Processor",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
-            "name": "SQL-Update"
+            "name": "PHP-Sandbox",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-            "name": "Util-Static-Response"
+            "name": "Php-Engine",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpEngine"
         },
         {
-            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction",
-            "name": "Void-Action"
+            "name": "SMTP-Send",
+            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend"
+        },
+        {
+            "name": "SQL-Builder",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder"
+        },
+        {
+            "name": "SQL-Delete",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete"
+        },
+        {
+            "name": "SQL-Insert",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert"
+        },
+        {
+            "name": "SQL-Select-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll"
+        },
+        {
+            "name": "SQL-Select-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow"
+        },
+        {
+            "name": "SQL-Update",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate"
+        },
+        {
+            "name": "Util-A\/B-Test",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilABTest"
+        },
+        {
+            "name": "Util-Cache",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilCache"
+        },
+        {
+            "name": "Util-Dispatch-Event",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilDispatchEvent"
+        },
+        {
+            "name": "Util-JSON-Patch",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilJsonPatch"
+        },
+        {
+            "name": "Util-Redirect",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilRedirect"
+        },
+        {
+            "name": "Util-Static-Response",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
         }
     ]
 }

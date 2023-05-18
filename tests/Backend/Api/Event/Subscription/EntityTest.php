@@ -84,24 +84,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/event/subscription/10', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find subscription"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find subscription', $data->message);
     }
 
     public function testPost()
@@ -115,7 +108,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -145,7 +138,7 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssoc($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
 
         $this->assertEquals(1, $row['id']);
         $this->assertEquals($this->eventId, $row['event_id']);
@@ -180,7 +173,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = $this->connection->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(2, $row['id']);
     }

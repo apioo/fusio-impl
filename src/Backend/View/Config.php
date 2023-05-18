@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Record\RecordInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
@@ -72,8 +73,8 @@ class Config extends ViewAbstract
                 'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
                 'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-                'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
-                    return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
+                'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, RecordInterface $row){
+                    return \Fusio\Impl\Service\Config::convertValueToType($value, $row->get('type'));
                 }),
             ]),
         ];
@@ -90,8 +91,8 @@ class Config extends ViewAbstract
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,
             'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
-            'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, Table\Generated\ConfigRow $row){
-                return \Fusio\Impl\Service\Config::convertValueToType($value, $row->getType());
+            'value' => $builder->fieldCallback(Table\Generated\ConfigTable::COLUMN_VALUE, function($value, RecordInterface $row){
+                return \Fusio\Impl\Service\Config::convertValueToType($value, $row->get('type'));
             }),
         ]);
 

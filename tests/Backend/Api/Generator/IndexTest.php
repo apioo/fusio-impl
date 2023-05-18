@@ -47,20 +47,28 @@ class IndexTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
     "providers": [
         {
-            "name": "SQL-Table",
-            "class": "sqltable"
+            "name": "File-Directory",
+            "class": "Fusio\\Adapter\\File\\Generator\\FileDirectory"
+        },
+        {
+            "name": "SQL-Database",
+            "class": "Fusio\\Adapter\\Sql\\Generator\\SqlDatabase"
         },
         {
             "name": "SQL-Entity",
-            "class": "sqlentity"
+            "class": "Fusio\\Adapter\\Sql\\Generator\\SqlEntity"
+        },
+        {
+            "name": "SQL-Table",
+            "class": "Fusio\\Adapter\\Sql\\Generator\\SqlTable"
         },
         {
             "name": "Test-Provider",
-            "class": "testprovider"
+            "class": "Fusio\\Impl\\Tests\\Service\\Generator\\TestProvider"
         }
     ]
 }
@@ -81,7 +89,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -95,7 +103,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -109,6 +117,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

@@ -51,6 +51,7 @@ class GetEntitiesTest extends ControllerDbTestCase
 {
     "entities": [
         "app_news",
+        "doctrine_migration_versions",
         "fusio_action",
         "fusio_action_queue",
         "fusio_app",
@@ -69,7 +70,7 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_event_trigger",
         "fusio_log",
         "fusio_log_error",
-        "fusio_migration_versions",
+        "fusio_operation",
         "fusio_page",
         "fusio_plan",
         "fusio_plan_scope",
@@ -79,12 +80,9 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_rate_allocation",
         "fusio_role",
         "fusio_role_scope",
-        "fusio_routes",
-        "fusio_routes_method",
-        "fusio_routes_response",
         "fusio_schema",
         "fusio_scope",
-        "fusio_scope_routes",
+        "fusio_scope_operation",
         "fusio_transaction",
         "fusio_user",
         "fusio_user_grant",
@@ -108,7 +106,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -122,7 +120,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -136,6 +134,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

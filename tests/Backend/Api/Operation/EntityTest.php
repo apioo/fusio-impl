@@ -71,9 +71,9 @@ class EntityTest extends ControllerDbTestCase
     "httpPath": "\/foo",
     "name": "test.listFoo",
     "parameters": [],
-    "outgoing": "",
+    "outgoing": "Collection-Schema",
     "throws": [],
-    "action": "",
+    "action": "Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -101,9 +101,9 @@ JSON;
     "httpPath": "\/foo",
     "name": "test.listFoo",
     "parameters": [],
-    "outgoing": "",
+    "outgoing": "Collection-Schema",
     "throws": [],
-    "action": "",
+    "action": "Sql-Select-All",
     "costs": 0
 }
 JSON;
