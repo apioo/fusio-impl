@@ -84,24 +84,16 @@ JSON;
 
     public function testGetUnauthorized()
     {
-        Environment::getService('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/consumer/app', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Missing authorization header"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Missing authorization header', $data->message);
     }
 
     public function testPost()
@@ -128,7 +120,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
@@ -136,7 +128,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
@@ -156,7 +148,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -170,6 +162,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

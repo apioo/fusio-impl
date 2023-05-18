@@ -27,6 +27,7 @@ use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * EntityTest
@@ -77,7 +78,7 @@ class EntityTest extends ControllerDbTestCase
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.user",
+        "consumer.account",
         "authorization",
         "default"
     ],
@@ -127,7 +128,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -154,13 +155,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url')
             ->from('fusio_app')
             ->where('id = 2')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(1, $row['status']);
@@ -168,7 +169,7 @@ JSON;
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
 
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(2);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(2);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -193,13 +194,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_app')
             ->where('id = 2')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(Table\App::STATUS_DELETED, $row['status']);
