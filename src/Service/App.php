@@ -141,7 +141,7 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $existing->setStatus($app->getStatus());
+            $existing->setStatus($app->getStatus() ?? Table\App::STATUS_ACTIVE);
             $existing->setName($app->getName());
             $existing->setUrl($app->getUrl());
             $existing->setParameters($parameters);

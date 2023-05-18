@@ -132,17 +132,17 @@ class App
 
         // check that the user can assign only the scopes which are also
         // assigned to the user account
-        $scopes = array_filter($scopes, function ($scope) use ($userScopes) {
+        $scopes = array_filter($scopes, function (Table\Generated\ScopeRow $scope) use ($userScopes) {
             foreach ($userScopes as $userScope) {
-                if ($userScope['id'] == $scope['id']) {
+                if ($userScope['id'] == $scope->getId()) {
                     return true;
                 }
             }
             return false;
         });
 
-        return array_map(function ($scope) {
-            return $scope['name'];
+        return array_map(function (Table\Generated\ScopeRow $scope) {
+            return $scope->getName();
         }, $scopes);
     }
 
