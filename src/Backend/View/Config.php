@@ -83,17 +83,9 @@ class Config extends ViewAbstract
 
     public function getEntity(string $id)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Config::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

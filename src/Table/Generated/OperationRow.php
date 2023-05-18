@@ -13,6 +13,7 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $description = null;
     private ?string $httpMethod = null;
     private ?string $httpPath = null;
+    private ?int $httpCode = null;
     private ?string $name = null;
     private ?string $parameters = null;
     private ?string $incoming = null;
@@ -93,6 +94,14 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->httpPath ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "http_path" was provided');
     }
+    public function setHttpCode(int $httpCode) : void
+    {
+        $this->httpCode = $httpCode;
+    }
+    public function getHttpCode() : int
+    {
+        return $this->httpCode ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "http_code" was provided');
+    }
     public function setName(string $name) : void
     {
         $this->name = $name;
@@ -170,6 +179,7 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('description', $this->description);
         $record->put('http_method', $this->httpMethod);
         $record->put('http_path', $this->httpPath);
+        $record->put('http_code', $this->httpCode);
         $record->put('name', $this->name);
         $record->put('parameters', $this->parameters);
         $record->put('incoming', $this->incoming);
@@ -196,6 +206,7 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
         $row->httpMethod = isset($data['http_method']) && is_string($data['http_method']) ? $data['http_method'] : null;
         $row->httpPath = isset($data['http_path']) && is_string($data['http_path']) ? $data['http_path'] : null;
+        $row->httpCode = isset($data['http_code']) && is_int($data['http_code']) ? $data['http_code'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->parameters = isset($data['parameters']) && is_string($data['parameters']) ? $data['parameters'] : null;
         $row->incoming = isset($data['incoming']) && is_string($data['incoming']) ? $data['incoming'] : null;

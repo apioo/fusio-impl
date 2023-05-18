@@ -50,7 +50,7 @@ class Delete extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->scopeService->delete(
-            (int) $request->get('scope_id'),
+            $request->get('scope_id'),
             UserContext::newActionContext($context)
         );
 

@@ -142,6 +142,7 @@ class Fixture
                 httpPath: '/foo',
                 httpCode: 200,
                 outgoing: 'Collection-Schema',
+                stability: OperationInterface::STABILITY_EXPERIMENTAL
             ),
             'test.createFoo' => new Operation(
                 action: 'Sql-Insert',
@@ -149,7 +150,7 @@ class Fixture
                 httpPath: '/foo',
                 httpCode: 201,
                 outgoing: 'Passthru',
-                incoming: 'Entry-Schema'
+                incoming: 'Entry-Schema',
             ),
             'inspect.get' => new Operation(
                 action: 'Inspect-Action',

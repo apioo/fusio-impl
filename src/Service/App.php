@@ -119,9 +119,9 @@ class App
         return $appId;
     }
 
-    public function update(int $appId, AppUpdate $app, UserContext $context): int
+    public function update(string $appId, AppUpdate $app, UserContext $context): int
     {
-        $existing = $this->appTable->find($appId);
+        $existing = $this->appTable->findOneByIdentifier($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -166,12 +166,12 @@ class App
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($app, $existing, $context));
 
-        return $appId;
+        return $existing->getId();
     }
 
-    public function delete(int $appId, UserContext $context): int
+    public function delete(string $appId, UserContext $context): int
     {
-        $existing = $this->appTable->find($appId);
+        $existing = $this->appTable->findOneByIdentifier($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -185,7 +185,7 @@ class App
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $appId;
+        return $existing->getId();
     }
 
     protected function insertScopes(int $appId, ?array $scopes): void

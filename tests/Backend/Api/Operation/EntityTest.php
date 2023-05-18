@@ -25,6 +25,7 @@ use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\OperationInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -61,41 +62,19 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": {$this->id},
+    "id": 173,
     "status": 1,
-    "path": "\/foo",
-    "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController",
-    "scopes": [
-        "bar"
-    ],
-    "config": [
-        {
-            "version": 1,
-            "status": 4,
-            "methods": {
-                "GET": {
-                    "active": true,
-                    "public": true,
-                    "operationId": "listFoo",
-                    "responses": {
-                        "200": "Collection-Schema"
-                    },
-                    "action": "Sql-Select-All"
-                },
-                "POST": {
-                    "active": true,
-                    "public": false,
-                    "operationId": "createFoo",
-                    "request": "Entry-Schema",
-                    "responses": {
-                        "201": "Passthru"
-                    },
-                    "action": "Sql-Insert",
-                    "costs": 1
-                }
-            }
-        }
-    ]
+    "active": 1,
+    "public": 0,
+    "stability": 1,
+    "httpMethod": "GET",
+    "httpPath": "\/foo",
+    "name": "test.listFoo",
+    "parameters": [],
+    "outgoing": "",
+    "throws": [],
+    "action": "",
+    "costs": 0
 }
 JSON;
 
@@ -105,7 +84,7 @@ JSON;
 
     public function testGetByName()
     {
-        $response = $this->sendRequest('/backend/operation/~' . urlencode('test.listFoo'), 'GET', array(
+        $response = $this->sendRequest('/backend/operation/~test.listFoo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -113,41 +92,19 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": {$this->id},
+    "id": 173,
     "status": 1,
-    "path": "\/foo",
-    "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController",
-    "scopes": [
-        "bar"
-    ],
-    "config": [
-        {
-            "version": 1,
-            "status": 4,
-            "methods": {
-                "GET": {
-                    "active": true,
-                    "public": true,
-                    "operationId": "listFoo",
-                    "responses": {
-                        "200": "Collection-Schema"
-                    },
-                    "action": "Sql-Select-All"
-                },
-                "POST": {
-                    "active": true,
-                    "public": false,
-                    "operationId": "createFoo",
-                    "request": "Entry-Schema",
-                    "responses": {
-                        "201": "Passthru"
-                    },
-                    "action": "Sql-Insert",
-                    "costs": 1
-                }
-            }
-        }
-    ]
+    "active": 1,
+    "public": 0,
+    "stability": 1,
+    "httpMethod": "GET",
+    "httpPath": "\/foo",
+    "name": "test.listFoo",
+    "parameters": [],
+    "outgoing": "",
+    "throws": [],
+    "action": "",
+    "costs": 0
 }
 JSON;
 
@@ -157,24 +114,17 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/operation/1000', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find route"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find operation', $data->message);
     }
 
     public function testPost()
@@ -188,7 +138,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -201,33 +151,26 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'     => '/foo',
-            'scopes'   => ['foo', 'baz'],
-            'config'   => [[
-                'version' => 1,
-                'status'  => 4,
-                'methods' => [
-                    'GET' => [
-                        'active'     => true,
-                        'public'     => true,
-                        'parameters' => 'Collection-Schema',
-                        'responses'  => [
-                            '200'    => 'Passthru'
-                        ],
-                        'costs'      => 16,
-                        'action'     => 'Sql-Table',
-                    ],
-                    'POST' => [
-                        'active'     => true,
-                        'public'     => false,
-                        'request'    => 'Passthru',
-                        'responses'  => [
-                            '201'    => 'Passthru'
-                        ],
-                        'action'     => 'Sql-Table',
-                    ],
-                ],
-            ]],
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_STABLE,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo',
+            'httpCode'   => 200,
+            'name'       => 'test.baz',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'string'
+                ]
+            ],
+            'incoming'   => 'Passthru',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                500 => 'Passthru',
+            ],
+            'cost'       => 10,
+            'action'     => 'Sql-Select-All',
+            'scopes'     => ['foo', 'baz'],
             'metadata' => $metadata,
         ]));
 
@@ -243,50 +186,39 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertOperation('/foo', ['foo', 'baz'], [[
-            'method'       => 'GET',
-            'version'      => 1,
-            'status'       => 4,
-            'active'       => true,
-            'public'       => true,
-            'description'  => '',
-            'operation_id' => 'get.foo',
-            'parameters'   => 'Collection-Schema',
-            'request'      => null,
-            'responses'    => [
-                '200'      => 'Passthru'
-            ],
-            'action'       => 'Sql-Table',
-            'costs'        => 16,
-        ], [
-            'method'       => 'POST',
-            'version'      => 1,
-            'status'       => 4,
-            'active'       => true,
-            'public'       => false,
-            'description'  => '',
-            'operation_id' => 'post.foo',
-            'parameters'   => null,
-            'request'      => 'Passthru',
-            'responses'    => [
-                '201'      => 'Passthru'
-            ],
-            'action'       => 'Sql-Table',
-            'costs'        => 0,
-        ]], $metadata);
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_STABLE, 'test.baz', 'GET', '/foo', ['foo', 'baz'], $metadata);
     }
 
-    public function testPutDeploy()
+    /**
+     * If we are sending a put against a stable operation we are only able to change the stability all other properties
+     * should not change
+     */
+    public function testPutStable()
     {
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/~test.createFoo', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'   => '/foo',
-            'config' => [[
-                'version' => 1,
-                'status'  => Resource::STATUS_ACTIVE,
-            ]],
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_DEPRECATED,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo',
+            'httpCode'   => 200,
+            'name'       => 'test.baz',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'string'
+                ]
+            ],
+            'incoming'   => 'Passthru',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                500 => 'Passthru',
+            ],
+            'cost'       => 10,
+            'action'     => 'Sql-Select-All',
+            'scopes'     => ['foo', 'baz'],
         ]));
 
         $body   = (string) $response->getBody();
@@ -301,37 +233,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertOperation('/foo', ['bar'], [[
-            'method'       => 'GET',
-            'version'      => 1,
-            'status'       => 1,
-            'active'       => true,
-            'public'       => true,
-            'description'  => '',
-            'operation_id' => 'listFoo',
-            'parameters'   => null,
-            'request'      => null,
-            'responses'    => [
-                '200'      => 'Collection-Schema'
-            ],
-            'action'       => 'Sql-Select-All',
-            'costs'        => 0,
-        ], [
-            'method'       => 'POST',
-            'version'      => 1,
-            'status'       => 1,
-            'active'       => true,
-            'public'       => false,
-            'description'  => '',
-            'operation_id' => 'createFoo',
-            'parameters'   => null,
-            'request'      => 'Entry-Schema',
-            'responses'    => [
-                '201'      => 'Passthru'
-            ],
-            'action'       => 'Sql-Insert',
-            'costs'        => 1,
-        ]]);
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_DEPRECATED, 'test.createFoo', 'POST', '/foo', ['foo', 'baz']);
     }
 
     public function testDelete()
@@ -361,7 +263,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = $this->connection->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals($this->id, $row['id']);
         $this->assertEquals(TableRoutes::STATUS_DELETED, $row['status']);

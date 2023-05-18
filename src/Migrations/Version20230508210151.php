@@ -262,6 +262,7 @@ final class Version20230508210151 extends AbstractMigration
             $operationTable->addColumn('description', 'string', ['length' => 500, 'notnull' => false]);
             $operationTable->addColumn('http_method', 'string', ['length' => 16]);
             $operationTable->addColumn('http_path', 'string', ['length' => 255]);
+            $operationTable->addColumn('http_code', 'integer');
             $operationTable->addColumn('name', 'string', ['length' => 255]);
             $operationTable->addColumn('parameters', 'text', ['notnull' => false]);
             $operationTable->addColumn('incoming', 'string', ['length' => 255, 'notnull' => false]);

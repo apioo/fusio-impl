@@ -98,41 +98,41 @@ class Scope
         return $scopeId;
     }
 
-    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context): void
+    public function createForOperation(int $categoryId, int $operationId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
-        $this->scopeRouteTable->deleteAllFromOperation($routeId);
+        $this->scopeRouteTable->deleteAllFromOperation($operationId);
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
             $scope = $this->scopeTable->findOneByName($scopeName);
             if ($scope instanceof Table\Generated\ScopeRow) {
                 // assign route to scope
-                $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
-                    Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID => $scope->getId(),
-                    Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID => $routeId,
-                    Table\Generated\ScopeRoutesTable::COLUMN_ALLOW => 1,
-                    Table\Generated\ScopeRoutesTable::COLUMN_METHODS => 'GET|POST|PUT|PATCH|DELETE',
-                ]));
+                $row = new Table\Generated\ScopeOperationRow();
+                $row->setScopeId($scope->getId());
+                $row->setOperationId($operationId);
+                $row->setAllow(1);
+                $row->setMethods('GET|POST|PUT|PATCH|DELETE');
+                $this->scopeRouteTable->create($row);
             } else {
                 // create new scope
-                $route = new ScopeRoute();
-                $route->setRouteId($routeId);
-                $route->setAllow(true);
-                $route->setMethods('GET|POST|PUT|PATCH|DELETE');
+                $operation = new ScopeOperation();
+                $operation->setOperationId($operationId);
+                $operation->setAllow(true);
+                $operation->setMethods('GET|POST|PUT|PATCH|DELETE');
 
                 $scope = new ScopeCreate();
                 $scope->setName($scopeName);
-                $scope->setRoutes([$route]);
+                $scope->setOperations([$operation]);
 
                 $this->create($categoryId, $scope, $context);
             }
         }
     }
 
-    public function update(int $scopeId, ScopeUpdate $scope, UserContext $context): int
+    public function update(string $scopeId, ScopeUpdate $scope, UserContext $context): int
     {
-        $existing = $this->scopeTable->find($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -163,12 +163,12 @@ class Scope
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($scope, $existing, $context));
 
-        return $scopeId;
+        return $existing->getId();
     }
 
-    public function delete(int $scopeId, UserContext $context): int
+    public function delete(string $scopeId, UserContext $context): int
     {
-        $existing = $this->scopeTable->find($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -210,7 +210,7 @@ class Scope
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $scopeId;
+        return $existing->getId();
     }
 
     /**

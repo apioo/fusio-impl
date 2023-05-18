@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Route;
+namespace Fusio\Impl\Service\Operation;
 
 use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;

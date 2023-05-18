@@ -121,9 +121,9 @@ class Connection
         return $connectionId;
     }
 
-    public function update(int $connectionId, ConnectionUpdate $connection, UserContext $context): int
+    public function update(string $connectionId, ConnectionUpdate $connection, UserContext $context): int
     {
-        $existing = $this->connectionTable->find($connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -153,12 +153,12 @@ class Connection
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
 
-        return $connectionId;
+        return $existing->getId();
     }
 
     public function delete(int $connectionId, UserContext $context): int
     {
-        $existing = $this->connectionTable->find($connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -189,7 +189,7 @@ class Connection
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $connectionId;
+        return $existing->getId();
     }
 
     public function exists(string $name): int|false

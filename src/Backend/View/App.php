@@ -86,7 +86,7 @@ class App extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
             'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),

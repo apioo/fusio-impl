@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ConnectionRow;
+use Fusio\Impl\Table\Generated\CronjobRow;
+
 /**
  * Cronjob
  *
@@ -35,4 +38,13 @@ class Cronjob extends Generated\CronjobTable
 
     public const CODE_SUCCESS = 0;
     public const CODE_ERROR = 1;
+
+    public function findOneByIdentifier(string $id): ?CronjobRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 }

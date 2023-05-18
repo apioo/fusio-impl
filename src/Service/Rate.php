@@ -99,9 +99,9 @@ class Rate
         return $rateId;
     }
 
-    public function update(int $rateId, RateUpdate $rate, UserContext $context): int
+    public function update(string $rateId, RateUpdate $rate, UserContext $context): int
     {
-        $existing = $this->rateTable->find($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -132,12 +132,12 @@ class Rate
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($rate, $existing, $context));
 
-        return $rateId;
+        return $existing->getId();
     }
 
-    public function delete(int $rateId, UserContext $context): int
+    public function delete(string $rateId, UserContext $context): int
     {
-        $existing = $this->rateTable->find($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -147,7 +147,7 @@ class Rate
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $rateId;
+        return $existing->getId();
     }
 
     public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool

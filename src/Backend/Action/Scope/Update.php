@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof ScopeUpdate);
 
         $this->scopeService->update(
-            (int) $request->get('scope_id'),
+            $request->get('scope_id'),
             $body,
             UserContext::newActionContext($context)
         );

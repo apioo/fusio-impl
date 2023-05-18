@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof ConnectionUpdate);
 
         $this->connectionService->update(
-            (int) $request->get('connection_id'),
+            $request->get('connection_id'),
             $body,
             UserContext::newActionContext($context)
         );

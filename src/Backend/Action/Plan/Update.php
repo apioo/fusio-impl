@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof PlanUpdate);
 
         $this->planService->update(
-            (int) $request->get('plan_id'),
+            $request->get('plan_id'),
             $body,
             UserContext::newActionContext($context)
         );

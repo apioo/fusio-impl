@@ -84,17 +84,9 @@ class Rate extends ViewAbstract
 
     public function getEntity(string $id)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
             'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),

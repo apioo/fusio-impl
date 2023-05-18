@@ -95,9 +95,9 @@ class Page
         return $pageId;
     }
 
-    public function update(int $pageId, PageUpdate $page, UserContext $context): int
+    public function update(string $pageId, PageUpdate $page, UserContext $context): int
     {
-        $existing = $this->pageTable->find($pageId);
+        $existing = $this->pageTable->findOneByIdentifier($pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }
@@ -125,12 +125,12 @@ class Page
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($page, $existing, $context));
 
-        return $pageId;
+        return $existing->getId();
     }
 
-    public function delete(int $pageId, UserContext $context): int
+    public function delete(string $pageId, UserContext $context): int
     {
-        $existing = $this->pageTable->find($pageId);
+        $existing = $this->pageTable->findOneByIdentifier($pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }
@@ -144,7 +144,7 @@ class Page
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $pageId;
+        return $existing->getId();
     }
 
     public function exists(string $slug): int|false

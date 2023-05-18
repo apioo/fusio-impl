@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ConfigRow;
+use Fusio\Impl\Table\Generated\PageRow;
+
 /**
  * Page
  *
@@ -33,4 +36,13 @@ class Page extends Generated\PageTable
     public const STATUS_VISIBLE   = 1;
     public const STATUS_INVISIBLE = 2;
     public const STATUS_DELETED   = 0;
+
+    public function findOneByIdentifier(string $id): ?PageRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTitle(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 }

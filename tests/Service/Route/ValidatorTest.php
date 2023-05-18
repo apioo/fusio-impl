@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Service\Route;
 
-use Fusio\Impl\Service\Route\Validator;
+use Fusio\Impl\Service\Operation\Validator;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\BadRequestException;
 
@@ -40,7 +40,7 @@ class ValidatorTest extends TestCase
     public function testAssertPath(string $path, bool $expect, ?string $errorMessage)
     {
         try {
-            Validator::assertPath($path);
+            Validator::assertHttpPath($path);
 
             $this->assertTrue($expect);
         } catch (BadRequestException $e) {

@@ -50,7 +50,7 @@ class Delete extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->cronjobService->delete(
-            (int) $request->get('cronjob_id'),
+            $request->get('cronjob_id'),
             UserContext::newActionContext($context)
         );
 

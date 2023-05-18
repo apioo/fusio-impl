@@ -86,9 +86,9 @@ class Category
         return $categoryId;
     }
 
-    public function update(int $categoryId, CategoryUpdate $category, UserContext $context): int
+    public function update(string $categoryId, CategoryUpdate $category, UserContext $context): int
     {
-        $existing = $this->categoryTable->find($categoryId);
+        $existing = $this->categoryTable->findOneByIdentifier($categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }
@@ -113,12 +113,12 @@ class Category
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($category, $existing, $context));
 
-        return $categoryId;
+        return $existing->getId();
     }
 
-    public function delete(int $categoryId, UserContext $context): int
+    public function delete(string $categoryId, UserContext $context): int
     {
-        $existing = $this->categoryTable->find($categoryId);
+        $existing = $this->categoryTable->findOneByIdentifier($categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }
@@ -128,7 +128,7 @@ class Category
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $categoryId;
+        return $existing->getId();
     }
 
     public function exists(string $name): int|false

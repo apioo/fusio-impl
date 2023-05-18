@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ActionRow;
+use Fusio\Impl\Table\Generated\ConnectionRow;
+
 /**
  * Connection
  *
@@ -32,4 +35,13 @@ class Connection extends Generated\ConnectionTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public function findOneByIdentifier(string $id): ?ConnectionRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 }

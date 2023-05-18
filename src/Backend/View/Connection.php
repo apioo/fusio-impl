@@ -107,17 +107,9 @@ class Connection extends ViewAbstract
 
     public function getEntityWithConfig(string $id, string $secretKey, ParserInterface $connectionParser)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

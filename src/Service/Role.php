@@ -95,9 +95,9 @@ class Role
         return $roleId;
     }
 
-    public function update(int $roleId, RoleUpdate $role, UserContext $context): int
+    public function update(string $roleId, RoleUpdate $role, UserContext $context): int
     {
-        $existing = $this->roleTable->find($roleId);
+        $existing = $this->roleTable->findOneByIdentifier($roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
@@ -131,12 +131,12 @@ class Role
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($role, $existing, $context));
 
-        return $roleId;
+        return $existing->getId();
     }
 
-    public function delete(int $roleId, UserContext $context): int
+    public function delete(string $roleId, UserContext $context): int
     {
-        $existing = $this->roleTable->find($roleId);
+        $existing = $this->roleTable->findOneByIdentifier($roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
@@ -146,7 +146,7 @@ class Role
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $roleId;
+        return $existing->getId();
     }
 
     public function exists(string $name): int|false

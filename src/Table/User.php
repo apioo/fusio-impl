@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ScopeRow;
+use Fusio\Impl\Table\Generated\UserRow;
+
 /**
  * User
  *
@@ -33,6 +36,15 @@ class User extends Generated\UserTable
     public const STATUS_DISABLED = 2;
     public const STATUS_ACTIVE   = 1;
     public const STATUS_DELETED  = 0;
+
+    public function findOneByIdentifier(string $id): ?UserRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 
     public function changePassword(int $userId, string $oldPassword, string $newPassword, bool $verifyOld = true): bool
     {

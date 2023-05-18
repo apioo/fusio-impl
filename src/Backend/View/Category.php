@@ -82,7 +82,7 @@ class Category extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
             'name' => Table\Generated\CategoryTable::COLUMN_NAME,

@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof ConfigUpdate);
 
         $this->configService->update(
-            (int) $request->get('config_id'),
+            $request->get('config_id'),
             $body,
             UserContext::newActionContext($context)
         );

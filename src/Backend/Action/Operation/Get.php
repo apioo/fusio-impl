@@ -51,18 +51,18 @@ class Get extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $route = $this->table->getEntity(
+        $operation = $this->table->getEntity(
             $request->get('operation_id')
         );
 
-        if (empty($route)) {
-            throw new StatusCode\NotFoundException('Could not find route');
+        if (empty($operation)) {
+            throw new StatusCode\NotFoundException('Could not find operation');
         }
 
-        if ($route['status'] == Table\Operation::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Route was deleted');
+        if ($operation['status'] == Table\Operation::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Operation was deleted');
         }
 
-        return $route;
+        return $operation;
     }
 }

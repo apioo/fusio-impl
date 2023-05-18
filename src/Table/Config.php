@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\CategoryRow;
+use Fusio\Impl\Table\Generated\ConfigRow;
+
 /**
  * Config
  *
@@ -37,6 +40,15 @@ class Config extends Generated\ConfigTable
     public const FORM_EMAIL    = 5;
     public const FORM_TEXT     = 6;
     public const FORM_SECRET   = 7;
+
+    public function findOneByIdentifier(string $id): ?ConfigRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 
     public function getValue($name)
     {

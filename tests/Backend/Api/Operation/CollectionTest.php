@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\OperationInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -54,7 +55,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 178,
+            "id": 179,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -65,7 +66,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 177,
+            "id": 178,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -76,7 +77,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 176,
+            "id": 177,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -87,7 +88,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 175,
+            "id": 176,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -98,7 +99,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 174,
+            "id": 175,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -109,7 +110,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 173,
+            "id": 174,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -120,7 +121,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": ""
         },
         {
-            "id": 172,
+            "id": 173,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -164,7 +165,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 178,
+            "id": 179,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -175,7 +176,7 @@ JSON;
             "action": ""
         },
         {
-            "id": 177,
+            "id": 178,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -186,7 +187,7 @@ JSON;
             "action": ""
         },
         {
-            "id": 176,
+            "id": 177,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -197,7 +198,7 @@ JSON;
             "action": ""
         },
         {
-            "id": 175,
+            "id": 176,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -208,7 +209,7 @@ JSON;
             "action": ""
         },
         {
-            "id": 174,
+            "id": 175,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -236,27 +237,97 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 117,
+            "id": 179,
             "status": 1,
-            "path": "\/inspect\/:foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "DELETE",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.delete",
+            "action": ""
         },
         {
-            "id": 116,
+            "id": 178,
             "status": 1,
-            "path": "\/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PATCH",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.patch",
+            "action": ""
         },
         {
-            "id": 7,
+            "id": 177,
             "status": 1,
-            "path": "\/",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "PUT",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.put",
+            "action": ""
+        },
+        {
+            "id": 176,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.post",
+            "action": ""
+        },
+        {
+            "id": 175,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/inspect\/:foo",
+            "name": "inspect.get",
+            "action": ""
+        },
+        {
+            "id": 174,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/foo",
+            "name": "test.createFoo",
+            "action": ""
+        },
+        {
+            "id": 173,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "name": "test.listFoo",
+            "action": ""
+        },
+        {
+            "id": 1,
+            "status": 1,
+            "active": 1,
+            "public": 0,
+            "stability": 2,
+            "httpMethod": "GET",
+            "httpPath": "\/",
+            "name": "getAbout",
+            "action": "System_Action_GetAbout"
         }
     ]
 }
@@ -276,34 +347,26 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'     => '/bar',
-            'scopes'   => ['foo', 'baz'],
-            'config'   => [[
-                'version' => 1,
-                'status'  => 4,
-                'methods' => [
-                    'GET' => [
-                        'active'      => true,
-                        'public'      => true,
-                        'description' => 'The GET method',
-                        'parameters'  => 'Collection-Schema',
-                        'responses'   => [
-                            '200'     => 'Passthru'
-                        ],
-                        'action'      => 'Sql-Table',
-                    ],
-                    'POST' => [
-                        'active'      => true,
-                        'public'      => true,
-                        'description' => 'The POST method',
-                        'request'     => 'Collection-Schema',
-                        'responses'   => [
-                            '201'     => 'Passthru'
-                        ],
-                        'action'      => 'Sql-Table',
-                    ]
-                ],
-            ]],
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'string'
+                ]
+            ],
+            'incoming'   => 'Passthru',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                500 => 'Passthru',
+            ],
+            'cost'       => 10,
+            'action'     => 'Sql-Select-All',
+            'scopes'     => ['foo', 'baz'],
             'metadata' => $metadata,
         ]));
 
@@ -311,7 +374,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successfully created"
+    "message": "Operation successfully created"
 }
 JSON;
 
@@ -319,37 +382,349 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertOperation('/bar', ['foo', 'baz'], [[
-            'method'       => 'GET',
-            'version'      => 1,
-            'status'       => 4,
-            'active'       => true,
-            'public'       => true,
-            'description'  => 'The GET method',
-            'operation_id' => 'get.bar',
-            'parameters'   => 'Collection-Schema',
-            'request'      => null,
-            'responses'    => [
-                '200'      => 'Passthru'
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', ['foo', 'baz'], $metadata);
+    }
+
+    public function testPostStabilityInvalid()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => 99,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Stability contain an invalid value must be one of: 0, 1, 2, 3', $data->message);
+    }
+
+    public function testPostHttpMethodInvalid()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'FOO',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('HTTP method must not be one of: GET, POST, PUT, PATCH, DELETE', $data->message);
+    }
+
+    public function testPostHttpPathInvalid()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => 'foobar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('HTTP path must start with a /', $data->message);
+    }
+
+    public function testPostHttpCodeInvalid()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo',
+            'httpCode'   => 999,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('HTTP code contains an HTTP status code "999" which is not in the range between 200 and 299', $data->message);
+    }
+
+    public function testPostHttpMethodAndPathExisting()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('An operation exists already with the same HTTP method and path', $data->message);
+    }
+
+    public function testPostNameInvalid()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'foo&bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('/name does not match pattern [^[a-zA-Z0-9\-\_\.]{3,64}$]', $data->message);
+    }
+
+    public function testPostParametersInvalidName()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'parameters' => [
+                'fo&o' => [
+                    'type' => 'string'
+                ]
             ],
-            'action'       => 'Sql-Table',
-            'costs'        => 0,
-        ], [
-            'method'       => 'POST',
-            'version'      => 1,
-            'status'       => 4,
-            'active'       => true,
-            'public'       => true,
-            'description'  => 'The POST method',
-            'operation_id' => 'post.bar',
-            'parameters'   => null,
-            'request'      => 'Collection-Schema',
-            'responses'    => [
-                '201'      => 'Passthru'
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Parameter name "fo&o" contains an invalid character, allowed are only alphanumeric characters and underscore', $data->message);
+    }
+
+    public function testPostParametersInvalidSchema()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'foobar'
+                ]
             ],
-            'action'       => 'Sql-Table',
-            'costs'        => 0,
-        ]], $metadata);
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Parameter "foo" contains an invalid schema "foobar" must be one of: string, boolean, integer, number', $data->message);
+    }
+
+    public function testPostIncomingNonExistingSchema()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'incoming'   => 'Foobar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Incoming schema "Foobar" does not exist', $data->message);
+    }
+
+    public function testPostOutgoingNonExistingSchema()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Foobar',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Outgoing schema "Foobar" does not exist', $data->message);
+    }
+
+    public function testPostThrowNonExistingSchema()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                500 => 'Foobar',
+            ],
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Throw "500" contains a schema "Foobar" which does not exist', $data->message);
+    }
+
+    public function testPostThrowInvalidStatusCode()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                900 => 'Passthru',
+            ],
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Throw contains an HTTP status code "900" which is not in the range between 400 and 599', $data->message);
+    }
+
+    public function testPostActionNonExisting()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Foobar',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Action "Foobar" does not exist', $data->message);
     }
 
     public function testPut()
@@ -363,7 +738,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -377,6 +752,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

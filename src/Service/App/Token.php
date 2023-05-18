@@ -176,7 +176,7 @@ class Token
         );
     }
 
-    public function removeToken(int $appId, int $tokenId, UserContext $context): void
+    public function removeToken(string $appId, int $tokenId, UserContext $context): void
     {
         $app = $this->getApp($appId);
 
@@ -200,9 +200,9 @@ class Token
         return JWT::encode($payload, $this->config->get('fusio_project_key'));
     }
 
-    private function getApp(int $appId): Table\Generated\AppRow
+    private function getApp(string $appId): Table\Generated\AppRow
     {
-        $app = $this->appTable->find($appId);
+        $app = $this->appTable->findOneByIdentifier($appId);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Invalid app');
         }

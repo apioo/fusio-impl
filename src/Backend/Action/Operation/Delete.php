@@ -50,13 +50,13 @@ class Delete extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->operationService->delete(
-            (int) $request->get('operation_id'),
+            $request->get('operation_id'),
             UserContext::newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'Route successfully deleted',
+            'message' => 'Operation successfully deleted',
         ];
     }
 }

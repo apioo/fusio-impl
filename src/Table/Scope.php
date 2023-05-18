@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\SchemaRow;
+use Fusio\Impl\Table\Generated\ScopeRow;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\Sql;
@@ -36,6 +38,15 @@ class Scope extends Generated\ScopeTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public function findOneByIdentifier(string $id): ?ScopeRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 
     public function getValidScopes(array $names): array
     {

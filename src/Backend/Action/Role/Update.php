@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof RoleUpdate);
 
         $this->roleService->update(
-            (int) $request->get('role_id'),
+            $request->get('role_id'),
             $body,
             UserContext::newActionContext($context)
         );

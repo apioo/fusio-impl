@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof SchemaUpdate);
 
         $this->schemaService->update(
-            (int) $request->get('schema_id'),
+            $request->get('schema_id'),
             $body,
             UserContext::newActionContext($context)
         );

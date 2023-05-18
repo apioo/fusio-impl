@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Framework\Api\Parser;
 
 use Fusio\Impl\Controller\ActionController;
-use Fusio\Impl\Service\Route\SpecificationBuilder;
+use Fusio\Impl\Service\Operation\SpecificationBuilder;
 use PSX\Api\Parser\Attribute;
 use PSX\Api\ParserInterface;
 use PSX\Api\Specification;

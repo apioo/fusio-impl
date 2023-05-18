@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\PageRow;
+use Fusio\Impl\Table\Generated\PlanRow;
+
 /**
  * Plan
  *
@@ -32,6 +35,15 @@ class Plan extends Generated\PlanTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public function findOneByIdentifier(string $id): ?PlanRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 
     /**
      * Returns an array of plans which are currently active for the provided user

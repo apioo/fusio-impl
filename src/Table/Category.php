@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\CategoryRow;
+use Fusio\Impl\Table\Generated\OperationRow;
+
 /**
  * Category
  *
@@ -32,6 +35,15 @@ class Category extends Generated\CategoryTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public function findOneByIdentifier(string $id): ?CategoryRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 
     public function getCategoryIdForPath(string $path): int
     {

@@ -100,7 +100,7 @@ class Cronjob
 
         Cronjob\Validator::assertCron($cron);
 
-        $existing = $this->cronjobTable->find($cronjobId);
+        $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
@@ -117,12 +117,12 @@ class Cronjob
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
 
-        return $cronjobId;
+        return $existing->getId();
     }
 
-    public function delete(int $cronjobId, UserContext $context): int
+    public function delete(string $cronjobId, UserContext $context): int
     {
-        $existing = $this->cronjobTable->find($cronjobId);
+        $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
@@ -136,7 +136,7 @@ class Cronjob
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $cronjobId;
+        return $existing->getId();
     }
 
     /**

@@ -90,9 +90,9 @@ class Event
         return $eventId;
     }
 
-    public function update(int $eventId, EventUpdate $event, UserContext $context): int
+    public function update(string $eventId, EventUpdate $event, UserContext $context): int
     {
-        $existing = $this->eventTable->find($eventId);
+        $existing = $this->eventTable->findOneByIdentifier($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
@@ -110,12 +110,12 @@ class Event
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
 
-        return $eventId;
+        return $existing->getId();
     }
 
     public function delete(int $eventId, UserContext $context): int
     {
-        $existing = $this->eventTable->find($eventId);
+        $existing = $this->eventTable->findOneByIdentifier($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
@@ -125,7 +125,7 @@ class Event
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $eventId;
+        return $existing->getId();
     }
 
     public function exists(string $name): int|false

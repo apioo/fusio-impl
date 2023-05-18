@@ -85,11 +85,11 @@ class User extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(string $id)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
             'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
             'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),

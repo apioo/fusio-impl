@@ -46,9 +46,9 @@ class Config
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function update(int $configId, ConfigUpdate $config, UserContext $context): int
+    public function update(string $configId, ConfigUpdate $config, UserContext $context): int
     {
-        $existing = $this->configTable->find($configId);
+        $existing = $this->configTable->findOneByIdentifier($configId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find config');
         }
@@ -58,7 +58,7 @@ class Config
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($config, $context));
 
-        return $configId;
+        return $existing->getId();
     }
 
     public function getValue(string $name)

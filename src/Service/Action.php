@@ -130,11 +130,11 @@ class Action
         return $actionId;
     }
 
-    public function update(int $actionId, ActionUpdate $action, UserContext $context): int
+    public function update(string $actionId, ActionUpdate $action, UserContext $context): int
     {
         $this->assertSandboxAccess($action);
 
-        $existing = $this->actionTable->find($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -181,12 +181,12 @@ class Action
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
 
-        return $actionId;
+        return $existing->getId();
     }
 
-    public function delete(int $actionId, UserContext $context): int
+    public function delete(string $actionId, UserContext $context): int
     {
-        $existing = $this->actionTable->find($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }

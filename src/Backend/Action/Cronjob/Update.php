@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof CronjobUpdate);
 
         $this->cronjobService->update(
-            (int) $request->get('cronjob_id'),
+            $request->get('cronjob_id'),
             $body,
             UserContext::newActionContext($context)
         );

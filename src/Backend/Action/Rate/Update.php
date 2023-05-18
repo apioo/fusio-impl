@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof RateUpdate);
 
         $this->rateService->update(
-            (int) $request->get('rate_id'),
+            $request->get('rate_id'),
             $body,
             UserContext::newActionContext($context)
         );

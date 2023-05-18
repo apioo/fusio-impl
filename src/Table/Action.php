@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ActionRow;
+
 /**
  * Action
  *
@@ -32,4 +34,13 @@ class Action extends Generated\ActionTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public function findOneByIdentifier(string $id): ?ActionRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 }

@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof EventUpdate);
 
         $this->eventService->update(
-            (int) $request->get('event_id'),
+            $request->get('event_id'),
             $body,
             UserContext::newActionContext($context)
         );

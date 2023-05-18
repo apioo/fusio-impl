@@ -37,15 +37,15 @@ class Operation extends Generated\ScopeOperationTable
         $sql = 'DELETE FROM fusio_scope_operation
                       WHERE scope_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $scopeId));
+        $this->connection->executeQuery($sql, ['id' => $scopeId]);
     }
 
     public function deleteAllFromOperation(int $operationId): void
     {
         $sql = 'DELETE FROM fusio_scope_operation
-                      WHERE route_id = :id';
+                      WHERE operation_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $operationId));
+        $this->connection->executeQuery($sql, ['id' => $operationId]);
     }
 
     public function getScopeNamesForOperation(int $operationId): array

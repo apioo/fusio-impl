@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Installation;
 
+use PSX\Api\OperationInterface;
+
 /**
  * Operation
  *
@@ -40,8 +42,9 @@ class Operation
     public array $throws;
     public ?string $eventName;
     public bool $public;
+    public int $stability;
 
-    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false)
+    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false, int $stability = OperationInterface::STABILITY_STABLE)
     {
         $this->action = $action;
         $this->httpMethod = $httpMethod;
@@ -53,5 +56,6 @@ class Operation
         $this->throws = $throws;
         $this->eventName = $eventName;
         $this->public = $public;
+        $this->stability = $stability;
     }
 }

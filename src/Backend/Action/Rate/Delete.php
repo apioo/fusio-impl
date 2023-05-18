@@ -50,7 +50,7 @@ class Delete extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->rateService->delete(
-            (int) $request->get('rate_id'),
+            $request->get('rate_id'),
             UserContext::newActionContext($context)
         );
 

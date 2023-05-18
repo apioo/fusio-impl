@@ -85,17 +85,9 @@ class Cronjob extends ViewAbstract
 
     public function getEntity(string $id)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Cronjob::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Cronjob::class), 'findOneByIdentifier'], [$id], [
             'id' => Table\Generated\CronjobTable::COLUMN_ID,
             'status' => $builder->fieldInteger(Table\Generated\CronjobTable::COLUMN_STATUS),
             'name' => Table\Generated\CronjobTable::COLUMN_NAME,

@@ -55,7 +55,7 @@ class Update extends ActionAbstract
         assert($body instanceof CategoryUpdate);
 
         $this->categoryService->update(
-            (int) $request->get('category_id'),
+            $request->get('category_id'),
             $body,
             UserContext::newActionContext($context)
         );

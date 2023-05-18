@@ -102,9 +102,9 @@ class Plan
         return $planId;
     }
 
-    public function update(int $planId, PlanUpdate $plan, UserContext $context): int
+    public function update(string $planId, PlanUpdate $plan, UserContext $context): int
     {
-        $existing = $this->planTable->find($planId);
+        $existing = $this->planTable->findOneByIdentifier($planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -134,12 +134,12 @@ class Plan
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
 
-        return $planId;
+        return $existing->getId();
     }
 
-    public function delete(int $planId, UserContext $context): int
+    public function delete(string $planId, UserContext $context): int
     {
-        $existing = $this->planTable->find($planId);
+        $existing = $this->planTable->findOneByIdentifier($planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -149,7 +149,7 @@ class Plan
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $planId;
+        return $existing->getId();
     }
     
     public function exists(string $name): int|false

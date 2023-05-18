@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\AppRow;
+use Fusio\Impl\Table\Generated\OperationRow;
+
 /**
  * App
  *
@@ -34,4 +37,13 @@ class App extends Generated\AppTable
     public const STATUS_PENDING     = 0x2;
     public const STATUS_DEACTIVATED = 0x3;
     public const STATUS_DELETED     = 0x4;
+
+    public function findOneByIdentifier(string $id): ?AppRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByName(urldecode(substr($id, 1)));
+        } else {
+            return $this->find((int) $id);
+        }
+    }
 }

@@ -55,14 +55,14 @@ class Update extends ActionAbstract
         assert($body instanceof OperationUpdate);
 
         $this->operationService->update(
-            (int) $request->get('operation_id'),
+            $request->get('operation_id'),
             $body,
             UserContext::newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'Route successfully updated',
+            'message' => 'Operation successfully updated',
         ];
     }
 }

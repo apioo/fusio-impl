@@ -86,87 +86,39 @@ class Assert extends \PHPUnit\Framework\Assert
         }
     }
 
-    public static function assertOperation(Connection $connection, string $expectPath, array $expectScopes, array $expectConfig, ?array $expectMetadata = null)
+    public static function assertOperation(Connection $connection, int $expectStability, string $expectName, string $expectHttpMethod, string $expectHttpPath, array $expectScopes, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'status', 'methods', 'path', 'controller', 'metadata')
-            ->from('fusio_routes')
-            ->where('path = :path')
+            ->select('id', 'stability', 'name', 'http_method', 'http_path', 'metadata')
+            ->from('fusio_operation')
+            ->where('name = :name')
             ->getSQL();
 
-        $route = $connection->fetchAssociative($sql, ['path' => $expectPath]);
-        if (empty($route)) {
-            throw new \RuntimeException('Provided route path ' . $expectPath . ' does not exist');
+        $operation = $connection->fetchAssociative($sql, ['name' => $expectName]);
+        if (empty($operation)) {
+            throw new \RuntimeException('Provided operation ' . $expectName . ' does not exist');
         }
 
-        self::assertNotEmpty($route['id']);
-        self::assertEquals(1, $route['status']);
-        self::assertEquals('ANY', $route['methods']);
-        self::assertEquals($expectPath, $route['path']);
-        self::assertEquals(SchemaApiController::class, $route['controller']);
+        self::assertNotEmpty($operation['id']);
+        self::assertEquals($expectStability, $operation['stability']);
+        self::assertEquals($expectName, $operation['name']);
+        self::assertEquals($expectHttpMethod, $operation['http_method']);
+        self::assertEquals($expectHttpPath, $operation['http_path']);
 
         if ($expectMetadata !== null) {
-            self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $route['metadata'], $route['metadata']);
-        }
-
-        // check methods
-        $sql = $connection->createQueryBuilder()
-            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'description', 'operation_id', 'parameters', 'request', 'action', 'costs')
-            ->from('fusio_routes_method')
-            ->where('route_id = :route_id')
-            ->orderBy('id', 'ASC')
-            ->getSQL();
-
-        $methods = $connection->fetchAllAssociative($sql, ['route_id' => $route['id']]);
-
-        self::assertEquals(count($expectConfig), count($methods));
-
-        foreach ($expectConfig as $index => $row) {
-            self::assertEquals($row['method'], $methods[$index]['method']);
-            self::assertEquals($row['version'], $methods[$index]['version']);
-            self::assertEquals($row['status'], $methods[$index]['status']);
-            self::assertEquals($row['active'] ? 1 : 0, $methods[$index]['active']);
-            self::assertEquals($row['public'] ? 1 : 0, $methods[$index]['public']);
-            self::assertEquals($row['description'], $methods[$index]['description']);
-            self::assertEquals($row['operation_id'], $methods[$index]['operation_id']);
-            self::assertEquals($row['parameters'], $methods[$index]['parameters'], 'Used parameters schema ' . $methods[$index]['parameters']);
-            self::assertEquals($row['request'], $methods[$index]['request'], 'Used request schema ' . $methods[$index]['request']);
-            self::assertEquals($row['action'], $methods[$index]['action'], 'Used action ' . $methods[$index]['action']);
-            self::assertEquals($row['costs'], $methods[$index]['costs']);
-
-            if (isset($row['responses'])) {
-                // check responses
-                $sql = $connection->createQueryBuilder()
-                    ->select('id', 'method_id', 'code', 'response')
-                    ->from('fusio_routes_response')
-                    ->where('method_id = :method_id')
-                    ->orderBy('code', 'ASC')
-                    ->getSQL();
-
-                $responses = $connection->fetchAllAssociative($sql, ['method_id' => $methods[$index]['id']]);
-
-                self::assertEquals(count($row['responses']), count($responses));
-
-                $respIndex = 0;
-                foreach ($row['responses'] as $code => $resp) {
-                    self::assertEquals($code, $responses[$respIndex]['code']);
-                    self::assertEquals($resp, $responses[$respIndex]['response'], 'Used ' . $responses[$respIndex]['code'] . ' response ' . $responses[$respIndex]['response']);
-
-                    $respIndex++;
-                }
-            }
+            self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $operation['metadata'], $operation['metadata']);
         }
 
         // check scopes
         $sql = $connection->createQueryBuilder()
             ->select('s.name')
-            ->from('fusio_scope_routes', 'r')
-            ->innerJoin('r', 'fusio_scope', 's', 's.id = r.scope_id')
-            ->where('r.route_id = :route_id')
+            ->from('fusio_scope_operation', 'o')
+            ->innerJoin('o', 'fusio_scope', 's', 's.id = o.scope_id')
+            ->where('o.operation_id = :operation_id')
             ->orderBy('s.id', 'ASC')
             ->getSQL();
 
-        $result = $connection->fetchAllAssociative($sql, ['route_id' => $route['id']]);
+        $result = $connection->fetchAllAssociative($sql, ['operation_id' => $operation['id']]);
         $scopes = [];
 
         foreach ($result as $row) {

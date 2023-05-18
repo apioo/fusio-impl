@@ -102,9 +102,9 @@ class Schema
         return $schemaId;
     }
 
-    public function update(int $schemaId, SchemaUpdate $schema, UserContext $context): int
+    public function update(string $schemaId, SchemaUpdate $schema, UserContext $context): int
     {
-        $existing = $this->schemaTable->find($schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -139,12 +139,12 @@ class Schema
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
 
-        return $schemaId;
+        return $existing->getId();
     }
 
-    public function delete(int $schemaId, UserContext $context): int
+    public function delete(string $schemaId, UserContext $context): int
     {
-        $existing = $this->schemaTable->find($schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -158,7 +158,7 @@ class Schema
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $schemaId;
+        return $existing->getId();
     }
 
     public function updateForm(int $schemaId, SchemaForm $form, UserContext $context): void
@@ -176,7 +176,7 @@ class Schema
         $this->schemaTable->update($schema);
     }
 
-    public function generatePreview(int $schemaId): Generator\Code\Chunks|string
+    public function generatePreview(string $schemaId): Generator\Code\Chunks|string
     {
         $schema = $this->schemaLoader->getSchema($schemaId);
         return (new Generator\Html())->generate($schema);

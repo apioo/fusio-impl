@@ -119,9 +119,11 @@ class DataBag
 
             $this->addOperation(
                 $category,
+                $operation->stability,
                 $operationName,
                 $operation->httpMethod,
                 $path,
+                $operation->httpCode,
                 $this->normalizeParameters($operation->parameters),
                 $incomingName,
                 $outgoingName,
@@ -484,17 +486,18 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, string $name, string $httpMethod, string $httpPath, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
+    public function addOperation(string $category, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
             'public' => 0,
-            'stability' => OperationInterface::STABILITY_STABLE,
+            'stability' => $stability,
             'description' => '',
             'http_method' => $httpMethod,
             'http_path' => $httpPath,
+            'http_code' => $httpCode,
             'name' => $name,
             'parameters' => \json_encode($parameters),
             'incoming' => $incoming,

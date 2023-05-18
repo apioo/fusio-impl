@@ -245,9 +245,9 @@ class User
         return $userId;
     }
 
-    public function update(int $userId, UserUpdate $user, UserContext $context): int
+    public function update(string $userId, UserUpdate $user, UserContext $context): int
     {
-        $existing = $this->userTable->find($userId);
+        $existing = $this->userTable->findOneByIdentifier($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -307,12 +307,12 @@ class User
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($user, $existing, $context));
 
-        return $userId;
+        return $existing->getId();
     }
 
-    public function delete(int $userId, UserContext $context): int
+    public function delete(string $userId, UserContext $context): int
     {
-        $existing = $this->userTable->find($userId);
+        $existing = $this->userTable->findOneByIdentifier($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -324,7 +324,7 @@ class User
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $userId;
+        return $existing->getId();
     }
 
     public function changeStatus(int $userId, int $status, UserContext $context): void
