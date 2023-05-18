@@ -1246,8 +1246,8 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/payment/:provider/checkout',
                     httpCode: 200,
-                    outgoing: Model\Consumer\PaymentCheckoutRequest::class,
-                    incoming: Model\Consumer\PaymentCheckoutResponse::class,
+                    outgoing: Model\Consumer\PaymentCheckoutResponse::class,
+                    incoming: Model\Consumer\PaymentCheckoutRequest::class,
                 ),
                 'plan.getAll' => new Operation(
                     action: Consumer\Action\Plan\GetAll::class,

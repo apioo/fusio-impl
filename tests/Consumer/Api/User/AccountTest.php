@@ -77,7 +77,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.plan",
         "backend.rate",
         "backend.role",
-        "backend.route",
+        "backend.operation",
         "backend.schema",
         "backend.scope",
         "backend.sdk",
@@ -96,7 +96,7 @@ class AccountTest extends ControllerDbTestCase
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.user",
+        "consumer.account",
         "authorization",
         "default",
         "foo",
@@ -129,7 +129,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -154,13 +154,13 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database user
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
 
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(1, $row['status']);
@@ -180,6 +180,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

@@ -47,20 +47,21 @@ class Plan extends Generated\PlanTable
 
     /**
      * Returns an array of plans which are currently active for the provided user
+     *
+     * @return PlanRow[]
      */
     public function getActivePlansForUser(int $userId): array
     {
-        $now = $this->connection->getDatabasePlatform()->getNowExpression();
-
         $query = 'SELECT plan.* 
                     FROM fusio_transaction trx
               INNER JOIN fusio_plan plan
                       ON plan.id = trx.plan_id
                    WHERE trx.user_id = :user_id 
-                     AND ' . $now . ' >= trx.period_start
-                     AND ' . $now . ' <= trx.period_end';
+                     AND :now >= trx.period_start
+                     AND :now <= trx.period_end';
         $result = $this->connection->fetchAllAssociative($query, [
             'user_id' => $userId,
+            'now' => date('Y-m-d H:i:s'),
         ]);
 
         $plans = [];
