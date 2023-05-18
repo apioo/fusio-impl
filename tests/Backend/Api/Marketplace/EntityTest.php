@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
@@ -67,29 +67,22 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/backend/marketplace/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find local app"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find local app', $data->message);
     }
 
     public function testPost()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
@@ -107,7 +100,7 @@ JSON;
 
     public function testPut()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
@@ -133,7 +126,7 @@ JSON;
 
     public function testDelete()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 

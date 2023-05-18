@@ -42,7 +42,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
@@ -76,11 +76,11 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGetLocal()
     {
-        if (Environment::getConfig()->get('fusio_marketplace')) {
+        if (Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace enabled');
         }
 
-        if (is_dir(Environment::getConfig()->get('fusio_apps_dir') . '/fusio')) {
+        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is already installed');
         }
 
@@ -99,7 +99,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        if (!Environment::getConfig()->get('fusio_marketplace')) {
+        if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
@@ -133,7 +133,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -147,6 +147,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }
