@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api;
+namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -35,21 +35,9 @@ use PSX\Framework\Test\Environment;
  */
 class SchemaTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/system/schema/Entry-Schema', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/schema.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -259,23 +247,16 @@ JSON;
 
     public function testGetNotFound()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/system/schema/not_available', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Could not find schema"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find schema', $data->message);
     }
 
     public function testPost()
@@ -288,7 +269,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -301,7 +282,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -314,6 +295,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

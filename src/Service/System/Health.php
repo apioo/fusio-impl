@@ -58,17 +58,17 @@ class Health
 
         $result = $this->connectionTable->findAll($condition, 0, 1024);
         foreach ($result as $row) {
-            $factory    = $this->connectionFactory->factory($row['class']);
-            $parameters = Service\Connection\Encrypter::decrypt($row['config'], $this->secretKey);
+            $factory    = $this->connectionFactory->factory($row->getClass());
+            $parameters = Service\Connection\Encrypter::decrypt($row->getConfig(), $this->secretKey);
             $connection = $factory->getConnection(new Parameters($parameters));
 
             if ($factory instanceof PingableInterface) {
                 try {
                     $factory->ping($connection);
 
-                    $checks->add($row['name'], true);
+                    $checks->add($row->getName(), true);
                 } catch (\Throwable $e) {
-                    $checks->add($row['name'], false, $e->getMessage());
+                    $checks->add($row->getName(), false, $e->getMessage());
                 }
             }
         }

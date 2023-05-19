@@ -19,34 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api\Documentation;
+namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\System\Health;
 
 /**
- * DetailTest
+ * GetHealth
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class DetailTest extends ControllerDbTestCase
+class GetHealth implements ActionInterface
 {
-    public function getDataSet()
+    private Health $healthService;
+
+    public function __construct(Health $healthService)
     {
-        return Fixture::getDataSet();
+        $this->healthService = $healthService;
     }
 
-    public function testGet()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $response = $this->sendRequest('/system/doc/*/foo', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
+        $result  = $this->healthService->check();
+        $healthy = $result->isHealthy();
 
-        $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/detail.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        return [
+            'healthy' => $healthy,
+            'checks'  => $result->getChecks(),
+        ];
     }
 }

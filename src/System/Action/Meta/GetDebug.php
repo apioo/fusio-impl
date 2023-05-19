@@ -19,43 +19,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Action;
+namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Connection;
 
 /**
- * ConnectionCallback
+ * GetDebug
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ConnectionCallback implements ActionInterface
+class GetDebug implements ActionInterface
 {
-    private Connection\Token $tokenService;
-
-    public function __construct(Connection\Token $tokenService)
-    {
-        $this->tokenService = $tokenService;
-    }
-
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->tokenService->fetchByCode(
-            $request->get('name'),
-            $request->get('code'),
-            $request->get('state')
-        );
-
         return [
-            'success' => true,
-            'message' => 'Access token successfully obtained, you can now close this window',
+            'class' => get_class($request),
+            'arguments' => $request->getArguments(),
+            'payload' => $request->getPayload(),
+            'context' => get_class($request->getContext()),
         ];
     }
 }

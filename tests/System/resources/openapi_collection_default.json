@@ -1,9 +1,9 @@
 {
   "security": null,
   "operations": {
-    "PSX.Framework.Controller.OAuth2.AuthorizationController.doGet": {
-      "path": "/authorization/authorize",
-      "method": "GET",
+    "inspect.delete": {
+      "path": "/inspect/:foo",
+      "method": "DELETE",
       "return": {
         "code": 200,
         "schema": {
@@ -11,188 +11,8 @@
         }
       },
       "arguments": {
-        "response_type": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "client_id": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "redirect_uri": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "scope": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "state": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "PSX.Framework.Controller.OAuth2.AuthorizationController.doPost": {
-      "path": "/authorization/authorize",
-      "method": "POST",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Passthru"
-        }
-      },
-      "arguments": {
-        "response_type": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "client_id": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "redirect_uri": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "scope": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "state": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "PSX.Framework.Controller.OAuth2.CallbackController.doGet": {
-      "path": "/authorization/callback",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Passthru"
-        }
-      },
-      "arguments": {
-        "error": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "error_description": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "code": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "state": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "PSX.Framework.Controller.OAuth2.CallbackController.doPost": {
-      "path": "/authorization/callback",
-      "method": "POST",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Passthru"
-        }
-      },
-      "arguments": {
-        "error": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "error_description": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "code": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "state": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "PSX.Framework.Controller.OAuth2.TokenController.doPost": {
-      "path": "/authorization/token",
-      "method": "POST",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "AccessToken"
-        }
-      },
-      "arguments": {
-        "authorization": {
-          "in": "header",
+        "foo": {
+          "in": "path",
           "schema": {
             "type": "string"
           }
@@ -211,16 +31,29 @@
       "authorization": true,
       "tags": []
     },
-    "PSX.Framework.Controller.Tool.DiscoveryController.show": {
-      "path": "/system/discovery",
-      "method": "GET",
+    "inspect.patch": {
+      "path": "/inspect/:foo",
+      "method": "PATCH",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "DiscoveryCollection"
+          "$ref": "Passthru"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -228,8 +61,38 @@
       "authorization": true,
       "tags": []
     },
-    "PSX.Framework.Controller.Tool.GeneratorController.generate": {
-      "path": "/system/generator/:type",
+    "inspect.put": {
+      "path": "/inspect/:foo",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
+    "inspect.post": {
+      "path": "/inspect/:foo",
       "method": "POST",
       "return": {
         "code": 200,
@@ -238,35 +101,120 @@
         }
       },
       "arguments": {
-        "type": {
+        "foo": {
           "in": "path",
           "schema": {
-            "description": "",
             "type": "string"
           }
         },
-        "filter": {
-          "in": "query",
+        "payload": {
+          "in": "body",
           "schema": {
-            "description": "",
-            "type": "string"
+            "$ref": "Passthru"
           }
         }
       },
       "throws": [],
       "description": "",
       "stability": 1,
-      "security": [],
+      "security": [
+        "bar"
+      ],
       "authorization": true,
-      "tags": []
+      "tags": [
+        "bar"
+      ]
     },
-    "PSX.Framework.Controller.Tool.RoutingController.show": {
-      "path": "/system/routing",
+    "inspect.get": {
+      "path": "/inspect/:foo",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "RoutingCollection"
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "foo"
+      ],
+      "authorization": true,
+      "tags": [
+        "foo"
+      ]
+    },
+    "test.createFoo": {
+      "path": "/foo",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Entry-Schema"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "test.listFoo": {
+      "path": "/foo",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Collection-Schema"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "meta.getAbout": {
+      "path": "/",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "System_About"
         }
       },
       "arguments": [],
@@ -279,41 +227,69 @@
     }
   },
   "definitions": {
-    "AccessToken": {
+    "About": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "apiVersion": {
           "type": "string"
         },
-        "tokenType": {
+        "title": {
           "type": "string"
         },
-        "expiresIn": {
-          "type": "integer"
-        },
-        "refreshToken": {
+        "description": {
           "type": "string"
         },
-        "scope": {
+        "termsOfService": {
           "type": "string"
         },
-        "state": {
+        "contactName": {
           "type": "string"
-        }
-      }
-    },
-    "DiscoveryCollection": {
-      "type": "object",
-      "properties": {
+        },
+        "contactUrl": {
+          "type": "string"
+        },
+        "contactEmail": {
+          "type": "string"
+        },
+        "licenseName": {
+          "type": "string"
+        },
+        "licenseUrl": {
+          "type": "string"
+        },
+        "paymentCurrency": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "$ref": "AboutApps"
+        },
         "links": {
           "type": "array",
           "items": {
-            "$ref": "DiscoveryLink"
+            "$ref": "AboutLink"
           }
         }
       }
     },
-    "DiscoveryLink": {
+    "AboutApps": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "AboutLink": {
       "type": "object",
       "properties": {
         "rel": {
@@ -321,11 +297,50 @@
         },
         "href": {
           "type": "string"
+        }
+      }
+    },
+    "Collection": {
+      "title": "collection",
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
         },
-        "method": {
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "$ref": "Entry"
+        }
+      }
+    },
+    "Collection-Schema": {
+      "$ref": "Collection"
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
           "type": "string"
         }
       }
+    },
+    "Entry-Schema": {
+      "$ref": "Entry"
     },
     "Passthru": {
       "description": "No schema information available",
@@ -334,30 +349,8 @@
         "type": "any"
       }
     },
-    "RoutingCollection": {
-      "type": "object",
-      "properties": {
-        "routings": {
-          "type": "array",
-          "items": {
-            "$ref": "RoutingRoute"
-          }
-        }
-      }
-    },
-    "RoutingRoute": {
-      "type": "object",
-      "properties": {
-        "method": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        },
-        "operationId": {
-          "type": "string"
-        }
-      }
+    "System_About": {
+      "$ref": "About"
     }
   }
 }

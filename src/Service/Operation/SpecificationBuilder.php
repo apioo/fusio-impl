@@ -54,100 +54,80 @@ class SpecificationBuilder
         $this->schemaParser = new TypeSchema();
     }
 
-    public function build(int $routeId): SpecificationInterface
+    public function build(int $operationId): SpecificationInterface
     {
-        $route = $this->operationTable->find($routeId);
-        if (!$route instanceof Table\Generated\RoutesRow) {
+        $row = $this->operationTable->find($operationId);
+        if (!$row instanceof Table\Generated\OperationRow) {
             throw new \RuntimeException('Provided an invalid route');
         }
 
-        $version = $this->methodTable->getLatestVersion($routeId);
-        if (empty($version)) {
-            throw new \RuntimeException('Version does not exist');
-        }
-
         $specification = new Specification();
-        $path = $route->getPath();
-        $methods = $this->methodTable->getMethods($routeId, $version, true);
-        $scopes = $this->scopeTable->getScopesForOperation($routeId);
+        $scopes = $this->scopeTable->getScopesForOperation($operationId);
 
-        foreach ($methods as $method) {
-            $return = $this->getReturn($method->getId(), $specification->getDefinitions());
-            if (empty($return)) {
-                continue;
-            }
+        $return = $this->getReturn($row, $specification->getDefinitions());
 
-            $operation = new Operation($method->getMethod(), $path, $return);
-            $operation->setArguments($this->getArguments($path, $method, $specification->getDefinitions()));
-            $operation->setThrows($this->getThrows($method->getId(), $specification->getDefinitions()));
+        $operation = new Operation($row->getHttpMethod(), $row->getHttpPath(), $return);
+        $operation->setArguments($this->getArguments($row, $specification->getDefinitions()));
+        $operation->setThrows($this->getThrows($row));
 
-            if (!empty($method->getDescription())) {
-                $operation->setDescription($method->getDescription());
-            }
-
-            if (isset($scopes[$method->getMethod()])) {
-                $operation->setTags($scopes[$method->getMethod()]);
-
-                if (!$method->getPublic()) {
-                    $operation->setSecurity($scopes[$method->getMethod()]);
-                }
-            }
-
-            $operationId = !empty($method->getOperationId()) ? $method->getOperationId() : $method->getAction();
-            $specification->getOperations()->add($operationId, $operation);
+        if (!empty($row->getDescription())) {
+            $operation->setDescription($row->getDescription());
         }
+
+        $operation->setTags($scopes);
+
+        if (!$row->getPublic()) {
+            $operation->setSecurity($scopes);
+        }
+
+        $specification->getOperations()->add($row->getName(), $operation);
 
         return $specification;
     }
 
-    private function getReturn(int $methodId, DefinitionsInterface $definitions): ?Operation\Response
+    private function getReturn(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Response
     {
-        $responses = $this->responseTable->getResponses($methodId, 200, 299);
-        $response = $responses[0] ?? null;
-        if (empty($response)) {
-            return null;
+        $outgoing = $row->getOutgoing();
+        if (empty($outgoing)) {
+            throw new \RuntimeException('Provided no outgoing schema');
         }
 
-        $definitions->addSchema($response['response'], $this->schemaLoader->getSchema($response['response']));
+        $definitions->addSchema($outgoing, $this->schemaLoader->getSchema($outgoing));
 
-        return new Operation\Response($response['code'], TypeFactory::getReference($response['response']));
+        return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($outgoing));
     }
 
-    private function getArguments(string $path, Table\Generated\RoutesMethodRow $method, DefinitionsInterface $definitions): Operation\Arguments
+    private function getArguments(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Arguments
     {
         $arguments = new Operation\Arguments();
 
-        $this->buildPathParameters($arguments, $path);
+        $this->buildPathParameters($arguments, $row->getHttpPath());
 
-        $request = $method->getRequest();
-        if (!empty($request)) {
-            $definitions->addSchema($request, $this->schemaLoader->getSchema($request));
+        $incoming = $row->getIncoming();
+        if (!empty($incoming)) {
+            $definitions->addSchema($incoming, $this->schemaLoader->getSchema($incoming));
 
-            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($request)));
+            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($incoming)));
         }
 
-        $parameters = $method->getParameters();
-        if (!empty($parameters)) {
-            $parametersObject = \json_decode($parameters);
-            if ($parametersObject instanceof \stdClass) {
-                $this->buildQueryParametersFromJson($arguments, $parametersObject);
-            } else {
-                $this->buildQueryParametersFromSchema($arguments, $parameters);
-
-            }
+        $parameters = \json_decode($row->getParameters());
+        if ($parameters instanceof \stdClass) {
+            $this->buildQueryParametersFromJson($arguments, $parameters);
         }
 
         return $arguments;
     }
 
-    private function getThrows(int $methodId, DefinitionsInterface $definitions): array
+    private function getThrows(Table\Generated\OperationRow $row): array
     {
-        $result = [];
-        $responses = $this->responseTable->getResponses($methodId, 400, 599);
-        foreach ($responses as $response) {
-            $definitions->addSchema($response['response'], $this->schemaLoader->getSchema($response['response']));
+        $throws = \json_decode($row->getThrows());
+        if (!$throws instanceof \stdClass) {
+            return [];
+        }
 
-            $result[] = new Operation\Response($response['code'], TypeFactory::getReference($response['response']));
+        $result = [];
+        foreach ($throws as $httpCode => $schema) {
+            $result[] = new Operation\Response($httpCode, TypeFactory::getReference($schema));
         }
 
         return $result;

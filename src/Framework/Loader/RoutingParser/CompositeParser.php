@@ -59,8 +59,11 @@ class CompositeParser implements RoutingParserInterface
             $collection->add(...$row);
         }
 
-        foreach ($this->attributeParser->getCollection($filter) as $row) {
-            $collection->add(...$row);
+        if ($filter === null) {
+            // we add the manual routes only if we have no filter
+            foreach ($this->attributeParser->getCollection($filter) as $row) {
+                $collection->add(...$row);
+            }
         }
 
         return $this->collection[$key] = $collection;

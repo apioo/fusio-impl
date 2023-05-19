@@ -110,14 +110,8 @@ class Operation extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getPublic(?string $category)
+    public function getRoutes(int $categoryId)
     {
-        if (!empty($category)) {
-            $categoryId = (int) $this->connection->fetchOne('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        } else {
-            $categoryId = 1;
-        }
-
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select(['operation.http_method', 'operation.http_path', 'operation.name'])
             ->from('fusio_operation', 'operation')
@@ -129,15 +123,15 @@ class Operation extends ViewAbstract
 
         $definition = [
             'routes' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                'path' => 'http_path',
-                'method' => 'http_method',
-                'operation' => 'name',
+                'http_path' => 'http_path',
+                'http_method' => 'http_method',
+                'name' => 'name',
             ], null, function (array $result) {
                 $data = [];
 
                 foreach ($result as $row) {
                     if (!isset($data[$row['http_path']])) {
-                        $data[$row['http_method']] = [];
+                        $data[$row['http_path']] = [];
                     }
 
                     $data[$row['http_path']][$row['http_method']] = $row['name'];

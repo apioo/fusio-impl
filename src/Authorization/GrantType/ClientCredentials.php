@@ -60,8 +60,8 @@ class ClientCredentials extends ClientCredentialsAbstract
         // check whether the credentials contain an app key and secret
         $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
         if (!empty($app)) {
-            $appId  = $app['id'];
-            $userId = $app['user_id'];
+            $appId  = $app->getId();
+            $userId = $app->getUserId();
         } else {
             // otherwise try to authenticate the user credentials
             $appId  = null;

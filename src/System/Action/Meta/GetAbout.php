@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Action;
+namespace Fusio\Impl\System\Action\Meta;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;

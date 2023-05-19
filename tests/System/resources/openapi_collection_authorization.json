@@ -1,223 +1,13 @@
 {
     "security": null,
     "operations": {
-        "PSX.Framework.Controller.OAuth2.AuthorizationController.doGet": {
-            "path": "/authorization/authorize",
+        "authorization.getWhoami": {
+            "path": "/authorization/whoami",
             "method": "GET",
             "return": {
                 "code": 200,
                 "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "response_type": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "client_id": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "redirect_uri": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "scope": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "state": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.OAuth2.AuthorizationController.doPost": {
-            "path": "/authorization/authorize",
-            "method": "POST",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "response_type": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "client_id": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "redirect_uri": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "scope": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "state": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.OAuth2.CallbackController.doGet": {
-            "path": "/authorization/callback",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "error": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "error_description": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "code": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "state": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.OAuth2.CallbackController.doPost": {
-            "path": "/authorization/callback",
-            "method": "POST",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "error": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "error_description": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "code": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "state": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.OAuth2.TokenController.doPost": {
-            "path": "/authorization/token",
-            "method": "POST",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "AccessToken"
-                }
-            },
-            "arguments": {
-                "authorization": {
-                    "in": "header",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.Tool.DiscoveryController.show": {
-            "path": "/system/discovery",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "DiscoveryCollection"
+                    "$ref": "Backend_User"
                 }
             },
             "arguments": [],
@@ -228,45 +18,13 @@
             "authorization": true,
             "tags": []
         },
-        "PSX.Framework.Controller.Tool.GeneratorController.generate": {
-            "path": "/system/generator/:type",
+        "authorization.revoke": {
+            "path": "/authorization/revoke",
             "method": "POST",
             "return": {
                 "code": 200,
                 "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "type": {
-                    "in": "path",
-                    "schema": {
-                        "description": "",
-                        "type": "string"
-                    }
-                },
-                "filter": {
-                    "in": "query",
-                    "schema": {
-                        "description": "",
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "PSX.Framework.Controller.Tool.RoutingController.show": {
-            "path": "/system/routing",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "RoutingCollection"
+                    "$ref": "Message"
                 }
             },
             "arguments": [],
@@ -279,82 +37,148 @@
         }
     },
     "definitions": {
-        "AccessToken": {
+        "App": {
             "type": "object",
             "properties": {
-                "accessToken": {
-                    "type": "string"
-                },
-                "tokenType": {
-                    "type": "string"
-                },
-                "expiresIn": {
+                "id": {
                     "type": "integer"
                 },
-                "refreshToken": {
+                "userId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "string"
+                },
+                "appKey": {
+                    "type": "string"
+                },
+                "appSecret": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "Metadata"
+                },
+                "date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "scopes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tokens": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "AppToken"
+                    }
+                }
+            }
+        },
+        "AppToken": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "token": {
                     "type": "string"
                 },
                 "scope": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                }
-            }
-        },
-        "DiscoveryCollection": {
-            "type": "object",
-            "properties": {
-                "links": {
                     "type": "array",
                     "items": {
-                        "$ref": "DiscoveryLink"
+                        "type": "string"
                     }
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "expire": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "date": {
+                    "format": "date-time",
+                    "type": "string"
                 }
             }
         },
-        "DiscoveryLink": {
+        "Backend_User": {
+            "$ref": "User"
+        },
+        "Message": {
             "type": "object",
             "properties": {
-                "rel": {
-                    "type": "string"
+                "success": {
+                    "type": "boolean"
                 },
-                "href": {
-                    "type": "string"
-                },
-                "method": {
+                "message": {
                     "type": "string"
                 }
             }
         },
-        "Passthru": {
-            "description": "No schema information available",
+        "Metadata": {
             "type": "object",
             "additionalProperties": {
-                "type": "any"
+                "type": "string"
             }
         },
-        "RoutingCollection": {
+        "User": {
             "type": "object",
             "properties": {
-                "routings": {
+                "id": {
+                    "type": "integer"
+                },
+                "roleId": {
+                    "type": "integer"
+                },
+                "planId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "points": {
+                    "type": "integer"
+                },
+                "scopes": {
                     "type": "array",
                     "items": {
-                        "$ref": "RoutingRoute"
+                        "type": "string"
                     }
-                }
-            }
-        },
-        "RoutingRoute": {
-            "type": "object",
-            "properties": {
-                "method": {
-                    "type": "string"
                 },
-                "path": {
-                    "type": "string"
+                "apps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "App"
+                    }
                 },
-                "operationId": {
+                "metadata": {
+                    "$ref": "Metadata"
+                },
+                "date": {
+                    "format": "date-time",
                     "type": "string"
                 }
             }

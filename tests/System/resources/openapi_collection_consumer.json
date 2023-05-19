@@ -1,2247 +1,1749 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Fusio",
-    "version": "1"
-  },
-  "servers": [
-    {
-      "url": "http:\/\/127.0.0.1\/"
-    }
-  ],
-  "paths": {
-    "\/consumer\/password_reset": {
-      "put": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_ResetPassword_Execute",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserPasswordReset"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
+  "security": null,
+  "operations": {
+    "consumer.account.executePasswordReset": {
+      "path": "/consumer/password_reset",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserPasswordReset"
           }
         }
       },
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_ResetPassword_Request",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserEmail"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        }
-      }
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
     },
-    "\/consumer\/register": {
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Register",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserRegister"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
+    "consumer.account.requestPasswordReset": {
+      "path": "/consumer/password_reset",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
         }
-      }
-    },
-    "\/consumer\/provider\/{provider}": {
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Provider",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserProvider"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
-                }
-              }
-            }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserEmail"
           }
         }
       },
-      "parameters": [
-        {
-          "name": "provider",
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.register": {
+      "path": "/consumer/register",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserRegister"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.provider": {
+      "path": "/consumer/provider/:provider",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_UserJWT"
+        }
+      },
+      "arguments": {
+        "provider": {
           "in": "path",
-          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserProvider"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.refresh": {
+      "path": "/consumer/login",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_UserJWT"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserRefresh"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.login": {
+      "path": "/consumer/login",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_UserJWT"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserLogin"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.authorize": {
+      "path": "/consumer/authorize",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_AuthorizeResponse"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_AuthorizeRequest"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.account"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.activate": {
+      "path": "/consumer/activate",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserActivate"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.changePassword": {
+      "path": "/consumer/account/change_password",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Backend_AccountChangePassword"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.account"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.update": {
+      "path": "/consumer/account",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_UserAccount"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.account"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.get": {
+      "path": "/consumer/account",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_UserAccount"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.account"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.transaction.get": {
+      "path": "/consumer/transaction/$transaction_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_Transaction"
+        }
+      },
+      "arguments": {
+        "transaction_id": {
+          "in": "path",
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.transaction"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.transaction"
       ]
     },
-    "\/consumer\/login": {
-      "put": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Refresh",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserRefresh"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
-                }
-              }
-            }
-          }
+    "consumer.transaction.getAll": {
+      "path": "/consumer/transaction",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_TransactionCollection"
         }
       },
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Login",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserLogin"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_UserJWT"
-                }
-              }
-            }
-          }
-        }
-      }
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.transaction"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.transaction"
+      ]
     },
-    "\/consumer\/authorize": {
-      "get": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_GetApp",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_AuthorizeMeta"
-                }
-              }
-            }
-          }
+    "consumer.subscription.delete": {
+      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
         }
       },
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Authorize",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_AuthorizeRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_AuthorizeResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/consumer\/activate": {
-      "post": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Activate",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserActivate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/consumer\/account\/change_password": {
-      "put": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_ChangePassword",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Backend_AccountChangePassword"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.user"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/account": {
-      "get": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_UserAccount"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.user"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "consumer.user"
-        ],
-        "operationId": "Consumer_Action_User_Update",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_UserAccount"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.user"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/transaction\/{transaction_id}": {
-      "get": {
-        "tags": [
-          "consumer.transaction"
-        ],
-        "operationId": "Consumer_Action_Transaction_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Transaction"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.transaction"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "transaction_id",
+      "arguments": {
+        "subscription_id": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.subscription"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.subscription"
       ]
     },
-    "\/consumer\/transaction": {
-      "get": {
-        "tags": [
-          "consumer.transaction"
-        ],
-        "operationId": "Consumer_Action_Transaction_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_TransactionCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.transaction"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/subscription\/{subscription_id}": {
-      "get": {
-        "tags": [
-          "consumer.subscription"
-        ],
-        "operationId": "Consumer_Action_Event_Subscription_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_EventSubscription"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.subscription"
-            ]
-          }
-        ]
+    "consumer.subscription.update": {
+      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
       },
-      "put": {
-        "tags": [
-          "consumer.subscription"
-        ],
-        "operationId": "Consumer_Action_Event_Subscription_Update",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.subscription"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "consumer.subscription"
-        ],
-        "operationId": "Consumer_Action_Event_Subscription_Delete",
-        "responses": {
-          "200": {
-            "description": "DELETE 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.subscription"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "subscription_id",
+      "arguments": {
+        "subscription_id": {
           "in": "path",
-          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_EventSubscriptionUpdate"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.subscription"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.subscription"
+      ]
+    },
+    "consumer.subscription.get": {
+      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_EventSubscription"
+        }
+      },
+      "arguments": {
+        "subscription_id": {
+          "in": "path",
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.subscription"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.subscription"
       ]
     },
-    "\/consumer\/subscription": {
-      "get": {
-        "tags": [
-          "consumer.subscription"
-        ],
-        "operationId": "Consumer_Action_Event_Subscription_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.subscription"
-            ]
-          }
-        ]
+    "consumer.subscription.create": {
+      "path": "/consumer/subscription",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Message"
+        }
       },
-      "post": {
-        "tags": [
-          "consumer.subscription"
-        ],
-        "operationId": "Consumer_Action_Event_Subscription_Create",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_EventSubscriptionCreate"
-              }
-            }
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_EventSubscriptionCreate"
           }
-        },
-        "responses": {
-          "201": {
-            "description": "POST 201 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.subscription"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/scope": {
-      "get": {
-        "tags": [
-          "consumer.scope"
-        ],
-        "operationId": "Consumer_Action_Scope_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_ScopeCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.scope"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/plan\/{plan_id}": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
+        }
       },
-      "parameters": [
-        {
-          "name": "plan_id",
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.subscription"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.subscription"
+      ]
+    },
+    "consumer.subscription.getAll": {
+      "path": "/consumer/subscription",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_EventSubscriptionCollection"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.subscription"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.subscription"
+      ]
+    },
+    "consumer.scope.getAll": {
+      "path": "/consumer/scope",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_ScopeCollection"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.scope"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.scope"
+      ]
+    },
+    "consumer.plan.get": {
+      "path": "/consumer/plan/$plan_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_Plan"
+        }
+      },
+      "arguments": {
+        "plan_id": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.plan"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.plan"
       ]
     },
-    "\/consumer\/plan": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_PlanCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/payment\/{provider}\/checkout": {
-      "post": {
-        "tags": [
-          "consumer.payment"
-        ],
-        "operationId": "Consumer_Action_Payment_Checkout",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_PaymentCheckoutRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_PaymentCheckoutResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.payment"
-            ]
-          }
-        ]
+    "consumer.plan.getAll": {
+      "path": "/consumer/plan",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_PlanCollection"
+        }
       },
-      "parameters": [
-        {
-          "name": "provider",
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.plan"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.plan"
+      ]
+    },
+    "consumer.payment.checkout": {
+      "path": "/consumer/payment/:provider/checkout",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_PaymentCheckoutResponse"
+        }
+      },
+      "arguments": {
+        "provider": {
           "in": "path",
-          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_PaymentCheckoutRequest"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.payment"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.payment"
+      ]
+    },
+    "consumer.payment.portal": {
+      "path": "/consumer/payment/:provider/portal",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_PaymentPortalResponse"
+        }
+      },
+      "arguments": {
+        "provider": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_PaymentPortalRequest"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.payment"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.payment"
+      ]
+    },
+    "consumer.page.get": {
+      "path": "/consumer/page/:page_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_Page"
+        }
+      },
+      "arguments": {
+        "page_id": {
+          "in": "path",
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.page"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.page"
       ]
     },
-    "\/consumer\/payment\/{provider}\/portal": {
-      "post": {
-        "tags": [
-          "consumer.payment"
-        ],
-        "operationId": "Consumer_Action_Payment_Portal",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_PaymentPortalRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_PaymentPortalResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.payment"
-            ]
-          }
-        ]
+    "consumer.page.getAll": {
+      "path": "/consumer/page",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_PageCollection"
+        }
       },
-      "parameters": [
-        {
-          "name": "provider",
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.page"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.page"
+      ]
+    },
+    "consumer.log.get": {
+      "path": "/consumer/log/$log_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_Log"
+        }
+      },
+      "arguments": {
+        "log_id": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.log"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.log"
       ]
     },
-    "\/consumer\/page\/{page_id}": {
-      "get": {
-        "tags": [
-          "consumer.page"
-        ],
-        "operationId": "Consumer_Action_Page_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Page"
-                }
-              }
-            }
-          }
+    "consumer.log.getAll": {
+      "path": "/consumer/log",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_LogCollection"
         }
       },
-      "parameters": [
-        {
-          "name": "page_id",
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.log"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.log"
+      ]
+    },
+    "consumer.grant.delete": {
+      "path": "/consumer/grant/$grant_id<[0-9]+>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "grant_id": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.grant"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.grant"
       ]
     },
-    "\/consumer\/page": {
-      "get": {
-        "tags": [
-          "consumer.page"
-        ],
-        "operationId": "Consumer_Action_Page_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_PageCollection"
-                }
-              }
-            }
-          }
+    "consumer.grant.getAll": {
+      "path": "/consumer/grant",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_GrantCollection"
         }
-      }
-    },
-    "\/consumer\/log\/{log_id}": {
-      "get": {
-        "tags": [
-          "consumer.log"
-        ],
-        "operationId": "Consumer_Action_Log_Get",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Log"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.log"
-            ]
-          }
-        ]
       },
-      "parameters": [
-        {
-          "name": "log_id",
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.grant"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.grant"
+      ]
+    },
+    "consumer.event.getAll": {
+      "path": "/consumer/event",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_EventCollection"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.event"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.event"
+      ]
+    },
+    "consumer.app.delete": {
+      "path": "/consumer/app/$app_id<[0-9]+>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "app_id": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.app"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.app"
       ]
     },
-    "\/consumer\/log": {
-      "get": {
-        "tags": [
-          "consumer.log"
-        ],
-        "operationId": "Consumer_Action_Log_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_LogCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.log"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/grant\/{grant_id}": {
-      "delete": {
-        "tags": [
-          "consumer.grant"
-        ],
-        "operationId": "Consumer_Action_Grant_Delete",
-        "responses": {
-          "204": {
-            "description": "DELETE 204 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.grant"
-            ]
-          }
-        ]
+    "consumer.app.update": {
+      "path": "/consumer/app/$app_id<[0-9]+>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
       },
-      "parameters": [
-        {
-          "name": "grant_id",
+      "arguments": {
+        "app_id": {
           "in": "path",
-          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_AppUpdate"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.app"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.app"
+      ]
+    },
+    "consumer.app.get": {
+      "path": "/consumer/app/$app_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_App"
+        }
+      },
+      "arguments": {
+        "app_id": {
+          "in": "path",
           "schema": {
             "type": "string"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.app"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.app"
       ]
     },
-    "\/consumer\/grant": {
-      "get": {
-        "tags": [
-          "consumer.grant"
-        ],
-        "operationId": "Consumer_Action_Grant_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_GrantCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.grant"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/event": {
-      "get": {
-        "tags": [
-          "consumer.event"
-        ],
-        "operationId": "Consumer_Action_Event_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_EventCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.event"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/app\/{app_id}": {
-      "get": {
-        "tags": [
-          "consumer.app"
-        ],
-        "operationId": "Consumer_Action_App_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_App"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.app"
-            ]
-          }
-        ]
+    "consumer.app.create": {
+      "path": "/consumer/app",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Message"
+        }
       },
-      "put": {
-        "tags": [
-          "consumer.app"
-        ],
-        "operationId": "Consumer_Action_App_Update",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_AppUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.app"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "consumer.app"
-        ],
-        "operationId": "Consumer_Action_App_Delete",
-        "responses": {
-          "200": {
-            "description": "DELETE 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.app"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "app_id",
-          "in": "path",
-          "required": false,
+      "arguments": {
+        "payload": {
+          "in": "body",
           "schema": {
-            "type": "string"
+            "$ref": "Consumer_AppCreate"
           }
         }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.app"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.app"
       ]
     },
-    "\/consumer\/app": {
-      "get": {
-        "tags": [
-          "consumer.app"
-        ],
-        "operationId": "Consumer_Action_App_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_AppCollection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.app"
-            ]
-          }
-        ]
+    "consumer.app.getAll": {
+      "path": "/consumer/app",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_AppCollection"
+        }
       },
-      "post": {
-        "tags": [
-          "consumer.app"
-        ],
-        "operationId": "Consumer_Action_App_Create",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_AppCreate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "POST 201 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.app"
-            ]
-          }
-        ]
-      }
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.app"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.app"
+      ]
     }
   },
-  "components": {
-    "schemas": {
-      "AccountChangePassword": {
-        "type": "object",
-        "properties": {
-          "oldPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
-          },
-          "newPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
-          },
-          "verifyPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
-          }
-        }
-      },
-      "App": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          }
-        }
-      },
-      "AppCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "AppCreate": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+  "definitions": {
+    "AccountChangePassword": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
         },
-        "required": [
-          "name",
-          "url",
-          "scopes"
-        ]
-      },
-      "AppUpdate": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+        "newPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
         },
-        "required": [
-          "name",
-          "url",
-          "scopes"
-        ]
-      },
-      "AuthorizeMeta": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Scope"
-            }
-          }
+        "verifyPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
         }
-      },
-      "AuthorizeRequest": {
-        "type": "object",
-        "properties": {
-          "responseType": {
-            "type": "string"
-          },
-          "clientId": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "allow": {
-            "type": "boolean"
-          }
+      }
+    },
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
         },
-        "required": [
-          "responseType",
-          "clientId",
-          "scope",
-          "allow"
-        ]
-      },
-      "AuthorizeResponse": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "token": {
-            "$ref": "#\/components\/schemas\/AuthorizeResponseToken"
-          },
-          "code": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
-          }
-        }
-      },
-      "AuthorizeResponseToken": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        }
-      },
-      "Backend_AccountChangePassword": {
-        "$ref": "#\/components\/schemas\/AccountChangePassword"
-      },
-      "Collection": {
-        "type": "object",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "itemsPerPage": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$generic": "T"
-            }
-          }
-        }
-      },
-      "Consumer_App": {
-        "$ref": "#\/components\/schemas\/App"
-      },
-      "Consumer_AppCollection": {
-        "$ref": "#\/components\/schemas\/AppCollection"
-      },
-      "Consumer_AppCreate": {
-        "$ref": "#\/components\/schemas\/AppCreate"
-      },
-      "Consumer_AppUpdate": {
-        "$ref": "#\/components\/schemas\/AppUpdate"
-      },
-      "Consumer_AuthorizeMeta": {
-        "$ref": "#\/components\/schemas\/AuthorizeMeta"
-      },
-      "Consumer_AuthorizeRequest": {
-        "$ref": "#\/components\/schemas\/AuthorizeRequest"
-      },
-      "Consumer_AuthorizeResponse": {
-        "$ref": "#\/components\/schemas\/AuthorizeResponse"
-      },
-      "Consumer_EventCollection": {
-        "$ref": "#\/components\/schemas\/EventCollection"
-      },
-      "Consumer_EventSubscription": {
-        "$ref": "#\/components\/schemas\/EventSubscription"
-      },
-      "Consumer_EventSubscriptionCollection": {
-        "$ref": "#\/components\/schemas\/EventSubscriptionCollection"
-      },
-      "Consumer_EventSubscriptionCreate": {
-        "$ref": "#\/components\/schemas\/EventSubscriptionCreate"
-      },
-      "Consumer_EventSubscriptionUpdate": {
-        "$ref": "#\/components\/schemas\/EventSubscriptionUpdate"
-      },
-      "Consumer_GrantCollection": {
-        "$ref": "#\/components\/schemas\/GrantCollection"
-      },
-      "Consumer_Log": {
-        "$ref": "#\/components\/schemas\/Log"
-      },
-      "Consumer_LogCollection": {
-        "$ref": "#\/components\/schemas\/LogCollection"
-      },
-      "Consumer_Page": {
-        "$ref": "#\/components\/schemas\/Page"
-      },
-      "Consumer_PageCollection": {
-        "$ref": "#\/components\/schemas\/PageCollection"
-      },
-      "Consumer_PaymentCheckoutRequest": {
-        "$ref": "#\/components\/schemas\/PaymentCheckoutRequest"
-      },
-      "Consumer_PaymentCheckoutResponse": {
-        "$ref": "#\/components\/schemas\/PaymentCheckoutResponse"
-      },
-      "Consumer_PaymentPortalRequest": {
-        "$ref": "#\/components\/schemas\/PaymentPortalRequest"
-      },
-      "Consumer_PaymentPortalResponse": {
-        "$ref": "#\/components\/schemas\/PaymentPortalResponse"
-      },
-      "Consumer_Plan": {
-        "$ref": "#\/components\/schemas\/Plan"
-      },
-      "Consumer_PlanCollection": {
-        "$ref": "#\/components\/schemas\/PlanCollection"
-      },
-      "Consumer_ScopeCollection": {
-        "$ref": "#\/components\/schemas\/ScopeCollection"
-      },
-      "Consumer_Transaction": {
-        "$ref": "#\/components\/schemas\/Transaction"
-      },
-      "Consumer_TransactionCollection": {
-        "$ref": "#\/components\/schemas\/TransactionCollection"
-      },
-      "Consumer_UserAccount": {
-        "$ref": "#\/components\/schemas\/UserAccount"
-      },
-      "Consumer_UserActivate": {
-        "$ref": "#\/components\/schemas\/UserActivate"
-      },
-      "Consumer_UserEmail": {
-        "$ref": "#\/components\/schemas\/UserEmail"
-      },
-      "Consumer_UserJWT": {
-        "$ref": "#\/components\/schemas\/UserJWT"
-      },
-      "Consumer_UserLogin": {
-        "$ref": "#\/components\/schemas\/UserLogin"
-      },
-      "Consumer_UserPasswordReset": {
-        "$ref": "#\/components\/schemas\/UserPasswordReset"
-      },
-      "Consumer_UserProvider": {
-        "$ref": "#\/components\/schemas\/UserProvider"
-      },
-      "Consumer_UserRefresh": {
-        "$ref": "#\/components\/schemas\/UserRefresh"
-      },
-      "Consumer_UserRegister": {
-        "$ref": "#\/components\/schemas\/UserRegister"
-      },
-      "Event": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          }
-        }
-      },
-      "EventCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "EventSubscription": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "event": {
-            "type": "string"
-          },
-          "endpoint": {
-            "type": "string"
-          },
-          "responses": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/EventSubscriptionResponse"
-            }
-          }
-        }
-      },
-      "EventSubscriptionCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "EventSubscriptionCreate": {
-        "type": "object",
-        "properties": {
-          "event": {
-            "type": "string"
-          },
-          "endpoint": {
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         },
-        "required": [
-          "event",
-          "endpoint"
-        ]
-      },
-      "EventSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "integer"
-          },
-          "code": {
-            "type": "integer"
-          },
-          "attempts": {
-            "type": "string"
-          },
-          "executeDate": {
-            "type": "string"
-          }
+        "metadata": {
+          "$ref": "Metadata"
         }
-      },
-      "EventSubscriptionUpdate": {
-        "type": "object",
-        "properties": {
-          "event": {
-            "type": "string"
-          },
-          "endpoint": {
-            "type": "string"
-          }
+      }
+    },
+    "AppCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "App"
+      }
+    },
+    "AppCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
         },
-        "required": [
-          "event",
-          "endpoint"
-        ]
-      },
-      "Grant": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "app": {
-            "$ref": "#\/components\/schemas\/App"
-          },
-          "createDate": {
-            "format": "date-time",
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         }
       },
-      "GrantCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Log": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "format": "date-time",
+      "required": [
+        "name",
+        "url",
+        "scopes"
+      ]
+    },
+    "AppUpdate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
             "type": "string"
           }
         }
       },
-      "LogCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "required": [
+        "name",
+        "url",
+        "scopes"
+      ]
+    },
+    "AuthorizeRequest": {
+      "type": "object",
+      "properties": {
+        "responseType": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "allow": {
+          "type": "boolean"
         }
       },
-      "Metadata": {
-        "type": "object",
-        "additionalProperties": {
+      "required": [
+        "responseType",
+        "clientId",
+        "scope",
+        "allow"
+      ]
+    },
+    "AuthorizeResponse": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "token": {
+          "$ref": "AuthorizeResponseToken"
+        },
+        "code": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthorizeResponseToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AccountChangePassword": {
+      "$ref": "AccountChangePassword"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Consumer_App": {
+      "$ref": "App"
+    },
+    "Consumer_AppCollection": {
+      "$ref": "AppCollection"
+    },
+    "Consumer_AppCreate": {
+      "$ref": "AppCreate"
+    },
+    "Consumer_AppUpdate": {
+      "$ref": "AppUpdate"
+    },
+    "Consumer_AuthorizeRequest": {
+      "$ref": "AuthorizeRequest"
+    },
+    "Consumer_AuthorizeResponse": {
+      "$ref": "AuthorizeResponse"
+    },
+    "Consumer_EventCollection": {
+      "$ref": "EventCollection"
+    },
+    "Consumer_EventSubscription": {
+      "$ref": "EventSubscription"
+    },
+    "Consumer_EventSubscriptionCollection": {
+      "$ref": "EventSubscriptionCollection"
+    },
+    "Consumer_EventSubscriptionCreate": {
+      "$ref": "EventSubscriptionCreate"
+    },
+    "Consumer_EventSubscriptionUpdate": {
+      "$ref": "EventSubscriptionUpdate"
+    },
+    "Consumer_GrantCollection": {
+      "$ref": "GrantCollection"
+    },
+    "Consumer_Log": {
+      "$ref": "Log"
+    },
+    "Consumer_LogCollection": {
+      "$ref": "LogCollection"
+    },
+    "Consumer_Page": {
+      "$ref": "Page"
+    },
+    "Consumer_PageCollection": {
+      "$ref": "PageCollection"
+    },
+    "Consumer_PaymentCheckoutRequest": {
+      "$ref": "PaymentCheckoutRequest"
+    },
+    "Consumer_PaymentCheckoutResponse": {
+      "$ref": "PaymentCheckoutResponse"
+    },
+    "Consumer_PaymentPortalRequest": {
+      "$ref": "PaymentPortalRequest"
+    },
+    "Consumer_PaymentPortalResponse": {
+      "$ref": "PaymentPortalResponse"
+    },
+    "Consumer_Plan": {
+      "$ref": "Plan"
+    },
+    "Consumer_PlanCollection": {
+      "$ref": "PlanCollection"
+    },
+    "Consumer_ScopeCollection": {
+      "$ref": "ScopeCollection"
+    },
+    "Consumer_Transaction": {
+      "$ref": "Transaction"
+    },
+    "Consumer_TransactionCollection": {
+      "$ref": "TransactionCollection"
+    },
+    "Consumer_UserAccount": {
+      "$ref": "UserAccount"
+    },
+    "Consumer_UserActivate": {
+      "$ref": "UserActivate"
+    },
+    "Consumer_UserEmail": {
+      "$ref": "UserEmail"
+    },
+    "Consumer_UserJWT": {
+      "$ref": "UserJWT"
+    },
+    "Consumer_UserLogin": {
+      "$ref": "UserLogin"
+    },
+    "Consumer_UserPasswordReset": {
+      "$ref": "UserPasswordReset"
+    },
+    "Consumer_UserProvider": {
+      "$ref": "UserProvider"
+    },
+    "Consumer_UserRefresh": {
+      "$ref": "UserRefresh"
+    },
+    "Consumer_UserRegister": {
+      "$ref": "UserRegister"
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        }
+      }
+    },
+    "EventCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Event"
+      }
+    },
+    "EventSubscription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "event": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "$ref": "EventSubscriptionResponse"
+          }
+        }
+      }
+    },
+    "EventSubscriptionCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "EventSubscription"
+      }
+    },
+    "EventSubscriptionCreate": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "endpoint": {
           "type": "string"
         }
       },
-      "Page": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          }
-        }
-      },
-      "PageCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "PaymentCheckoutRequest": {
-        "type": "object",
-        "properties": {
-          "planId": {
-            "type": "integer"
-          },
-          "returnUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "PaymentCheckoutResponse": {
-        "type": "object",
-        "properties": {
-          "approvalUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "PaymentPortalRequest": {
-        "type": "object",
-        "properties": {
-          "returnUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "PaymentPortalResponse": {
-        "type": "object",
-        "properties": {
-          "redirectUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "Plan": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          }
-        }
-      },
-      "PlanCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Scope": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          }
-        }
-      },
-      "ScopeCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Transaction": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "planId": {
-            "type": "integer"
-          },
-          "plan": {
-            "$ref": "#\/components\/schemas\/Plan"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "points": {
-            "type": "number"
-          },
-          "periodStart": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "periodEnd": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "insertDate": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "TransactionCollection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "UserAccount": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "planId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "plans": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/UserPlan"
-            }
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "UserActivate": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string"
-          }
+      "required": [
+        "event",
+        "endpoint"
+      ]
+    },
+    "EventSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer"
         },
-        "required": [
-          "token"
-        ]
-      },
-      "UserEmail": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "captcha": {
-            "type": "string"
-          }
+        "code": {
+          "type": "integer"
         },
-        "required": [
-          "email"
-        ]
-      },
-      "UserJWT": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "integer"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        }
-      },
-      "UserLogin": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "UserPasswordReset": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "newPassword": {
-            "type": "string"
-          }
+        "attempts": {
+          "type": "string"
         },
-        "required": [
-          "token",
-          "newPassword"
-        ]
-      },
-      "UserPlan": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "integer"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          }
+        "executeDate": {
+          "type": "string"
         }
-      },
-      "UserProvider": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "clientId": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
-          }
-        }
-      },
-      "UserRefresh": {
-        "type": "object",
-        "properties": {
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "UserRegister": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "captcha": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "email",
-          "password"
-        ]
       }
     },
-    "securitySchemes": {
-      "app": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "consumer": "",
-              "consumer.app": "",
-              "consumer.event": "",
-              "consumer.grant": "",
-              "consumer.log": "",
-              "consumer.page": "",
-              "consumer.payment": "",
-              "consumer.plan": "",
-              "consumer.scope": "",
-              "consumer.subscription": "",
-              "consumer.transaction": "",
-              "consumer.user": ""
-            }
+    "EventSubscriptionUpdate": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "event",
+        "endpoint"
+      ]
+    },
+    "Grant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "app": {
+          "$ref": "App"
+        },
+        "createDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "GrantCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Grant"
+      }
+    },
+    "Log": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "LogCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Log"
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        }
+      }
+    },
+    "PageCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Page"
+      }
+    },
+    "PaymentCheckoutRequest": {
+      "type": "object",
+      "properties": {
+        "planId": {
+          "type": "integer"
+        },
+        "returnUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentCheckoutResponse": {
+      "type": "object",
+      "properties": {
+        "approvalUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentPortalRequest": {
+      "type": "object",
+      "properties": {
+        "returnUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "PaymentPortalResponse": {
+      "type": "object",
+      "properties": {
+        "redirectUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "Plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        }
+      }
+    },
+    "PlanCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Plan"
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        }
+      }
+    },
+    "ScopeCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Scope"
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "planId": {
+          "type": "integer"
+        },
+        "plan": {
+          "$ref": "Plan"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "points": {
+          "type": "number"
+        },
+        "periodStart": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "periodEnd": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "insertDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "TransactionCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Transaction"
+      }
+    },
+    "UserAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "planId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "UserPlan"
+          }
+        },
+        "metadata": {
+          "$ref": "Metadata"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "UserActivate": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    },
+    "UserEmail": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "captcha": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    "UserJWT": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "integer"
+        },
+        "refresh_token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
+    },
+    "UserPasswordReset": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "newPassword"
+      ]
+    },
+    "UserPlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        }
+      }
+    },
+    "UserProvider": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string"
+        }
+      }
+    },
+    "UserRefresh": {
+      "type": "object",
+      "properties": {
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "UserRegister": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "captcha": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "password"
+      ]
     }
   }
 }

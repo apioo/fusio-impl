@@ -19,46 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api\Documentation;
+namespace Fusio\Impl\System\Action\Connection;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Connection;
 
 /**
- * IndexTest
+ * Callback
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class IndexTest extends ControllerDbTestCase
+class Callback implements ActionInterface
 {
-    public function getDataSet()
+    private Connection\Token $tokenService;
+
+    public function __construct(Connection\Token $tokenService)
     {
-        return Fixture::getDataSet();
+        $this->tokenService = $tokenService;
     }
 
-    public function testGet()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $response = $this->sendRequest('/system/doc', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
+        $this->tokenService->fetchByCode(
+            $request->get('name'),
+            $request->get('code'),
+            $request->get('state')
+        );
 
-        $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/index_default.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testGetFilter()
-    {
-        $response = $this->sendRequest('/system/doc?filter=backend', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/index_backend.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        return [
+            'success' => true,
+            'message' => 'Access token successfully obtained, you can now close this window',
+        ];
     }
 }

@@ -55,9 +55,9 @@ class RefreshToken extends RefreshTokenAbstract
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant)
     {
         $condition = Condition::withAnd();
-        $condition->equals('app_key', $credentials->getClientId());
-        $condition->equals('app_secret', $credentials->getClientSecret());
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $credentials->getClientId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_APP_SECRET, $credentials->getClientSecret());
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {
@@ -66,7 +66,7 @@ class RefreshToken extends RefreshTokenAbstract
 
         // refresh access token
         return $this->appTokenService->refreshAccessToken(
-            $app['id'],
+            $app->getId(),
             $grant->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->expireApp),

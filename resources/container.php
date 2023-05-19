@@ -36,6 +36,7 @@ use Psr\SimpleCache\CacheInterface;
 use PSX\Api\ParserInterface;
 use PSX\Api\Scanner\FilterFactoryInterface;
 use PSX\Framework\Controller\ControllerInterface;
+use PSX\Framework\Dependency\Configurator;
 use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
 use PSX\Framework\Loader\ControllerResolverInterface;
@@ -51,10 +52,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container) {
     $services = ServiceBuilder::build($container);
-
-    $services
-        ->instanceof(ControllerInterface::class)
-        ->tag('psx.controller');
+    $services = Configurator::services($services);
 
     $services
         ->instanceof(MailSenderInterface::class)

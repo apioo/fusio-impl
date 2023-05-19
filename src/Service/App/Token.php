@@ -121,14 +121,12 @@ class Token
 
         // check expire date
         $now = new \DateTime();
-        $date = $token->getDate();
-        if ($date instanceof \DateTime) {
-            $expires = clone $date;
-            $expires->add($expireRefresh);
+        $date = $token->getDate()->toDateTime();
+        $expires = clone $date;
+        $expires->add($expireRefresh);
 
-            if ($expires < $now) {
-                throw new StatusCode\BadRequestException('Refresh token is expired');
-            }
+        if ($expires < $now) {
+            throw new StatusCode\BadRequestException('Refresh token is expired');
         }
 
         // check whether the refresh was requested from the same app
@@ -147,14 +145,13 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $row = new Table\Generated\AppTokenRow();
-        $row->setStatus(Table\App\Token::STATUS_ACTIVE);
-        $row->setToken($accessToken);
-        $row->setRefresh($refreshToken);
-        $row->setIp($ip);
-        $row->setExpire(LocalDateTime::from($expires));
-        $row->setDate(LocalDateTime::from($now));
-        $this->appTokenTable->update($row);
+        $token->setStatus(Table\App\Token::STATUS_ACTIVE);
+        $token->setToken($accessToken);
+        $token->setRefresh($refreshToken);
+        $token->setIp($ip);
+        $token->setExpire(LocalDateTime::from($expires));
+        $token->setDate(LocalDateTime::from($now));
+        $this->appTokenTable->update($token);
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
@@ -197,7 +194,7 @@ class Token
             'name' => $user->getName()
         ];
 
-        return JWT::encode($payload, $this->config->get('fusio_project_key'));
+        return JWT::encode($payload, $this->config->get('fusio_project_key'), 'HS256');
     }
 
     private function getApp(string $appId): Table\Generated\AppRow

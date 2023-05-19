@@ -45,8 +45,6 @@ class TypeAPITest extends ControllerDbTestCase
      */
     public function testGetCollection(string $category)
     {
-        //Environment::getContainer()->get(ConfigInterface::class)->set('psx_debug', $debug);
-
         $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'POST', [
             'User-Agent' => 'Fusio TestCase',
         ]);
@@ -64,12 +62,10 @@ class TypeAPITest extends ControllerDbTestCase
     {
         return [
             ['default'],
-            /*
             ['backend'],
             ['consumer'],
             ['system'],
             ['authorization'],
-            */
         ];
     }
 }

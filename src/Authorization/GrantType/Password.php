@@ -82,14 +82,14 @@ class Password extends PasswordAbstract
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($scope, (int) $app['id'], $userId);
+        $scopes = $this->scopeService->getValidScopes($scope, $app->getId(), $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
-            $app['id'],
+            $app->getId(),
             $userId,
             $scopes,
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',

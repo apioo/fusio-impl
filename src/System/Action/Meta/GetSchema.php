@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Action;
+namespace Fusio\Impl\System\Action\Meta;
 
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
@@ -28,26 +28,49 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Service\Schema\Loader;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Generator;
 
 /**
- * GetAllRoute
+ * GetSchema
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAllRoute implements ActionInterface
+class GetSchema implements ActionInterface
 {
-    private View\Operation $table;
+    private View\Schema $view;
+    private Loader $loader;
 
-    public function __construct(View\Operation $table)
+    public function __construct(View\Schema $view, Loader $loader)
     {
-        $this->table = $table;
+        $this->view = $view;
+        $this->loader = $loader;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getPublic($request->get('category'));
+        $schema = $this->view->getEntityWithForm(
+            $request->get('name')
+        );
+
+        if (empty($schema)) {
+            throw new StatusCode\NotFoundException('Could not find schema');
+        }
+
+        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Schema was deleted');
+        }
+
+        $type = $this->loader->getSchema($schema['name']);
+        $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
+
+        return [
+            'schema' => $json,
+            'form' => $schema['form'],
+        ];
     }
 }

@@ -36,7 +36,7 @@ use PSX\Json\Parser;
  */
 class PasswordTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -134,7 +134,7 @@ JSON;
         $this->assertEquals('authorization', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(4, $row['user_id']);

@@ -119,6 +119,7 @@ class DataBag
 
             $this->addOperation(
                 $category,
+                $operation->public,
                 $operation->stability,
                 $operationName,
                 $operation->httpMethod,
@@ -486,13 +487,13 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
-            'public' => 0,
+            'public' => $public ? 1 : 0,
             'stability' => $stability,
             'description' => '',
             'http_method' => $httpMethod,

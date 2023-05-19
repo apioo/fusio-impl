@@ -160,8 +160,8 @@ class NewInstallation
     {
         return [
             'default' => [
-                'getAbout' => new Operation(
-                    action: System\Action\GetAbout::class,
+                'meta.getAbout' => new Operation(
+                    action: System\Action\Meta\GetAbout::class,
                     httpMethod: 'GET',
                     httpPath: '/',
                     httpCode: 200,
@@ -1421,50 +1421,59 @@ class NewInstallation
                 ),
             ],
             'system' => [
-                'getAbout' => new Operation(
-                    action: System\Action\GetAbout::class,
+                'connection.callback' => new Operation(
+                    action: System\Action\Connection\Callback::class,
+                    httpMethod: 'GET',
+                    httpPath: '/connection/:name/callback',
+                    httpCode: 200,
+                    outgoing: Message::class,
+                    public: true,
+                ),
+                'meta.getAbout' => new Operation(
+                    action: System\Action\Meta\GetAbout::class,
                     httpMethod: 'GET',
                     httpPath: '/about',
                     httpCode: 200,
                     outgoing: Model\System\About::class,
                     public: true,
                 ),
-                'getAllRoutes' => new Operation(
-                    action: System\Action\GetAllRoute::class,
-                    httpMethod: 'GET',
-                    httpPath: '/route',
-                    httpCode: 200,
-                    outgoing: Model\System\Route::class,
-                    public: true,
-                ),
-                'getDebug' => new Operation(
-                    action: System\Action\GetDebug::class,
-                    httpMethod: 'GET',
+                'meta.getDebug' => new Operation(
+                    action: System\Action\Meta\GetDebug::class,
+                    httpMethod: 'POST',
                     httpPath: '/debug',
                     httpCode: 200,
                     outgoing: Passthru::class,
+                    incoming: Passthru::class,
                     public: true,
                 ),
-                'getHealth' => new Operation(
-                    action: System\Action\GetHealth::class,
+                'meta.getHealth' => new Operation(
+                    action: System\Action\Meta\GetHealth::class,
                     httpMethod: 'GET',
                     httpPath: '/health',
                     httpCode: 200,
                     outgoing: Model\System\HealthCheck::class,
                     public: true,
                 ),
-                'getSchema' => new Operation(
-                    action: System\Action\GetSchema::class,
+                'meta.getRoutes' => new Operation(
+                    action: System\Action\Meta\GetRoutes::class,
+                    httpMethod: 'GET',
+                    httpPath: '/route',
+                    httpCode: 200,
+                    outgoing: Model\System\Route::class,
+                    public: true,
+                ),
+                'meta.getSchema' => new Operation(
+                    action: System\Action\Meta\GetSchema::class,
                     httpMethod: 'GET',
                     httpPath: '/schema/:name',
                     httpCode: 200,
                     outgoing: Model\System\Schema::class,
                     public: true,
                 ),
-                'fetchConnectionCallback' => new Operation(
-                    action: System\Action\ConnectionCallback::class,
+                'payment.webhook' => new Operation(
+                    action: System\Action\Payment\Webhook::class,
                     httpMethod: 'GET',
-                    httpPath: '/connection/:name/callback',
+                    httpPath: '/payment/:provider/webhook',
                     httpCode: 200,
                     outgoing: Message::class,
                     public: true,

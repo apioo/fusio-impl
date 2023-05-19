@@ -34,7 +34,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class RevokeTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -57,7 +57,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check whether the token was revoked
-        $status = $this->connection->fetchColumn('SELECT status FROM fusio_app_token WHERE token = :token', ['token' => 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf']);
+        $status = $this->connection->fetchFirstColumn('SELECT status FROM fusio_app_token WHERE token = :token', ['token' => 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf']);
 
         $this->assertEquals(Token::STATUS_DELETED, $status);
     }

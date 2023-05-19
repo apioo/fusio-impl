@@ -66,8 +66,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             throw new InvalidClientException('Unknown credentials');
         }
 
-        // check whether the code is older then 30 minutes. After that we
-        // can not exchange it for an access token
+        // check whether the code is older then 30 minutes. After that we can not exchange it for an access token
         if (time() - strtotime($code['date']) > 60 * 30) {
             throw new InvalidGrantException('Code is expired');
         }

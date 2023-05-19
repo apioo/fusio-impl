@@ -19,58 +19,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\System\Action;
+namespace Fusio\Impl\System\Action\Payment;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use Fusio\Impl\Service\Schema\Loader;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Generator;
+use Fusio\Impl\Service;
 
 /**
- * GetSchema
+ * Webhook
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetSchema implements ActionInterface
+class Webhook implements ActionInterface
 {
-    private View\Schema $view;
-    private Loader $loader;
+    private Service\Log $logService;
+    private Service\Payment $paymentService;
 
-    public function __construct(View\Schema $view, Loader $loader)
+    public function __construct(Service\Log $logService, Service\Payment $paymentService)
     {
-        $this->view = $view;
-        $this->loader = $loader;
+        $this->logService = $logService;
+        $this->paymentService = $paymentService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $schema = $this->view->getEntityWithForm(
-            $request->get('name')
+        $requestContext = $request->getContext();
+        if (!$requestContext instanceof HttpRequest) {
+            throw new \RuntimeException('Invoking the webhook is currently only supported through HTTP');
+        }
+
+        $this->logService->log(
+            $requestContext->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $requestContext->getMethod(),
+            $requestContext->getRequestTarget(),
+            $requestContext->getHeader('User-Agent'),
+            $context,
+            $requestContext
         );
 
-        if (empty($schema)) {
-            throw new StatusCode\NotFoundException('Could not find schema');
-        }
+        try {
+            $this->paymentService->webhook($requestContext->getUriFragment('provider'), $request);
+        } catch (\Throwable $e) {
+            $this->logService->error($e);
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Schema was deleted');
+            throw $e;
+        } finally {
+            $this->logService->finish();
         }
-
-        $type = $this->loader->getSchema($schema['name']);
-        $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
 
         return [
-            'schema' => $json,
-            'form' => $schema['form'],
+            'success' => true,
+            'message' => 'Execution successful'
         ];
     }
 }

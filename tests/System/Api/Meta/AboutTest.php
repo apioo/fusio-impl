@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api;
+namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Base;
 use Fusio\Impl\Tests\Documentation;
@@ -35,21 +35,9 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class AboutTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/system/about', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/about.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -136,7 +124,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -149,7 +137,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -162,6 +150,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

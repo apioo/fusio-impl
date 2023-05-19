@@ -19,56 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api;
+namespace Fusio\Impl\Tests\System\Api\Payment;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * HealthTest
+ * WebhookTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class HealthTest extends ControllerDbTestCase
+class WebhookTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/system/health', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/health.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
     public function testGet()
     {
-        $response = $this->sendRequest('/system/health', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "healthy": true,
-    "checks": {
-        "Test": {
-            "healthy": true
-        },
-        "System": {
-            "healthy": true
-        }
-    }
+    "success": true,
+    "message": "Execution successful"
 }
 JSON;
 
@@ -78,40 +58,43 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/system/health', 'POST', array(
-            'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+        ));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Execution successful"
+}
+JSON;
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/system/health', 'PUT', array(
-            'User-Agent' => 'Fusio TestCase',
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/health', 'DELETE', array(
-            'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'DELETE', array(
+            'User-Agent'    => 'Fusio TestCase',
+        ));
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

@@ -19,43 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Rpc\Middleware;
+namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Engine\Request\RpcRequest;
-use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Service;
-use PSX\Http\Exception as StatusCode;
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Authentication
+ * GetRoutes
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Authentication
+class GetRoutes implements ActionInterface
 {
-    private Service\Security\TokenValidator $tokenValidator;
-    private ?string $authorization;
+    private View\Operation $table;
 
-    public function __construct(Service\Security\TokenValidator $tokenValidator, ?string $authorization)
+    public function __construct(View\Operation $table)
     {
-        $this->tokenValidator = $tokenValidator;
-        $this->authorization = $authorization;
+        $this->table = $table;
     }
 
-    public function __invoke(RpcRequest $request, Context $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $method = $context->getOperation();
-
-        $success = $this->tokenValidator->assertAuthorization(
-            $method['method'],
-            $this->authorization,
-            $context
-        );
-
-        if (!$success) {
-            throw new StatusCode\UnauthorizedException('Could not authorize request', 'Bearer');
+        $categoryId = $context->getUser()->getCategoryId();
+        if (empty($categoryId)) {
+            $categoryId = 1;
         }
+
+        return $this->table->getRoutes($categoryId);
     }
 }

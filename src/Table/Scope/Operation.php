@@ -63,29 +63,13 @@ class Operation extends Generated\ScopeOperationTable
 
     public function getScopesForOperation(int $operationId): array
     {
-        $sql = 'SELECT scope.name,
-                       operation.methods
+        $sql = 'SELECT scope.name
                   FROM fusio_scope_operation operation
             INNER JOIN fusio_scope scope
                     ON scope.id = operation.scope_id
-                 WHERE operation.route_id = :id
+                 WHERE operation.operation_id = :id
                    AND operation.allow = 1
               ORDER BY operation.id ASC';
-
-        $result = $this->connection->fetchAllAssociative($sql, ['id' => $operationId]);
-        $scopes = [];
-
-        foreach ($result as $row) {
-            $methods = explode('|', $row['methods']);
-            foreach ($methods as $methodName) {
-                if (!isset($scopes[$methodName])) {
-                    $scopes[$methodName] = [];
-                }
-
-                $scopes[$methodName][] = $row['name'];
-            }
-        }
-
-        return $scopes;
+        return $this->connection->fetchFirstColumn($sql, ['id' => $operationId]);
     }
 }

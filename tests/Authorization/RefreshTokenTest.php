@@ -35,7 +35,7 @@ use PSX\Json\Parser;
  */
 class RefreshTokenTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -48,7 +48,7 @@ class RefreshTokenTest extends ControllerDbTestCase
             ->set('date', ':date')
             ->setParameter('date', date('Y-m-d H:i:s'));
 
-        $this->connection->executeUpdate($qb->getSQL(), $qb->getParameters());
+        $this->connection->executeStatement($qb->getSQL(), $qb->getParameters());
 
         $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -73,7 +73,7 @@ class RefreshTokenTest extends ControllerDbTestCase
         $this->assertEquals('bar', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);

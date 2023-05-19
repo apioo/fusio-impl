@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\System\Api;
+namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -34,21 +34,9 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class RouteTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/system/route', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/route.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -62,42 +50,18 @@ class RouteTest extends ControllerDbTestCase
 {
     "routes": {
         "\/": {
-            "GET": "System_Action_GetAbout"
+            "GET": "meta.getAbout"
         },
         "\/foo": {
-            "GET": "Sql-Select-All",
-            "POST": "Sql-Insert"
+            "GET": "test.listFoo",
+            "POST": "test.createFoo"
         },
         "\/inspect\/:foo": {
-            "GET": "Inspect-Action",
-            "POST": "Inspect-Action",
-            "PUT": "Inspect-Action",
-            "DELETE": "Inspect-Action",
-            "PATCH": "Inspect-Action"
-        }
-    }
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testGetCategory()
-    {
-        $response = $this->sendRequest('/system/route?category=authorization', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "routes": {
-        "\/authorization\/revoke": {
-            "POST": "Authorization_Action_Revoke"
-        },
-        "\/authorization\/whoami": {
-            "GET": "Authorization_Action_GetWhoami"
+            "GET": "inspect.get",
+            "POST": "inspect.post",
+            "PUT": "inspect.put",
+            "PATCH": "inspect.patch",
+            "DELETE": "inspect.delete"
         }
     }
 }
@@ -117,7 +81,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -130,7 +94,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -143,6 +107,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }
