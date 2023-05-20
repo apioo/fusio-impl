@@ -36,11 +36,11 @@ class UpdateCommandTest extends MarketplaceTestCase
 {
     public function testCommand()
     {
-        if (is_dir(Environment::getConfig()->get('fusio_apps_dir') . '/fusio')) {
+        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is already installed');
         }
 
-        $appsDir = Environment::getConfig()->get('fusio_apps_dir');
+        $appsDir = Environment::getConfig('fusio_apps_dir');
         mkdir($appsDir . '/fusio');
         file_put_contents($appsDir . '/fusio/app.yaml', $this->getOldApp());
         file_put_contents($appsDir . '/fusio/index.html', 'old');

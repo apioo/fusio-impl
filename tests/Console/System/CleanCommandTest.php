@@ -36,7 +36,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class CleanCommandTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

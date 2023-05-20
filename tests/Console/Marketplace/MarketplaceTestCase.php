@@ -40,8 +40,8 @@ use PSX\Http\Client\Client;
  */
 class MarketplaceTestCase extends ControllerDbTestCase
 {
-    private $installer;
-    private $remote;
+    private Installer $installer;
+    private Remote $remote;
 
     public function getDataSet(): array
     {

@@ -67,13 +67,13 @@ class TokenValidator
         // a header from the client we also check the token so that the client
         // gets maybe another rate limit
         if ($needsAuth || !empty($authorization)) {
-            $parts       = explode(' ', $authorization ?? '', 2);
-            $type        = $parts[0] ?? null;
+            $parts = explode(' ', $authorization ?? '', 2);
+            $type = $parts[0] ?? null;
             $accessToken = $parts[1] ?? null;
 
-            $params = array(
+            $params = [
                 'realm' => 'Fusio',
-            );
+            ];
 
             if ($type === 'Bearer' && !empty($accessToken)) {
                 try {
@@ -133,11 +133,11 @@ class TokenValidator
                    AND app_token.status = :status
                    AND (app_token.expire IS NULL OR app_token.expire > :now)';
 
-        $accessToken = $this->connection->fetchAssociative($sql, array(
-            'token'  => $token,
+        $accessToken = $this->connection->fetchAssociative($sql, [
+            'token' => $token,
             'status' => AppToken::STATUS_ACTIVE,
-            'now'    => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
-        ));
+            'now' => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
+        ]);
 
         if (empty($accessToken)) {
             return null;
@@ -158,7 +158,7 @@ class TokenValidator
                         ON scope.id = scope_operation.scope_id
                      WHERE scope_operation.operation_id = :operation';
 
-        $availableScopes = $this->connection->fetchAllAssociative($sql, array('operation' => $operationId));
+        $availableScopes = $this->connection->fetchAllAssociative($sql, ['operation' => $operationId]);
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request

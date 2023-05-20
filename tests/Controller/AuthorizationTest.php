@@ -34,7 +34,7 @@ use PSX\Framework\Test\Environment;
  */
 class AuthorizationTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

@@ -53,17 +53,22 @@ class Revoke implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if ($request instanceof HttpRequest) {
-            $token = $this->getTokenByHttp($request);
+        $requestContext = $request->getContext();
+        if ($requestContext instanceof HttpRequest) {
+            $token = $this->getTokenByHttp($requestContext);
         } else {
             $token = $request->get('token');
+        }
+
+        if (empty($token)) {
+            throw new StatusCode\BadRequestException('No token provided');
         }
 
         $row = $this->table->getTokenByToken($context->getApp()->getId(), $token);
 
         // the token must be assigned to the user
-        if (!empty($row) && $row['app_id'] == $context->getApp()->getId() && $row['user_id'] == $context->getUser()->getId()) {
-            $this->appTokenService->removeToken($row['app_id'], $row['id'], UserContext::newActionContext($context));
+        if ($row instanceof Table\Generated\AppTokenRow && $row->getAppId() == $context->getApp()->getId() && $row->getUserId() == $context->getUser()->getId()) {
+            $this->appTokenService->removeToken($row->getAppId(), $row->getId(), UserContext::newActionContext($context));
 
             return [
                 'success' => true

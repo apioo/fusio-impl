@@ -35,7 +35,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class CronjobExecuteCommandTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

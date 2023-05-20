@@ -30,10 +30,7 @@ namespace Fusio\Impl\Tests;
  */
 class DbTestCase extends \PSX\Framework\Test\DbTestCase
 {
-    /**
-     * @inheritdoc
-     */
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

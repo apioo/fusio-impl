@@ -62,7 +62,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 173,
+    "id": 174,
     "status": 1,
     "active": 1,
     "public": 0,
@@ -92,7 +92,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 173,
+    "id": 174,
     "status": 1,
     "active": 1,
     "public": 0,

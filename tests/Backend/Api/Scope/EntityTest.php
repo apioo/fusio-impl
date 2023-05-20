@@ -64,23 +64,23 @@ class EntityTest extends ControllerDbTestCase
     "description": "Bar access",
     "routes": [
         {
+            "id": 169,
+            "scopeId": 43,
+            "operationId": 177,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
             "id": 167,
             "scopeId": 43,
-            "operationId": 176,
+            "operationId": 175,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 165,
+            "id": 166,
             "scopeId": 43,
             "operationId": 174,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
-        },
-        {
-            "id": 164,
-            "scopeId": 43,
-            "operationId": 173,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
@@ -107,23 +107,23 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
+            "id": 169,
+            "scopeId": 43,
+            "operationId": 177,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
             "id": 167,
             "scopeId": 43,
-            "operationId": 176,
+            "operationId": 175,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 165,
+            "id": 166,
             "scopeId": 43,
             "operationId": 174,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
-        },
-        {
-            "id": 164,
-            "scopeId": 43,
-            "operationId": 173,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }

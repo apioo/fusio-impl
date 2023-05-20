@@ -45,6 +45,6 @@ class FilterTestCase extends TestCase
 
         $context = new HttpContext(new Request($uri, 'GET'), []);
 
-        return new \Fusio\Engine\Request(Record::fromArray($parameters), new Record(), new HttpRequest($context));
+        return new \Fusio\Engine\Request($parameters, new Record(), new HttpRequest($context));
     }
 }

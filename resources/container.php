@@ -117,6 +117,7 @@ return static function (ContainerConfigurator $container) {
     $services->alias(RuntimeInterface::class, Action\Runtime::class);
 
     // impl
+    $services->load('Fusio\\Impl\\Authorization\\Action\\', __DIR__ . '/../src/Authorization/Action');
     $services->load('Fusio\\Impl\\Backend\\Action\\', __DIR__ . '/../src/Backend/Action');
     $services->load('Fusio\\Impl\\Backend\\View\\', __DIR__ . '/../src/Backend/View');
     $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action');

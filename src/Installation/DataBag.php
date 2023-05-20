@@ -138,10 +138,14 @@ class DataBag
                 $this->addScope($category, $scope);
                 $this->addScopeOperation($scope, $operationName);
 
-                if (in_array($parts[1], ['create', 'update', 'delete'])) {
+                if (isset($parts[1]) && in_array($parts[1], ['create', 'update', 'delete'])) {
                     $eventName = 'fusio.' . $parts[0] . '.' . $parts[1];
                     $this->addEvent($category, $eventName);
                 }
+            } elseif ($category === 'authorization') {
+                $scope = $category;
+                $this->addScope($category, $scope);
+                $this->addScopeOperation($scope, $operationName);
             }
         }
     }

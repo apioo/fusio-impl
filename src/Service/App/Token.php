@@ -122,8 +122,7 @@ class Token
         // check expire date
         $now = new \DateTime();
         $date = $token->getDate()->toDateTime();
-        $expires = clone $date;
-        $expires->add($expireRefresh);
+        $expires = $date->add($expireRefresh);
 
         if ($expires < $now) {
             throw new StatusCode\BadRequestException('Refresh token is expired');

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Filter\Audit;
 
-use Backend\Filter\Audit\QueryFilter;
+use Fusio\Impl\Backend\Filter\Audit\QueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
 
 /**
