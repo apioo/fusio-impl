@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Service\App;
 
 use Firebase\JWT\JWT;
 use Fusio\Impl\Service\App\Token;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -37,7 +38,7 @@ use PSX\Oauth2\AccessToken;
  */
 class TokenTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -45,9 +46,7 @@ class TokenTest extends ControllerDbTestCase
     public function testGenerateAccessToken()
     {
         /** @var Token $tokenService */
-        $tokenService = Environment::getService('app_token_service');
-        $projectKey   = Environment::getConfig()->get('fusio_project_key');
-
+        $tokenService = Environment::getService(Token::class);
         $token = $tokenService->generateAccessToken(1, 1, ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
 
         $this->assertInstanceOf(AccessToken::class, $token);
@@ -56,7 +55,8 @@ class TokenTest extends ControllerDbTestCase
         $this->assertNotEmpty($token->getExpiresIn());
         $this->assertNotEmpty($token->getRefreshToken());
 
-        $jwt = JWT::decode($token->getAccessToken(), $projectKey, ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $jwt = $jsonWebToken->decode($token->getAccessToken());
 
         $this->assertEquals('http://127.0.0.1', $jwt->iss);
         $this->assertEquals('b2493ea4-c99b-5cc9-8004-4fdbe90f674b', $jwt->sub);

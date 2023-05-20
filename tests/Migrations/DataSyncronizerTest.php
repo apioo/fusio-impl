@@ -35,7 +35,7 @@ use PSX\Framework\Test\DbTestCase;
  */
 class DataSyncronizerTest extends DbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

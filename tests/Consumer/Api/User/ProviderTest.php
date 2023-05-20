@@ -23,8 +23,9 @@ namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Provider;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table\User;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -50,13 +51,13 @@ class ProviderTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/provider/github', 'GET', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPostFacebook()
@@ -67,20 +68,19 @@ class ProviderTest extends ControllerDbTestCase
         ]);
 
         $container = [];
-        $history   = Middleware::history($container);
+        $history = Middleware::history($container);
 
         $handler = HandlerStack::create($mock);
         $handler->push($history);
 
         $client = new Client(['handler' => $handler]);
+        Environment::getService(Provider\User\Facebook::class)->setHttpClient($client);
 
-        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_facebook_secret']);
-        Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => $id]);
+        $this->connection->update('fusio_config', ['value' => 'facebook'], ['name' => 'provider_facebook_secret']);
 
-        $response = $this->sendRequest('/consumer/provider/facebook', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/facebook', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
             'redirectUri' => 'http://google.com',
@@ -96,12 +96,12 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token?code=foo&client_id=bar&client_secret=facebook&redirect_uri=' . urlencode('http://google.com'), $transaction['request']->getUri());
+        $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token?code=foo&client_id=bar&client_secret=facebook&redirect_uri=' . urlencode('http://google.com'), (string) $transaction['request']->getUri());
 
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://graph.facebook.com/v2.5/me?access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&fields=id%2Cname%2Cemail', $transaction['request']->getUri());
+        $this->assertEquals('https://graph.facebook.com/v2.5/me?access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&fields=id%2Cname%2Cemail', (string) $transaction['request']->getUri());
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
@@ -113,20 +113,19 @@ class ProviderTest extends ControllerDbTestCase
         ]);
 
         $container = [];
-        $history   = Middleware::history($container);
+        $history = Middleware::history($container);
 
         $handler = HandlerStack::create($mock);
         $handler->push($history);
 
         $client = new Client(['handler' => $handler]);
+        Environment::getService(Provider\User\Github::class)->setHttpClient($client);
 
-        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_github_secret']);
-        Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => $id]);
+        $this->connection->update('fusio_config', ['value' => 'github'], ['name' => 'provider_github_secret']);
 
-        $response = $this->sendRequest('/consumer/provider/github', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
             'redirectUri' => 'http://google.com',
@@ -142,13 +141,13 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
-        $this->assertEquals('https://github.com/login/oauth/access_token', $transaction['request']->getUri());
+        $this->assertEquals('https://github.com/login/oauth/access_token', (string) $transaction['request']->getUri());
         $this->assertEquals('code=foo&client_id=bar&client_secret=github&redirect_uri=http%3A%2F%2Fgoogle.com', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://api.github.com/user', $transaction['request']->getUri());
+        $this->assertEquals('https://api.github.com/user', (string) $transaction['request']->getUri());
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
@@ -160,20 +159,19 @@ class ProviderTest extends ControllerDbTestCase
         ]);
 
         $container = [];
-        $history   = Middleware::history($container);
+        $history = Middleware::history($container);
 
         $handler = HandlerStack::create($mock);
         $handler->push($history);
 
         $client = new Client(['handler' => $handler]);
+        Environment::getService(Provider\User\Google::class)->setHttpClient($client);
 
-        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_google_secret']);
-        Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => $id]);
+        $this->connection->update('fusio_config', ['value' => 'google'], ['name' => 'provider_google_secret']);
 
-        $response = $this->sendRequest('/consumer/provider/google', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/google', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
             'redirectUri' => 'http://google.com',
@@ -189,45 +187,46 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
-        $this->assertEquals('https://oauth2.googleapis.com/token', $transaction['request']->getUri());
+        $this->assertEquals('https://oauth2.googleapis.com/token', (string) $transaction['request']->getUri());
         $this->assertEquals('code=foo&client_id=bar&client_secret=google&redirect_uri=http%3A%2F%2Fgoogle.com&grant_type=authorization_code', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://www.googleapis.com/userinfo/v2/me', $transaction['request']->getUri());
+        $this->assertEquals('https://www.googleapis.com/userinfo/v2/me', (string) $transaction['request']->getUri());
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/provider/github', 'PUT', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/provider/github', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
-    
-    protected function assertToken($jwt, $provider)
+
+    protected function assertToken(string $jwt, string $provider): void
     {
-        $token = JWT::decode($jwt, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($jwt);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -235,31 +234,31 @@ class ProviderTest extends ControllerDbTestCase
         $this->assertEquals('octocat', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $jwt]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $jwt]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(6, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('eb9a3e30-9c88-5525-b229-903113421324', $token->sub);
-        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,default', $row['scope']);
+        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.account,authorization,default', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
 
         // check new user
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('status', 'provider', 'remote_id', 'name', 'email', 'password')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['user_id']]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $row['user_id']]);
 
         $this->assertEquals(User::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($provider, $row['provider']);

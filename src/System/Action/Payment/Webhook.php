@@ -24,8 +24,9 @@ namespace Fusio\Impl\System\Action\Payment;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 
 /**
@@ -49,21 +50,27 @@ class Webhook implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $requestContext = $request->getContext();
-        if (!$requestContext instanceof HttpRequest) {
+        if (!$requestContext instanceof HttpRequestContext) {
             throw new \RuntimeException('Invoking the webhook is currently only supported through HTTP');
         }
 
+        if (!$context instanceof Context) {
+            throw new \RuntimeException('Provided an invalid context');
+        }
+
+        $httpRequest = $requestContext->getRequest();
+
         $this->logService->log(
-            $requestContext->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
-            $requestContext->getMethod(),
-            $requestContext->getRequestTarget(),
-            $requestContext->getHeader('User-Agent'),
+            $httpRequest->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $httpRequest->getMethod(),
+            $httpRequest->getRequestTarget(),
+            $httpRequest->getHeader('User-Agent'),
             $context,
-            $requestContext
+            $httpRequest
         );
 
         try {
-            $this->paymentService->webhook($requestContext->getUriFragment('provider'), $request);
+            $this->paymentService->webhook($requestContext->getParameter('provider'), $httpRequest);
         } catch (\Throwable $e) {
             $this->logService->error($e);
 

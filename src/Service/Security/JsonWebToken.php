@@ -19,43 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Mail\Sender;
+namespace Fusio\Impl\Service\Security;
 
-use Fusio\Impl\Mail\Message;
-use Fusio\Impl\Mail\SenderInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
- * SMTP
+ * JsonWebToken
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class SMTP implements SenderInterface
+class JsonWebToken
 {
-    public function accept(object $dispatcher): bool
+    private const ALGO = 'HS256';
+
+    private ConfigInterface $config;
+
+    public function __construct(ConfigInterface $config)
     {
-        return $dispatcher instanceof MailerInterface;
+        $this->config = $config;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
-    public function send(object $dispatcher, Message $message): void
+    public function encode(array $payload): string
     {
-        if (!$dispatcher instanceof MailerInterface) {
-            throw new \InvalidArgumentException('Provided an invalid dispatcher');
-        }
+        return JWT::encode($payload, $this->config->get('fusio_project_key'), self::ALGO);
+    }
 
-        $msg = new Email();
-        $msg->from($message->getFrom());
-        $msg->to(...$message->getTo());
-        $msg->subject($message->getSubject());
-        $msg->html($message->getBody());
-
-        $dispatcher->send($msg);
+    public function decode(string $jwt): \stdClass
+    {
+        return JWT::decode($jwt, new Key($this->config->get('fusio_project_key'), self::ALGO));
     }
 }

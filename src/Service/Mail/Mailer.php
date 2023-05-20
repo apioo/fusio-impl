@@ -25,7 +25,7 @@ use Fusio\Impl\Mail\Message;
 use Fusio\Impl\Mail\SenderInterface;
 use Fusio\Impl\Service\Connection\Resolver;
 use PSX\Framework\Config\ConfigInterface;
-use Symfony\Component\Mailer\Mailer as SymfonyMailer;
+use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use Symfony\Component\Mailer\Transport\TransportInterface;
@@ -42,19 +42,21 @@ class Mailer implements MailerInterface
     private Resolver $resolver;
     private SenderFactory $senderFactory;
     private ConfigInterface $config;
+    private SymfonyMailerInterface $mailer;
 
-    public function __construct(Resolver $resolver, SenderFactory $senderFactory, ConfigInterface $config)
+    public function __construct(Resolver $resolver, SenderFactory $senderFactory, ConfigInterface $config, SymfonyMailerInterface $mailer)
     {
-        $this->resolver      = $resolver;
+        $this->resolver = $resolver;
         $this->senderFactory = $senderFactory;
-        $this->config        = $config;
+        $this->config = $config;
+        $this->mailer = $mailer;
     }
 
     public function send(string $subject, array $to, string $body): void
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
         if (!$dispatcher) {
-            $dispatcher = new SymfonyMailer($this->createTransport());
+            $dispatcher = $this->mailer;
         }
 
         $from = $this->config->get('fusio_mail_sender');
@@ -90,8 +92,8 @@ class Mailer implements MailerInterface
 
     private function createTransport(): TransportInterface
     {
-        $mailer = $this->config['fusio_mailer'];
-        if ($this->config['psx_debug'] === false && !empty($mailer)) {
+        $mailer = $this->config->get('fusio_mailer');
+        if ($this->config->get('psx_debug') === false && !empty($mailer)) {
             return Transport::fromDsn($mailer);
         } else {
             return new NullTransport();

@@ -8,7 +8,7 @@ class PlanRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $status = null;
     private ?string $name = null;
     private ?string $description = null;
-    private ?string $price = null;
+    private ?int $price = null;
     private ?int $points = null;
     private ?int $periodType = null;
     private ?string $externalId = null;
@@ -45,11 +45,11 @@ class PlanRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->description ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "description" was provided');
     }
-    public function setPrice(string $price) : void
+    public function setPrice(int $price) : void
     {
         $this->price = $price;
     }
-    public function getPrice() : string
+    public function getPrice() : int
     {
         return $this->price ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "price" was provided');
     }
@@ -111,7 +111,7 @@ class PlanRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
-        $row->price = isset($data['price']) && is_string($data['price']) ? $data['price'] : null;
+        $row->price = isset($data['price']) && is_int($data['price']) ? $data['price'] : null;
         $row->points = isset($data['points']) && is_int($data['points']) ? $data['points'] : null;
         $row->periodType = isset($data['period_type']) && is_int($data['period_type']) ? $data['period_type'] : null;
         $row->externalId = isset($data['external_id']) && is_string($data['external_id']) ? $data['external_id'] : null;

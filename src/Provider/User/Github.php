@@ -42,7 +42,7 @@ class Github extends ProviderAbstract
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
-            'client_secret' => $this->secret,
+            'client_secret' => $this->getSecret(),
             'redirect_uri'  => $redirectUri,
         ];
 

@@ -73,7 +73,9 @@ class Plan extends ViewAbstract
                 'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-                'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'price' => $builder->fieldCallback(Table\Generated\PlanTable::COLUMN_PRICE, function($value){
+                    return round($value / 100, 2);
+                }),
                 'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
                 'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
                 'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
@@ -93,7 +95,9 @@ class Plan extends ViewAbstract
             'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,
             'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
-            'price' => $builder->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+            'price' => $builder->fieldCallback(Table\Generated\PlanTable::COLUMN_PRICE, function($value){
+                return round($value / 100, 2);
+            }),
             'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
             'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,

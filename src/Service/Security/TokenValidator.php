@@ -41,14 +41,14 @@ use PSX\OAuth2\Exception\InvalidScopeException;
 class TokenValidator
 {
     private Connection $connection;
-    private string $projectKey;
+    private JsonWebToken $jsonWebToken;
     private Repository\AppInterface $appRepository;
     private Repository\UserInterface $userRepository;
 
-    public function __construct(Connection $connection, ConfigInterface $config, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(Connection $connection, JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->connection = $connection;
-        $this->projectKey = $config->get('fusio_project_key');
+        $this->jsonWebToken = $jsonWebToken;
         $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
     }
@@ -116,8 +116,8 @@ class TokenValidator
     private function getToken(string $token, int $operationId, string $requestMethod): ?Model\Token
     {
         // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
-        if (strpos($token, '.') !== false) {
-            JWT::decode($token, $this->projectKey);
+        if (str_contains($token, '.')) {
+            $this->jsonWebToken->decode($token);
         }
 
         $now = new \DateTime();

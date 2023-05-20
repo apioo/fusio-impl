@@ -34,7 +34,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class WelcomeTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

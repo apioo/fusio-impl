@@ -27,6 +27,7 @@ use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated\PlanRow;
 use Fusio\Impl\Table\Generated\TransactionRow;
 use Fusio\Impl\Table\Generated\UserRow;
+use PSX\DateTime\LocalDateTime;
 
 /**
  * Webhook
@@ -80,7 +81,7 @@ class Webhook implements WebhookInterface
             $transaction->setTransactionId($sessionId);
             $transaction->setAmount($amountTotal);
             $transaction->setPoints($plan->getPoints());
-            $transaction->setInsertDate(new \DateTime());
+            $transaction->setInsertDate(LocalDateTime::now());
             $this->transactionTable->create($transaction);
         }
     }
@@ -106,9 +107,9 @@ class Webhook implements WebhookInterface
         $transaction->setTransactionId($invoiceId);
         $transaction->setAmount($amountPaid);
         $transaction->setPoints($plan->getPoints());
-        $transaction->setPeriodStart(\DateTime::createFromImmutable($periodStart));
-        $transaction->setPeriodEnd(\DateTime::createFromImmutable($periodEnd));
-        $transaction->setInsertDate(new \DateTime());
+        $transaction->setPeriodStart(LocalDateTime::from($periodStart));
+        $transaction->setPeriodEnd(LocalDateTime::from($periodEnd));
+        $transaction->setInsertDate(LocalDateTime::now());
         $this->transactionTable->create($transaction);
     }
 

@@ -49,7 +49,7 @@ class ChangePasswordTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -63,7 +63,7 @@ class ChangePasswordTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
@@ -89,12 +89,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database password
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('password')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 2]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
         $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL!', $row['password']));
     }
@@ -110,6 +110,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

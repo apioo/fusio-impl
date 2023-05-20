@@ -44,13 +44,18 @@ abstract class ProviderAbstract implements ProviderInterface
     protected const TYPE_POST = 0x1;
     protected const TYPE_GET = 0x2;
 
-    protected ClientInterface $httpClient;
-    protected string $secret;
+    private ClientInterface $httpClient;
+    private Config $config;
 
     public function __construct(ClientInterface $httpClient, Config $config)
     {
         $this->httpClient = $httpClient;
-        $this->secret     = $config->getValue($this->getProviderConfigKey($this->getId()));
+        $this->config = $config;
+    }
+
+    public function setHttpClient(ClientInterface $httpClient): void
+    {
+        $this->httpClient = $httpClient;
     }
 
     protected function obtainUserInfo(string $rawUrl, string $accessToken, ?array $parameters = null): ?\stdClass
@@ -60,7 +65,7 @@ abstract class ProviderAbstract implements ProviderInterface
             'User-Agent'    => Base::getUserAgent()
         ];
 
-        $url = new Url($rawUrl);
+        $url = Url::parse($rawUrl);
         if (!empty($parameters)) {
             $url = $url->withParameters($parameters);
         }
@@ -86,9 +91,9 @@ abstract class ProviderAbstract implements ProviderInterface
         ];
 
         if ($type === self::TYPE_POST) {
-            $request = new PostRequest(new Url($rawUrl), $headers, $params);
+            $request = new PostRequest(Url::parse($rawUrl), $headers, $params);
         } elseif ($type === self::TYPE_GET) {
-            $url = new Url($rawUrl);
+            $url = Url::parse($rawUrl);
             $url = $url->withParameters($params);
             $request = new GetRequest($url, $headers);
         } else {
@@ -113,6 +118,11 @@ abstract class ProviderAbstract implements ProviderInterface
         } else {
             return null;
         }
+    }
+
+    protected function getSecret(): string
+    {
+        return $this->config->getValue($this->getProviderConfigKey($this->getId()));
     }
 
     protected function getProviderConfigKey(int $provider): string

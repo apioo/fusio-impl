@@ -7,7 +7,7 @@ return [
 
     // This array contains a list of worker endpoints which can be used by Fusio to execute action code in different
     // programming languages. For more information please take a look at our worker documentation:
-    // https://www.fusio-project.org/documentation/worker
+    // https://docs.fusio-project.org/docs/concepts/worker_api/
     /*
     'fusio_worker'            => [
         'java'                => 'localhost:9090',
@@ -37,12 +37,8 @@ return [
     // provider file for more information
     'fusio_provider'          => __DIR__ . '/provider.php',
 
-    // Settings of the internal mailer. More information s.
-    // https://symfony.com/doc/current/mailer.html#using-built-in-transports
-    'fusio_mailer'            => 'native://default',
-
     // Describes the default email which Fusio uses as from address
-    'fusio_mail_sender'       => null,
+    'fusio_mail_sender'       => env('APP_MAIL_SENDER')->string(),
 
     // Indicates whether the marketplace is enabled. If yes it is possible to download and install other apps through
     // the backend
@@ -52,7 +48,7 @@ return [
     'fusio_marketplace_url'   => 'https://www.fusio-project.org/marketplace.yaml',
 
     // The public url to the apps folder (i.e. http://acme.com/apps or http://apps.acme.com)
-    'fusio_apps_url'          => 'http://127.0.0.1/apps',
+    'fusio_apps_url'          => env('APP_APPS_URL')->string(),
 
     // Location where the apps are persisted from the marketplace. By default this is the public dir to access the apps
     // directly, but it is also possible to specify a different folder

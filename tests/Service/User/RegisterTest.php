@@ -44,7 +44,7 @@ use PSX\Http\Exception\BadRequestException;
  */
 class RegisterTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

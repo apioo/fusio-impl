@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -49,7 +50,7 @@ class LoginTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -66,7 +67,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -74,20 +76,20 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
-        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', $row['scope']);
+        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.account,authorization,foo,bar', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
     }
@@ -107,7 +109,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -115,13 +118,13 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
@@ -162,7 +165,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -170,13 +174,13 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
@@ -213,6 +217,6 @@ class LoginTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

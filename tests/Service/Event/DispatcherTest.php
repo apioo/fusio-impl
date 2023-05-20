@@ -35,7 +35,7 @@ use PSX\Framework\Test\Environment;
  */
 class DispatcherTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -45,7 +45,7 @@ class DispatcherTest extends ControllerDbTestCase
         $this->newDispatcher()->dispatch('foo-event', ['foo' => 'bar']);
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT event_id, status, payload FROM fusio_event_trigger');
+        $responses = $this->connection->fetchAllAssociative('SELECT event_id, status, payload FROM fusio_event_trigger');
 
         // payload from fixture
         $this->assertEquals(2, count($responses));

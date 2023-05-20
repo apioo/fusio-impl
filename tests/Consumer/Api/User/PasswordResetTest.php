@@ -47,7 +47,7 @@ class PasswordResetTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -69,7 +69,7 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $actual);
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
 
-        $token = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = 2');
+        $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = 2');
         $this->assertNotEmpty($token);
     }
 
@@ -108,7 +108,7 @@ JSON;
         // set token
         $this->testPost();
 
-        $token = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = :id', ['id' => 2]);
+        $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => 2]);
 
         $response = $this->sendRequest('/consumer/password_reset', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -129,7 +129,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
 
         // verify password
-        $user = $this->connection->fetchAssoc('SELECT password, token FROM fusio_user WHERE id = :id', ['id' => 2]);
+        $user = $this->connection->fetchAssociative('SELECT password, token FROM fusio_user WHERE id = :id', ['id' => 2]);
         $this->assertTrue(password_verify('foo', $user['password']));
         $this->assertEmpty($user['token']);
     }
@@ -160,6 +160,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

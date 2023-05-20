@@ -134,6 +134,10 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\Mail\\Sender\\', __DIR__ . '/../src/Mail/Sender');
     $services->load('Fusio\\Impl\\Webhook\\Sender\\', __DIR__ . '/../src/Webhook/Sender');
     $services->load('Fusio\\Impl\\Connection\\', __DIR__ . '/../src/Connection');
+    $services->load('Fusio\\Impl\\Provider\\User\\', __DIR__ . '/../src/Provider/User')
+        ->public();
+    $services->load('Fusio\\Impl\\Provider\\Generator\\', __DIR__ . '/../src/Provider/Generator')
+        ->public();
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);

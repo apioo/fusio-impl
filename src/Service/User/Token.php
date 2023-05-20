@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Service\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
@@ -37,12 +39,12 @@ use PSX\Http\Exception as StatusCode;
 class Token
 {
     private Table\User $userTable;
-    private ConfigInterface $config;
+    private JsonWebToken $jsonWebToken;
 
-    public function __construct(Table\User $userTable, ConfigInterface $config)
+    public function __construct(Table\User $userTable, JsonWebToken $jsonWebToken)
     {
         $this->userTable = $userTable;
-        $this->config = $config;
+        $this->jsonWebToken = $jsonWebToken;
     }
 
     /**
@@ -51,7 +53,7 @@ class Token
     public function getUser(string $token): int
     {
         try {
-            JWT::decode($token, $this->config->get('fusio_project_key'), ['HS256']);
+            $this->jsonWebToken->decode($token);
         } catch (\RuntimeException $e) {
             throw new StatusCode\BadRequestException('Invalid token provided');
         }
@@ -81,7 +83,7 @@ class Token
             'jti' => TokenGenerator::generateCode(),
         ];
 
-        $token = JWT::encode($payload, $this->config->get('fusio_project_key'), 'HS256');
+        $token = $this->jsonWebToken->encode($payload);
 
         $existing->setToken($token);
         $this->userTable->update($existing);

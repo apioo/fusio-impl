@@ -49,10 +49,10 @@ class Provider
 
     public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, ConfigInterface $config)
     {
-        $this->userService     = $userService;
+        $this->userService = $userService;
         $this->appTokenService = $appTokenService;
-        $this->userProvider    = $userProvider;
-        $this->config          = $config;
+        $this->userProvider = $userProvider;
+        $this->config = $config;
     }
 
     public function provider(string $providerName, Consumer\UserProvider $request): AccessToken
@@ -74,7 +74,7 @@ class Provider
 
         /** @var ProviderInterface $provider */
         $provider = $this->userProvider->getInstance($providerName);
-        $user     = $provider->requestUser($code, $clientId, $redirectUri);
+        $user = $provider->requestUser($code, $clientId, $redirectUri);
 
         if (!$user instanceof UserDetails) {
             throw new StatusCode\BadRequestException('Could not request user information');

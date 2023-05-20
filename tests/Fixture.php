@@ -78,8 +78,8 @@ class Fixture
 
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
-        $data->addPlan('Plan A', 39.99, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu', ['foo' => 'bar']);
-        $data->addPlan('Plan B', 49.99, 1000, null);
+        $data->addPlan('Plan A', 3999, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu', ['foo' => 'bar']);
+        $data->addPlan('Plan B', 4999, 1000, null);
         $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, 'Plan A', ['foo' => 'bar']);
         $data->addUser('Consumer', 'Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED);
         $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE);

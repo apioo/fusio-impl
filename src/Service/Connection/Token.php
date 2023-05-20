@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\Connection;
 
-use Firebase\JWT\JWT;
 use Fusio\Engine\Connection\OAuth2Interface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Model;
@@ -32,7 +31,6 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\ConnectionConfig;
 use Fusio\Model\Backend\ConnectionUpdate;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
@@ -54,14 +52,16 @@ class Token
     private Repository\ConnectionInterface $repository;
     private ClientInterface $httpClient;
     private Service\Connection $connectionService;
+    private Service\Security\JsonWebToken $jsonWebToken;
     private ConfigInterface $config;
 
-    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, ConfigInterface $config)
+    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Service\Security\JsonWebToken $jsonWebToken, ConfigInterface $config)
     {
         $this->factory = $factory;
         $this->repository = $repository;
         $this->httpClient = $httpClient;
         $this->connectionService = $connectionService;
+        $this->jsonWebToken = $jsonWebToken;
         $this->config = $config;
     }
 
@@ -271,10 +271,10 @@ class Token
     /**
      * @throws StatusCode\BadRequestException
      */
-    private function assertState(string $state)
+    private function assertState(string $state): void
     {
         try {
-            JWT::decode($state, $this->config->get('fusio_project_key'), ['HS256']);
+            $this->jsonWebToken->decode($state);
         } catch (\UnexpectedValueException $e) {
             throw new StatusCode\BadRequestException('The provided state is not valid', $e);
         }
@@ -282,7 +282,11 @@ class Token
 
     private function newState(): string
     {
-        return JWT::encode(['exp' => time() + (60 * 10)], $this->config->get('fusio_project_key'));
+        $payload = [
+            'exp' => time() + (60 * 10)
+        ];
+
+        return $this->jsonWebToken->encode($payload);
     }
 
     private function newRedirectUri(string $connectionId): string

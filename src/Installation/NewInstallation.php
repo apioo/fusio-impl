@@ -1357,6 +1357,13 @@ class NewInstallation
                     incoming: Model\Consumer\UserActivate::class,
                     public: true,
                 ),
+                'account.getApp' => new Operation(
+                    action: Consumer\Action\User\GetApp::class,
+                    httpMethod: 'GET',
+                    httpPath: '/authorize',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\AuthorizeMeta::class,
+                ),
                 'account.authorize' => new Operation(
                     action: Consumer\Action\User\Authorize::class,
                     httpMethod: 'POST',

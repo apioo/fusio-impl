@@ -39,7 +39,7 @@ use Symfony\Component\Mailer\Mailer;
  */
 class MailerTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

@@ -48,7 +48,7 @@ class RegisterTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -69,7 +69,7 @@ class RegisterTest extends ControllerDbTestCase
         $this->assertEquals('Registration successful', $data->message);
 
         // check database user
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
@@ -77,7 +77,7 @@ class RegisterTest extends ControllerDbTestCase
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(2, $row['status']);
@@ -147,7 +147,7 @@ class RegisterTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -160,6 +160,6 @@ class RegisterTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

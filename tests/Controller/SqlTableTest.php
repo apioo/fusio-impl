@@ -36,7 +36,7 @@ use PSX\Json\Parser;
  */
 class SqlTableTest extends ControllerDbTestCase
 {
-    private $id;
+    private ?int $id;
 
     protected function setUp(): void
     {
@@ -45,7 +45,7 @@ class SqlTableTest extends ControllerDbTestCase
         $this->id = Fixture::getId('fusio_routes', '/foo');
     }
 
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }

@@ -23,18 +23,18 @@ namespace Fusio\Impl\Service\App;
 
 use DateInterval;
 use DateTime;
-use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Token
@@ -49,14 +49,16 @@ class Token
     private Table\User $userTable;
     private Table\App\Token $appTokenTable;
     private ConfigInterface $config;
+    private JsonWebToken $jsonWebToken;
     private EventDispatcherInterface  $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, ConfigInterface $config, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
         $this->userTable       = $userTable;
         $this->appTokenTable   = $appTokenTable;
         $this->config          = $config;
+        $this->jsonWebToken    = $jsonWebToken;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -193,7 +195,7 @@ class Token
             'name' => $user->getName()
         ];
 
-        return JWT::encode($payload, $this->config->get('fusio_project_key'), 'HS256');
+        return $this->jsonWebToken->encode($payload);
     }
 
     private function getApp(string $appId): Table\Generated\AppRow

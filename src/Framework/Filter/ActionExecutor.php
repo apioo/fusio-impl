@@ -27,7 +27,6 @@ use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Schema\Loader;
 use PSX\Framework\Http\RequestReader;
 use PSX\Framework\Http\ResponseWriter;
-use PSX\Http\Environment\HttpContext;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -67,8 +66,7 @@ class ActionExecutor implements FilterInterface
 
         $arguments = array_merge($request->getUri()->getParameters(), $this->context->getParameters());
 
-        $context = new HttpContext($request, $this->context->getParameters());
-        $requestContext = new Request\HttpRequest($context);
+        $requestContext = new Request\HttpRequestContext($request, $this->context->getParameters());
 
         $operation = $this->context->getOperation();
         if (!empty($operation->getIncoming()) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {

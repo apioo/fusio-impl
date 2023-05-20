@@ -115,7 +115,7 @@ JSON;
         $this->assertEquals('http://google.com?code=' . urlencode($data['code']) . '&state=state', $data['redirectUri'], $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'code', 'redirect_uri', 'scope')
             ->from('fusio_app_code')
             ->orderBy('id', 'DESC')
@@ -123,7 +123,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(1, $row['user_id']);
@@ -158,7 +158,7 @@ JSON;
         $this->assertEquals('#', $data['redirectUri'], $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'code', 'redirect_uri', 'scope')
             ->from('fusio_app_code')
             ->orderBy('id', 'DESC')
@@ -166,7 +166,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(1, $row['user_id']);
@@ -234,7 +234,7 @@ JSON;
         $this->assertEquals('http://google.com#' . http_build_query($data['token']), $data['redirectUri'], $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
@@ -242,7 +242,7 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, [
+        $row = $this->connection->fetchAssociative($sql, [
             'token' => $data['token']['access_token']
         ]);
 
@@ -417,7 +417,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -431,7 +431,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     private function getExpireTimes($timestamps = true)

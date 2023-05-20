@@ -24,6 +24,7 @@ namespace Fusio\Impl\Provider;
 use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Factory\FactoryInterface;
 use Fusio\Engine\Form;
+use Fusio\Engine\NameBuilder;
 use Fusio\Engine\Parser\ParserAbstract;
 
 /**
@@ -63,14 +64,16 @@ abstract class ProviderParser extends ParserAbstract
         return $result;
     }
 
-    public function getInstance(string $class): ?object
+    public function getInstance(string $name): ?object
     {
         foreach ($this->objects as $object) {
-            if ($object::class === $class) {
+            if ($object::class === $name) {
+                return $object;
+            } elseif (strcasecmp(NameBuilder::fromClass($object::class), $name) === 0) {
                 return $object;
             }
         }
 
-        return null;
+        throw new InvalidProviderException($name);
     }
 }

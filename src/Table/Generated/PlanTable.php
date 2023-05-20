@@ -23,7 +23,7 @@ class PlanTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_PRICE => 0x500000, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_TYPE => 0x4020000a, self::COLUMN_EXTERNAL_ID => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_PRICE => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_TYPE => 0x4020000a, self::COLUMN_EXTERNAL_ID => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\PlanRow>
@@ -209,7 +209,7 @@ class PlanTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\PlanRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPrice(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByPrice(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('price', $value);
@@ -218,7 +218,7 @@ class PlanTable extends \PSX\Sql\TableAbstract
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByPrice(string $value) : ?\Fusio\Impl\Table\Generated\PlanRow
+    public function findOneByPrice(int $value) : ?\Fusio\Impl\Table\Generated\PlanRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('price', $value);
@@ -227,7 +227,7 @@ class PlanTable extends \PSX\Sql\TableAbstract
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByPrice(string $value, \Fusio\Impl\Table\Generated\PlanRow $record) : int
+    public function updateByPrice(int $value, \Fusio\Impl\Table\Generated\PlanRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('price', $value);
@@ -236,7 +236,7 @@ class PlanTable extends \PSX\Sql\TableAbstract
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByPrice(string $value) : int
+    public function deleteByPrice(int $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('price', $value);

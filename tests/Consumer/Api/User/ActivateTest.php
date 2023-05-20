@@ -22,7 +22,8 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
-use Fusio\Impl\Tests\Documentation;
+use Fusio\Impl\Service\Security\JsonWebToken;
+use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Model\Consumer\UserRegister;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -50,7 +51,7 @@ class ActivateTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -59,16 +60,16 @@ class ActivateTest extends ControllerDbTestCase
         $register->setName('baz');
         $register->setEmail('baz@localhost.com');
         $register->setPassword('test1234!');
-        Environment::getService('user_register_service')->register($register);
+        Environment::getService(Register::class)->register($register);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(1, $row['provider']);
@@ -77,7 +78,7 @@ class ActivateTest extends ControllerDbTestCase
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
 
-        $token = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -93,14 +94,14 @@ class ActivateTest extends ControllerDbTestCase
         $this->assertEquals('Activation successful', $data->message);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 6]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 6]);
 
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(1, $row['status']);
@@ -116,7 +117,8 @@ class ActivateTest extends ControllerDbTestCase
             'exp' => time() - 60,
         ];
 
-        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->encode($payload);
 
         $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -139,7 +141,8 @@ class ActivateTest extends ControllerDbTestCase
             'exp' => time() + 60,
         ];
 
-        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->encode($payload);
 
         $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -165,7 +168,7 @@ class ActivateTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -178,6 +181,6 @@ class ActivateTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

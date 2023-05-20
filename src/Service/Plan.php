@@ -70,11 +70,16 @@ class Plan
         try {
             $this->planTable->beginTransaction();
 
+            $price = $plan->getPrice();
+            if ($price !== null) {
+                $price = (int) ($price * 100);
+            }
+
             $row = new Table\Generated\PlanRow();
             $row->setStatus(Table\Plan::STATUS_ACTIVE);
             $row->setName($plan->getName());
             $row->setDescription($plan->getDescription());
-            $row->setPrice($plan->getPrice());
+            $row->setPrice($price);
             $row->setPoints($plan->getPoints());
             $row->setPeriodType($plan->getPeriod());
             $row->setExternalId($plan->getExternalId());
@@ -113,10 +118,15 @@ class Plan
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
+        $price = $plan->getPrice();
+        if ($price !== null) {
+            $price = (int) ($price * 100);
+        }
+
         // update event
         $existing->setName($plan->getName());
         $existing->setDescription($plan->getDescription());
-        $existing->setPrice($plan->getPrice());
+        $existing->setPrice($price);
         $existing->setPoints($plan->getPoints());
         $existing->setPeriodType($plan->getPeriod());
         $existing->setExternalId($plan->getExternalId());

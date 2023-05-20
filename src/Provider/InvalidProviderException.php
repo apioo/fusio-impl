@@ -19,16 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Authorization;
+namespace Fusio\Impl\Provider;
 
 /**
- * Authorization
+ * InvalidProviderException
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Authorization
+class InvalidProviderException extends \Exception
 {
-    const APP = 'app';
+    public function __construct(string $providerName, ?\Throwable $previous = null)
+    {
+        parent::__construct('The provider ' . $providerName . ' does not exist', 0, $previous);
+    }
 }

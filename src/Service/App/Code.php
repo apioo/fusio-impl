@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\App;
 
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table;
+use PSX\DateTime\LocalDateTime;
 
 /**
  * Code
@@ -44,14 +45,14 @@ class Code
     {
         $code = TokenGenerator::generateCode();
 
-        $this->appCodeTable->create(new Table\Generated\AppCodeRow([
-            Table\Generated\AppCodeTable::COLUMN_APP_ID => $appId,
-            Table\Generated\AppCodeTable::COLUMN_USER_ID => $userId,
-            Table\Generated\AppCodeTable::COLUMN_CODE => $code,
-            Table\Generated\AppCodeTable::COLUMN_REDIRECT_URI => $redirectUri,
-            Table\Generated\AppCodeTable::COLUMN_SCOPE => implode(',', $scopes),
-            Table\Generated\AppCodeTable::COLUMN_DATE => new \DateTime(),
-        ]));
+        $row = new Table\Generated\AppCodeRow();
+        $row->setAppId($appId);
+        $row->setUserId($userId);
+        $row->setCode($code);
+        $row->setRedirectUri($redirectUri);
+        $row->setScope(implode(',', $scopes));
+        $row->setDate(LocalDateTime::now());
+        $this->appCodeTable->create($row);
 
         return $code;
     }
