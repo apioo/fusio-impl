@@ -21,17 +21,13 @@
 
 namespace Fusio\Impl\Service\Generator;
 
+use Fusio\Engine\Schema\SchemaName;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Operation;
 use Fusio\Impl\Service\Schema;
 use Fusio\Model;
-use Fusio\Model\Backend\RouteMethod;
-use Fusio\Model\Backend\RouteMethodResponses;
-use Fusio\Model\Backend\RouteVersion;
 use PSX\Api\OperationInterface;
-use PSX\Api\Resource;
-use PSX\Http\Exception as StatusCode;
 
 /**
  * EntityCreator
@@ -103,6 +99,7 @@ class EntityCreator
     public function createOperations(int $categoryId, array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
     {
         $scopes = $scopes ?: [];
+        $reservedSchemaNames = [SchemaName::PASSTHRU, SchemaName::MESSAGE];
 
         foreach ($operations as $record) {
             $record->setActive(true);
@@ -115,17 +112,24 @@ class EntityCreator
             $record->setHttpPath($path);
 
             $incoming = $record->getIncoming();
-            if (!empty($incoming)) {
+            if (!empty($incoming) && !in_array($incoming, $reservedSchemaNames)) {
                 $record->setIncoming($this->buildName($prefix, $incoming));
             }
 
-            $record->setOutgoing($this->buildName($prefix, $record->getOutgoing()));
+            $outgoing = $record->getOutgoing();
+            if (!in_array($outgoing, $reservedSchemaNames)) {
+                $record->setOutgoing($this->buildName($prefix, $outgoing));
+            }
 
             $throws = $record->getThrows();
             if (!empty($throws)) {
                 $result = [];
                 foreach ($throws as $code => $throw) {
-                    $result[$code] = $this->buildName($prefix, $throw);
+                    if (!in_array($throw, $reservedSchemaNames)) {
+                        $result[$code] = $this->buildName($prefix, $throw);
+                    } else {
+                        $result[$code] = $throw;
+                    }
                 }
                 $record->setThrows(Model\Backend\OperationThrows::fromArray($result));
             }
