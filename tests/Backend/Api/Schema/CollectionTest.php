@@ -53,17 +53,17 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 141,
+            "id": 143,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 140,
+            "id": 142,
             "status": 1,
             "name": "Collection-Schema",
             "metadata": {
@@ -71,9 +71,14 @@ class CollectionTest extends ControllerDbTestCase
             }
         },
         {
-            "id": 2,
+            "id": 3,
             "status": 1,
             "name": "System_About"
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "name": "Message"
         },
         {
             "id": 1,
@@ -103,7 +108,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 141,
+            "id": 143,
             "status": 1,
             "name": "Entry-Schema"
         }
@@ -125,17 +130,17 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 141,
+            "id": 143,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 140,
+            "id": 142,
             "status": 1,
             "name": "Collection-Schema",
             "metadata": {
@@ -143,9 +148,14 @@ JSON;
             }
         },
         {
-            "id": 2,
+            "id": 3,
             "status": 1,
             "name": "System_About"
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "name": "Message"
         },
         {
             "id": 1,

@@ -73,7 +73,7 @@ class Generator
         try {
             $this->entityCreator->createSchemas($categoryId, $setup->getSchemas(), $prefix, $context);
             $this->entityCreator->createActions($categoryId, $setup->getActions(), $prefix, $context);
-            $this->entityCreator->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $public, $context);
+            $this->entityCreator->createOperations($categoryId, $setup->getOperations(), $scopes, $public, $basePath, $prefix, $context);
 
             $this->connection->commit();
         } catch (\Throwable $e) {
@@ -104,12 +104,12 @@ class Generator
         $setup = new Setup();
 
         $provider = $this->getProvider($providerName);
-        $provider->setup($setup, '/[path]', new Parameters($config->getProperties()));
+        $provider->setup($setup, '/[path]', new Parameters($config->getAll()));
 
         return [
             'schemas' => $setup->getSchemas(),
             'actions' => $setup->getActions(),
-            'routes' => $setup->getRoutes(),
+            'operations' => $setup->getOperations(),
         ];
     }
 

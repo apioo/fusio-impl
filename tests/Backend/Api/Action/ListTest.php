@@ -103,6 +103,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Http\\Action\\HttpEngine"
         },
         {
+            "name": "Inspect-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction"
+        },
+        {
             "name": "PHP-Processor",
             "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor"
         },
@@ -129,6 +133,14 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "SQL-Insert",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert"
+        },
+        {
+            "name": "SQL-Query-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll"
+        },
+        {
+            "name": "SQL-Query-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow"
         },
         {
             "name": "SQL-Select-All",
@@ -165,6 +177,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
+        },
+        {
+            "name": "Void-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction"
         }
     ]
 }

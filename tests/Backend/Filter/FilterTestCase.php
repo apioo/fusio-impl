@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Filter;
 
 use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpContext;
@@ -43,8 +44,6 @@ class FilterTestCase extends TestCase
         $uri = Uri::parse('/');
         $uri = $uri->withParameters($parameters);
 
-        $context = new HttpContext(new Request($uri, 'GET'), []);
-
-        return new \Fusio\Engine\Request($parameters, new Record(), new HttpRequest($context));
+        return new \Fusio\Engine\Request($parameters, new Record(), new HttpRequestContext(new Request($uri, 'GET'), []));
     }
 }

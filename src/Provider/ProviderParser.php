@@ -71,6 +71,8 @@ abstract class ProviderParser extends ParserAbstract
                 return $object;
             } elseif (strcasecmp(NameBuilder::fromClass($object::class), $name) === 0) {
                 return $object;
+            } elseif (str_ends_with(strtolower($object::class), strtolower($name))) {
+                return $object;
             }
         }
 

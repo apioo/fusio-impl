@@ -22,10 +22,9 @@
 namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Worker\Generated\RpcRequest;
 use PSX\Http\Exception as StatusCode;
@@ -37,7 +36,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class InspectAction implements ActionInterface
+class InspectAction extends ActionAbstract
 {
     public function getName(): string
     {
@@ -53,12 +52,12 @@ class InspectAction implements ActionInterface
 
         $data = [];
         $context = $request->getContext();
-        if ($context instanceof HttpRequest) {
+        if ($context instanceof HttpRequestContext) {
             $data = [
-                'method' => $context->getMethod(),
-                'headers' => $context->getHeaders(),
-                'uri_fragments' => $context->getUriFragments(),
-                'parameters' => $context->getParameters(),
+                'method' => $context->getRequest()->getMethod(),
+                'headers' => $context->getRequest()->getHeaders(),
+                'uri_fragments' => $context->getParameters(),
+                'parameters' => $context->getRequest()->getUri()->getParameters(),
             ];
         } elseif ($context instanceof RpcRequest) {
             $data = [

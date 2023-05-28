@@ -172,7 +172,7 @@ JSON;
         $this->assertEquals(1, $row['id']);
         $this->assertEquals('New-Test', $row['name']);
         $this->assertEquals('Test new description', $row['description']);
-        $this->assertEquals(49.99, $row['price']);
+        $this->assertEquals(4999, $row['price']);
         $this->assertEquals(4000, $row['points']);
         $this->assertEquals(1, $row['period_type']);
         $this->assertEquals('foobar', $row['external_id']);

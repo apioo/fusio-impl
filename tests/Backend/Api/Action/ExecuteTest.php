@@ -53,7 +53,7 @@ class ExecuteTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/execute/System_Action_GetDebug', 'POST', array(
+        $response = $this->sendRequest('/backend/action/execute/System_Action_Meta_GetDebug', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -76,7 +76,7 @@ class ExecuteTest extends ControllerDbTestCase
             "news_id": "10"
         },
         "payload": {},
-        "context": "Fusio\\Engine\\Request\\HttpRequest"
+        "context": "Fusio\\Engine\\Request\\HttpRequestContext"
     }
 }
 JSON;

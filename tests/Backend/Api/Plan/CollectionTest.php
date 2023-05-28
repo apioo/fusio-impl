@@ -130,7 +130,7 @@ JSON;
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('Plan D', $row['name']);
         $this->assertEquals('Test description', $row['description']);
-        $this->assertEquals(59.99, $row['price']);
+        $this->assertEquals(5999, $row['price']);
         $this->assertEquals(1000, $row['points']);
         $this->assertEquals(ProductInterface::INTERVAL_SUBSCRIPTION, $row['period_type']);
         $this->assertEquals('price_1L3dOA2Tb35ankTn36cCgliu', $row['external_id']);

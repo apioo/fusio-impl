@@ -55,7 +55,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 180,
+            "id": 181,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -66,7 +66,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Inspect-Action"
         },
         {
-            "id": 179,
+            "id": 180,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -77,7 +77,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Inspect-Action"
         },
         {
-            "id": 178,
+            "id": 179,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -88,7 +88,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Inspect-Action"
         },
         {
-            "id": 177,
+            "id": 178,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -99,7 +99,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Inspect-Action"
         },
         {
-            "id": 176,
+            "id": 177,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -110,7 +110,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Inspect-Action"
         },
         {
-            "id": 175,
+            "id": 176,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -121,7 +121,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "Sql-Insert"
         },
         {
-            "id": 174,
+            "id": 175,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -165,7 +165,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 180,
+            "id": 181,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -176,7 +176,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 179,
+            "id": 180,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -187,7 +187,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 178,
+            "id": 179,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -198,7 +198,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 177,
+            "id": 178,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -209,7 +209,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 176,
+            "id": 177,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -242,7 +242,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 180,
+            "id": 181,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -253,7 +253,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 179,
+            "id": 180,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -264,7 +264,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 178,
+            "id": 179,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -275,7 +275,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 177,
+            "id": 178,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -286,7 +286,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 176,
+            "id": 177,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -297,7 +297,7 @@ JSON;
             "action": "Inspect-Action"
         },
         {
-            "id": 175,
+            "id": 176,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -308,7 +308,7 @@ JSON;
             "action": "Sql-Insert"
         },
         {
-            "id": 174,
+            "id": 175,
             "status": 1,
             "active": 1,
             "public": 0,
@@ -532,7 +532,7 @@ JSON;
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('/name does not match pattern [^[a-zA-Z0-9\-\_\.]{3,64}$]', $data->message);
+        $this->assertStringStartsWith('/name does not match pattern [^[a-zA-Z0-9\_\.]{3,64}$]', $data->message);
     }
 
     public function testPostParametersInvalidName()

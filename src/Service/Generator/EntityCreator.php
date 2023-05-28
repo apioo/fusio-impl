@@ -29,6 +29,7 @@ use Fusio\Model;
 use Fusio\Model\Backend\RouteMethod;
 use Fusio\Model\Backend\RouteMethodResponses;
 use Fusio\Model\Backend\RouteVersion;
+use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
 
@@ -41,23 +42,15 @@ use PSX\Http\Exception as StatusCode;
  */
 class EntityCreator
 {
-    private Operation $routeService;
+    private Operation $operationService;
     private Schema $schemaService;
     private Action $actionService;
 
-    private array $schemas;
-    private array $actions;
-    private array $routes;
-
-    public function __construct(Operation $routeService, Schema $schemaService, Action $actionService)
+    public function __construct(Operation $operationService, Schema $schemaService, Action $actionService)
     {
-        $this->routeService = $routeService;
+        $this->operationService = $operationService;
         $this->schemaService = $schemaService;
         $this->actionService = $actionService;
-
-        $this->schemas = [];
-        $this->actions = [];
-        $this->routes = [];
     }
 
     /**
@@ -65,7 +58,7 @@ class EntityCreator
      */
     public function createSchemas(int $categoryId, array $schemas, string $prefix, UserContext $context): void
     {
-        foreach ($schemas as $index => $record) {
+        foreach ($schemas as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $source = $record->getSource();
@@ -86,8 +79,6 @@ class EntityCreator
             if (!$id) {
                 $this->schemaService->create($categoryId, $record, $context);
             }
-
-            $this->schemas[$index] = $record->getName();
         }
     }
 
@@ -96,114 +87,70 @@ class EntityCreator
      */
     public function createActions(int $categoryId, array $actions, string $prefix, UserContext $context): void
     {
-        foreach ($actions as $index => $record) {
+        foreach ($actions as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $id = $this->actionService->exists($record->getName() ?? '');
             if (!$id) {
                 $this->actionService->create($categoryId, $record, $context);
             }
-
-            $this->actions[$index] = $record->getName();
         }
     }
 
     /**
-     * @param Model\Backend\RouteCreate[] $routes
+     * @param Model\Backend\OperationCreate[] $operations
      */
-    public function createRoutes(int $categoryId, array $routes, $basePath, $scopes, ?bool $public, UserContext $context): void
+    public function createOperations(int $categoryId, array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
     {
         $scopes = $scopes ?: [];
 
-        foreach ($routes as $index => $record) {
-            $record->setPath($this->buildPath($basePath, $record->getPath() ?? ''));
+        foreach ($operations as $record) {
+            $record->setActive(true);
+            $record->setPublic($public ?? false);
+            $record->setStability(OperationInterface::STABILITY_EXPERIMENTAL);
+            $record->setName($this->buildName($prefix, $record->getName() ?? '', '.', false));
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
-            $config = $record->getConfig() ?? [];
-            foreach ($config as $version) {
-                /** @var RouteVersion $version */
-                $version->setVersion(1);
-                $version->setStatus(Resource::STATUS_DEVELOPMENT);
-                $methods = $version->getMethods() ?? [];
-                foreach ($methods as $method) {
-                    /** @var RouteMethod $method */
-                    $method->setActive(true);
-                    $method->setPublic($public === true);
+            $path = '/' . implode('/', array_filter(explode('/', $basePath . '/' . $record->getHttpPath())));
+            $record->setHttpPath($path);
 
-                    $parameters = $method->getParameters();
-                    if ($parameters !== null) {
-                        $method->setParameters($this->resolveSchema((int) $parameters));
-                    }
+            $incoming = $record->getIncoming();
+            if (!empty($incoming)) {
+                $record->setIncoming($this->buildName($prefix, $incoming));
+            }
 
-                    $request = $method->getRequest();
-                    if ($request !== null) {
-                        $method->setRequest($this->resolveSchema((int) $request));
-                    }
+            $record->setOutgoing($this->buildName($prefix, $record->getOutgoing()));
 
-                    $responses = $method->getResponses();
-                    if ($responses instanceof RouteMethodResponses) {
-                        foreach ($responses as $statusCode => $response) {
-                            if ($response !== null) {
-                                $responses[$statusCode] = $this->resolveSchema((int) $response);
-                            }
-                        }
-                    }
-
-                    $action = $method->getAction();
-                    if ($action !== null) {
-                        $method->setAction($this->resolveAction((int) $action));
-                    }
+            $throws = $record->getThrows();
+            if (!empty($throws)) {
+                $result = [];
+                foreach ($throws as $code => $throw) {
+                    $result[$code] = $this->buildName($prefix, $throw);
                 }
+                $record->setThrows(Model\Backend\OperationThrows::fromArray($result));
             }
 
-            $id = $this->routeService->exists((string) $record->getPath());
+            $record->setAction($this->buildName($prefix, $record->getAction()));
+
+            $id = $this->operationService->exists((string) $record->getName());
             if (!$id) {
-                $id = $this->routeService->create($categoryId, $record, $context);
+                $this->operationService->create($categoryId, $record, $context);
             }
-
-            $this->routes[$index] = $id;
         }
     }
 
-    private function buildPath(string $basePath, string $path): string
-    {
-        $parts = array_merge(explode('/', $basePath), explode('/', $path));
-        $parts = array_filter($parts, function ($value) {
-            return $value !== '';
-        });
-        return '/' . implode('/', $parts);
-    }
-
-    private function buildName(string $prefix, string $name): string
+    private function buildName(string $prefix, string $name, string $separator = '_', bool $pascalCase = true): string
     {
         $parts = explode('_', $prefix . '_' . $name);
         $parts = array_filter($parts, function ($value) {
             return $value !== '';
         });
-        $parts = array_map('ucfirst', $parts);
-        $parts = implode('_', $parts);
+        if ($pascalCase) {
+            $parts = array_map('ucfirst', $parts);
+        } else {
+            $parts = array_map('lcfirst', $parts);
+        }
+        $parts = implode($separator, $parts);
         return $parts;
-    }
-
-    private function resolveSchema(int $schema): string
-    {
-        if ($schema === -1) {
-            return 'Passthru';
-        }
-
-        if (isset($this->schemas[$schema])) {
-            return $this->schemas[$schema];
-        } else {
-            throw new StatusCode\BadRequestException('Could not resolve schema ' . $schema);
-        }
-    }
-
-    private function resolveAction(int $action): string
-    {
-        if (isset($this->actions[$action])) {
-            return $this->actions[$action];
-        } else {
-            throw new StatusCode\BadRequestException('Could not resolve action ' . $action);
-        }
     }
 }

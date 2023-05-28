@@ -26,7 +26,6 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Model\Backend\ActionExecuteRequest;
-use PSX\Http\Environment\HttpContext;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
 use PSX\Uri\Uri;
@@ -69,13 +68,12 @@ class Executor
         $uri = $uri->withParameters($parameters);
 
         $httpRequest = new HttpRequest($uri, $request->getMethod() ?? 'GET', $headers);
-        $httpContext = new HttpContext($httpRequest, $uriFragments);
 
         $arguments = [];
         $arguments = array_merge($arguments, $parameters);
         $arguments = array_merge($arguments, $uriFragments);
 
-        $request = new Request($arguments, $body, new Request\HttpRequest($httpContext));
+        $request = new Request($arguments, $body, new Request\HttpRequestContext($httpRequest, $uriFragments));
         $context = new Context(0, '/', $app, $user);
 
         return $this->processor->execute($actionId, $request, $context);

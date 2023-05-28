@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\Connection\DeploymentInterface;
 use Fusio\Engine\Connection\LifecycleInterface;
+use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -35,7 +36,7 @@ use Fusio\Engine\ParametersInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class VoidConnection implements ConnectionInterface, DeploymentInterface, LifecycleInterface
+class VoidConnection extends ConnectionAbstract implements DeploymentInterface, LifecycleInterface
 {
     public function getName(): string
     {

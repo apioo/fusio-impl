@@ -49,43 +49,26 @@
       }
     }
   ],
-  "routes": [
+  "operations": [
     {
-      "priority": 1,
-      "path": "\/table",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [
-        "foo",
-        "bar"
-      ],
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns all entries on the table",
-              "request": "0",
-              "responses": {
-                "200": "1"
-              },
-              "action": "0"
-            },
-            "POST": {
-              "active": true,
-              "public": false,
-              "description": "Creates a new entry on the table",
-              "request": "0",
-              "responses": {
-                "200": "1"
-              },
-              "action": "1"
-            }
-          }
-        }
-      ]
+      "description": "Returns all entries on the table",
+      "httpMethod": "GET",
+      "httpPath": "\/table",
+      "httpCode": 200,
+      "name": "getAll",
+      "incoming": "Schema_Request",
+      "outgoing": "Schema_Response",
+      "action": "Action_Select"
+    },
+    {
+      "description": "Creates a new entry on the table",
+      "httpMethod": "POST",
+      "httpPath": "\/table",
+      "httpCode": 200,
+      "name": "create",
+      "incoming": "Schema_Request",
+      "outgoing": "Schema_Response",
+      "action": "Action_Insert"
     }
   ]
 }

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Adapter\Test;
 
-use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -35,7 +35,7 @@ use Fusio\Engine\RequestInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class VoidAction implements ActionInterface
+class VoidAction extends ActionAbstract
 {
     public function getName(): string
     {

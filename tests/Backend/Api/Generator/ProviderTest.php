@@ -26,6 +26,7 @@ use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Controller\SqlEntityTest;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -105,18 +106,18 @@ JSON;
 
         // check schema
         foreach ($data->schemas as $schema) {
-            Assert::assertSchema('Provider_' . $schema->name, json_encode($schema->source));
+            Assert::assertSchema($this->connection, 'Provider_' . $schema->name, json_encode($schema->source));
         }
 
         // check action
         foreach ($data->actions as $action) {
-            Assert::assertAction('Provider_' . $action->name, $action->class, json_encode($action->config));
+            Assert::assertAction($this->connection, 'Provider_' . $action->name, $action->class, json_encode($action->config));
         }
 
-        // check routes
-        foreach ($data->routes as $route) {
-            $path = '/provider' . $route->path;
-            Assert::assertOperation($path, ['foo', 'bar', 'provider'], $this->convertConfig($route->config, $data, $path));
+        // check operations
+        foreach ($data->operations as $operation) {
+            $path = '/provider' . $operation->httpPath;
+            Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'provider.' . $operation->name, $operation->httpMethod, $path, ['provider']);
         }
     }
 
@@ -154,18 +155,18 @@ JSON;
 
         // check schema
         foreach ($data->schemas as $schema) {
-            Assert::assertSchema('Provider_' . $schema->name, json_encode($schema->source));
+            Assert::assertSchema($this->connection, 'Provider_' . $schema->name, json_encode($schema->source));
         }
 
         // check action
         foreach ($data->actions as $action) {
-            Assert::assertAction('Provider_' . $action->name, $action->class, json_encode($action->config));
+            Assert::assertAction($this->connection, 'Provider_' . $action->name, $action->class, json_encode($action->config));
         }
 
         // check routes
-        foreach ($data->routes as $route) {
-            $path = '/provider' . $route->path;
-            Assert::assertOperation($path, ['provider'], $this->convertConfig($route->config, $data, $path));
+        foreach ($data->operations as $operation) {
+            $path = '/provider' . $operation->path;
+            Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, $operation->name, 'GET', $path, ['provider']);
         }
     }
 
@@ -215,48 +216,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
-    }
-
-    private function convertConfig(array $configs, \stdClass $data, string $path): array
-    {
-        $result = [];
-        foreach ($configs as $config) {
-            foreach ($config->methods as $methodName => $method) {
-                $newConfig = [
-                    'method'       => $methodName,
-                    'version'      => 1,
-                    'status'       => Resource::STATUS_DEVELOPMENT,
-                    'active'       => 1,
-                    'public'       => 1,
-                    'description'  => $method->description ?? null,
-                    'operation_id' => $method->operationId ?? Config::buildOperationId($path, $methodName),
-                    'parameters'   => isset($method->parameters) ? 'Provider_' . $this->findSchemaByIndex($method->parameters, $data) : null,
-                    'request'      => isset($method->request) ? 'Provider_' . $this->findSchemaByIndex($method->request, $data) : null,
-                    'responses'    => [],
-                    'action'       => 'Provider_' . $this->findActionByIndex($method->action, $data),
-                    'costs'        => $method->costs ?? null,
-                ];
-
-                if (isset($method->responses)) {
-                    foreach ($method->responses as $statusCode => $response) {
-                        $newConfig['responses'][$statusCode] = 'Provider_' . $this->findSchemaByIndex($response, $data);
-                    }
-                }
-
-                $result[] = $newConfig;
-            }
-        }
-        return $result;
-    }
-
-    private function findSchemaByIndex(int $index, \stdClass $data): string
-    {
-        return $data->schemas[$index]->name ?? throw new \RuntimeException('Provided an invalid index');
-    }
-
-    private function findActionByIndex(int $index, \stdClass $data): string
-    {
-        return $data->actions[$index]->name ?? throw new \RuntimeException('Provided an invalid index');
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

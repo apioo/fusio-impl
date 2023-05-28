@@ -30,9 +30,7 @@ use Fusio\Impl\Consumer;
 use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Model;
-use Fusio\Model\Message;
 use PSX\Api\Model\Passthru;
-use PSX\Schema\Format;
 use PSX\Schema\TypeFactory;
 
 /**
@@ -138,6 +136,7 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'default');
         $bag->addSchema('default', 'Passthru', Passthru::class);
+        $bag->addSchema('default', 'Message', Model\Common\Model\Common\Message::class);
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
@@ -182,7 +181,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/account',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
                 ),
                 'account.changePassword' => new Operation(
@@ -190,7 +189,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/account/change_password',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AccountChangePassword::class,
                 ),
                 'action.getAll' => new Operation(
@@ -206,7 +205,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/action',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionCreate::class,
                 ),
                 'action.getClasses' => new Operation(
@@ -221,7 +220,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/action/form',
                     httpCode: 200,
-                    outgoing: Model\FormContainer::class,
+                    outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => TypeFactory::getString()],
                 ),
                 'action.execute' => new Operation(
@@ -244,7 +243,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/action/$action_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionUpdate::class,
                 ),
                 'action.delete' => new Operation(
@@ -252,7 +251,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/action/$action_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'app.getAllTokens' => new Operation(
                     action: Backend\Action\App\Token\GetAll::class,
@@ -282,7 +281,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/app',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppCreate::class,
                 ),
                 'app.get' => new Operation(
@@ -297,7 +296,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppUpdate::class,
                 ),
                 'app.delete' => new Operation(
@@ -305,14 +304,14 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'app.deleteToken' => new Operation(
                     action: Backend\Action\App\DeleteToken::class,
                     httpMethod: 'DELETE',
                     httpPath: '/app/$app_id<[0-9]+>/token/:token_id',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'audit.getAll' => new Operation(
                     action: Backend\Action\Audit\GetAll::class,
@@ -342,7 +341,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/category',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CategoryCreate::class,
                 ),
                 'category.get' => new Operation(
@@ -357,7 +356,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/category/$category_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CategoryUpdate::class
                 ),
                 'category.delete' => new Operation(
@@ -365,7 +364,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/category/$category_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'config.getAll' => new Operation(
                     action: Backend\Action\Config\GetAll::class,
@@ -387,7 +386,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/config/$config_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConfigUpdate::class
                 ),
                 'connection.getAll' => new Operation(
@@ -418,7 +417,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/connection/form',
                     httpCode: 200,
-                    outgoing: Model\FormContainer::class,
+                    outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => TypeFactory::getString()],
                 ),
                 'connection.get' => new Operation(
@@ -433,7 +432,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/connection/$connection_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConnectionUpdate::class
                 ),
                 'connection.delete' => new Operation(
@@ -441,14 +440,14 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/connection/$connection_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'connection.getRedirect' => new Operation(
                     action: Backend\Action\Connection\GetRedirect::class,
                     httpMethod: 'GET',
                     httpPath: '/connection/$connection_id<[0-9]+|^~>/redirect',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'connection.getIntrospection' => new Operation(
                     action: Backend\Action\Connection\Introspection\GetEntities::class,
@@ -477,7 +476,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/cronjob',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobCreate::class,
                 ),
                 'cronjob.get' => new Operation(
@@ -492,7 +491,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/cronjob/$cronjob_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobUpdate::class,
                 ),
                 'cronjob.delete' => new Operation(
@@ -500,7 +499,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/cronjob/$cronjob_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'dashboard.getAll' => new Operation(
                     action: Backend\Action\Dashboard\GetAll::class,
@@ -522,7 +521,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/event/subscription',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionCreate::class,
                 ),
                 'event.getSubscription' => new Operation(
@@ -537,7 +536,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/event/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionUpdate::class,
                 ),
                 'event.deleteSubscription' => new Operation(
@@ -545,7 +544,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/event/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'event.getAll' => new Operation(
                     action: Backend\Action\Event\GetAll::class,
@@ -560,7 +559,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/event',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventCreate::class,
                 ),
                 'event.get' => new Operation(
@@ -575,7 +574,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/event/$event_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventUpdate::class,
                 ),
                 'event.delete' => new Operation(
@@ -583,7 +582,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/event/$event_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'generator.getProviders' => new Operation(
                     action: Backend\Action\Generator\Index::class,
@@ -597,14 +596,14 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/generator/:provider',
                     httpCode: 200,
-                    outgoing: Model\FormContainer::class,
+                    outgoing: Model\Common\FormContainer::class,
                 ),
                 'generator.executeProvider' => new Operation(
                     action: Backend\Action\Generator\Create::class,
                     httpMethod: 'POST',
                     httpPath: '/generator/:provider',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\GeneratorProvider::class,
                 ),
                 'generator.getChangelog' => new Operation(
@@ -612,8 +611,8 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/generator/:provider',
                     httpCode: 200,
-                    outgoing: Message::class,
-                    incoming: Model\Backend\GeneratorProviderChangelog::class,
+                    outgoing: Model\Backend\GeneratorProviderChangelog::class,
+                    incoming: Model\Backend\GeneratorProviderConfig::class,
                 ),
                 'log.getAllErrors' => new Operation(
                     action: Backend\Action\Log\Error\GetAll::class,
@@ -657,7 +656,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/marketplace',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\MarketplaceInstall::class,
                 ),
                 'marketplace.get' => new Operation(
@@ -672,14 +671,14 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/marketplace/:app_name',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'marketplace.remove' => new Operation(
                     action: Backend\Action\Marketplace\Remove::class,
                     httpMethod: 'DELETE',
                     httpPath: '/marketplace/:app_name',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,
@@ -694,7 +693,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/page',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageCreate::class,
                 ),
                 'page.get' => new Operation(
@@ -709,7 +708,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/page/$page_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageUpdate::class,
                 ),
                 'page.delete' => new Operation(
@@ -717,7 +716,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/page/$page_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'plan.getAll' => new Operation(
                     action: Backend\Action\Plan\GetAll::class,
@@ -732,7 +731,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/plan',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanCreate::class,
                 ),
                 'plan.get' => new Operation(
@@ -747,7 +746,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/plan/$plan_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanUpdate::class,
                 ),
                 'plan.delete' => new Operation(
@@ -755,7 +754,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/plan/$plan_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'rate.getAll' => new Operation(
                     action: Backend\Action\Rate\GetAll::class,
@@ -770,7 +769,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/rate',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateCreate::class,
                 ),
                 'rate.get' => new Operation(
@@ -785,7 +784,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/rate/$rate_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateUpdate::class,
                 ),
                 'rate.delete' => new Operation(
@@ -793,7 +792,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/rate/$rate_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'role.getAll' => new Operation(
                     action: Backend\Action\Role\GetAll::class,
@@ -808,7 +807,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/role',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleCreate::class,
                 ),
                 'role.get' => new Operation(
@@ -823,7 +822,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/role/$role_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleUpdate::class,
                 ),
                 'role.delete' => new Operation(
@@ -831,7 +830,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/role/$role_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'operation.getAll' => new Operation(
                     action: Backend\Action\Operation\GetAll::class,
@@ -846,7 +845,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/operation',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationCreate::class,
                 ),
                 'operation.get' => new Operation(
@@ -861,7 +860,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/operation/$operation_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationUpdate::class,
                 ),
                 'operation.delete' => new Operation(
@@ -869,7 +868,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/operation/$operation_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'schema.getAll' => new Operation(
                     action: Backend\Action\Schema\GetAll::class,
@@ -884,7 +883,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/schema',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaCreate::class,
                 ),
                 'schema.getPreview' => new Operation(
@@ -899,7 +898,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/schema/form/$schema_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaForm::class,
                 ),
                 'schema.get' => new Operation(
@@ -914,7 +913,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/schema/$schema_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaUpdate::class,
                 ),
                 'schema.delete' => new Operation(
@@ -922,7 +921,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/schema/$schema_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'scope.getAll' => new Operation(
                     action: Backend\Action\Scope\GetAll::class,
@@ -937,7 +936,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/scope',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeCreate::class,
                 ),
                 'scope.getCategories' => new Operation(
@@ -959,7 +958,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/scope/$scope_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeUpdate::class,
                 ),
                 'scope.delete' => new Operation(
@@ -967,7 +966,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/scope/$scope_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'sdk.getAll' => new Operation(
                     action: Backend\Action\Sdk\GetAll::class,
@@ -981,7 +980,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/sdk',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SdkGenerate::class,
                 ),
                 'statistic.getCountRequests' => new Operation(
@@ -1099,7 +1098,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/trash/:type',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\TrashRestore::class,
                 ),
                 'user.getAll' => new Operation(
@@ -1115,7 +1114,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/user',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserCreate::class,
                 ),
                 'user.get' => new Operation(
@@ -1130,7 +1129,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/user/$user_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
                 ),
                 'user.delete' => new Operation(
@@ -1138,7 +1137,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/user/$user_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
             ],
             'consumer' => [
@@ -1155,7 +1154,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/app',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\AppCreate::class,
                 ),
                 'app.get' => new Operation(
@@ -1170,7 +1169,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\AppUpdate::class,
                 ),
                 'app.delete' => new Operation(
@@ -1178,7 +1177,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'event.getAll' => new Operation(
                     action: Consumer\Action\Event\GetAll::class,
@@ -1201,7 +1200,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/grant/$grant_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'log.getAll' => new Operation(
                     action: Consumer\Action\Log\GetAll::class,
@@ -1285,7 +1284,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/subscription',
                     httpCode: 201,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\EventSubscriptionCreate::class,
                 ),
                 'subscription.get' => new Operation(
@@ -1300,7 +1299,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\EventSubscriptionUpdate::class,
                 ),
                 'subscription.delete' => new Operation(
@@ -1308,7 +1307,7 @@ class NewInstallation
                     httpMethod: 'DELETE',
                     httpPath: '/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'transaction.getAll' => new Operation(
                     action: Consumer\Action\Transaction\GetAll::class,
@@ -1337,7 +1336,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/account',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserAccount::class,
                 ),
                 'account.changePassword' => new Operation(
@@ -1345,7 +1344,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/account/change_password',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AccountChangePassword::class,
                 ),
                 'account.activate' => new Operation(
@@ -1353,7 +1352,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/activate',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserActivate::class,
                     public: true,
                 ),
@@ -1404,7 +1403,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/register',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserRegister::class,
                     public: true,
                 ),
@@ -1413,7 +1412,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/password_reset',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserEmail::class,
                     public: true,
                 ),
@@ -1422,7 +1421,7 @@ class NewInstallation
                     httpMethod: 'PUT',
                     httpPath: '/password_reset',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserPasswordReset::class,
                     public: true,
                 ),
@@ -1433,7 +1432,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/connection/:name/callback',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     public: true,
                 ),
                 'meta.getAbout' => new Operation(
@@ -1482,7 +1481,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/payment/:provider/webhook',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                     public: true,
                 ),
             ],
@@ -1492,7 +1491,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/revoke',
                     httpCode: 200,
-                    outgoing: Message::class,
+                    outgoing: Model\Common\Message::class,
                 ),
                 'getWhoami' => new Operation(
                     action: Authorization\Action\GetWhoami::class,

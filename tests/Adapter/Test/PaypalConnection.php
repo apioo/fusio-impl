@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Adapter\Test;
 
+use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -33,7 +34,7 @@ use Fusio\Engine\ParametersInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class PaypalConnection implements ConnectionInterface
+class PaypalConnection extends ConnectionAbstract
 {
     public function getName(): string
     {
@@ -43,9 +44,5 @@ class PaypalConnection implements ConnectionInterface
     public function getConnection(ParametersInterface $config): mixed
     {
         return new \stdClass();
-    }
-
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
-    {
     }
 }
