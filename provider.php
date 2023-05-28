@@ -8,6 +8,7 @@ return [
     \Fusio\Adapter\Http\Adapter::class,
     \Fusio\Adapter\Php\Adapter::class,
     \Fusio\Adapter\Smtp\Adapter::class,
+    \Fusio\Adapter\Soap\Adapter::class,
     \Fusio\Adapter\Sql\Adapter::class,
     \Fusio\Adapter\Util\Adapter::class,
     \Fusio\Impl\Tests\Adapter\TestAdapter::class,
