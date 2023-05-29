@@ -19,47 +19,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheInterface;
+use Fusio\Impl\Command\TypeSafeTrait;
+use Fusio\Impl\Service\Mail\Mailer;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ClearCacheCommand
+ * MailTestCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ClearCacheCommand extends Command
+class MailTestCommand extends Command
 {
-    private CacheItemPoolInterface $cache;
-    private CacheInterface $engineCache;
+    use TypeSafeTrait;
 
-    public function __construct(CacheItemPoolInterface $cache, CacheInterface $engineCache)
+    private Mailer $mailer;
+
+    public function __construct(Mailer $mailer)
     {
         parent::__construct();
 
-        $this->cache = $cache;
-        $this->engineCache = $engineCache;
+        $this->mailer = $mailer;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:clear_cache')
-            ->setDescription('Clears the complete cache');
+            ->setName('system:mail_test')
+            ->setDescription('Sends a test mail to check whether the configured mailer works')
+            ->addArgument('to', InputArgument::REQUIRED, 'The target mail address');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->cache->clear();
-        $this->engineCache->clear();
+        $to = $this->getArgumentAsString($input, 'to');
+        if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            throw new \RuntimeException('Provided "to" email address has not a valid format');
+        }
 
-        $output->writeln('Cache cleared');
+        $body = <<<TEXT
+
+This is a Fusio test email, the mailer configuration of Fusio works as expected.
+Thanks for choosing Fusio and happy testing.
+
+More information about Fusio at:
+https://www.fusio-project.org/
+
+TEXT;
+
+        $this->mailer->send('[Fusio] Test Mail', [$to], $body);
 
         return 0;
     }

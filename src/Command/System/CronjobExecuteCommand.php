@@ -19,57 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Console\TypeSafeTrait;
-use Fusio\Impl\Service\System\Restorer;
+use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * RestoreCommand
+ * CronjobExecuteCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class RestoreCommand extends Command
+class CronjobExecuteCommand extends Command
 {
-    use TypeSafeTrait;
+    private Service\Cronjob\Executor $executor;
 
-    private Restorer $restorer;
-
-    public function __construct(Restorer $restorer)
+    public function __construct(Service\Cronjob\Executor $executor)
     {
-        $this->restorer = $restorer;
-
         parent::__construct();
+
+        $this->executor = $executor;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:restore')
-            ->setDescription('Restores a deleted database record')
-            ->addArgument('type', InputArgument::REQUIRED, 'Type must be one of: ' . implode(', ', $this->restorer->getTypes()))
-            ->addArgument('id', InputArgument::REQUIRED, 'Name or id of the record');
+            ->setName('system:cronjob_execute')
+            ->setAliases(['cronjob'])
+            ->setDescription('Entrypoint to execute cronjobs')
+            ->addOption('daemon', 'd', InputOption::VALUE_NONE, 'Whether to execute in daemon mode');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $type = $this->getArgumentAsString($input, 'type');
-        $id   = $this->getArgumentAsString($input, 'id');
-
-        $result = $this->restorer->restore($type, $id);
-
-        if ($result > 0) {
-            $output->writeln('Restored ' . $result . ' record' . ($result > 1 ? 's' : ''));
-            return 0;
+        if ($input->getOption('daemon')) {
+            $this->executor->executeDaemon();
         } else {
-            $output->writeln('Restored no record');
-            return 1;
+            $this->executor->execute();
+            $output->writeln('Execution successful');
         }
+
+        return 0;
     }
 }

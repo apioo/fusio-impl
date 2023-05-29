@@ -67,12 +67,12 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiEngine"
         },
         {
-            "name": "File-Directory-Detail",
-            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryDetail"
+            "name": "File-Directory-Get",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGet"
         },
         {
-            "name": "File-Directory-Index",
-            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryIndex"
+            "name": "File-Directory-GetAll",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGetAll"
         },
         {
             "name": "File-Engine",

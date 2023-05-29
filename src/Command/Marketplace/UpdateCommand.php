@@ -19,12 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Marketplace;
+namespace Fusio\Impl\Command\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Console\TypeSafeTrait;
+use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,13 +32,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * InstallCommand
+ * UpdateCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class InstallCommand extends Command
+class UpdateCommand extends Command
 {
     use TypeSafeTrait;
 
@@ -57,11 +56,10 @@ class InstallCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('marketplace:install')
-            ->setDescription('Installs an app from the marketplace')
+            ->setName('marketplace:update')
+            ->setDescription('Updates an existing locally installed app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
-            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification')
-            ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
+            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -70,21 +68,13 @@ class InstallCommand extends Command
             $this->remoteRepository->setSslVerify(false);
         }
 
-        $replaceEnv = true;
-        if ($input->getOption('disable_env')) {
-            $replaceEnv = false;
-        }
-
         $name = $this->getArgumentAsString($input, 'name');
 
-        $install = new MarketplaceInstall();
-        $install->setName($name);
-
         try {
-            $app = $this->installer->install($install, UserContext::newAnonymousContext(), $replaceEnv);
+            $app = $this->installer->update($name, UserContext::newAnonymousContext());
 
             $output->writeln('');
-            $output->writeln('Installed app ' . $app->getName());
+            $output->writeln('Updated app ' . $app->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

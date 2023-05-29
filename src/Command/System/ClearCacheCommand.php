@@ -19,43 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service\System\Cleaner;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * CleanCommand
+ * ClearCacheCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+class ClearCacheCommand extends Command
 {
-    private Cleaner $cleaner;
+    private CacheItemPoolInterface $cache;
+    private CacheInterface $engineCache;
 
-    public function __construct(Cleaner $cleaner)
+    public function __construct(CacheItemPoolInterface $cache, CacheInterface $engineCache)
     {
         parent::__construct();
 
-        $this->cleaner = $cleaner;
+        $this->cache = $cache;
+        $this->engineCache = $engineCache;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
+            ->setName('system:clear_cache')
+            ->setDescription('Clears the complete cache');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->cleaner->cleanUp();
+        $this->cache->clear();
+        $this->engineCache->clear();
 
-        $output->writeln('Clean up successful!');
+        $output->writeln('Cache cleared');
 
         return 0;
     }

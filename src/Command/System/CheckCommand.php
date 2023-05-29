@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Console\TypeSafeTrait;
+use Fusio\Impl\Command\TypeSafeTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -94,6 +94,6 @@ class CheckCommand extends Command
      */
     protected function checkUser(): bool
     {
-        return $this->connection->fetchColumn('SELECT COUNT(*) FROM fusio_user') > 1;
+        return $this->connection->fetchOne('SELECT COUNT(*) FROM fusio_user') > 1;
     }
 }

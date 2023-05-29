@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,7 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('cronjob');
+        $command = Environment::getService(Application::class)->find('cronjob');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -53,7 +54,7 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
 
         $this->assertStringContainsString('Execution successful', $actual);
 
-        $cronjob = $this->connection->fetchAssoc('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
+        $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
 
         $this->assertEquals(4, $cronjob['id']);
         $this->assertEquals(1, $cronjob['status']);

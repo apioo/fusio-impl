@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
 use Fusio\Impl\Service\System\Health;
 use Symfony\Component\Console\Command\Command;

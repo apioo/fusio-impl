@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,7 @@ class UserAddCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('adduser');
+        $command = Environment::getService(Application::class)->find('adduser');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -58,7 +59,7 @@ class UserAddCommandTest extends ControllerDbTestCase
         $this->assertStringContainsString('Created user bar successful', $actual);
 
         // check user
-        $user = $this->connection->fetchAssoc('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
+        $user = $this->connection->fetchAssociative('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
 
         $this->assertEquals(1, $user['role_id']);
         $this->assertEquals(1, $user['provider']);

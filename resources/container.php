@@ -124,6 +124,7 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\Consumer\\View\\', __DIR__ . '/../src/Consumer/View');
     $services->load('Fusio\\Impl\\Consumer\\Action\\', __DIR__ . '/../src/Consumer/Action');
     $services->load('Fusio\\Impl\\System\\Action\\', __DIR__ . '/../src/System/Action');
+    $services->load('Fusio\\Impl\\Command\\', __DIR__ . '/../src/Command');
     $services->load('Fusio\\Impl\\Service\\', __DIR__ . '/../src/Service')
         ->public();
     $services->load('Fusio\\Impl\\Controller\\', __DIR__ . '/../src/Controller')

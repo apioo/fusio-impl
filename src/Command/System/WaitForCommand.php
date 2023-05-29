@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Fusio\Impl\Worker\ClientFactory;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,9 +41,9 @@ class WaitForCommand extends Command
 {
     private const MAX_TRY = 40;
 
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         parent::__construct();
 
@@ -78,14 +79,14 @@ class WaitForCommand extends Command
         return 0;
     }
 
-    private function waitFor(string $name, OutputInterface $output, \Closure $closure): bool
+    private function waitFor(string $name, OutputInterface $output, \Closure $closure): void
     {
         $count = 0;
         while ($count < self::MAX_TRY) {
             try {
                 $closure();
                 $output->writeln('* Connection to ' . $name . ' successful');
-                return true;
+                return;
             } catch (\Throwable $e) {
             }
 

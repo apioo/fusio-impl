@@ -19,48 +19,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\Marketplace;
 
+use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
+use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * CronjobExecuteCommand
+ * EnvCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CronjobExecuteCommand extends Command
+class EnvCommand extends Command
 {
-    private Service\Cronjob\Executor $executor;
+    use TypeSafeTrait;
 
-    public function __construct(Service\Cronjob\Executor $executor)
+    private Service\Marketplace\Installer $installer;
+
+    public function __construct(Service\Marketplace\Installer $installer)
     {
         parent::__construct();
 
-        $this->executor = $executor;
+        $this->installer = $installer;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:cronjob_execute')
-            ->setAliases(['cronjob'])
-            ->setDescription('Entrypoint to execute cronjobs')
-            ->addOption('daemon', 'd', InputOption::VALUE_NONE, 'Whether to execute in daemon mode');
+            ->setName('marketplace:env')
+            ->setDescription('Replaces env variables of an existing app')
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('daemon')) {
-            $this->executor->executeDaemon();
-        } else {
-            $this->executor->execute();
-            $output->writeln('Execution successful');
+        $name = $this->getArgumentAsString($input, 'name');
+
+        try {
+            $app = $this->installer->env($name);
+
+            $output->writeln('');
+            $output->writeln('Replaced env ' . $app->getName());
+            $output->writeln('');
+        } catch (BadRequestException $e) {
+            $output->writeln('');
+            $output->writeln($e->getMessage());
+            $output->writeln('');
         }
 
         return 0;

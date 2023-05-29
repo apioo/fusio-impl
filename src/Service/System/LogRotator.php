@@ -43,8 +43,8 @@ class LogRotator
 
     public function rotate(): \Generator
     {
-        $schemaManager = $this->connection->getSchemaManager();
-        $schema = $schemaManager->createSchema();
+        $schemaManager = $this->connection->createSchemaManager();
+        $schema = $schemaManager->introspectSchema();
 
         yield from $this->archiveAuditTable($schemaManager, $schema);
         yield from $this->archiveLogTable($schemaManager, $schema);
@@ -96,7 +96,7 @@ class LogRotator
         if (!$schema->hasTable($tableName)) {
             $logTable = $schema->createTable($tableName);
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logTable->addColumn('route_id', 'integer', ['notnull' => false]);
+            $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('ip', 'string', ['length' => 40]);
@@ -116,7 +116,7 @@ class LogRotator
         }
 
         // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT route_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
+        $result = $this->connection->fetchAllAssociative('SELECT operation_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
         foreach ($result as $row) {
             $this->connection->insert($tableName, $row);
         }

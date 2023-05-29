@@ -27,8 +27,10 @@ use Fusio\Impl\Tests\Adapter\Test\VoidAction;
 use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
 use Fusio\Impl\Tests\Adapter\TestAdapter;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -47,7 +49,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('system:register');
+        $command = Environment::getService(Application::class)->find('system:register');
         $answers = ['y', '1'];
 
         $commandTester = new CommandTester($command);
@@ -62,42 +64,21 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/Registration successful/', $display, $display);
 
         // check action class
-        $file   = Environment::getService('config')->get('fusio_provider');
-        $config = ProviderConfig::fromFile($file);
+        $file = Environment::getService(ConfigInterface::class)->get('fusio_provider');
 
-        $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
+        $actual = include $file;
         $expect = [
-            Adapter\Cli\Action\CliProcessor::class,
-            Adapter\Fcgi\Action\FcgiProcessor::class,
-            Adapter\File\Action\FileProcessor::class,
-            Adapter\GraphQL\Action\GraphQLProcessor::class,
-            Adapter\Http\Action\HttpProcessor::class,
-            Adapter\Php\Action\PhpProcessor::class,
-            Adapter\Php\Action\PhpSandbox::class,
-            Adapter\Smtp\Action\SmtpSend::class,
-            Adapter\Sql\Action\SqlSelectAll::class,
-            Adapter\Sql\Action\SqlSelectRow::class,
-            Adapter\Sql\Action\SqlInsert::class,
-            Adapter\Sql\Action\SqlUpdate::class,
-            Adapter\Sql\Action\SqlDelete::class,
-            Adapter\Sql\Action\Query\SqlQueryAll::class,
-            Adapter\Sql\Action\Query\SqlQueryRow::class,
-            Adapter\Util\Action\UtilStaticResponse::class,
-            VoidAction::class,
-        ];
-
-        $this->assertEquals($expect, $actual);
-
-        // check connection class
-        $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
-        $expect = [
-            Adapter\GraphQL\Connection\GraphQL::class,
-            Adapter\Http\Connection\Http::class,
-            Adapter\Smtp\Connection\Smtp::class,
-            Adapter\Soap\Connection\Soap::class,
-            Adapter\Sql\Connection\Sql::class,
-            Adapter\Sql\Connection\SqlAdvanced::class,
-            VoidConnection::class,
+            \Fusio\Adapter\Cli\Adapter::class,
+            \Fusio\Adapter\Fcgi\Adapter::class,
+            \Fusio\Adapter\File\Adapter::class,
+            \Fusio\Adapter\GraphQL\Adapter::class,
+            \Fusio\Adapter\Http\Adapter::class,
+            \Fusio\Adapter\Php\Adapter::class,
+            \Fusio\Adapter\Smtp\Adapter::class,
+            \Fusio\Adapter\Soap\Adapter::class,
+            \Fusio\Adapter\Sql\Adapter::class,
+            \Fusio\Adapter\Util\Adapter::class,
+            \Fusio\Impl\Tests\Adapter\TestAdapter::class,
         ];
 
         $this->assertEquals($expect, $actual);
@@ -105,7 +86,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 
     public function testCommandAutoConfirm()
     {
-        $command = Environment::getService('console')->find('system:register');
+        $command = Environment::getService(Application::class)->find('system:register');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -119,42 +100,21 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/Registration successful/', $display, $display);
 
         // check action class
-        $file   = Environment::getService('config')->get('fusio_provider');
-        $config = ProviderConfig::fromFile($file);
+        $file = Environment::getService(ConfigInterface::class)->get('fusio_provider');
 
-        $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
+        $actual = include $file;
         $expect = [
-            Adapter\Cli\Action\CliProcessor::class,
-            Adapter\Fcgi\Action\FcgiProcessor::class,
-            Adapter\File\Action\FileProcessor::class,
-            Adapter\GraphQL\Action\GraphQLProcessor::class,
-            Adapter\Http\Action\HttpProcessor::class,
-            Adapter\Php\Action\PhpProcessor::class,
-            Adapter\Php\Action\PhpSandbox::class,
-            Adapter\Smtp\Action\SmtpSend::class,
-            Adapter\Sql\Action\SqlSelectAll::class,
-            Adapter\Sql\Action\SqlSelectRow::class,
-            Adapter\Sql\Action\SqlInsert::class,
-            Adapter\Sql\Action\SqlUpdate::class,
-            Adapter\Sql\Action\SqlDelete::class,
-            Adapter\Sql\Action\Query\SqlQueryAll::class,
-            Adapter\Sql\Action\Query\SqlQueryRow::class,
-            Adapter\Util\Action\UtilStaticResponse::class,
-            VoidAction::class,
-        ];
-
-        $this->assertEquals($expect, $actual);
-
-        // check connection class
-        $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
-        $expect = [
-            Adapter\GraphQL\Connection\GraphQL::class,
-            Adapter\Http\Connection\Http::class,
-            Adapter\Smtp\Connection\Smtp::class,
-            Adapter\Soap\Connection\Soap::class,
-            Adapter\Sql\Connection\Sql::class,
-            Adapter\Sql\Connection\SqlAdvanced::class,
-            VoidConnection::class,
+            \Fusio\Adapter\Cli\Adapter::class,
+            \Fusio\Adapter\Fcgi\Adapter::class,
+            \Fusio\Adapter\File\Adapter::class,
+            \Fusio\Adapter\GraphQL\Adapter::class,
+            \Fusio\Adapter\Http\Adapter::class,
+            \Fusio\Adapter\Php\Adapter::class,
+            \Fusio\Adapter\Smtp\Adapter::class,
+            \Fusio\Adapter\Soap\Adapter::class,
+            \Fusio\Adapter\Sql\Adapter::class,
+            \Fusio\Adapter\Util\Adapter::class,
+            \Fusio\Impl\Tests\Adapter\TestAdapter::class,
         ];
 
         $this->assertEquals($expect, $actual);

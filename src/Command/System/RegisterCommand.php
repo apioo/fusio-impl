@@ -19,21 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
 use Fusio\Engine\AdapterInterface;
-use Fusio\Impl\Adapter\Installer;
-use Fusio\Impl\Adapter\InstructionParser;
-use Fusio\Impl\Console\TypeSafeTrait;
-use Fusio\Impl\Provider\ProviderWriter;
-use PSX\Json\Parser;
+use Fusio\Impl\Command\TypeSafeTrait;
+use Fusio\Impl\Service\Adapter\Installer;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * RegisterCommand
@@ -79,13 +74,7 @@ class RegisterCommand extends Command
             return 1;
         }
 
-        $containerFile = $adapter->getContainerFile();
-        if (!is_file($containerFile)) {
-            $output->writeln('The adapter returned an invalid container file');
-            return 1;
-        }
-
-        $this->installer->install($containerFile);
+        $this->installer->install($adapter);
 
         $output->writeln('Registration successful!');
         $output->writeln('');

@@ -19,60 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Marketplace;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Console\TypeSafeTrait;
-use Fusio\Impl\Service;
-use PSX\Http\Exception\BadRequestException;
+use Fusio\Impl\Service\System\Cleaner;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * RemoveCommand
+ * CleanCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class RemoveCommand extends Command
+class CleanCommand extends Command
 {
-    use TypeSafeTrait;
+    private Cleaner $cleaner;
 
-    private Service\Marketplace\Installer $installer;
-
-    public function __construct(Service\Marketplace\Installer $installer)
+    public function __construct(Cleaner $cleaner)
     {
         parent::__construct();
 
-        $this->installer = $installer;
+        $this->cleaner = $cleaner;
     }
 
     protected function configure()
     {
         $this
-            ->setName('marketplace:remove')
-            ->setDescription('Removes an existing locally installed app')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
+            ->setName('system:clean')
+            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $this->getArgumentAsString($input, 'name');
+        $this->cleaner->cleanUp();
 
-        try {
-            $app = $this->installer->remove($name, UserContext::newAnonymousContext());
-
-            $output->writeln('');
-            $output->writeln('Removed app ' . $app->getName());
-            $output->writeln('');
-        } catch (BadRequestException $e) {
-            $output->writeln('');
-            $output->writeln($e->getMessage());
-            $output->writeln('');
-        }
+        $output->writeln('Clean up successful!');
 
         return 0;
     }

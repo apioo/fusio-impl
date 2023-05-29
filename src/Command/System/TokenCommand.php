@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
 use DateInterval;
 use Fusio\Impl\Service;
@@ -74,11 +74,11 @@ class TokenCommand extends Command
         $expire = $this->parseExpire($input->getArgument('expire'));
         $ip     = '127.0.0.1';
 
-        $accessToken = $this->appTokenService->generateAccessToken($app['id'], $user['id'], $scopes, $ip, $expire);
+        $accessToken = $this->appTokenService->generateAccessToken($app->getId(), $user->getId(), $scopes, $ip, $expire);
 
         $response = [
-            'App'   => $app['name'],
-            'User'  => $user['name'],
+            'App'   => $app->getName(),
+            'User'  => $user->getName(),
             'Token' => $accessToken->getAccessToken(),
         ];
 

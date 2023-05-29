@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,7 @@ class HealthCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('system:health');
+        $command = Environment::getService(Application::class)->find('system:health');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

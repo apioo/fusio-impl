@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 
@@ -43,7 +44,7 @@ class TokenCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('system:token');
+        $command = Environment::getService(Application::class)->find('system:token');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

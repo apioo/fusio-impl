@@ -19,44 +19,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service\System\LogRotator;
+use Fusio\Impl\Command\TypeSafeTrait;
+use Fusio\Impl\Service\System\Restorer;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * LogRotateCommand
+ * RestoreCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class LogRotateCommand extends Command
+class RestoreCommand extends Command
 {
-    private LogRotator $logRotator;
+    use TypeSafeTrait;
 
-    public function __construct(LogRotator $logRotator)
+    private Restorer $restorer;
+
+    public function __construct(Restorer $restorer)
     {
-        parent::__construct();
+        $this->restorer = $restorer;
 
-        $this->logRotator = $logRotator;
+        parent::__construct();
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:log_rotate')
-            ->setDescription('Rotates the log table');
+            ->setName('system:restore')
+            ->setDescription('Restores a deleted database record')
+            ->addArgument('type', InputArgument::REQUIRED, 'Type must be one of: ' . implode(', ', $this->restorer->getTypes()))
+            ->addArgument('id', InputArgument::REQUIRED, 'Name or id of the record');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->logRotator->rotate() as $message) {
-            $output->writeln($message);
-        }
+        $type = $this->getArgumentAsString($input, 'type');
+        $id   = $this->getArgumentAsString($input, 'id');
 
-        return 0;
+        $result = $this->restorer->restore($type, $id);
+
+        if ($result > 0) {
+            $output->writeln('Restored ' . $result . ' record' . ($result > 1 ? 's' : ''));
+            return 0;
+        } else {
+            $output->writeln('Restored no record');
+            return 1;
+        }
     }
 }

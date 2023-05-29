@@ -19,7 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Adapter;
+namespace Fusio\Impl\Service\Adapter;
+
+use Fusio\Engine\AdapterInterface;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * The installer inserts only the action and connection classes through the database connection. All other entries are
@@ -31,8 +34,37 @@ namespace Fusio\Impl\Adapter;
  */
 class Installer
 {
-    public function install(string $containerFile): void
+    private ConfigInterface $config;
+
+    public function __construct(ConfigInterface $config)
     {
-        // @TODO write container file to container.php
+        $this->config = $config;
+    }
+
+    public function install(AdapterInterface $adapter): void
+    {
+        $providerFile = $this->config->get('fusio_provider');
+        if (!is_file($providerFile)) {
+            throw new \RuntimeException('Configured provider file does not exist: ' . $providerFile);
+        }
+
+        $provider = include $providerFile;
+        if (!is_array($provider)) {
+            throw new \RuntimeException('Provider file ' . $providerFile . ' must return an array');
+        }
+
+        if (in_array($adapter::class, $provider)) {
+            // adapter already registered
+            return;
+        }
+
+        $provider[] = $adapter::class;
+
+        $provider = array_unique($provider);
+        sort($provider);
+
+        $code = '<?php' . "\n\n" . 'return ' . var_export($provider, true) . ';';
+
+        file_put_contents($providerFile, $code);
     }
 }

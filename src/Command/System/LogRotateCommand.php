@@ -19,61 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Marketplace;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\LogRotator;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ListCommand
+ * LogRotateCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ListCommand extends Command
+class LogRotateCommand extends Command
 {
-    private Service\Marketplace\Repository\Remote $remoteRepository;
+    private LogRotator $logRotator;
 
-    public function __construct(Service\Marketplace\Repository\Remote $remoteRepository)
+    public function __construct(LogRotator $logRotator)
     {
         parent::__construct();
 
-        $this->remoteRepository = $remoteRepository;
+        $this->logRotator = $logRotator;
     }
 
     protected function configure()
     {
         $this
-            ->setName('marketplace:list')
-            ->setDescription('Lists all available apps on the marketplace')
-            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
+            ->setName('system:log_rotate')
+            ->setDescription('Rotates the log table');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('disable_ssl_verify')) {
-            $this->remoteRepository->setSslVerify(false);
+        foreach ($this->logRotator->rotate() as $message) {
+            $output->writeln($message);
         }
-
-        $apps = $this->remoteRepository->fetchAll();
-
-        $rows = [];
-        foreach ($apps as $name => $app) {
-            /** @var \Fusio\Impl\Dto\Marketplace\App $app */
-            $rows[] = [$name, $app->getVersion()];
-        }
-
-        $table = new Table($output);
-        $table
-            ->setHeaders(['Name', 'Version'])
-            ->setRows($rows);
-
-        $table->render();
 
         return 0;
     }

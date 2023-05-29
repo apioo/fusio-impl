@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Command;
 
 use Composer\InstalledVersions;
 use Fusio\Cli\Transport\TransportInterface;
@@ -50,7 +50,7 @@ class Transport implements TransportInterface
 
     public function request(string $baseUri, string $method, string $path, ?array $query = null, ?array $headers = null, $body = null): HttpResponseInterface
     {
-        $uri = new Uri('/' . $path);
+        $uri = Uri::parse('/' . $path);
         if ($query !== null) {
             $uri = $uri->withParameters($query);
         }

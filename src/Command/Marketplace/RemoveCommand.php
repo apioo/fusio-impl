@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Marketplace;
+namespace Fusio\Impl\Command\Marketplace;
 
-use Fusio\Impl\Console\TypeSafeTrait;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -30,13 +31,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * EnvCommand
+ * RemoveCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class EnvCommand extends Command
+class RemoveCommand extends Command
 {
     use TypeSafeTrait;
 
@@ -52,8 +53,8 @@ class EnvCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('marketplace:env')
-            ->setDescription('Replaces env variables of an existing app')
+            ->setName('marketplace:remove')
+            ->setDescription('Removes an existing locally installed app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
     }
 
@@ -62,10 +63,10 @@ class EnvCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->env($name);
+            $app = $this->installer->remove($name, UserContext::newAnonymousContext());
 
             $output->writeln('');
-            $output->writeln('Replaced env ' . $app->getName());
+            $output->writeln('Removed app ' . $app->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

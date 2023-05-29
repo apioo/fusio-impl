@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,7 @@ class ClearCacheCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('system:clear_cache');
+        $command = Environment::getService(Application::class)->find('system:clear_cache');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

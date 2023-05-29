@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Connection;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Fusio\Adapter\Sql\Introspection\Introspector;
 use Fusio\Engine\Connection\IntrospectableInterface;
 use Fusio\Engine\Connection\Introspection\IntrospectorInterface;
@@ -64,10 +65,15 @@ class Native implements ConnectionInterface, PingableInterface, IntrospectableIn
     public function ping(mixed $connection): bool
     {
         if ($connection instanceof Connection) {
-            return $connection->ping();
+            try {
+                $connection->createSchemaManager()->listTableNames();
+                return true;
+            } catch (Exception $e) {
+                return false;
+            }
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public function getIntrospector(mixed $connection): IntrospectorInterface

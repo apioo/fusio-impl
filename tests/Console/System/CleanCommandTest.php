@@ -25,6 +25,7 @@ use Fusio\Impl\Console\System\CleanCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -44,7 +45,7 @@ class CleanCommandTest extends ControllerDbTestCase
     public function testCommandLogRotate()
     {
         /** @var CleanCommand $command */
-        $command = Environment::getService('console')->find('system:clean');
+        $command = Environment::getService(Application::class)->find('system:clean');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

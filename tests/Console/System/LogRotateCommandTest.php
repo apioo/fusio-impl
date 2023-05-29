@@ -23,10 +23,11 @@ namespace Fusio\Impl\Tests\Console\System;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
-use Fusio\Impl\Console\System\LogRotateCommand;
+use Fusio\Impl\Command\System\LogRotateCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -46,7 +47,7 @@ class LogRotateCommandTest extends ControllerDbTestCase
     public function testCommandLogRotate()
     {
         /** @var LogRotateCommand $command */
-        $command = Environment::getService('console')->find('system:log_rotate');
+        $command = Environment::getService(Application::class)->find('system:log_rotate');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -57,8 +58,8 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
         $this->assertSame(0, $commandTester->getStatusCode());
 
-        $schemaManager = $this->connection->getSchemaManager();
-        $schema = $schemaManager->createSchema();
+        $schemaManager = $this->connection->createSchemaManager();
+        $schema = $schemaManager->introspectSchema();
 
         $this->assertAuditTable($display, $schemaManager, $schema);
         $this->assertLogTable($display, $schemaManager, $schema);
@@ -75,7 +76,7 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
         $this->assertTrue($schema->hasTable($tableName));
 
-        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM ' . $tableName);
         $this->assertEquals(1, $row['cnt']);
 
         $schemaManager->dropTable($tableName);
@@ -92,10 +93,10 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
         $this->assertTrue($schema->hasTable($tableName));
 
-        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM ' . $tableName);
         $this->assertEquals(2, $row['cnt']);
 
-        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM fusio_log');
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM fusio_log');
         $this->assertEquals(0, $row['cnt']);
 
         $schemaManager->dropTable($tableName);

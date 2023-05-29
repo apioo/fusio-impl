@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,7 @@ class CheckCommandTest extends ControllerDbTestCase
 
     public function testCommandUser()
     {
-        $command = Environment::getService('console')->find('system:check');
+        $command = Environment::getService(Application::class)->find('system:check');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -55,7 +56,7 @@ class CheckCommandTest extends ControllerDbTestCase
 
     public function testCommandUnknownCheck()
     {
-        $command = Environment::getService('console')->find('system:check');
+        $command = Environment::getService(Application::class)->find('system:check');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
