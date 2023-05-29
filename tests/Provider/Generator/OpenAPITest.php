@@ -44,26 +44,31 @@ class OpenAPITest extends DbTestCase
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();
-        $routes = $setup->getRoutes();
+        $operations = $setup->getOperations();
 
-        $this->assertEquals(5, count($schemas));
+        $this->assertEquals(3, count($schemas));
         $this->assertEquals(3, count($actions));
-        $this->assertEquals(2, count($routes));
+        $this->assertEquals(3, count($operations));
 
         $this->assertEquals('Pet', $schemas[0]->getName());
         $this->assertEquals('Pets', $schemas[1]->getName());
         $this->assertEquals('Error', $schemas[2]->getName());
-        $this->assertEquals('PetsGetQuery', $schemas[3]->getName());
-        $this->assertEquals('PetsPetIdGetQuery', $schemas[4]->getName());
 
-        $this->assertEquals('pets-listPets-GET', $actions[0]->getName());
+        $this->assertEquals('listPets', $actions[0]->getName());
         $this->assertEquals('http://petstore.swagger.io/v1/pets', $actions[0]->getConfig()['url']);
-        $this->assertEquals('pets-createPets-POST', $actions[1]->getName());
+        $this->assertEquals('createPets', $actions[1]->getName());
         $this->assertEquals('http://petstore.swagger.io/v1/pets', $actions[1]->getConfig()['url']);
-        $this->assertEquals('pets-_petId-showPetById-GET', $actions[2]->getName());
+        $this->assertEquals('showPetById', $actions[2]->getName());
         $this->assertEquals('http://petstore.swagger.io/v1/pets/:petId', $actions[2]->getConfig()['url']);
 
-        $this->assertEquals('/pets', $routes[0]->getPath());
-        $this->assertEquals('/pets/:petId', $routes[1]->getPath());
+        $this->assertEquals('listPets', $operations[0]->getName());
+        $this->assertEquals('GET', $operations[0]->getHttpMethod());
+        $this->assertEquals('/pets', $operations[0]->getHttpPath());
+        $this->assertEquals('createPets', $operations[1]->getName());
+        $this->assertEquals('POST', $operations[1]->getHttpMethod());
+        $this->assertEquals('/pets', $operations[1]->getHttpPath());
+        $this->assertEquals('showPetById', $operations[2]->getName());
+        $this->assertEquals('GET', $operations[2]->getHttpMethod());
+        $this->assertEquals('/pets/:petId', $operations[2]->getHttpPath());
     }
 }

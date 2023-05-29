@@ -44,18 +44,22 @@ class PostmanTest extends DbTestCase
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();
-        $routes = $setup->getRoutes();
+        $operations = $setup->getOperations();
 
-        $this->assertEquals(19, count($schemas));
+        $this->assertEquals(0, count($schemas));
         $this->assertEquals(132, count($actions));
-        $this->assertEquals(73, count($routes));
+        $this->assertEquals(132, count($operations));
 
-        $this->assertEquals('Backend_Action_User_Get_GET', $actions[0]->getName());
+        $this->assertEquals('Backend_Action_User_Get_get', $actions[0]->getName());
         $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[0]->getConfig()['url']);
-        $this->assertEquals('Backend_Action_User_Update_PUT', $actions[1]->getName());
+        $this->assertEquals('Backend_Action_User_Update_update', $actions[1]->getName());
         $this->assertEquals('http://api.fusio.cloud:8080/backend/user/:user_id', $actions[1]->getConfig()['url']);
 
-        $this->assertEquals('/backend/user/:user_id', $routes[0]->getPath());
-        $this->assertEquals('/backend/user', $routes[1]->getPath());
+        $this->assertEquals('Backend_Action_User_Get_get', $operations[0]->getName());
+        $this->assertEquals('GET', $operations[0]->getHttpMethod());
+        $this->assertEquals('/backend/user/:user_id', $operations[0]->getHttpPath());
+        $this->assertEquals('Backend_Action_User_Update_update', $operations[1]->getName());
+        $this->assertEquals('PUT', $operations[1]->getHttpMethod());
+        $this->assertEquals('/backend/user/:user_id', $operations[1]->getHttpPath());
     }
 }

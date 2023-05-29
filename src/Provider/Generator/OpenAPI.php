@@ -29,12 +29,25 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Schema\SchemaName;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\OperationParameters;
+use Fusio\Model\Backend\OperationSchema;
+use Fusio\Model\Backend\OperationThrows;
+use Fusio\Model\Backend\SchemaCreate;
+use Fusio\Model\Backend\SchemaSource;
+use PSX\Api\Operation\ArgumentInterface;
+use PSX\Api\Operation\Response;
+use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\Schema;
 use PSX\Schema\SchemaResolver;
+use PSX\Schema\Type;
 use PSX\Schema\TypeFactory;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -72,13 +85,16 @@ class OpenAPI implements ProviderInterface
 
             $result = (string) $generator->generate($schema);
 
-            $this->schemas[$name] = $setup->addSchema($name, (array) \json_decode($result));
+            $schema = new SchemaCreate();
+            $schema->setName($name);
+            $schema->setSource(SchemaSource::fromObject(\json_decode($result)));
+            $setup->addSchema($schema);
         }
 
-        // add routes and actions
-        $resources = $specification->getResourceCollection();
-        foreach ($resources as $resource) {
-            $setup->addRoute(1, $this->normalizePath($resource->getPath()), 'Fusio\Impl\Controller\SchemaApiController', [], [$this->buildConfig($resource, $setup, $baseUrl)]);
+        // add operations and actions
+        $operations = $specification->getOperations();
+        foreach ($operations->getAll() as $operationId => $operation) {
+            $this->buildOperation($operationId, $operation, $setup, $baseUrl);
         }
     }
 
@@ -108,65 +124,45 @@ class OpenAPI implements ProviderInterface
         return $parser->parse($schema);
     }
 
-    private function buildConfig(Resource $resource, SetupInterface $setup, string $baseUrl): array
+    private function buildOperation(string $operationId, OperationInterface $operation, SetupInterface $setup, string $baseUrl): void
     {
-        $url = rtrim($baseUrl, '/') . '/' . ltrim($resource->getPath(), '/');
-        $methods = $resource->getMethods();
-        $prefix  = $this->buildPrefixFromPath($resource->getPath());
+        $url = rtrim($baseUrl, '/') . '/' . ltrim($operation->getPath(), '/');
 
-        $config = [
-            'version' => 1,
-            'methods' => [],
-        ];
-        
-        foreach ($methods as $methodName => $method) {
-            $config['methods'][$methodName] = $this->buildMethod($method, $prefix, $setup, $url);
-        }
-
-        return $config;
-    }
-
-    private function buildMethod(Resource\MethodAbstract $method, $prefix, SetupInterface $setup, string $url): array
-    {
-        $name = $this->buildName([$prefix, $method->getOperationId(), $method->getName()]);
-
-        $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
+        $action = new ActionCreate();
+        $action->setName($operationId);
+        $action->setClass(HttpProcessor::class);
+        $action->setConfig(ActionConfig::fromArray([
             'url' => $url,
             'type' => HttpEngine::TYPE_JSON,
-        ]);
+        ]));
+        $setup->addAction($action);
 
-        $config = [
-            'active' => true,
-            'public' => true,
-        ];
-
-        $queryParameters = $method->getQueryParameters();
-        if (!empty($queryParameters)) {
-            $config['parameters'] = $this->schemas[$queryParameters] ?? null;
-        }
-
-        $request = $method->getRequest();
-        if (!empty($request)) {
-            $config['request'] = $this->schemas[$request] ?? null;
-        }
-
-        $config['responses'] = [];
-        foreach ($method->getResponses() as $code => $schema) {
-            $config['responses'][$code] = $this->schemas[$schema] ?? null;
-        }
-
-        $config['action'] = $action;
-
-        return $config;
+        $create = new OperationCreate();
+        $create->setName($operationId);
+        $create->setHttpMethod($operation->getMethod());
+        $create->setHttpPath($this->normalizePath($operation->getPath()));
+        $create->setHttpPath($this->normalizePath($operation->getPath()));
+        $create->setHttpCode($operation->getReturn()->getCode());
+        $create->setParameters($this->getArguments($operation));
+        $create->setIncoming($this->getIncoming($operation));
+        $create->setOutgoing($this->getOutgoing($operation));
+        $create->setThrows($this->getThrows($operation));
+        $create->setAction($operationId);
+        $setup->addOperation($create);
     }
 
-    private function buildName(array $parts): string
+    private function buildName(array $parts, string $separator = '.'): string
     {
-        $parts = array_map(function($value){
-            return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
+        $parts = array_map(function($parts) use ($separator) {
+            $parts = array_filter(explode('/', $parts));
+            $result = [];
+            foreach ($parts as $part) {
+                $result[] = preg_replace('/[^0-9A-Za-z_-]/', '_', $part);
+            }
+            return implode($separator, $result);
         }, $parts);
 
-        return implode('-', array_filter($parts));
+        return implode($separator, array_filter($parts));
     }
 
     private function buildPrefixFromPath($path): string
@@ -179,5 +175,82 @@ class OpenAPI implements ProviderInterface
         $path = '/' . implode('/', array_filter(explode('/', $path)));
         $path = preg_replace('/(\{(\w+)\})/i', ':$2', $path);
         return $path;
+    }
+
+    private function getArguments(OperationInterface $operation): ?OperationParameters
+    {
+        if ($operation->getArguments()->isEmpty()) {
+            return null;
+        }
+
+        $parameters = new OperationParameters();
+        foreach ($operation->getArguments() as $name => $argument) {
+            /** @var ArgumentInterface $argument */
+            if ($argument->getIn() !== ArgumentInterface::IN_QUERY) {
+                continue;
+            }
+
+            $data = $argument->getSchema()->toArray();
+
+            $schema = new OperationSchema();
+            $schema->setType($data['type'] ?? Type::STRING);
+            if (isset($data['description'])) {
+                $schema->setDescription($data['description']);
+            }
+            if (isset($data['format'])) {
+                $schema->setFormat($data['format']);
+            }
+            if (isset($data['enum'])) {
+                $schema->setEnum($data['enum']);
+            }
+            $parameters->put($name, $schema);
+        }
+
+        return $parameters;
+    }
+
+    private function getIncoming(OperationInterface $operation): ?string
+    {
+        foreach ($operation->getArguments() as $argument) {
+            /** @var ArgumentInterface $argument */
+            if ($argument->getIn() !== ArgumentInterface::IN_BODY) {
+                continue;
+            }
+
+            return $this->getRef($argument->getSchema());
+        }
+
+        return null;
+    }
+
+    private function getOutgoing(OperationInterface $operation): string
+    {
+        return $this->getRef($operation->getReturn());
+    }
+
+    private function getThrows(OperationInterface $operation): ?OperationThrows
+    {
+        $throws = $operation->getThrows();
+        if (empty($throws)) {
+            return null;
+        }
+
+        $result = new OperationThrows();
+        foreach ($throws as $code => $response) {
+            $result->put($code, $this->getRef($response));
+        }
+        return null;
+    }
+
+    private function getRef(Response $response): string
+    {
+        $schema = $response->getSchema();
+        if ($schema instanceof Type\ReferenceType) {
+            return $schema->getRef();
+        } elseif ($schema instanceof Type\AnyType) {
+            return SchemaName::PASSTHRU;
+        } else {
+            throw new \RuntimeException('Could not resolve return type');
+        }
     }
 }

@@ -44,24 +44,32 @@ class InsomniaTest extends DbTestCase
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();
-        $routes = $setup->getRoutes();
+        $operations = $setup->getOperations();
 
         $this->assertEquals(0, count($schemas));
         $this->assertEquals(21, count($actions));
-        $this->assertEquals(9, count($routes));
+        $this->assertEquals(21, count($operations));
 
-        $this->assertEquals('GET-_', $actions[0]->getName());
+        $this->assertEquals('get', $actions[0]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/', $actions[0]->getConfig()['url']);
-        $this->assertEquals('GET-_contract', $actions[1]->getName());
+        $this->assertEquals('contract.get', $actions[1]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[1]->getConfig()['url']);
-        $this->assertEquals('POST-_contract', $actions[2]->getName());
+        $this->assertEquals('contract.create', $actions[2]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[2]->getConfig()['url']);
-        $this->assertEquals('GET-_contract__contract_', $actions[3]->getName());
+        $this->assertEquals('contract._contract_.get', $actions[3]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract/:contract', $actions[3]->getConfig()['url']);
 
-        $this->assertEquals('/', $routes[0]->getPath());
-        $this->assertEquals('/contract', $routes[1]->getPath());
-        $this->assertEquals('/contract/:contract', $routes[2]->getPath());
-        $this->assertEquals('/customer', $routes[3]->getPath());
+        $this->assertEquals('get', $operations[0]->getName());
+        $this->assertEquals('GET', $operations[0]->getHttpMethod());
+        $this->assertEquals('/', $operations[0]->getHttpPath());
+        $this->assertEquals('contract.get', $operations[1]->getName());
+        $this->assertEquals('GET', $operations[1]->getHttpMethod());
+        $this->assertEquals('/contract', $operations[1]->getHttpPath());
+        $this->assertEquals('contract.create', $operations[2]->getName());
+        $this->assertEquals('POST', $operations[2]->getHttpMethod());
+        $this->assertEquals('/contract', $operations[2]->getHttpPath());
+        $this->assertEquals('contract._contract_.get', $operations[3]->getName());
+        $this->assertEquals('GET', $operations[3]->getHttpMethod());
+        $this->assertEquals('/contract/:contract', $operations[3]->getHttpPath());
     }
 }
