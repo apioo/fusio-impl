@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -28,13 +28,13 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * ClearCacheCommandTest
+ * CronjobExecuteCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ClearCacheCommandTest extends ControllerDbTestCase
+class CronjobExecuteCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -43,7 +43,7 @@ class ClearCacheCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService(Application::class)->find('system:clear_cache');
+        $command = Environment::getService(Application::class)->find('cronjob');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -52,6 +52,16 @@ class ClearCacheCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Cache cleared', trim($actual));
+        $this->assertStringContainsString('Execution successful', $actual);
+
+        $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
+
+        $this->assertEquals(4, $cronjob['id']);
+        $this->assertEquals(1, $cronjob['status']);
+        $this->assertEquals('Test-Cron', $cronjob['name']);
+        $this->assertEquals('* * * * *', $cronjob['cron']);
+        $this->assertEquals('Sql-Select-All', $cronjob['action']);
+        $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
+        $this->assertEquals(0, $cronjob['exit_code']);
     }
 }

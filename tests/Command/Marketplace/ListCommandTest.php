@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Marketplace;
+namespace Fusio\Impl\Tests\Command\Marketplace;
 
-use Fusio\Impl\Console\Marketplace\ListCommand;
+use Fusio\Impl\Command\Marketplace\ListCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

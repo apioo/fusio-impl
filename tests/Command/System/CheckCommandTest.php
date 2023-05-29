@@ -19,9 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
-use Fusio\Impl\Console\System\CleanCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -29,32 +28,42 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * CleanCommandTest
+ * CheckCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommandTest extends ControllerDbTestCase
+class CheckCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    public function testCommandLogRotate()
+    public function testCommandUser()
     {
-        /** @var CleanCommand $command */
-        $command = Environment::getService(Application::class)->find('system:clean');
+        $command = Environment::getService(Application::class)->find('system:check');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
+            'name'    => 'user',
         ]);
 
-        $display = $commandTester->getDisplay();
-
         $this->assertSame(0, $commandTester->getStatusCode());
-        $this->assertRegExp('/Clean up successful/', $display, $display);
+    }
+
+    public function testCommandUnknownCheck()
+    {
+        $command = Environment::getService(Application::class)->find('system:check');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name'    => 'foo',
+        ]);
+
+        $this->assertSame(1, $commandTester->getStatusCode());
     }
 }

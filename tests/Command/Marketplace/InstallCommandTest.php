@@ -19,20 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Marketplace;
+namespace Fusio\Impl\Tests\Command\Marketplace;
 
-use Fusio\Impl\Console\Marketplace\UpdateCommand;
+use Fusio\Impl\Command\Marketplace\InstallCommand;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * UpdateCommandTest
+ * InstallCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class UpdateCommandTest extends MarketplaceTestCase
+class InstallCommandTest extends MarketplaceTestCase
 {
     public function testCommand()
     {
@@ -40,12 +40,7 @@ class UpdateCommandTest extends MarketplaceTestCase
             $this->markTestSkipped('The fusio app is already installed');
         }
 
-        $appsDir = Environment::getConfig('fusio_apps_dir');
-        mkdir($appsDir . '/fusio');
-        file_put_contents($appsDir . '/fusio/app.yaml', $this->getOldApp());
-        file_put_contents($appsDir . '/fusio/index.html', 'old');
-
-        $command = new UpdateCommand(
+        $command = new InstallCommand(
             $this->getInstaller(),
             $this->getRemoteRepository()
         );
@@ -57,23 +52,12 @@ class UpdateCommandTest extends MarketplaceTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Updated app fusio', trim($actual));
+        $this->assertEquals('Installed app fusio', trim($actual));
 
+        $appsDir = Environment::getConfig()->get('fusio_apps_dir');
         $this->assertDirectoryExists($appsDir . '/fusio');
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
         $this->assertFileExists($appsDir . '/fusio/index.html');
         $this->assertEquals('foobar', file_get_contents($appsDir . '/fusio/index.html'));
-    }
-
-    private function getOldApp()
-    {
-        return <<<YAML
-version: '0.6'
-description: 'The backend app is the official app to develop, configure and maintain your API.'
-screenshot: 'https://raw.githubusercontent.com/apioo/fusio/master/doc/_static/backend.png'
-website: 'https://github.com/apioo/fusio-backend'
-downloadUrl: 'https://www.fusio-project.org/files/fusio.zip'
-sha1Hash: 573cb65ec966ed13f23aaa1888066069c7fdb3ae
-YAML;
     }
 }

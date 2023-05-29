@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -28,13 +28,13 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * UserAddCommandTest
+ * HealthCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class UserAddCommandTest extends ControllerDbTestCase
+class HealthCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -43,30 +43,15 @@ class UserAddCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService(Application::class)->find('adduser');
+        $command = Environment::getService(Application::class)->find('system:health');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--role' => '1',
-            '--username' => 'bar',
-            '--email' => 'bar@bar.com',
-            '--password' => 'test1234!',
         ]);
 
-        $actual = $commandTester->getDisplay();
+        $display = $commandTester->getDisplay();
 
-        $this->assertStringContainsString('Created user bar successful', $actual);
-
-        // check user
-        $user = $this->connection->fetchAssociative('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
-
-        $this->assertEquals(1, $user['role_id']);
-        $this->assertEquals(1, $user['provider']);
-        $this->assertEquals(1, $user['status']);
-        $this->assertEquals(null, $user['remote_id']);
-        $this->assertEquals('bar', $user['name']);
-        $this->assertEquals('bar@bar.com', $user['email']);
-        $this->assertNotEmpty($user['password']);
+        $this->assertSame(0, $commandTester->getStatusCode());
     }
 }

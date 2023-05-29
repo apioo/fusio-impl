@@ -19,22 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 
 /**
- * HealthCommandTest
+ * TokenCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class HealthCommandTest extends ControllerDbTestCase
+class TokenCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -43,15 +44,24 @@ class HealthCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService(Application::class)->find('system:health');
+        $command = Environment::getService(Application::class)->find('system:token');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
+            'appId'   => 1,
+            'userId'  => 1,
+            'scopes'  => 'backend,authorization',
+            'expire'  => 'P1M',
         ]);
 
-        $display = $commandTester->getDisplay();
+        $actual = $commandTester->getDisplay();
+        $data   = Yaml::parse($actual);
 
-        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertEquals('Backend', $data['App']);
+        $this->assertEquals('Administrator', $data['User']);
+        $this->assertNotEmpty($data['Token']);
+        $this->assertEquals(date('Y-m-d', strtotime('+1 month')), $data['Expires']);
+        $this->assertEquals('backend,authorization', $data['Scope']);
     }
 }

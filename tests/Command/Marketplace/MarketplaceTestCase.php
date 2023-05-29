@@ -19,14 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Marketplace;
+namespace Fusio\Impl\Tests\Command\Marketplace;
 
+use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace\Repository\Local;
 use Fusio\Impl\Service\Marketplace\Repository\Remote;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
@@ -40,8 +43,8 @@ use PSX\Http\Client\Client;
  */
 class MarketplaceTestCase extends ControllerDbTestCase
 {
-    private Installer $installer;
-    private Remote $remote;
+    private ?Installer $installer = null;
+    private ?Remote $remote = null;
 
     public function getDataSet(): array
     {
@@ -55,10 +58,10 @@ class MarketplaceTestCase extends ControllerDbTestCase
         }
 
         return $this->installer = new Installer(
-            Environment::getService('marketplace_repository_local'),
+            Environment::getService(Local::class),
             $this->getRemoteRepository(),
-            Environment::getService('config_service'),
-            Environment::getService('config')
+            Environment::getService(Config::class),
+            Environment::getService(ConfigInterface::class)
         );
     }
 
@@ -77,7 +80,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
 
         $httpClient = new Client(['handler' => HandlerStack::create($mock)]);
 
-        return $this->remote = new Remote($httpClient, 'https://fusio.market.place');
+        return $this->remote = new Remote($httpClient, Environment::getService(ConfigInterface::class));
     }
 
     private function getMarketplaceYaml(string $sha1Hash)

@@ -19,49 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
+use Fusio\Impl\Command\System\CleanCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Yaml\Yaml;
 
 /**
- * TokenCommandTest
+ * CleanCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class TokenCommandTest extends ControllerDbTestCase
+class CleanCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    public function testCommand()
+    public function testCommandLogRotate()
     {
-        $command = Environment::getService(Application::class)->find('system:token');
+        /** @var CleanCommand $command */
+        $command = Environment::getService(Application::class)->find('system:clean');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'appId'   => 1,
-            'userId'  => 1,
-            'scopes'  => 'backend,authorization',
-            'expire'  => 'P1M',
         ]);
 
-        $actual = $commandTester->getDisplay();
-        $data   = Yaml::parse($actual);
+        $display = $commandTester->getDisplay();
 
-        $this->assertEquals('Backend', $data['App']);
-        $this->assertEquals('Administrator', $data['User']);
-        $this->assertNotEmpty($data['Token']);
-        $this->assertEquals(date('Y-m-d', strtotime('+1 month')), $data['Expires']);
-        $this->assertEquals('backend,authorization', $data['Scope']);
+        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertRegExp('/Clean up successful/', $display, $display);
     }
 }

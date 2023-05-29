@@ -19,31 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Marketplace;
+namespace Fusio\Impl\Tests\Command\Marketplace;
 
-use Fusio\Impl\Console\Marketplace\InstallCommand;
+use Fusio\Impl\Command\Marketplace\RemoveCommand;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * InstallCommandTest
+ * RemoveCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class InstallCommandTest extends MarketplaceTestCase
+class RemoveCommandTest extends MarketplaceTestCase
 {
     public function testCommand()
     {
-        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is already installed');
+        if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
+            $this->markTestSkipped('The fusio app is not installed');
         }
 
-        $command = new InstallCommand(
-            $this->getInstaller(),
-            $this->getRemoteRepository()
-        );
+        $command = new RemoveCommand($this->getInstaller());
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -52,12 +49,6 @@ class InstallCommandTest extends MarketplaceTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Installed app fusio', trim($actual));
-
-        $appsDir = Environment::getConfig()->get('fusio_apps_dir');
-        $this->assertDirectoryExists($appsDir . '/fusio');
-        $this->assertFileExists($appsDir . '/fusio/app.yaml');
-        $this->assertFileExists($appsDir . '/fusio/index.html');
-        $this->assertEquals('foobar', file_get_contents($appsDir . '/fusio/index.html'));
+        $this->assertEquals('Removed app fusio', trim($actual));
     }
 }

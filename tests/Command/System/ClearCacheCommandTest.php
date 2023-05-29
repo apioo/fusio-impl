@@ -19,36 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Marketplace;
+namespace Fusio\Impl\Tests\Command\System;
 
-use Fusio\Impl\Console\Marketplace\RemoveCommand;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * RemoveCommandTest
+ * ClearCacheCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class RemoveCommandTest extends MarketplaceTestCase
+class ClearCacheCommandTest extends ControllerDbTestCase
 {
+    public function getDataSet(): array
+    {
+        return Fixture::getDataSet();
+    }
+
     public function testCommand()
     {
-        if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is not installed');
-        }
-
-        $command = new RemoveCommand($this->getInstaller());
+        $command = Environment::getService(Application::class)->find('system:clear_cache');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'name' => 'fusio',
+            'command' => $command->getName(),
         ]);
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Removed app fusio', trim($actual));
+        $this->assertEquals('Cache cleared', trim($actual));
     }
 }

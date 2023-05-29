@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -28,13 +28,13 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * CronjobExecuteCommandTest
+ * UserAddCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CronjobExecuteCommandTest extends ControllerDbTestCase
+class UserAddCommandTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -43,25 +43,30 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService(Application::class)->find('cronjob');
+        $command = Environment::getService(Application::class)->find('adduser');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
+            '--role' => '1',
+            '--username' => 'bar',
+            '--email' => 'bar@bar.com',
+            '--password' => 'test1234!',
         ]);
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertStringContainsString('Execution successful', $actual);
+        $this->assertStringContainsString('Created user bar successful', $actual);
 
-        $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
+        // check user
+        $user = $this->connection->fetchAssociative('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
 
-        $this->assertEquals(4, $cronjob['id']);
-        $this->assertEquals(1, $cronjob['status']);
-        $this->assertEquals('Test-Cron', $cronjob['name']);
-        $this->assertEquals('* * * * *', $cronjob['cron']);
-        $this->assertEquals('Sql-Select-All', $cronjob['action']);
-        $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
-        $this->assertEquals(0, $cronjob['exit_code']);
+        $this->assertEquals(1, $user['role_id']);
+        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(1, $user['status']);
+        $this->assertEquals(null, $user['remote_id']);
+        $this->assertEquals('bar', $user['name']);
+        $this->assertEquals('bar@bar.com', $user['email']);
+        $this->assertNotEmpty($user['password']);
     }
 }

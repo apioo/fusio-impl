@@ -19,12 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\System;
+namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Adapter;
-use Fusio\Impl\Provider\ProviderConfig;
-use Fusio\Impl\Tests\Adapter\Test\VoidAction;
-use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
 use Fusio\Impl\Tests\Adapter\TestAdapter;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Config\ConfigInterface;
