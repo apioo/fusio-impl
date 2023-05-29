@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Tests\Migrations;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Migrations\DataSyncronizer;
+use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\DbTestCase;
 
@@ -43,7 +43,7 @@ class DataSyncronizerTest extends DbTestCase
     public function testSync()
     {
         $config = $this->getConfig('info_title');
-        $route = $this->getRoute('/backend/action');
+        $operation = $this->getOperation('backend.action.get');
         $action = $this->getAction('Backend_Action_Action_Get');
         $schema = $this->getSchema('Backend_Action');
         $event = $this->getEvent('fusio.action.create');
@@ -53,7 +53,7 @@ class DataSyncronizerTest extends DbTestCase
         DataSyncronizer::sync($this->connection);
 
         $this->assertEquals($config, $this->getConfig('info_title'));
-        $this->assertEquals($route, $this->getRoute('/backend/action'));
+        $this->assertEquals($operation, $this->getOperation('backend.action.get'));
         $this->assertEquals($action, $this->getAction('Backend_Action_Action_Get'));
         $this->assertEquals($schema, $this->getSchema('Backend_Action'));
         $this->assertEquals($event, $this->getEvent('fusio.action.create'));
@@ -70,47 +70,15 @@ class DataSyncronizerTest extends DbTestCase
         return $config;
     }
 
-    private function getRoute(string $path): array
+    private function getOperation(string $name): array
     {
-        $route = $this->connection->fetchAssociative('SELECT * FROM fusio_routes WHERE path = :path', ['path' => $path]);
-        $route['methods'] = $this->getMethods((int) $route['id']);
-        $this->connection->delete('fusio_scope_routes', ['route_id' => $route['id']]);
-        $this->connection->delete('fusio_rate_allocation', ['route_id' => $route['id']]);
-        $this->connection->delete('fusio_routes', ['id' => $route['id']]);
-        unset($route['id']);
+        $operation = $this->connection->fetchAssociative('SELECT * FROM fusio_operation WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_scope_operation', ['operation_id' => $operation['id']]);
+        $this->connection->delete('fusio_rate_allocation', ['operation_id' => $operation['id']]);
+        $this->connection->delete('fusio_operation', ['id' => $operation['id']]);
+        unset($operation['id']);
 
-        return $route;
-    }
-
-    private function getMethods(int $routeId): array
-    {
-        $result = [];
-        $methods = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_method WHERE route_id = :route_id', ['route_id' => $routeId]);
-        foreach ($methods as $method) {
-            $method['responses'] = $this->getResponses($method['id']);
-            unset($method['id']);
-            unset($method['route_id']);
-            $result[] = $method;
-        }
-
-        $this->connection->delete('fusio_routes_method', ['route_id' => $routeId]);
-
-        return $result;
-    }
-
-    private function getResponses(int $methodId): array
-    {
-        $result = [];
-        $responses = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_response WHERE method_id = :method_id', ['method_id' => $methodId]);
-        foreach ($responses as $response) {
-            unset($response['id']);
-            unset($response['method_id']);
-            $result[] = $response;
-        }
-
-        $this->connection->delete('fusio_routes_response', ['method_id' => $methodId]);
-
-        return $result;
+        return $operation;
     }
 
     private function getAction(string $name): array
@@ -152,7 +120,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getScope(string $name): array
     {
         $scope = $this->connection->fetchAssociative('SELECT * FROM fusio_scope WHERE name = :name', ['name' => $name]);
-        $this->connection->delete('fusio_scope_routes', ['scope_id' => $scope['id']]);
+        $this->connection->delete('fusio_scope_operation', ['scope_id' => $scope['id']]);
         $this->connection->delete('fusio_scope', ['id' => $scope['id']]);
         unset($scope['id']);
 

@@ -21,14 +21,17 @@
 
 namespace Fusio\Impl\Tests\Mail;
 
-use Fusio\Impl\Service\Mail\MailerInterface;
 use Fusio\Impl\Mail\Message;
-use Fusio\Impl\Service\Mail\SenderFactory;
 use Fusio\Impl\Mail\SenderInterface;
+use Fusio\Impl\Service;
+use Fusio\Impl\Service\Connection\Resolver;
+use Fusio\Impl\Service\Mail\SenderFactory;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * MailerTest
@@ -77,12 +80,13 @@ class MailerTest extends ControllerDbTestCase
                 return true;
             }));
 
-        /** @var SenderFactory $factory */
-        $factory = Environment::getService('mailer_sender_factory');
-        $factory->add($sender, 64);
+        $mailer = new Service\Mail\Mailer(
+            Environment::getService(Resolver::class),
+            new SenderFactory([$sender]),
+            Environment::getService(ConfigInterface::class),
+            Environment::getService(MailerInterface::class)
+        );
 
-        /** @var MailerInterface $mailer */
-        $mailer = Environment::getService('mailer');
         $mailer->send('test', ['foo@bar.com'], 'test body');
     }
 }
