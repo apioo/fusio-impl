@@ -22,9 +22,12 @@
 namespace Fusio\Impl\Tests\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
+use Fusio\Impl\Service\Event\Dispatcher;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * DispatcherTest
@@ -49,11 +52,11 @@ class DispatcherTest extends ControllerDbTestCase
 
         // payload from fixture
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(46, $responses[0]['event_id']);
+        $this->assertEquals(49, $responses[0]['event_id']);
         $this->assertEquals(2, $responses[0]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[0]['payload']);
 
-        $this->assertEquals(46, $responses[1]['event_id']);
+        $this->assertEquals(49, $responses[1]['event_id']);
         $this->assertEquals(1, $responses[1]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[1]['payload']);
     }
@@ -65,11 +68,11 @@ class DispatcherTest extends ControllerDbTestCase
         $this->newDispatcher()->dispatch('bar', ['foo' => 'bar']);
     }
 
-    /**
-     * @return DispatcherInterface
-     */
-    private function newDispatcher()
+    private function newDispatcher(): DispatcherInterface
     {
-        return Environment::getService('engine_dispatcher');
+        return new Dispatcher(
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event\Trigger::class)
+        );
     }
 }

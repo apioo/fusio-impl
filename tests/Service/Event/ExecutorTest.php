@@ -22,7 +22,10 @@
 namespace Fusio\Impl\Tests\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
+use Fusio\Impl\Service\Connection\Resolver;
+use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Service\Event\Executor;
+use Fusio\Impl\Service\Event\SenderFactory;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Exception\RequestException;
@@ -34,6 +37,7 @@ use GuzzleHttp\Psr7\Response;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * ExecutorTest
@@ -77,7 +81,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(500, $container[1]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAllAssociative('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
@@ -143,7 +147,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(500, $container[3]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAllAssociative('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
@@ -195,7 +199,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAllAssociative('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
@@ -254,7 +258,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(200, $container[2]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAllAssociative('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
@@ -286,20 +290,21 @@ class ExecutorTest extends ControllerDbTestCase
         $httpClient = new Client(['handler' => $stack]);
 
         return new Executor(
-            Environment::getService('table_manager')->getTable(Table\Event\Trigger::class),
-            Environment::getService('table_manager')->getTable(Table\Event\Subscription::class),
-            Environment::getService('table_manager')->getTable(Table\Event\Response::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event\Trigger::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event\Subscription::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event\Response::class),
             $httpClient,
-            Environment::getService('connection_resolver_service'),
-            Environment::getService('event_sender_factory_service')
+            Environment::getService(Resolver::class),
+            Environment::getService(SenderFactory::class)
         );
     }
 
-    private function dispatchEvent($name, $payload)
+    private function dispatchEvent(string $name, mixed $payload): void
     {
-        // dispatch event
-        /** @var DispatcherInterface $dispatcher */
-        $dispatcher = Environment::getService('engine_dispatcher');
+        $dispatcher = new Dispatcher(
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Event\Trigger::class)
+        );
         $dispatcher->dispatch($name, $payload);
     }
 }
