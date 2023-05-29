@@ -24,7 +24,6 @@ namespace Fusio\Impl\Tests\Controller;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Json\Parser;
@@ -64,23 +63,38 @@ class InspectTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "method": "GET",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
+    "arguments": {
         "foo": "bar"
     },
-    "parameters": {
-        "foo": "bar"
+    "payload": {},
+    "context": {
+        "method": "GET",
+        "headers": {
+            "user-agent": [
+                "Fusio TestCase"
+            ],
+            "authorization": [
+                "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+            ],
+            "x-request-id": [
+                "[uuid]"
+            ],
+            "x-operation-id": [
+                "inspect.get"
+            ],
+            "x-stability": [
+                "stable"
+            ],
+            "x-powered-by": [
+                "Fusio"
+            ]
+        },
+        "uri_fragments": {
+            "foo": "bar"
+        },
+        "parameters": {
+            "foo": "bar"
+        }
     }
 }
 JSON;
@@ -106,221 +120,52 @@ JSON;
         $this->assertEquals('Foobar', substr($data->message, 0, 6));
     }
 
-    public function testGetChangeStatus()
-    {
-        $stability = [
-            OperationInterface::STABILITY_DEPRECATED,
-            OperationInterface::STABILITY_EXPERIMENTAL,
-            OperationInterface::STABILITY_STABLE,
-            OperationInterface::STABILITY_LEGACY,
-        ];
-
-        foreach ($stability as $key => $status) {
-            // update the route status
-            $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', [
-                'User-Agent' => 'Fusio TestCase',
-                'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-            ], json_encode([
-                'path' => '/foo',
-                'config' => [[
-                    'version' => 1,
-                    'status' => $status,
-                    'methods' => [
-                        'GET' => [
-                            'active' => true,
-                            'public' => true,
-                            'action' => 'Inspect-Action',
-                            'response' => 'Passthru',
-                        ],
-                    ],
-                ]],
-            ]));
-
-            $actual = (string) $response->getBody();
-            $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Route successfully updated"
-}
-JSON;
-
-            $this->assertEquals(200, $response->getStatusCode(), $actual);
-            $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-
-            // send request
-            $response = $this->sendRequest('/inspect/bar', 'GET', [
-                'User-Agent' => 'Fusio TestCase',
-                'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-            ]);
-
-            $actual = (string)$response->getBody();
-            $actual = Normalizer::normalize($actual);
-
-            if ($status === Resource::STATUS_CLOSED) {
-                $data = Parser::decode($actual);
-
-                $headers = [
-                    'vary' => ['Accept'],
-                    'content-type' => ['application/json'],
-                    'ratelimit-limit' => ['3600'],
-                    'ratelimit-remaining' => [3600 - $key],
-                ];
-
-                $this->assertEquals(410, $response->getStatusCode(), $actual);
-                $this->assertEquals($headers, $response->getHeaders(), $actual);
-                $this->assertEquals(false, $data->success, $actual);
-                $this->assertEquals($debug ? 'PSX\\Http\\Exception\\GoneException' : 'Internal Server Error', $data->title, $actual);
-                $this->assertEquals('Resource is not longer supported', substr($data->message, 0, 32), $actual);
-            } else {
-                $expect = <<<'JSON'
-{
-    "method": "GET",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
-        "foo": "bar"
-    },
-    "parameters": []
-}
-JSON;
-
-                $headers = [
-                    'vary' => ['Accept'],
-                    'content-type' => ['application/json'],
-                    'ratelimit-limit' => ['3600'],
-                    'ratelimit-remaining' => [3600 - $key],
-                ];
-
-                if ($status === Resource::STATUS_DEVELOPMENT) {
-                    $headers['warning'] = ['199 PSX "Resource is in development"'];
-                } elseif ($status === Resource::STATUS_DEPRECATED) {
-                    $headers['warning'] = ['199 PSX "Resource is deprecated"'];
-                }
-
-                $this->assertEquals(200, $response->getStatusCode(), $actual);
-                $this->assertEquals($headers, $response->getHeaders(), $actual);
-                $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-            }
-        }
-    }
-
-    public function testGetChangeStatusError()
-    {
-        $stability = [
-            OperationInterface::STABILITY_DEPRECATED,
-            OperationInterface::STABILITY_EXPERIMENTAL,
-            OperationInterface::STABILITY_STABLE,
-            OperationInterface::STABILITY_LEGACY,
-        ];
-
-        foreach ($stability as $key => $status) {
-            // update the route status
-            $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
-                'User-Agent' => 'Fusio TestCase',
-                'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-            ], json_encode([
-                'status' => $status,
-                'http_path' => '/foo',
-                'action' => 'Inspect-Action',
-            ]));
-
-            $body = (string) $response->getBody();
-            $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Operation successfully updated"
-}
-JSON;
-
-            $this->assertEquals(200, $response->getStatusCode(), $body);
-            $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-            // send request
-            $response = $this->sendRequest('/inspect/bar?throw=1', 'GET', [
-                'User-Agent' => 'Fusio TestCase',
-                'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-            ]);
-
-            $body = (string) $response->getBody();
-
-            if ($status === Resource::STATUS_CLOSED) {
-                $data = Parser::decode($body);
-
-                $headers = [
-                    'vary' => ['Accept'],
-                    'content-type' => ['application/json'],
-                    'ratelimit-limit' => ['3600'],
-                    'ratelimit-remaining' => [3600 - $key],
-                ];
-
-                $this->assertEquals(410, $response->getStatusCode(), $body);
-                $this->assertEquals($headers, $response->getHeaders(), $body);
-                $this->assertEquals(false, $data->success, $body);
-                $this->assertEquals($debug ? 'PSX\\Http\\Exception\\GoneException' : 'Internal Server Error', $data->title, $body);
-                $this->assertEquals('Resource is not longer supported', substr($data->message, 0, 32), $body);
-            } else {
-                $headers = [
-                    'vary' => ['Accept'],
-                    'content-type' => ['application/json'],
-                    'ratelimit-limit' => ['3600'],
-                    'ratelimit-remaining' => [3600 - $key],
-                ];
-
-                if ($status === Resource::STATUS_DEVELOPMENT) {
-                    $headers['warning'] = ['199 PSX "Resource is in development"'];
-                } elseif ($status === Resource::STATUS_DEPRECATED) {
-                    $headers['warning'] = ['199 PSX "Resource is deprecated"'];
-                }
-
-                $this->assertEquals(500, $response->getStatusCode(), $body);
-                $this->assertEquals($headers, $response->getHeaders(), $body);
-
-                $data = json_decode($body);
-
-                $this->assertFalse($data->success);
-                $this->assertEquals('Foobar', substr($data->message, 0, 6));
-            }
-        }
-    }
-
     public function testPost()
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'POST', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ]);
+        ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
         $actual = Normalizer::normalize($actual);
 
         $expect = <<<'JSON'
 {
-    "method": "POST",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
+    "arguments": {
         "foo": "bar"
     },
-    "parameters": {
+    "payload": {
         "foo": "bar"
+    },
+    "context": {
+        "method": "POST",
+        "headers": {
+            "user-agent": [
+                "Fusio TestCase"
+            ],
+            "authorization": [
+                "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+            ],
+            "x-request-id": [
+                "[uuid]"
+            ],
+            "x-operation-id": [
+                "inspect.post"
+            ],
+            "x-stability": [
+                "stable"
+            ],
+            "x-powered-by": [
+                "Fusio"
+            ]
+        },
+        "uri_fragments": {
+            "foo": "bar"
+        },
+        "parameters": {
+            "foo": "bar"
+        }
     }
 }
 JSON;
@@ -334,30 +179,47 @@ JSON;
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ]);
+        ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
         $actual = Normalizer::normalize($actual);
 
         $expect = <<<'JSON'
 {
-    "method": "PUT",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
+    "arguments": {
         "foo": "bar"
     },
-    "parameters": {
+    "payload": {
         "foo": "bar"
+    },
+    "context": {
+        "method": "PUT",
+        "headers": {
+            "user-agent": [
+                "Fusio TestCase"
+            ],
+            "authorization": [
+                "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+            ],
+            "x-request-id": [
+                "[uuid]"
+            ],
+            "x-operation-id": [
+                "inspect.put"
+            ],
+            "x-stability": [
+                "stable"
+            ],
+            "x-powered-by": [
+                "Fusio"
+            ]
+        },
+        "uri_fragments": {
+            "foo": "bar"
+        },
+        "parameters": {
+            "foo": "bar"
+        }
     }
 }
 JSON;
@@ -371,30 +233,47 @@ JSON;
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PATCH', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ]);
+        ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
         $actual = Normalizer::normalize($actual);
 
         $expect = <<<'JSON'
 {
-    "method": "PATCH",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
+    "arguments": {
         "foo": "bar"
     },
-    "parameters": {
+    "payload": {
         "foo": "bar"
+    },
+    "context": {
+        "method": "PATCH",
+        "headers": {
+            "user-agent": [
+                "Fusio TestCase"
+            ],
+            "authorization": [
+                "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+            ],
+            "x-request-id": [
+                "[uuid]"
+            ],
+            "x-operation-id": [
+                "inspect.patch"
+            ],
+            "x-stability": [
+                "stable"
+            ],
+            "x-powered-by": [
+                "Fusio"
+            ]
+        },
+        "uri_fragments": {
+            "foo": "bar"
+        },
+        "parameters": {
+            "foo": "bar"
+        }
     }
 }
 JSON;
@@ -415,23 +294,38 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "method": "DELETE",
-    "headers": {
-        "user-agent": [
-            "Fusio TestCase"
-        ],
-        "authorization": [
-            "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-        ],
-        "x-request-id": [
-            "[uuid]"
-        ]
-    },
-    "uri_fragments": {
+    "arguments": {
         "foo": "bar"
     },
-    "parameters": {
-        "foo": "bar"
+    "payload": {},
+    "context": {
+        "method": "DELETE",
+        "headers": {
+            "user-agent": [
+                "Fusio TestCase"
+            ],
+            "authorization": [
+                "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+            ],
+            "x-request-id": [
+                "[uuid]"
+            ],
+            "x-operation-id": [
+                "inspect.delete"
+            ],
+            "x-stability": [
+                "stable"
+            ],
+            "x-powered-by": [
+                "Fusio"
+            ]
+        },
+        "uri_fragments": {
+            "foo": "bar"
+        },
+        "parameters": {
+            "foo": "bar"
+        }
     }
 }
 JSON;

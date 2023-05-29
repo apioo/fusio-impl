@@ -149,7 +149,7 @@ JSON;
         return $data->id;
     }
 
-    private function executeProvider()
+    private function executeProvider(): void
     {
         $typeSchema = \json_decode(file_get_contents(__DIR__ . '/../Backend/Api/Generator/resource/typeschema.json'));
 
@@ -176,14 +176,9 @@ JSON;
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        $routingParser = Environment::getService('routing_parser');
-        if ($routingParser instanceof DatabaseParser) {
-            $routingParser->clear();
-        }
     }
 
-    private function assertResponse(string $path, string $expectFile)
+    private function assertResponse(string $path, string $expectFile): void
     {
         $response = $this->sendRequest($path, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
@@ -207,13 +202,13 @@ JSON;
         ];
 
         foreach ($tableNames as $tableName) {
-            if ($connection->getSchemaManager()->tablesExist($tableName)) {
+            if ($connection->createSchemaManager()->tablesExist($tableName)) {
                 $connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
             }
         }
 
         foreach ($tableNames as $tableName) {
-            if ($connection->getSchemaManager()->tablesExist($tableName)) {
+            if ($connection->createSchemaManager()->tablesExist($tableName)) {
                 $connection->executeQuery('DROP TABLE ' . $tableName);
             }
         }

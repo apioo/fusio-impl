@@ -74,9 +74,6 @@ JSON;
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "warning": [
-        "199 PSX \"Resource is in development\""
-    ],
     "ratelimit-limit": [
         "8"
     ],
@@ -131,14 +128,11 @@ JSON;
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "warning": [
-        "199 PSX \"Resource is in development\""
-    ],
     "ratelimit-limit": [
-        "16"
+        "8"
     ],
     "ratelimit-remaining": [
-        "16"
+        "8"
     ],
     "vary": [
         "Accept"
@@ -154,24 +148,17 @@ JSON;
 
     public function testPublicWithInvalidAuthorization()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
         $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer 1234'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Invalid access token"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Invalid access token', $data->message);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
@@ -227,9 +214,6 @@ JSON;
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "warning": [
-        "199 PSX \"Resource is in development\""
-    ],
     "ratelimit-limit": [
         "8"
     ],
@@ -250,8 +234,6 @@ JSON;
 
     public function testNotPublic()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-        
         $body = <<<'JSON'
 {
     "title": "foo",
@@ -264,17 +246,12 @@ JSON;
             'User-Agent' => 'Fusio TestCase',
         ), $body);
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Missing authorization header"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Missing authorization header', $data->message);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
@@ -325,9 +302,6 @@ JSON;
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "warning": [
-        "199 PSX \"Resource is in development\""
-    ],
     "ratelimit-limit": [
         "16"
     ],
@@ -348,8 +322,6 @@ JSON;
 
     public function testNotPublicWithInvalidAuthorization()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-        
         $body = <<<'JSON'
 {
     "title": "foo",
@@ -363,17 +335,12 @@ JSON;
             'Authorization' => 'Bearer 1234'
         ), $body);
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Invalid access token"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Invalid access token', $data->message);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
@@ -395,8 +362,6 @@ JSON;
 
     public function testNotPublicWithEmptyAuthorization()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-        
         $body = <<<'JSON'
 {
     "title": "foo",
@@ -410,17 +375,12 @@ JSON;
             'Authorization' => ''
         ), $body);
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Missing authorization header"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Missing authorization header', $data->message);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON

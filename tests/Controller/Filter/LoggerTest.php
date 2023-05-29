@@ -25,12 +25,16 @@ use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
 use Fusio\Impl\Controller\Filter\Logger;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Service\Log;
+use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
 use PSX\Http\Response;
 use PSX\Http\Stream\StringStream;
+use PSX\Sql\TableManagerInterface;
 use PSX\Uri\Uri;
 
 /**
@@ -44,7 +48,10 @@ class LoggerTest extends DbTestCase
 {
     public function testHandle()
     {
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request  = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -55,15 +62,15 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logService = Environment::getService('log_service');
+        $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $this->newContext());
+        $logger = new Logger($logService, $contextFactory);
         $logger->handle($request, $response, $filterChain);
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
+        $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -76,7 +83,10 @@ class LoggerTest extends DbTestCase
 
     public function testHandleLongPath()
     {
-        $request  = new Request(new Uri('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request  = new Request(Uri::parse('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -87,15 +97,15 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logService = Environment::getService('log_service');
+        $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $this->newContext());
+        $logger = new Logger($logService, $contextFactory);
         $logger->handle($request, $response, $filterChain);
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
+        $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -108,8 +118,11 @@ class LoggerTest extends DbTestCase
 
     public function testHandlePost()
     {
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
         $body     = new StringStream('foobar');
-        $request  = new Request(new Uri('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
+        $request  = new Request(Uri::parse('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -120,15 +133,15 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logService = Environment::getService('log_service');
+        $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $this->newContext());
+        $logger = new Logger($logService, $contextFactory);
         $logger->handle($request, $response, $filterChain);
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
+        $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -141,7 +154,10 @@ class LoggerTest extends DbTestCase
 
     public function testAppendError()
     {
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request  = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -156,16 +172,16 @@ class LoggerTest extends DbTestCase
             });
 
         try {
-            $logService = Environment::getService('log_service');
+            $logService = Environment::getService(Log::class);
 
-            $logger = new Logger($logService, $this->newContext());
+            $logger = new Logger($logService, $contextFactory);
             $logger->handle($request, $response, $filterChain);
             
             $this->fail('Should throw an exception');
         } catch (\RuntimeException $e) {
         }
 
-        $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
+        $error = $this->connection->fetchAssociative('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
 
         $this->assertEquals(2, $error['id']);
         $this->assertEquals(3, $error['log_id']);
@@ -174,7 +190,10 @@ class LoggerTest extends DbTestCase
 
     public function testAppendErrorLongMessage()
     {
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request  = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -189,29 +208,31 @@ class LoggerTest extends DbTestCase
             });
 
         try {
-            $logService = Environment::getService('log_service');
+            $logService = Environment::getService(Log::class);
 
-            $logger = new Logger($logService, $this->newContext());
+            $logger = new Logger($logService, $contextFactory);
             $logger->handle($request, $response, $filterChain);
 
             $this->fail('Should throw an exception');
         } catch (\RuntimeException $e) {
         }
 
-        $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
+        $error = $this->connection->fetchAssociative('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
 
         $this->assertEquals(2, $error['id']);
         $this->assertEquals(3, $error['log_id']);
         $this->assertEquals(str_repeat('a', 500), $error['message']);
     }
 
-    private function newContext()
+    private function newContext(Context $context): Context
     {
         $app = new App(false, 1, 0, 0, '', '', '', [], []);
         $user = new User(false, 1, 0, 0, 0, '', '', 0);
 
-        $context = new Context();
+        $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find(1);
+
         $context->setOperationId(1);
+        $context->setOperation($row);
         $context->setCategoryId(1);
         $context->setApp($app);
         $context->setUser($user);

@@ -25,6 +25,10 @@ use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
 use Fusio\Impl\Controller\Filter\Authentication;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Repository\AppDatabase;
+use Fusio\Impl\Service\Security\TokenValidator;
+use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
@@ -32,6 +36,7 @@ use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
 use PSX\Http\Response;
+use PSX\Sql\TableManagerInterface;
 use PSX\Uri\Uri;
 
 /**
@@ -45,8 +50,10 @@ class AuthenticationTest extends DbTestCase
 {
     public function testHandle()
     {
-        $context  = $this->newContext();
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -57,13 +64,13 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $tokenValidator = Environment::getService('security_token_validator');
+        $tokenValidator = Environment::getService(TokenValidator::class);
 
-        $authentication = new Authentication($tokenValidator, $context);
+        $authentication = new Authentication($tokenValidator, $contextFactory);
         $authentication->handle($request, $response, $filterChain);
 
-        $app  = $context->getApp();
-        $user = $context->getUser();
+        $app = $contextFactory->getActive()->getApp();
+        $user = $contextFactory->getActive()->getUser();
 
         $this->assertInstanceOf(App::class, $app);
         $this->assertEquals('Foo-App', $app->getName());
@@ -76,8 +83,10 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(\DomainException::class);
 
-        $context  = $this->newContext();
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foo.bar.baz']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foo.bar.baz']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -88,9 +97,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $tokenValidator = Environment::getService('security_token_validator');
+        $tokenValidator = Environment::getService(TokenValidator::class);
 
-        $authentication = new Authentication($tokenValidator, $context);
+        $authentication = new Authentication($tokenValidator, $contextFactory);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -98,8 +107,10 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(UnauthorizedException::class);
 
-        $context  = $this->newContext();
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foobar']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foobar']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -110,9 +121,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $tokenValidator = Environment::getService('security_token_validator');
+        $tokenValidator = Environment::getService(TokenValidator::class);
 
-        $authentication = new Authentication($tokenValidator, $context);
+        $authentication = new Authentication($tokenValidator, $contextFactory);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -120,8 +131,10 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(UnauthorizedException::class);
 
-        $context  = $this->newContext();
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Basic foobar']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Basic foobar']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -132,9 +145,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $tokenValidator = Environment::getService('security_token_validator');
+        $tokenValidator = Environment::getService(TokenValidator::class);
 
-        $authentication = new Authentication($tokenValidator, $context);
+        $authentication = new Authentication($tokenValidator, $contextFactory);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -142,8 +155,10 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(UnauthorizedException::class);
 
-        $context  = $this->newContext();
-        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -154,20 +169,22 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $tokenValidator = Environment::getService('security_token_validator');
+        $tokenValidator = Environment::getService(TokenValidator::class);
 
-        $authentication = new Authentication($tokenValidator, $context);
+        $authentication = new Authentication($tokenValidator, $contextFactory);
         $authentication->handle($request, $response, $filterChain);
     }
 
-    private function newContext()
+    private function newContext(Context $context): void
     {
-        $context = new Context();
-        $context->setOperationId(Fixture::getId('fusio_routes', '/foo'));
-        $context->setOperation([
-            'public' => false,
-        ]);
+        $operationId = Fixture::getId('fusio_operation', 'test.listFoo');
+        $context->setOperationId($operationId);
 
-        return $context;
+        $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($operationId);
+        $row->setPublic(0);
+        $context->setOperation($row);
+
+        $app = (new AppDatabase($this->connection))->get(1);
+        $context->setApp($app);
     }
 }

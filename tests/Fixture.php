@@ -143,6 +143,7 @@ class Fixture
                 httpPath: '/foo',
                 httpCode: 200,
                 outgoing: 'Collection-Schema',
+                public: true,
                 stability: OperationInterface::STABILITY_EXPERIMENTAL
             ),
             'test.createFoo' => new Operation(
@@ -204,7 +205,12 @@ class Fixture
         $data->addScopeOperation('bar', 'test.listFoo');
         $data->addScopeOperation('bar', 'test.createFoo');
         $data->addScopeOperation('foo', 'inspect.get');
+        $data->addScopeOperation('bar', 'inspect.get');
+        $data->addScopeOperation('foo', 'inspect.post');
         $data->addScopeOperation('bar', 'inspect.post');
+        $data->addScopeOperation('bar', 'inspect.put');
+        $data->addScopeOperation('bar', 'inspect.patch');
+        $data->addScopeOperation('bar', 'inspect.delete');
 
         $data->addTable('app_news', [
             ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],
