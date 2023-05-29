@@ -23,6 +23,8 @@ namespace Fusio\Impl\Framework\Schema\Parser\Resolver;
 
 use Doctrine\DBAL\Connection;
 use PSX\Json\Parser;
+use PSX\Schema\Generator\TypeSchema;
+use PSX\Schema\Parser\Popo;
 use PSX\Schema\Parser\TypeSchema\ResolverInterface;
 use PSX\Uri\Uri;
 
@@ -44,23 +46,29 @@ class Database implements ResolverInterface
 
     public function resolve(Uri $uri, ?string $basePath = null): \stdClass
     {
-        $result = $this->connection->fetchAllAssociative('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
+        $row = $this->connection->fetchAssociative('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
+
+        if (!str_contains($row['source'], '{') && class_exists($row['source'])) {
+            return $this->parseClass($row['source']);
+        }
 
         $definitions = [];
-        foreach ($result as $row) {
-            if (strpos($row['source'], '{') === false) {
-                // in case source is a class skip
-                continue;
-            }
-
-            $data = Parser::decode($row['source']);
-            if (isset($data->definitions)) {
-                $definitions = array_merge($definitions, (array) $data->definitions);
-            }
+        $data = Parser::decode($row['source']);
+        if (isset($data->definitions)) {
+            $definitions = array_merge($definitions, (array) $data->definitions);
+        } elseif (isset($data->{'$class'}) && class_exists($data->{'$class'})) {
+            return $this->parseClass($data->{'$class'});
         }
 
         $return = new \stdClass();
         $return->definitions = (object) $definitions;
         return $return;
+    }
+
+    private function parseClass(string $class) : \stdClass
+    {
+        $schema = (new Popo())->parse($class);
+        $json = (new TypeSchema())->generate($schema);
+        return \json_decode($json);
     }
 }

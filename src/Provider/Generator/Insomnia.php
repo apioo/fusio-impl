@@ -51,7 +51,7 @@ class Insomnia implements ProviderInterface
         return 'Import-Insomnia';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
         if (!$import instanceof \stdClass) {

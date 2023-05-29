@@ -28,6 +28,7 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Schema\SchemaInterface;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * CollectionTest
@@ -222,9 +223,9 @@ JSON;
         Assert::assertSchema($this->connection, 'Bar-Schema', $schema, null, $metadata);
 
         // test schema
-        /** @var Loader $schemaLoader */
-        $schemaLoader = Environment::getService(Loader::class);
-        $schema = $schemaLoader->getSchema('Bar-Schema');
+        /** @var SchemaManagerInterface $schemaManager */
+        $schemaManager = Environment::getService(SchemaManagerInterface::class);
+        $schema = $schemaManager->getSchema('schema:///Bar-Schema');
 
         $this->assertInstanceOf(SchemaInterface::class, $schema);
         $this->assertEquals(['entry:Entry', 'self:Bar'], array_keys($schema->getDefinitions()->getAllTypes()));

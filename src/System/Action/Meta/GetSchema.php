@@ -28,10 +28,12 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * GetSchema
@@ -43,12 +45,12 @@ use PSX\Schema\Generator;
 class GetSchema implements ActionInterface
 {
     private View\Schema $view;
-    private Loader $loader;
+    private SchemaManagerInterface $schemaManager;
 
-    public function __construct(View\Schema $view, Loader $loader)
+    public function __construct(View\Schema $view, SchemaManagerInterface $schemaManager)
     {
         $this->view = $view;
-        $this->loader = $loader;
+        $this->schemaManager = $schemaManager;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -65,7 +67,7 @@ class GetSchema implements ActionInterface
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $type = $this->loader->getSchema($schema['name']);
+        $type = $this->schemaManager->getSchema(Scheme::wrap($schema['name']));
         $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
 
         return [

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\Operation;
 
-use Fusio\Impl\Service\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Api\Operation;
 use PSX\Api\Operation\ArgumentInterface;
@@ -29,6 +28,7 @@ use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 
@@ -43,14 +43,14 @@ class SpecificationBuilder
 {
     private Table\Operation $operationTable;
     private Table\Scope\Operation $scopeTable;
-    private Loader $schemaLoader;
+    private SchemaManagerInterface $schemaManager;
     private TypeSchema $schemaParser;
 
-    public function __construct(Table\Operation $operationTable, Table\Scope\Operation $scopeTable, Loader $schemaLoader)
+    public function __construct(Table\Operation $operationTable, Table\Scope\Operation $scopeTable, SchemaManagerInterface $schemaManager)
     {
         $this->operationTable = $operationTable;
         $this->scopeTable = $scopeTable;
-        $this->schemaLoader = $schemaLoader;
+        $this->schemaManager = $schemaManager;
         $this->schemaParser = new TypeSchema();
     }
 
@@ -92,7 +92,7 @@ class SpecificationBuilder
             throw new \RuntimeException('Provided no outgoing schema');
         }
 
-        $definitions->addSchema($outgoing, $this->schemaLoader->getSchema($outgoing));
+        $definitions->addSchema($outgoing, $this->schemaManager->getSchema($outgoing));
 
         return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($outgoing));
     }
@@ -105,7 +105,7 @@ class SpecificationBuilder
 
         $incoming = $row->getIncoming();
         if (!empty($incoming)) {
-            $definitions->addSchema($incoming, $this->schemaLoader->getSchema($incoming));
+            $definitions->addSchema($incoming, $this->schemaManager->getSchema($incoming));
 
             $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($incoming)));
         }
@@ -178,7 +178,7 @@ class SpecificationBuilder
 
     private function buildQueryParametersFromSchema(Operation\Arguments $arguments, string $parameters): void
     {
-        $schema = $this->schemaLoader->getSchema($parameters);
+        $schema = $this->schemaManager->getSchema($parameters);
         if (!$schema instanceof StructType) {
             return;
         }

@@ -24,6 +24,7 @@ namespace Fusio\Impl\Framework\Loader\RoutingParser;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
 use PSX\Framework\Loader\RoutingParser\AttributeParser;
+use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
@@ -33,7 +34,7 @@ use PSX\Framework\Loader\RoutingParserInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CompositeParser implements RoutingParserInterface
+class CompositeParser implements RoutingParserInterface, InvalidateableInterface
 {
     private array $collection = [];
     private DatabaseParser $databaseParser;
@@ -67,5 +68,14 @@ class CompositeParser implements RoutingParserInterface
         }
 
         return $this->collection[$key] = $collection;
+    }
+
+    public function invalidate(?FilterInterface $filter = null): void
+    {
+        $key = $filter !== null ? $filter->getId() : '0';
+
+        if (isset($this->collection[$key])) {
+            unset($this->collection[$key]);
+        }
     }
 }

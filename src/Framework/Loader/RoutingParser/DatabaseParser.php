@@ -26,6 +26,7 @@ use Fusio\Impl\Framework\Api\Scanner\Filter;
 use Fusio\Impl\Table\Operation as TableOperation;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
+use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
@@ -38,7 +39,6 @@ use PSX\Framework\Loader\RoutingParserInterface;
 class DatabaseParser implements RoutingParserInterface
 {
     private Connection $connection;
-    private array $collection = [];
 
     public function __construct(Connection $connection)
     {
@@ -47,12 +47,6 @@ class DatabaseParser implements RoutingParserInterface
 
     public function getCollection(?FilterInterface $filter = null): RoutingCollection
     {
-        $key = $filter !== null ? $filter->getId() : '0';
-
-        if (isset($this->collection[$key])) {
-            return $this->collection[$key];
-        }
-
         $sql = 'SELECT operation.id,
                        operation.http_method,
                        operation.http_path
@@ -78,11 +72,6 @@ class DatabaseParser implements RoutingParserInterface
             $collection->add([$row['http_method']], $row['http_path'], [$controller, $method]);
         }
 
-        return $this->collection[$key] = $collection;
-    }
-
-    public function clear()
-    {
-        $this->collection = [];
+        return $collection;
     }
 }

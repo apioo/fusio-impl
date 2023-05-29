@@ -66,7 +66,7 @@ class Generator
         $prefix = $this->getPrefix($basePath);
 
         $provider = $this->getProvider($providerName);
-        $provider->setup($setup, $basePath, $configuration);
+        $provider->setup($setup, $configuration);
 
         $this->connection->beginTransaction();
 

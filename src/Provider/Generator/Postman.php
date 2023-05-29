@@ -50,7 +50,7 @@ class Postman implements ProviderInterface
         return 'Import-Postman';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
         if (!$import instanceof \stdClass) {

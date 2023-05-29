@@ -32,6 +32,7 @@ use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 use PSX\Record\Record;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * ControllerExecutor
@@ -44,15 +45,15 @@ class ActionExecutor implements FilterInterface
 {
     private ActionController $controller;
     private Context $context;
-    private Loader $schemaLoader;
+    private SchemaManagerInterface $schemaManager;
     private RequestReader $requestReader;
     private ResponseWriter $responseWriter;
 
-    public function __construct(ActionController $controller, Context $context, Loader $schemaLoader, RequestReader $requestReader, ResponseWriter $responseWriter)
+    public function __construct(ActionController $controller, Context $context, SchemaManagerInterface $schemaManager, RequestReader $requestReader, ResponseWriter $responseWriter)
     {
         $this->controller = $controller;
         $this->context = $context;
-        $this->schemaLoader = $schemaLoader;
+        $this->schemaManager = $schemaManager;
         $this->requestReader = $requestReader;
         $this->responseWriter = $responseWriter;
     }
@@ -70,7 +71,7 @@ class ActionExecutor implements FilterInterface
 
         $operation = $this->context->getOperation();
         if (!empty($operation->getIncoming()) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
-            $schema = $this->schemaLoader->getSchema($operation->getIncoming());
+            $schema = $this->schemaManager->getSchema($operation->getIncoming());
             $payload = $this->requestReader->getBodyAs($request, $schema);
         } else {
             $payload = new Record();

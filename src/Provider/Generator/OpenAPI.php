@@ -61,14 +61,12 @@ use Symfony\Component\Yaml\Yaml;
  */
 class OpenAPI implements ProviderInterface
 {
-    private array $schemas = [];
-
     public function getName(): string
     {
         return 'Import-OpenAPI';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
         $baseUrl = '';
         $specification = $this->parse($configuration->get('spec'), $baseUrl);

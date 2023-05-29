@@ -25,8 +25,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
-use Fusio\Impl\Schema\Parser;
-use Fusio\Impl\Service\Schema\Loader;
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\SchemaCreate;
 use Fusio\Model\Backend\SchemaForm;
@@ -35,6 +34,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -47,15 +47,13 @@ use PSX\Sql\Condition;
 class Schema
 {
     private Table\Schema $schemaTable;
-    private Table\Operation $operationTable;
-    private Loader $schemaLoader;
+    private SchemaManagerInterface $schemaManager;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Schema $schemaTable, Table\Operation $operationTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable     = $schemaTable;
-        $this->operationTable  = $operationTable;
-        $this->schemaLoader    = $schemaLoader;
+        $this->schemaManager   = $schemaManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -88,7 +86,7 @@ class Schema
             $schema->setId($schemaId);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($name);
+            $this->schemaManager->getSchema(Scheme::wrap($name));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -128,7 +126,7 @@ class Schema
             $this->schemaTable->update($existing);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($name);
+            $this->schemaManager->getSchema(Scheme::wrap($name));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -178,7 +176,7 @@ class Schema
 
     public function generatePreview(string $schemaId): Generator\Code\Chunks|string
     {
-        $schema = $this->schemaLoader->getSchema($schemaId);
+        $schema = $this->schemaManager->getSchema(Scheme::wrap($schemaId));
         return (new Generator\Html())->generate($schema);
     }
 
@@ -203,7 +201,7 @@ class Schema
     private function parseSource(?RecordInterface $source): ?string
     {
         if ($source instanceof RecordInterface) {
-            $class = $source->getProperty('$class');
+            $class = $source->get('$class');
             if (is_string($class)) {
                 return $class;
             } else {

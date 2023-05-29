@@ -136,7 +136,7 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'default');
         $bag->addSchema('default', 'Passthru', Passthru::class);
-        $bag->addSchema('default', 'Message', Model\Common\Model\Common\Message::class);
+        $bag->addSchema('default', 'Message', Model\Common\Message::class);
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');

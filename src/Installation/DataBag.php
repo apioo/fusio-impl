@@ -26,6 +26,7 @@ use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\ActionController;
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use PSX\Api\OperationInterface;
 use PSX\Schema\TypeInterface;
@@ -126,8 +127,8 @@ class DataBag
                 $path,
                 $operation->httpCode,
                 $this->normalizeParameters($operation->parameters),
-                $incomingName,
-                $outgoingName,
+                Scheme::wrap($incomingName),
+                Scheme::wrap($outgoingName),
                 $this->normalizeThrows($operation->throws, $category),
                 $actionName
             );
@@ -171,7 +172,7 @@ class DataBag
                 $this->addSchema($category, $schemaName, $class);
             }
 
-            $result[$code] = $schemaName;
+            $result[$code] = Scheme::wrap($schemaName);
         }
 
         return $result;

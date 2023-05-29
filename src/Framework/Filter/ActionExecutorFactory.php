@@ -23,13 +23,13 @@ namespace Fusio\Impl\Framework\Filter;
 
 use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Framework\Loader\Context as FusioContext;
-use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Schema\Loader;
 use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Http\RequestReader;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Framework\Loader\Context;
 use PSX\Http\FilterInterface;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * ActionExecutorFactory
@@ -40,13 +40,13 @@ use PSX\Http\FilterInterface;
  */
 class ActionExecutorFactory implements ControllerExecutorFactoryInterface
 {
-    private Loader $schemaLoader;
+    private SchemaManagerInterface $schemaManager;
     private RequestReader $requestReader;
     private ResponseWriter $responseWriter;
 
-    public function __construct(Loader $schemaLoader, RequestReader $requestReader, ResponseWriter $responseWriter)
+    public function __construct(SchemaManagerInterface $schemaManager, RequestReader $requestReader, ResponseWriter $responseWriter)
     {
-        $this->schemaLoader = $schemaLoader;
+        $this->schemaManager = $schemaManager;
         $this->requestReader = $requestReader;
         $this->responseWriter = $responseWriter;
     }
@@ -61,6 +61,6 @@ class ActionExecutorFactory implements ControllerExecutorFactoryInterface
             throw new \RuntimeException('Provided an invalid context');
         }
 
-        return new ActionExecutor($controller, $context, $this->schemaLoader, $this->requestReader, $this->responseWriter);
+        return new ActionExecutor($controller, $context, $this->schemaManager, $this->requestReader, $this->responseWriter);
     }
 }

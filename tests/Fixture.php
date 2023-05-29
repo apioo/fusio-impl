@@ -27,14 +27,12 @@ use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Installation\DataBag;
-use Fusio\Impl\Installation\Method;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Installation\Operation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
-use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 
 /**

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Model;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Operation\CreatedEvent;
@@ -29,10 +30,15 @@ use Fusio\Impl\Event\Operation\UpdatedEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\OperationParameters;
+use Fusio\Model\Backend\OperationThrows;
 use Fusio\Model\Backend\OperationUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Api\OperationInterface;
+use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
+use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -47,13 +53,17 @@ class Operation
     private Table\Operation $operationTable;
     private Operation\Validator $validator;
     private Service\Scope $scopeService;
+    private RoutingParserInterface $routingParser;
+    private SchemaManagerInterface $schemaManager;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Operation $operationTable, Service\Operation\Validator $validator, Service\Scope $scopeService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Operation $operationTable, Service\Operation\Validator $validator, Service\Scope $scopeService, RoutingParserInterface $routingParser, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->operationTable  = $operationTable;
         $this->validator       = $validator;
         $this->scopeService    = $scopeService;
+        $this->routingParser   = $routingParser;
+        $this->schemaManager   = $schemaManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -81,10 +91,10 @@ class Operation
             $row->setHttpPath($operation->getHttpPath());
             $row->setHttpCode($operation->getHttpCode());
             $row->setName($operation->getName());
-            $row->setParameters(\json_encode($operation->getParameters()));
-            $row->setIncoming($operation->getIncoming());
-            $row->setOutgoing($operation->getOutgoing());
-            $row->setThrows(\json_encode($operation->getThrows()));
+            $row->setParameters($this->wrapParameters($operation->getParameters()));
+            $row->setIncoming(Scheme::wrap($operation->getIncoming()));
+            $row->setOutgoing(Scheme::wrap($operation->getOutgoing()));
+            $row->setThrows($this->wrapThrows($operation->getThrows()));
             $row->setAction($operation->getAction());
             $row->setCosts($operation->getCosts());
             $row->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
@@ -104,6 +114,10 @@ class Operation
             $this->operationTable->rollBack();
 
             throw $e;
+        }
+
+        if ($this->routingParser instanceof InvalidateableInterface) {
+            $this->routingParser->invalidate();
         }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($operation, $context));
@@ -139,10 +153,10 @@ class Operation
                 $existing->setHttpMethod($operation->getHttpMethod());
                 $existing->setHttpPath($operation->getHttpPath());
                 $existing->setName($operation->getName());
-                $existing->setParameters(\json_encode($operation->getParameters()));
-                $existing->setIncoming($operation->getIncoming());
-                $existing->setOutgoing($operation->getOutgoing());
-                $existing->setThrows(\json_encode($operation->getThrows()));
+                $existing->setParameters($this->wrapParameters($operation->getParameters()));
+                $existing->setIncoming(Scheme::wrap($operation->getIncoming()));
+                $existing->setOutgoing(Scheme::wrap($operation->getOutgoing()));
+                $existing->setThrows($this->wrapThrows($operation->getThrows()));
                 $existing->setAction($operation->getAction());
                 $existing->setCosts($operation->getCosts());
                 $existing->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
@@ -209,5 +223,27 @@ class Operation
         } else {
             return false;
         }
+    }
+
+    private function wrapParameters(?OperationParameters $parameters): ?string
+    {
+        if ($parameters === null) {
+            return null;
+        }
+
+        return \json_encode($parameters);
+    }
+
+    private function wrapThrows(?OperationThrows $throws): ?string
+    {
+        if ($throws === null) {
+            return null;
+        }
+
+        foreach ($throws->getAll() as $code => $schema) {
+            $throws->put($code, Scheme::wrap($schema));
+        }
+
+        return \json_encode($throws);
     }
 }
