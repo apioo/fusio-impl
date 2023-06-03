@@ -51,7 +51,7 @@ class SpecificationBuilder
         $this->operationTable = $operationTable;
         $this->scopeTable = $scopeTable;
         $this->schemaManager = $schemaManager;
-        $this->schemaParser = new TypeSchema();
+        $this->schemaParser = new TypeSchema($schemaManager);
     }
 
     public function build(int $operationId): SpecificationInterface

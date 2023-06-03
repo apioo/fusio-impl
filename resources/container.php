@@ -23,7 +23,7 @@ use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Framework\Loader\ControllerResolver;
 use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
 use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
-use Fusio\Impl\Framework\Schema\Parser\Resolver as FusioResolver;
+use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Provider\ActionProvider;
@@ -45,6 +45,7 @@ use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use PSX\Schema\Parser\TypeSchema\Resolver as TypeSchemaResolver;
+use PSX\Schema\SchemaManagerInterface;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -179,16 +180,9 @@ return static function (ContainerConfigurator $container) {
     $services->set(FilterFactory::class);
     $services->alias(FilterFactoryInterface::class, FilterFactory::class);
 
-    $services->set(TypeSchemaResolver\File::class);
-    $services->set(TypeSchemaResolver\Http::class);
-    $services->set(TypeSchemaResolver\TypeHub::class);
-    $services->set(FusioResolver\Database::class);
-    $services->set(ImportResolver::class)
-        ->call('addResolver', ['file', service(TypeSchemaResolver\File::class)])
-        ->call('addResolver', ['http', service(TypeSchemaResolver\Http::class)])
-        ->call('addResolver', ['https', service(TypeSchemaResolver\Http::class)])
-        ->call('addResolver', ['typehub', service(TypeSchemaResolver\TypeHub::class)])
-        ->call('addResolver', ['schema', service(FusioResolver\Database::class)]);
+    $services->set(Framework\Schema\Parser\Schema::class);
+    $services->get(\PSX\Schema\SchemaManager::class)
+        ->call('register', ['schema', service(Framework\Schema\Parser\Schema::class)]);
 
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();

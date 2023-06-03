@@ -40,6 +40,6 @@ class Scheme
             return $schemaName;
         }
 
-        return 'schema:///' . $schemaName;
+        return 'schema://' . $schemaName;
     }
 }

@@ -86,7 +86,7 @@ class Schema
             $schema->setId($schemaId);
 
             // check whether we can load the schema
-            $this->schemaManager->getSchema(Scheme::wrap($name));
+            //$this->schemaManager->getSchema(Scheme::wrap($name));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {

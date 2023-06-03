@@ -444,14 +444,14 @@ JSON;
             "id": 34,
             "type": 1,
             "name": "system_dispatcher",
-            "description": "Optional a HTTP or message queue connection which is used to dispatch events",
+            "description": "Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request",
             "value": ""
         },
         {
             "id": 33,
             "type": 1,
             "name": "system_mailer",
-            "description": "Optional a SMTP connection which is used as mailer",
+            "description": "Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable",
             "value": ""
         },
         {

@@ -104,7 +104,7 @@ class Generator
         $setup = new Setup();
 
         $provider = $this->getProvider($providerName);
-        $provider->setup($setup, '/[path]', new Parameters($config->getAll()));
+        $provider->setup($setup, new Parameters($config->getAll()));
 
         return [
             'schemas' => $setup->getSchemas(),
