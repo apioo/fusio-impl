@@ -40,7 +40,7 @@ class OpenAPITest extends DbTestCase
         $spec  = file_get_contents(__DIR__ . '/resource/openapi_petstore.json');
         $setup = new Setup();
 
-        (new OpenAPI())->setup($setup, '/', new Parameters(['spec' => $spec]));
+        (new OpenAPI())->setup($setup, new Parameters(['spec' => $spec]));
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();

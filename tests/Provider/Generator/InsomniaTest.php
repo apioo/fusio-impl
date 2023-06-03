@@ -40,7 +40,7 @@ class InsomniaTest extends DbTestCase
         $import = file_get_contents(__DIR__ . '/resource/insomnia.json');
         $setup = new Setup();
 
-        (new Insomnia())->setup($setup, '/', new Parameters(['import' => $import]));
+        (new Insomnia())->setup($setup, new Parameters(['import' => $import]));
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();

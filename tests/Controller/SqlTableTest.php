@@ -42,7 +42,7 @@ class SqlTableTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getId('fusio_routes', '/foo');
+        $this->id = Fixture::getId('fusio_operation', 'test.listFoo');
     }
 
     public function getDataSet(): array
@@ -50,13 +50,8 @@ class SqlTableTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    /**
-     * @dataProvider providerDebugStatus
-     */
     public function testGet($debug)
     {
-        Environment::getContainer()->get('config')->set('psx_debug', $debug);
-
         $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'

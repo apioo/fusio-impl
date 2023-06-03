@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 
 /**
@@ -40,11 +40,13 @@ class Webhook implements ActionInterface
 {
     private Service\Log $logService;
     private Service\Payment $paymentService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Log $logService, Service\Payment $paymentService)
+    public function __construct(Service\Log $logService, Service\Payment $paymentService, ContextFactory $contextFactory)
     {
         $this->logService = $logService;
         $this->paymentService = $paymentService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -54,10 +56,6 @@ class Webhook implements ActionInterface
             throw new \RuntimeException('Invoking the webhook is currently only supported through HTTP');
         }
 
-        if (!$context instanceof Context) {
-            throw new \RuntimeException('Provided an invalid context');
-        }
-
         $httpRequest = $requestContext->getRequest();
 
         $this->logService->log(
@@ -65,7 +63,7 @@ class Webhook implements ActionInterface
             $httpRequest->getMethod(),
             $httpRequest->getRequestTarget(),
             $httpRequest->getHeader('User-Agent'),
-            $context,
+            $this->contextFactory->getActive(),
             $httpRequest
         );
 

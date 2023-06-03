@@ -70,7 +70,7 @@ class DebugTest extends ControllerDbTestCase
     "payload": {
         "foo": "bar"
     },
-    "context": "Fusio\\Engine\\Request\\HttpRequest"
+    "context": "Fusio\\Engine\\Request\\HttpRequestContext"
 }
 JSON;
 

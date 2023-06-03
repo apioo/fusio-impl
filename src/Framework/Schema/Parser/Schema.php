@@ -52,7 +52,15 @@ class Schema implements ParserInterface
 
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
-        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($schema, '/')]);
+        if (is_numeric($schema)) {
+            $column = 'id';
+            $value  = (int) $schema;
+        } else {
+            $column = 'name';
+            $value  = ltrim($schema, '/');
+        }
+
+        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE ' . $column . ' LIKE :value', ['value' => $value]);
         if (empty($source)) {
             throw new ParserException('Could not find schema ' . $schema);
         }

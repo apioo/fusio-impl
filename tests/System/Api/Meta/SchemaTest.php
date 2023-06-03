@@ -102,116 +102,44 @@ JSON;
 {
     "schema": {
         "definitions": {
-            "App": {
+            "About": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-                    },
-                    "url": {
+                    "apiVersion": {
                         "type": "string"
                     },
-                    "parameters": {
+                    "title": {
                         "type": "string"
                     },
-                    "appKey": {
+                    "description": {
                         "type": "string"
                     },
-                    "appSecret": {
+                    "termsOfService": {
                         "type": "string"
                     },
-                    "metadata": {
-                        "$ref": "Metadata"
-                    },
-                    "date": {
-                        "format": "date-time",
+                    "contactName": {
                         "type": "string"
                     },
-                    "scopes": {
+                    "contactUrl": {
+                        "type": "string"
+                    },
+                    "contactEmail": {
+                        "type": "string"
+                    },
+                    "licenseName": {
+                        "type": "string"
+                    },
+                    "licenseUrl": {
+                        "type": "string"
+                    },
+                    "paymentCurrency": {
+                        "type": "string"
+                    },
+                    "categories": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
-                    },
-                    "tokens": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "AppToken"
-                        }
-                    }
-                }
-            },
-            "AppToken": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "token": {
-                        "type": "string"
-                    },
-                    "scope": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "expire": {
-                        "format": "date-time",
-                        "type": "string"
-                    },
-                    "date": {
-                        "format": "date-time",
-                        "type": "string"
-                    }
-                }
-            },
-            "Metadata": {
-                "type": "object",
-                "additionalProperties": {
-                    "type": "string"
-                }
-            },
-            "User": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "roleId": {
-                        "type": "integer"
-                    },
-                    "planId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "points": {
-                        "type": "integer"
                     },
                     "scopes": {
                         "type": "array",
@@ -220,22 +148,35 @@ JSON;
                         }
                     },
                     "apps": {
+                        "$ref": "AboutApps"
+                    },
+                    "links": {
                         "type": "array",
                         "items": {
-                            "$ref": "App"
+                            "$ref": "AboutLink"
                         }
+                    }
+                }
+            },
+            "AboutApps": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
+            "AboutLink": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
                     },
-                    "metadata": {
-                        "$ref": "Metadata"
-                    },
-                    "date": {
-                        "format": "date-time",
+                    "href": {
                         "type": "string"
                     }
                 }
             }
         },
-        "$ref": "User"
+        "$ref": "About"
     },
     "form": null
 }

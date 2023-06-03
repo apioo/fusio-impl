@@ -223,17 +223,17 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 178,
+            'operation_id' => 181,
             'allow' => 1,
             'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 176,
+            'operation_id' => 180,
             'allow' => 1,
             'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 175,
+            'operation_id' => 179,
             'allow' => 1,
             'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ]], $operations);

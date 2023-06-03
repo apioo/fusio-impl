@@ -64,9 +64,37 @@ class EntityTest extends ControllerDbTestCase
     "description": "Bar access",
     "routes": [
         {
-            "id": 170,
+            "id": 175,
+            "scopeId": 43,
+            "operationId": 181,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 174,
+            "scopeId": 43,
+            "operationId": 180,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 173,
+            "scopeId": 43,
+            "operationId": 179,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 172,
             "scopeId": 43,
             "operationId": 178,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 170,
+            "scopeId": 43,
+            "operationId": 177,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
@@ -107,9 +135,37 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
-            "id": 170,
+            "id": 175,
+            "scopeId": 43,
+            "operationId": 181,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 174,
+            "scopeId": 43,
+            "operationId": 180,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 173,
+            "scopeId": 43,
+            "operationId": 179,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 172,
             "scopeId": 43,
             "operationId": 178,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 170,
+            "scopeId": 43,
+            "operationId": 177,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
