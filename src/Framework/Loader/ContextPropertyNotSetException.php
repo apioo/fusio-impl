@@ -19,40 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
-
-use Fusio\Impl\Table\Generated\CronjobRow;
-use Fusio\Impl\Table\Generated\OperationRow;
+namespace Fusio\Impl\Framework\Loader;
 
 /**
- * Operation
+ * ContextPropertyNotSetException
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Operation extends Generated\OperationTable
+class ContextPropertyNotSetException extends \RuntimeException
 {
-    public const STATUS_ACTIVE  = 1;
-    public const STATUS_DELETED = 0;
+    private string $propertyName;
 
-    public function findOneByIdentifier(string $id): ?OperationRow
+    public function __construct(string $propertyName, ?\Throwable $previous = null)
     {
-        if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
-        } else {
-            return $this->find((int) $id);
-        }
+        parent::__construct(sprintf('Context property %s was not set', $propertyName), 0, $previous);
+
+        $this->propertyName = $propertyName;
     }
 
-    public function getAvailableMethods(string $httPath): array
+    public function getPropertyName(): string
     {
-        $result = $this->findByHttpPath($httPath);
-        $methods = [];
-        foreach ($result as $operation) {
-            $methods[] = $operation->getHttpMethod();
-        }
-        sort($methods);
-        return $methods;
+        return $this->propertyName;
     }
 }

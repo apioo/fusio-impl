@@ -37,7 +37,6 @@ use PSX\Framework\Loader\Context as FrameworkContext;
  */
 class Context extends FrameworkContext
 {
-    private ?int $operationId = null;
     private ?int $categoryId = null;
     private ?AppInterface $app = null;
     private ?UserInterface $user = null;
@@ -46,24 +45,10 @@ class Context extends FrameworkContext
     private ?OperationRow $operation = null;
     private ?UserContext $userContext = null;
 
-    public function getOperationId(): int
-    {
-        if ($this->operationId === null) {
-            throw new \RuntimeException('Context route id not available');
-        }
-
-        return $this->operationId;
-    }
-
-    public function setOperationId(int $operationId): void
-    {
-        $this->operationId = $operationId;
-    }
-
     public function getCategoryId(): int
     {
         if ($this->categoryId === null) {
-            throw new \RuntimeException('Context category id not available');
+            throw new ContextPropertyNotSetException('categoryId');
         }
 
         return $this->categoryId;
@@ -77,7 +62,7 @@ class Context extends FrameworkContext
     public function getApp(): AppInterface
     {
         if ($this->app === null) {
-            throw new \RuntimeException('Context app not available');
+            throw new ContextPropertyNotSetException('app');
         }
 
         return $this->app;
@@ -96,7 +81,7 @@ class Context extends FrameworkContext
     public function getUser(): UserInterface
     {
         if ($this->user === null) {
-            throw new \RuntimeException('Context user not available');
+            throw new ContextPropertyNotSetException('user');
         }
 
         return $this->user;
@@ -115,7 +100,7 @@ class Context extends FrameworkContext
     public function getToken(): TokenInterface
     {
         if ($this->token === null) {
-            throw new \RuntimeException('Context token not available');
+            throw new ContextPropertyNotSetException('token');
         }
 
         return $this->token;
@@ -129,7 +114,7 @@ class Context extends FrameworkContext
     public function getLogId(): int
     {
         if ($this->logId === null) {
-            throw new \RuntimeException('Context log id not available');
+            throw new ContextPropertyNotSetException('logId');
         }
 
         return $this->logId;
@@ -143,7 +128,7 @@ class Context extends FrameworkContext
     public function getOperation(): OperationRow
     {
         if ($this->operation === null) {
-            throw new \RuntimeException('Context operation not available');
+            throw new ContextPropertyNotSetException('operation');
         }
 
         return $this->operation;

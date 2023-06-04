@@ -136,38 +136,51 @@ class Operation
             throw new StatusCode\GoneException('Operation was deleted');
         }
 
+        $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
+
         try {
             $this->operationTable->beginTransaction();
 
             // update operation
-            if (in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true)) {
+            if ($isStable) {
                 // if the operation is stable or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
                 $this->validator->assertOperation($operation, $existing);
 
-                $existing->setActive($operation->getActive());
-                $existing->setPublic($operation->getPublic());
-                $existing->setStability($operation->getStability());
-                $existing->setDescription($operation->getDescription());
-                $existing->setHttpMethod($operation->getHttpMethod());
-                $existing->setHttpPath($operation->getHttpPath());
-                $existing->setName($operation->getName());
-                $existing->setParameters($this->wrapParameters($operation->getParameters()));
-                $existing->setIncoming(Scheme::wrap($operation->getIncoming()));
-                $existing->setOutgoing(Scheme::wrap($operation->getOutgoing()));
-                $existing->setThrows($this->wrapThrows($operation->getThrows()));
-                $existing->setAction($operation->getAction());
-                $existing->setCosts($operation->getCosts());
-                $existing->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
+                $existing->setActive($operation->getActive() ?? $existing->getActive());
+                $existing->setPublic($operation->getPublic() ?? $existing->getPublic());
+                $existing->setStability($operation->getStability() ?? $existing->getStability());
+                $existing->setDescription($operation->getDescription() ?? $existing->getDescription());
+                $existing->setHttpMethod($operation->getHttpMethod() ?? $existing->getHttpMethod());
+                $existing->setHttpPath($operation->getHttpPath() ?? $existing->getHttpPath());
+                $existing->setName($operation->getName() ?? $existing->getName());
+                $parameters = $operation->getParameters();
+                if ($parameters !== null) {
+                    $existing->setParameters($this->wrapParameters($parameters));
+                }
+                $existing->setIncoming(Scheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
+                $existing->setOutgoing(Scheme::wrap($operation->getOutgoing() ?? $existing->getOutgoing()));
+                $throws = $operation->getThrows();
+                if ($throws !== null) {
+                    $existing->setThrows($this->wrapThrows($throws));
+                }
+                $existing->setAction($operation->getAction() ?? $existing->getAction());
+                $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
+                $metadata = $operation->getMetadata();
+                if ($metadata !== null) {
+                    $existing->setMetadata(json_encode($metadata));
+                }
             }
 
             $this->operationTable->update($existing);
 
-            // assign scopes
-            $scopes = $operation->getScopes();
-            if (!empty($scopes)) {
-                $this->scopeService->createForOperation($existing->getCategoryId(), $existing->getId(), $scopes, $context);
+            if (!$isStable) {
+                // assign scopes
+                $scopes = $operation->getScopes();
+                if (!empty($scopes)) {
+                    $this->scopeService->createForOperation($existing->getCategoryId(), $existing->getId(), $scopes, $context);
+                }
             }
 
             $this->operationTable->commit();

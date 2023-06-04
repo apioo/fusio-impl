@@ -69,7 +69,13 @@ class DatabaseParser implements RoutingParserInterface
             $controller = 'operation:' . $row['id'];
             $method = $row['id'];
 
-            $collection->add([$row['http_method']], $row['http_path'], [$controller, $method]);
+            if ($row['http_method'] === 'GET') {
+                $methods = ['OPTIONS', 'HEAD', $row['http_method']];
+            } else {
+                $methods = ['OPTIONS', $row['http_method']];
+            }
+
+            $collection->add($methods, $row['http_path'], [$controller, $method]);
         }
 
         return $collection;

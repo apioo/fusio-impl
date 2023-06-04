@@ -60,11 +60,6 @@ class ActionExecutor implements FilterInterface
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        if ($request->getMethod() === 'OPTIONS') {
-            $filterChain->handle($request, $response);
-            return;
-        }
-
         $arguments = array_merge($request->getUri()->getParameters(), $this->context->getParameters());
 
         $requestContext = new Request\HttpRequestContext($request, $this->context->getParameters());

@@ -54,30 +54,36 @@ class AssertOperation implements FilterInterface
         $operationId = $context->getSource()[1] ?? null;
         $methodName  = $request->getMethod();
 
-        if ($methodName === 'HEAD') {
-            // in case of HEAD we use the schema of the GET request
-            $methodName = 'GET';
-        } elseif ($methodName === 'OPTIONS') {
-            // for OPTIONS request we dont need method details
-            $filterChain->handle($request, $response);
+        $operation = $this->operationTable->find($operationId);
+
+        if ($methodName === 'OPTIONS') {
+            // for OPTIONS requests we only set the available request methods and directly return so the request is very
+            // inexpensive and does not execute any business logic
+            $availableMethods = $this->operationTable->getAvailableMethods($operation->getHttpPath());
+
+            $globalMethods = ['OPTIONS'];
+            if (in_array('GET', $availableMethods)) {
+                $globalMethods[] = 'HEAD';
+            }
+
+            $response->setHeader('Allow', implode(', ', array_merge($globalMethods, $availableMethods)));
+            $response->setHeader('X-Powered-By', 'Fusio');
             return;
         }
-
-        $operation = $this->operationTable->find($operationId);
 
         $context->setOperation($operation);
 
         // add request id
-        $request->setHeader('X-Request-Id', Uuid::pseudoRandom());
-        $request->setHeader('X-Operation-Id', $operation->getName());
-        $request->setHeader('X-Stability', match ($operation->getStability()) {
+        $response->setHeader('X-Request-Id', Uuid::pseudoRandom());
+        $response->setHeader('X-Operation-Id', $operation->getName());
+        $response->setHeader('X-Stability', match ($operation->getStability()) {
             OperationInterface::STABILITY_DEPRECATED => 'deprecated',
             OperationInterface::STABILITY_EXPERIMENTAL => 'experimental',
             OperationInterface::STABILITY_STABLE => 'stable',
             OperationInterface::STABILITY_LEGACY => 'legacy',
             default => 'unknown',
         });
-        $request->setHeader('X-Powered-By', 'Fusio');
+        $response->setHeader('X-Powered-By', 'Fusio');
 
         $filterChain->handle($request, $response);
     }

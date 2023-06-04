@@ -53,20 +53,57 @@ class Validator
     public function assertOperation(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
     {
         $name = $operation->getName();
-        if (empty($name)) {
+        if ($existing === null && empty($name)) {
             throw new StatusCode\BadRequestException('Name must not be empty');
         }
 
-        $this->assertStability($operation->getStability() ?? throw new StatusCode\BadRequestException('Stability must not be empty'));
-        $this->assertHttpPath($operation->getHttpPath() ?? throw new StatusCode\BadRequestException('HTTP path must not be empty'));
-        $this->assertHttpMethod($operation->getHttpMethod() ?? throw new StatusCode\BadRequestException('HTTP method must not be empty'));
-        $this->assertHttpCode($operation->getHttpCode() ?? throw new StatusCode\BadRequestException('HTTP code must not be empty'), 200, 299, 'HTTP code');
+        $stability = $operation->getStability();
+        if ($stability !== null) {
+            $this->assertStability($stability);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('Stability must not be empty');
+        }
+
+        $httpPath = $operation->getHttpPath();
+        if ($httpPath !== null) {
+            $this->assertHttpPath($httpPath);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('HTTP path must not be empty');
+        }
+
+        $httpMethod = $operation->getHttpMethod();
+        if ($httpMethod !== null) {
+            $this->assertHttpMethod($httpMethod);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('HTTP method must not be empty');
+        }
+
+        $httpCode = $operation->getHttpCode();
+        if ($httpCode !== null) {
+            $this->assertHttpCode($httpCode, 200, 299, 'HTTP code');
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('HTTP code must not be empty');
+        }
+
         $this->assertHttpMethodAndPathExisting($operation, $existing);
         $this->assertParameters($operation->getParameters());
         $this->assertIncoming($operation->getIncoming());
-        $this->assertOutgoing($operation->getOutgoing() ?? throw new StatusCode\BadRequestException('Outgoing schema must not be empty'));
+
+        $outgoing = $operation->getOutgoing();
+        if ($outgoing !== null) {
+            $this->assertOutgoing($outgoing);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('Outgoing schema must not be empty');
+        }
+
         $this->assertThrows($operation->getThrows());
-        $this->assertAction($operation->getAction() ?? throw new StatusCode\BadRequestException('Action must not be empty'));
+
+        $action = $operation->getAction();
+        if ($action !== null) {
+            $this->assertAction($operation->getAction());
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('Action must not be empty');
+        }
     }
 
     private function assertStability(int $stability): void

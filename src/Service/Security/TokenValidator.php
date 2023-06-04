@@ -55,12 +55,7 @@ class TokenValidator
 
     public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context): bool
     {
-        if ($requestMethod === 'OPTIONS') {
-            $needsAuth = false;
-        } else {
-            $needsAuth = $context->getOperation()->getPublic() !== 1;
-        }
-
+        $needsAuth = $context->getOperation()->getPublic() !== 1;
         $requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
 
         // authorization is required if the method is not public. In case we get
