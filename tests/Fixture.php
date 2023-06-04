@@ -142,7 +142,7 @@ class Fixture
                 httpCode: 200,
                 outgoing: 'Collection-Schema',
                 public: true,
-                stability: OperationInterface::STABILITY_EXPERIMENTAL
+                stability: OperationInterface::STABILITY_EXPERIMENTAL,
             ),
             'test.createFoo' => new Operation(
                 action: 'Sql-Insert',
@@ -151,6 +151,7 @@ class Fixture
                 httpCode: 201,
                 outgoing: 'Passthru',
                 incoming: 'Entry-Schema',
+                costs: 1,
             ),
             'inspect.get' => new Operation(
                 action: 'Inspect-Action',

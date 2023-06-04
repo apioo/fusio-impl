@@ -75,18 +75,6 @@ class InspectTest extends ControllerDbTestCase
             ],
             "authorization": [
                 "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-            ],
-            "x-request-id": [
-                "[uuid]"
-            ],
-            "x-operation-id": [
-                "inspect.get"
-            ],
-            "x-stability": [
-                "stable"
-            ],
-            "x-powered-by": [
-                "Fusio"
             ]
         },
         "uri_fragments": {
@@ -146,18 +134,6 @@ JSON;
             ],
             "authorization": [
                 "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-            ],
-            "x-request-id": [
-                "[uuid]"
-            ],
-            "x-operation-id": [
-                "inspect.post"
-            ],
-            "x-stability": [
-                "stable"
-            ],
-            "x-powered-by": [
-                "Fusio"
             ]
         },
         "uri_fragments": {
@@ -200,18 +176,6 @@ JSON;
             ],
             "authorization": [
                 "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-            ],
-            "x-request-id": [
-                "[uuid]"
-            ],
-            "x-operation-id": [
-                "inspect.put"
-            ],
-            "x-stability": [
-                "stable"
-            ],
-            "x-powered-by": [
-                "Fusio"
             ]
         },
         "uri_fragments": {
@@ -254,18 +218,6 @@ JSON;
             ],
             "authorization": [
                 "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-            ],
-            "x-request-id": [
-                "[uuid]"
-            ],
-            "x-operation-id": [
-                "inspect.patch"
-            ],
-            "x-stability": [
-                "stable"
-            ],
-            "x-powered-by": [
-                "Fusio"
             ]
         },
         "uri_fragments": {
@@ -306,18 +258,6 @@ JSON;
             ],
             "authorization": [
                 "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
-            ],
-            "x-request-id": [
-                "[uuid]"
-            ],
-            "x-operation-id": [
-                "inspect.delete"
-            ],
-            "x-stability": [
-                "stable"
-            ],
-            "x-powered-by": [
-                "Fusio"
             ]
         },
         "uri_fragments": {

@@ -43,8 +43,9 @@ class Operation
     public ?string $eventName;
     public bool $public;
     public int $stability;
+    public ?int $costs;
 
-    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false, int $stability = OperationInterface::STABILITY_STABLE)
+    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false, int $stability = OperationInterface::STABILITY_STABLE, ?int $costs = null)
     {
         $this->action = $action;
         $this->httpMethod = $httpMethod;
@@ -57,5 +58,6 @@ class Operation
         $this->eventName = $eventName;
         $this->public = $public;
         $this->stability = $stability;
+        $this->costs = $costs;
     }
 }

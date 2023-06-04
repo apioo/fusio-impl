@@ -60,7 +60,7 @@ class Schema implements ParserInterface
             $value  = ltrim($schema, '/');
         }
 
-        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE ' . $column . ' LIKE :value', ['value' => $value]);
+        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE ' . $column . ' = :value', ['value' => $value]);
         if (empty($source)) {
             throw new ParserException('Could not find schema ' . $schema);
         }

@@ -130,7 +130,8 @@ class DataBag
                 Scheme::wrap($incomingName),
                 Scheme::wrap($outgoingName),
                 $this->normalizeThrows($operation->throws, $category),
-                $actionName
+                $actionName,
+                $operation->costs
             );
 
             if (in_array($category, ['backend', 'consumer'])) {
@@ -492,7 +493,7 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?array $metadata = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?int $costs = null, ?array $metadata = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
@@ -510,7 +511,7 @@ class DataBag
             'outgoing' => $outgoing,
             'throws' => \json_encode($throws),
             'action' => $action,
-            'costs' => 0,
+            'costs' => $costs ?? 0,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }

@@ -53,12 +53,12 @@ class SqlTableTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/foo', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
+        $response = $this->sendRequest('/foo', 'GET', [
+            'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ));
+        ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string)$response->getBody();
         $expect = <<<'JSON'
 {
     "totalResults": 2,
@@ -103,14 +103,14 @@ JSON;
 
         foreach ($stabilities as $key => $stability) {
             // update the operation status
-            $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
-                'User-Agent'    => 'Fusio TestCase',
+            $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
+                'User-Agent' => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-            ), json_encode([
+            ], json_encode([
                 'stability' => $stability,
             ]));
 
-            $body   = (string) $response->getBody();
+            $body = (string)$response->getBody();
             $expect = <<<'JSON'
 {
     "success": true,
@@ -122,12 +122,12 @@ JSON;
             $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
             // send request
-            $response = $this->sendRequest('/foo', 'GET', array(
-                'User-Agent'    => 'Fusio TestCase',
+            $response = $this->sendRequest('/foo', 'GET', [
+                'User-Agent' => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-            ));
+            ]);
 
-            $body = (string) $response->getBody();
+            $body = (string)$response->getBody();
 
             $expect = <<<'JSON'
 {
@@ -185,12 +185,12 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('/foo', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
+        $response = $this->sendRequest('/foo', 'POST', [
+            'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ), $body);
+        ], $body);
 
-        $body   = (string) $response->getBody();
+        $body = (string)$response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
@@ -214,11 +214,12 @@ JSON;
     public function testRateLimit()
     {
         for ($i = 0; $i < 10; $i++) {
-            $response = $this->sendRequest('/foo', 'GET', array(
-                'User-Agent' => 'Fusio TestCase'
-            ));
+            $response = $this->sendRequest('/foo', 'GET', [
+                'User-Agent' => 'Fusio TestCase',
+                'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            ]);
 
-            $body = (string) $response->getBody();
+            $body = (string)$response->getBody();
             $data = Parser::decode($body);
 
             if ($i < 8) {
@@ -248,12 +249,12 @@ JSON;
     public function testRateLimitAuthenticated()
     {
         for ($i = 0; $i < 18; $i++) {
-            $response = $this->sendRequest('/foo', 'GET', array(
-                'User-Agent'    => 'Fusio TestCase',
+            $response = $this->sendRequest('/foo', 'GET', [
+                'User-Agent' => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-            ));
+            ]);
 
-            $body = (string) $response->getBody();
+            $body = (string)$response->getBody();
             $data = Parser::decode($body);
 
             if ($i < 8) {
@@ -287,17 +288,17 @@ JSON;
         $this->assertEquals(10, $points);
 
         for ($i = 0; $i < 15; $i++) {
-            $response = $this->sendRequest('/foo', 'POST', array(
-                'User-Agent'    => 'Fusio TestCase',
+            $response = $this->sendRequest('/foo', 'POST', [
+                'User-Agent' => 'Fusio TestCase',
                 'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f',
-                'Content-Type'  => 'application/json',
-            ), \json_encode([
+                'Content-Type' => 'application/json',
+            ], \json_encode([
                 'title' => 'foo',
                 'content' => 'bar',
                 'date' => date('Y-m-d\TH:i:s\Z'),
             ]));
 
-            $body = (string) $response->getBody();
+            $body = (string)$response->getBody();
             $data = Parser::decode($body);
 
             if ($i < 10) {
@@ -342,12 +343,12 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('/foo', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
+        $response = $this->sendRequest('/foo', 'PUT', [
+            'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ), $body);
+        ], $body);
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
         $data = Parser::decode($body);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
@@ -358,12 +359,12 @@ JSON;
 
     public function testHead()
     {
-        $response = $this->sendRequest('/foo', 'HEAD', array(
-            'User-Agent'    => 'Fusio TestCase',
+        $response = $this->sendRequest('/foo', 'HEAD', [
+            'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ));
+        ]);
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertEquals('8', $response->getHeader('RateLimit-Limit'), $body);
@@ -379,11 +380,11 @@ JSON;
 
     public function testOptions()
     {
-        $response = $this->sendRequest('/foo', 'OPTIONS', array(
-            'User-Agent'    => 'Fusio TestCase',
-        ));
+        $response = $this->sendRequest('/foo', 'OPTIONS', [
+            'User-Agent' => 'Fusio TestCase',
+        ]);
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertEquals('OPTIONS, HEAD, GET, POST', $response->getHeader('Allow'), $body);
@@ -393,10 +394,10 @@ JSON;
 
     public function testCorsSimpleRequest()
     {
-        $response = $this->sendRequest('/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
             'Origin' => 'http://foo.example',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -413,14 +414,14 @@ JSON;
 
     public function testCorsPreflightedRequest()
     {
-        $response = $this->sendRequest('/foo', 'OPTIONS', array(
+        $response = $this->sendRequest('/foo', 'OPTIONS', [
             'User-Agent' => 'Fusio TestCase',
             'Origin' => 'http://foo.example',
             'Access-Control-Request-Method' => 'POST',
             'Access-Control-Request-Headers' => 'Content-Type',
-        ));
+        ]);
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertEquals('OPTIONS, HEAD, GET, POST', $response->getHeader('Allow'), $body);

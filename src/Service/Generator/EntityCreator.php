@@ -61,8 +61,8 @@ class EntityCreator
             if (isset($source['$import']) && is_iterable($source['$import'])) {
                 $import = [];
                 foreach ($source['$import'] as $name => $schema) {
-                    if (str_starts_with($schema, 'schema:///')) {
-                        $import[$name] = 'schema:///' . $prefix . '_' . substr($schema, 10);
+                    if (str_starts_with($schema, 'schema://')) {
+                        $import[$name] = 'schema://' . $this->buildName($prefix, ltrim(substr($schema, 9), '/'));
                     } else {
                         $import[$name] = $schema;
                     }
