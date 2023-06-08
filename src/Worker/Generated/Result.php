@@ -25,7 +25,7 @@ class Result
             'var' => 'response',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Response',
+            'class' => '\Fusio\Impl\Worker\Generated\Response',
         ),
         2 => array(
             'var' => 'events',
@@ -34,7 +34,7 @@ class Result
             'etype' => TType::STRUCT,
             'elem' => array(
                 'type' => TType::STRUCT,
-                'class' => '\Fusio\Worker\Generated\Event',
+                'class' => '\Fusio\Impl\Worker\Generated\Event',
                 ),
         ),
         3 => array(
@@ -44,21 +44,21 @@ class Result
             'etype' => TType::STRUCT,
             'elem' => array(
                 'type' => TType::STRUCT,
-                'class' => '\Fusio\Worker\Generated\Log',
+                'class' => '\Fusio\Impl\Worker\Generated\Log',
                 ),
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Response
+     * @var \Fusio\Impl\Worker\Generated\Response
      */
     public $response = null;
     /**
-     * @var \Fusio\Worker\Generated\Event[]
+     * @var \Fusio\Impl\Worker\Generated\Event[]
      */
     public $events = null;
     /**
-     * @var \Fusio\Worker\Generated\Log[]
+     * @var \Fusio\Impl\Worker\Generated\Log[]
      */
     public $logs = null;
 
@@ -98,7 +98,7 @@ class Result
             switch ($fid) {
                 case 1:
                     if ($ftype == TType::STRUCT) {
-                        $this->response = new \Fusio\Worker\Generated\Response();
+                        $this->response = new \Fusio\Impl\Worker\Generated\Response();
                         $xfer += $this->response->read($input);
                     } else {
                         $xfer += $input->skip($ftype);
@@ -112,7 +112,7 @@ class Result
                         $xfer += $input->readListBegin($_etype44, $_size41);
                         for ($_i45 = 0; $_i45 < $_size41; ++$_i45) {
                             $elem46 = null;
-                            $elem46 = new \Fusio\Worker\Generated\Event();
+                            $elem46 = new \Fusio\Impl\Worker\Generated\Event();
                             $xfer += $elem46->read($input);
                             $this->events []= $elem46;
                         }
@@ -129,7 +129,7 @@ class Result
                         $xfer += $input->readListBegin($_etype50, $_size47);
                         for ($_i51 = 0; $_i51 < $_size47; ++$_i51) {
                             $elem52 = null;
-                            $elem52 = new \Fusio\Worker\Generated\Log();
+                            $elem52 = new \Fusio\Impl\Worker\Generated\Log();
                             $xfer += $elem52->read($input);
                             $this->logs []= $elem52;
                         }

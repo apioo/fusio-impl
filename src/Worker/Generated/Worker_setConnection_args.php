@@ -25,12 +25,12 @@ class Worker_setConnection_args
             'var' => 'connection',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Connection',
+            'class' => '\Fusio\Impl\Worker\Generated\Connection',
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Connection
+     * @var \Fusio\Impl\Worker\Generated\Connection
      */
     public $connection = null;
 
@@ -64,7 +64,7 @@ class Worker_setConnection_args
             switch ($fid) {
                 case 1:
                     if ($ftype == TType::STRUCT) {
-                        $this->connection = new \Fusio\Worker\Generated\Connection();
+                        $this->connection = new \Fusio\Impl\Worker\Generated\Connection();
                         $xfer += $this->connection->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

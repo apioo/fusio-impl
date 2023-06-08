@@ -52,15 +52,15 @@ class WorkerProcessor
         if ($bin_accel) {
             $args = thrift_protocol_read_binary_after_message_begin(
                 $input,
-                '\Fusio\Worker\Generated\Worker_setConnection_args',
+                '\Fusio\Impl\Worker\Generated\Worker_setConnection_args',
                 $input->isStrictRead()
             );
         } else {
-            $args = new \Fusio\Worker\Generated\Worker_setConnection_args();
+            $args = new \Fusio\Impl\Worker\Generated\Worker_setConnection_args();
             $args->read($input);
         }
         $input->readMessageEnd();
-        $result = new \Fusio\Worker\Generated\Worker_setConnection_result();
+        $result = new \Fusio\Impl\Worker\Generated\Worker_setConnection_result();
         $result->success = $this->handler_->setConnection($args->connection);
         $bin_accel = ($output instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
@@ -85,15 +85,15 @@ class WorkerProcessor
         if ($bin_accel) {
             $args = thrift_protocol_read_binary_after_message_begin(
                 $input,
-                '\Fusio\Worker\Generated\Worker_setAction_args',
+                '\Fusio\Impl\Worker\Generated\Worker_setAction_args',
                 $input->isStrictRead()
             );
         } else {
-            $args = new \Fusio\Worker\Generated\Worker_setAction_args();
+            $args = new \Fusio\Impl\Worker\Generated\Worker_setAction_args();
             $args->read($input);
         }
         $input->readMessageEnd();
-        $result = new \Fusio\Worker\Generated\Worker_setAction_result();
+        $result = new \Fusio\Impl\Worker\Generated\Worker_setAction_result();
         $result->success = $this->handler_->setAction($args->action);
         $bin_accel = ($output instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
@@ -118,15 +118,15 @@ class WorkerProcessor
         if ($bin_accel) {
             $args = thrift_protocol_read_binary_after_message_begin(
                 $input,
-                '\Fusio\Worker\Generated\Worker_executeAction_args',
+                '\Fusio\Impl\Worker\Generated\Worker_executeAction_args',
                 $input->isStrictRead()
             );
         } else {
-            $args = new \Fusio\Worker\Generated\Worker_executeAction_args();
+            $args = new \Fusio\Impl\Worker\Generated\Worker_executeAction_args();
             $args->read($input);
         }
         $input->readMessageEnd();
-        $result = new \Fusio\Worker\Generated\Worker_executeAction_result();
+        $result = new \Fusio\Impl\Worker\Generated\Worker_executeAction_result();
         $result->success = $this->handler_->executeAction($args->execute);
         $bin_accel = ($output instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {

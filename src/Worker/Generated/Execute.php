@@ -30,13 +30,13 @@ class Execute
             'var' => 'request',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Request',
+            'class' => '\Fusio\Impl\Worker\Generated\Request',
         ),
         3 => array(
             'var' => 'context',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Context',
+            'class' => '\Fusio\Impl\Worker\Generated\Context',
         ),
     );
 
@@ -45,11 +45,11 @@ class Execute
      */
     public $action = null;
     /**
-     * @var \Fusio\Worker\Generated\Request
+     * @var \Fusio\Impl\Worker\Generated\Request
      */
     public $request = null;
     /**
-     * @var \Fusio\Worker\Generated\Context
+     * @var \Fusio\Impl\Worker\Generated\Context
      */
     public $context = null;
 
@@ -96,7 +96,7 @@ class Execute
                     break;
                 case 2:
                     if ($ftype == TType::STRUCT) {
-                        $this->request = new \Fusio\Worker\Generated\Request();
+                        $this->request = new \Fusio\Impl\Worker\Generated\Request();
                         $xfer += $this->request->read($input);
                     } else {
                         $xfer += $input->skip($ftype);
@@ -104,7 +104,7 @@ class Execute
                     break;
                 case 3:
                     if ($ftype == TType::STRUCT) {
-                        $this->context = new \Fusio\Worker\Generated\Context();
+                        $this->context = new \Fusio\Impl\Worker\Generated\Context();
                         $xfer += $this->context->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

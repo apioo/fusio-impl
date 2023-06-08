@@ -16,7 +16,7 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
+class WorkerClient implements \Fusio\Impl\Worker\Generated\WorkerIf
 {
     protected $input_ = null;
     protected $output_ = null;
@@ -38,7 +38,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
 
     public function send_setConnection($connection)
     {
-        $args = new \Fusio\Worker\Generated\Worker_setConnection_args();
+        $args = new \Fusio\Impl\Worker\Generated\Worker_setConnection_args();
         $args->connection = $connection;
         $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
@@ -64,7 +64,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
         if ($bin_accel) {
             $result = thrift_protocol_read_binary(
                 $this->input_,
-                '\Fusio\Worker\Generated\Worker_setConnection_result',
+                '\Fusio\Impl\Worker\Generated\Worker_setConnection_result',
                 $this->input_->isStrictRead()
             );
         } else {
@@ -79,7 +79,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
                 $this->input_->readMessageEnd();
                 throw $x;
             }
-            $result = new \Fusio\Worker\Generated\Worker_setConnection_result();
+            $result = new \Fusio\Impl\Worker\Generated\Worker_setConnection_result();
             $result->read($this->input_);
             $this->input_->readMessageEnd();
         }
@@ -97,7 +97,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
 
     public function send_setAction($action)
     {
-        $args = new \Fusio\Worker\Generated\Worker_setAction_args();
+        $args = new \Fusio\Impl\Worker\Generated\Worker_setAction_args();
         $args->action = $action;
         $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
@@ -123,7 +123,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
         if ($bin_accel) {
             $result = thrift_protocol_read_binary(
                 $this->input_,
-                '\Fusio\Worker\Generated\Worker_setAction_result',
+                '\Fusio\Impl\Worker\Generated\Worker_setAction_result',
                 $this->input_->isStrictRead()
             );
         } else {
@@ -138,7 +138,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
                 $this->input_->readMessageEnd();
                 throw $x;
             }
-            $result = new \Fusio\Worker\Generated\Worker_setAction_result();
+            $result = new \Fusio\Impl\Worker\Generated\Worker_setAction_result();
             $result->read($this->input_);
             $this->input_->readMessageEnd();
         }
@@ -156,7 +156,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
 
     public function send_executeAction($execute)
     {
-        $args = new \Fusio\Worker\Generated\Worker_executeAction_args();
+        $args = new \Fusio\Impl\Worker\Generated\Worker_executeAction_args();
         $args->execute = $execute;
         $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
@@ -182,7 +182,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
         if ($bin_accel) {
             $result = thrift_protocol_read_binary(
                 $this->input_,
-                '\Fusio\Worker\Generated\Worker_executeAction_result',
+                '\Fusio\Impl\Worker\Generated\Worker_executeAction_result',
                 $this->input_->isStrictRead()
             );
         } else {
@@ -197,7 +197,7 @@ class WorkerClient implements \Fusio\Worker\Generated\WorkerIf
                 $this->input_->readMessageEnd();
                 throw $x;
             }
-            $result = new \Fusio\Worker\Generated\Worker_executeAction_result();
+            $result = new \Fusio\Impl\Worker\Generated\Worker_executeAction_result();
             $result->read($this->input_);
             $this->input_->readMessageEnd();
         }

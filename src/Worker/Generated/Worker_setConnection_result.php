@@ -25,12 +25,12 @@ class Worker_setConnection_result
             'var' => 'success',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Message',
+            'class' => '\Fusio\Impl\Worker\Generated\Message',
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Message
+     * @var \Fusio\Impl\Worker\Generated\Message
      */
     public $success = null;
 
@@ -64,7 +64,7 @@ class Worker_setConnection_result
             switch ($fid) {
                 case 0:
                     if ($ftype == TType::STRUCT) {
-                        $this->success = new \Fusio\Worker\Generated\Message();
+                        $this->success = new \Fusio\Impl\Worker\Generated\Message();
                         $xfer += $this->success->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

@@ -25,12 +25,12 @@ class Worker_executeAction_result
             'var' => 'success',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Result',
+            'class' => '\Fusio\Impl\Worker\Generated\Result',
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Result
+     * @var \Fusio\Impl\Worker\Generated\Result
      */
     public $success = null;
 
@@ -64,7 +64,7 @@ class Worker_executeAction_result
             switch ($fid) {
                 case 0:
                     if ($ftype == TType::STRUCT) {
-                        $this->success = new \Fusio\Worker\Generated\Result();
+                        $this->success = new \Fusio\Impl\Worker\Generated\Result();
                         $xfer += $this->success->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

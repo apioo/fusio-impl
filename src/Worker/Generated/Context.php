@@ -35,13 +35,13 @@ class Context
             'var' => 'app',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\App',
+            'class' => '\Fusio\Impl\Worker\Generated\App',
         ),
         4 => array(
             'var' => 'user',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\User',
+            'class' => '\Fusio\Impl\Worker\Generated\User',
         ),
     );
 
@@ -54,11 +54,11 @@ class Context
      */
     public $baseUrl = null;
     /**
-     * @var \Fusio\Worker\Generated\App
+     * @var \Fusio\Impl\Worker\Generated\App
      */
     public $app = null;
     /**
-     * @var \Fusio\Worker\Generated\User
+     * @var \Fusio\Impl\Worker\Generated\User
      */
     public $user = null;
 
@@ -115,7 +115,7 @@ class Context
                     break;
                 case 3:
                     if ($ftype == TType::STRUCT) {
-                        $this->app = new \Fusio\Worker\Generated\App();
+                        $this->app = new \Fusio\Impl\Worker\Generated\App();
                         $xfer += $this->app->read($input);
                     } else {
                         $xfer += $input->skip($ftype);
@@ -123,7 +123,7 @@ class Context
                     break;
                 case 4:
                     if ($ftype == TType::STRUCT) {
-                        $this->user = new \Fusio\Worker\Generated\User();
+                        $this->user = new \Fusio\Impl\Worker\Generated\User();
                         $xfer += $this->user->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

@@ -25,12 +25,12 @@ class Worker_setAction_args
             'var' => 'action',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Action',
+            'class' => '\Fusio\Impl\Worker\Generated\Action',
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Action
+     * @var \Fusio\Impl\Worker\Generated\Action
      */
     public $action = null;
 
@@ -64,7 +64,7 @@ class Worker_setAction_args
             switch ($fid) {
                 case 1:
                     if ($ftype == TType::STRUCT) {
-                        $this->action = new \Fusio\Worker\Generated\Action();
+                        $this->action = new \Fusio\Impl\Worker\Generated\Action();
                         $xfer += $this->action->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

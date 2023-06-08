@@ -25,12 +25,12 @@ class Worker_executeAction_args
             'var' => 'execute',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\Execute',
+            'class' => '\Fusio\Impl\Worker\Generated\Execute',
         ),
     );
 
     /**
-     * @var \Fusio\Worker\Generated\Execute
+     * @var \Fusio\Impl\Worker\Generated\Execute
      */
     public $execute = null;
 
@@ -64,7 +64,7 @@ class Worker_executeAction_args
             switch ($fid) {
                 case 1:
                     if ($ftype == TType::STRUCT) {
-                        $this->execute = new \Fusio\Worker\Generated\Execute();
+                        $this->execute = new \Fusio\Impl\Worker\Generated\Execute();
                         $xfer += $this->execute->read($input);
                     } else {
                         $xfer += $input->skip($ftype);

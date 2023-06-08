@@ -43,7 +43,7 @@ class Request
             'var' => 'context',
             'isRequired' => false,
             'type' => TType::STRUCT,
-            'class' => '\Fusio\Worker\Generated\RequestContext',
+            'class' => '\Fusio\Impl\Worker\Generated\RequestContext',
         ),
     );
 
@@ -56,7 +56,7 @@ class Request
      */
     public $payload = null;
     /**
-     * @var \Fusio\Worker\Generated\RequestContext
+     * @var \Fusio\Impl\Worker\Generated\RequestContext
      */
     public $context = null;
 
@@ -122,7 +122,7 @@ class Request
                     break;
                 case 3:
                     if ($ftype == TType::STRUCT) {
-                        $this->context = new \Fusio\Worker\Generated\RequestContext();
+                        $this->context = new \Fusio\Impl\Worker\Generated\RequestContext();
                         $xfer += $this->context->read($input);
                     } else {
                         $xfer += $input->skip($ftype);
