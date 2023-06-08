@@ -150,7 +150,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         $data = file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json');
-        $data = str_replace('schema:\/\/\/', 'schema:\/\/\/Provider_', $data);
+        $data = str_replace('schema:\/\/', 'schema:\/\/Provider_', $data);
         $data = json_decode($data);
 
         // check schema

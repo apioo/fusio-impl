@@ -4,10 +4,10 @@
       "name": "Human_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/SQL_Get"
+          "Entity": "schema:\/\/Human_0_SQL_Get"
         },
         "definitions": {
-          "SQL_GetAll": {
+          "Human_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -22,24 +22,24 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:SQL_Get"
+                  "$ref": "Entity:Human_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "SQL_GetAll"
+        "$ref": "Human_0_SQL_GetAll"
       }
     },
     {
       "name": "Human_0_SQL_Get",
       "source": {
         "$import": {
-          "Location": "schema:\/\/\/Location_0_SQL_Entity",
-          "Category": "schema:\/\/\/Category_0_SQL_Entity"
+          "Location": "schema:\/\/Location_0_SQL_Get",
+          "Category": "schema:\/\/Category_0_SQL_Get"
         },
         "definitions": {
-          "SQL_Get": {
+          "Human_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -55,7 +55,7 @@
                 "type": "string"
               },
               "location": {
-                "$ref": "Location:Location_0_SQL_Entity"
+                "$ref": "Location:Location_0_SQL_Get"
               },
               "tags": {
                 "description": "",
@@ -66,48 +66,48 @@
               },
               "categories": {
                 "items": {
-                  "$ref": "Category:Category_0_SQL_Entity"
+                  "$ref": "Category:Category_0_SQL_Get"
                 }
               },
               "map": {
                 "additionalProperties": {
-                  "$ref": "Location:Location_0_SQL_Entity"
+                  "$ref": "Location:Location_0_SQL_Get"
                 }
               },
               "union": {
                 "oneOf": [
                   {
-                    "$ref": "Location:Location_0_SQL_Entity"
+                    "$ref": "Location:Location_0_SQL_Get"
                   },
                   {
-                    "$ref": "Category:Category_0_SQL_Entity"
+                    "$ref": "Category:Category_0_SQL_Get"
                   }
                 ]
               },
               "intersection": {
                 "allOf": [
                   {
-                    "$ref": "Human"
+                    "$ref": "Human_0_SQL_Get"
                   },
                   {
-                    "$ref": "Location:Location_0_SQL_Entity"
+                    "$ref": "Location:Location_0_SQL_Get"
                   }
                 ]
               }
             }
           }
         },
-        "$ref": "SQL_Get"
+        "$ref": "Human_0_SQL_Get"
       }
     },
     {
       "name": "Location_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/SQL_Get"
+          "Entity": "schema:\/\/Location_0_SQL_Get"
         },
         "definitions": {
-          "SQL_GetAll": {
+          "Location_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -122,24 +122,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:SQL_Get"
+                  "$ref": "Entity:Location_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "SQL_GetAll"
+        "$ref": "Location_0_SQL_GetAll"
       }
     },
     {
       "name": "Location_0_SQL_Get",
       "source": {
-        "$import": {
-          "Human": "schema:\/\/\/Human_0_SQL_Entity",
-          "Category": "schema:\/\/\/Category_0_SQL_Entity"
-        },
         "definitions": {
-          "SQL_Get": {
+          "Location_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -161,17 +157,17 @@
             }
           }
         },
-        "$ref": "SQL_Get"
+        "$ref": "Location_0_SQL_Get"
       }
     },
     {
       "name": "Category_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/SQL_Get"
+          "Entity": "schema:\/\/Category_0_SQL_Get"
         },
         "definitions": {
-          "SQL_GetAll": {
+          "Category_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -186,24 +182,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:SQL_Get"
+                  "$ref": "Entity:Category_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "SQL_GetAll"
+        "$ref": "Category_0_SQL_GetAll"
       }
     },
     {
       "name": "Category_0_SQL_Get",
       "source": {
-        "$import": {
-          "Human": "schema:\/\/\/Human_0_SQL_Entity",
-          "Location": "schema:\/\/\/Location_0_SQL_Entity"
-        },
         "definitions": {
-          "SQL_Get": {
+          "Category_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -217,7 +209,7 @@
             }
           }
         },
-        "$ref": "SQL_Get"
+        "$ref": "Category_0_SQL_Get"
       }
     }
   ],
@@ -410,7 +402,7 @@
     {
       "description": "Returns a collection of Human",
       "httpMethod": "GET",
-      "httpPath": "human\/",
+      "httpPath": "\/human\/",
       "httpCode": 200,
       "name": "human_0.getAll",
       "outgoing": "Human_0_SQL_GetAll",
@@ -419,7 +411,7 @@
     {
       "description": "Returns a single Human",
       "httpMethod": "GET",
-      "httpPath": "human\/:id",
+      "httpPath": "\/human\/:id",
       "httpCode": 200,
       "name": "human_0.get",
       "outgoing": "Human_0_SQL_Get",
@@ -428,25 +420,27 @@
     {
       "description": "Creates a new Human",
       "httpMethod": "POST",
-      "httpPath": "human\/",
+      "httpPath": "\/human\/",
       "httpCode": 200,
       "name": "human_0.create",
+      "incoming": "Human_0_SQL_Get",
       "outgoing": "Message",
       "action": "Human_0_SQL_Insert"
     },
     {
       "description": "Updates an existing Human",
       "httpMethod": "PUT",
-      "httpPath": "human\/:id",
+      "httpPath": "\/human\/:id",
       "httpCode": 200,
       "name": "human_0.update",
+      "incoming": "Human_0_SQL_Get",
       "outgoing": "Message",
       "action": "Human_0_SQL_Update"
     },
     {
       "description": "Deletes an existing Human",
       "httpMethod": "DELETE",
-      "httpPath": "human\/:id",
+      "httpPath": "\/human\/:id",
       "httpCode": 200,
       "name": "human_0.delete",
       "outgoing": "Message",
@@ -455,7 +449,7 @@
     {
       "description": "Returns a collection of Location",
       "httpMethod": "GET",
-      "httpPath": "location\/",
+      "httpPath": "\/location\/",
       "httpCode": 200,
       "name": "location_0.getAll",
       "outgoing": "Location_0_SQL_GetAll",
@@ -464,7 +458,7 @@
     {
       "description": "Returns a single Location",
       "httpMethod": "GET",
-      "httpPath": "location\/:id",
+      "httpPath": "\/location\/:id",
       "httpCode": 200,
       "name": "location_0.get",
       "outgoing": "Location_0_SQL_Get",
@@ -473,25 +467,27 @@
     {
       "description": "Creates a new Location",
       "httpMethod": "POST",
-      "httpPath": "location\/",
+      "httpPath": "\/location\/",
       "httpCode": 200,
       "name": "location_0.create",
+      "incoming": "Location_0_SQL_Get",
       "outgoing": "Message",
       "action": "Location_0_SQL_Insert"
     },
     {
       "description": "Updates an existing Location",
       "httpMethod": "PUT",
-      "httpPath": "location\/:id",
+      "httpPath": "\/location\/:id",
       "httpCode": 200,
       "name": "location_0.update",
+      "incoming": "Location_0_SQL_Get",
       "outgoing": "Message",
       "action": "Location_0_SQL_Update"
     },
     {
       "description": "Deletes an existing Location",
       "httpMethod": "DELETE",
-      "httpPath": "location\/:id",
+      "httpPath": "\/location\/:id",
       "httpCode": 200,
       "name": "location_0.delete",
       "outgoing": "Message",
@@ -500,7 +496,7 @@
     {
       "description": "Returns a collection of Category",
       "httpMethod": "GET",
-      "httpPath": "category\/",
+      "httpPath": "\/category\/",
       "httpCode": 200,
       "name": "category_0.getAll",
       "outgoing": "Category_0_SQL_GetAll",
@@ -509,7 +505,7 @@
     {
       "description": "Returns a single Category",
       "httpMethod": "GET",
-      "httpPath": "category\/:id",
+      "httpPath": "\/category\/:id",
       "httpCode": 200,
       "name": "category_0.get",
       "outgoing": "Category_0_SQL_Get",
@@ -518,25 +514,27 @@
     {
       "description": "Creates a new Category",
       "httpMethod": "POST",
-      "httpPath": "category\/",
+      "httpPath": "\/category\/",
       "httpCode": 200,
       "name": "category_0.create",
+      "incoming": "Category_0_SQL_Get",
       "outgoing": "Message",
       "action": "Category_0_SQL_Insert"
     },
     {
       "description": "Updates an existing Category",
       "httpMethod": "PUT",
-      "httpPath": "category\/:id",
+      "httpPath": "\/category\/:id",
       "httpCode": 200,
       "name": "category_0.update",
+      "incoming": "Category_0_SQL_Get",
       "outgoing": "Message",
       "action": "Category_0_SQL_Update"
     },
     {
       "description": "Deletes an existing Category",
       "httpMethod": "DELETE",
-      "httpPath": "category\/:id",
+      "httpPath": "\/category\/:id",
       "httpCode": 200,
       "name": "category_0.delete",
       "outgoing": "Message",
