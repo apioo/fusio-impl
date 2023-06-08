@@ -184,7 +184,7 @@ class SpecificationBuilder
             $arguments->add($name, new Operation\Argument($in, $this->schemaParser->parseType($schema)));
         }
     }
-//
+
     private function getNameForSchema(string $source, SchemaInterface $schema): string
     {
         $root = $schema->getType();
