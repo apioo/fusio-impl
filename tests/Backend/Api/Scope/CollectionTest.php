@@ -236,6 +236,26 @@ JSON;
             'operation_id' => 179,
             'allow' => 1,
             'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 178,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 177,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 176,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 175,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ]], $operations);
     }
 
