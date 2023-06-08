@@ -53,7 +53,7 @@ class User extends Generated\UserTable
             return false;
         }
 
-        if (!$verifyOld || password_verify($oldPassword, $password)) {
+        if (!$verifyOld || password_verify($oldPassword ?? '', $password)) {
             $this->connection->update('fusio_user', [
                 'password' => \password_hash($newPassword, PASSWORD_DEFAULT),
             ], [

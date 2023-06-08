@@ -69,7 +69,7 @@ class Scope extends Generated\ScopeTable
         $result = $this->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
         $scopes = [];
         foreach ($result as $row) {
-            $scopes[$row[self::COLUMN_NAME]] = $row[self::COLUMN_DESCRIPTION];
+            $scopes[$row->getName()] = $row->getDescription();
         }
 
         return $scopes;

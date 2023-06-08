@@ -67,6 +67,11 @@ class Allocation extends Generated\RateAllocationTable
 
         $sql.= ' ORDER BY rate.priority DESC';
 
-        return $this->connection->fetchAssociative($sql, $params);
+        $row = $this->connection->fetchAssociative($sql, $params);
+        if (empty($row)) {
+            throw new \RuntimeException('Could not find rate for request');
+        }
+
+        return $row;
     }
 }
