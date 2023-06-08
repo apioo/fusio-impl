@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
@@ -54,7 +55,7 @@ class Revoke implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $requestContext = $request->getContext();
-        if ($requestContext instanceof HttpRequest) {
+        if ($requestContext instanceof HttpRequestContext) {
             $token = $this->getTokenByHttp($requestContext);
         } else {
             $token = $request->get('token');
@@ -78,10 +79,10 @@ class Revoke implements ActionInterface
         }
     }
 
-    private function getTokenByHttp(HttpRequest $request): ?string
+    private function getTokenByHttp(HttpRequestContext $requestContext): ?string
     {
-        $header = $request->getHeader('Authorization');
-        $parts  = explode(' ', $header ?? '', 2);
+        $header = $requestContext->getRequest()->getHeader('Authorization');
+        $parts  = explode(' ', $header, 2);
         $type   = $parts[0] ?? null;
         $token  = $parts[1] ?? null;
 
