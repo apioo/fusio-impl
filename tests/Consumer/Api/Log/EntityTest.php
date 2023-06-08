@@ -58,7 +58,7 @@ class EntityTest extends ControllerDbTestCase
     "userAgent": "Fusio TestCase",
     "method": "GET",
     "path": "\/consumer\/log\/3",
-    "header": "User-Agent: Fusio TestCase\nAuthorization: Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2\nX-Request-Id: [uuid]\nX-Operation-Id: consumer.log.get\nX-Stability: stable\nX-Powered-By: Fusio",
+    "header": "User-Agent: Fusio TestCase\nAuthorization: Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2",
     "date": "[datetime]"
 }
 JSON;
