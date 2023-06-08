@@ -165,7 +165,7 @@ JSON;
 
         // check routes
         foreach ($data->operations as $operation) {
-            $path = '/provider' . $operation->httpPath;
+            $path = rtrim('/provider' . $operation->httpPath, '/');
             Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'provider.' . $operation->name, $operation->httpMethod, $path, ['provider']);
         }
     }

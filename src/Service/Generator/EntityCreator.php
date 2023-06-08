@@ -58,17 +58,17 @@ class EntityCreator
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $source = $record->getSource();
-            if (isset($source['$import']) && is_iterable($source['$import'])) {
-                $import = [];
-                foreach ($source['$import'] as $name => $schema) {
+            $import = $source?->get('$import');
+            if (is_iterable($import) || $import instanceof \stdClass) {
+                $result = [];
+                foreach ($import as $name => $schema) {
                     if (str_starts_with($schema, 'schema://')) {
-                        $import[$name] = 'schema://' . $this->buildName($prefix, ltrim(substr($schema, 9), '/'));
+                        $result[$name] = 'schema://' . $this->buildName($prefix, ltrim(substr($schema, 9), '/'));
                     } else {
-                        $import[$name] = $schema;
+                        $result[$name] = $schema;
                     }
                 }
-                $source['$import'] = $import;
-                $record->setSource($source);
+                $source->put('$import', $result);
             }
 
             $id = $this->schemaService->exists($record->getName() ?? '');
@@ -145,10 +145,11 @@ class EntityCreator
 
     private function buildName(string $prefix, string $name, string $separator = '_', bool $pascalCase = true): string
     {
-        $parts = explode('_', $prefix . '_' . $name);
+        $parts = explode('_', $prefix);
         $parts = array_filter($parts, function ($value) {
             return $value !== '';
         });
+        $parts[] = $name;
         if ($pascalCase) {
             $parts = array_map('ucfirst', $parts);
         } else {
