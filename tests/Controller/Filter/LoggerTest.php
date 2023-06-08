@@ -29,6 +29,7 @@ use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Log;
 use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
@@ -70,7 +71,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['operation_id']);
+        $this->assertEquals(175, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -105,7 +106,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['operation_id']);
+        $this->assertEquals(175, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -141,7 +142,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['operation_id']);
+        $this->assertEquals(175, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -228,10 +229,10 @@ class LoggerTest extends DbTestCase
     {
         $app = new App(false, 1, 0, 0, '', '', '', [], []);
         $user = new User(false, 1, 0, 0, 0, '', '', 0);
+        $id = Fixture::getId('fusio_operation', 'test.listFoo');
 
-        $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find(1);
+        $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
 
-        $context->setOperationId(1);
         $context->setOperation($row);
         $context->setCategoryId(1);
         $context->setApp($app);
