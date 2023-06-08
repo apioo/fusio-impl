@@ -119,7 +119,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
         ));
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testPut()
@@ -128,7 +128,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
         ));
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testPatch()
@@ -137,7 +137,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
         ));
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testDelete()
@@ -146,7 +146,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
         ));
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
 }
