@@ -14,7 +14,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserPasswordReset"
+            "$ref": "UserPasswordReset"
           }
         }
       },
@@ -40,7 +40,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserEmail"
+            "$ref": "UserEmail"
           }
         }
       },
@@ -66,7 +66,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserRegister"
+            "$ref": "UserRegister"
           }
         }
       },
@@ -85,7 +85,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_UserJWT"
+          "$ref": "UserJWT"
         }
       },
       "arguments": {
@@ -98,7 +98,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserProvider"
+            "$ref": "UserProvider"
           }
         }
       },
@@ -117,14 +117,14 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_UserJWT"
+          "$ref": "UserJWT"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserRefresh"
+            "$ref": "UserRefresh"
           }
         }
       },
@@ -143,14 +143,14 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_UserJWT"
+          "$ref": "UserJWT"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserLogin"
+            "$ref": "UserLogin"
           }
         }
       },
@@ -169,17 +169,38 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_AuthorizeResponse"
+          "$ref": "AuthorizeResponse"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_AuthorizeRequest"
+            "$ref": "AuthorizeRequest"
           }
         }
       },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.account"
+      ],
+      "authorization": true,
+      "tags": [
+        "consumer.account"
+      ]
+    },
+    "consumer.account.getApp": {
+      "path": "/consumer/authorize",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "AuthorizeMeta"
+        }
+      },
+      "arguments": [],
       "throws": [],
       "description": "",
       "stability": 1,
@@ -204,7 +225,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserActivate"
+            "$ref": "UserActivate"
           }
         }
       },
@@ -230,7 +251,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_AccountChangePassword"
+            "$ref": "AccountChangePassword"
           }
         }
       },
@@ -258,7 +279,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_UserAccount"
+            "$ref": "UserAccount"
           }
         }
       },
@@ -279,7 +300,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_UserAccount"
+          "$ref": "UserAccount"
         }
       },
       "arguments": [],
@@ -300,7 +321,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_Transaction"
+          "$ref": "Transaction"
         }
       },
       "arguments": {
@@ -328,7 +349,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_TransactionCollection"
+          "$ref": "TransactionCollection"
         }
       },
       "arguments": [],
@@ -390,7 +411,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_EventSubscriptionUpdate"
+            "$ref": "EventSubscriptionUpdate"
           }
         }
       },
@@ -411,7 +432,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_EventSubscription"
+          "$ref": "EventSubscription"
         }
       },
       "arguments": {
@@ -446,7 +467,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_EventSubscriptionCreate"
+            "$ref": "EventSubscriptionCreate"
           }
         }
       },
@@ -467,7 +488,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_EventSubscriptionCollection"
+          "$ref": "EventSubscriptionCollection"
         }
       },
       "arguments": [],
@@ -488,7 +509,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_ScopeCollection"
+          "$ref": "ScopeCollection"
         }
       },
       "arguments": [],
@@ -509,7 +530,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_Plan"
+          "$ref": "Plan"
         }
       },
       "arguments": {
@@ -537,7 +558,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_PlanCollection"
+          "$ref": "PlanCollection"
         }
       },
       "arguments": [],
@@ -558,7 +579,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_PaymentCheckoutResponse"
+          "$ref": "PaymentCheckoutResponse"
         }
       },
       "arguments": {
@@ -571,7 +592,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_PaymentCheckoutRequest"
+            "$ref": "PaymentCheckoutRequest"
           }
         }
       },
@@ -592,7 +613,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_PaymentPortalResponse"
+          "$ref": "PaymentPortalResponse"
         }
       },
       "arguments": {
@@ -605,7 +626,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_PaymentPortalRequest"
+            "$ref": "PaymentPortalRequest"
           }
         }
       },
@@ -626,7 +647,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_Page"
+          "$ref": "Page"
         }
       },
       "arguments": {
@@ -654,7 +675,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_PageCollection"
+          "$ref": "PageCollection"
         }
       },
       "arguments": [],
@@ -675,7 +696,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_Log"
+          "$ref": "Log"
         }
       },
       "arguments": {
@@ -703,7 +724,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_LogCollection"
+          "$ref": "LogCollection"
         }
       },
       "arguments": [],
@@ -752,7 +773,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_GrantCollection"
+          "$ref": "GrantCollection"
         }
       },
       "arguments": [],
@@ -773,7 +794,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_EventCollection"
+          "$ref": "EventCollection"
         }
       },
       "arguments": [],
@@ -835,7 +856,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_AppUpdate"
+            "$ref": "AppUpdate"
           }
         }
       },
@@ -856,7 +877,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_App"
+          "$ref": "App"
         }
       },
       "arguments": {
@@ -891,7 +912,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_AppCreate"
+            "$ref": "AppCreate"
           }
         }
       },
@@ -912,7 +933,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_AppCollection"
+          "$ref": "AppCollection"
         }
       },
       "arguments": [],
@@ -1043,6 +1064,23 @@
         "scopes"
       ]
     },
+    "AuthorizeMeta": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "Scope"
+          }
+        }
+      }
+    },
     "AuthorizeRequest": {
       "type": "object",
       "properties": {
@@ -1106,9 +1144,6 @@
         }
       }
     },
-    "Backend_AccountChangePassword": {
-      "$ref": "AccountChangePassword"
-    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -1128,108 +1163,6 @@
           }
         }
       }
-    },
-    "Consumer_App": {
-      "$ref": "App"
-    },
-    "Consumer_AppCollection": {
-      "$ref": "AppCollection"
-    },
-    "Consumer_AppCreate": {
-      "$ref": "AppCreate"
-    },
-    "Consumer_AppUpdate": {
-      "$ref": "AppUpdate"
-    },
-    "Consumer_AuthorizeRequest": {
-      "$ref": "AuthorizeRequest"
-    },
-    "Consumer_AuthorizeResponse": {
-      "$ref": "AuthorizeResponse"
-    },
-    "Consumer_EventCollection": {
-      "$ref": "EventCollection"
-    },
-    "Consumer_EventSubscription": {
-      "$ref": "EventSubscription"
-    },
-    "Consumer_EventSubscriptionCollection": {
-      "$ref": "EventSubscriptionCollection"
-    },
-    "Consumer_EventSubscriptionCreate": {
-      "$ref": "EventSubscriptionCreate"
-    },
-    "Consumer_EventSubscriptionUpdate": {
-      "$ref": "EventSubscriptionUpdate"
-    },
-    "Consumer_GrantCollection": {
-      "$ref": "GrantCollection"
-    },
-    "Consumer_Log": {
-      "$ref": "Log"
-    },
-    "Consumer_LogCollection": {
-      "$ref": "LogCollection"
-    },
-    "Consumer_Page": {
-      "$ref": "Page"
-    },
-    "Consumer_PageCollection": {
-      "$ref": "PageCollection"
-    },
-    "Consumer_PaymentCheckoutRequest": {
-      "$ref": "PaymentCheckoutRequest"
-    },
-    "Consumer_PaymentCheckoutResponse": {
-      "$ref": "PaymentCheckoutResponse"
-    },
-    "Consumer_PaymentPortalRequest": {
-      "$ref": "PaymentPortalRequest"
-    },
-    "Consumer_PaymentPortalResponse": {
-      "$ref": "PaymentPortalResponse"
-    },
-    "Consumer_Plan": {
-      "$ref": "Plan"
-    },
-    "Consumer_PlanCollection": {
-      "$ref": "PlanCollection"
-    },
-    "Consumer_ScopeCollection": {
-      "$ref": "ScopeCollection"
-    },
-    "Consumer_Transaction": {
-      "$ref": "Transaction"
-    },
-    "Consumer_TransactionCollection": {
-      "$ref": "TransactionCollection"
-    },
-    "Consumer_UserAccount": {
-      "$ref": "UserAccount"
-    },
-    "Consumer_UserActivate": {
-      "$ref": "UserActivate"
-    },
-    "Consumer_UserEmail": {
-      "$ref": "UserEmail"
-    },
-    "Consumer_UserJWT": {
-      "$ref": "UserJWT"
-    },
-    "Consumer_UserLogin": {
-      "$ref": "UserLogin"
-    },
-    "Consumer_UserPasswordReset": {
-      "$ref": "UserPasswordReset"
-    },
-    "Consumer_UserProvider": {
-      "$ref": "UserProvider"
-    },
-    "Consumer_UserRefresh": {
-      "$ref": "UserRefresh"
-    },
-    "Consumer_UserRegister": {
-      "$ref": "UserRegister"
     },
     "Event": {
       "type": "object",
@@ -1397,6 +1330,9 @@
           "type": "boolean"
         },
         "message": {
+          "type": "string"
+        },
+        "id": {
           "type": "string"
         }
       }

@@ -31,7 +31,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_Schema"
+          "$ref": "Schema"
         }
       },
       "arguments": {
@@ -55,7 +55,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_Route"
+          "$ref": "Route"
         }
       },
       "arguments": [],
@@ -72,7 +72,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_HealthCheck"
+          "$ref": "HealthCheck"
         }
       },
       "arguments": [],
@@ -89,14 +89,14 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Model_Passthru"
+          "$ref": "Passthru"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Model_Passthru"
+            "$ref": "Passthru"
           }
         }
       },
@@ -113,7 +113,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_About"
+          "$ref": "About"
         }
       },
       "arguments": [],
@@ -242,11 +242,11 @@
         },
         "message": {
           "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       }
-    },
-    "Model_Passthru": {
-      "$ref": "Passthru"
     },
     "Passthru": {
       "description": "No schema information available",
@@ -297,18 +297,6 @@
       "additionalProperties": {
         "type": "any"
       }
-    },
-    "System_About": {
-      "$ref": "About"
-    },
-    "System_HealthCheck": {
-      "$ref": "HealthCheck"
-    },
-    "System_Route": {
-      "$ref": "Route"
-    },
-    "System_Schema": {
-      "$ref": "Schema"
     }
   }
 }

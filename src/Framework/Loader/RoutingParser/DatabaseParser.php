@@ -66,7 +66,7 @@ class DatabaseParser implements RoutingParserInterface
         $result = $this->connection->fetchAllAssociative($sql, $params);
 
         foreach ($result as $row) {
-            $controller = 'operation:' . $row['id'];
+            $controller = 'operation://' . $row['id'];
             $method = $row['id'];
 
             if ($row['http_method'] === 'GET') {

@@ -21,38 +21,28 @@
 
 namespace Fusio\Impl\Framework\Api\Parser;
 
-use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Service\Operation\SpecificationBuilder;
-use PSX\Api\Parser\Attribute;
 use PSX\Api\ParserInterface;
-use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
-use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
- * DatabaseSchema
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class DatabaseSchema implements ParserInterface
+class Operation implements ParserInterface
 {
     private SpecificationBuilder $builder;
-    private Attribute $attributeParser;
 
-    public function __construct(SpecificationBuilder $builder, Attribute $attributeParser)
+    public function __construct(SpecificationBuilder $builder)
     {
         $this->builder = $builder;
-        $this->attributeParser = $attributeParser;
     }
 
     public function parse(string $schema): SpecificationInterface
     {
-        if (str_starts_with($schema, 'operation:')) {
-            return $this->builder->build(substr($schema, 10));
-        } else {
-            return $this->attributeParser->parse($schema);
-        }
+        return $this->builder->build((int)$schema);
     }
 }

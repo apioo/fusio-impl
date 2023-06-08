@@ -42,9 +42,9 @@ class GeneratorFactory extends ApiGeneratorFactory
     private Table\Scope $scopeTable;
     private Service\Config $configService;
 
-    public function __construct(Table\Scope $scopeTable, Service\Config $configService, string $namespace, string $url, string $dispatch)
+    public function __construct(Table\Scope $scopeTable, Service\Config $configService, string $url, string $dispatch)
     {
-        parent::__construct($namespace, $url, $dispatch);
+        parent::__construct($url, $dispatch);
 
         $this->scopeTable    = $scopeTable;
         $this->configService = $configService;

@@ -22,13 +22,16 @@
 namespace Fusio\Impl\Service\Operation;
 
 use Fusio\Impl\Table;
+use PSX\Api\Exception\InvalidApiException;
 use PSX\Api\Operation;
 use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\Type\ReferenceType;
 use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 
@@ -92,9 +95,12 @@ class SpecificationBuilder
             throw new \RuntimeException('Provided no outgoing schema');
         }
 
-        $definitions->addSchema($outgoing, $this->schemaManager->getSchema($outgoing));
+        $schema = $this->schemaManager->getSchema($outgoing);
+        $name = $this->getNameForSchema($outgoing, $schema);
 
-        return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($outgoing));
+        $definitions->addSchema($name, $this->schemaManager->getSchema($outgoing));
+
+        return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($name));
     }
 
     private function getArguments(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Arguments
@@ -105,9 +111,12 @@ class SpecificationBuilder
 
         $incoming = $row->getIncoming();
         if (!empty($incoming)) {
-            $definitions->addSchema($incoming, $this->schemaManager->getSchema($incoming));
+            $schema = $this->schemaManager->getSchema($incoming);
+            $name = $this->getNameForSchema($incoming, $schema);
 
-            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($incoming)));
+            $definitions->addSchema($name, $this->schemaManager->getSchema($incoming));
+
+            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($name)));
         }
 
         $parameters = \json_decode($row->getParameters());
@@ -175,16 +184,19 @@ class SpecificationBuilder
             $arguments->add($name, new Operation\Argument($in, $this->schemaParser->parseType($schema)));
         }
     }
-
-    private function buildQueryParametersFromSchema(Operation\Arguments $arguments, string $parameters): void
+//
+    private function getNameForSchema(string $source, SchemaInterface $schema): string
     {
-        $schema = $this->schemaManager->getSchema($parameters);
-        if (!$schema instanceof StructType) {
-            return;
+        $root = $schema->getType();
+        if ($root instanceof ReferenceType) {
+            return $root->getRef();
         }
 
-        foreach ($schema->getProperties() as $name => $property) {
-            $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_QUERY, $property));
+        $pos = strpos($source, '://');
+        if ($pos === false) {
+            return $source;
         }
+
+        return substr($source, $pos + 3);
     }
 }

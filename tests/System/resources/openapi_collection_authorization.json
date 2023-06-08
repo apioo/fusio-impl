@@ -7,16 +7,20 @@
             "return": {
                 "code": 200,
                 "schema": {
-                    "$ref": "Backend_User"
+                    "$ref": "User"
                 }
             },
             "arguments": [],
             "throws": [],
             "description": "",
             "stability": 1,
-            "security": [],
+            "security": [
+                "authorization"
+            ],
             "authorization": true,
-            "tags": []
+            "tags": [
+                "authorization"
+            ]
         },
         "authorization.revoke": {
             "path": "/authorization/revoke",
@@ -31,9 +35,13 @@
             "throws": [],
             "description": "",
             "stability": 1,
-            "security": [],
+            "security": [
+                "authorization"
+            ],
             "authorization": true,
-            "tags": []
+            "tags": [
+                "authorization"
+            ]
         }
     },
     "definitions": {
@@ -117,9 +125,6 @@
                 }
             }
         },
-        "Backend_User": {
-            "$ref": "User"
-        },
         "Message": {
             "type": "object",
             "properties": {
@@ -127,6 +132,9 @@
                     "type": "boolean"
                 },
                 "message": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }

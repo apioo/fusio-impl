@@ -15,14 +15,6 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Impl\Factory\Resolver;
-use Fusio\Impl\Framework\Api\Parser\DatabaseSchema;
-use Fusio\Impl\Framework\Api\Scanner\FilterFactory;
-use Fusio\Impl\Framework\Filter\ActionExecutorFactory;
-use Fusio\Impl\Framework\Filter\CompositeExecutorFactory;
-use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Framework\Loader\ControllerResolver;
-use Fusio\Impl\Framework\Loader\RoutingParser\CompositeParser;
-use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
@@ -33,9 +25,7 @@ use Fusio\Impl\Service\Action\Queue\Producer;
 use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
-use PSX\Api\ParserInterface;
-use PSX\Api\Scanner\FilterFactoryInterface;
-use PSX\Framework\Controller\ControllerInterface;
+use PSX\Api;
 use PSX\Framework\Dependency\Configurator;
 use PSX\Framework\Filter\ControllerExecutorFactoryInterface;
 use PSX\Framework\Loader\ContextFactoryInterface;
@@ -43,9 +33,7 @@ use PSX\Framework\Loader\ControllerResolverInterface;
 use PSX\Framework\Loader\RoutingParser\CachedParser;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
-use PSX\Schema\Parser\TypeSchema\ImportResolver;
-use PSX\Schema\Parser\TypeSchema\Resolver as TypeSchemaResolver;
-use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -147,22 +135,19 @@ return static function (ContainerConfigurator $container) {
     $services->set(Provider\PaymentProvider::class);
     $services->set(Provider\UserProvider::class);
 
-    $services->set(ContextFactory::class);
-    $services->alias(ContextFactoryInterface::class, ContextFactory::class);
+    $services->set(Framework\Loader\ContextFactory::class);
+    $services->alias(ContextFactoryInterface::class, Framework\Loader\ContextFactory::class);
 
     // psx
-    $services->set(DatabaseParser::class);
-    $services->set(CompositeParser::class);
+    $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);
+    $services->set(Framework\Loader\RoutingParser\CompositeParser::class);
     $services->set(CachedParser::class)
         ->args([
-            service(CompositeParser::class),
+            service(Framework\Loader\RoutingParser\CompositeParser::class),
             service(CacheItemPoolInterface::class),
             param('psx_debug'),
         ]);
     $services->alias(RoutingParserInterface::class, CachedParser::class);
-
-    $services->set(DatabaseSchema::class);
-    $services->alias(ParserInterface::class, DatabaseSchema::class);
 
     $services->set(UserAgentEnforcer::class)
         ->public();
@@ -170,19 +155,23 @@ return static function (ContainerConfigurator $container) {
     $services->set(Psr16Cache::class);
     $services->alias(CacheInterface::class, Psr16Cache::class);
 
-    $services->set(ActionExecutorFactory::class);
-    $services->set(CompositeExecutorFactory::class);
-    $services->alias(ControllerExecutorFactoryInterface::class, CompositeExecutorFactory::class);
+    $services->set(Framework\Filter\ActionExecutorFactory::class);
+    $services->set(Framework\Filter\CompositeExecutorFactory::class);
+    $services->alias(ControllerExecutorFactoryInterface::class, Framework\Filter\CompositeExecutorFactory::class);
 
-    $services->set(ControllerResolver::class);
-    $services->alias(ControllerResolverInterface::class, ControllerResolver::class);
+    $services->set(Framework\Loader\ControllerResolver::class);
+    $services->alias(ControllerResolverInterface::class, Framework\Loader\ControllerResolver::class);
 
-    $services->set(FilterFactory::class);
-    $services->alias(FilterFactoryInterface::class, FilterFactory::class);
+    $services->set(Framework\Api\Scanner\FilterFactory::class);
+    $services->alias(Api\Scanner\FilterFactoryInterface::class, Framework\Api\Scanner\FilterFactory::class);
 
     $services->set(Framework\Schema\Parser\Schema::class);
-    $services->get(\PSX\Schema\SchemaManager::class)
+    $services->get(Schema\SchemaManager::class)
         ->call('register', ['schema', service(Framework\Schema\Parser\Schema::class)]);
+
+    $services->set(Framework\Api\Parser\Operation::class);
+    $services->get(Api\ApiManager::class)
+        ->call('register', ['operation', service(Framework\Api\Parser\Operation::class)]);
 
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();

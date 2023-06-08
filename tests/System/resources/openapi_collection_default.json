@@ -27,73 +27,17 @@
       "throws": [],
       "description": "",
       "stability": 1,
-      "security": [],
+      "security": [
+        "bar"
+      ],
       "authorization": true,
-      "tags": []
+      "tags": [
+        "bar"
+      ]
     },
     "inspect.patch": {
       "path": "/inspect/:foo",
       "method": "PATCH",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Passthru"
-        }
-      },
-      "arguments": {
-        "foo": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "$ref": "Passthru"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "inspect.put": {
-      "path": "/inspect/:foo",
-      "method": "PUT",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Passthru"
-        }
-      },
-      "arguments": {
-        "foo": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "$ref": "Passthru"
-          }
-        }
-      },
-      "throws": [],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": []
-    },
-    "inspect.post": {
-      "path": "/inspect/:foo",
-      "method": "POST",
       "return": {
         "code": 200,
         "schema": {
@@ -122,6 +66,76 @@
       ],
       "authorization": true,
       "tags": [
+        "bar"
+      ]
+    },
+    "inspect.put": {
+      "path": "/inspect/:foo",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "inspect.post": {
+      "path": "/inspect/:foo",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "foo",
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "foo",
         "bar"
       ]
     },
@@ -152,11 +166,13 @@
       "description": "",
       "stability": 1,
       "security": [
-        "foo"
+        "foo",
+        "bar"
       ],
       "authorization": true,
       "tags": [
-        "foo"
+        "foo",
+        "bar"
       ]
     },
     "test.createFoo": {
@@ -172,7 +188,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Entry-Schema"
+            "$ref": "Entry"
           }
         }
       },
@@ -193,16 +209,14 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Collection-Schema"
+          "$ref": "Collection"
         }
       },
       "arguments": [],
       "throws": [],
       "description": "",
       "stability": 1,
-      "security": [
-        "bar"
-      ],
+      "security": [],
       "authorization": true,
       "tags": [
         "bar"
@@ -214,7 +228,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_About"
+          "$ref": "About"
         }
       },
       "arguments": [],
@@ -318,9 +332,6 @@
         }
       }
     },
-    "Collection-Schema": {
-      "$ref": "Collection"
-    },
     "Entry": {
       "type": "object",
       "properties": {
@@ -339,18 +350,12 @@
         }
       }
     },
-    "Entry-Schema": {
-      "$ref": "Entry"
-    },
     "Passthru": {
       "description": "No schema information available",
       "type": "object",
       "additionalProperties": {
         "type": "any"
       }
-    },
-    "System_About": {
-      "$ref": "About"
     }
   }
 }

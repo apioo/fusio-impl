@@ -41,11 +41,12 @@ use Fusio\Model\Backend\SchemaSource;
 use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\Operation\Response;
 use PSX\Api\OperationInterface;
-use PSX\Api\Resource;
+use PSX\Api\Parser;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\Schema;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaResolver;
 use PSX\Schema\Type;
 use PSX\Schema\TypeFactory;
@@ -61,6 +62,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class OpenAPI implements ProviderInterface
 {
+    private SchemaManagerInterface $schemaManager;
+
+    public function __construct(SchemaManagerInterface $schemaManager)
+    {
+        $this->schemaManager = $schemaManager;
+    }
+
     public function getName(): string
     {
         return 'Import-OpenAPI';
@@ -117,7 +125,7 @@ class OpenAPI implements ProviderInterface
         $data = \json_decode($schema);
         $baseUrl = $data->servers[0]->url ?? '';
 
-        $parser = new \PSX\Api\Parser\OpenAPI();
+        $parser = new Parser\OpenAPI($this->schemaManager);
 
         return $parser->parse($schema);
     }

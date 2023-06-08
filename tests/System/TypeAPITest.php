@@ -41,7 +41,7 @@ class TypeAPITest extends ControllerDbTestCase
     }
 
     /**
-     * @dataProvider providerDebugCollectionStatus
+     * @dataProvider providerFilter
      */
     public function testGetCollection(string $category)
     {
@@ -58,7 +58,7 @@ class TypeAPITest extends ControllerDbTestCase
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
-    public function providerDebugCollectionStatus()
+    public function providerFilter()
     {
         return [
             ['default'],

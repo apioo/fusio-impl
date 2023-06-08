@@ -48,7 +48,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_UserUpdate"
+            "$ref": "UserUpdate"
           }
         }
       },
@@ -69,7 +69,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_User"
+          "$ref": "User"
         }
       },
       "arguments": {
@@ -104,7 +104,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_UserCreate"
+            "$ref": "UserCreate"
           }
         }
       },
@@ -125,7 +125,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_UserCollection"
+          "$ref": "UserCollection"
         }
       },
       "arguments": [],
@@ -159,7 +159,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_TrashRestore"
+            "$ref": "TrashRestore"
           }
         }
       },
@@ -180,7 +180,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_TrashDataCollection"
+          "$ref": "TrashDataCollection"
         }
       },
       "arguments": {
@@ -208,7 +208,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_TrashTypes"
+          "$ref": "TrashTypes"
         }
       },
       "arguments": [],
@@ -229,7 +229,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Transaction"
+          "$ref": "Transaction"
         }
       },
       "arguments": {
@@ -257,7 +257,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_TransactionCollection"
+          "$ref": "TransactionCollection"
         }
       },
       "arguments": [],
@@ -278,7 +278,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -299,7 +299,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -320,7 +320,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -341,7 +341,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -362,7 +362,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -383,7 +383,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -404,7 +404,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -425,7 +425,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -446,7 +446,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticChart"
+          "$ref": "StatisticChart"
         }
       },
       "arguments": [],
@@ -467,7 +467,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticCount"
+          "$ref": "StatisticCount"
         }
       },
       "arguments": [],
@@ -495,7 +495,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_SdkGenerate"
+            "$ref": "SdkGenerate"
           }
         }
       },
@@ -516,7 +516,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_SdkResponse"
+          "$ref": "SdkResponse"
         }
       },
       "arguments": [],
@@ -578,7 +578,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ScopeUpdate"
+            "$ref": "ScopeUpdate"
           }
         }
       },
@@ -599,7 +599,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Scope"
+          "$ref": "Scope"
         }
       },
       "arguments": {
@@ -627,7 +627,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ScopeCategories"
+          "$ref": "ScopeCategories"
         }
       },
       "arguments": [],
@@ -655,7 +655,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ScopeCreate"
+            "$ref": "ScopeCreate"
           }
         }
       },
@@ -676,7 +676,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ScopeCollection"
+          "$ref": "ScopeCollection"
         }
       },
       "arguments": [],
@@ -738,7 +738,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_SchemaUpdate"
+            "$ref": "SchemaUpdate"
           }
         }
       },
@@ -759,7 +759,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Schema"
+          "$ref": "Schema"
         }
       },
       "arguments": {
@@ -800,7 +800,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_SchemaForm"
+            "$ref": "SchemaForm"
           }
         }
       },
@@ -821,7 +821,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_SchemaPreviewResponse"
+          "$ref": "SchemaPreviewResponse"
         }
       },
       "arguments": {
@@ -856,7 +856,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_SchemaCreate"
+            "$ref": "SchemaCreate"
           }
         }
       },
@@ -877,7 +877,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_SchemaCollection"
+          "$ref": "SchemaCollection"
         }
       },
       "arguments": [],
@@ -939,7 +939,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_OperationUpdate"
+            "$ref": "OperationUpdate"
           }
         }
       },
@@ -960,7 +960,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Operation"
+          "$ref": "Operation"
         }
       },
       "arguments": {
@@ -995,7 +995,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_OperationCreate"
+            "$ref": "OperationCreate"
           }
         }
       },
@@ -1016,7 +1016,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_OperationCollection"
+          "$ref": "OperationCollection"
         }
       },
       "arguments": [],
@@ -1078,7 +1078,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_RoleUpdate"
+            "$ref": "RoleUpdate"
           }
         }
       },
@@ -1099,7 +1099,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Role"
+          "$ref": "Role"
         }
       },
       "arguments": {
@@ -1134,7 +1134,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_RoleCreate"
+            "$ref": "RoleCreate"
           }
         }
       },
@@ -1155,7 +1155,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_RoleCollection"
+          "$ref": "RoleCollection"
         }
       },
       "arguments": [],
@@ -1217,7 +1217,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_RateUpdate"
+            "$ref": "RateUpdate"
           }
         }
       },
@@ -1238,7 +1238,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Rate"
+          "$ref": "Rate"
         }
       },
       "arguments": {
@@ -1273,7 +1273,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_RateCreate"
+            "$ref": "RateCreate"
           }
         }
       },
@@ -1294,7 +1294,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_RateCollection"
+          "$ref": "RateCollection"
         }
       },
       "arguments": [],
@@ -1356,7 +1356,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_PlanUpdate"
+            "$ref": "PlanUpdate"
           }
         }
       },
@@ -1377,7 +1377,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Plan"
+          "$ref": "Plan"
         }
       },
       "arguments": {
@@ -1412,7 +1412,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_PlanCreate"
+            "$ref": "PlanCreate"
           }
         }
       },
@@ -1433,7 +1433,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_PlanCollection"
+          "$ref": "PlanCollection"
         }
       },
       "arguments": [],
@@ -1495,7 +1495,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_PageUpdate"
+            "$ref": "PageUpdate"
           }
         }
       },
@@ -1516,7 +1516,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Page"
+          "$ref": "Page"
         }
       },
       "arguments": {
@@ -1551,7 +1551,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_PageCreate"
+            "$ref": "PageCreate"
           }
         }
       },
@@ -1572,7 +1572,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_PageCollection"
+          "$ref": "PageCollection"
         }
       },
       "arguments": [],
@@ -1649,7 +1649,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_MarketplaceLocalApp"
+          "$ref": "MarketplaceLocalApp"
         }
       },
       "arguments": {
@@ -1684,7 +1684,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_MarketplaceInstall"
+            "$ref": "MarketplaceInstall"
           }
         }
       },
@@ -1705,7 +1705,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_MarketplaceCollection"
+          "$ref": "MarketplaceCollection"
         }
       },
       "arguments": [],
@@ -1726,7 +1726,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Log"
+          "$ref": "Log"
         }
       },
       "arguments": {
@@ -1754,7 +1754,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_LogCollection"
+          "$ref": "LogCollection"
         }
       },
       "arguments": [],
@@ -1775,7 +1775,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_LogError"
+          "$ref": "LogError"
         }
       },
       "arguments": {
@@ -1803,7 +1803,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_LogErrorCollection"
+          "$ref": "LogErrorCollection"
         }
       },
       "arguments": [],
@@ -1824,7 +1824,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Message"
+          "$ref": "GeneratorProviderChangelog"
         }
       },
       "arguments": {
@@ -1837,7 +1837,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_GeneratorProviderChangelog"
+            "$ref": "GeneratorProviderConfig"
           }
         }
       },
@@ -1871,7 +1871,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_GeneratorProvider"
+            "$ref": "GeneratorProvider"
           }
         }
       },
@@ -1920,7 +1920,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_GeneratorIndexProviders"
+          "$ref": "GeneratorIndexProviders"
         }
       },
       "arguments": [],
@@ -1982,7 +1982,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_EventUpdate"
+            "$ref": "EventUpdate"
           }
         }
       },
@@ -2003,7 +2003,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Event"
+          "$ref": "Event"
         }
       },
       "arguments": {
@@ -2038,7 +2038,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_EventCreate"
+            "$ref": "EventCreate"
           }
         }
       },
@@ -2059,7 +2059,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_EventCollection"
+          "$ref": "EventCollection"
         }
       },
       "arguments": [],
@@ -2121,7 +2121,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_EventSubscriptionUpdate"
+            "$ref": "EventSubscriptionUpdate"
           }
         }
       },
@@ -2142,7 +2142,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_EventSubscription"
+          "$ref": "EventSubscription"
         }
       },
       "arguments": {
@@ -2177,7 +2177,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_EventSubscriptionCreate"
+            "$ref": "EventSubscriptionCreate"
           }
         }
       },
@@ -2198,7 +2198,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_EventSubscriptionCollection"
+          "$ref": "EventSubscriptionCollection"
         }
       },
       "arguments": [],
@@ -2219,7 +2219,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Dashboard"
+          "$ref": "Dashboard"
         }
       },
       "arguments": [],
@@ -2281,7 +2281,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_CronjobUpdate"
+            "$ref": "CronjobUpdate"
           }
         }
       },
@@ -2302,7 +2302,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Cronjob"
+          "$ref": "Cronjob"
         }
       },
       "arguments": {
@@ -2337,7 +2337,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_CronjobCreate"
+            "$ref": "CronjobCreate"
           }
         }
       },
@@ -2358,7 +2358,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_CronjobCollection"
+          "$ref": "CronjobCollection"
         }
       },
       "arguments": [],
@@ -2379,7 +2379,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ConnectionIntrospectionEntity"
+          "$ref": "ConnectionIntrospectionEntity"
         }
       },
       "arguments": {
@@ -2413,7 +2413,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ConnectionIntrospectionEntities"
+          "$ref": "ConnectionIntrospectionEntities"
         }
       },
       "arguments": {
@@ -2510,7 +2510,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ConnectionUpdate"
+            "$ref": "ConnectionUpdate"
           }
         }
       },
@@ -2531,7 +2531,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Connection"
+          "$ref": "Connection"
         }
       },
       "arguments": {
@@ -2580,7 +2580,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ConnectionIndex"
+          "$ref": "ConnectionIndex"
         }
       },
       "arguments": [],
@@ -2601,14 +2601,14 @@
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "Backend_ConnectionCollection"
+          "$ref": "ConnectionCollection"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ConnectionCreate"
+            "$ref": "ConnectionCreate"
           }
         }
       },
@@ -2629,7 +2629,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ConnectionCollection"
+          "$ref": "ConnectionCollection"
         }
       },
       "arguments": [],
@@ -2663,7 +2663,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ConfigUpdate"
+            "$ref": "ConfigUpdate"
           }
         }
       },
@@ -2684,7 +2684,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Config"
+          "$ref": "Config"
         }
       },
       "arguments": {
@@ -2712,7 +2712,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ConfigCollection"
+          "$ref": "ConfigCollection"
         }
       },
       "arguments": [],
@@ -2774,7 +2774,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_CategoryUpdate"
+            "$ref": "CategoryUpdate"
           }
         }
       },
@@ -2795,7 +2795,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Category"
+          "$ref": "Category"
         }
       },
       "arguments": {
@@ -2830,7 +2830,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_CategoryCreate"
+            "$ref": "CategoryCreate"
           }
         }
       },
@@ -2851,7 +2851,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_CategoryCollection"
+          "$ref": "CategoryCollection"
         }
       },
       "arguments": [],
@@ -2872,7 +2872,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Audit"
+          "$ref": "Audit"
         }
       },
       "arguments": {
@@ -2900,7 +2900,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_AuditCollection"
+          "$ref": "AuditCollection"
         }
       },
       "arguments": [],
@@ -2996,7 +2996,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_AppUpdate"
+            "$ref": "AppUpdate"
           }
         }
       },
@@ -3017,7 +3017,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_App"
+          "$ref": "App"
         }
       },
       "arguments": {
@@ -3052,7 +3052,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_AppCreate"
+            "$ref": "AppCreate"
           }
         }
       },
@@ -3073,7 +3073,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_AppCollection"
+          "$ref": "AppCollection"
         }
       },
       "arguments": [],
@@ -3094,7 +3094,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_AppToken"
+          "$ref": "AppToken"
         }
       },
       "arguments": {
@@ -3122,7 +3122,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_AppTokenCollection"
+          "$ref": "AppTokenCollection"
         }
       },
       "arguments": [],
@@ -3184,7 +3184,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ActionUpdate"
+            "$ref": "ActionUpdate"
           }
         }
       },
@@ -3205,7 +3205,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_Action"
+          "$ref": "Action"
         }
       },
       "arguments": {
@@ -3233,7 +3233,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ActionExecuteResponse"
+          "$ref": "ActionExecuteResponse"
         }
       },
       "arguments": {
@@ -3246,7 +3246,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ActionExecuteRequest"
+            "$ref": "ActionExecuteRequest"
           }
         }
       },
@@ -3288,7 +3288,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ActionIndex"
+          "$ref": "ActionIndex"
         }
       },
       "arguments": [],
@@ -3316,7 +3316,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_ActionCreate"
+            "$ref": "ActionCreate"
           }
         }
       },
@@ -3337,7 +3337,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_ActionCollection"
+          "$ref": "ActionCollection"
         }
       },
       "arguments": [],
@@ -3365,7 +3365,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_AccountChangePassword"
+            "$ref": "AccountChangePassword"
           }
         }
       },
@@ -3393,7 +3393,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_UserUpdate"
+            "$ref": "UserUpdate"
           }
         }
       },
@@ -3414,7 +3414,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_User"
+          "$ref": "User"
         }
       },
       "arguments": [],
@@ -3730,297 +3730,6 @@
       "additionalProperties": {
         "type": "any"
       }
-    },
-    "Backend_AccountChangePassword": {
-      "$ref": "AccountChangePassword"
-    },
-    "Backend_Action": {
-      "$ref": "Action"
-    },
-    "Backend_ActionCollection": {
-      "$ref": "ActionCollection"
-    },
-    "Backend_ActionCreate": {
-      "$ref": "ActionCreate"
-    },
-    "Backend_ActionExecuteRequest": {
-      "$ref": "ActionExecuteRequest"
-    },
-    "Backend_ActionExecuteResponse": {
-      "$ref": "ActionExecuteResponse"
-    },
-    "Backend_ActionIndex": {
-      "$ref": "ActionIndex"
-    },
-    "Backend_ActionUpdate": {
-      "$ref": "ActionUpdate"
-    },
-    "Backend_App": {
-      "$ref": "App"
-    },
-    "Backend_AppCollection": {
-      "$ref": "AppCollection"
-    },
-    "Backend_AppCreate": {
-      "$ref": "AppCreate"
-    },
-    "Backend_AppToken": {
-      "$ref": "AppToken"
-    },
-    "Backend_AppTokenCollection": {
-      "$ref": "AppTokenCollection"
-    },
-    "Backend_AppUpdate": {
-      "$ref": "AppUpdate"
-    },
-    "Backend_Audit": {
-      "$ref": "Audit"
-    },
-    "Backend_AuditCollection": {
-      "$ref": "AuditCollection"
-    },
-    "Backend_Category": {
-      "$ref": "Category"
-    },
-    "Backend_CategoryCollection": {
-      "$ref": "CategoryCollection"
-    },
-    "Backend_CategoryCreate": {
-      "$ref": "CategoryCreate"
-    },
-    "Backend_CategoryUpdate": {
-      "$ref": "CategoryUpdate"
-    },
-    "Backend_Config": {
-      "$ref": "Config"
-    },
-    "Backend_ConfigCollection": {
-      "$ref": "ConfigCollection"
-    },
-    "Backend_ConfigUpdate": {
-      "$ref": "ConfigUpdate"
-    },
-    "Backend_Connection": {
-      "$ref": "Connection"
-    },
-    "Backend_ConnectionCollection": {
-      "$ref": "ConnectionCollection"
-    },
-    "Backend_ConnectionCreate": {
-      "$ref": "ConnectionCreate"
-    },
-    "Backend_ConnectionIndex": {
-      "$ref": "ConnectionIndex"
-    },
-    "Backend_ConnectionIntrospectionEntities": {
-      "$ref": "ConnectionIntrospectionEntities"
-    },
-    "Backend_ConnectionIntrospectionEntity": {
-      "$ref": "ConnectionIntrospectionEntity"
-    },
-    "Backend_ConnectionUpdate": {
-      "$ref": "ConnectionUpdate"
-    },
-    "Backend_Cronjob": {
-      "$ref": "Cronjob"
-    },
-    "Backend_CronjobCollection": {
-      "$ref": "CronjobCollection"
-    },
-    "Backend_CronjobCreate": {
-      "$ref": "CronjobCreate"
-    },
-    "Backend_CronjobUpdate": {
-      "$ref": "CronjobUpdate"
-    },
-    "Backend_Dashboard": {
-      "$ref": "Dashboard"
-    },
-    "Backend_Event": {
-      "$ref": "Event"
-    },
-    "Backend_EventCollection": {
-      "$ref": "EventCollection"
-    },
-    "Backend_EventCreate": {
-      "$ref": "EventCreate"
-    },
-    "Backend_EventSubscription": {
-      "$ref": "EventSubscription"
-    },
-    "Backend_EventSubscriptionCollection": {
-      "$ref": "EventSubscriptionCollection"
-    },
-    "Backend_EventSubscriptionCreate": {
-      "$ref": "EventSubscriptionCreate"
-    },
-    "Backend_EventSubscriptionUpdate": {
-      "$ref": "EventSubscriptionUpdate"
-    },
-    "Backend_EventUpdate": {
-      "$ref": "EventUpdate"
-    },
-    "Backend_GeneratorIndexProviders": {
-      "$ref": "GeneratorIndexProviders"
-    },
-    "Backend_GeneratorProvider": {
-      "$ref": "GeneratorProvider"
-    },
-    "Backend_GeneratorProviderChangelog": {
-      "$ref": "GeneratorProviderChangelog"
-    },
-    "Backend_Log": {
-      "$ref": "Log"
-    },
-    "Backend_LogCollection": {
-      "$ref": "LogCollection"
-    },
-    "Backend_LogError": {
-      "$ref": "LogError"
-    },
-    "Backend_LogErrorCollection": {
-      "$ref": "LogErrorCollection"
-    },
-    "Backend_MarketplaceCollection": {
-      "$ref": "MarketplaceCollection"
-    },
-    "Backend_MarketplaceInstall": {
-      "$ref": "MarketplaceInstall"
-    },
-    "Backend_MarketplaceLocalApp": {
-      "$ref": "MarketplaceLocalApp"
-    },
-    "Backend_Operation": {
-      "$ref": "Operation"
-    },
-    "Backend_OperationCollection": {
-      "$ref": "OperationCollection"
-    },
-    "Backend_OperationCreate": {
-      "$ref": "OperationCreate"
-    },
-    "Backend_OperationUpdate": {
-      "$ref": "OperationUpdate"
-    },
-    "Backend_Page": {
-      "$ref": "Page"
-    },
-    "Backend_PageCollection": {
-      "$ref": "PageCollection"
-    },
-    "Backend_PageCreate": {
-      "$ref": "PageCreate"
-    },
-    "Backend_PageUpdate": {
-      "$ref": "PageUpdate"
-    },
-    "Backend_Plan": {
-      "$ref": "Plan"
-    },
-    "Backend_PlanCollection": {
-      "$ref": "PlanCollection"
-    },
-    "Backend_PlanCreate": {
-      "$ref": "PlanCreate"
-    },
-    "Backend_PlanUpdate": {
-      "$ref": "PlanUpdate"
-    },
-    "Backend_Rate": {
-      "$ref": "Rate"
-    },
-    "Backend_RateCollection": {
-      "$ref": "RateCollection"
-    },
-    "Backend_RateCreate": {
-      "$ref": "RateCreate"
-    },
-    "Backend_RateUpdate": {
-      "$ref": "RateUpdate"
-    },
-    "Backend_Role": {
-      "$ref": "Role"
-    },
-    "Backend_RoleCollection": {
-      "$ref": "RoleCollection"
-    },
-    "Backend_RoleCreate": {
-      "$ref": "RoleCreate"
-    },
-    "Backend_RoleUpdate": {
-      "$ref": "RoleUpdate"
-    },
-    "Backend_Schema": {
-      "$ref": "Schema"
-    },
-    "Backend_SchemaCollection": {
-      "$ref": "SchemaCollection"
-    },
-    "Backend_SchemaCreate": {
-      "$ref": "SchemaCreate"
-    },
-    "Backend_SchemaForm": {
-      "$ref": "SchemaForm"
-    },
-    "Backend_SchemaPreviewResponse": {
-      "$ref": "SchemaPreviewResponse"
-    },
-    "Backend_SchemaUpdate": {
-      "$ref": "SchemaUpdate"
-    },
-    "Backend_Scope": {
-      "$ref": "Scope"
-    },
-    "Backend_ScopeCategories": {
-      "$ref": "ScopeCategories"
-    },
-    "Backend_ScopeCollection": {
-      "$ref": "ScopeCollection"
-    },
-    "Backend_ScopeCreate": {
-      "$ref": "ScopeCreate"
-    },
-    "Backend_ScopeUpdate": {
-      "$ref": "ScopeUpdate"
-    },
-    "Backend_SdkGenerate": {
-      "$ref": "SdkGenerate"
-    },
-    "Backend_SdkResponse": {
-      "$ref": "SdkResponse"
-    },
-    "Backend_StatisticChart": {
-      "$ref": "StatisticChart"
-    },
-    "Backend_StatisticCount": {
-      "$ref": "StatisticCount"
-    },
-    "Backend_Transaction": {
-      "$ref": "Transaction"
-    },
-    "Backend_TransactionCollection": {
-      "$ref": "TransactionCollection"
-    },
-    "Backend_TrashDataCollection": {
-      "$ref": "TrashDataCollection"
-    },
-    "Backend_TrashRestore": {
-      "$ref": "TrashRestore"
-    },
-    "Backend_TrashTypes": {
-      "$ref": "TrashTypes"
-    },
-    "Backend_User": {
-      "$ref": "User"
-    },
-    "Backend_UserCollection": {
-      "$ref": "UserCollection"
-    },
-    "Backend_UserCreate": {
-      "$ref": "UserCreate"
-    },
-    "Backend_UserUpdate": {
-      "$ref": "UserUpdate"
     },
     "Category": {
       "type": "object",
@@ -4815,6 +4524,9 @@
         },
         "message": {
           "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
@@ -4856,7 +4568,7 @@
         },
         "name": {
           "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+          "pattern": "^[a-zA-Z0-9\\_\\.]{3,64}$"
         },
         "parameters": {
           "$ref": "OperationParameters"
@@ -4914,7 +4626,16 @@
     "OperationSchema": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "type": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "enum": {
           "type": "string"
         }
       }

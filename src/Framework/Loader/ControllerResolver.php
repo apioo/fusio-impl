@@ -45,7 +45,7 @@ class ControllerResolver implements ControllerResolverInterface
 
     public function resolve(mixed $source): array
     {
-        if (str_starts_with($source[0], 'operation:')) {
+        if (str_starts_with($source[0], 'operation://')) {
             return [$this->controller, 'execute'];
         } else {
             return $this->controllerResolver->resolve($source);
