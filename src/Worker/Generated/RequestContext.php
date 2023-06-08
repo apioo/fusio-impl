@@ -16,7 +16,7 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class Action
+class RequestContext
 {
     static public $isValidate = false;
 
@@ -27,9 +27,17 @@ class Action
             'type' => TType::STRING,
         ),
         2 => array(
-            'var' => 'code',
+            'var' => 'parameters',
             'isRequired' => false,
-            'type' => TType::STRING,
+            'type' => TType::MAP,
+            'ktype' => TType::STRING,
+            'vtype' => TType::STRING,
+            'key' => array(
+                'type' => TType::STRING,
+            ),
+            'val' => array(
+                'type' => TType::STRING,
+                ),
         ),
     );
 
@@ -38,9 +46,9 @@ class Action
      */
     public $name = null;
     /**
-     * @var string
+     * @var array
      */
-    public $code = null;
+    public $parameters = null;
 
     public function __construct($vals = null)
     {
@@ -48,15 +56,15 @@ class Action
             if (isset($vals['name'])) {
                 $this->name = $vals['name'];
             }
-            if (isset($vals['code'])) {
-                $this->code = $vals['code'];
+            if (isset($vals['parameters'])) {
+                $this->parameters = $vals['parameters'];
             }
         }
     }
 
     public function getName()
     {
-        return 'Action';
+        return 'RequestContext';
     }
 
 
@@ -81,8 +89,20 @@ class Action
                     }
                     break;
                 case 2:
-                    if ($ftype == TType::STRING) {
-                        $xfer += $input->readString($this->code);
+                    if ($ftype == TType::MAP) {
+                        $this->parameters = array();
+                        $_size18 = 0;
+                        $_ktype19 = 0;
+                        $_vtype20 = 0;
+                        $xfer += $input->readMapBegin($_ktype19, $_vtype20, $_size18);
+                        for ($_i22 = 0; $_i22 < $_size18; ++$_i22) {
+                            $key23 = '';
+                            $val24 = '';
+                            $xfer += $input->readString($key23);
+                            $xfer += $input->readString($val24);
+                            $this->parameters[$key23] = $val24;
+                        }
+                        $xfer += $input->readMapEnd();
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -100,15 +120,23 @@ class Action
     public function write($output)
     {
         $xfer = 0;
-        $xfer += $output->writeStructBegin('Action');
+        $xfer += $output->writeStructBegin('RequestContext');
         if ($this->name !== null) {
             $xfer += $output->writeFieldBegin('name', TType::STRING, 1);
             $xfer += $output->writeString($this->name);
             $xfer += $output->writeFieldEnd();
         }
-        if ($this->code !== null) {
-            $xfer += $output->writeFieldBegin('code', TType::STRING, 2);
-            $xfer += $output->writeString($this->code);
+        if ($this->parameters !== null) {
+            if (!is_array($this->parameters)) {
+                throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
+            }
+            $xfer += $output->writeFieldBegin('parameters', TType::MAP, 2);
+            $output->writeMapBegin(TType::STRING, TType::STRING, count($this->parameters));
+            foreach ($this->parameters as $kiter25 => $viter26) {
+                $xfer += $output->writeString($kiter25);
+                $xfer += $output->writeString($viter26);
+            }
+            $output->writeMapEnd();
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();

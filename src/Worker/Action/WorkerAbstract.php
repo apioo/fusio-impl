@@ -28,17 +28,17 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Model\ActionInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequestContext;
+use Fusio\Engine\Request\RpcRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Worker\ClientFactory;
 use Fusio\Impl\Worker\Generated\App;
 use Fusio\Impl\Worker\Generated\Context;
 use Fusio\Impl\Worker\Generated\Execute;
-use Fusio\Impl\Worker\Generated\HttpRequest;
 use Fusio\Impl\Worker\Generated\Request;
+use Fusio\Impl\Worker\Generated\RequestContext;
 use Fusio\Impl\Worker\Generated\Result;
-use Fusio\Impl\Worker\Generated\RpcRequest;
 use Fusio\Impl\Worker\Generated\User;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Thrift\Exception\TException;
@@ -119,18 +119,15 @@ abstract class WorkerAbstract extends ActionAbstract
     private function buildRequest(RequestInterface $request): Request
     {
         $return = new Request();
-        if ($request instanceof HttpInterface) {
-            $httpRequest = new HttpRequest();
-            $httpRequest->method = $request->getMethod();
-            $httpRequest->headers = $this->getHttpHeaders($request);
-            $httpRequest->uriFragments = $request->getUriFragments();
-            $httpRequest->parameters = $request->getParameters();
-            $httpRequest->body = \json_encode($request->getBody());
-            $return->http = $httpRequest;
-        } elseif ($request instanceof RpcInterface) {
-            $rpcRequest = new RpcRequest();
-            $rpcRequest->arguments = \json_encode($request->getArguments());
-            $return->rpc = $rpcRequest;
+        $return->arguments = $request->getArguments();
+        $return->payload = \json_encode($request->getPayload());
+        $return->context = new RequestContext();
+
+        $requestContext = $request->getContext();
+        if ($requestContext instanceof HttpRequestContext) {
+            $return->context->name = 'http';
+        } elseif ($requestContext instanceof RpcRequestContext) {
+            $return->context->name = 'rpc';
         } else {
             throw new StatusCode\BadRequestException('Received an not supported request');
         }
@@ -138,7 +135,7 @@ abstract class WorkerAbstract extends ActionAbstract
         return $return;
     }
 
-    private function getHttpHeaders(HttpInterface $request): array
+    private function getHttpHeaders(\PSX\Http\RequestInterface $request): array
     {
         $result = [];
         $headers = $request->getHeaders();
