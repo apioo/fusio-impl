@@ -135,6 +135,9 @@ abstract class WorkerAbstract extends ActionAbstract
         return $return;
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getHttpHeaders(\PSX\Http\RequestInterface $request): array
     {
         $result = [];

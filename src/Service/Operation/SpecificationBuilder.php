@@ -189,7 +189,7 @@ class SpecificationBuilder
     {
         $root = $schema->getType();
         if ($root instanceof ReferenceType) {
-            return $root->getRef();
+            return $root->getRef() ?? throw new \RuntimeException('Provided an invalid ref');
         }
 
         $pos = strpos($source, '://');

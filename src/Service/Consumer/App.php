@@ -102,7 +102,7 @@ class App
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);
 
-        return $this->appService->update($appId, $backendApp, $context);
+        return $this->appService->update((string) $appId, $backendApp, $context);
     }
 
     public function delete(int $appId, UserContext $context): int
@@ -118,7 +118,7 @@ class App
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
-        return $this->appService->delete($appId, $context);
+        return $this->appService->delete((string) $appId, $context);
     }
 
     protected function getValidUserScopes(int $userId, ?array $scopes): array

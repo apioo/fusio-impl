@@ -35,6 +35,9 @@ class WorkerPHP extends WorkerAbstract
         return 'Worker-PHP';
     }
 
+    /**
+     * @psalm-return 'php'
+     */
     protected function getLanguage(): string
     {
         return 'php';

@@ -35,6 +35,9 @@ class WorkerJava extends WorkerAbstract
         return 'Worker-Java';
     }
 
+    /**
+     * @psalm-return 'java'
+     */
     protected function getLanguage(): string
     {
         return 'java';

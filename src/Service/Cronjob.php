@@ -83,7 +83,7 @@ class Cronjob
         return $cronjobId;
     }
 
-    public function update(int $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
+    public function update(string $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
     {
         $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
         if (empty($existing)) {

@@ -40,6 +40,9 @@ class Scope extends Generated\UserScopeTable
         $this->connection->executeStatement($sql, ['id' => $userId]);
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     public function getValidScopes(int $userId, array $scopes): array
     {
         $result = $this->getAvailableScopes($userId, true);
@@ -54,6 +57,9 @@ class Scope extends Generated\UserScopeTable
         return $data;
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     public function getAvailableScopes(int $userId, bool $includePlanScopes = false): array
     {
         $assignedScopes = $this->getScopesForUser($userId);
@@ -97,6 +103,9 @@ class Scope extends Generated\UserScopeTable
         return $this->connection->fetchAllAssociative($sql, ['user_id' => $userId]) ?: [];
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function getScopesForPlan(int $userId): array
     {
         $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);

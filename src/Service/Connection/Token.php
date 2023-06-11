@@ -36,7 +36,7 @@ use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 use PSX\Uri\Url;
 
 /**
@@ -144,7 +144,7 @@ class Token
         $this->updateConnectionConfig($connection, $accessToken);
     }
 
-    public function refreshAll()
+    public function refreshAll(): void
     {
         $connections = $this->repository->getAll();
         foreach ($connections as $connection) {
@@ -187,7 +187,7 @@ class Token
 
         $update = new ConnectionUpdate();
         $update->setConfig(ConnectionConfig::fromArray($config));
-        $this->connectionService->update($connection->getId(), $update, UserContext::newAnonymousContext());
+        $this->connectionService->update((string) $connection->getId(), $update, UserContext::newAnonymousContext());
     }
 
     /**

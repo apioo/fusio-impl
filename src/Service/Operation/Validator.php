@@ -243,7 +243,7 @@ class Validator
         }
 
         foreach ($throws as $statusCode => $throwName) {
-            $this->assertHttpCode($statusCode, 400, 599, 'Throw');
+            $this->assertHttpCode((int) $statusCode, 400, 599, 'Throw');
 
             $schema = $this->schemaTable->findOneByName($throwName);
             if (!$schema instanceof Table\Generated\SchemaRow) {

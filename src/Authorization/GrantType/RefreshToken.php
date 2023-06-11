@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
+use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\ServerErrorException;
 use PSX\OAuth2\Grant;
 use PSX\Sql\Condition;
@@ -52,7 +53,7 @@ class RefreshToken extends RefreshTokenAbstract
         $this->expireRefresh   = $config->get('fusio_expire_refresh') ?? 'P3D';
     }
 
-    protected function generate(Credentials $credentials, Grant\RefreshToken $grant)
+    protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $credentials->getClientId());

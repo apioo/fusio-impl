@@ -35,6 +35,9 @@ class WorkerJavascript extends WorkerAbstract
         return 'Worker-Javascript';
     }
 
+    /**
+     * @psalm-return 'javascript'
+     */
     protected function getLanguage(): string
     {
         return 'javascript';

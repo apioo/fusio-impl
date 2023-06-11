@@ -34,7 +34,7 @@ use Fusio\Impl\Table\Rate;
  */
 class Allocation extends Generated\RateAllocationTable
 {
-    public function deleteAllFromRate($rateId)
+    public function deleteAllFromRate($rateId): void
     {
         $sql = 'DELETE FROM fusio_rate_allocation 
                       WHERE rate_id = :rate_id';

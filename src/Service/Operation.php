@@ -141,8 +141,8 @@ class Operation
                 // if the operation is stable or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
-                $existing->setActive($operation->getActive() ?? $existing->getActive());
-                $existing->setPublic($operation->getPublic() ?? $existing->getPublic());
+                $existing->setActive($operation->getActive() !== null ? (int) $operation->getActive() : $existing->getActive());
+                $existing->setPublic($operation->getPublic() !== null ? (int) $operation->getPublic() : $existing->getPublic());
                 $existing->setStability($operation->getStability() ?? $existing->getStability());
                 $existing->setDescription($operation->getDescription() ?? $existing->getDescription());
                 $existing->setHttpMethod($operation->getHttpMethod() ?? $existing->getHttpMethod());

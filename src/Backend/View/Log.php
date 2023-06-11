@@ -73,7 +73,7 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(int $id)
     {
         $builder = new Builder($this->connection);
 

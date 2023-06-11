@@ -35,6 +35,9 @@ class WorkerPython extends WorkerAbstract
         return 'Worker-Python';
     }
 
+    /**
+     * @psalm-return 'python'
+     */
     protected function getLanguage(): string
     {
         return 'python';
