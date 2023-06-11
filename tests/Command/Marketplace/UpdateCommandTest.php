@@ -36,8 +36,8 @@ class UpdateCommandTest extends MarketplaceTestCase
 {
     public function testCommand()
     {
-        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is already installed');
+        if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
+            $this->markTestSkipped('The fusio app is not installed');
         }
 
         $appsDir = Environment::getConfig('fusio_apps_dir');

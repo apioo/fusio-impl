@@ -54,7 +54,7 @@ class InstallCommandTest extends MarketplaceTestCase
 
         $this->assertEquals('Installed app fusio', trim($actual));
 
-        $appsDir = Environment::getConfig()->get('fusio_apps_dir');
+        $appsDir = Environment::getConfig('fusio_apps_dir');
         $this->assertDirectoryExists($appsDir . '/fusio');
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
         $this->assertFileExists($appsDir . '/fusio/index.html');
