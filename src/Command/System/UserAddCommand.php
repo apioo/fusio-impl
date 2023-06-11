@@ -43,13 +43,15 @@ class UserAddCommand extends Command
 {
     private Service\User $userService;
     private Service\Config $configService;
+    private Service\User\Validator $validator;
 
-    public function __construct(Service\User $userService, Service\Config $configService)
+    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator)
     {
         parent::__construct();
 
-        $this->userService   = $userService;
+        $this->userService = $userService;
         $this->configService = $configService;
+        $this->validator = $validator;
     }
 
     protected function configure()
@@ -84,7 +86,7 @@ class UserAddCommand extends Command
         if ($name === null) {
             $question = new Question('Enter the username: ');
             $question->setValidator(function ($value) {
-                Service\User\Validator::assertName($value);
+                $this->validator->assertName($value);
                 return $value;
             });
 
@@ -94,7 +96,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid name');
             }
 
-            Service\User\Validator::assertName($name);
+            $this->validator->assertName($name);
         }
 
         // email
@@ -102,7 +104,7 @@ class UserAddCommand extends Command
         if ($email === null) {
             $question = new Question('Enter the email: ');
             $question->setValidator(function ($value) {
-                Service\User\Validator::assertEmail($value);
+                $this->validator->assertEmail($value);
                 return $value;
             });
 
@@ -112,7 +114,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid email');
             }
 
-            Service\User\Validator::assertEmail($email);
+            $this->validator->assertEmail($email);
         }
 
         // password
@@ -121,7 +123,7 @@ class UserAddCommand extends Command
             $question = new Question('Enter the password: ');
             $question->setHidden(true);
             $question->setValidator(function ($value) {
-                Service\User\Validator::assertPassword($value, $this->configService->getValue('user_pw_length'));
+                $this->validator->assertPassword($value, $this->configService->getValue('user_pw_length'));
                 return $value;
             });
 
@@ -144,7 +146,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid password');
             }
 
-            Service\User\Validator::assertPassword($password, $this->configService->getValue('user_pw_length'));
+            $this->validator->assertPassword($password, $this->configService->getValue('user_pw_length'));
         }
 
         // create user

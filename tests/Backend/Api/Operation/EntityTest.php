@@ -203,9 +203,9 @@ JSON;
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_DEPRECATED,
             'httpMethod' => 'GET',
-            'httpPath'   => '/foo',
+            'httpPath'   => '/foo/baz',
             'httpCode'   => 200,
-            'name'       => 'test.baz',
+            'name'       => 'test.bazzz',
             'parameters' => [
                 'foo' => [
                     'type' => 'string'

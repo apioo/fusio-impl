@@ -28,10 +28,9 @@ use Fusio\Impl\Provider\UserProvider;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Consumer;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Provider

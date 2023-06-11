@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\PlanRow;
 use Fusio\Impl\Table\Generated\RateRow;
+use PSX\Sql\Condition;
 
 /**
  * Rate

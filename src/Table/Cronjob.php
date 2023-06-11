@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\ConnectionRow;
 use Fusio\Impl\Table\Generated\CronjobRow;
+use PSX\Sql\Condition;
 
 /**
  * Cronjob

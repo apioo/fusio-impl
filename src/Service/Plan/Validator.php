@@ -19,41 +19,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Service\Plan;
 
-use Fusio\Impl\Table\Generated\CronjobRow;
-use Fusio\Impl\Table\Generated\OperationRow;
-use PSX\Sql\Condition;
+use Fusio\Impl\Table;
+use Fusio\Model\Backend\Plan;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * Operation
+ * Validator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Operation extends Generated\OperationTable
+class Validator
 {
-    public const STATUS_ACTIVE  = 1;
-    public const STATUS_DELETED = 0;
+    private Table\Plan $planTable;
 
-    public function findOneByIdentifier(string $id): ?OperationRow
+    public function __construct(Table\Plan $planTable)
     {
-        if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
-        } else {
-            return $this->find((int) $id);
+        $this->planTable = $planTable;
+    }
+
+    public function assert(Plan $plan, ?Table\Generated\PlanRow $existing = null): void
+    {
+        $name = $plan->getName();
+        if ($name !== null) {
+            $this->assertName($name, $existing);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('Plan name must not be empty');
         }
     }
 
-    public function getAvailableMethods(string $httPath): array
+    private function assertName(string $name, ?Table\Generated\PlanRow $existing = null): void
     {
-        $result = $this->findByHttpPath($httPath);
-        $methods = [];
-        foreach ($result as $operation) {
-            $methods[] = $operation->getHttpMethod();
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Invalid plan name');
         }
-        sort($methods);
-        return $methods;
+
+        if (($existing === null || $name !== $existing->getName()) && $this->planTable->findOneByName($name)) {
+            throw new StatusCode\BadRequestException('Event already exists');
+        }
     }
 }

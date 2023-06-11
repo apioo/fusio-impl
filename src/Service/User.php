@@ -57,9 +57,10 @@ class User
     private Table\Role $roleTable;
     private Table\Plan $planTable;
     private Service\Config $configService;
+    private User\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, User\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
@@ -68,80 +69,16 @@ class User
         $this->roleTable       = $roleTable;
         $this->planTable       = $planTable;
         $this->configService   = $configService;
+        $this->validator       = $validator;
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-    /**
-     * Authenticates a user based on the username and password. Returns the user id if the authentication was successful
-     * else null
-     */
-    public function authenticateUser(string $username, string $password): ?int
-    {
-        if (empty($password)) {
-            return null;
-        }
-
-        // allow login either through username or email
-        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $username)) {
-            $column = Table\Generated\UserTable::COLUMN_NAME;
-        } else {
-            $column = Table\Generated\UserTable::COLUMN_EMAIL;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals($column, $username);
-        $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
-
-        $user = $this->userTable->findOneBy($condition);
-        if (empty($user)) {
-            return null;
-        }
-
-        // we can authenticate only local users
-        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
-            return null;
-        }
-
-        // check password
-        $databasePassword = $user->getPassword();
-        if (empty($databasePassword)) {
-            return null;
-        }
-
-        if (password_verify($password, $databasePassword)) {
-            return $user->getId();
-        } else {
-            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user->getId())));
-        }
-
-        return null;
     }
 
     public function create(UserCreate $user, UserContext $context): int
     {
-        // check whether user name exists
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_NAME, $user->getName());
-        if ($this->userTable->getCount($condition) > 0) {
-            throw new StatusCode\BadRequestException('User name already exists');
-        }
+        $this->validator->assert($user);
 
-        // check whether user email exists
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_EMAIL, $user->getEmail());
-        if ($this->userTable->getCount($condition) > 0) {
-            throw new StatusCode\BadRequestException('User email already exists');
-        }
+        $roleId = $user->getRoleId();
 
-        // check values
-        User\Validator::assertName($user->getName());
-        User\Validator::assertEmail($user->getEmail());
-        User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
-
-        $roleId = $this->getRoleId($user);
-        $planId = $this->getPlanId($user);
-
-        // create user
         try {
             $this->userTable->beginTransaction();
 
@@ -149,9 +86,9 @@ class User
 
             $row = new Table\Generated\UserRow();
             $row->setRoleId($roleId);
-            $row->setPlanId($planId);
+            $row->setPlanId($user->getPlanId());
             $row->setProvider(ProviderInterface::PROVIDER_SYSTEM);
-            $row->setStatus($user->getStatus());
+            $row->setStatus($user->getStatus() ?? Table\User::STATUS_DISABLED);
             $row->setName($user->getName());
             $row->setEmail($user->getEmail());
             $row->setPassword($password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null);
@@ -194,10 +131,10 @@ class User
         $remote->setName(str_replace(' ', '.', $remote->getName() ?? ''));
 
         // check values
-        User\Validator::assertName($remote->getName());
+        $this->validator->assertName($remote->getName());
 
         if (!empty($remote->getEmail())) {
-            User\Validator::assertEmail($remote->getEmail());
+            $this->validator->assertEmail($remote->getEmail());
         }
 
         try {
@@ -252,28 +189,11 @@ class User
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        if ($user->getRoleId() === null) {
-            $user->setRoleId($existing->getRoleId());
+        if ($existing->getStatus() == Table\User::STATUS_DELETED) {
+            throw new StatusCode\GoneException('User was deleted');
         }
 
-        if ($user->getPlanId() === null) {
-            $user->setPlanId($existing->getPlanId());
-        }
-
-        if ($user->getStatus() === null) {
-            $user->setStatus($existing->getStatus());
-        }
-
-        if ($user->getName() === null) {
-            $user->setName($existing->getName());
-        }
-
-        // check values
-        User\Validator::assertName($user->getName());
-        User\Validator::assertEmail($user->getEmail());
-
-        $roleId = $this->getRoleId($user);
-        $planId = $this->getPlanId($user);
+        $this->validator->assert($user, $existing);
 
         try {
             $this->userTable->beginTransaction();
@@ -281,11 +201,11 @@ class User
             // update user
             $row = new Table\Generated\UserRow();
             $row->setId($existing->getId());
-            $row->setRoleId($roleId);
-            $row->setPlanId($planId);
-            $row->setStatus($user->getStatus());
-            $row->setName($user->getName());
-            $row->setEmail($user->getEmail());
+            $row->setRoleId($user->getRoleId() ?? $existing->getRoleId());
+            $row->setPlanId($user->getPlanId() ?? $existing->getPlanId());
+            $row->setStatus($user->getStatus() ?? $existing->getStatus());
+            $row->setName($user->getName() ?? $existing->getName());
+            $row->setEmail($user->getEmail() ?? $existing->getEmail());
             $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
             $this->userTable->update($row);
 
@@ -317,10 +237,12 @@ class User
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        $row = new Table\Generated\UserRow();
-        $row->setId($existing->getId());
-        $row->setStatus(Table\User::STATUS_DELETED);
-        $this->userTable->update($row);
+        if ($existing->getStatus() == Table\User::STATUS_DELETED) {
+            throw new StatusCode\GoneException('User was deleted');
+        }
+
+        $existing->setStatus(Table\User::STATUS_DELETED);
+        $this->userTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
@@ -329,17 +251,17 @@ class User
 
     public function changeStatus(int $userId, int $status, UserContext $context): void
     {
-        $user = $this->userTable->find($userId);
-        if (empty($user)) {
+        $existing = $this->userTable->find($userId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        $row = new Table\Generated\UserRow();
-        $row->setId($user->getId());
-        $row->setStatus($status);
-        $this->userTable->update($row);
+        $oldStatus = $existing->getStatus();
 
-        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user->getStatus(), $status, $context));
+        $existing->setStatus($status);
+        $this->userTable->update($existing);
+
+        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $oldStatus, $status, $context));
     }
 
     public function changePassword(AccountChangePassword $changePassword, UserContext $context): bool
@@ -352,24 +274,26 @@ class User
             throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
         }
 
-        if (empty($changePassword->getNewPassword())) {
+        $newPassword = $changePassword->getNewPassword();
+        if (empty($newPassword)) {
             throw new StatusCode\BadRequestException('New password must not be empty');
         }
 
-        if (empty($changePassword->getOldPassword())) {
+        $oldPassword = $changePassword->getOldPassword();
+        if (empty($oldPassword)) {
             throw new StatusCode\BadRequestException('Old password must not be empty');
         }
 
         // check verify password
-        if ($changePassword->getNewPassword() != $changePassword->getVerifyPassword()) {
+        if ($newPassword != $changePassword->getVerifyPassword()) {
             throw new StatusCode\BadRequestException('New password does not match the verify password');
         }
 
         // assert password complexity
-        User\Validator::assertPassword($changePassword->getNewPassword(), $this->configService->getValue('user_pw_length'));
+        $this->validator->assertPassword($newPassword);
 
         // change password
-        $result = $this->userTable->changePassword($userId, $changePassword->getOldPassword(), $changePassword->getNewPassword());
+        $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
         if ($result) {
             $this->eventDispatcher->dispatch(new ChangedPasswordEvent($changePassword, $context));
@@ -378,11 +302,6 @@ class User
         } else {
             throw new StatusCode\BadRequestException('Changing password failed');
         }
-    }
-
-    public function getValidScopes(int $userId, array $scopes): array
-    {
-        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
     }
 
     public function getAvailableScopes(int $userId): array
@@ -412,35 +331,5 @@ class User
                 $this->userScopeTable->create($row);
             }
         }
-    }
-
-    private function getRoleId(Model\Backend\User $user): int
-    {
-        $roleId = $user->getRoleId();
-        if (!empty($roleId)) {
-            $role = $this->roleTable->find($roleId);
-            if ($role instanceof Table\Generated\RoleRow) {
-                return $role->getId();
-            } else {
-                throw new StatusCode\BadRequestException('Provided role id does not exist');
-            }
-        } else {
-            throw new StatusCode\BadRequestException('No role provided');
-        }
-    }
-
-    private function getPlanId(Model\Backend\User $user): ?int
-    {
-        $planId = $user->getPlanId();
-        if (!empty($planId)) {
-            $plan = $this->planTable->find($planId);
-            if ($plan instanceof Table\Generated\PlanRow) {
-                return $plan->getId();
-            } else {
-                throw new StatusCode\BadRequestException('Provided plan id does not exist');
-            }
-        }
-
-        return null;
     }
 }

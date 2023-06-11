@@ -31,7 +31,6 @@ use Fusio\Model\Backend\PageUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Page
@@ -43,29 +42,22 @@ use PSX\Sql\Condition;
 class Page
 {
     private Table\Page $pageTable;
+    private Page\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Page $pageTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Page $pageTable, Page\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->pageTable       = $pageTable;
+        $this->pageTable = $pageTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(PageCreate $page, UserContext $context): int
     {
+        $this->validator->assert($page);
+
         $title = $page->getTitle();
-        if (empty($title)) {
-            throw new StatusCode\BadRequestException('Title not provided');
-        }
-
         $slug = $this->createSlug($title);
-
-        // check whether page exists
-        if ($this->exists($slug)) {
-            throw new StatusCode\BadRequestException('Page already exists');
-        }
-
-        $this->assertStatus($page);
 
         // create page
         try {
@@ -106,21 +98,17 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
+        $this->validator->assert($page);
+
         $title = $page->getTitle();
-        if (empty($title)) {
-            throw new StatusCode\BadRequestException('Title not provided');
-        }
-
-        $slug = $this->createSlug($title);
-
-        $this->assertStatus($page);
+        $slug = $title !== null ? $this->createSlug($title) : null;
 
         // update action
-        $existing->setStatus($page->getStatus());
-        $existing->setTitle($title);
-        $existing->setSlug($slug);
-        $existing->setContent($page->getContent());
-        $existing->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : null);
+        $existing->setStatus($page->getStatus() ?? $existing->getStatus());
+        $existing->setTitle($title ?? $existing->getTitle());
+        $existing->setSlug($slug ?? $existing->getSlug());
+        $existing->setContent($page->getContent() ?? $existing->getContent());
+        $existing->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : $existing->getMetadata());
         $this->pageTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($page, $existing, $context));
@@ -147,21 +135,6 @@ class Page
         return $existing->getId();
     }
 
-    public function exists(string $slug): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
-        $condition->equals(Table\Generated\PageTable::COLUMN_SLUG, $slug);
-
-        $page = $this->pageTable->findOneBy($condition);
-
-        if ($page instanceof Table\Generated\PageRow) {
-            return $page->getId();
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Generates a slug from the title
      *
@@ -176,12 +149,5 @@ class Page
         $slug = strtolower(trim($slug, '-'));
         $slug = preg_replace('/[\/_|+ -]+/', '-', $slug);
         return $slug;
-    }
-
-    private function assertStatus(\Fusio\Model\Backend\Page $page): void
-    {
-        if (!in_array($page->getStatus(), [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE])) {
-            throw new StatusCode\GoneException('Page status must be either 1 or 2');
-        }
     }
 }

@@ -152,7 +152,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'      => 'Gold',
+            'name'      => 'foo',
             'rateLimit' => 20,
             'timespan'  => 'PT2H',
             'metadata'  => $metadata,
@@ -182,7 +182,7 @@ JSON;
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('Gold', $row['name']);
+        $this->assertEquals('foo', $row['name']);
         $this->assertEquals(20, $row['rate_limit']);
         $this->assertEquals('PT2H', $row['timespan']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);

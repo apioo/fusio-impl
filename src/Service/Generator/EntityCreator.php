@@ -23,9 +23,8 @@ namespace Fusio\Impl\Service\Generator;
 
 use Fusio\Engine\Schema\SchemaName;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Action;
-use Fusio\Impl\Service\Operation;
-use Fusio\Impl\Service\Schema;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model;
 use PSX\Api\OperationInterface;
 
@@ -38,15 +37,21 @@ use PSX\Api\OperationInterface;
  */
 class EntityCreator
 {
-    private Operation $operationService;
-    private Schema $schemaService;
-    private Action $actionService;
+    private Service\Operation $operationService;
+    private Table\Operation $operationTable;
+    private Service\Schema $schemaService;
+    private Table\Schema $schemaTable;
+    private Service\Action $actionService;
+    private Table\Action $actionTable;
 
-    public function __construct(Operation $operationService, Schema $schemaService, Action $actionService)
+    public function __construct(Service\Operation $operationService, Table\Operation $operationTable, Service\Schema $schemaService, Table\Schema $schemaTable, Service\Action $actionService, Table\Action $actionTable)
     {
         $this->operationService = $operationService;
+        $this->operationTable = $operationTable;
         $this->schemaService = $schemaService;
+        $this->schemaTable = $schemaTable;
         $this->actionService = $actionService;
+        $this->actionTable = $actionTable;
     }
 
     /**
@@ -71,8 +76,8 @@ class EntityCreator
                 $source->put('$import', $result);
             }
 
-            $id = $this->schemaService->exists($record->getName() ?? '');
-            if (!$id) {
+            $existing = $this->schemaTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
                 $this->schemaService->create($categoryId, $record, $context);
             }
         }
@@ -86,8 +91,8 @@ class EntityCreator
         foreach ($actions as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
-            $id = $this->actionService->exists($record->getName() ?? '');
-            if (!$id) {
+            $existing = $this->actionTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
                 $this->actionService->create($categoryId, $record, $context);
             }
         }
@@ -136,8 +141,8 @@ class EntityCreator
 
             $record->setAction($this->buildName($prefix, $record->getAction()));
 
-            $id = $this->operationService->exists((string) $record->getName());
-            if (!$id) {
+            $existing = $this->operationTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
                 $this->operationService->create($categoryId, $record, $context);
             }
         }

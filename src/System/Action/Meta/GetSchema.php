@@ -67,7 +67,9 @@ class GetSchema implements ActionInterface
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $type = $this->schemaManager->getSchema(Scheme::wrap($schema['name']));
+        $source = Scheme::wrap($schema['name']) ?? throw new StatusCode\BadRequestException('Could not get schema name');
+
+        $type = $this->schemaManager->getSchema($source);
         $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
 
         return [

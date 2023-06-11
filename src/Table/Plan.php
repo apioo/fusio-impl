@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\PageRow;
 use Fusio\Impl\Table\Generated\PlanRow;
+use PSX\Sql\Condition;
 
 /**
  * Plan

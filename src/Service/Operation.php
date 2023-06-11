@@ -54,27 +54,20 @@ class Operation
     private Operation\Validator $validator;
     private Service\Scope $scopeService;
     private RoutingParserInterface $routingParser;
-    private SchemaManagerInterface $schemaManager;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Operation $operationTable, Service\Operation\Validator $validator, Service\Scope $scopeService, RoutingParserInterface $routingParser, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Operation $operationTable, Service\Operation\Validator $validator, Service\Scope $scopeService, RoutingParserInterface $routingParser, EventDispatcherInterface $eventDispatcher)
     {
-        $this->operationTable  = $operationTable;
-        $this->validator       = $validator;
-        $this->scopeService    = $scopeService;
-        $this->routingParser   = $routingParser;
-        $this->schemaManager   = $schemaManager;
+        $this->operationTable = $operationTable;
+        $this->validator = $validator;
+        $this->scopeService = $scopeService;
+        $this->routingParser = $routingParser;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, OperationCreate $operation, UserContext $context): int
     {
-        $this->validator->assertOperation($operation);
-
-        // check whether route exists
-        if ($this->exists($operation->getName())) {
-            throw new StatusCode\BadRequestException('Operation already exists');
-        }
+        $this->validator->assert($operation);
 
         // create operation
         try {
@@ -136,6 +129,8 @@ class Operation
             throw new StatusCode\GoneException('Operation was deleted');
         }
 
+        $this->validator->assert($operation, $existing);
+
         $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
 
         try {
@@ -146,8 +141,6 @@ class Operation
                 // if the operation is stable or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
-                $this->validator->assertOperation($operation, $existing);
-
                 $existing->setActive($operation->getActive() ?? $existing->getActive());
                 $existing->setPublic($operation->getPublic() ?? $existing->getPublic());
                 $existing->setStability($operation->getStability() ?? $existing->getStability());
@@ -218,24 +211,6 @@ class Operation
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    /**
-     * Checks whether the provided path already exists
-     */
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\OperationTable::COLUMN_NAME, $name);
-
-        $operation = $this->operationTable->findOneBy($condition);
-
-        if ($operation instanceof Table\Generated\OperationRow) {
-            return $operation->getId();
-        } else {
-            return false;
-        }
     }
 
     private function wrapParameters(?OperationParameters $parameters): ?string

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\CategoryRow;
 use Fusio\Impl\Table\Generated\OperationRow;
+use PSX\Sql\Condition;
 
 /**
  * Category

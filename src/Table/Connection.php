@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\ActionRow;
 use Fusio\Impl\Table\Generated\ConnectionRow;
+use PSX\Sql\Condition;
 
 /**
  * Connection

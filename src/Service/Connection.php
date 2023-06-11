@@ -51,33 +51,30 @@ use PSX\Sql\Condition;
 class Connection
 {
     private Table\Connection $connectionTable;
+    private Connection\Validator $validator;
     private Factory\Connection $connectionFactory;
     private string $secretKey;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Connection $connectionTable, Connection\Validator $validator, Factory\Connection $connectionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
-        $this->connectionTable   = $connectionTable;
+        $this->connectionTable = $connectionTable;
+        $this->validator = $validator;
         $this->connectionFactory = $connectionFactory;
-        $this->secretKey         = $config->get('fusio_project_key');
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->secretKey = $config->get('fusio_project_key');
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(ConnectionCreate $connection, UserContext $context): int
     {
+        $this->validator->assert($connection);
+
         $name = $connection->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $class = $connection->getClass();
 
-        // check whether connection exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Connection already exists');
-        }
-
-        $config     = $connection->getConfig();
-        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
+        $config     = $connection->getConfig()?->getAll() ?? [];
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
@@ -100,8 +97,8 @@ class Connection
 
             $row = new Table\Generated\ConnectionRow();
             $row->setStatus(Table\Connection::STATUS_ACTIVE);
-            $row->setName($connection->getName());
-            $row->setClass($connection->getClass());
+            $row->setName($name);
+            $row->setClass($class);
             $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
             $row->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
             $this->connectionTable->create($row);
@@ -132,9 +129,13 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config     = $connection->getConfig();
-        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
+        $this->validator->assert($connection, $existing);
+
+        $class = $connection->getClass();
+
+        $config     = $connection->getConfig()?->getAll() ?? Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
 
         $conn = $factory->getConnection($parameters);
 
@@ -148,7 +149,7 @@ class Connection
 
         // update connection
         $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
-        $existing->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
+        $existing->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : $existing->getMetadata());
         $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
@@ -190,21 +191,6 @@ class Connection
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_NAME, $name);
-
-        $connection = $this->connectionTable->findOneBy($condition);
-
-        if ($connection instanceof Table\Generated\ConnectionRow) {
-            return $connection->getId();
-        } else {
-            return false;
-        }
     }
 
     public function getIntrospection(int $connectionId): IntrospectorInterface

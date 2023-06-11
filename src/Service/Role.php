@@ -44,27 +44,21 @@ class Role
     private Table\Role $roleTable;
     private Table\Role\Scope $roleScopeTable;
     private Table\Scope $scopeTable;
+    private Role\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Role $roleTable, Table\Role\Scope $roleScopeTable, Table\Scope $scopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Role $roleTable, Table\Role\Scope $roleScopeTable, Table\Scope $scopeTable, Role\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->roleTable       = $roleTable;
-        $this->roleScopeTable  = $roleScopeTable;
-        $this->scopeTable      = $scopeTable;
+        $this->roleTable = $roleTable;
+        $this->roleScopeTable = $roleScopeTable;
+        $this->scopeTable = $scopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(RoleCreate $role, UserContext $context): int
     {
-        $name = $role->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
-
-        // check whether role exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Role already exists');
-        }
+        $this->validator->assert($role);
 
         try {
             $this->roleTable->beginTransaction();
@@ -106,12 +100,14 @@ class Role
             throw new StatusCode\GoneException('Role was deleted');
         }
 
+        $this->validator->assert($role, $existing);
+
         try {
             $this->roleTable->beginTransaction();
 
             // update role
-            $existing->setCategoryId($role->getCategoryId());
-            $existing->setName($role->getName());
+            $existing->setCategoryId($role->getCategoryId() ?? $existing->getCategoryId());
+            $existing->setName($role->getName() ?? $existing->getName());
             $this->roleTable->update($existing);
 
             if ($role->getScopes() !== null) {
@@ -147,21 +143,6 @@ class Role
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->notEquals(Table\Generated\RoleTable::COLUMN_STATUS, Table\Role::STATUS_DELETED);
-        $condition->equals(Table\Generated\RoleTable::COLUMN_NAME, $name);
-
-        $role = $this->roleTable->findOneBy($condition);
-
-        if ($role instanceof Table\Generated\RoleRow) {
-            return $role->getId();
-        } else {
-            return false;
-        }
     }
 
     protected function insertScopes(int $roleId, ?array $scopes): void

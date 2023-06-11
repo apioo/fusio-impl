@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\File\Action\FileEngine;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Factory\ResolverInterface;
 
@@ -34,9 +35,16 @@ use Fusio\Engine\Factory\ResolverInterface;
  */
 class StaticFile implements ResolverInterface
 {
+    private RuntimeInterface $runtime;
+
+    public function __construct(RuntimeInterface $runtime)
+    {
+        $this->runtime = $runtime;
+    }
+
     public function resolve(string $className): ActionInterface
     {
-        $engine = new FileEngine($className);
+        $engine = new FileEngine($this->runtime);
         $engine->setFile($className);
         return $engine;
     }

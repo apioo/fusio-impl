@@ -42,25 +42,19 @@ use PSX\Sql\Condition;
 class Event
 {
     private Table\Event $eventTable;
+    private Event\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Event $eventTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Event $eventTable, Event\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventTable      = $eventTable;
+        $this->eventTable = $eventTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, EventCreate $event, UserContext $context): int
     {
-        $name = $event->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
-
-        // check whether event exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Event already exists');
-        }
+        $this->validator->assert($event);
 
         // create event
         try {
@@ -101,11 +95,13 @@ class Event
             throw new StatusCode\GoneException('Event was deleted');
         }
 
+        $this->validator->assert($event, $existing);
+
         // update event
-        $existing->setName($event->getName());
-        $existing->setDescription($event->getDescription());
-        $existing->setEventSchema($event->getSchema());
-        $existing->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
+        $existing->setName($event->getName() ?? $existing->getName());
+        $existing->setDescription($event->getDescription() ?? $existing->getDescription());
+        $existing->setEventSchema($event->getSchema() ?? $existing->getEventSchema());
+        $existing->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : $existing->getMetadata());
         $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
@@ -126,20 +122,5 @@ class Event
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $name);
-
-        $event = $this->eventTable->findOneBy($condition);
-
-        if ($event instanceof Table\Generated\EventRow) {
-            return $event->getId();
-        } else {
-            return false;
-        }
     }
 }

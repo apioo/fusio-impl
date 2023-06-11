@@ -42,25 +42,19 @@ use PSX\Sql\Condition;
 class Category
 {
     private Table\Category $categoryTable;
+    private Category\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Category $categoryTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Category $categoryTable, Category\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->categoryTable   = $categoryTable;
+        $this->categoryTable = $categoryTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(CategoryCreate $category, UserContext $context): int
     {
-        $name = $category->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
-
-        // check whether rate exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Category already exists');
-        }
+        $this->validator->assert($category);
 
         try {
             $this->categoryTable->beginTransaction();
@@ -97,11 +91,13 @@ class Category
             throw new StatusCode\GoneException('Category was deleted');
         }
 
+        $this->validator->assert($category, $existing);
+
         try {
             $this->categoryTable->beginTransaction();
 
             // update category
-            $existing->setName($category->getName());
+            $existing->setName($category->getName() ?? $existing->getName());
             $this->categoryTable->update($existing);
 
             $this->categoryTable->commit();
@@ -129,20 +125,5 @@ class Category
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->notEquals(Table\Generated\CategoryTable::COLUMN_STATUS, Table\Category::STATUS_DELETED);
-        $condition->equals(Table\Generated\CategoryTable::COLUMN_NAME, $name);
-
-        $category = $this->categoryTable->findOneBy($condition);
-
-        if ($category instanceof Table\Generated\CategoryRow) {
-            return $category->getId();
-        } else {
-            return false;
-        }
     }
 }

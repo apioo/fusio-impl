@@ -50,11 +50,13 @@ class Validator
         $this->schemaTable = $schemaTable;
     }
 
-    public function assertOperation(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
+    public function assert(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
     {
         $name = $operation->getName();
-        if ($existing === null && empty($name)) {
-            throw new StatusCode\BadRequestException('Name must not be empty');
+        if ($name !== null) {
+            $this->assertName($name, $existing);
+        } elseif ($existing === null) {
+            throw new StatusCode\BadRequestException('Operation name must not be empty');
         }
 
         $stability = $operation->getStability();
@@ -103,6 +105,17 @@ class Validator
             $this->assertAction($operation->getAction());
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Action must not be empty');
+        }
+    }
+
+    private function assertName(string $name, ?Table\Generated\OperationRow $existing = null): void
+    {
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\_\\.]{3,64}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid operation name');
+        }
+
+        if (($existing === null || $name !== $existing->getName()) && $this->operationTable->findOneByName($name)) {
+            throw new StatusCode\BadRequestException('Operation already exists');
         }
     }
 

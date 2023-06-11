@@ -42,19 +42,19 @@ use PSX\Sql\Condition;
  */
 class Password extends PasswordAbstract
 {
+    private Service\User\Authenticator $authenticatorService;
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
-    private Service\User $userService;
     private Table\App $appTable;
     private string $expireToken;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
     {
+        $this->authenticatorService = $authenticatorService;
         $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->userService     = $userService;
-        $this->appTable        = $appTable;
-        $this->expireToken     = $config->get('fusio_expire_token');
+        $this->scopeService = $scopeService;
+        $this->appTable = $appTable;
+        $this->expireToken = $config->get('fusio_expire_token');
     }
 
     protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
@@ -70,7 +70,7 @@ class Password extends PasswordAbstract
         }
 
         // check user
-        $userId = $this->userService->authenticateUser($grant->getUsername(), $grant->getPassword());
+        $userId = $this->authenticatorService->authenticate($grant->getUsername(), $grant->getPassword());
         if (empty($userId)) {
             throw new InvalidGrantException('Unknown user');
         }
@@ -78,7 +78,7 @@ class Password extends PasswordAbstract
         $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
-            $scope = implode(',', $this->userService->getAvailableScopes($userId));
+            $scope = implode(',', $this->authenticatorService->getAvailableScopes($userId));
         }
 
         // validate scopes

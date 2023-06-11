@@ -31,9 +31,7 @@ use Fusio\Model\Backend\AppCreate;
 use Fusio\Model\Backend\AppUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * App
@@ -47,32 +45,21 @@ class App
     private Table\App $appTable;
     private Table\Scope $scopeTable;
     private Table\App\Scope $appScopeTable;
-    private Table\App\Token $appTokenTable;
-    private string $tokenSecret;
+    private App\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, App\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->appTable        = $appTable;
-        $this->scopeTable      = $scopeTable;
-        $this->appScopeTable   = $appScopeTable;
-        $this->appTokenTable   = $appTokenTable;
-        $this->tokenSecret     = $config->get('fusio_project_key');
+        $this->appTable = $appTable;
+        $this->scopeTable = $scopeTable;
+        $this->appScopeTable = $appScopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(AppCreate $app, UserContext $context): int
     {
-        // check whether app exists
-        $condition  = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $app->getUserId());
-        $condition->notEquals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_DELETED);
-        $condition->equals(Table\Generated\AppTable::COLUMN_NAME, $app->getName());
-
-        $existing = $this->appTable->findOneBy($condition);
-        if (!empty($existing)) {
-            throw new StatusCode\BadRequestException('App already exists');
-        }
+        $this->validator->assert($app);
 
         // parse parameters
         $parameters = $app->getParameters();
@@ -130,6 +117,8 @@ class App
             throw new StatusCode\GoneException('App was deleted');
         }
 
+        $this->validator->assert($app, $existing);
+
         // parse parameters
         $parameters = $app->getParameters();
         if ($parameters !== null) {
@@ -142,10 +131,10 @@ class App
             $this->appTable->beginTransaction();
 
             $existing->setStatus($app->getStatus() ?? Table\App::STATUS_ACTIVE);
-            $existing->setName($app->getName());
-            $existing->setUrl($app->getUrl());
+            $existing->setName($app->getName() ?? $existing->getName());
+            $existing->setUrl($app->getUrl() ?? $existing->getUrl());
             $existing->setParameters($parameters);
-            $existing->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : null);
+            $existing->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : $existing->getParameters());
             $this->appTable->update($existing);
 
             $scopes = $app->getScopes();

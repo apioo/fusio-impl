@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\RateRow;
 use Fusio\Impl\Table\Generated\RoleRow;
+use PSX\Sql\Condition;
 
 /**
  * Role

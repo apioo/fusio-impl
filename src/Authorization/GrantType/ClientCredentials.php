@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\ClientCredentialsAbstract;
+use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\InvalidClientException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 use PSX\OAuth2\Grant;
@@ -40,22 +41,22 @@ use PSX\Sql\Condition;
  */
 class ClientCredentials extends ClientCredentialsAbstract
 {
+    private Service\User\Authenticator $authenticatorService;
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
-    private Service\User $userService;
     private Table\App $appTable;
     private string $expireToken;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
     {
+        $this->authenticatorService = $authenticatorService;
         $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->userService     = $userService;
-        $this->appTable        = $appTable;
-        $this->expireToken     = $config->get('fusio_expire_token');
+        $this->scopeService = $scopeService;
+        $this->appTable = $appTable;
+        $this->expireToken = $config->get('fusio_expire_token');
     }
 
-    protected function generate(Credentials $credentials, Grant\ClientCredentials $grant)
+    protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         // check whether the credentials contain an app key and secret
         $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
@@ -65,7 +66,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         } else {
             // otherwise try to authenticate the user credentials
             $appId  = null;
-            $userId = $this->userService->authenticateUser($credentials->getClientId(), $credentials->getClientSecret());
+            $userId = $this->authenticatorService->authenticate($credentials->getClientId(), $credentials->getClientSecret());
         }
 
         if (empty($userId)) {
@@ -75,7 +76,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
-            $scope = implode(',', $this->userService->getAvailableScopes($userId));
+            $scope = implode(',', $this->authenticatorService->getAvailableScopes($userId));
         }
 
         // validate scopes
@@ -94,7 +95,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         );
     }
 
-    private function getApp(string $appKey, string $appSecret)
+    private function getApp(string $appKey, string $appSecret): ?Table\Generated\AppRow
     {
         $condition = Condition::withAnd();
         $condition->equals('app_key', $appKey);

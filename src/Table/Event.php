@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\CronjobRow;
 use Fusio\Impl\Table\Generated\EventRow;
+use PSX\Sql\Condition;
 
 /**
  * Event

@@ -67,8 +67,13 @@ class Webhook implements ActionInterface
             $httpRequest
         );
 
+        $provider = $requestContext->getParameter('provider');
+        if (empty($provider)) {
+            throw new \RuntimeException('No provider provided');
+        }
+
         try {
-            $this->paymentService->webhook($requestContext->getParameter('provider'), $httpRequest);
+            $this->paymentService->webhook($provider, $httpRequest);
         } catch (\Throwable $e) {
             $this->logService->error($e);
 

@@ -35,7 +35,6 @@ use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaManagerInterface;
-use PSX\Sql\Condition;
 
 /**
  * Schema
@@ -47,36 +46,29 @@ use PSX\Sql\Condition;
 class Schema
 {
     private Table\Schema $schemaTable;
+    private Schema\Validator $validator;
     private SchemaManagerInterface $schemaManager;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Schema $schemaTable, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Schema\Validator $validator, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
     {
-        $this->schemaTable     = $schemaTable;
-        $this->schemaManager   = $schemaManager;
+        $this->schemaTable = $schemaTable;
+        $this->validator = $validator;
+        $this->schemaManager = $schemaManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
     {
-        $name = $schema->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid schema name');
-        }
+        $this->validator->assert($schema);
 
-        // check whether schema exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Schema already exists');
-        }
-
-        // create schema
         try {
             $this->schemaTable->beginTransaction();
 
             $row = new Table\Generated\SchemaRow();
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Schema::STATUS_ACTIVE);
-            $row->setName($name);
+            $row->setName($schema->getName());
             $row->setSource($this->parseSource($schema->getSource()));
             $row->setForm($this->parseForm($schema->getForm()));
             $row->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
@@ -86,7 +78,7 @@ class Schema
             $schema->setId($schemaId);
 
             // check whether we can load the schema
-            //$this->schemaManager->getSchema(Scheme::wrap($name));
+            //$this->schemaManager->getSchema(Scheme::wrap($row->getName()));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -111,22 +103,19 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $name = $schema->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid schema name');
-        }
+        $this->validator->assert($schema, $existing);
 
         try {
             $this->schemaTable->beginTransaction();
 
-            $existing->setName($name);
-            $existing->setSource($this->parseSource($schema->getSource()));
-            $existing->setForm($this->parseForm($schema->getForm()));
-            $existing->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
+            $existing->setName($schema->getName() ?? $existing->getName());
+            $existing->setSource($this->parseSource($schema->getSource()) ?? $existing->getSource());
+            $existing->setForm($this->parseForm($schema->getForm()) ?? $existing->getForm());
+            $existing->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : $existing->getMetadata());
             $this->schemaTable->update($existing);
 
             // check whether we can load the schema
-            $this->schemaManager->getSchema(Scheme::wrap($name));
+            $this->schemaManager->getSchema(Scheme::wrap($existing->getName()));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -178,24 +167,6 @@ class Schema
     {
         $schema = $this->schemaManager->getSchema(Scheme::wrap($schemaId));
         return (new Generator\Html())->generate($schema);
-    }
-
-    /**
-     * Returns either false ot the id of the existing schema
-     */
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, $name);
-
-        $schema = $this->schemaTable->findOneBy($condition);
-
-        if ($schema instanceof Table\Generated\SchemaRow) {
-            return $schema->getId();
-        } else {
-            return false;
-        }
     }
 
     private function parseSource(?RecordInterface $source): ?string

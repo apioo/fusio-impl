@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Fusio\Impl\Service\User\Validator;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
 
 /**
@@ -39,7 +40,8 @@ class ValidatorTest extends TestCase
      */
     public function testAssertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
     {
-        Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        $validator = Environment::getService(Validator::class);
+        $validator->assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
 
         $this->assertTrue(true);
     }
@@ -52,10 +54,11 @@ class ValidatorTest extends TestCase
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage($exceptionMessage);
 
-        Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        $validator = Environment::getService(Validator::class);
+        $validator->assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
     }
 
-    public function assertProvider()
+    public function assertProvider(): array
     {
         return [
             ['aaaaaaaa', null, null, null, null, true],

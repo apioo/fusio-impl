@@ -106,7 +106,7 @@ class Authorize
 
         // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app->getId(), $request->getAllow());
+        $this->saveUserDecision($userId, $app->getId(), $request->getAllow() ?? false);
 
         $state = $request->getState();
         if ($request->getAllow()) {

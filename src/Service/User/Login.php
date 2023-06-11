@@ -24,10 +24,9 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Login
@@ -38,15 +37,15 @@ use PSX\Oauth2\AccessToken;
  */
 class Login
 {
-    private Service\User $userService;
+    private Authenticator $authenticatorService;
     private Service\App\Token $appTokenService;
     private ConfigInterface $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, ConfigInterface $config)
     {
-        $this->userService     = $userService;
+        $this->authenticatorService = $authenticatorService;
         $this->appTokenService = $appTokenService;
-        $this->config          = $config;
+        $this->config = $config;
     }
 
     public function login(UserLogin $login): ?AccessToken
@@ -61,16 +60,16 @@ class Login
             throw new StatusCode\BadRequestException('No password provided');
         }
 
-        $userId = $this->userService->authenticateUser($username, $password);
+        $userId = $this->authenticatorService->authenticate($username, $password);
         if (empty($userId)) {
             return null;
         }
 
         $scopes = $login->getScopes();
         if (empty($scopes)) {
-            $scopes = $this->userService->getAvailableScopes($userId);
+            $scopes = $this->authenticatorService->getAvailableScopes($userId);
         } else {
-            $scopes = $this->userService->getValidScopes($userId, $scopes);
+            $scopes = $this->authenticatorService->getValidScopes($userId, $scopes);
         }
 
         $appId = $this->getAppId();

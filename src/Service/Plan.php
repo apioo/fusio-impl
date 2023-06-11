@@ -44,29 +44,22 @@ class Plan
     private Table\Plan $planTable;
     private Table\Scope $scopeTable;
     private Table\Plan\Scope $planScopeTable;
+    private Plan\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Plan $planTable, Table\Scope $scopeTable, Table\Plan\Scope $planScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Plan $planTable, Table\Scope $scopeTable, Table\Plan\Scope $planScopeTable, Plan\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->planTable       = $planTable;
-        $this->scopeTable      = $scopeTable;
-        $this->planScopeTable  = $planScopeTable;
+        $this->planTable = $planTable;
+        $this->scopeTable = $scopeTable;
+        $this->planScopeTable = $planScopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(PlanCreate $plan, UserContext $context): int
     {
-        $name = $plan->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $this->validator->assert($plan);
 
-        // check whether plan exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Plan already exists');
-        }
-
-        // create plan
         try {
             $this->planTable->beginTransaction();
 
@@ -118,19 +111,21 @@ class Plan
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
+        $this->validator->assert($plan, $existing);
+
         $price = $plan->getPrice();
         if ($price !== null) {
             $price = (int) ($price * 100);
         }
 
         // update event
-        $existing->setName($plan->getName());
-        $existing->setDescription($plan->getDescription());
-        $existing->setPrice($price);
-        $existing->setPoints($plan->getPoints());
-        $existing->setPeriodType($plan->getPeriod());
-        $existing->setExternalId($plan->getExternalId());
-        $existing->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null);
+        $existing->setName($plan->getName() ?? $existing->getName());
+        $existing->setDescription($plan->getDescription() ?? $existing->getDescription());
+        $existing->setPrice($price ?? $existing->getPrice());
+        $existing->setPoints($plan->getPoints() ?? $existing->getPoints());
+        $existing->setPeriodType($plan->getPeriod() ?? $existing->getPeriodType());
+        $existing->setExternalId($plan->getExternalId() ?? $existing->getExternalId());
+        $existing->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : $existing->getMetadata());
         $this->planTable->update($existing);
 
         $scopes = $plan->getScopes();
@@ -160,21 +155,6 @@ class Plan
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-    
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\PlanTable::COLUMN_NAME, $name);
-
-        $plan = $this->planTable->findOneBy($condition);
-
-        if ($plan instanceof Table\Generated\PlanRow) {
-            return $plan->getId();
-        } else {
-            return false;
-        }
     }
 
     private function insertScopes(int $planId, array $scopes): void

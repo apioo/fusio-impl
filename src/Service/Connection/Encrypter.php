@@ -53,7 +53,7 @@ class Encrypter
         return base64_encode($iv) . '.' . base64_encode($data);
     }
 
-    public static function decrypt(mixed $data, string $secretKey)
+    public static function decrypt(mixed $data, string $secretKey): array
     {
         if (empty($data)) {
             return [];

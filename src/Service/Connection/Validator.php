@@ -19,11 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Cronjob;
+namespace Fusio\Impl\Service\Connection;
 
-use Cron\CronExpression;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Cronjob;
+use Fusio\Model\Backend\Connection;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -35,51 +34,31 @@ use PSX\Http\Exception as StatusCode;
  */
 class Validator
 {
-    private Table\Cronjob $cronjobTable;
+    private Table\Connection $connectionTable;
 
-    public function __construct(Table\Cronjob $cronjobTable)
+    public function __construct(Table\Connection $connectionTable)
     {
-        $this->cronjobTable = $cronjobTable;
+        $this->connectionTable = $connectionTable;
     }
 
-    public function assert(Cronjob $cronjob, ?Table\Generated\CronjobRow $existing = null): void
+    public function assert(Connection $connection, ?Table\Generated\ConnectionRow $existing = null): void
     {
-        $name = $cronjob->getName();
+        $name = $connection->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
         } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Cronjob name must not be empty');
-        }
-
-        $cron = $cronjob->getCron();
-        if ($cron !== null) {
-            $this->assertCron($cron);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Cronjob expression must not be empty');
+            throw new StatusCode\BadRequestException('Connection name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\CronjobRow $existing = null): void
+    private function assertName(string $name, ?Table\Generated\ConnectionRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByName($name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
-        }
-    }
-
-    private function assertCron(string $cron): void
-    {
-        if (empty($cron)) {
-            throw new StatusCode\BadRequestException('Cron must not be empty');
-        }
-
-        try {
-            new CronExpression($cron);
-        } catch (\InvalidArgumentException $e) {
-            throw new StatusCode\BadRequestException($e->getMessage(), $e);
         }
     }
 }

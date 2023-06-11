@@ -30,7 +30,6 @@ use Fusio\Model\Backend\CronjobCreate;
 use Fusio\Model\Backend\CronjobUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Cronjob
@@ -42,29 +41,19 @@ use PSX\Sql\Condition;
 class Cronjob
 {
     private Table\Cronjob $cronjobTable;
+    private Cronjob\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Cronjob $cronjobTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Cronjob $cronjobTable, Cronjob\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->cronjobTable    = $cronjobTable;
+        $this->cronjobTable = $cronjobTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, CronjobCreate $cronjob, UserContext $context): int
     {
-        $cron = $cronjob->getCron() ?? '';
-
-        Cronjob\Validator::assertCron($cron);
-
-        $name = $cronjob->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
-
-        // check whether cronjob exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Cronjob already exists');
-        }
+        $this->validator->assert($cronjob);
 
         // create cronjob
         try {
@@ -96,10 +85,6 @@ class Cronjob
 
     public function update(int $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
     {
-        $cron = $cronjob->getCron() ?? '';
-
-        Cronjob\Validator::assertCron($cron);
-
         $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
@@ -109,10 +94,12 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $existing->setName($cronjob->getName());
-        $existing->setCron($cronjob->getCron());
-        $existing->setAction($cronjob->getAction());
-        $existing->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null);
+        $this->validator->assert($cronjob, $existing);
+
+        $existing->setName($cronjob->getName() ?? $existing->getName());
+        $existing->setCron($cronjob->getCron() ?? $existing->getCron());
+        $existing->setAction($cronjob->getAction() ?? $existing->getAction());
+        $existing->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : $existing->getMetadata());
         $this->cronjobTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
@@ -137,28 +124,5 @@ class Cronjob
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    /**
-     * Executes a specific cronjob
-     */
-    public function execute(string|int $cronjobId)
-    {
-
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\CronjobTable::COLUMN_NAME, $name);
-
-        $cronjob = $this->cronjobTable->findOneBy($condition);
-
-        if ($cronjob instanceof Table\Generated\CronjobRow) {
-            return $cronjob->getId();
-        } else {
-            return false;
-        }
     }
 }

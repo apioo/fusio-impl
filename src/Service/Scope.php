@@ -47,30 +47,23 @@ class Scope
     private Table\Scope\Operation $scopeRouteTable;
     private Table\App\Scope $appScopeTable;
     private Table\User\Scope $userScopeTable;
+    private Scope\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, Scope\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->scopeTable      = $scopeTable;
+        $this->scopeTable = $scopeTable;
         $this->scopeRouteTable = $scopeRouteTable;
-        $this->appScopeTable   = $appScopeTable;
-        $this->userScopeTable  = $userScopeTable;
+        $this->appScopeTable = $appScopeTable;
+        $this->userScopeTable = $userScopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
     {
-        $name = $scope->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $this->validator->assert($scope);
 
-        // check whether scope exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Scope already exists');
-        }
-
-        // create scope
         try {
             $this->scopeTable->beginTransaction();
 
@@ -124,7 +117,6 @@ class Scope
                 $scope = new ScopeCreate();
                 $scope->setName($scopeName);
                 $scope->setOperations([$operation]);
-
                 $this->create($categoryId, $scope, $context);
             }
         }
@@ -137,10 +129,7 @@ class Scope
             throw new StatusCode\NotFoundException('Could not find scope');
         }
 
-        // check whether this is a system scope
-        if (in_array($existing->getId(), [1, 2, 3])) {
-            throw new StatusCode\BadRequestException('It is not possible to change this scope');
-        }
+        $this->validator->assert($scope, $existing);
 
         try {
             $this->scopeTable->beginTransaction();
@@ -229,20 +218,6 @@ class Scope
         }
 
         return $scopes;
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ScopeTable::COLUMN_NAME, $name);
-
-        $scope = $this->scopeTable->findOneBy($condition);
-
-        if ($scope instanceof Table\Generated\ScopeRow) {
-            return $scope->getId();
-        } else {
-            return false;
-        }
     }
 
     /**

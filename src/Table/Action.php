@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\ActionRow;
+use PSX\Sql\Condition;
 
 /**
  * Action

@@ -47,29 +47,22 @@ class Rate
     private Table\Rate $rateTable;
     private Table\Rate\Allocation $rateAllocationTable;
     private Table\Log $logTable;
+    private Rate\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, Rate\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->rateTable           = $rateTable;
+        $this->rateTable = $rateTable;
         $this->rateAllocationTable = $rateAllocationTable;
-        $this->logTable            = $logTable;
-        $this->eventDispatcher     = $eventDispatcher;
+        $this->logTable = $logTable;
+        $this->validator = $validator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(RateCreate $rate, UserContext $context): int
     {
-        $name = $rate->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $this->validator->assert($rate);
 
-        // check whether rate exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Rate already exists');
-        }
-
-        // create rate
         try {
             $this->rateTable->beginTransaction();
 
@@ -110,15 +103,16 @@ class Rate
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
+        $this->validator->assert($rate);
+
         try {
             $this->rateTable->beginTransaction();
 
-            // update rate
-            $existing->setPriority($rate->getPriority() ?? 0);
-            $existing->setName($rate->getName());
-            $existing->setRateLimit($rate->getRateLimit());
-            $existing->setTimespan($rate->getTimespan());
-            $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
+            $existing->setPriority($rate->getPriority() ?? $existing->getPriority());
+            $existing->setName($rate->getName() ?? $existing->getName());
+            $existing->setRateLimit($rate->getRateLimit() ?? $existing->getRateLimit());
+            $existing->setTimespan($rate->getTimespan() ?? $existing->getTimespan());
+            $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : $existing->getMetadata());
             $this->rateTable->update($existing);
 
             $this->handleAllocations($existing->getId(), $rate->getAllocation());
@@ -170,21 +164,6 @@ class Rate
         }
 
         return true;
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition  = Condition::withAnd();
-        $condition->notEquals(Table\Generated\RateTable::COLUMN_STATUS, Table\Rate::STATUS_DELETED);
-        $condition->equals(Table\Generated\RateTable::COLUMN_NAME, $name);
-
-        $rate = $this->rateTable->findOneBy($condition);
-
-        if ($rate instanceof Table\Generated\RateRow) {
-            return $rate->getId();
-        } else {
-            return false;
-        }
     }
 
     private function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int

@@ -94,7 +94,12 @@ class ResetPassword
             throw new StatusCode\NotFoundException('Invalid token provided');
         }
 
-        $result = $this->userTable->changePassword($userId, null, $reset->getNewPassword(), false);
+        $newPassword = $reset->getNewPassword();
+        if (empty($newPassword)) {
+            throw new StatusCode\BadRequestException('Provided no new password');
+        }
+
+        $result = $this->userTable->changePassword($userId, null, $newPassword, false);
         if (!$result) {
             throw new StatusCode\BadRequestException('Could not change password');
         }

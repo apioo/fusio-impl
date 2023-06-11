@@ -23,7 +23,9 @@ namespace Fusio\Impl\Tests\Service\Cronjob;
 
 use Fusio\Impl\Backend\Filter\Cronjob\Cron;
 use Fusio\Impl\Service\Cronjob\Validator;
+use Fusio\Model\Backend\CronjobCreate;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
 
 /**
@@ -41,7 +43,10 @@ class ValidatorTest extends TestCase
     public function testAssertCron(string $cron, bool $expect, ?string $errorMessage)
     {
         try {
-            Validator::assertCron($cron);
+            $cronjob = new CronjobCreate();
+            $cronjob->setName('test');
+            $cronjob->setCron($cron);
+            Environment::getService(Validator::class)->assert($cronjob);
 
             $this->assertTrue($expect);
         } catch (BadRequestException $e) {
