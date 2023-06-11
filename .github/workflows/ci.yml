@@ -20,11 +20,11 @@ jobs:
         run: vendor/bin/psalm --no-progress --shepherd --show-info=false --stats
   phpunit:
     needs: psalm
-    name: "PHPUnit (PHP: ${{ matrix.php-versions }}-${{ matrix.database }})"
+    name: "PHPUnit (PHP: ${{ matrix.php-version }}-${{ matrix.connection }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions:
+        php-version:
           - 8.1
           - 8.2
         connection:
@@ -46,7 +46,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
           coverage: none
       - name: Setup MySQL
         run: |
