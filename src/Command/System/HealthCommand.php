@@ -44,14 +44,14 @@ class HealthCommand extends Command
         $this->health = $health;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:health')
             ->setDescription('Checks whether the system is healthy');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $result = $this->health->check();
         foreach ($result->getChecks() as $name => $check) {
@@ -64,6 +64,6 @@ class HealthCommand extends Command
             }
         }
 
-        return $result->isHealthy() ? 0 : 1;
+        return $result->isHealthy() ? self::SUCCESS : self::FAILURE;
     }
 }

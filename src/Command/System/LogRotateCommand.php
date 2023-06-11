@@ -44,19 +44,19 @@ class LogRotateCommand extends Command
         $this->logRotator = $logRotator;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:log_rotate')
             ->setDescription('Rotates the log table');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->logRotator->rotate() as $message) {
             $output->writeln($message);
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

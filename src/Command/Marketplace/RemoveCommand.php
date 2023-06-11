@@ -50,7 +50,7 @@ class RemoveCommand extends Command
         $this->installer = $installer;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('marketplace:remove')
@@ -58,7 +58,7 @@ class RemoveCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $this->getArgumentAsString($input, 'name');
 
@@ -74,6 +74,6 @@ class RemoveCommand extends Command
             $output->writeln('');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

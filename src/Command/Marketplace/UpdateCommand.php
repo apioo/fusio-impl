@@ -53,7 +53,7 @@ class UpdateCommand extends Command
         $this->remoteRepository = $remoteRepository;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('marketplace:update')
@@ -62,7 +62,7 @@ class UpdateCommand extends Command
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('disable_ssl_verify')) {
             $this->remoteRepository->setSslVerify(false);
@@ -82,6 +82,6 @@ class UpdateCommand extends Command
             $output->writeln('');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

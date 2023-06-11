@@ -48,7 +48,7 @@ class RestoreCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:restore')
@@ -57,7 +57,7 @@ class RestoreCommand extends Command
             ->addArgument('id', InputArgument::REQUIRED, 'Name or id of the record');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = $this->getArgumentAsString($input, 'type');
         $id   = $this->getArgumentAsString($input, 'id');
@@ -66,10 +66,10 @@ class RestoreCommand extends Command
 
         if ($result > 0) {
             $output->writeln('Restored ' . $result . ' record' . ($result > 1 ? 's' : ''));
-            return 0;
+            return self::SUCCESS;
         } else {
             $output->writeln('Restored no record');
-            return 1;
+            return self::FAILURE;
         }
     }
 }

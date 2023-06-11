@@ -54,7 +54,7 @@ class InstallCommand extends Command
         $this->remoteRepository = $remoteRepository;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('marketplace:install')
@@ -64,7 +64,7 @@ class InstallCommand extends Command
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('disable_ssl_verify')) {
             $this->remoteRepository->setSslVerify(false);
@@ -92,6 +92,6 @@ class InstallCommand extends Command
             $output->writeln('');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

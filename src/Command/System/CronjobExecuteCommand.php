@@ -45,7 +45,7 @@ class CronjobExecuteCommand extends Command
         $this->executor = $executor;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:cronjob_execute')
@@ -54,7 +54,7 @@ class CronjobExecuteCommand extends Command
             ->addOption('daemon', 'd', InputOption::VALUE_NONE, 'Whether to execute in daemon mode');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('daemon')) {
             $this->executor->executeDaemon();
@@ -63,6 +63,6 @@ class CronjobExecuteCommand extends Command
             $output->writeln('Execution successful');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

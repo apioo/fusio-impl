@@ -55,7 +55,7 @@ class TokenCommand extends Command
         $this->userTable       = $userTable;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:token')
@@ -66,7 +66,7 @@ class TokenCommand extends Command
             ->addArgument('expire', InputArgument::REQUIRED, 'Interval when the token expires (i.e. P1D for one day)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $app    = $this->findApp($input->getArgument('appId'));
         $user   = $this->findUser($input->getArgument('userId'));
@@ -96,7 +96,7 @@ class TokenCommand extends Command
         $output->writeln(Yaml::dump($response, 2));
         $output->writeln("");
 
-        return 0;
+        return self::SUCCESS;
     }
 
     private function findApp(mixed $appId): Table\Generated\AppRow

@@ -48,7 +48,7 @@ class CheckCommand extends Command
         $this->connection = $connection;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:check')
@@ -56,7 +56,7 @@ class CheckCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'Name of the check i.e. user');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $check = $this->getArgumentAsString($input, 'name');
 
@@ -68,13 +68,13 @@ class CheckCommand extends Command
 
         if ($result === false) {
             $output->writeln('Check failed');
-            return 1;
+            return self::FAILURE;
         } elseif ($result === true) {
             $output->writeln('Check successful');
-            return 0;
+            return self::SUCCESS;
         } else {
             $output->writeln('Unknown check');
-            return 1;
+            return self::FAILURE;
         }
     }
 

@@ -44,19 +44,19 @@ class CleanCommand extends Command
         $this->cleaner = $cleaner;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:clean')
             ->setDescription('Clean up not needed database entries i.e. expired app tokens');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cleaner->cleanUp();
 
         $output->writeln('Clean up successful!');
 
-        return 0;
+        return self::SUCCESS;
     }
 }

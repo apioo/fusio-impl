@@ -54,7 +54,7 @@ class UserAddCommand extends Command
         $this->validator = $validator;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:user_add')
@@ -66,7 +66,7 @@ class UserAddCommand extends Command
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = $this->getHelper('question');
 
@@ -161,6 +161,6 @@ class UserAddCommand extends Command
 
         $output->writeln('Created user ' . $name . ' successful');
 
-        return 0;
+        return self::SUCCESS;
     }
 }

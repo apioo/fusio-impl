@@ -48,7 +48,7 @@ class MailTestCommand extends Command
         $this->mailer = $mailer;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:mail_test')
@@ -56,7 +56,7 @@ class MailTestCommand extends Command
             ->addArgument('to', InputArgument::REQUIRED, 'The target mail address');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $to = $this->getArgumentAsString($input, 'to');
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
@@ -75,6 +75,6 @@ TEXT;
 
         $this->mailer->send('[Fusio] Test Mail', [$to], $body);
 
-        return 0;
+        return self::SUCCESS;
     }
 }

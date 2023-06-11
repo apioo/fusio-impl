@@ -47,20 +47,20 @@ class ClearCacheCommand extends Command
         $this->engineCache = $engineCache;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('system:clear_cache')
             ->setDescription('Clears the complete cache');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cache->clear();
         $this->engineCache->clear();
 
         $output->writeln('Cache cleared');
 
-        return 0;
+        return self::SUCCESS;
     }
 }
