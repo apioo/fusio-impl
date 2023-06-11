@@ -27,10 +27,10 @@ jobs:
         php-versions:
           - 8.1
           - 8.2
-        database:
-          - sqlite
-          - postgres
-          - mysql
+        connection:
+          - 'pdo-sqlite://:memory:'
+          - 'pdo-pgsql://postgres:postgres@localhost/fusio'
+          - 'pdo-mysql://root:test1234@localhost/fusio'
     services:
       postgres:
         image: postgres
@@ -57,9 +57,9 @@ jobs:
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Wait for
         env:
-          DB: ${{ matrix.database }}
+          APP_CONNECTION: ${{ matrix.connection }}
         run: php bin/fusio system:wait_for
       - name: Run PHPUnit
         env:
-          DB: ${{ matrix.database }}
+          APP_CONNECTION: ${{ matrix.connection }}
         run: vendor/bin/phpunit
