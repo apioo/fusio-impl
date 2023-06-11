@@ -28,6 +28,7 @@ use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 /**
  * WaitForCommand
@@ -72,13 +73,11 @@ class WaitForCommand extends Command
             $connection->fetchFirstColumn($connection->getDatabasePlatform()->getDummySelectSQL());
         });
 
-        $worker = $this->config->get('fusio_worker');
-        if (!empty($worker) && is_array($worker)) {
-            foreach ($worker as $type => $endpoint) {
-                $this->waitFor($type, $output, function() use ($endpoint, $type) {
-                    ClientFactory::getClient($endpoint, $type);
-                });
-            }
+        $worker = $this->getWorker();
+        foreach ($worker as $type => $endpoint) {
+            $this->waitFor($type, $output, function() use ($endpoint, $type) {
+                ClientFactory::getClient($endpoint, $type);
+            });
         }
 
         return self::SUCCESS;
@@ -101,5 +100,18 @@ class WaitForCommand extends Command
         }
 
         throw new \RuntimeException('Could not connect to ' . $name);
+    }
+
+    private function getWorker(): array
+    {
+        try {
+            $worker = $this->config->get('fusio_worker');
+            if (is_array($worker)) {
+                return $worker;
+            }
+        } catch (ParameterNotFoundException) {
+        }
+
+        return [];
     }
 }
