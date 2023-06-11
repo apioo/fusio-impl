@@ -21,10 +21,9 @@
 
 namespace Fusio\Impl\Command\System;
 
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Fusio\Impl\Worker\ClientFactory;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,11 +58,17 @@ class WaitForCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $params = $this->config->get('psx_connection');
-        $config = new Configuration();
+        $connection = $this->config->get('psx_connection');
+        if (is_string($connection)) {
+            $params = (new DsnParser())->parse($connection);
+        } elseif (is_array($connection)) {
+            $params = $connection;
+        } else {
+            throw new \RuntimeException('Invalid connection');
+        }
 
-        $this->waitFor('database', $output, function() use ($params, $config) {
-            $connection = DriverManager::getConnection($params, $config);
+        $this->waitFor('database', $output, function() use ($params) {
+            $connection = DriverManager::getConnection($params);
             $connection->fetchFirstColumn($connection->getDatabasePlatform()->getDummySelectSQL());
         });
 
