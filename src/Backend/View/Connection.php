@@ -118,7 +118,7 @@ class Connection extends ViewAbstract
                 $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
-                if (!empty($config) && is_array($config)) {
+                if (!empty($config)) {
                     $form = $connectionParser->getForm($row[Table\Generated\ConnectionTable::COLUMN_CLASS]);
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();

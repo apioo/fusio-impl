@@ -109,7 +109,7 @@ class Event
         return $existing->getId();
     }
 
-    public function delete(int $eventId, UserContext $context): int
+    public function delete(string $eventId, UserContext $context): int
     {
         $existing = $this->eventTable->findOneByIdentifier($eventId);
         if (empty($existing)) {

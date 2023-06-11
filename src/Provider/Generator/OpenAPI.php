@@ -50,6 +50,7 @@ use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaResolver;
 use PSX\Schema\Type;
 use PSX\Schema\TypeFactory;
+use PSX\Schema\TypeInterface;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -63,6 +64,7 @@ use Symfony\Component\Yaml\Yaml;
 class OpenAPI implements ProviderInterface
 {
     private SchemaManagerInterface $schemaManager;
+    private array $schemas = [];
 
     public function __construct(SchemaManagerInterface $schemaManager)
     {
@@ -231,7 +233,7 @@ class OpenAPI implements ProviderInterface
 
     private function getOutgoing(OperationInterface $operation): string
     {
-        return $this->getRef($operation->getReturn());
+        return $this->getRef($operation->getReturn()->getSchema());
     }
 
     private function getThrows(OperationInterface $operation): ?OperationThrows
@@ -243,16 +245,15 @@ class OpenAPI implements ProviderInterface
 
         $result = new OperationThrows();
         foreach ($throws as $code => $response) {
-            $result->put($code, $this->getRef($response));
+            $result->put($code, $this->getRef($response->getSchema()));
         }
         return null;
     }
 
-    private function getRef(Response $response): string
+    private function getRef(TypeInterface $schema): string
     {
-        $schema = $response->getSchema();
         if ($schema instanceof Type\ReferenceType) {
-            return $schema->getRef();
+            return $schema->getRef() ?? throw new \RuntimeException('No ref provided');
         } elseif ($schema instanceof Type\AnyType) {
             return SchemaName::PASSTHRU;
         } else {

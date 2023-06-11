@@ -181,7 +181,7 @@ class Action
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $actionId;
+        return $existing->getId();
     }
 
     /**

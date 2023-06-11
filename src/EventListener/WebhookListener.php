@@ -60,7 +60,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/action/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/action/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.action.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -99,7 +99,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/app/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/app/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.app.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -138,7 +138,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/connection/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/connection/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.connection.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -177,7 +177,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/cronjob/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/cronjob/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.cronjob.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -216,7 +216,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/event/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/event/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.event.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -255,7 +255,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/event/subscription/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/event/subscription/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.event.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -294,7 +294,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/plan/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/plan/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.plan.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -333,7 +333,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/rate/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/rate/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.rate.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -355,43 +355,43 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.rate.update', $event);
     }
 
-    public function onRouteCreate(Event\Route\CreatedEvent $event)
+    public function onOperationCreate(Event\Operation\CreatedEvent $event)
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/routes')
-            ->withType('org.fusio-project.route.create')
+            ->withSource('/backend/operation')
+            ->withType('org.fusio-project.operation.create')
             ->withDataContentType('application/json')
-            ->withData($event->getRoute())
+            ->withData($event->getOperation())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.route.create', $event);
+        $this->dispatcher->dispatch('fusio.operation.create', $event);
     }
 
-    public function onRouteDelete(Event\Route\DeletedEvent $event)
+    public function onOperationDelete(Event\Operation\DeletedEvent $event)
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/routes/' . $event->getExisting()->getProperty('id'))
-            ->withType('org.fusio-project.route.delete')
+            ->withSource('/backend/operation/' . $event->getExisting()->getId())
+            ->withType('org.fusio-project.operation.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.route.delete', $event);
+        $this->dispatcher->dispatch('fusio.operation.delete', $event);
     }
 
-    public function onRouteUpdate(Event\Route\UpdatedEvent $event)
+    public function onOperationUpdate(Event\Operation\UpdatedEvent $event)
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/routes/' . $event->getRoute()->getId())
-            ->withType('org.fusio-project.route.update')
+            ->withSource('/backend/operation/' . $event->getOperation()->getId())
+            ->withType('org.fusio-project.operation.update')
             ->withDataContentType('application/json')
-            ->withData($event->getRoute())
+            ->withData($event->getOperation())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.route.update', $event);
+        $this->dispatcher->dispatch('fusio.operation.update', $event);
     }
 
     public function onSchemaCreate(Event\Schema\CreatedEvent $event)
@@ -411,7 +411,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/schema/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/schema/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.schema.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -450,7 +450,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/scope/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/scope/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.scope.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -489,7 +489,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/user/' . $event->getExisting()->getProperty('id'))
+            ->withSource('/backend/user/' . $event->getExisting()->getId())
             ->withType('org.fusio-project.user.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
@@ -511,56 +511,56 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.user.update', $event);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            Event\Action\CreatedEvent::class        => 'onActionCreate',
-            Event\Action\DeletedEvent::class        => 'onActionDelete',
-            Event\Action\UpdatedEvent::class        => 'onActionUpdate',
+            Event\Action\CreatedEvent::class => 'onActionCreate',
+            Event\Action\DeletedEvent::class => 'onActionDelete',
+            Event\Action\UpdatedEvent::class => 'onActionUpdate',
 
-            Event\App\CreatedEvent::class           => 'onAppCreate',
-            Event\App\DeletedEvent::class           => 'onAppDelete',
-            Event\App\UpdatedEvent::class           => 'onAppUpdate',
+            Event\App\CreatedEvent::class => 'onAppCreate',
+            Event\App\DeletedEvent::class => 'onAppDelete',
+            Event\App\UpdatedEvent::class => 'onAppUpdate',
 
-            Event\Connection\CreatedEvent::class    => 'onConnectionCreate',
-            Event\Connection\DeletedEvent::class    => 'onConnectionDelete',
-            Event\Connection\UpdatedEvent::class    => 'onConnectionUpdate',
+            Event\Connection\CreatedEvent::class => 'onConnectionCreate',
+            Event\Connection\DeletedEvent::class => 'onConnectionDelete',
+            Event\Connection\UpdatedEvent::class => 'onConnectionUpdate',
 
-            Event\Cronjob\CreatedEvent::class       => 'onCronjobCreate',
-            Event\Cronjob\DeletedEvent::class       => 'onCronjobDelete',
-            Event\Cronjob\UpdatedEvent::class       => 'onCronjobUpdate',
+            Event\Cronjob\CreatedEvent::class => 'onCronjobCreate',
+            Event\Cronjob\DeletedEvent::class => 'onCronjobDelete',
+            Event\Cronjob\UpdatedEvent::class => 'onCronjobUpdate',
 
-            Event\Event\CreatedEvent::class         => 'onEventCreate',
-            Event\Event\DeletedEvent::class         => 'onEventDelete',
-            Event\Event\UpdatedEvent::class         => 'onEventUpdate',
+            Event\Event\CreatedEvent::class => 'onEventCreate',
+            Event\Event\DeletedEvent::class => 'onEventDelete',
+            Event\Event\UpdatedEvent::class => 'onEventUpdate',
 
             Event\Event\Subscription\CreatedEvent::class => 'onEventSubscriptionCreate',
             Event\Event\Subscription\DeletedEvent::class => 'onEventSubscriptionDelete',
             Event\Event\Subscription\UpdatedEvent::class => 'onEventSubscriptionUpdate',
 
-            Event\Plan\CreatedEvent::class          => 'onPlanCreate',
-            Event\Plan\DeletedEvent::class          => 'onPlanDelete',
-            Event\Plan\UpdatedEvent::class          => 'onPlanUpdate',
+            Event\Plan\CreatedEvent::class => 'onPlanCreate',
+            Event\Plan\DeletedEvent::class => 'onPlanDelete',
+            Event\Plan\UpdatedEvent::class => 'onPlanUpdate',
 
-            Event\Rate\CreatedEvent::class          => 'onRateCreate',
-            Event\Rate\DeletedEvent::class          => 'onRateDelete',
-            Event\Rate\UpdatedEvent::class          => 'onRateUpdate',
+            Event\Rate\CreatedEvent::class => 'onRateCreate',
+            Event\Rate\DeletedEvent::class => 'onRateDelete',
+            Event\Rate\UpdatedEvent::class => 'onRateUpdate',
 
-            Event\Route\CreatedEvent::class         => 'onRouteCreate',
-            Event\Route\DeletedEvent::class         => 'onRouteDelete',
-            Event\Route\UpdatedEvent::class         => 'onRouteUpdate',
+            Event\Operation\CreatedEvent::class => 'onOperationCreate',
+            Event\Operation\DeletedEvent::class => 'onOperationDelete',
+            Event\Operation\UpdatedEvent::class => 'onOperationUpdate',
 
-            Event\Schema\CreatedEvent::class        => 'onSchemaCreate',
-            Event\Schema\DeletedEvent::class        => 'onSchemaDelete',
-            Event\Schema\UpdatedEvent::class        => 'onSchemaUpdate',
+            Event\Schema\CreatedEvent::class => 'onSchemaCreate',
+            Event\Schema\DeletedEvent::class => 'onSchemaDelete',
+            Event\Schema\UpdatedEvent::class => 'onSchemaUpdate',
 
-            Event\Scope\CreatedEvent::class         => 'onScopeCreate',
-            Event\Scope\DeletedEvent::class         => 'onScopeDelete',
-            Event\Scope\UpdatedEvent::class         => 'onScopeUpdate',
+            Event\Scope\CreatedEvent::class => 'onScopeCreate',
+            Event\Scope\DeletedEvent::class => 'onScopeDelete',
+            Event\Scope\UpdatedEvent::class => 'onScopeUpdate',
 
-            Event\User\CreatedEvent::class          => 'onUserCreate',
-            Event\User\DeletedEvent::class          => 'onUserDelete',
-            Event\User\UpdatedEvent::class          => 'onUserUpdate',
+            Event\User\CreatedEvent::class => 'onUserCreate',
+            Event\User\DeletedEvent::class => 'onUserDelete',
+            Event\User\UpdatedEvent::class => 'onUserUpdate',
         ];
     }
 }

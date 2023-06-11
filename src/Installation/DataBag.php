@@ -110,12 +110,9 @@ class DataBag
                 }
             }
 
-            $outgoingName = null;
-            if (isset($operation->outgoing)) {
-                $outgoingName = $this->getSchemaName($operation->outgoing);
-                if (!$this->hasId('fusio_schema', $outgoingName)) {
-                    $this->addSchema($category, $outgoingName, $operation->outgoing);
-                }
+            $outgoingName = $this->getSchemaName($operation->outgoing);
+            if (!$this->hasId('fusio_schema', $outgoingName)) {
+                $this->addSchema($category, $outgoingName, $operation->outgoing);
             }
 
             $this->addOperation(

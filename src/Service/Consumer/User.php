@@ -47,6 +47,6 @@ class User
         $backendUser = new UserUpdate();
         $backendUser->setEmail($account->getEmail());
 
-        return $this->userService->update($context->getUserId(), $backendUser, $context);
+        return $this->userService->update((string) $context->getUserId(), $backendUser, $context);
     }
 }

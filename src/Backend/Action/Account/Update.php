@@ -54,7 +54,7 @@ class Update implements ActionInterface
         assert($body instanceof UserUpdate);
 
         $this->userService->update(
-            $context->getUser()->getId(),
+            (string) $context->getUser()->getId(),
             $body,
             UserContext::newActionContext($context)
         );

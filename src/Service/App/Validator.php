@@ -61,17 +61,21 @@ class Validator
         $userId = $app->getUserId();
         if ($userId !== null) {
             $this->assertUser($userId);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('App name must not be empty');
         } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('App name must not be empty');
+            }
+
             $userId = $existing->getUserId();
         }
 
         $name = $app->getName();
         if ($name !== null) {
             $this->assertName($name, $userId, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('App name must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('App name must not be empty');
+            }
         }
     }
 

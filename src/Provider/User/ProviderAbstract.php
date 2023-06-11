@@ -29,7 +29,7 @@ use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
-use PSX\Oauth2\Error;
+use PSX\OAuth2\Error;
 use PSX\Uri\Url;
 
 /**

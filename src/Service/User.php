@@ -150,10 +150,10 @@ class User
             // create user
             $row = new Table\Generated\UserRow();
             $row->setRoleId($roleId);
-            $row->setProvider($remote->getProvider());
+            $row->setProvider($remote->getProvider() ?? throw new StatusCode\InternalServerErrorException('Invalid provider configured'));
             $row->setStatus(Table\User::STATUS_ACTIVE);
             $row->setRemoteId($remote->getRemoteId());
-            $row->setName($remote->getName());
+            $row->setName($remote->getName() ?? throw new StatusCode\InternalServerErrorException('Invalid name configured'));
             $row->setEmail($remote->getEmail());
             $row->setPassword(null);
             $row->setPoints($this->configService->getValue('points_default') ?: null);

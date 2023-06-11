@@ -157,7 +157,7 @@ class Connection
         return $existing->getId();
     }
 
-    public function delete(int $connectionId, UserContext $context): int
+    public function delete(string $connectionId, UserContext $context): int
     {
         $existing = $this->connectionTable->findOneByIdentifier($connectionId);
         if (empty($existing)) {

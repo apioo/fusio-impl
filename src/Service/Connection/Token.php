@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\Connection;
 
+use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Connection\OAuth2Interface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Model;
@@ -150,7 +151,7 @@ class Token
         foreach ($connections as $connection) {
             $parameters = new Parameters($connection->getConfig());
             $connection = $this->factory->factory($connection->getClass());
-            if (!$connection instanceof OAuth2Interface) {
+            if (!$connection instanceof OAuth2Interface || !$connection instanceof ConfigurableInterface) {
                 continue;
             }
 

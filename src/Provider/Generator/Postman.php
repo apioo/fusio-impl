@@ -34,6 +34,7 @@ use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\OperationCreate;
 use Fusio\Model\Backend\OperationParameters;
+use Fusio\Model\Backend\OperationSchema;
 use PSX\Api\Util\Inflection;
 
 /**
@@ -196,15 +197,14 @@ class Postman implements ProviderInterface
                 continue;
             }
 
-            $type = [
-                'type' => 'string'
-            ];
+            $schema = new OperationSchema();
+            $schema->setType('string');
 
             if (isset($parameter->description)) {
-                $type['description'] = $parameter->description;
+                $schema->setDescription($parameter->description);
             }
 
-            $result->put($parameter->key, $type);
+            $result->put($parameter->key, $schema);
         }
 
         return $result;

@@ -129,6 +129,7 @@ class Insomnia implements ProviderInterface
         $operation = new OperationCreate();
         $operation->setName($name);
         $operation->setPublic(!isset($resource->auth));
+        $operation->setActive(true);
         $operation->setHttpMethod($method);
         $operation->setHttpPath($path);
         $operation->setHttpCode(200);
@@ -138,7 +139,6 @@ class Insomnia implements ProviderInterface
         }
 
         $operation->setOutgoing(SchemaName::PASSTHRU);
-        $operation->setActive($name);
         $setup->addOperation($operation);
 
         return $operation;

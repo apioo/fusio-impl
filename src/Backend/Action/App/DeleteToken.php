@@ -49,8 +49,8 @@ class DeleteToken implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->removeToken(
-            $request->get('app_id'),
-            $request->get('token_id'),
+            (int) $request->get('app_id'),
+            (int) $request->get('token_id'),
             UserContext::newActionContext($context)
         );
 

@@ -57,8 +57,10 @@ class Validator
         $roleId = $user->getRoleId();
         if ($roleId !== null) {
             $this->assertRoleId($roleId);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('User role id must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User role id must not be empty');
+            }
         }
 
         $planId = $user->getPlanId();
@@ -69,23 +71,29 @@ class Validator
         $name = $user->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('User name must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User name must not be empty');
+            }
         }
 
         $email = $user->getEmail();
         if ($email !== null) {
             $this->assertEmail($email, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('User email must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User email must not be empty');
+            }
         }
 
         if ($user instanceof UserCreate) {
             $password = $user->getPassword();
             if ($password !== null) {
                 $this->assertPassword($password, $this->configService->getValue('user_pw_length'));
-            } elseif ($existing === null) {
-                throw new StatusCode\BadRequestException('User password must not be empty');
+            } else {
+                if ($existing === null) {
+                    throw new StatusCode\BadRequestException('User password must not be empty');
+                }
             }
         }
     }

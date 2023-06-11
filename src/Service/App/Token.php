@@ -174,7 +174,7 @@ class Token
         );
     }
 
-    public function removeToken(string $appId, int $tokenId, UserContext $context): void
+    public function removeToken(int $appId, int $tokenId, UserContext $context): void
     {
         $app = $this->getApp($appId);
 
@@ -198,9 +198,9 @@ class Token
         return $this->jsonWebToken->encode($payload);
     }
 
-    private function getApp(string $appId): Table\Generated\AppRow
+    private function getApp(int $appId): Table\Generated\AppRow
     {
-        $app = $this->appTable->findOneByIdentifier($appId);
+        $app = $this->appTable->find($appId);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Invalid app');
         }

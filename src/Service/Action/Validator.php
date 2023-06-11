@@ -53,15 +53,19 @@ class Validator
         $name = $action->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Action name must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Action name must not be empty');
+            }
         }
 
         $class = $action->getClass();
         if ($class !== null) {
             $this->assertClass($class);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Action class must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Action class must not be empty');
+            }
         }
     }
 

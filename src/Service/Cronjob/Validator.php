@@ -47,15 +47,19 @@ class Validator
         $name = $cronjob->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Cronjob name must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Cronjob name must not be empty');
+            }
         }
 
         $cron = $cronjob->getCron();
         if ($cron !== null) {
             $this->assertCron($cron);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Cronjob expression must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Cronjob expression must not be empty');
+            }
         }
     }
 

@@ -76,8 +76,8 @@ class Operation
             $row = new Table\Generated\OperationRow();
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Operation::STATUS_ACTIVE);
-            $row->setActive($operation->getActive());
-            $row->setPublic($operation->getPublic());
+            $row->setActive($operation->getActive() !== null ? (int) $operation->getActive() : 1);
+            $row->setPublic($operation->getPublic() !== null ? (int) $operation->getPublic() : 0);
             $row->setStability($operation->getStability());
             $row->setDescription($operation->getDescription());
             $row->setHttpMethod($operation->getHttpMethod());

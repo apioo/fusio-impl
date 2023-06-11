@@ -80,7 +80,7 @@ class Provider
         }
 
         $remote = new UserRemote();
-        $remote->setProvider((string) $provider->getId());
+        $remote->setProvider($provider->getId());
         $remote->setRemoteId($user->getId());
         $remote->setName($user->getUserName());
         $remote->setEmail($user->getEmail());

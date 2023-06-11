@@ -71,7 +71,7 @@ class Rate
             $row->setPriority($rate->getPriority());
             $row->setName($rate->getName());
             $row->setRateLimit($rate->getRateLimit());
-            $row->setTimespan($rate->getTimespan());
+            $row->setTimespan((string) $rate->getTimespan());
             $row->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
             $this->rateTable->create($row);
 

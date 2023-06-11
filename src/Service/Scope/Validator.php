@@ -46,8 +46,10 @@ class Validator
         $name = $scope->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
-        } elseif ($existing === null) {
-            throw new StatusCode\BadRequestException('Scope name must not be empty');
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Scope name must not be empty');
+            }
         }
 
         if ($existing !== null) {

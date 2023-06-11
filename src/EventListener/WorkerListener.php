@@ -60,7 +60,7 @@ class WorkerListener implements EventSubscriberInterface
         $this->config = $config;
     }
 
-    public function onActionCreate(Event\Action\CreatedEvent $event)
+    public function onActionCreate(Event\Action\CreatedEvent $event): void
     {
         $this->notifyWorkerAction(
             $event->getAction()->getName(),
@@ -69,12 +69,11 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    public function onActionDelete(Event\Action\DeletedEvent $event)
+    public function onActionDelete(Event\Action\DeletedEvent $event): void
     {
-
     }
 
-    public function onActionUpdate(Event\Action\UpdatedEvent $event)
+    public function onActionUpdate(Event\Action\UpdatedEvent $event): void
     {
         $this->notifyWorkerAction(
             $event->getAction()->getName(),
@@ -83,7 +82,7 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    public function onConnectionCreate(Event\Connection\CreatedEvent $event)
+    public function onConnectionCreate(Event\Connection\CreatedEvent $event): void
     {
         $this->notifyWorkerConnection(
             $event->getConnection()->getName(),
@@ -92,11 +91,11 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    public function onConnectionDelete(Event\Connection\DeletedEvent $event)
+    public function onConnectionDelete(Event\Connection\DeletedEvent $event): void
     {
     }
 
-    public function onConnectionUpdate(Event\Connection\UpdatedEvent $event)
+    public function onConnectionUpdate(Event\Connection\UpdatedEvent $event): void
     {
         $this->notifyWorkerConnection(
             $event->getConnection()->getName(),
@@ -105,7 +104,7 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    private function notifyWorkerConnection(?string $name, ?string $class, ?ConnectionConfig $config)
+    private function notifyWorkerConnection(?string $name, ?string $class, ?ConnectionConfig $config): void
     {
         if (empty($name) || empty($class)) {
             return;
@@ -121,7 +120,7 @@ class WorkerListener implements EventSubscriberInterface
             $connection->name = $name;
             $connection->type = $this->convertClassToType($class);
             if ($config !== null) {
-                $connection->config = $config->getProperties();
+                $connection->config = $config->getAll();
             }
 
             try {
@@ -134,7 +133,7 @@ class WorkerListener implements EventSubscriberInterface
         }
     }
 
-    private function notifyWorkerAction(?string $name, ?string $class, ?ActionConfig $config)
+    private function notifyWorkerAction(?string $name, ?string $class, ?ActionConfig $config): void
     {
         if (empty($name) || empty($class)) {
             return;
@@ -161,7 +160,7 @@ class WorkerListener implements EventSubscriberInterface
 
         $action = new Action();
         $action->name = $name;
-        $action->code = $config->getProperty('code');
+        $action->code = $config->get('code');
 
         try {
             $message = ClientFactory::getClient($endpoint, $language)->setAction($action);
@@ -181,16 +180,16 @@ class WorkerListener implements EventSubscriberInterface
         return str_replace('\\', '.', $class ?? '');
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            Event\Action\CreatedEvent::class        => 'onActionCreate',
-            Event\Action\DeletedEvent::class        => 'onActionDelete',
-            Event\Action\UpdatedEvent::class        => 'onActionUpdate',
+            Event\Action\CreatedEvent::class => 'onActionCreate',
+            Event\Action\DeletedEvent::class => 'onActionDelete',
+            Event\Action\UpdatedEvent::class => 'onActionUpdate',
 
-            Event\Connection\CreatedEvent::class    => 'onConnectionCreate',
-            Event\Connection\DeletedEvent::class    => 'onConnectionDelete',
-            Event\Connection\UpdatedEvent::class    => 'onConnectionUpdate',
+            Event\Connection\CreatedEvent::class => 'onConnectionCreate',
+            Event\Connection\DeletedEvent::class => 'onConnectionDelete',
+            Event\Connection\UpdatedEvent::class => 'onConnectionUpdate',
         ];
     }
 }

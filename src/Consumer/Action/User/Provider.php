@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -30,7 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\User\Provider as UserProvider;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Provider

@@ -27,6 +27,8 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\UserCreate;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperInterface;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -68,6 +70,7 @@ class UserAddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         // role

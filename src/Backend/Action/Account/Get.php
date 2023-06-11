@@ -49,7 +49,7 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getEntity(
-            $context->getUser()->getId()
+            (string) $context->getUser()->getId()
         );
     }
 }
