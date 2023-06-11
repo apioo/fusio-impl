@@ -230,7 +230,7 @@ class Scope
                 if ($operation->getAllow()) {
                     $row = new Table\Generated\ScopeOperationRow();
                     $row->setScopeId($scopeId);
-                    $row->setOperationId($operation->getOperationId());
+                    $row->setOperationId($operation->getOperationId() ?? throw new \RuntimeException('No operation id provided'));
                     $row->setAllow($operation->getAllow() ? 1 : 0);
                     $row->setMethods($operation->getMethods());
                     $this->scopeRouteTable->create($row);

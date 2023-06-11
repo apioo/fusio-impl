@@ -81,7 +81,7 @@ class Sdk
         $this->console->run(new ArrayInput($parameters), new NullOutput());
         $this->console->setAutoExit($autoExit);
 
-        return $this->config['psx_url'] . '/sdk/' . $file;
+        return $this->config->get('psx_url') . '/sdk/' . $file;
     }
 
     public function getTypes(): array
@@ -94,7 +94,7 @@ class Sdk
             $fileName = $this->getFileName($type);
             $sdkZip = $sdkDir . '/' . $fileName;
             if (is_file($sdkZip)) {
-                $result[$type] = $this->config['psx_url'] . '/sdk/' . $fileName;
+                $result[$type] = $this->config->get('psx_url') . '/sdk/' . $fileName;
             } else {
                 $result[$type] = null;
             }
@@ -117,11 +117,8 @@ class Sdk
             case GeneratorFactoryInterface::MARKUP_MARKDOWN:
                 return 'output-' . $type . '-external.md';
 
-            case GeneratorFactoryInterface::SPEC_RAML:
-                return 'output-' . $type . '-external.raml';
-
             case GeneratorFactoryInterface::SPEC_OPENAPI:
-            case GeneratorFactoryInterface::SPEC_TYPESCHEMA:
+            case GeneratorFactoryInterface::SPEC_TYPEAPI:
                 return 'output-' . $type . '-external.json';
 
             default:
