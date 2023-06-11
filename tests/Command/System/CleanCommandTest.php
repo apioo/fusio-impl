@@ -55,6 +55,6 @@ class CleanCommandTest extends ControllerDbTestCase
         $display = $commandTester->getDisplay();
 
         $this->assertSame(0, $commandTester->getStatusCode());
-        $this->assertRegExp('/Clean up successful/', $display, $display);
+        $this->assertMatchesRegularExpression('/Clean up successful/', $display, $display);
     }
 }

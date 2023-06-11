@@ -64,7 +64,7 @@ class RestoreCommandTest extends ControllerDbTestCase
         $display = $commandTester->getDisplay();
 
         $this->assertSame(0, $commandTester->getStatusCode());
-        $this->assertRegExp('/Restored 1 record/', $display, $display);
+        $this->assertMatchesRegularExpression('/Restored 1 record/', $display, $display);
 
         $row = $this->connection->fetchAssociative('SELECT status FROM fusio_' . $type . ' WHERE ' . $column . ' = :id', ['id' => $id]);
         $this->assertEquals($status, $row['status']);
@@ -107,7 +107,7 @@ class RestoreCommandTest extends ControllerDbTestCase
         $display = $commandTester->getDisplay();
 
         $this->assertSame(1, $commandTester->getStatusCode());
-        $this->assertRegExp('/Restored no record/', $display, $display);
+        $this->assertMatchesRegularExpression('/Restored no record/', $display, $display);
     }
 
     public function restoreInvalidProvider(): array

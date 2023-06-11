@@ -58,7 +58,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Registration successful/', $display, $display);
+        $this->assertMatchesRegularExpression('/Registration successful/', $display, $display);
 
         // check action class
         $file = Environment::getService(ConfigInterface::class)->get('fusio_provider');
@@ -94,7 +94,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Registration successful/', $display, $display);
+        $this->assertMatchesRegularExpression('/Registration successful/', $display, $display);
 
         // check action class
         $file = Environment::getService(ConfigInterface::class)->get('fusio_provider');

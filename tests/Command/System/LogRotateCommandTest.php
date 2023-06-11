@@ -67,9 +67,9 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
     private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
     {
-        $this->assertRegExp('/Created audit archive table fusio_audit_/', $display, $display);
-        $this->assertRegExp('/Copied 1 entries to audit archive table/', $display, $display);
-        $this->assertRegExp('/Truncated audit table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created audit archive table fusio_audit_/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to audit archive table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated audit table/', $display, $display);
 
         preg_match('/fusio_audit_(\d+)/', $display, $matches);
         $tableName = $matches[0];
@@ -84,9 +84,9 @@ class LogRotateCommandTest extends ControllerDbTestCase
     
     private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
     {
-        $this->assertRegExp('/Created log archive table fusio_log_/', $display, $display);
-        $this->assertRegExp('/Copied 2 entries to log archive table/', $display, $display);
-        $this->assertRegExp('/Truncated log table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created log archive table fusio_log_/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 2 entries to log archive table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated log table/', $display, $display);
 
         preg_match('/fusio_log_(\d+)/', $display, $matches);
         $tableName = $matches[0];
