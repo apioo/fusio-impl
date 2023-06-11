@@ -130,7 +130,7 @@ final class Version20230508210151 extends AbstractMigration
             $configTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $configTable->addColumn('type', 'integer', ['default' => 1]);
             $configTable->addColumn('name', 'string', ['length' => 64]);
-            $configTable->addColumn('description', 'string', ['length' => 255]);
+            $configTable->addColumn('description', 'string', ['length' => 512]);
             $configTable->addColumn('value', 'string', ['length' => 512]);
             $configTable->setPrimaryKey(['id']);
             $configTable->addUniqueIndex(['name']);
