@@ -84,7 +84,7 @@ class MostUsedRoutes extends ViewAbstract
                 INNER JOIN fusio_operation operation
                         ON log.operation_id = operation.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.operation_id, operation.http_path';
+                  GROUP BY DATE(log.date), log.operation_id, operation.name';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
