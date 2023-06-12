@@ -68,6 +68,7 @@ class EntityTest extends ControllerDbTestCase
     "appSecret": "[app_secret]",
     "scopes": [
         "consumer",
+        "consumer.account",
         "consumer.app",
         "consumer.event",
         "consumer.grant",
@@ -78,7 +79,6 @@ class EntityTest extends ControllerDbTestCase
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.account",
         "authorization",
         "default"
     ],

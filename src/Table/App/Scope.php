@@ -73,7 +73,8 @@ class Scope extends Generated\AppScopeTable
                                scope.name,
                                scope.description
                           FROM fusio_scope scope
-                         WHERE scope.name LIKE :name';
+                         WHERE scope.name LIKE :name
+                      ORDER BY scope.name ASC';
                 $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;

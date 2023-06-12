@@ -65,6 +65,7 @@ class EntityTest extends ControllerDbTestCase
     "name": "Consumer",
     "scopes": [
         "consumer",
+        "consumer.account",
         "consumer.app",
         "consumer.event",
         "consumer.grant",
@@ -75,7 +76,6 @@ class EntityTest extends ControllerDbTestCase
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.account",
         "authorization",
         "default"
     ]
@@ -102,6 +102,7 @@ JSON;
     "name": "Consumer",
     "scopes": [
         "consumer",
+        "consumer.account",
         "consumer.app",
         "consumer.event",
         "consumer.grant",
@@ -112,7 +113,6 @@ JSON;
         "consumer.scope",
         "consumer.subscription",
         "consumer.transaction",
-        "consumer.account",
         "authorization",
         "default"
     ]
