@@ -65,8 +65,7 @@ class GenerateTest extends ControllerDbTestCase
         "markup-html": null,
         "markup-markdown": null,
         "spec-openapi": null,
-        "spec-raml": null,
-        "spec-typeschema": null
+        "spec-typeapi": null
     }
 }
 JSON;

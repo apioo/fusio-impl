@@ -66,10 +66,10 @@ class Sdk
         $file = 'sdk-' . $format . '-' . $filter . '.zip';
 
         $parameters = [
-            'command'  => 'api:generate',
-            'dir'      => $sdkDir,
-            '--format' => $format,
-            '--filter' => $filter,
+            'command'     => 'generate:sdk',
+            'format'      => $format,
+            '--filter'    => $filter,
+            '--output'    => $sdkDir,
         ];
 
         if (!empty($config)) {
