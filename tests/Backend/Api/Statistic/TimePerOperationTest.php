@@ -21,18 +21,17 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * TimePerRouteTest
+ * TimePerOperationTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class TimePerRouteTest extends ControllerDbTestCase
+class TimePerOperationTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {

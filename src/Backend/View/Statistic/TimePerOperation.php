@@ -25,27 +25,28 @@ use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
 /**
- * MostUsedRoutes
+ * TimePerOperation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class MostUsedRoutes extends ViewAbstract
+class TimePerOperation extends ViewAbstract
 {
     public function getView(int $categoryId, Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
-        // get the most used routes and build data structure
-        $sql = '  SELECT log.operation_id
-                    FROM fusio_log log
-                   WHERE log.category_id = ?
-                     AND log.operation_id IS NOT NULL
-                     AND ' . $expression . '
-                GROUP BY log.operation_id
-                ORDER BY COUNT(log.operation_id) DESC';
+        // get the most slowest routes and build data structure
+        $sql = '    SELECT log.operation_id
+                      FROM fusio_log log
+                     WHERE log.category_id = ?
+                       AND log.operation_id IS NOT NULL
+                       AND log.execution_time IS NOT NULL
+                       AND ' . $expression . '
+                  GROUP BY log.operation_id
+                  ORDER BY SUM(log.execution_time) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
@@ -73,10 +74,12 @@ class MostUsedRoutes extends ViewAbstract
             $condition->in('log.operation_id', $routeIds);
         }
 
+        $condition->notNil('log.execution_time');
+
         // fill data with values
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
-        $sql = '    SELECT COUNT(log.id) AS cnt,
+        $sql = '    SELECT AVG(log.execution_time / 1000) AS exec_time,
                            log.operation_id,
                            operation.name,
                            DATE(log.date) AS date
@@ -90,8 +93,8 @@ class MostUsedRoutes extends ViewAbstract
 
         foreach ($result as $row) {
             if (isset($data[$row['operation_id']][$row['date']])) {
-                $series[$row['operation_id']] = $row['name'];
-                $data[$row['operation_id']][$row['date']] = (int) $row['cnt'];
+                $series[$row['operation_id']] = $row['name'] . ' (ms)';
+                $data[$row['operation_id']][$row['date']] = (float) $row['exec_time']; // microseconds
             }
         }
 

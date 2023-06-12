@@ -25,13 +25,13 @@ use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
 /**
- * ErrorsPerRoute
+ * ErrorsPerOperation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ErrorsPerRoute extends ViewAbstract
+class ErrorsPerOperation extends ViewAbstract
 {
     public function getView(int $categoryId, Log\QueryFilter $filter)
     {

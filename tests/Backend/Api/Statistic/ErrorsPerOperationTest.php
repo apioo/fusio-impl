@@ -21,18 +21,17 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * ErrorsPerRouteTest
+ * ErrorsPerOperationTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class ErrorsPerRouteTest extends ControllerDbTestCase
+class ErrorsPerOperationTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
