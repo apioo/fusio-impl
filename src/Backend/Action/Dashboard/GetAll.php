@@ -40,11 +40,11 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll implements ActionInterface
 {
-    private View\Statistic\ErrorsPerRoute $errorsPerRoute;
+    private View\Statistic\ErrorsPerOperation $errorsPerRoute;
     private View\Statistic\IncomingRequests $incomingRequests;
     private View\Statistic\IncomingTransactions $incomingTransactions;
-    private View\Statistic\MostUsedRoutes $mostUsedRoutes;
-    private View\Statistic\TimePerRoute $timePerRoute;
+    private View\Statistic\MostUsedOperations $mostUsedRoutes;
+    private View\Statistic\TimePerOperation $timePerRoute;
     private View\Dashboard\LatestApps $latestApps;
     private View\Dashboard\LatestRequests $latestRequests;
     private View\Dashboard\LatestUsers $latestUsers;
@@ -52,11 +52,11 @@ class GetAll implements ActionInterface
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
+        $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerOperation::class);
         $this->incomingRequests = $tableManager->getTable(View\Statistic\IncomingRequests::class);
         $this->incomingTransactions = $tableManager->getTable(View\Statistic\IncomingTransactions::class);
-        $this->mostUsedRoutes = $tableManager->getTable(View\Statistic\MostUsedRoutes::class);
-        $this->timePerRoute = $tableManager->getTable(View\Statistic\TimePerRoute::class);
+        $this->mostUsedRoutes = $tableManager->getTable(View\Statistic\MostUsedOperations::class);
+        $this->timePerRoute = $tableManager->getTable(View\Statistic\TimePerOperation::class);
         $this->latestApps = $tableManager->getTable(View\Dashboard\LatestApps::class);
         $this->latestRequests = $tableManager->getTable(View\Dashboard\LatestRequests::class);
         $this->latestUsers = $tableManager->getTable(View\Dashboard\LatestUsers::class);

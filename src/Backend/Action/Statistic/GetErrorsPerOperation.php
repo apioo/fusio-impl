@@ -21,27 +21,24 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
- * GetErrorsPerRoute
+ * GetErrorsPerOperation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetErrorsPerRoute implements ActionInterface
+class GetErrorsPerOperation implements ActionInterface
 {
-    private View\Statistic\ErrorsPerRoute $view;
+    private View\Statistic\ErrorsPerOperation $view;
 
-    public function __construct(View\Statistic\ErrorsPerRoute $view)
+    public function __construct(View\Statistic\ErrorsPerOperation $view)
     {
         $this->view = $view;
     }

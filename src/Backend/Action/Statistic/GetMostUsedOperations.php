@@ -21,27 +21,24 @@
 
 namespace Fusio\Impl\Backend\Action\Statistic;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
- * GetTimePerRoute
+ * GetMostUsedOperations
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetTimePerRoute implements ActionInterface
+class GetMostUsedOperations implements ActionInterface
 {
-    private View\Statistic\TimePerRoute $view;
+    private View\Statistic\MostUsedOperations $view;
 
-    public function __construct(View\Statistic\TimePerRoute $view)
+    public function __construct(View\Statistic\MostUsedOperations $view)
     {
         $this->view = $view;
     }

@@ -992,7 +992,7 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                 ),
                 'statistic.getErrorsPerRoute' => new Operation(
-                    action: Backend\Action\Statistic\GetErrorsPerRoute::class,
+                    action: Backend\Action\Statistic\GetErrorsPerOperation::class,
                     httpMethod: 'GET',
                     httpPath: '/statistic/errors_per_route',
                     httpCode: 200,
@@ -1032,7 +1032,7 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                 ),
                 'statistic.getMostUsedRoutes' => new Operation(
-                    action: Backend\Action\Statistic\GetMostUsedRoutes::class,
+                    action: Backend\Action\Statistic\GetMostUsedOperations::class,
                     httpMethod: 'GET',
                     httpPath: '/statistic/most_used_routes',
                     httpCode: 200,
@@ -1048,7 +1048,7 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                 ),
                 'statistic.getTimePerRoute' => new Operation(
-                    action: Backend\Action\Statistic\GetTimePerRoute::class,
+                    action: Backend\Action\Statistic\GetTimePerOperation::class,
                     httpMethod: 'GET',
                     httpPath: '/statistic/time_per_route',
                     httpCode: 200,
