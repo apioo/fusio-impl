@@ -94,7 +94,7 @@ JSON;
 {
     "success": true,
     "message": "SDK successfully generated",
-    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client-php-external.zip"
+    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client-php-default.zip"
 }
 JSON;
 
@@ -102,7 +102,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check zip file
-        $this->assertTrue(is_file(Environment::getConfig('psx_path_public') . '/sdk/sdk-client-php-external.zip'));
+        $this->assertTrue(is_file(Environment::getConfig('psx_path_public') . '/sdk/sdk-client-php-default.zip'));
     }
 
     public function testPut()

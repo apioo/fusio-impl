@@ -62,7 +62,7 @@ class Sdk
             mkdir($sdkDir);
         }
 
-        $filter = 'external';
+        $filter = 'default';
         $file = 'sdk-' . $format . '-' . $filter . '.zip';
 
         $parameters = [
