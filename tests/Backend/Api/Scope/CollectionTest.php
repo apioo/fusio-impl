@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Backend\Api\Scope;
@@ -30,27 +29,14 @@ use PSX\Framework\Test\Environment;
  * CollectionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class CollectionTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/scope', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -186,11 +172,11 @@ JSON;
             'name'        => 'test',
             'description' => 'Test description',
             'routes'      => [[
-                'routeId' => Fixture::getId('fusio_routes', '/foo'),
+                'operationId' => Fixture::getId('fusio_operation', 'test.listFoo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ], [
-                'routeId' => Fixture::getId('fusio_routes', '/inspect/:foo'),
+                'operationId' => Fixture::getId('fusio_operation', 'inspect.get'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ]],
@@ -209,7 +195,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('id', 'name', 'description', 'metadata')
             ->from('fusio_scope')
             ->orderBy('id', 'DESC')
@@ -217,34 +203,59 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(45, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('scope_id', 'route_id', 'allow', 'methods')
-            ->from('fusio_scope_routes')
+        $sql = $this->connection->createQueryBuilder()
+            ->select('scope_id', 'operation_id', 'allow', 'methods')
+            ->from('fusio_scope_operation')
             ->where('scope_id = :scope_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
         $scopeId = 43;
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => $scopeId]);
+        $operations = $this->connection->fetchAllAssociative($sql, ['scope_id' => $scopeId]);
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'route_id' => 117,
-            'allow'    => 1,
-            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
+            'operation_id' => 181,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
-            'route_id' => 116,
-            'allow'    => 1,
-            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
-        ]], $routes);
+            'operation_id' => 180,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 179,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 178,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 177,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 176,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ], [
+            'scope_id' => $scopeId,
+            'operation_id' => 175,
+            'allow' => 1,
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+        ]], $operations);
     }
 
     public function testPut()
@@ -258,7 +269,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
@@ -272,6 +283,6 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

@@ -2,30 +2,54 @@
 
 namespace Fusio\Impl\Table\Generated;
 
-class UserScopeRow extends \PSX\Record\Record
+class UserScopeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
+    private ?int $id = null;
+    private ?int $userId = null;
+    private ?int $scopeId = null;
     public function setId(int $id) : void
     {
-        $this->setProperty('id', $id);
+        $this->id = $id;
     }
     public function getId() : int
     {
-        return $this->getProperty('id');
+        return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
     public function setUserId(int $userId) : void
     {
-        $this->setProperty('user_id', $userId);
+        $this->userId = $userId;
     }
     public function getUserId() : int
     {
-        return $this->getProperty('user_id');
+        return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
     public function setScopeId(int $scopeId) : void
     {
-        $this->setProperty('scope_id', $scopeId);
+        $this->scopeId = $scopeId;
     }
     public function getScopeId() : int
     {
-        return $this->getProperty('scope_id');
+        return $this->scopeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope_id" was provided');
+    }
+    public function toRecord() : \PSX\Record\RecordInterface
+    {
+        /** @var \PSX\Record\Record<mixed> $record */
+        $record = new \PSX\Record\Record();
+        $record->put('id', $this->id);
+        $record->put('user_id', $this->userId);
+        $record->put('scope_id', $this->scopeId);
+        return $record;
+    }
+    public function jsonSerialize() : object
+    {
+        return (object) $this->toRecord()->getAll();
+    }
+    public static function from(array|\ArrayAccess $data) : self
+    {
+        $row = new self();
+        $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
+        $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
+        $row->scopeId = isset($data['scope_id']) && is_int($data['scope_id']) ? $data['scope_id'] : null;
+        return $row;
     }
 }

@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Table\App;
@@ -30,7 +29,7 @@ use PSX\Sql\Condition;
  * Token
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Token extends Generated\AppTokenTable
@@ -38,46 +37,46 @@ class Token extends Generated\AppTokenTable
     const STATUS_ACTIVE  = 0x1;
     const STATUS_DELETED = 0x2;
 
-    public function getTokensByApp($appId)
+    public function getTokensByApp(int $appId): array
     {
         $now = new DateTime();
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('status', '=', self::STATUS_ACTIVE);
-        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('status', self::STATUS_ACTIVE);
+        $con->greater('expire', $now->format('Y-m-d H:i:s'));
 
         return $this->findBy($con);
     }
 
-    public function getTokenByRefreshToken($appId, $refreshToken)
+    public function getTokenByRefreshToken(int $appId, string $refreshToken): ?Generated\AppTokenRow
     {
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('refresh', '=', $refreshToken);
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('refresh', $refreshToken);
 
         return $this->findOneBy($con);
     }
 
-    public function getTokenByToken($appId, $token)
+    public function getTokenByToken(int $appId, string $token): ?Generated\AppTokenRow
     {
         $now = new DateTime();
-        $con = new Condition();
-        $con->add('app_id', '=', $appId);
-        $con->add('status', '=', self::STATUS_ACTIVE);
-        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
-        $con->add('token', '=', $token);
+        $con = Condition::withAnd();
+        $con->equals('app_id', $appId);
+        $con->equals('status', self::STATUS_ACTIVE);
+        $con->greater('expire', $now->format('Y-m-d H:i:s'));
+        $con->equals('token', $token);
 
         return $this->findOneBy($con);
     }
 
-    public function removeTokenFromApp($appId, $tokenId)
+    public function removeTokenFromApp(int $appId, int $tokenId): void
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
                  WHERE app_id = :app_id
                    AND id = :id';
 
-        $affectedRows = $this->connection->executeUpdate($sql, array(
+        $affectedRows = $this->connection->executeStatement($sql, array(
             'status' => self::STATUS_DELETED,
             'app_id' => $appId,
             'id'     => $tokenId
@@ -88,14 +87,14 @@ class Token extends Generated\AppTokenTable
         }
     }
 
-    public function removeAllTokensFromAppAndUser($appId, $userId)
+    public function removeAllTokensFromAppAndUser(int $appId, int $userId): void
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
                  WHERE app_id = :app_id
                    AND user_id = :user_id';
 
-        $this->connection->executeUpdate($sql, array(
+        $this->connection->executeStatement($sql, array(
             'status'  => self::STATUS_DELETED,
             'app_id'  => $appId,
             'user_id' => $userId

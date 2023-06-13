@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Service\Generator;
@@ -29,13 +28,20 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Model\Backend\Action;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\Operation;
+use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\Schema;
+use Fusio\Model\Backend\SchemaCreate;
+use Fusio\Model\Backend\SchemaSource;
 
 /**
  * TestProvider
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class TestProvider implements ProviderInterface
@@ -45,9 +51,11 @@ class TestProvider implements ProviderInterface
         return 'Test-Provider';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
-        $schemaRequest = $setup->addSchema('Schema_Request', [
+        $schema = new SchemaCreate();
+        $schema->setName('Schema_Request');
+        $schema->setSource(SchemaSource::fromIterable([
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -58,9 +66,12 @@ class TestProvider implements ProviderInterface
                     'format' => 'date-time',
                 ],
             ],
-        ]);
+        ]));
+        $setup->addSchema($schema);
 
-        $schemaResponse = $setup->addSchema('Schema_Response', [
+        $schema = new SchemaCreate();
+        $schema->setName('Schema_Response');
+        $schema->setSource(SchemaSource::fromIterable([
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -71,44 +82,48 @@ class TestProvider implements ProviderInterface
                     'format' => 'date-time',
                 ],
             ],
-        ]);
+        ]));
+        $setup->addSchema($schema);
 
-        $selectAction = $setup->addAction('Action_Select', SqlSelectAll::class, PhpClass::class, [
+        $action = new ActionCreate();
+        $action->setName('Action_Select');
+        $action->setClass(SqlSelectAll::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromIterable([
             'table' => $configuration->get('table'),
-        ]);
+        ]));
+        $setup->addAction($action);
 
-        $insertAction = $setup->addAction('Action_Insert', SqlInsert::class, PhpClass::class, [
+        $action = new ActionCreate();
+        $action->setName('Action_Insert');
+        $action->setClass(SqlInsert::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromIterable([
             'table' => $configuration->get('table'),
-        ]);
+        ]));
+        $setup->addAction($action);
 
-        $setup->addRoute(1, '/table', SchemaApiController::class, ['foo', 'bar'], [
-            [
-                'version' => 1,
-                'status' => 4,
-                'methods' => [
-                    'GET' => [
-                        'active' => true,
-                        'public' => true,
-                        'description' => 'Returns all entries on the table',
-                        'request' => $schemaRequest,
-                        'responses' => [
-                            200 => $schemaResponse,
-                        ],
-                        'action' => $selectAction,
-                    ],
-                    'POST' => [
-                        'active' => true,
-                        'public' => false,
-                        'description' => 'Creates a new entry on the table',
-                        'request' => $schemaRequest,
-                        'responses' => [
-                            200 => $schemaResponse,
-                        ],
-                        'action' => $insertAction,
-                    ]
-                ],
-            ]
-        ]);
+        $operation = new OperationCreate();
+        $operation->setName('getAll');
+        $operation->setDescription('Returns all entries on the table');
+        $operation->setHttpMethod('GET');
+        $operation->setHttpPath('/table');
+        $operation->setHttpCode(200);
+        $operation->setIncoming('Schema_Request');
+        $operation->setOutgoing('Schema_Response');
+        $operation->setAction('Action_Select');
+        $setup->addOperation($operation);
+
+        $operation = new OperationCreate();
+        $operation->setName('create');
+        $operation->setDescription('Creates a new entry on the table');
+        $operation->setHttpMethod('POST');
+        $operation->setHttpPath('/table');
+        $operation->setHttpCode(200);
+        $operation->setIncoming('Schema_Request');
+        $operation->setOutgoing('Schema_Response');
+        $operation->setAction('Action_Insert');
+        $setup->addOperation($operation);
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void

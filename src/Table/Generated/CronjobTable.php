@@ -29,31 +29,31 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
+        return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneBy(\PSX\Sql\Condition $condition, ?\PSX\Sql\Fields $fields = null) : ?\Fusio\Impl\Table\Generated\CronjobRow
+    public function findOneBy(\PSX\Sql\Condition $condition) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        return $this->doFindOneBy($condition, $fields);
+        return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
     public function find(int $id) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
@@ -61,9 +61,9 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -72,17 +72,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneById(int $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateById(int $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteById(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('category_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -91,17 +109,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByCategoryId(int $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('category_id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByCategoryId(int $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByCategoryId(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('status', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -110,17 +146,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByStatus(int $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('status', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByStatus(int $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('status', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByStatus(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('status', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByName(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByName(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('name', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -129,17 +183,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByName(string $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('name', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByName(string $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('name', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByName(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('name', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByCron(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByCron(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('cron', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -148,17 +220,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByCron(string $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('cron', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByCron(string $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('cron', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByCron(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('cron', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByAction(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByAction(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('action', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -167,36 +257,72 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByAction(string $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('action', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByAction(string $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('action', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByAction(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('action', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExecuteDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByExecuteDate(\PSX\DateTime\LocalDateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('execute_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByExecuteDate(\DateTime $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
+    public function findOneByExecuteDate(\PSX\DateTime\LocalDateTime $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('execute_date', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByExecuteDate(\PSX\DateTime\LocalDateTime $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('execute_date', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByExecuteDate(\PSX\DateTime\LocalDateTime $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('execute_date', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExitCode(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByExitCode(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('exit_code', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -205,17 +331,35 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByExitCode(int $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('exit_code', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByExitCode(int $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('exit_code', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByExitCode(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('exit_code', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('metadata', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -224,36 +368,68 @@ class CronjobTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\CronjobRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
+    public function updateByMetadata(string $value, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('metadata', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByMetadata(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('metadata', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
     public function create(\Fusio\Impl\Table\Generated\CronjobRow $record) : int
     {
-        return $this->doCreate($record);
+        return $this->doCreate($record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
     public function update(\Fusio\Impl\Table\Generated\CronjobRow $record) : int
     {
-        return $this->doUpdate($record);
+        return $this->doUpdate($record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateBy(\PSX\Sql\Condition $condition, \Fusio\Impl\Table\Generated\CronjobRow $record) : int
+    {
+        return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
     public function delete(\Fusio\Impl\Table\Generated\CronjobRow $record) : int
     {
-        return $this->doDelete($record);
+        return $this->doDelete($record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteBy(\PSX\Sql\Condition $condition) : int
+    {
+        return $this->doDeleteBy($condition);
     }
     /**
      * @param array<string, mixed> $row
      */
     protected function newRecord(array $row) : \Fusio\Impl\Table\Generated\CronjobRow
     {
-        return new \Fusio\Impl\Table\Generated\CronjobRow($row);
+        return \Fusio\Impl\Table\Generated\CronjobRow::from($row);
     }
 }

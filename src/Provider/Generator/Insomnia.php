@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Provider\Generator;
@@ -27,16 +26,20 @@ use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
+use Fusio\Engine\Generator\Setup;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Engine\Schema\SchemaName;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\OperationCreate;
 use PSX\Api\Util\Inflection;
 
 /**
  * Insomnia
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Insomnia implements ProviderInterface
@@ -46,37 +49,19 @@ class Insomnia implements ProviderInterface
         return 'Import-Insomnia';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
-        if (!$import instanceof \stdClass) {
-            return;
-        }
-
         if (isset($import->resources) && is_array($import->resources)) {
             $env = $this->getEnvironmentVariables($import->resources);
 
-
-            $resources = [];
-            foreach ($import->resources as $resource) {
+            foreach ($import->resources as $index => $resource) {
                 $type = $resource->_type ?? null;
                 if ($type !== 'request') {
                     continue;
                 }
 
-                $path = $this->normalizePath($resource);
-                if (!isset($resources[$path])) {
-                    $resources[$path] = [];
-                }
-
-                $method = $resource->method ?? null;
-                if (!empty($method)) {
-                    $resources[$path][$method] = $resource;
-                }
-            }
-
-            foreach ($resources as $path => $methods) {
-                $setup->addRoute(1, $path, SchemaApiController::class, [], [$this->buildConfig($methods, $setup, $env)]);
+                $this->buildOperation($resource, $env, $setup, $index);
             }
         }
     }
@@ -96,66 +81,73 @@ class Insomnia implements ProviderInterface
         return $data;
     }
 
-    private function buildConfig(array $methods, SetupInterface $setup, array $env): array
-    {
-        $result = [];
-        foreach ($methods as $methodName => $resource) {
-            $result[$methodName] = $this->buildMethod($methodName, $resource, $setup, $env);
-        }
-
-        return [
-            'version' => 1,
-            'methods' => $result,
-        ];
-    }
-
-    private function buildMethod(string $methodName, \stdClass $resource, SetupInterface $setup, array $env): array
+    private function buildOperation(\stdClass $resource, array $env, Setup $setup, string $index): void
     {
         $name = $resource->name ?? null;
         if (empty($name)) {
-            throw new \RuntimeException('No name provided');
+            throw new \RuntimeException('No name provided for resource ' . $index);
         }
 
         $url = $resource->url ?? null;
         if (empty($url)) {
-            throw new \RuntimeException('No url provided');
+            throw new \RuntimeException('No url provided for resource ' . $index);
+        }
+
+        $path = $this->normalizePath($resource);
+        if (empty($path)) {
+            throw new \RuntimeException('No path provided for resource ' . $index);
+        }
+
+        $method = $resource->method ?? null;
+        if (empty($method)) {
+            throw new \RuntimeException('No path provided for resource ' . $index);
         }
 
         foreach ($env as $key => $value) {
             $url = str_replace('{{ ' . $key . ' }}', $value, $url);
         }
 
-        $url = $this->convertPlaceholderToColon($url);
+        $url  = $this->convertPlaceholderToColon($url);
+        $name = $this->buildName([$name, $this->getOperationMethodName($method)]);
 
-        $name = $this->buildName([$methodName, $name]);
-
-        $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
+        $action = new ActionCreate();
+        $action->setName($name);
+        $action->setClass(HttpProcessor::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
             'url' => $url,
             'type' => HttpEngine::TYPE_JSON,
-        ]);
+        ]));
+        $setup->addAction($action);
 
-        $config = [
-            'active' => true,
-            'public' => !isset($resource->auth)
-        ];
+        $operation = new OperationCreate();
+        $operation->setName($name);
+        $operation->setPublic(!isset($resource->auth));
+        $operation->setActive(true);
+        $operation->setHttpMethod($method);
+        $operation->setHttpPath($path);
+        $operation->setHttpCode(200);
 
         if (isset($resource->body)) {
-            $config['request'] = -1;
+            $operation->setIncoming(SchemaName::PASSTHRU);
         }
 
-        $config['responses'][200] = -1;
-        $config['action'] = $action;
-
-        return $config;
+        $operation->setOutgoing(SchemaName::PASSTHRU);
+        $setup->addOperation($operation);
     }
 
-    private function buildName(array $parts): string
+    private function buildName(array $parts, string $separator = '.'): string
     {
-        $parts = array_map(function($value){
-            return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
+        $parts = array_map(function($parts) use ($separator) {
+            $parts = array_filter(explode('/', $parts));
+            $result = [];
+            foreach ($parts as $part) {
+                $result[] = preg_replace('/[^0-9A-Za-z_-]/', '_', $part);
+            }
+            return implode($separator, $result);
         }, $parts);
 
-        return implode('-', array_filter($parts));
+        return implode($separator, array_filter($parts));
     }
 
     private function normalizePath(\stdClass $resource): string
@@ -173,6 +165,18 @@ class Insomnia implements ProviderInterface
         $path = preg_replace('/(\{\{ (\w+) \}\})/i', ':$2', $path);
 
         return $path;
+    }
+
+    private function getOperationMethodName(string $method): string
+    {
+        return match ($method) {
+            'GET' => 'get',
+            'POST' => 'create',
+            'PUT' => 'update',
+            'PATCH' => 'patch',
+            'DELETE' => 'delete',
+            default => 'execute',
+        };
     }
 
     private function getEnvironmentVariables(array $resources): array

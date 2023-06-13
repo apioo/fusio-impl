@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -30,16 +29,16 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\RateAllocation;
 use Fusio\Model\Backend\RateCreate;
 use Fusio\Model\Backend\RateUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Rate
@@ -47,42 +46,33 @@ class Rate
     private Table\Rate $rateTable;
     private Table\Rate\Allocation $rateAllocationTable;
     private Table\Log $logTable;
+    private Rate\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, Rate\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->rateTable           = $rateTable;
+        $this->rateTable = $rateTable;
         $this->rateAllocationTable = $rateAllocationTable;
-        $this->logTable            = $logTable;
-        $this->eventDispatcher     = $eventDispatcher;
+        $this->logTable = $logTable;
+        $this->validator = $validator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(RateCreate $rate, UserContext $context): int
     {
-        $name = $rate->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $this->validator->assert($rate);
 
-        // check whether rate exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Rate already exists');
-        }
-
-        // create rate
         try {
             $this->rateTable->beginTransaction();
 
-            $record = new Table\Generated\RateRow([
-                Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_ACTIVE,
-                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
-                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
-                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
-                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
-                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
-            ]);
-
-            $this->rateTable->create($record);
+            $row = new Table\Generated\RateRow();
+            $row->setStatus(Table\Rate::STATUS_ACTIVE);
+            $row->setPriority($rate->getPriority());
+            $row->setName($rate->getName());
+            $row->setRateLimit($rate->getRateLimit());
+            $row->setTimespan((string) $rate->getTimespan());
+            $row->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
+            $this->rateTable->create($row);
 
             $rateId = $this->rateTable->getLastInsertId();
             $rate->setId($rateId);
@@ -101,9 +91,9 @@ class Rate
         return $rateId;
     }
 
-    public function update(int $rateId, RateUpdate $rate, UserContext $context): int
+    public function update(string $rateId, RateUpdate $rate, UserContext $context): int
     {
-        $existing = $this->rateTable->find($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -112,20 +102,17 @@ class Rate
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
+        $this->validator->assert($rate);
+
         try {
             $this->rateTable->beginTransaction();
 
-            // update rate
-            $record = new Table\Generated\RateRow([
-                Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
-                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
-                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
-                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
-                Table\Generated\RateTable::COLUMN_METADATA => $rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null,
-            ]);
-
-            $this->rateTable->update($record);
+            $existing->setPriority($rate->getPriority() ?? $existing->getPriority());
+            $existing->setName($rate->getName() ?? $existing->getName());
+            $existing->setRateLimit($rate->getRateLimit() ?? $existing->getRateLimit());
+            $existing->setTimespan((string) ($rate->getTimespan() ?? $existing->getTimespan()));
+            $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : $existing->getMetadata());
+            $this->rateTable->update($existing);
 
             $this->handleAllocations($existing->getId(), $rate->getAllocation());
 
@@ -138,31 +125,27 @@ class Rate
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($rate, $existing, $context));
 
-        return $rateId;
+        return $existing->getId();
     }
 
-    public function delete(int $rateId, UserContext $context): int
+    public function delete(string $rateId, UserContext $context): int
     {
-        $existing = $this->rateTable->find($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
-        $record = new Table\Generated\RateRow([
-            Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
-        ]);
-
-        $this->rateTable->update($record);
+        $existing->setStatus(Table\Rate::STATUS_DELETED);
+        $this->rateTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $rateId;
+        return $existing->getId();
     }
 
-    public function assertLimit(string $ip, int $routeId, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
+    public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
     {
-        $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app, $user);
+        $rate = $this->rateAllocationTable->getRateForRequest($operation, $app, $user);
         if (empty($rate)) {
             return false;
         }
@@ -182,21 +165,6 @@ class Rate
         return true;
     }
 
-    public function exists(string $name): int|false
-    {
-        $condition  = new Condition();
-        $condition->notEquals(Table\Generated\RateTable::COLUMN_STATUS, Table\Rate::STATUS_DELETED);
-        $condition->equals(Table\Generated\RateTable::COLUMN_NAME, $name);
-
-        $rate = $this->rateTable->findOneBy($condition);
-
-        if ($rate instanceof Table\Generated\RateRow) {
-            return $rate->getId();
-        } else {
-            return false;
-        }
-    }
-
     private function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int
     {
         if (empty($timespan)) {
@@ -207,7 +175,7 @@ class Rate
         $past = new \DateTime();
         $past->sub(new \DateInterval($timespan));
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         // we count only requests to the default category
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, 1);
 
@@ -239,14 +207,14 @@ class Rate
                     $authenticated = null;
                 }
 
-                $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
-                    Table\Generated\RateAllocationTable::COLUMN_RATE_ID => $rateId,
-                    Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID => $allocation->getRouteId(),
-                    Table\Generated\RateAllocationTable::COLUMN_USER_ID => $allocation->getUserId(),
-                    Table\Generated\RateAllocationTable::COLUMN_PLAN_ID => $allocation->getPlanId(),
-                    Table\Generated\RateAllocationTable::COLUMN_APP_ID => $allocation->getAppId(),
-                    Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $authenticated,
-                ]));
+                $row = new Table\Generated\RateAllocationRow();
+                $row->setRateId($rateId);
+                $row->setOperationId($allocation->getOperationId());
+                $row->setUserId($allocation->getUserId());
+                $row->setPlanId($allocation->getPlanId());
+                $row->setAppId($allocation->getAppId());
+                $row->setAuthenticated($authenticated);
+                $this->rateAllocationTable->create($row);
             }
         }
     }

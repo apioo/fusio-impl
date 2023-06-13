@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Authorization;
@@ -31,12 +30,12 @@ use PSX\Json\Parser;
  * ClientCredentialsTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class ClientCredentialsTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -51,7 +50,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         // if we provide no explicit scopes we get all scopes assigned to the user
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
     }
 
     public function testPostSpecificScope()
@@ -75,7 +74,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
     }
 
     /**
@@ -91,7 +90,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         // we receive only the authorization scope since out user has not the backend scope
-        $this->assertAccessToken($response, 'consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 2);
+        $this->assertAccessToken($response, 'consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 2);
     }
 
     /**
@@ -203,7 +202,7 @@ JSON;
         $this->assertEquals($scope, $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals($appId, $row['app_id']);
         $this->assertEquals($userId, $row['user_id']);

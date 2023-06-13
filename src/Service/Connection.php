@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -36,47 +35,45 @@ use Fusio\Impl\Event\Connection\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConnectionCreate;
 use Fusio\Model\Backend\ConnectionUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Connection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Connection
 {
     private Table\Connection $connectionTable;
+    private Connection\Validator $validator;
     private Factory\Connection $connectionFactory;
     private string $secretKey;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Connection $connectionTable, Connection\Validator $validator, Factory\Connection $connectionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
-        $this->connectionTable   = $connectionTable;
+        $this->connectionTable = $connectionTable;
+        $this->validator = $validator;
         $this->connectionFactory = $connectionFactory;
-        $this->secretKey         = $secretKey;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->secretKey = $config->get('fusio_project_key');
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(ConnectionCreate $connection, UserContext $context): int
     {
+        $this->validator->assert($connection);
+
         $name = $connection->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $class = $connection->getClass();
 
-        // check whether connection exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Connection already exists');
-        }
-
-        $config     = $connection->getConfig();
-        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
+        $config     = $connection->getConfig()?->getAll() ?? [];
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
@@ -97,15 +94,13 @@ class Connection
         try {
             $this->connectionTable->beginTransaction();
 
-            $record = new Table\Generated\ConnectionRow([
-                Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_ACTIVE,
-                Table\Generated\ConnectionTable::COLUMN_NAME => $connection->getName(),
-                Table\Generated\ConnectionTable::COLUMN_CLASS => $connection->getClass(),
-                Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-                Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
-            ]);
-
-            $this->connectionTable->create($record);
+            $row = new Table\Generated\ConnectionRow();
+            $row->setStatus(Table\Connection::STATUS_ACTIVE);
+            $row->setName($name);
+            $row->setClass($class);
+            $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+            $row->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
+            $this->connectionTable->create($row);
 
             $connectionId = $this->connectionTable->getLastInsertId();
             $connection->setId($connectionId);
@@ -122,9 +117,9 @@ class Connection
         return $connectionId;
     }
 
-    public function update(int $connectionId, ConnectionUpdate $connection, UserContext $context): int
+    public function update(string $connectionId, ConnectionUpdate $connection, UserContext $context): int
     {
-        $existing = $this->connectionTable->find($connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -133,9 +128,13 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config     = $connection->getConfig();
-        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
-        $factory    = $this->connectionFactory->factory($connection->getClass() ?? '');
+        $this->validator->assert($connection, $existing);
+
+        $class = $connection->getClass();
+
+        $config     = $connection->getConfig()?->getAll() ?? Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
 
         $conn = $factory->getConnection($parameters);
 
@@ -148,22 +147,18 @@ class Connection
         }
 
         // update connection
-        $record = new Table\Generated\ConnectionRow([
-            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-            Table\Generated\ConnectionTable::COLUMN_METADATA => $connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null,
-        ]);
-
-        $this->connectionTable->update($record);
+        $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+        $existing->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : $existing->getMetadata());
+        $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
 
-        return $connectionId;
+        return $existing->getId();
     }
 
-    public function delete(int $connectionId, UserContext $context): int
+    public function delete(string $connectionId, UserContext $context): int
     {
-        $existing = $this->connectionTable->find($connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -189,31 +184,12 @@ class Connection
             $factory->onDelete($existing->getName(), $parameters, $conn);
         }
 
-        $record = new Table\Generated\ConnectionRow([
-            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_DELETED,
-        ]);
-
-        $this->connectionTable->update($record);
+        $existing->setStatus(Table\Connection::STATUS_DELETED);
+        $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $connectionId;
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_NAME, $name);
-
-        $connection = $this->connectionTable->findOneBy($condition);
-
-        if ($connection instanceof Table\Generated\ConnectionRow) {
-            return $connection->getId();
-        } else {
-            return false;
-        }
+        return $existing->getId();
     }
 
     public function getIntrospection(int $connectionId): IntrospectorInterface

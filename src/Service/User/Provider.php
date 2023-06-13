@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\User;
@@ -24,37 +23,37 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Provider\ProviderFactory;
+use Fusio\Impl\Provider\UserProvider;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\UserRemote;
-use Fusio\Model\Consumer\UserProvider;
-use PSX\Framework\Config\Config;
+use Fusio\Model\Consumer;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Provider
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Provider
 {
     private Service\User $userService;
     private Service\App\Token $appTokenService;
-    private ProviderFactory $providerFactory;
-    private Config $config;
+    private UserProvider $userProvider;
+    private ConfigInterface $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, ConfigInterface $config)
     {
-        $this->userService     = $userService;
+        $this->userService = $userService;
         $this->appTokenService = $appTokenService;
-        $this->providerFactory = $providerFactory;
-        $this->config          = $config;
+        $this->userProvider = $userProvider;
+        $this->config = $config;
     }
 
-    public function provider(string $providerName, UserProvider $request): AccessToken
+    public function provider(string $providerName, Consumer\UserProvider $request): AccessToken
     {
         $code = $request->getCode();
         if (empty($code)) {
@@ -72,15 +71,15 @@ class Provider
         }
 
         /** @var ProviderInterface $provider */
-        $provider = $this->providerFactory->factory($providerName);
-        $user     = $provider->requestUser($code, $clientId, $redirectUri);
+        $provider = $this->userProvider->getInstance($providerName);
+        $user = $provider->requestUser($code, $clientId, $redirectUri);
 
         if (!$user instanceof UserDetails) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
         $remote = new UserRemote();
-        $remote->setProvider((string) $provider->getId());
+        $remote->setProvider($provider->getId());
         $remote->setRemoteId($user->getId());
         $remote->setName($user->getUserName());
         $remote->setEmail($user->getEmail());

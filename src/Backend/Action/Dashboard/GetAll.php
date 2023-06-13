@@ -1,30 +1,32 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Backend\Action\Dashboard;
 
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter;
 use Fusio\Impl\Backend\View;
 use PSX\Sql\TableManagerInterface;
 
@@ -32,16 +34,16 @@ use PSX\Sql\TableManagerInterface;
  * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends ActionAbstract
+class GetAll implements ActionInterface
 {
-    private View\Statistic\ErrorsPerRoute $errorsPerRoute;
+    private View\Statistic\ErrorsPerOperation $errorsPerRoute;
     private View\Statistic\IncomingRequests $incomingRequests;
     private View\Statistic\IncomingTransactions $incomingTransactions;
-    private View\Statistic\MostUsedRoutes $mostUsedRoutes;
-    private View\Statistic\TimePerRoute $timePerRoute;
+    private View\Statistic\MostUsedOperations $mostUsedRoutes;
+    private View\Statistic\TimePerOperation $timePerRoute;
     private View\Dashboard\LatestApps $latestApps;
     private View\Dashboard\LatestRequests $latestRequests;
     private View\Dashboard\LatestUsers $latestUsers;
@@ -49,11 +51,11 @@ class GetAll extends ActionAbstract
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
+        $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerOperation::class);
         $this->incomingRequests = $tableManager->getTable(View\Statistic\IncomingRequests::class);
         $this->incomingTransactions = $tableManager->getTable(View\Statistic\IncomingTransactions::class);
-        $this->mostUsedRoutes = $tableManager->getTable(View\Statistic\MostUsedRoutes::class);
-        $this->timePerRoute = $tableManager->getTable(View\Statistic\TimePerRoute::class);
+        $this->mostUsedRoutes = $tableManager->getTable(View\Statistic\MostUsedOperations::class);
+        $this->timePerRoute = $tableManager->getTable(View\Statistic\TimePerOperation::class);
         $this->latestApps = $tableManager->getTable(View\Dashboard\LatestApps::class);
         $this->latestRequests = $tableManager->getTable(View\Dashboard\LatestRequests::class);
         $this->latestUsers = $tableManager->getTable(View\Dashboard\LatestUsers::class);
@@ -62,8 +64,8 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $logFilter = View\Log\QueryFilter::create($request);
-        $transactionFilter = View\Transaction\QueryFilter::create($request);
+        $logFilter = Filter\Log\QueryFilter::create($request);
+        $transactionFilter = Filter\Transaction\QueryFilter::create($request);
 
         return [
             'errorsPerRoute' => $this->errorsPerRoute->getView($context->getUser()->getCategoryId(), $logFilter),

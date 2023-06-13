@@ -1,27 +1,25 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
@@ -34,58 +32,40 @@ use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
-use PSX\Dependency\Exception\AutowiredException;
-use PSX\Dependency\Exception\NotFoundException;
-use PSX\Framework\Config\Config as FrameworkConfig;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Action
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Action
 {
     private Table\Action $actionTable;
-    private Table\Route\Method $routeMethodTable;
     private Factory\ActionInterface $actionFactory;
-    private FrameworkConfig $config;
+    private Action\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, FrameworkConfig $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Factory\ActionInterface $actionFactory, Action\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->actionTable      = $actionTable;
-        $this->routeMethodTable = $routeMethodTable;
-        $this->actionFactory    = $actionFactory;
-        $this->config           = $config;
-        $this->eventDispatcher  = $eventDispatcher;
+        $this->actionTable = $actionTable;
+        $this->actionFactory = $actionFactory;
+        $this->validator = $validator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, ActionCreate $action, UserContext $context): int
     {
-        $this->assertSandboxAccess($action);
+        $this->validator->assert($action);
 
         $name = $action->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid action name');
-        }
-
-        // check whether action exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Action already exists');
-        }
-
         $class = $action->getClass();
-        if (empty($class)) {
-            throw new StatusCode\BadRequestException('Action class not available');
-        }
 
         $engine = $action->getEngine();
         if (empty($engine)) {
@@ -93,8 +73,8 @@ class Action
         }
 
         // check source
-        $config     = $action->getConfig() ? $action->getConfig()?->getProperties() : [];
-        $parameters = new Parameters($config ?? []);
+        $config     = $action->getConfig() ? $action->getConfig()->getAll() : [];
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
@@ -106,19 +86,17 @@ class Action
         try {
             $this->actionTable->beginTransaction();
 
-            $record = new Table\Generated\ActionRow([
-                Table\Generated\ActionTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_ACTIVE,
-                Table\Generated\ActionTable::COLUMN_NAME => $action->getName(),
-                Table\Generated\ActionTable::COLUMN_CLASS => $class,
-                Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
-                Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
-                Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
-                Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
-                Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
-            ]);
-
-            $this->actionTable->create($record);
+            $row = new Table\Generated\ActionRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Action::STATUS_ACTIVE);
+            $row->setName($name);
+            $row->setClass($class);
+            $row->setAsync($action->getAsync() ?? false);
+            $row->setEngine($engine);
+            $row->setConfig(self::serializeConfig($config));
+            $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->actionTable->create($row);
 
             $actionId = $this->actionTable->getLastInsertId();
             $action->setId($actionId);
@@ -135,11 +113,9 @@ class Action
         return $actionId;
     }
 
-    public function update(int $actionId, ActionUpdate $action, UserContext $context): int
+    public function update(string $actionId, ActionUpdate $action, UserContext $context): int
     {
-        $this->assertSandboxAccess($action);
-
-        $existing = $this->actionTable->find($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -148,25 +124,15 @@ class Action
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        $name = $action->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid action name');
-        }
+        $this->validator->assert($action, $existing);
 
-        // in case the class is empty use the existing class
-        $class = $action->getClass();
-        if (empty($class)) {
-            $class = $existing->getClass();
-        }
-
-        $engine = $action->getEngine();
-        if (empty($engine)) {
-            $engine = $existing->getEngine() ?? Resolver\PhpClass::class;
-        }
+        $name = $action->getName() ?? $existing->getName();
+        $class = $action->getClass() ?? $existing->getClass();
+        $engine = $action->getEngine() ?? $existing->getEngine();
 
         // check source
-        $config     = $action->getConfig() ? $action->getConfig()?->getProperties() : [];
-        $parameters = new Parameters($config ?? []);
+        $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
@@ -175,27 +141,23 @@ class Action
         }
 
         // update action
-        $record = new Table\Generated\ActionRow([
-            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ActionTable::COLUMN_NAME => $name,
-            Table\Generated\ActionTable::COLUMN_CLASS => $class,
-            Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
-            Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
-            Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
-            Table\Generated\ActionTable::COLUMN_METADATA => $action->getMetadata() !== null ? json_encode($action->getMetadata()) : null,
-            Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
-        ]);
-
-        $this->actionTable->update($record);
+        $existing->setName($name);
+        $existing->setClass($class);
+        $existing->setAsync($action->getAsync() ?? $existing->getAsync());
+        $existing->setEngine($engine);
+        $existing->setConfig(self::serializeConfig($config));
+        $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : $existing->getMetadata());
+        $existing->setDate(LocalDateTime::now());
+        $this->actionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
 
-        return $actionId;
+        return $existing->getId();
     }
 
-    public function delete(int $actionId, UserContext $context): int
+    public function delete(string $actionId, UserContext $context): int
     {
-        $existing = $this->actionTable->find($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -213,31 +175,12 @@ class Action
             $handler->onDelete($existing->getName(), $parameters);
         }
 
-        $record = new Table\Generated\ActionRow([
-            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_DELETED,
-        ]);
-
-        $this->actionTable->update($record);
+        $existing->setStatus(Table\Action::STATUS_DELETED);
+        $this->actionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $actionId;
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition = new Condition();
-        $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\ActionTable::COLUMN_NAME, $name);
-
-        $action = $this->actionTable->findOneBy($condition);
-
-        if ($action instanceof Table\Generated\ActionRow) {
-            return $action->getId();
-        } else {
-            return false;
-        }
+        return $existing->getId();
     }
 
     /**
@@ -251,20 +194,11 @@ class Action
 
         try {
             $action = $this->actionFactory->factory($class, $engine);
-        } catch (FactoryResolveException|NotFoundException|AutowiredException $e) {
+        } catch (FactoryResolveException $e) {
             throw new StatusCode\BadRequestException($e->getMessage());
         }
 
         return $action;
-    }
-
-    private function assertSandboxAccess(Backend\Action $record): void
-    {
-        $class = ltrim((string) $record->getClass(), '\\');
-
-        if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
-            throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
-        }
     }
 
     public static function serializeConfig(?array $config = null): ?string

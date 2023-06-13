@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -25,72 +24,60 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
-use Fusio\Impl\Schema\Loader;
-use Fusio\Impl\Schema\Parser;
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\SchemaCreate;
 use Fusio\Model\Backend\SchemaForm;
 use Fusio\Model\Backend\SchemaUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
-use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * Schema
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Schema
 {
     private Table\Schema $schemaTable;
-    private Table\Route\Method $routesMethodTable;
-    private Loader $schemaLoader;
+    private Schema\Validator $validator;
+    private SchemaManagerInterface $schemaManager;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Schema\Validator $validator, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
     {
-        $this->schemaTable       = $schemaTable;
-        $this->routesMethodTable = $routesMethodTable;
-        $this->schemaLoader      = $schemaLoader;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->schemaTable = $schemaTable;
+        $this->validator = $validator;
+        $this->schemaManager = $schemaManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
     {
-        $name = $schema->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid schema name');
-        }
+        $this->validator->assert($schema);
 
-        // check whether schema exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Schema already exists');
-        }
-
-        // create schema
         try {
             $this->schemaTable->beginTransaction();
 
-            $record = new Table\Generated\SchemaRow([
-                Table\Generated\SchemaTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_ACTIVE,
-                Table\Generated\SchemaTable::COLUMN_NAME => $name,
-                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
-                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
-                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
-            ]);
-
-            $this->schemaTable->create($record);
+            $row = new Table\Generated\SchemaRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Schema::STATUS_ACTIVE);
+            $row->setName($schema->getName());
+            $row->setSource($this->parseSource($schema->getSource()));
+            $row->setForm($this->parseForm($schema->getForm()));
+            $row->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
+            $this->schemaTable->create($row);
 
             $schemaId = $this->schemaTable->getLastInsertId();
             $schema->setId($schemaId);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($name);
+            //$this->schemaManager->getSchema(Scheme::wrap($row->getName()));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -104,9 +91,9 @@ class Schema
         return $schemaId;
     }
 
-    public function update(int $schemaId, SchemaUpdate $schema, UserContext $context): int
+    public function update(string $schemaId, SchemaUpdate $schema, UserContext $context): int
     {
-        $existing = $this->schemaTable->find($schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -115,26 +102,19 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $name = $schema->getName();
-        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid schema name');
-        }
+        $this->validator->assert($schema, $existing);
 
         try {
             $this->schemaTable->beginTransaction();
 
-            $record = new Table\Generated\SchemaRow([
-                Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\SchemaTable::COLUMN_NAME => $name,
-                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
-                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
-                Table\Generated\SchemaTable::COLUMN_METADATA => $schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null,
-            ]);
-
-            $this->schemaTable->update($record);
+            $existing->setName($schema->getName() ?? $existing->getName());
+            $existing->setSource($this->parseSource($schema->getSource()) ?? $existing->getSource());
+            $existing->setForm($this->parseForm($schema->getForm()) ?? $existing->getForm());
+            $existing->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : $existing->getMetadata());
+            $this->schemaTable->update($existing);
 
             // check whether we can load the schema
-            $this->schemaLoader->getSchema($name);
+            $this->schemaManager->getSchema(Scheme::wrap($existing->getName()));
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -145,12 +125,12 @@ class Schema
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
 
-        return $schemaId;
+        return $existing->getId();
     }
 
-    public function delete(int $schemaId, UserContext $context): int
+    public function delete(string $schemaId, UserContext $context): int
     {
-        $existing = $this->schemaTable->find($schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -159,16 +139,12 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = new Table\Generated\SchemaRow([
-            Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_DELETED,
-        ]);
-
-        $this->schemaTable->update($record);
+        $existing->setStatus(Table\Schema::STATUS_DELETED);
+        $this->schemaTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $schemaId;
+        return $existing->getId();
     }
 
     public function updateForm(int $schemaId, SchemaForm $form, UserContext $context): void
@@ -182,42 +158,20 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = new Table\Generated\SchemaRow([
-            Table\Generated\SchemaTable::COLUMN_ID => $schema->getId(),
-            Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($form),
-        ]);
-
-        $this->schemaTable->update($record);
+        $schema->setForm($this->parseForm($form));
+        $this->schemaTable->update($schema);
     }
 
-    public function generatePreview(int $schemaId): Generator\Code\Chunks|string
+    public function generatePreview(string $schemaId): Generator\Code\Chunks|string
     {
-        $schema = $this->schemaLoader->getSchema($schemaId);
+        $schema = $this->schemaManager->getSchema(Scheme::wrap($schemaId));
         return (new Generator\Html())->generate($schema);
-    }
-
-    /**
-     * Returns either false ot the id of the existing schema
-     */
-    public function exists(string $name): int|false
-    {
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, $name);
-
-        $schema = $this->schemaTable->findOneBy($condition);
-
-        if ($schema instanceof Table\Generated\SchemaRow) {
-            return $schema->getId();
-        } else {
-            return false;
-        }
     }
 
     private function parseSource(?RecordInterface $source): ?string
     {
         if ($source instanceof RecordInterface) {
-            $class = $source->getProperty('$class');
+            $class = $source->get('$class');
             if (is_string($class)) {
                 return $class;
             } else {

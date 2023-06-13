@@ -1,49 +1,114 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
+use Fusio\Impl\Table\Generated\UserRow;
+use Fusio\Model\Backend\User;
+use Fusio\Model\Backend\UserCreate;
+use Fusio\Model\Backend\UserRemote;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 
 /**
  * Validator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Validator
 {
-    public static function assertName(?string $name): void
+    private Table\User $userTable;
+    private Table\Role $roleTable;
+    private Table\Plan $planTable;
+    private Service\Config $configService;
+
+    public function __construct(Table\User $userTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService)
     {
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name must not be empty');
+        $this->userTable = $userTable;
+        $this->roleTable = $roleTable;
+        $this->planTable = $planTable;
+        $this->configService = $configService;
+    }
+
+    public function assert(User $user, ?Table\Generated\UserRow $existing = null): void
+    {
+        $roleId = $user->getRoleId();
+        if ($roleId !== null) {
+            $this->assertRoleId($roleId);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User role id must not be empty');
+            }
         }
 
-        if (!preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $name)) {
-            throw new StatusCode\BadRequestException('Name must be between 3 and 32 signs and use only the characters (a-zA-Z0-9-_.)');
+        $planId = $user->getPlanId();
+        if ($planId !== null) {
+            $this->assertPlanId($planId);
+        }
+
+        $name = $user->getName();
+        if ($name !== null) {
+            $this->assertName($name, $existing);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User name must not be empty');
+            }
+        }
+
+        $email = $user->getEmail();
+        if ($email !== null) {
+            $this->assertEmail($email, $existing);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('User email must not be empty');
+            }
+        }
+
+        if ($user instanceof UserCreate) {
+            $password = $user->getPassword();
+            if ($password !== null) {
+                $this->assertPassword($password, $this->configService->getValue('user_pw_length'));
+            } else {
+                if ($existing === null) {
+                    throw new StatusCode\BadRequestException('User password must not be empty');
+                }
+            }
         }
     }
 
-    public static function assertEmail(?string $email): void
+    public function assertName(?string $name, ?Table\Generated\UserRow $existing = null): void
+    {
+        if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid user name');
+        }
+
+        if (($existing === null || $name !== $existing->getName()) && $this->userTable->findOneByName($name)) {
+            throw new StatusCode\BadRequestException('User name already exists');
+        }
+    }
+
+    public function assertEmail(?string $email, ?Table\Generated\UserRow $existing = null): void
     {
         if (empty($email)) {
             throw new StatusCode\BadRequestException('Email must not be empty');
@@ -52,15 +117,19 @@ class Validator
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new StatusCode\BadRequestException('Invalid email format');
         }
+
+        if (($existing === null || $email !== $existing->getName()) && $this->userTable->findOneByEmail($email)) {
+            throw new StatusCode\BadRequestException('User email already exists');
+        }
     }
 
-    public static function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null): void
+    public function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null): void
     {
         if (empty($password)) {
             throw new StatusCode\BadRequestException('Password must not be empty');
         }
 
-        $minLength  = $minLength ?? 8;
+        $minLength  = $minLength ?? $this->configService->getValue('user_pw_length');
         $minAlpha   = $minAlpha ?? 0;
         $minNumeric = $minNumeric ?? 0;
         $minSpecial = $minSpecial ?? 0;
@@ -106,6 +175,22 @@ class Validator
 
         if ($special < $minSpecial) {
             throw new StatusCode\BadRequestException('Password must have at least ' . $minSpecial . ' special character i.e. (!#$%&*@_~)');
+        }
+    }
+
+    private function assertRoleId(int $roleId): void
+    {
+        $role = $this->roleTable->find($roleId);
+        if (!$role instanceof Table\Generated\RoleRow) {
+            throw new StatusCode\BadRequestException('Provided role id does not exist');
+        }
+    }
+
+    private function assertPlanId(int $planId): void
+    {
+        $plan = $this->planTable->find($planId);
+        if (!$plan instanceof Table\Generated\PlanRow) {
+            throw new StatusCode\BadRequestException('Provided plan id does not exist');
         }
     }
 }

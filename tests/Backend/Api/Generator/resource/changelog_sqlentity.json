@@ -1,79 +1,13 @@
 {
   "schemas": [
     {
-      "name": "SQL_Table_Parameters",
-      "source": {
-        "definitions": {
-          "SQL_Table_Parameters": {
-            "type": "object",
-            "properties": {
-              "startIndex": {
-                "type": "integer"
-              },
-              "count": {
-                "type": "integer"
-              },
-              "sortBy": {
-                "type": "string"
-              },
-              "sortOrder": {
-                "type": "string",
-                "enum": [
-                  "ASC",
-                  "DESC"
-                ]
-              },
-              "filterBy": {
-                "type": "string"
-              },
-              "filterOp": {
-                "type": "string",
-                "enum": [
-                  "contains",
-                  "equals",
-                  "startsWith",
-                  "present"
-                ]
-              },
-              "filterValue": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "$ref": "SQL_Table_Parameters"
-      }
-    },
-    {
-      "name": "SQL_Table_Response",
-      "source": {
-        "definitions": {
-          "SQL_Table_Response": {
-            "type": "object",
-            "properties": {
-              "success": {
-                "type": "boolean"
-              },
-              "message": {
-                "type": "string"
-              },
-              "id": {
-                "type": "integer"
-              }
-            }
-          }
-        },
-        "$ref": "SQL_Table_Response"
-      }
-    },
-    {
-      "name": "Human_0_SQL_Collection",
+      "name": "Human_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/Human_0_SQL_Entity"
+          "Entity": "schema:\/\/Human_0_SQL_Get"
         },
         "definitions": {
-          "Human_0_SQL_Collection": {
+          "Human_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -88,24 +22,24 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:Human_0_SQL_Entity"
+                  "$ref": "Entity:Human_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Human_0_SQL_Collection"
+        "$ref": "Human_0_SQL_GetAll"
       }
     },
     {
-      "name": "Human_0_SQL_Entity",
+      "name": "Human_0_SQL_Get",
       "source": {
         "$import": {
-          "Location": "schema:\/\/\/Location_0_SQL_Entity",
-          "Category": "schema:\/\/\/Category_0_SQL_Entity"
+          "Location": "schema:\/\/Location_0_SQL_Get",
+          "Category": "schema:\/\/Category_0_SQL_Get"
         },
         "definitions": {
-          "Human_0_SQL_Entity": {
+          "Human_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -121,7 +55,7 @@
                 "type": "string"
               },
               "location": {
-                "$ref": "Location:Location_0_SQL_Entity"
+                "$ref": "Location:Location_0_SQL_Get"
               },
               "tags": {
                 "description": "",
@@ -132,48 +66,48 @@
               },
               "categories": {
                 "items": {
-                  "$ref": "Category:Category_0_SQL_Entity"
+                  "$ref": "Category:Category_0_SQL_Get"
                 }
               },
               "map": {
                 "additionalProperties": {
-                  "$ref": "Location:Location_0_SQL_Entity"
+                  "$ref": "Location:Location_0_SQL_Get"
                 }
               },
               "union": {
                 "oneOf": [
                   {
-                    "$ref": "Location:Location_0_SQL_Entity"
+                    "$ref": "Location:Location_0_SQL_Get"
                   },
                   {
-                    "$ref": "Category:Category_0_SQL_Entity"
+                    "$ref": "Category:Category_0_SQL_Get"
                   }
                 ]
               },
               "intersection": {
                 "allOf": [
                   {
-                    "$ref": "Human"
+                    "$ref": "Human_0_SQL_Get"
                   },
                   {
-                    "$ref": "Location:Location_0_SQL_Entity"
+                    "$ref": "Location:Location_0_SQL_Get"
                   }
                 ]
               }
             }
           }
         },
-        "$ref": "Human_0_SQL_Entity"
+        "$ref": "Human_0_SQL_Get"
       }
     },
     {
-      "name": "Location_0_SQL_Collection",
+      "name": "Location_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/Location_0_SQL_Entity"
+          "Entity": "schema:\/\/Location_0_SQL_Get"
         },
         "definitions": {
-          "Location_0_SQL_Collection": {
+          "Location_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -188,24 +122,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:Location_0_SQL_Entity"
+                  "$ref": "Entity:Location_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Location_0_SQL_Collection"
+        "$ref": "Location_0_SQL_GetAll"
       }
     },
     {
-      "name": "Location_0_SQL_Entity",
+      "name": "Location_0_SQL_Get",
       "source": {
-        "$import": {
-          "Human": "schema:\/\/\/Human_0_SQL_Entity",
-          "Category": "schema:\/\/\/Category_0_SQL_Entity"
-        },
         "definitions": {
-          "Location_0_SQL_Entity": {
+          "Location_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -227,17 +157,17 @@
             }
           }
         },
-        "$ref": "Location_0_SQL_Entity"
+        "$ref": "Location_0_SQL_Get"
       }
     },
     {
-      "name": "Category_0_SQL_Collection",
+      "name": "Category_0_SQL_GetAll",
       "source": {
         "$import": {
-          "entity": "schema:\/\/\/Category_0_SQL_Entity"
+          "Entity": "schema:\/\/Category_0_SQL_Get"
         },
         "definitions": {
-          "Category_0_SQL_Collection": {
+          "Category_0_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -252,24 +182,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "entity:Category_0_SQL_Entity"
+                  "$ref": "Entity:Category_0_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Category_0_SQL_Collection"
+        "$ref": "Category_0_SQL_GetAll"
       }
     },
     {
-      "name": "Category_0_SQL_Entity",
+      "name": "Category_0_SQL_Get",
       "source": {
-        "$import": {
-          "Human": "schema:\/\/\/Human_0_SQL_Entity",
-          "Location": "schema:\/\/\/Location_0_SQL_Entity"
-        },
         "definitions": {
-          "Category_0_SQL_Entity": {
+          "Category_0_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -283,13 +209,13 @@
             }
           }
         },
-        "$ref": "Category_0_SQL_Entity"
+        "$ref": "Category_0_SQL_Get"
       }
     }
   ],
   "actions": [
     {
-      "name": "Human_0_SQL_Select_All",
+      "name": "Human_0_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
@@ -298,29 +224,12 @@
       }
     },
     {
-      "name": "Human_0_SQL_Select_Row",
+      "name": "Human_0_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "connection": 1,
         "jql": "{\n    \"$entity\": \"SELECT id, first_name, last_name, location_id, tags FROM app_human_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"firstName\": {\n            \"$key\": \"first_name\",\n            \"$field\": \"string\"\n        },\n        \"lastName\": {\n            \"$key\": \"last_name\",\n            \"$field\": \"string\"\n        },\n        \"location\": {\n            \"$entity\": \"SELECT entity.id, entity.name, entity.latitude, entity.longitude FROM app_location_0 entity WHERE entity.id = :id\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"location_id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"tags\": {\n            \"$field\": \"json\"\n        },\n        \"categories\": {\n            \"$collection\": \"SELECT entity.id, entity.name FROM app_human_0_category rel INNER JOIN app_category_0 entity ON entity.id = rel.category_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"map\": {\n            \"$collection\": \"SELECT rel.name AS hash_key, entity.id, entity.name, entity.latitude, entity.longitude FROM app_human_0_location rel INNER JOIN app_location_0 entity ON entity.id = rel.location_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            },\n            \"$key\": \"hash_key\"\n        }\n    }\n}"
-      }
-    },
-    {
-      "name": "Human_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {
-        "connection": 1,
-        "table": "app_human_0",
-        "mapping": {
-          "first_name": "firstName",
-          "last_name": "lastName",
-          "location_id": "location:object",
-          "tags": "tags",
-          "categories": "categories:array:app_human_0_category:human_id:category_id",
-          "map": "map:map:app_human_0_location:human_id:location_id"
-        }
       }
     },
     {
@@ -358,7 +267,24 @@
       }
     },
     {
-      "name": "Location_0_SQL_Select_All",
+      "name": "Human_0_SQL_Delete",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "connection": 1,
+        "table": "app_human_0",
+        "mapping": {
+          "first_name": "firstName",
+          "last_name": "lastName",
+          "location_id": "location:object",
+          "tags": "tags",
+          "categories": "categories:array:app_human_0_category:human_id:category_id",
+          "map": "map:map:app_human_0_location:human_id:location_id"
+        }
+      }
+    },
+    {
+      "name": "Location_0_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
@@ -367,26 +293,12 @@
       }
     },
     {
-      "name": "Location_0_SQL_Select_Row",
+      "name": "Location_0_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "connection": 1,
         "jql": "{\n    \"$entity\": \"SELECT id, name, latitude, longitude FROM app_location_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        },\n        \"latitude\": {\n            \"$key\": \"latitude\",\n            \"$field\": \"string\"\n        },\n        \"longitude\": {\n            \"$key\": \"longitude\",\n            \"$field\": \"string\"\n        }\n    }\n}"
-      }
-    },
-    {
-      "name": "Location_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {
-        "connection": 1,
-        "table": "app_location_0",
-        "mapping": {
-          "name": "name",
-          "latitude": "latitude",
-          "longitude": "longitude"
-        }
       }
     },
     {
@@ -418,7 +330,21 @@
       }
     },
     {
-      "name": "Category_0_SQL_Select_All",
+      "name": "Location_0_SQL_Delete",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "connection": 1,
+        "table": "app_location_0",
+        "mapping": {
+          "name": "name",
+          "latitude": "latitude",
+          "longitude": "longitude"
+        }
+      }
+    },
+    {
+      "name": "Category_0_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
@@ -427,24 +353,12 @@
       }
     },
     {
-      "name": "Category_0_SQL_Select_Row",
+      "name": "Category_0_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "connection": 1,
         "jql": "{\n    \"$entity\": \"SELECT id, name FROM app_category_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        }\n    }\n}"
-      }
-    },
-    {
-      "name": "Category_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {
-        "connection": 1,
-        "table": "app_category_0",
-        "mapping": {
-          "name": "name"
-        }
       }
     },
     {
@@ -470,230 +384,161 @@
           "name": "name"
         }
       }
+    },
+    {
+      "name": "Category_0_SQL_Delete",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "connection": 1,
+        "table": "app_category_0",
+        "mapping": {
+          "name": "name"
+        }
+      }
     }
   ],
-  "routes": [
+  "operations": [
     {
-      "priority": 1,
-      "path": "\/human",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a collection of Human",
-              "parameters": "0",
-              "responses": {
-                "200": "2"
-              },
-              "action": "0"
-            },
-            "POST": {
-              "active": true,
-              "public": false,
-              "description": "Creates a new Human",
-              "request": "3",
-              "responses": {
-                "201": "1"
-              },
-              "action": "3"
-            }
-          }
-        }
-      ]
+      "description": "Returns a collection of Human",
+      "httpMethod": "GET",
+      "httpPath": "\/human\/",
+      "httpCode": 200,
+      "name": "human_0.getAll",
+      "outgoing": "Human_0_SQL_GetAll",
+      "action": "Human_0_SQL_GetAll"
     },
     {
-      "priority": 1,
-      "path": "\/human\/:id",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a single Human",
-              "responses": {
-                "200": "3"
-              },
-              "action": "1"
-            },
-            "PUT": {
-              "active": true,
-              "public": false,
-              "description": "Updates an existing Human",
-              "request": "3",
-              "responses": {
-                "200": "1"
-              },
-              "action": "4"
-            },
-            "DELETE": {
-              "active": true,
-              "public": false,
-              "description": "Deletes an existing Human",
-              "responses": {
-                "200": "1"
-              },
-              "action": "2"
-            }
-          }
-        }
-      ]
+      "description": "Returns a single Human",
+      "httpMethod": "GET",
+      "httpPath": "\/human\/:id",
+      "httpCode": 200,
+      "name": "human_0.get",
+      "outgoing": "Human_0_SQL_Get",
+      "action": "Human_0_SQL_Get"
     },
     {
-      "priority": 1,
-      "path": "\/location",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a collection of Location",
-              "parameters": "0",
-              "responses": {
-                "200": "4"
-              },
-              "action": "5"
-            },
-            "POST": {
-              "active": true,
-              "public": false,
-              "description": "Creates a new Location",
-              "request": "5",
-              "responses": {
-                "201": "1"
-              },
-              "action": "8"
-            }
-          }
-        }
-      ]
+      "description": "Creates a new Human",
+      "httpMethod": "POST",
+      "httpPath": "\/human\/",
+      "httpCode": 200,
+      "name": "human_0.create",
+      "incoming": "Human_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Human_0_SQL_Insert"
     },
     {
-      "priority": 1,
-      "path": "\/location\/:id",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a single Location",
-              "responses": {
-                "200": "5"
-              },
-              "action": "6"
-            },
-            "PUT": {
-              "active": true,
-              "public": false,
-              "description": "Updates an existing Location",
-              "request": "5",
-              "responses": {
-                "200": "1"
-              },
-              "action": "9"
-            },
-            "DELETE": {
-              "active": true,
-              "public": false,
-              "description": "Deletes an existing Location",
-              "responses": {
-                "200": "1"
-              },
-              "action": "7"
-            }
-          }
-        }
-      ]
+      "description": "Updates an existing Human",
+      "httpMethod": "PUT",
+      "httpPath": "\/human\/:id",
+      "httpCode": 200,
+      "name": "human_0.update",
+      "incoming": "Human_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Human_0_SQL_Update"
     },
     {
-      "priority": 1,
-      "path": "\/category",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a collection of Category",
-              "parameters": "0",
-              "responses": {
-                "200": "6"
-              },
-              "action": "10"
-            },
-            "POST": {
-              "active": true,
-              "public": false,
-              "description": "Creates a new Category",
-              "request": "7",
-              "responses": {
-                "201": "1"
-              },
-              "action": "13"
-            }
-          }
-        }
-      ]
+      "description": "Deletes an existing Human",
+      "httpMethod": "DELETE",
+      "httpPath": "\/human\/:id",
+      "httpCode": 200,
+      "name": "human_0.delete",
+      "outgoing": "Message",
+      "action": "Human_0_SQL_Delete"
     },
     {
-      "priority": 1,
-      "path": "\/category\/:id",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [],
-      "config": [
-        {
-          "version": 1,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "description": "Returns a single Category",
-              "responses": {
-                "200": "7"
-              },
-              "action": "11"
-            },
-            "PUT": {
-              "active": true,
-              "public": false,
-              "description": "Updates an existing Category",
-              "request": "7",
-              "responses": {
-                "200": "1"
-              },
-              "action": "14"
-            },
-            "DELETE": {
-              "active": true,
-              "public": false,
-              "description": "Deletes an existing Category",
-              "responses": {
-                "200": "1"
-              },
-              "action": "12"
-            }
-          }
-        }
-      ]
+      "description": "Returns a collection of Location",
+      "httpMethod": "GET",
+      "httpPath": "\/location\/",
+      "httpCode": 200,
+      "name": "location_0.getAll",
+      "outgoing": "Location_0_SQL_GetAll",
+      "action": "Location_0_SQL_GetAll"
+    },
+    {
+      "description": "Returns a single Location",
+      "httpMethod": "GET",
+      "httpPath": "\/location\/:id",
+      "httpCode": 200,
+      "name": "location_0.get",
+      "outgoing": "Location_0_SQL_Get",
+      "action": "Location_0_SQL_Get"
+    },
+    {
+      "description": "Creates a new Location",
+      "httpMethod": "POST",
+      "httpPath": "\/location\/",
+      "httpCode": 200,
+      "name": "location_0.create",
+      "incoming": "Location_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Location_0_SQL_Insert"
+    },
+    {
+      "description": "Updates an existing Location",
+      "httpMethod": "PUT",
+      "httpPath": "\/location\/:id",
+      "httpCode": 200,
+      "name": "location_0.update",
+      "incoming": "Location_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Location_0_SQL_Update"
+    },
+    {
+      "description": "Deletes an existing Location",
+      "httpMethod": "DELETE",
+      "httpPath": "\/location\/:id",
+      "httpCode": 200,
+      "name": "location_0.delete",
+      "outgoing": "Message",
+      "action": "Location_0_SQL_Delete"
+    },
+    {
+      "description": "Returns a collection of Category",
+      "httpMethod": "GET",
+      "httpPath": "\/category\/",
+      "httpCode": 200,
+      "name": "category_0.getAll",
+      "outgoing": "Category_0_SQL_GetAll",
+      "action": "Category_0_SQL_GetAll"
+    },
+    {
+      "description": "Returns a single Category",
+      "httpMethod": "GET",
+      "httpPath": "\/category\/:id",
+      "httpCode": 200,
+      "name": "category_0.get",
+      "outgoing": "Category_0_SQL_Get",
+      "action": "Category_0_SQL_Get"
+    },
+    {
+      "description": "Creates a new Category",
+      "httpMethod": "POST",
+      "httpPath": "\/category\/",
+      "httpCode": 200,
+      "name": "category_0.create",
+      "incoming": "Category_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Category_0_SQL_Insert"
+    },
+    {
+      "description": "Updates an existing Category",
+      "httpMethod": "PUT",
+      "httpPath": "\/category\/:id",
+      "httpCode": 200,
+      "name": "category_0.update",
+      "incoming": "Category_0_SQL_Get",
+      "outgoing": "Message",
+      "action": "Category_0_SQL_Update"
+    },
+    {
+      "description": "Deletes an existing Category",
+      "httpMethod": "DELETE",
+      "httpPath": "\/category\/:id",
+      "httpCode": 200,
+      "name": "category_0.delete",
+      "outgoing": "Message",
+      "action": "Category_0_SQL_Delete"
     }
   ]
 }

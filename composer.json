@@ -2,7 +2,7 @@
   "name": "fusio/impl",
   "description": "Fusio implementation",
   "homepage": "https://www.fusio-project.org",
-  "license": "AGPL-3.0-only",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Christoph Kappestein",
@@ -15,33 +15,32 @@
     "psalm": "@php vendor/vimeo/psalm/psalm"
   },
   "require": {
-    "php": ">=8.0",
-    "psx/framework": "^6.0",
+    "php": ">=8.1",
+    "psx/framework": "^7.1",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^1.0",
-    "fusio/cli": "^2.0",
-    "fusio/model": "^2.0",
-    "fusio/engine": "^5.0",
-    "fusio/adapter-file": "^5.0",
-    "fusio/adapter-graphql": "^5.0",
-    "fusio/adapter-http": "^5.0",
-    "fusio/adapter-php": "^5.0",
-    "fusio/adapter-smtp": "^5.0",
-    "fusio/adapter-soap": "^5.0",
-    "fusio/adapter-sql": "^5.0",
-    "fusio/adapter-util": "^5.0",
-    "fusio/adapter-cli": "^5.0",
-    "fusio/adapter-fcgi": "^5.0",
-    "firebase/php-jwt": "^5.0",
-    "doctrine/migrations": "^2.3",
-    "symfony/filesystem": "^5.0|^6.0",
+    "fusio/cli": "^3.0",
+    "fusio/model": "^3.0",
+    "fusio/engine": "^6.0",
+    "fusio/adapter-file": "^6.0",
+    "fusio/adapter-graphql": "^6.0",
+    "fusio/adapter-http": "^6.0",
+    "fusio/adapter-php": "^6.0",
+    "fusio/adapter-smtp": "^6.0",
+    "fusio/adapter-soap": "^6.0",
+    "fusio/adapter-sql": "^6.0",
+    "fusio/adapter-util": "^6.0",
+    "fusio/adapter-cli": "^6.0",
+    "fusio/adapter-fcgi": "^6.0",
+    "firebase/php-jwt": "^6.0",
+    "symfony/filesystem": "^6.0",
     "symfony/mailer": "^6.0",
-    "packaged/thrift": "^0.15",
+    "apache/thrift": "^0.18",
     "dragonmantank/cron-expression": "^3.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8.0",
-    "vimeo/psalm": "^4.0"
+    "phpunit/phpunit": "^9.0",
+    "vimeo/psalm": "^5.0"
   },
   "autoload": {
     "psr-4": {

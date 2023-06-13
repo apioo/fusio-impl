@@ -1,35 +1,39 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Service\Connection\Resolver;
+use Fusio\Impl\Service\Marketplace\Repository\Local;
 use Fusio\Impl\Table;
+use Fusio\Impl\Webhook\Message;
+use Fusio\Impl\Service\Event\SenderFactory;
+use Fusio\Impl\Webhook\SenderInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Client\ClientInterface;
 
 /**
  * Executor
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Executor
@@ -67,15 +71,13 @@ class Executor
             $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['event_id']);
 
             foreach ($subscriptions as $subscription) {
-                $record = new Table\Generated\EventResponseRow([
-                    Table\Generated\EventResponseTable::COLUMN_TRIGGER_ID => $trigger['id'],
-                    Table\Generated\EventResponseTable::COLUMN_SUBSCRIPTION_ID => $subscription['id'],
-                    Table\Generated\EventResponseTable::COLUMN_STATUS => Table\Event\Response::STATUS_PENDING,
-                    Table\Generated\EventResponseTable::COLUMN_ATTEMPTS => 0,
-                    Table\Generated\EventResponseTable::COLUMN_INSERT_DATE => new \DateTime(),
-                ]);
-
-                $this->responseTable->create($record);
+                $row = new Table\Generated\EventResponseRow();
+                $row->setTriggerId($trigger['id']);
+                $row->setSubscriptionId($subscription['id']);
+                $row->setStatus(Table\Event\Response::STATUS_PENDING);
+                $row->setAttempts(0);
+                $row->setInsertDate(LocalDateTime::now());
+                $this->responseTable->create($row);
             }
 
             $this->triggerTable->markDone($trigger['id']);

@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Provider\Generator;
@@ -30,7 +29,7 @@ use Fusio\Impl\Tests\DbTestCase;
  * InsomniaTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class InsomniaTest extends DbTestCase
@@ -40,28 +39,36 @@ class InsomniaTest extends DbTestCase
         $import = file_get_contents(__DIR__ . '/resource/insomnia.json');
         $setup = new Setup();
 
-        (new Insomnia())->setup($setup, '/', new Parameters(['import' => $import]));
+        (new Insomnia())->setup($setup, new Parameters(['import' => $import]));
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();
-        $routes = $setup->getRoutes();
+        $operations = $setup->getOperations();
 
         $this->assertEquals(0, count($schemas));
         $this->assertEquals(21, count($actions));
-        $this->assertEquals(9, count($routes));
+        $this->assertEquals(21, count($operations));
 
-        $this->assertEquals('GET-_', $actions[0]->getName());
+        $this->assertEquals('get', $actions[0]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/', $actions[0]->getConfig()['url']);
-        $this->assertEquals('GET-_contract', $actions[1]->getName());
+        $this->assertEquals('contract.get', $actions[1]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[1]->getConfig()['url']);
-        $this->assertEquals('POST-_contract', $actions[2]->getName());
+        $this->assertEquals('contract.create', $actions[2]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[2]->getConfig()['url']);
-        $this->assertEquals('GET-_contract__contract_', $actions[3]->getName());
+        $this->assertEquals('contract._contract_.get', $actions[3]->getName());
         $this->assertEquals('https://3ca114.fusio.cloud/contract/:contract', $actions[3]->getConfig()['url']);
 
-        $this->assertEquals('/', $routes[0]->getPath());
-        $this->assertEquals('/contract', $routes[1]->getPath());
-        $this->assertEquals('/contract/:contract', $routes[2]->getPath());
-        $this->assertEquals('/customer', $routes[3]->getPath());
+        $this->assertEquals('get', $operations[0]->getName());
+        $this->assertEquals('GET', $operations[0]->getHttpMethod());
+        $this->assertEquals('/', $operations[0]->getHttpPath());
+        $this->assertEquals('contract.get', $operations[1]->getName());
+        $this->assertEquals('GET', $operations[1]->getHttpMethod());
+        $this->assertEquals('/contract', $operations[1]->getHttpPath());
+        $this->assertEquals('contract.create', $operations[2]->getName());
+        $this->assertEquals('POST', $operations[2]->getHttpMethod());
+        $this->assertEquals('/contract', $operations[2]->getHttpPath());
+        $this->assertEquals('contract._contract_.get', $operations[3]->getName());
+        $this->assertEquals('GET', $operations[3]->getHttpMethod());
+        $this->assertEquals('/contract/:contract', $operations[3]->getHttpPath());
     }
 }

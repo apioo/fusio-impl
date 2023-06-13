@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Provider\User;
@@ -29,14 +28,14 @@ use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
-use PSX\Oauth2\Error;
+use PSX\OAuth2\Error;
 use PSX\Uri\Url;
 
 /**
  * ProviderAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 abstract class ProviderAbstract implements ProviderInterface
@@ -44,13 +43,18 @@ abstract class ProviderAbstract implements ProviderInterface
     protected const TYPE_POST = 0x1;
     protected const TYPE_GET = 0x2;
 
-    protected ClientInterface $httpClient;
-    protected string $secret;
+    private ClientInterface $httpClient;
+    private Config $config;
 
     public function __construct(ClientInterface $httpClient, Config $config)
     {
         $this->httpClient = $httpClient;
-        $this->secret     = $config->getValue($this->getProviderConfigKey($this->getId()));
+        $this->config = $config;
+    }
+
+    public function setHttpClient(ClientInterface $httpClient): void
+    {
+        $this->httpClient = $httpClient;
     }
 
     protected function obtainUserInfo(string $rawUrl, string $accessToken, ?array $parameters = null): ?\stdClass
@@ -60,7 +64,7 @@ abstract class ProviderAbstract implements ProviderInterface
             'User-Agent'    => Base::getUserAgent()
         ];
 
-        $url = new Url($rawUrl);
+        $url = Url::parse($rawUrl);
         if (!empty($parameters)) {
             $url = $url->withParameters($parameters);
         }
@@ -86,9 +90,9 @@ abstract class ProviderAbstract implements ProviderInterface
         ];
 
         if ($type === self::TYPE_POST) {
-            $request = new PostRequest(new Url($rawUrl), $headers, $params);
+            $request = new PostRequest(Url::parse($rawUrl), $headers, $params);
         } elseif ($type === self::TYPE_GET) {
-            $url = new Url($rawUrl);
+            $url = Url::parse($rawUrl);
             $url = $url->withParameters($params);
             $request = new GetRequest($url, $headers);
         } else {
@@ -113,6 +117,11 @@ abstract class ProviderAbstract implements ProviderInterface
         } else {
             return null;
         }
+    }
+
+    protected function getSecret(): string
+    {
+        return $this->config->getValue($this->getProviderConfigKey($this->getId()));
     }
 
     protected function getProviderConfigKey(int $provider): string

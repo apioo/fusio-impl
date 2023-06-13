@@ -1,37 +1,37 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Backend\View;
 
-use Fusio\Impl\Backend\View\Log\QueryFilter;
+use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
  * Log
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Log extends ViewAbstract
@@ -51,46 +51,50 @@ class Log extends ViewAbstract
         $condition = $filter->getCondition();
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-                'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
-                'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+            'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+                'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
                 'ip' => Table\Generated\LogTable::COLUMN_IP,
                 'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
                 'method' => Table\Generated\LogTable::COLUMN_METHOD,
                 'path' => Table\Generated\LogTable::COLUMN_PATH,
-                'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(int $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
-            'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
-            'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+            'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+            'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
             'ip' => Table\Generated\LogTable::COLUMN_IP,
             'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
             'method' => Table\Generated\LogTable::COLUMN_METHOD,
             'path' => Table\Generated\LogTable::COLUMN_PATH,
             'header' => Table\Generated\LogTable::COLUMN_HEADER,
             'body' => Table\Generated\LogTable::COLUMN_BODY,
-            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
+            'errors' => $builder->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
                 'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
                 'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
                 'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
             ]),
-            'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+            'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

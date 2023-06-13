@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Table\Rate;
@@ -29,20 +28,20 @@ use Fusio\Impl\Table\Rate;
  * Allocation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Allocation extends Generated\RateAllocationTable
 {
-    public function deleteAllFromRate($rateId)
+    public function deleteAllFromRate($rateId): void
     {
         $sql = 'DELETE FROM fusio_rate_allocation 
                       WHERE rate_id = :rate_id';
 
-        $this->connection->executeUpdate($sql, ['rate_id' => $rateId]);
+        $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
-    public function getRateForRequest(int $routeId, Model\AppInterface $app, Model\UserInterface $user)
+    public function getRateForRequest(Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
     {
         $sql = '    SELECT rate.rate_limit,
                            rate.timespan
@@ -50,7 +49,7 @@ class Allocation extends Generated\RateAllocationTable
                 INNER JOIN fusio_rate rate
                         ON rate_allocation.rate_id = rate.id 
                      WHERE rate.status = :status
-                       AND (rate_allocation.route_id IS NULL OR rate_allocation.route_id = :route_id)
+                       AND (rate_allocation.operation_id IS NULL OR rate_allocation.operation_id = :operation_id)
                        AND (rate_allocation.user_id IS NULL OR rate_allocation.user_id = :user_id)
                        AND (rate_allocation.plan_id IS NULL OR rate_allocation.plan_id = :plan_id)
                        AND (rate_allocation.app_id IS NULL OR rate_allocation.app_id = :app_id)
@@ -58,7 +57,7 @@ class Allocation extends Generated\RateAllocationTable
 
         $params = [
             'status' => Rate::STATUS_ACTIVE,
-            'route_id' => $routeId,
+            'operation_id' => $operation->getId(),
             'user_id' => $user->getId(),
             'plan_id' => $user->getPlanId(),
             'app_id' => $app->getId(),
@@ -67,6 +66,11 @@ class Allocation extends Generated\RateAllocationTable
 
         $sql.= ' ORDER BY rate.priority DESC';
 
-        return $this->connection->fetchAssoc($sql, $params);
+        $row = $this->connection->fetchAssociative($sql, $params);
+        if (empty($row)) {
+            throw new \RuntimeException('Could not find rate for request');
+        }
+
+        return $row;
     }
 }

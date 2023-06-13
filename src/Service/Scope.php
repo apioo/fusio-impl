@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -27,65 +26,56 @@ use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ScopeCreate;
-use Fusio\Model\Backend\ScopeRoute;
+use Fusio\Model\Backend\ScopeOperation;
 use Fusio\Model\Backend\ScopeUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Scope
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Scope
 {
     private Table\Scope $scopeTable;
-    private Table\Scope\Route $scopeRouteTable;
+    private Table\Scope\Operation $scopeRouteTable;
     private Table\App\Scope $appScopeTable;
     private Table\User\Scope $userScopeTable;
+    private Scope\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Scope $scopeTable, Table\Scope\Route $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, Scope\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->scopeTable      = $scopeTable;
+        $this->scopeTable = $scopeTable;
         $this->scopeRouteTable = $scopeRouteTable;
-        $this->appScopeTable   = $appScopeTable;
-        $this->userScopeTable  = $userScopeTable;
+        $this->appScopeTable = $appScopeTable;
+        $this->userScopeTable = $userScopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
     {
-        $name = $scope->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
+        $this->validator->assert($scope);
 
-        // check whether scope exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Scope already exists');
-        }
-
-        // create scope
         try {
             $this->scopeTable->beginTransaction();
 
-            $record = new Table\Generated\ScopeRow([
-                Table\Generated\ScopeTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
-                Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription() ?? '',
-                Table\Generated\ScopeTable::COLUMN_METADATA => $scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null,
-            ]);
-
-            $this->scopeTable->create($record);
+            $row = new Table\Generated\ScopeRow();
+            $row->setCategoryId($categoryId);
+            $row->setName($scope->getName());
+            $row->setDescription($scope->getDescription() ?? '');
+            $row->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
+            $this->scopeTable->create($row);
 
             $scopeId = $this->scopeTable->getLastInsertId();
             $scope->setId($scopeId);
 
-            $this->insertRoutes($scopeId, $scope->getRoutes() ?? []);
+            $this->insertOperations($scopeId, $scope->getOperations() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -99,65 +89,57 @@ class Scope
         return $scopeId;
     }
 
-    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context): void
+    public function createForOperation(int $categoryId, int $operationId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
-        $this->scopeRouteTable->deleteAllFromRoute($routeId);
+        $this->scopeRouteTable->deleteAllFromOperation($operationId);
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
             $scope = $this->scopeTable->findOneByName($scopeName);
             if ($scope instanceof Table\Generated\ScopeRow) {
                 // assign route to scope
-                $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
-                    Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID => $scope->getId(),
-                    Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID => $routeId,
-                    Table\Generated\ScopeRoutesTable::COLUMN_ALLOW => 1,
-                    Table\Generated\ScopeRoutesTable::COLUMN_METHODS => 'GET|POST|PUT|PATCH|DELETE',
-                ]));
+                $row = new Table\Generated\ScopeOperationRow();
+                $row->setScopeId($scope->getId());
+                $row->setOperationId($operationId);
+                $row->setAllow(1);
+                $row->setMethods('GET|POST|PUT|PATCH|DELETE');
+                $this->scopeRouteTable->create($row);
             } else {
                 // create new scope
-                $route = new ScopeRoute();
-                $route->setRouteId($routeId);
-                $route->setAllow(true);
-                $route->setMethods('GET|POST|PUT|PATCH|DELETE');
+                $operation = new ScopeOperation();
+                $operation->setOperationId($operationId);
+                $operation->setAllow(true);
+                $operation->setMethods('GET|POST|PUT|PATCH|DELETE');
 
                 $scope = new ScopeCreate();
                 $scope->setName($scopeName);
-                $scope->setRoutes([$route]);
-
+                $scope->setOperations([$operation]);
                 $this->create($categoryId, $scope, $context);
             }
         }
     }
 
-    public function update(int $scopeId, ScopeUpdate $scope, UserContext $context): int
+    public function update(string $scopeId, ScopeUpdate $scope, UserContext $context): int
     {
-        $existing = $this->scopeTable->find($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
 
-        // check whether this is a system scope
-        if (in_array($existing->getId(), [1, 2, 3])) {
-            throw new StatusCode\BadRequestException('It is not possible to change this scope');
-        }
+        $this->validator->assert($scope, $existing);
 
         try {
             $this->scopeTable->beginTransaction();
 
-            $record = new Table\Generated\ScopeRow([
-                Table\Generated\ScopeTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
-                Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription(),
-                Table\Generated\ScopeTable::COLUMN_METADATA => $scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null,
-            ]);
-
-            $this->scopeTable->update($record);
+            $existing->setName($scope->getName());
+            $existing->setDescription($scope->getDescription() ?? '');
+            $existing->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
+            $this->scopeTable->update($existing);
 
             $this->scopeRouteTable->deleteAllFromScope($existing->getId());
 
-            $this->insertRoutes($existing->getId(), $scope->getRoutes() ?? []);
+            $this->insertOperations($existing->getId(), $scope->getOperations() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -168,23 +150,27 @@ class Scope
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($scope, $existing, $context));
 
-        return $scopeId;
+        return $existing->getId();
     }
 
-    public function delete(int $scopeId, UserContext $context): int
+    public function delete(string $scopeId, UserContext $context): int
     {
-        $existing = $this->scopeTable->find($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
 
         // check whether the scope is used by an app or user
-        $appScopes = $this->appScopeTable->getCount(new Condition([Table\Generated\AppScopeTable::COLUMN_SCOPE_ID, '=', $existing->getId()]));
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppScopeTable::COLUMN_SCOPE_ID, $existing->getId());
+        $appScopes = $this->appScopeTable->getCount($condition);
         if ($appScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an app. Remove the scope from the app in order to delete the scope');
         }
 
-        $userScopes = $this->userScopeTable->getCount(new Condition([Table\Generated\UserScopeTable::COLUMN_SCOPE_ID, '=', $existing->getId()]));
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserScopeTable::COLUMN_SCOPE_ID, $existing->getId());
+        $userScopes = $this->userScopeTable->getCount($condition);
         if ($userScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an user. Remove the scope from the user in order to delete the scope');
         }
@@ -200,11 +186,7 @@ class Scope
             // delete all routes assigned to the scope
             $this->scopeRouteTable->deleteAllFromScope($existing->getId());
 
-            $record = new Table\Generated\ScopeRow([
-                Table\Generated\ScopeTable::COLUMN_ID => $existing->getId()
-            ]);
-
-            $this->scopeTable->delete($record);
+            $this->scopeTable->delete($existing);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -215,7 +197,7 @@ class Scope
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $scopeId;
+        return $existing->getId();
     }
 
     /**
@@ -236,34 +218,20 @@ class Scope
         return $scopes;
     }
 
-    public function exists(string $name): int|false
-    {
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\ScopeTable::COLUMN_NAME, $name);
-
-        $scope = $this->scopeTable->findOneBy($condition);
-
-        if ($scope instanceof Table\Generated\ScopeRow) {
-            return $scope->getId();
-        } else {
-            return false;
-        }
-    }
-
     /**
-     * @param ScopeRoute[] $routes
+     * @param ScopeOperation[] $operations
      */
-    protected function insertRoutes(int $scopeId, ?array $routes): void
+    protected function insertOperations(int $scopeId, ?array $operations): void
     {
-        if (!empty($routes)) {
-            foreach ($routes as $route) {
-                if ($route->getAllow()) {
-                    $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
-                        Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID => $scopeId,
-                        Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID => $route->getRouteId(),
-                        Table\Generated\ScopeRoutesTable::COLUMN_ALLOW => $route->getAllow() ? 1 : 0,
-                        Table\Generated\ScopeRoutesTable::COLUMN_METHODS => $route->getMethods(),
-                    ]));
+        if (!empty($operations)) {
+            foreach ($operations as $operation) {
+                if ($operation->getAllow()) {
+                    $row = new Table\Generated\ScopeOperationRow();
+                    $row->setScopeId($scopeId);
+                    $row->setOperationId($operation->getOperationId() ?? throw new \RuntimeException('No operation id provided'));
+                    $row->setAllow(1);
+                    $row->setMethods($operation->getMethods());
+                    $this->scopeRouteTable->create($row);
                 }
             }
         }

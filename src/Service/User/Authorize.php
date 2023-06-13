@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\User;
@@ -24,7 +23,8 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
-use PSX\Framework\Config\Config;
+use PSX\DateTime\LocalDateTime;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -34,7 +34,7 @@ use PSX\Uri\Url;
  * Authorize
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Authorize
@@ -44,9 +44,9 @@ class Authorize
     private Service\App\Code $appCodeService;
     private Table\App $appTable;
     private Table\User\Grant $userGrantTable;
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Config $config)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
@@ -74,7 +74,7 @@ class Authorize
         // redirect uri
         $redirectUri = $request->getRedirectUri();
         if (!empty($redirectUri)) {
-            $redirectUri = new Uri($redirectUri);
+            $redirectUri = Uri::parse($redirectUri);
 
             if (!$redirectUri->isAbsolute()) {
                 throw new StatusCode\BadRequestException('Redirect uri must be an absolute url');
@@ -86,7 +86,7 @@ class Authorize
 
             $url = $app->getUrl();
             if (!empty($url)) {
-                $url = new Url($url);
+                $url = Url::parse($url);
                 if ($url->getHost() != $redirectUri->getHost()) {
                     throw new StatusCode\BadRequestException('Redirect uri must have the same host as the app url');
                 }
@@ -105,7 +105,7 @@ class Authorize
 
         // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app->getId(), $request->getAllow());
+        $this->saveUserDecision($userId, $app->getId(), $request->getAllow() ?? false);
 
         $state = $request->getState();
         if ($request->getAllow()) {
@@ -194,41 +194,34 @@ class Authorize
         }
     }
 
-    protected function saveUserDecision($userId, $appId, $allow)
+    protected function saveUserDecision(int $userId, int $appId, bool $allow): void
     {
-        $condition = new Condition();
-        $condition->equals('user_id', $userId);
-        $condition->equals('app_id', $appId);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserGrantTable::COLUMN_USER_ID, $userId);
+        $condition->equals(Table\Generated\UserGrantTable::COLUMN_APP_ID, $appId);
 
-        $userApp = $this->userGrantTable->findOneBy($condition);
-
-        if (empty($userApp)) {
-            $record = new Table\Generated\UserGrantRow([
-                'user_id' => $userId,
-                'app_id'  => $appId,
-                'allow'   => $allow ? 1 : 0,
-                'date'    => new \DateTime(),
-            ]);
-
-            $this->userGrantTable->create($record);
+        $existing = $this->userGrantTable->findOneBy($condition);
+        if (empty($existing)) {
+            $row = new Table\Generated\UserGrantRow();
+            $row->setUserId($userId);
+            $row->setAppId($appId);
+            $row->setAllow($allow ? 1 : 0);
+            $row->setDate(LocalDateTime::now());
+            $this->userGrantTable->create($row);
         } else {
-            $record = new Table\Generated\UserGrantRow([
-                'id'      => $userApp->getId(),
-                'user_id' => $userId,
-                'app_id'  => $appId,
-                'allow'   => $allow ? 1 : 0,
-                'date'    => new \DateTime(),
-            ]);
-
-            $this->userGrantTable->update($record);
+            $existing->setUserId($userId);
+            $existing->setAppId($appId);
+            $existing->setAllow($allow ? 1 : 0);
+            $existing->setDate(LocalDateTime::now());
+            $this->userGrantTable->update($existing);
         }
     }
     
     private function getApp(string $clientId): Table\Generated\AppRow
     {
-        $condition = new Condition();
-        $condition->equals('app_key', $clientId);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $clientId);
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {

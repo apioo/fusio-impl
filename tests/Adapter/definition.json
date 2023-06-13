@@ -1,4 +1,0 @@
-{
-    "actionClass": ["Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction"],
-    "connectionClass": ["Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection"]
-}

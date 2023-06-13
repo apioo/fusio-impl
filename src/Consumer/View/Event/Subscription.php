@@ -1,36 +1,36 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Consumer\View\Event;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
 use PSX\Sql\ViewAbstract;
 
 /**
  * Subscription
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Subscription extends ViewAbstract
@@ -43,59 +43,56 @@ class Subscription extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('event_subscription.user_id', $userId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
+        $builder = new Builder($this->connection);
+
         $definition = [
-            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
+            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
+                'id' => $builder->fieldInteger('id'),
+                'status' => $builder->fieldInteger('status'),
                 'event' => 'name',
                 'endpoint' => 'endpoint',
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(int $userId, int $subscriptionId)
     {
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals('event_subscription.id', $subscriptionId);
         $condition->equals('event_subscription.user_id', $userId);
 
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition, 'event_subscription.id DESC');
+        $builder = new Builder($this->connection);
 
-        $definition = $this->doEntity($querySql, $condition->getValues(), [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
+        $definition = $builder->doEntity($querySql, $condition->getValues(), [
+            'id' => $builder->fieldInteger('id'),
+            'status' => $builder->fieldInteger('status'),
             'event' => 'name',
             'endpoint' => 'endpoint',
-            'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
-                'status' => $this->fieldInteger('status'),
-                'code' => $this->fieldInteger('code'),
-                'attempts' => $this->fieldInteger('attempts'),
-                'executeDate' => $this->fieldDateTime('execute_date'),
+            'responses' => $builder->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
+                'status' => $builder->fieldInteger('status'),
+                'code' => $builder->fieldInteger('code'),
+                'attempts' => $builder->fieldInteger('attempts'),
+                'executeDate' => $builder->fieldDateTime('execute_date'),
             ]),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
-    /**
-     * @param array $fields
-     * @param \PSX\Sql\Condition $condition
-     * @param string $orderBy
-     * @return string
-     */
-    private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
+    private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null): string
     {
         $fields  = implode(',', $fields);
         $where   = $condition->getStatement($this->connection->getDatabasePlatform());

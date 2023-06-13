@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Backend\View;
@@ -25,15 +24,16 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
 use PSX\Sql\Condition;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
  * Connection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Connection extends ViewAbstract
@@ -53,29 +53,31 @@ class Connection extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ConnectionTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+            'entry' => $builder->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
-                'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
@@ -88,37 +90,33 @@ class Connection extends ViewAbstract
             $id = (int) $id;
         }
 
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
-            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntityWithConfig(string $id, string $secretKey, ParserInterface $connectionParser)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
+        $builder = new Builder($this->connection);
 
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
-            'config' => $this->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
+            'config' => $builder->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
                 $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
-                if (!empty($config) && is_array($config)) {
+                if (!empty($config)) {
                     $form = $connectionParser->getForm($row[Table\Generated\ConnectionTable::COLUMN_CLASS]);
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();
@@ -136,9 +134,9 @@ class Connection extends ViewAbstract
                     return new \stdClass();
                 }
             }),
-            'metadata' => $this->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
+            'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

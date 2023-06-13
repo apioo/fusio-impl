@@ -1,27 +1,27 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -31,27 +31,14 @@ use PSX\Framework\Test\Environment;
  * LoginTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class LoginTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/consumer/login', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/login.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -62,7 +49,7 @@ class LoginTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
@@ -79,7 +66,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -87,20 +75,20 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
-        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', $row['scope']);
+        $this->assertEquals('consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
     }
@@ -120,7 +108,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -128,13 +117,13 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
@@ -175,7 +164,8 @@ class LoginTest extends ControllerDbTestCase
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $jsonWebToken = Environment::getService(JsonWebToken::class);
+        $token = $jsonWebToken->decode($data->token);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -183,13 +173,13 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals('Consumer', $token->name);
 
         // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
+        $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
@@ -226,6 +216,6 @@ class LoginTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

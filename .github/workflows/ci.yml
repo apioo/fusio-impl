@@ -12,7 +12,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.1
           coverage: none
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
@@ -20,21 +20,17 @@ jobs:
         run: vendor/bin/psalm --no-progress --shepherd --show-info=false --stats
   phpunit:
     needs: psalm
-    name: "PHPUnit (PHP: ${{ matrix.php-versions }}-${{ matrix.database }})"
+    name: "PHPUnit (PHP: ${{ matrix.php-version }}-${{ matrix.connection }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions:
-          - 8.0
+        php-version:
           - 8.1
-        database:
-          - sqlite
-          - postgres
-          - mysql
-        exclude:
-          # exclude PHP 8.0 mysql build which is really slow
-          - php-versions: 8.0
-            database: mysql
+          - 8.2
+        connection:
+          - 'pdo-sqlite://:memory:'
+          - 'pdo-pgsql://postgres:postgres@localhost/fusio'
+          - 'pdo-mysql://root:test1234@localhost/fusio'
     services:
       postgres:
         image: postgres
@@ -50,7 +46,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
           coverage: none
       - name: Setup MySQL
         run: |
@@ -61,9 +57,9 @@ jobs:
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Wait for
         env:
-          DB: ${{ matrix.database }}
+          APP_CONNECTION: ${{ matrix.connection }}
         run: php bin/fusio system:wait_for
       - name: Run PHPUnit
         env:
-          DB: ${{ matrix.database }}
+          APP_CONNECTION: ${{ matrix.connection }}
         run: vendor/bin/phpunit

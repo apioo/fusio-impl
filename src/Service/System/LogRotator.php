@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\System;
@@ -29,7 +28,7 @@ use Doctrine\DBAL\Schema\Schema;
  * LogRotator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class LogRotator
@@ -43,8 +42,8 @@ class LogRotator
 
     public function rotate(): \Generator
     {
-        $schemaManager = $this->connection->getSchemaManager();
-        $schema = $schemaManager->createSchema();
+        $schemaManager = $this->connection->createSchemaManager();
+        $schema = $schemaManager->introspectSchema();
 
         yield from $this->archiveAuditTable($schemaManager, $schema);
         yield from $this->archiveLogTable($schemaManager, $schema);
@@ -96,7 +95,7 @@ class LogRotator
         if (!$schema->hasTable($tableName)) {
             $logTable = $schema->createTable($tableName);
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logTable->addColumn('route_id', 'integer', ['notnull' => false]);
+            $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('ip', 'string', ['length' => 40]);
@@ -116,7 +115,7 @@ class LogRotator
         }
 
         // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT route_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
+        $result = $this->connection->fetchAllAssociative('SELECT operation_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
         foreach ($result as $row) {
             $this->connection->insert($tableName, $row);
         }

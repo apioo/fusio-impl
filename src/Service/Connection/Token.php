@@ -1,27 +1,26 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\Connection;
 
-use Firebase\JWT\JWT;
+use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Connection\OAuth2Interface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Model;
@@ -32,19 +31,19 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\ConnectionConfig;
 use Fusio\Model\Backend\ConnectionUpdate;
-use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 use PSX\Uri\Url;
 
 /**
  * This service help to manage and obtain access tokens for configured connections
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Token
@@ -53,14 +52,16 @@ class Token
     private Repository\ConnectionInterface $repository;
     private ClientInterface $httpClient;
     private Service\Connection $connectionService;
-    private Config $config;
+    private Service\Security\JsonWebToken $jsonWebToken;
+    private ConfigInterface $config;
 
-    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Config $config)
+    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Service\Security\JsonWebToken $jsonWebToken, ConfigInterface $config)
     {
         $this->factory = $factory;
         $this->repository = $repository;
         $this->httpClient = $httpClient;
         $this->connectionService = $connectionService;
+        $this->jsonWebToken = $jsonWebToken;
         $this->config = $config;
     }
 
@@ -90,7 +91,7 @@ class Token
         $redirectUri = $this->newRedirectUri($connectionId);
         $state = $this->newState();
 
-        $url = new Url($implementation->getAuthorizationUrl());
+        $url = Url::parse($implementation->getAuthorizationUrl());
         $url = $url->withParameters(array_merge([
             'response_type' => 'code',
             'client_id' => $config['client_id'] ?? null,
@@ -143,13 +144,13 @@ class Token
         $this->updateConnectionConfig($connection, $accessToken);
     }
 
-    public function refreshAll()
+    public function refreshAll(): void
     {
         $connections = $this->repository->getAll();
         foreach ($connections as $connection) {
             $parameters = new Parameters($connection->getConfig());
             $connection = $this->factory->factory($connection->getClass());
-            if (!$connection instanceof OAuth2Interface) {
+            if (!$connection instanceof OAuth2Interface || !$connection instanceof ConfigurableInterface) {
                 continue;
             }
 
@@ -186,7 +187,7 @@ class Token
 
         $update = new ConnectionUpdate();
         $update->setConfig(ConnectionConfig::fromArray($config));
-        $this->connectionService->update($connection->getId(), $update, UserContext::newAnonymousContext());
+        $this->connectionService->update((string) $connection->getId(), $update, UserContext::newAnonymousContext());
     }
 
     /**
@@ -270,10 +271,10 @@ class Token
     /**
      * @throws StatusCode\BadRequestException
      */
-    private function assertState(string $state)
+    private function assertState(string $state): void
     {
         try {
-            JWT::decode($state, $this->config->get('fusio_project_key'), ['HS256']);
+            $this->jsonWebToken->decode($state);
         } catch (\UnexpectedValueException $e) {
             throw new StatusCode\BadRequestException('The provided state is not valid', $e);
         }
@@ -281,7 +282,11 @@ class Token
 
     private function newState(): string
     {
-        return JWT::encode(['exp' => time() + (60 * 10)], $this->config->get('fusio_project_key'));
+        $payload = [
+            'exp' => time() + (60 * 10)
+        ];
+
+        return $this->jsonWebToken->encode($payload);
     }
 
     private function newRedirectUri(string $connectionId): string

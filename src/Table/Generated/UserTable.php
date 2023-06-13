@@ -34,31 +34,31 @@ class UserTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
+        return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneBy(\PSX\Sql\Condition $condition, ?\PSX\Sql\Fields $fields = null) : ?\Fusio\Impl\Table\Generated\UserRow
+    public function findOneBy(\PSX\Sql\Condition $condition) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        return $this->doFindOneBy($condition, $fields);
+        return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
     public function find(int $id) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
@@ -66,9 +66,9 @@ class UserTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -77,17 +77,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneById(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateById(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteById(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRoleId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByRoleId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('role_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -96,17 +114,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByRoleId(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('role_id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByRoleId(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('role_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByRoleId(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('role_id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('plan_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -115,17 +151,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByPlanId(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('plan_id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByPlanId(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('plan_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByPlanId(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('plan_id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByProvider(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByProvider(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('provider', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -134,17 +188,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByProvider(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('provider', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByProvider(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('provider', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByProvider(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('provider', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('status', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -153,17 +225,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByStatus(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('status', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByStatus(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('status', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByStatus(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('status', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRemoteId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByRemoteId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('remote_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -172,17 +262,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByRemoteId(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('remote_id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByRemoteId(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('remote_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByRemoteId(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('remote_id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExternalId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByExternalId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('external_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -191,17 +299,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByExternalId(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('external_id', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByExternalId(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('external_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByExternalId(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('external_id', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByName(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByName(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('name', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -210,17 +336,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByName(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('name', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByName(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('name', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByName(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('name', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByEmail(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByEmail(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('email', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -229,17 +373,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByEmail(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('email', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByEmail(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('email', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByEmail(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('email', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPassword(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByPassword(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('password', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -248,17 +410,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByPassword(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('password', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByPassword(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('password', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByPassword(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('password', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPoints(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByPoints(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('points', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -267,17 +447,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByPoints(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('points', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByPoints(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('points', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByPoints(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('points', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByToken(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByToken(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('token', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -286,17 +484,35 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByToken(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('token', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByToken(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('token', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByToken(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('token', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByMetadata(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('metadata', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
@@ -305,55 +521,105 @@ class UserTable extends \PSX\Sql\TableAbstract
      */
     public function findOneByMetadata(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByMetadata(string $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('metadata', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByMetadata(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('metadata', $value);
+        return $this->doDeleteBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByDate(\PSX\DateTime\LocalDateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByDate(\DateTime $value) : ?\Fusio\Impl\Table\Generated\UserRow
+    public function findOneByDate(\PSX\DateTime\LocalDateTime $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
-        $condition = new \PSX\Sql\Condition();
+        $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('date', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
+    public function updateByDate(\PSX\DateTime\LocalDateTime $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('date', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByDate(\PSX\DateTime\LocalDateTime $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('date', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
     public function create(\Fusio\Impl\Table\Generated\UserRow $record) : int
     {
-        return $this->doCreate($record);
+        return $this->doCreate($record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
     public function update(\Fusio\Impl\Table\Generated\UserRow $record) : int
     {
-        return $this->doUpdate($record);
+        return $this->doUpdate($record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateBy(\PSX\Sql\Condition $condition, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    {
+        return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
     public function delete(\Fusio\Impl\Table\Generated\UserRow $record) : int
     {
-        return $this->doDelete($record);
+        return $this->doDelete($record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteBy(\PSX\Sql\Condition $condition) : int
+    {
+        return $this->doDeleteBy($condition);
     }
     /**
      * @param array<string, mixed> $row
      */
     protected function newRecord(array $row) : \Fusio\Impl\Table\Generated\UserRow
     {
-        return new \Fusio\Impl\Table\Generated\UserRow($row);
+        return \Fusio\Impl\Table\Generated\UserRow::from($row);
     }
 }

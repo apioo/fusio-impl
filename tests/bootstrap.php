@@ -2,18 +2,40 @@
 
 require(__DIR__ . '/../vendor/autoload.php');
 
+$container = require_once __DIR__ . '/../container.php';
+
 define('FUSIO_IN_TEST', true);
 
-PSX\Framework\Test\Environment::setup(__DIR__ . '/..');
+/** @var \PSX\Framework\Test\Environment $environment */
+$environment = $container->get(\PSX\Framework\Test\Environment::class);
+$environment->setup(getConnectionParams());
 
-runMigrations();
-
-function runMigrations()
+function getConnectionParams(): array
 {
-    $configuration = \Fusio\Impl\Migrations\ConfigurationBuilder::fromSystem(
-        \PSX\Framework\Test\Environment::getService('connection')
-    );
+    switch (getenv('DB')) {
+        case 'mysql':
+            return [
+                'dbname'   => 'fusio',
+                'user'     => 'root',
+                'password' => 'test1234',
+                'host'     => 'localhost',
+                'driver'   => 'pdo_mysql',
+            ];
 
-    $factory = new \Doctrine\Migrations\DependencyFactory($configuration);
-    $factory->getMigrator()->migrate();
+        case 'postgres':
+            return [
+                'dbname'   => 'fusio',
+                'user'     => 'postgres',
+                'password' => 'postgres',
+                'host'     => 'localhost',
+                'driver'   => 'pdo_pgsql',
+            ];
+
+        default:
+        case 'sqlite':
+            return [
+                'memory' => true,
+                'driver' => 'pdo_sqlite',
+            ];
+    }
 }

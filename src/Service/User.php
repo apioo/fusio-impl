@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -36,16 +35,16 @@ use Fusio\Model\Backend\AccountChangePassword;
 use Fusio\Model\Backend\UserCreate;
 use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Backend\UserUpdate;
-use PSX\DateTime\DateTime;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * User
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class User
@@ -55,108 +54,45 @@ class User
     private Table\User\Scope $userScopeTable;
     private Table\Role\Scope $roleScopeTable;
     private Table\Role $roleTable;
-    private Table\Plan $planTable;
     private Service\Config $configService;
+    private User\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Service\Config $configService, User\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->userTable       = $userTable;
-        $this->scopeTable      = $scopeTable;
-        $this->userScopeTable  = $userScopeTable;
-        $this->roleScopeTable  = $roleScopeTable;
-        $this->roleTable       = $roleTable;
-        $this->planTable       = $planTable;
-        $this->configService   = $configService;
+        $this->userTable = $userTable;
+        $this->scopeTable = $scopeTable;
+        $this->userScopeTable = $userScopeTable;
+        $this->roleScopeTable = $roleScopeTable;
+        $this->roleTable = $roleTable;
+        $this->configService = $configService;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-    /**
-     * Authenticates a user based on the username and password. Returns the user id if the authentication was successful
-     * else null
-     */
-    public function authenticateUser(string $username, string $password): ?int
-    {
-        if (empty($password)) {
-            return null;
-        }
-
-        // allow login either through username or email
-        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $username)) {
-            $column = Table\Generated\UserTable::COLUMN_NAME;
-        } else {
-            $column = Table\Generated\UserTable::COLUMN_EMAIL;
-        }
-
-        $condition = new Condition();
-        $condition->equals($column, $username);
-        $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
-
-        $user = $this->userTable->findOneBy($condition);
-        if (empty($user)) {
-            return null;
-        }
-
-        // we can authenticate only local users
-        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
-            return null;
-        }
-
-        // check password
-        $databasePassword = $user->getPassword();
-        if (empty($databasePassword)) {
-            return null;
-        }
-
-        if (password_verify($password, $databasePassword)) {
-            return $user->getId();
-        } else {
-            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user->getId())));
-        }
-
-        return null;
     }
 
     public function create(UserCreate $user, UserContext $context): int
     {
-        // check whether user name exists
-        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_NAME, '=', $user->getName()])) > 0) {
-            throw new StatusCode\BadRequestException('User name already exists');
-        }
+        $this->validator->assert($user);
 
-        // check whether user email exists
-        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_EMAIL, '=', $user->getEmail()])) > 0) {
-            throw new StatusCode\BadRequestException('User email already exists');
-        }
+        $roleId = $user->getRoleId();
 
-        // check values
-        User\Validator::assertName($user->getName());
-        User\Validator::assertEmail($user->getEmail());
-        User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
-
-        $roleId = $this->getRoleId($user);
-        $planId = $this->getPlanId($user);
-
-        // create user
         try {
             $this->userTable->beginTransaction();
 
             $password = $user->getPassword();
 
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\UserTable::COLUMN_PROVIDER => ProviderInterface::PROVIDER_SYSTEM,
-                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
-                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
-                Table\Generated\UserTable::COLUMN_PASSWORD => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
-                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
-                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
-                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->userTable->create($record);
+            $row = new Table\Generated\UserRow();
+            $row->setRoleId($roleId);
+            $row->setPlanId($user->getPlanId());
+            $row->setProvider(ProviderInterface::PROVIDER_SYSTEM);
+            $row->setStatus($user->getStatus() ?? Table\User::STATUS_DISABLED);
+            $row->setName($user->getName());
+            $row->setEmail($user->getEmail());
+            $row->setPassword($password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null);
+            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->userTable->create($row);
 
             $userId = $this->userTable->getLastInsertId();
             $user->setId($userId);
@@ -179,7 +115,7 @@ class User
     public function createRemote(UserRemote $remote, UserContext $context): int
     {
         // check whether user exists
-        $condition  = new Condition();
+        $condition  = Condition::withAnd();
         $condition->equals(Table\Generated\UserTable::COLUMN_PROVIDER, $remote->getProvider());
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remote->getRemoteId());
 
@@ -192,10 +128,10 @@ class User
         $remote->setName(str_replace(' ', '.', $remote->getName() ?? ''));
 
         // check values
-        User\Validator::assertName($remote->getName());
+        $this->validator->assertName($remote->getName());
 
         if (!empty($remote->getEmail())) {
-            User\Validator::assertEmail($remote->getEmail());
+            $this->validator->assertEmail($remote->getEmail());
         }
 
         try {
@@ -209,19 +145,17 @@ class User
             $roleId = $role->getId();
 
             // create user
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PROVIDER => $remote->getProvider(),
-                Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_ACTIVE,
-                Table\Generated\UserTable::COLUMN_REMOTE_ID => $remote->getRemoteId(),
-                Table\Generated\UserTable::COLUMN_NAME => $remote->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $remote->getEmail(),
-                Table\Generated\UserTable::COLUMN_PASSWORD => null,
-                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
-                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->userTable->create($record);
+            $row = new Table\Generated\UserRow();
+            $row->setRoleId($roleId);
+            $row->setProvider($remote->getProvider() ?? throw new StatusCode\InternalServerErrorException('Invalid provider configured'));
+            $row->setStatus(Table\User::STATUS_ACTIVE);
+            $row->setRemoteId($remote->getRemoteId());
+            $row->setName($remote->getName() ?? throw new StatusCode\InternalServerErrorException('Invalid name configured'));
+            $row->setEmail($remote->getEmail());
+            $row->setPassword(null);
+            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setDate(LocalDateTime::now());
+            $this->userTable->create($row);
 
             $userId = $this->userTable->getLastInsertId();
 
@@ -245,51 +179,32 @@ class User
         return $userId;
     }
 
-    public function update(int $userId, UserUpdate $user, UserContext $context): int
+    public function update(string $userId, UserUpdate $user, UserContext $context): int
     {
-        $existing = $this->userTable->find($userId);
+        $existing = $this->userTable->findOneByIdentifier($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        if ($user->getRoleId() === null) {
-            $user->setRoleId($existing->getRoleId());
+        if ($existing->getStatus() == Table\User::STATUS_DELETED) {
+            throw new StatusCode\GoneException('User was deleted');
         }
 
-        if ($user->getPlanId() === null) {
-            $user->setPlanId($existing->getPlanId());
-        }
-
-        if ($user->getStatus() === null) {
-            $user->setStatus($existing->getStatus());
-        }
-
-        if ($user->getName() === null) {
-            $user->setName($existing->getName());
-        }
-
-        // check values
-        User\Validator::assertName($user->getName());
-        User\Validator::assertEmail($user->getEmail());
-
-        $roleId = $this->getRoleId($user);
-        $planId = $this->getPlanId($user);
+        $this->validator->assert($user, $existing);
 
         try {
             $this->userTable->beginTransaction();
 
             // update user
-            $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
-                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
-                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
-                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
-                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
-                Table\Generated\UserTable::COLUMN_METADATA => $user->getMetadata() !== null ? json_encode($user->getMetadata()) : null,
-            ]);
-
-            $this->userTable->update($record);
+            $row = new Table\Generated\UserRow();
+            $row->setId($existing->getId());
+            $row->setRoleId($user->getRoleId() ?? $existing->getRoleId());
+            $row->setPlanId($user->getPlanId() ?? $existing->getPlanId());
+            $row->setStatus($user->getStatus() ?? $existing->getStatus());
+            $row->setName($user->getName() ?? $existing->getName());
+            $row->setEmail($user->getEmail() ?? $existing->getEmail());
+            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $this->userTable->update($row);
 
             $scopes = $user->getScopes();
             if ($scopes !== null) {
@@ -309,43 +224,41 @@ class User
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($user, $existing, $context));
 
-        return $userId;
+        return $existing->getId();
     }
 
-    public function delete(int $userId, UserContext $context): int
+    public function delete(string $userId, UserContext $context): int
+    {
+        $existing = $this->userTable->findOneByIdentifier($userId);
+        if (empty($existing)) {
+            throw new StatusCode\NotFoundException('Could not find user');
+        }
+
+        if ($existing->getStatus() == Table\User::STATUS_DELETED) {
+            throw new StatusCode\GoneException('User was deleted');
+        }
+
+        $existing->setStatus(Table\User::STATUS_DELETED);
+        $this->userTable->update($existing);
+
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $existing->getId();
+    }
+
+    public function changeStatus(int $userId, int $status, UserContext $context): void
     {
         $existing = $this->userTable->find($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_DELETED,
-        ]);
+        $oldStatus = $existing->getStatus();
 
-        $this->userTable->update($record);
+        $existing->setStatus($status);
+        $this->userTable->update($existing);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
-
-        return $userId;
-    }
-
-    public function changeStatus(int $userId, int $status, UserContext $context): void
-    {
-        $user = $this->userTable->find($userId);
-        if (empty($user)) {
-            throw new StatusCode\NotFoundException('Could not find user');
-        }
-
-        $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $user->getId(),
-            Table\Generated\UserTable::COLUMN_STATUS => $status,
-        ]);
-
-        $this->userTable->update($record);
-
-        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user->getStatus(), $status, $context));
+        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $oldStatus, $status, $context));
     }
 
     public function changePassword(AccountChangePassword $changePassword, UserContext $context): bool
@@ -358,24 +271,26 @@ class User
             throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
         }
 
-        if (empty($changePassword->getNewPassword())) {
+        $newPassword = $changePassword->getNewPassword();
+        if (empty($newPassword)) {
             throw new StatusCode\BadRequestException('New password must not be empty');
         }
 
-        if (empty($changePassword->getOldPassword())) {
+        $oldPassword = $changePassword->getOldPassword();
+        if (empty($oldPassword)) {
             throw new StatusCode\BadRequestException('Old password must not be empty');
         }
 
         // check verify password
-        if ($changePassword->getNewPassword() != $changePassword->getVerifyPassword()) {
+        if ($newPassword != $changePassword->getVerifyPassword()) {
             throw new StatusCode\BadRequestException('New password does not match the verify password');
         }
 
         // assert password complexity
-        User\Validator::assertPassword($changePassword->getNewPassword(), $this->configService->getValue('user_pw_length'));
+        $this->validator->assertPassword($newPassword);
 
         // change password
-        $result = $this->userTable->changePassword($userId, $changePassword->getOldPassword(), $changePassword->getNewPassword());
+        $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
         if ($result) {
             $this->eventDispatcher->dispatch(new ChangedPasswordEvent($changePassword, $context));
@@ -386,11 +301,6 @@ class User
         }
     }
 
-    public function getValidScopes(int $userId, array $scopes): array
-    {
-        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
-    }
-
     public function getAvailableScopes(int $userId): array
     {
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
@@ -399,12 +309,11 @@ class User
     private function insertScopes(int $userId, array $scopes): void
     {
         $scopes = $this->scopeTable->getValidScopes($scopes);
-
         foreach ($scopes as $scope) {
-            $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
-                Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-            ]));
+            $row = new Table\Generated\UserScopeRow();
+            $row->setUserId($userId);
+            $row->setScopeId($scope->getId());
+            $this->userScopeTable->create($row);
         }
     }
 
@@ -413,41 +322,11 @@ class User
         $scopes = $this->roleScopeTable->getAvailableScopes($roleId);
         if (!empty($scopes)) {
             foreach ($scopes as $scope) {
-                $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                    Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
-                    Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope['id'],
-                ]));
+                $row = new Table\Generated\UserScopeRow();
+                $row->setUserId($userId);
+                $row->setScopeId($scope['id']);
+                $this->userScopeTable->create($row);
             }
         }
-    }
-
-    private function getRoleId(Model\Backend\User $user): int
-    {
-        $roleId = $user->getRoleId();
-        if (!empty($roleId)) {
-            $role = $this->roleTable->find($roleId);
-            if ($role instanceof Table\Generated\RoleRow) {
-                return $role->getId();
-            } else {
-                throw new StatusCode\BadRequestException('Provided role id does not exist');
-            }
-        } else {
-            throw new StatusCode\BadRequestException('No role provided');
-        }
-    }
-
-    private function getPlanId(Model\Backend\User $user): ?int
-    {
-        $planId = $user->getPlanId();
-        if (!empty($planId)) {
-            $plan = $this->planTable->find($planId);
-            if ($plan instanceof Table\Generated\PlanRow) {
-                return $plan->getId();
-            } else {
-                throw new StatusCode\BadRequestException('Provided plan id does not exist');
-            }
-        }
-
-        return null;
     }
 }

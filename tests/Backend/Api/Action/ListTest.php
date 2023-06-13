@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
@@ -29,27 +28,14 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * ListTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class ListTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
-    }
-
-    public function testDocumentation()
-    {
-        $response = $this->sendRequest('/system/doc/*/backend/action/list', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/list.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
@@ -64,72 +50,136 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
-            "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor",
-            "name": "CLI-Processor"
+            "name": "CLI-Processor",
+            "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor",
-            "name": "FastCGI-Processor"
+            "name": "Cli-Engine",
+            "class": "Fusio\\Adapter\\Cli\\Action\\CliEngine"
         },
         {
-            "class": "Fusio\\Adapter\\File\\Action\\FileProcessor",
-            "name": "File-Processor"
+            "name": "FastCGI-Processor",
+            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\GraphQL\\Action\\GraphQLProcessor",
-            "name": "GraphQL-Processor"
+            "name": "Fcgi-Engine",
+            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor",
-            "name": "HTTP-Processor"
+            "name": "File-Directory-Get",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGet"
         },
         {
-            "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor",
-            "name": "PHP-Processor"
+            "name": "File-Directory-GetAll",
+            "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGetAll"
         },
         {
-            "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox",
-            "name": "PHP-Sandbox"
+            "name": "File-Engine",
+            "class": "Fusio\\Adapter\\File\\Action\\FileEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend",
-            "name": "SMTP-Send"
+            "name": "File-Processor",
+            "class": "Fusio\\Adapter\\File\\Action\\FileProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
-            "name": "SQL-Delete"
+            "name": "GraphQL-Processor",
+            "class": "Fusio\\Adapter\\GraphQL\\Action\\GraphQLProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
-            "name": "SQL-Insert"
+            "name": "HTTP-Composition",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpComposition"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll",
-            "name": "SQL-Query-All"
+            "name": "HTTP-Load-Balancer",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpLoadBalancer"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow",
-            "name": "SQL-Query-Row"
+            "name": "HTTP-Processor",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
-            "name": "SQL-Select-All"
+            "name": "Http-Engine",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpEngine"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow",
-            "name": "SQL-Select-Row"
+            "name": "Inspect-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction"
         },
         {
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
-            "name": "SQL-Update"
+            "name": "PHP-Processor",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor"
         },
         {
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-            "name": "Util-Static-Response"
+            "name": "PHP-Sandbox",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
-            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction",
-            "name": "Void-Action"
+            "name": "Php-Engine",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpEngine"
+        },
+        {
+            "name": "SMTP-Send",
+            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend"
+        },
+        {
+            "name": "SQL-Builder",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder"
+        },
+        {
+            "name": "SQL-Delete",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete"
+        },
+        {
+            "name": "SQL-Insert",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert"
+        },
+        {
+            "name": "SQL-Query-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll"
+        },
+        {
+            "name": "SQL-Query-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow"
+        },
+        {
+            "name": "SQL-Select-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll"
+        },
+        {
+            "name": "SQL-Select-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow"
+        },
+        {
+            "name": "SQL-Update",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate"
+        },
+        {
+            "name": "Util-A\/B-Test",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilABTest"
+        },
+        {
+            "name": "Util-Cache",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilCache"
+        },
+        {
+            "name": "Util-Dispatch-Event",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilDispatchEvent"
+        },
+        {
+            "name": "Util-JSON-Patch",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilJsonPatch"
+        },
+        {
+            "name": "Util-Redirect",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilRedirect"
+        },
+        {
+            "name": "Util-Static-Response",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
+        },
+        {
+            "name": "Void-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction"
         }
     ]
 }

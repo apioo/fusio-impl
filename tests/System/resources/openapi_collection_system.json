@@ -1,649 +1,301 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Fusio",
-    "version": "1"
-  },
-  "servers": [
-    {
-      "url": "http:\/\/127.0.0.1\/"
-    }
-  ],
-  "paths": {
-    "\/system\/connection\/{name}\/callback": {
-      "get": {
-        "operationId": "System_Action_ConnectionCallback",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
+  "security": null,
+  "operations": {
+    "system.payment.webhook": {
+      "path": "/system/payment/:provider/webhook",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
         }
       },
-      "parameters": [
-        {
-          "name": "name",
+      "arguments": {
+        "provider": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
-      ]
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
     },
-    "\/system\/schema\/{name}": {
-      "get": {
-        "operationId": "System_Action_GetSchema",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Schema"
-                }
-              }
-            }
-          }
+    "system.meta.getSchema": {
+      "path": "/system/schema/:name",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Schema"
         }
       },
-      "parameters": [
-        {
-          "name": "name",
+      "arguments": {
+        "name": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
-      ]
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
     },
-    "\/system\/debug": {
-      "get": {
-        "operationId": "System_Action_GetDebug",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Debug"
-                }
-              }
-            }
-          }
+    "system.meta.getRoutes": {
+      "path": "/system/route",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Route"
         }
       },
-      "put": {
-        "operationId": "System_Action_GetDebug",
-        "requestBody": {
-          "description": "PUT Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Debug"
-                }
-              }
-            }
-          }
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
+    "system.meta.getHealth": {
+      "path": "/system/health",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "HealthCheck"
         }
       },
-      "post": {
-        "operationId": "System_Action_GetDebug",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Debug"
-                }
-              }
-            }
-          }
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
+    "system.meta.getDebug": {
+      "path": "/system/debug",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
         }
       },
-      "delete": {
-        "operationId": "System_Action_GetDebug",
-        "responses": {
-          "200": {
-            "description": "DELETE 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Debug"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "operationId": "System_Action_GetDebug",
-        "requestBody": {
-          "description": "PATCH Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PATCH 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Debug"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/system\/health": {
-      "get": {
-        "operationId": "System_Action_GetHealth",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_HealthCheck"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/system\/route": {
-      "get": {
-        "operationId": "System_Action_GetAllRoute",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Route"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/system\/about": {
-      "get": {
-        "operationId": "System_Action_GetAbout",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_About"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/system\/export\/{type}\/{version}\/{path}": {
-      "get": {
-        "operationId": "PSX_Framework_Controller_Generator_GeneratorController_doGet",
-        "responses": {}
-      }
-    },
-    "\/system\/payment\/{provider}\/webhook": {},
-    "\/system\/doc": {
-      "get": {
-        "operationId": "PSX_Framework_Controller_Tool_Documentation_IndexController_doGet",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/PSX_Framework_Controller_Tool_Documentation_IndexController_doGet_GET_200_Response"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "\/system\/doc\/{version}\/{path}": {
-      "get": {
-        "operationId": "PSX_Framework_Controller_Tool_Documentation_DetailController_doGet",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/PSX_Framework_Controller_Tool_Documentation_DetailController_doGet_GET_200_Response"
-                }
-              }
-            }
-          }
-        }
-      },
-      "parameters": [
-        {
-          "name": "version",
-          "in": "path",
-          "required": false,
+      "arguments": {
+        "payload": {
+          "in": "body",
           "schema": {
-            "type": "string"
+            "$ref": "Passthru"
           }
-        },
-        {
-          "name": "path",
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
+    "system.meta.getAbout": {
+      "path": "/system/about",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "About"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
+    "system.connection.callback": {
+      "path": "/system/connection/:name/callback",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "name": {
           "in": "path",
-          "required": false,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "\/system\/jsonrpc": {
-      "post": {
-        "description": "JSON-RPC Endpoint please take a look at https:\/\/www.jsonrpc.org\/specification",
-        "operationId": "Fusio_Impl_System_Api_JsonRpc_doPost",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response"
-                }
-              }
-            }
-          }
-        }
-      }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
     }
   },
-  "components": {
-    "schemas": {
-      "About": {
-        "type": "object",
-        "properties": {
-          "apiVersion": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "termsOfService": {
-            "type": "string"
-          },
-          "contactName": {
-            "type": "string"
-          },
-          "contactUrl": {
-            "type": "string"
-          },
-          "contactEmail": {
-            "type": "string"
-          },
-          "licenseName": {
-            "type": "string"
-          },
-          "licenseUrl": {
-            "type": "string"
-          },
-          "paymentCurrency": {
-            "type": "string"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "apps": {
-            "$ref": "#\/components\/schemas\/AboutApps"
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/AboutLink"
-            }
-          }
-        }
-      },
-      "AboutApps": {
-        "type": "object",
-        "additionalProperties": {
+  "definitions": {
+    "About": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
           "type": "string"
-        }
-      },
-      "AboutLink": {
-        "type": "object",
-        "properties": {
-          "rel": {
-            "type": "string"
-          },
-          "href": {
-            "type": "string"
-          }
-        }
-      },
-      "Debug": {
-        "type": "object",
-        "properties": {
-          "headers": {
-            "$ref": "#\/components\/schemas\/DebugHeaders"
-          },
-          "parameters": {
-            "$ref": "#\/components\/schemas\/DebugParameters"
-          },
-          "body": {
-            "$ref": "#\/components\/schemas\/DebugBody"
-          }
-        }
-      },
-      "DebugBody": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "DebugHeaders": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "DebugParameters": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "Discovery_Link": {
-        "type": "object",
-        "properties": {
-          "rel": {
-            "type": "string"
-          },
-          "href": {
-            "type": "string"
-          }
-        }
-      },
-      "Documentation_Detail": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "description": {
-            "type": "string"
-          },
-          "schema": {
-            "$ref": "#\/components\/schemas\/Documentation_Schema"
-          },
-          "pathParameters": {
-            "type": "string"
-          },
-          "methods": {
-            "$ref": "#\/components\/schemas\/Documentation_Methods"
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Discovery_Link"
-            }
-          }
-        }
-      },
-      "Documentation_Index": {
-        "type": "object",
-        "properties": {
-          "routings": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Documentation_Route"
-            }
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Discovery_Link"
-            }
-          }
-        }
-      },
-      "Documentation_Method": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "queryParameters": {
-            "type": "string"
-          },
-          "request": {
-            "type": "string"
-          },
-          "responses": {
-            "$ref": "#\/components\/schemas\/Documentation_Method_Responses"
-          }
-        }
-      },
-      "Documentation_Method_Responses": {
-        "type": "object",
-        "additionalProperties": {
+        },
+        "title": {
           "type": "string"
-        }
-      },
-      "Documentation_Methods": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#\/components\/schemas\/Documentation_Method"
-        }
-      },
-      "Documentation_Route": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string"
-          },
-          "methods": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "version": {
-            "type": "string"
-          }
-        }
-      },
-      "Documentation_Schema": {
-        "type": "object",
-        "additionalProperties": true
-      },
-      "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response": {
-        "$ref": "#\/components\/schemas\/RpcResponseSuccess"
-      },
-      "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request": {
-        "$ref": "#\/components\/schemas\/Passthru"
-      },
-      "HealthCheck": {
-        "type": "object",
-        "properties": {
-          "healthy": {
-            "type": "boolean"
-          },
-          "error": {
-            "type": "string"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "PSX_Framework_Controller_Tool_Documentation_DetailController_doGet_GET_200_Response": {
-        "$ref": "#\/components\/schemas\/Documentation_Detail"
-      },
-      "PSX_Framework_Controller_Tool_Documentation_IndexController_doGet_GET_200_Response": {
-        "$ref": "#\/components\/schemas\/Documentation_Index"
-      },
-      "Passthru": {
-        "description": "No schema information available",
-        "type": "object"
-      },
-      "Route": {
-        "type": "object",
-        "properties": {
-          "routes": {
-            "$ref": "#\/components\/schemas\/RoutePath"
-          }
-        }
-      },
-      "RouteMethod": {
-        "type": "object",
-        "additionalProperties": {
+        },
+        "description": {
           "type": "string"
-        }
-      },
-      "RoutePath": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#\/components\/schemas\/RouteMethod"
-        }
-      },
-      "RpcResponseResult": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "RpcResponseSuccess": {
-        "type": "object",
-        "properties": {
-          "jsonrpc": {
+        },
+        "termsOfService": {
+          "type": "string"
+        },
+        "contactName": {
+          "type": "string"
+        },
+        "contactUrl": {
+          "type": "string"
+        },
+        "contactEmail": {
+          "type": "string"
+        },
+        "licenseName": {
+          "type": "string"
+        },
+        "licenseUrl": {
+          "type": "string"
+        },
+        "paymentCurrency": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
             "type": "string"
-          },
-          "result": {
-            "$ref": "#\/components\/schemas\/RpcResponseResult"
-          },
-          "id": {
-            "type": "integer"
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "$ref": "AboutApps"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "AboutLink"
           }
         }
-      },
-      "Schema": {
-        "type": "object",
-        "properties": {
-          "schema": {
-            "$ref": "#\/components\/schemas\/SchemaTypeSchema"
-          },
-          "form": {
-            "$ref": "#\/components\/schemas\/SchemaForm"
-          }
-        }
-      },
-      "SchemaForm": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "SchemaTypeSchema": {
-        "type": "object",
-        "additionalProperties": []
-      },
-      "System_About": {
-        "$ref": "#\/components\/schemas\/About"
-      },
-      "System_Debug": {
-        "$ref": "#\/components\/schemas\/Debug"
-      },
-      "System_HealthCheck": {
-        "$ref": "#\/components\/schemas\/HealthCheck"
-      },
-      "System_Route": {
-        "$ref": "#\/components\/schemas\/Route"
-      },
-      "System_Schema": {
-        "$ref": "#\/components\/schemas\/Schema"
       }
     },
-    "securitySchemes": {
-      "app": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "system": ""
-            }
-          }
+    "AboutApps": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "AboutLink": {
+      "type": "object",
+      "properties": {
+        "rel": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
         }
+      }
+    },
+    "HealthCheck": {
+      "type": "object",
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "$ref": "RoutePath"
+        }
+      }
+    },
+    "RouteMethod": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "RoutePath": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "RouteMethod"
+      }
+    },
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "$ref": "SchemaTypeSchema"
+        },
+        "form": {
+          "$ref": "SchemaForm"
+        }
+      }
+    },
+    "SchemaForm": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "SchemaTypeSchema": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     }
   }

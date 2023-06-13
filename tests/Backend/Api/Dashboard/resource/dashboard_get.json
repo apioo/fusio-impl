@@ -67,7 +67,7 @@
       ]
     ],
     "series": [
-      "\/foo"
+      "test.listFoo"
     ]
   },
   "incomingRequests": {
@@ -280,7 +280,7 @@
       ]
     ],
     "series": [
-      "\/foo"
+      "test.listFoo"
     ]
   },
   "timePerRoute": {
@@ -351,7 +351,7 @@
       ]
     ],
     "series": [
-      "\/foo (ms)"
+      "test.listFoo (ms)"
     ]
   },
   "latestApps": {

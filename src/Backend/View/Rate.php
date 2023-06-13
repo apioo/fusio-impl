@@ -1,37 +1,37 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
  * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Rate extends ViewAbstract
@@ -51,63 +51,59 @@ class Rate extends ViewAbstract
         }
 
         if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_DESC;
+            $sortOrder = OrderBy::DESC;
         }
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->in(Table\Generated\RateTable::COLUMN_STATUS, [Table\Rate::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\RateTable::COLUMN_NAME, '%' . $search . '%');
         }
 
+        $builder = new Builder($this->connection);
+
         $definition = [
             'totalResults' => $this->getTable(Table\Rate::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Rate::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
-                'priority' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
+            'entry' => $builder->doCollection([$this->getTable(Table\Rate::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
+                'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
                 'name' => Table\Generated\RateTable::COLUMN_NAME,
                 'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
                 'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
-                'metadata' => $this->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
+                'metadata' => $builder->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity(string $id)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
+        $builder = new Builder($this->connection);
 
-        $definition = $this->doEntity([$this->getTable(Table\Rate::class), $method], [$id], [
-            'id' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
-            'priority' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
+        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$id], [
+            'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
+            'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
             'name' => Table\Generated\RateTable::COLUMN_NAME,
             'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
             'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
-            'metadata' => $this->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
-            'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'findByRateId'], [new Reference('id')], [
-                'id' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ID),
-                'rateId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_RATE_ID),
-                'routeId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID),
-                'userId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_USER_ID),
-                'planId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_PLAN_ID),
-                'appId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_APP_ID),
-                'authenticated' => $this->fieldBoolean(Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED),
+            'metadata' => $builder->fieldJson(Table\Generated\RateTable::COLUMN_METADATA),
+            'allocation' => $builder->doCollection([$this->getTable(Table\Rate\Allocation::class), 'findByRateId'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ID),
+                'rateId' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_RATE_ID),
+                'operationId' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_OPERATION_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_USER_ID),
+                'planId' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_PLAN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_APP_ID),
+                'authenticated' => $builder->fieldBoolean(Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED),
             ]),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

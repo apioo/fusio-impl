@@ -1,45 +1,45 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\App;
 
 use DateInterval;
 use DateTime;
-use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
+use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PSX\OAuth2\AccessToken;
 
 /**
  * Token
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Token
@@ -47,15 +47,17 @@ class Token
     private Table\App $appTable;
     private Table\User $userTable;
     private Table\App\Token $appTokenTable;
-    private Config $config;
+    private ConfigInterface $config;
+    private JsonWebToken $jsonWebToken;
     private EventDispatcherInterface  $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, Config $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, ConfigInterface $config, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
         $this->userTable       = $userTable;
         $this->appTokenTable   = $appTokenTable;
         $this->config          = $config;
+        $this->jsonWebToken    = $jsonWebToken;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -76,19 +78,17 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $record = new Table\Generated\AppTokenRow([
-            Table\Generated\AppTokenTable::COLUMN_APP_ID => $app->getId(),
-            Table\Generated\AppTokenTable::COLUMN_USER_ID => $user->getId(),
-            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
-            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
-            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
-            Table\Generated\AppTokenTable::COLUMN_SCOPE => implode(',', $scopes),
-            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
-            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
-            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
-        ]);
-
-        $this->appTokenTable->create($record);
+        $row = new Table\Generated\AppTokenRow();
+        $row->setAppId($app->getId());
+        $row->setUserId($user->getId());
+        $row->setStatus(Table\App\Token::STATUS_ACTIVE);
+        $row->setToken($accessToken);
+        $row->setRefresh($refreshToken);
+        $row->setScope(implode(',', $scopes));
+        $row->setIp($ip);
+        $row->setExpire(LocalDateTime::from($expires));
+        $row->setDate(LocalDateTime::now());
+        $this->appTokenTable->create($row);
 
         $tokenId = $this->appTokenTable->getLastInsertId();
 
@@ -122,14 +122,11 @@ class Token
 
         // check expire date
         $now = new \DateTime();
-        $date = $token->getDate();
-        if ($date instanceof \DateTime) {
-            $expires = clone $date;
-            $expires->add($expireRefresh);
+        $date = $token->getDate()->toDateTime();
+        $expires = $date->add($expireRefresh);
 
-            if ($expires < $now) {
-                throw new StatusCode\BadRequestException('Refresh token is expired');
-            }
+        if ($expires < $now) {
+            throw new StatusCode\BadRequestException('Refresh token is expired');
         }
 
         // check whether the refresh was requested from the same app
@@ -148,17 +145,13 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $record = new Table\Generated\AppTokenRow([
-            Table\Generated\AppTokenTable::COLUMN_ID => $token->getId(),
-            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
-            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
-            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
-            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
-            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
-            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
-        ]);
-
-        $this->appTokenTable->update($record);
+        $token->setStatus(Table\App\Token::STATUS_ACTIVE);
+        $token->setToken($accessToken);
+        $token->setRefresh($refreshToken);
+        $token->setIp($ip);
+        $token->setExpire(LocalDateTime::from($expires));
+        $token->setDate(LocalDateTime::from($now));
+        $this->appTokenTable->update($token);
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
@@ -201,7 +194,7 @@ class Token
             'name' => $user->getName()
         ];
 
-        return JWT::encode($payload, $this->config->get('fusio_project_key'));
+        return $this->jsonWebToken->encode($payload);
     }
 
     private function getApp(int $appId): Table\Generated\AppRow

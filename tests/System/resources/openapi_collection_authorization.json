@@ -1,319 +1,195 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Fusio",
-    "version": "1"
-  },
-  "servers": [
-    {
-      "url": "http:\/\/127.0.0.1\/"
-    }
-  ],
-  "paths": {
-    "\/authorization\/whoami": {
-      "get": {
-        "tags": [
-          "authorization"
-        ],
-        "operationId": "Authorization_Action_GetWhoami",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
+    "security": null,
+    "operations": {
+        "authorization.getWhoami": {
+            "path": "/authorization/whoami",
+            "method": "GET",
+            "return": {
+                "code": 200,
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_User"
+                    "$ref": "User"
                 }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "authorization"
+            },
+            "arguments": [],
+            "throws": [],
+            "description": "",
+            "stability": 1,
+            "security": [
+                "authorization"
+            ],
+            "authorization": true,
+            "tags": [
+                "authorization"
             ]
-          }
-        ]
-      }
-    },
-    "\/authorization\/revoke": {
-      "post": {
-        "tags": [
-          "authorization"
-        ],
-        "operationId": "Authorization_Action_Revoke",
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
         },
-        "security": [
-          {
-            "app": [
-              "authorization"
+        "authorization.revoke": {
+            "path": "/authorization/revoke",
+            "method": "POST",
+            "return": {
+                "code": 200,
+                "schema": {
+                    "$ref": "Message"
+                }
+            },
+            "arguments": [],
+            "throws": [],
+            "description": "",
+            "stability": 1,
+            "security": [
+                "authorization"
+            ],
+            "authorization": true,
+            "tags": [
+                "authorization"
             ]
-          }
-        ]
-      }
+        }
     },
-    "\/authorization\/token": {
-      "post": {
-        "operationId": "Fusio_Impl_Authorization_Token_doPost",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_Request"
-              }
+    "definitions": {
+        "App": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "string"
+                },
+                "appKey": {
+                    "type": "string"
+                },
+                "appSecret": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "$ref": "Metadata"
+                },
+                "date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "scopes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tokens": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "AppToken"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_200_Response"
+        "AppToken": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "scope": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "expire": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "date": {
+                    "format": "date-time",
+                    "type": "string"
                 }
-              }
             }
-          },
-          "400": {
-            "description": "POST 400 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_400_Response"
+        },
+        "Message": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
                 }
-              }
             }
-          }
+        },
+        "Metadata": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "roleId": {
+                    "type": "integer"
+                },
+                "planId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "points": {
+                    "type": "integer"
+                },
+                "scopes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "apps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "App"
+                    }
+                },
+                "metadata": {
+                    "$ref": "Metadata"
+                },
+                "date": {
+                    "format": "date-time",
+                    "type": "string"
+                }
+            }
         }
-      }
     }
-  },
-  "components": {
-    "schemas": {
-      "AccessToken": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "integer"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          }
-        }
-      },
-      "App": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/AppToken"
-            }
-          }
-        }
-      },
-      "AppToken": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "ip": {
-            "type": "string"
-          },
-          "expire": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "Backend_User": {
-        "$ref": "#\/components\/schemas\/User"
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "error_description": {
-            "type": "string"
-          },
-          "error_uri": {
-            "type": "string"
-          }
-        }
-      },
-      "Fusio_Impl_Authorization_Token_doPost_POST_200_Response": {
-        "$ref": "#\/components\/schemas\/AccessToken"
-      },
-      "Fusio_Impl_Authorization_Token_doPost_POST_400_Response": {
-        "$ref": "#\/components\/schemas\/Error"
-      },
-      "Fusio_Impl_Authorization_Token_doPost_POST_Request": {
-        "$ref": "#\/components\/schemas\/Passthru"
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "Metadata": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "Passthru": {
-        "description": "No schema information available",
-        "type": "object"
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "roleId": {
-            "type": "integer"
-          },
-          "planId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-          },
-          "email": {
-            "type": "string"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "apps": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/App"
-            }
-          },
-          "metadata": {
-            "$ref": "#\/components\/schemas\/Metadata"
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "app": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "authorization": ""
-            }
-          }
-        }
-      }
-    }
-  }
 }

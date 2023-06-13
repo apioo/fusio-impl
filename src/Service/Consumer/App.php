@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\Consumer;
@@ -34,7 +33,7 @@ use PSX\Sql\Condition;
  * Developer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class App
@@ -102,7 +101,7 @@ class App
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);
 
-        return $this->appService->update($appId, $backendApp, $context);
+        return $this->appService->update((string) $appId, $backendApp, $context);
     }
 
     public function delete(int $appId, UserContext $context): int
@@ -118,7 +117,7 @@ class App
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
-        return $this->appService->delete($appId, $context);
+        return $this->appService->delete((string) $appId, $context);
     }
 
     protected function getValidUserScopes(int $userId, ?array $scopes): array
@@ -132,17 +131,17 @@ class App
 
         // check that the user can assign only the scopes which are also
         // assigned to the user account
-        $scopes = array_filter($scopes, function ($scope) use ($userScopes) {
+        $scopes = array_filter($scopes, function (Table\Generated\ScopeRow $scope) use ($userScopes) {
             foreach ($userScopes as $userScope) {
-                if ($userScope['id'] == $scope['id']) {
+                if ($userScope['id'] == $scope->getId()) {
                     return true;
                 }
             }
             return false;
         });
 
-        return array_map(function ($scope) {
-            return $scope['name'];
+        return array_map(function (Table\Generated\ScopeRow $scope) {
+            return $scope->getName();
         }, $scopes);
     }
 
@@ -166,7 +165,7 @@ class App
     {
         $appCount = $this->configService->getValue('app_consumer');
 
-        $condition = new Condition();
+        $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
 

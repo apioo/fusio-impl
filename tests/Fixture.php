@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests;
@@ -26,21 +25,20 @@ use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Connection\Native;
-use Fusio\Impl\Migrations\DataBag;
-use Fusio\Impl\Migrations\Method;
-use Fusio\Impl\Migrations\NewInstallation;
+use Fusio\Impl\Installation\DataBag;
+use Fusio\Impl\Installation\NewInstallation;
+use Fusio\Impl\Installation\Operation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\Plan\Invoice;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
-use PSX\Api\Resource;
+use PSX\Api\OperationInterface;
 
 /**
  * Fixture
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Fixture
@@ -77,8 +75,8 @@ class Fixture
 
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
-        $data->addPlan('Plan A', 39.99, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu', ['foo' => 'bar']);
-        $data->addPlan('Plan B', 49.99, 1000, null);
+        $data->addPlan('Plan A', 3999, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu', ['foo' => 'bar']);
+        $data->addPlan('Plan B', 4999, 1000, null);
         $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, 'Plan A', ['foo' => 'bar']);
         $data->addUser('Consumer', 'Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED);
         $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE);
@@ -135,29 +133,82 @@ class Fixture
         $data->addUserScope('Developer', 'bar');
         $data->addUserGrant('Administrator', 'Backend', true, '2015-02-27 19:59:15');
 
-        $data->addRoutes('default', [
-            '/foo' => [
-                'GET' => new Method('Sql-Select-All', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', Resource::STATUS_DEVELOPMENT),
-                'POST' => new Method('Sql-Insert', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', Resource::STATUS_DEVELOPMENT),
-            ],
-            '/inspect/:foo' => [
-                'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'POST' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'PUT' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'DELETE' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-                'PATCH' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
-            ]
+        $data->addOperations('default', [
+            'test.listFoo' => new Operation(
+                action: 'Sql-Select-All',
+                httpMethod: 'GET',
+                httpPath: '/foo',
+                httpCode: 200,
+                outgoing: 'Collection-Schema',
+                public: true,
+                stability: OperationInterface::STABILITY_EXPERIMENTAL,
+            ),
+            'test.createFoo' => new Operation(
+                action: 'Sql-Insert',
+                httpMethod: 'POST',
+                httpPath: '/foo',
+                httpCode: 201,
+                outgoing: 'Passthru',
+                incoming: 'Entry-Schema',
+                costs: 1,
+            ),
+            'inspect.get' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'GET',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.post' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'POST',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.put' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'PUT',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.patch' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'PATCH',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
+            'inspect.delete' => new Operation(
+                action: 'Inspect-Action',
+                httpMethod: 'DELETE',
+                httpPath: '/inspect/:foo',
+                httpCode: 200,
+                outgoing: 'Passthru',
+                incoming: 'Passthru',
+            ),
         ]);
 
-        $data->addLog('default', 'Foo-App', '/foo');
-        $data->addLog('default', 'Foo-App', '/foo');
+        $data->addLog('default', 'Foo-App', 'test.listFoo');
+        $data->addLog('default', 'Foo-App', 'test.listFoo');
         $data->addLogError(0);
-        $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
-        $data->addRateAllocation('silver', '/foo');
-        $data->addRateAllocation('gold', '/foo', null, null, null, true);
-        $data->addScopeRoute('bar', '/foo');
-        $data->addScopeRoute('foo', '/inspect/:foo');
-        $data->addScopeRoute('bar', '/inspect/:foo');
+        $data->addPlanUsage('test.listFoo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
+        $data->addRateAllocation('silver', 'test.listFoo');
+        $data->addRateAllocation('gold', 'test.createFoo', null, null, null, true);
+        $data->addScopeOperation('bar', 'test.listFoo');
+        $data->addScopeOperation('bar', 'test.createFoo');
+        $data->addScopeOperation('foo', 'inspect.get');
+        $data->addScopeOperation('bar', 'inspect.get');
+        $data->addScopeOperation('foo', 'inspect.post');
+        $data->addScopeOperation('bar', 'inspect.post');
+        $data->addScopeOperation('bar', 'inspect.put');
+        $data->addScopeOperation('bar', 'inspect.patch');
+        $data->addScopeOperation('bar', 'inspect.delete');
 
         $data->addTable('app_news', [
             ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],

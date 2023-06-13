@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\Security;
@@ -27,57 +26,52 @@ use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
-use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\OAuth2\Exception\InvalidScopeException;
 
 /**
  * TokenValidator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class TokenValidator
 {
     private Connection $connection;
-    private string $projectKey;
+    private JsonWebToken $jsonWebToken;
     private Repository\AppInterface $appRepository;
     private Repository\UserInterface $userRepository;
 
-    public function __construct(Connection $connection, string $projectKey, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(Connection $connection, JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->connection = $connection;
-        $this->projectKey = $projectKey;
+        $this->jsonWebToken = $jsonWebToken;
         $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
     }
 
     public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context): bool
     {
-        if ($requestMethod === 'OPTIONS') {
-            $needsAuth = false;
-        } else {
-            $method = $context->getMethod();
-            $needsAuth = !$method['public'];
-        }
-
+        $needsAuth = $context->getOperation()->getPublic() !== 1;
         $requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
 
         // authorization is required if the method is not public. In case we get
         // a header from the client we also check the token so that the client
         // gets maybe another rate limit
         if ($needsAuth || !empty($authorization)) {
-            $parts       = explode(' ', $authorization ?? '', 2);
-            $type        = $parts[0] ?? null;
+            $parts = explode(' ', $authorization ?? '', 2);
+            $type = $parts[0] ?? null;
             $accessToken = $parts[1] ?? null;
 
-            $params = array(
+            $params = [
                 'realm' => 'Fusio',
-            );
+            ];
 
-            if ($type == 'Bearer' && !empty($accessToken)) {
+            if ($type === 'Bearer' && !empty($accessToken)) {
                 try {
-                    $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
+                    $token = $this->getToken($accessToken, $context->getOperation()->getId(), $requestMethod);
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }
@@ -113,11 +107,11 @@ class TokenValidator
         return true;
     }
 
-    private function getToken(string $token, int $routeId, string $requestMethod): ?Model\Token
+    private function getToken(string $token, int $operationId, string $requestMethod): ?Model\Token
     {
         // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
-        if (strpos($token, '.') !== false) {
-            JWT::decode($token, $this->projectKey, ['HS256']);
+        if (str_contains($token, '.')) {
+            $this->jsonWebToken->decode($token);
         }
 
         $now = new \DateTime();
@@ -133,11 +127,11 @@ class TokenValidator
                    AND app_token.status = :status
                    AND (app_token.expire IS NULL OR app_token.expire > :now)';
 
-        $accessToken = $this->connection->fetchAssoc($sql, array(
-            'token'  => $token,
+        $accessToken = $this->connection->fetchAssociative($sql, [
+            'token' => $token,
             'status' => AppToken::STATUS_ACTIVE,
-            'now'    => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
-        ));
+            'now' => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
+        ]);
 
         if (empty($accessToken)) {
             return null;
@@ -151,14 +145,14 @@ class TokenValidator
 
         // get all scopes which are assigned to this route
         $sql = '    SELECT scope.name,
-                               scope_routes.allow,
-                               scope_routes.methods
-                          FROM fusio_scope_routes scope_routes
-                    INNER JOIN fusio_scope scope
-                            ON scope.id = scope_routes.scope_id
-                         WHERE scope_routes.route_id = :route';
+                           scope_operation.allow,
+                           scope_operation.methods
+                      FROM fusio_scope_operation scope_operation
+                INNER JOIN fusio_scope scope
+                        ON scope.id = scope_operation.scope_id
+                     WHERE scope_operation.operation_id = :operation';
 
-        $availableScopes = $this->connection->fetchAll($sql, array('route' => $routeId));
+        $availableScopes = $this->connection->fetchAllAssociative($sql, ['operation' => $operationId]);
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request
@@ -190,19 +184,16 @@ class TokenValidator
     /**
      * If the user has as entitled scope a global scope like backend or consumer he has the right to access every sub
      * scope, so we add them to the entitled scopes
-     * 
-     * @param array $entitledScopes
-     * @return array
      */
     private function substituteGlobalScopes(array $entitledScopes): array
     {
         $scopes = $entitledScopes;
         foreach ($entitledScopes as $scope) {
-            if (strpos($scope, '.') === false) {
+            if (!str_contains($scope, '.')) {
                 $sql = 'SELECT scope.name
                           FROM fusio_scope scope
                          WHERE scope.name LIKE :name';
-                $result = $this->connection->fetchAll($sql, ['name' => $scope . '.%']);
+                $result = $this->connection->fetchAllAssociative($sql, ['name' => $scope . '.%']);
                 foreach ($result as $row) {
                     $scopes[] = $row['name'];
                 }

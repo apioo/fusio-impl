@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -29,16 +28,15 @@ use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\AppCreate;
 use Fusio\Model\Backend\AppUpdate;
-use PSX\DateTime\DateTime;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * App
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class App
@@ -46,32 +44,21 @@ class App
     private Table\App $appTable;
     private Table\Scope $scopeTable;
     private Table\App\Scope $appScopeTable;
-    private Table\App\Token $appTokenTable;
-    private string $tokenSecret;
+    private App\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, string $tokenSecret, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, App\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->appTable        = $appTable;
-        $this->scopeTable      = $scopeTable;
-        $this->appScopeTable   = $appScopeTable;
-        $this->appTokenTable   = $appTokenTable;
-        $this->tokenSecret     = $tokenSecret;
+        $this->appTable = $appTable;
+        $this->scopeTable = $scopeTable;
+        $this->appScopeTable = $appScopeTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(AppCreate $app, UserContext $context): int
     {
-        // check whether app exists
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $app->getUserId());
-        $condition->notEquals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_DELETED);
-        $condition->equals(Table\Generated\AppTable::COLUMN_NAME, $app->getName());
-
-        $existing = $this->appTable->findOneBy($condition);
-        if (!empty($existing)) {
-            throw new StatusCode\BadRequestException('App already exists');
-        }
+        $this->validator->assert($app);
 
         // parse parameters
         $parameters = $app->getParameters();
@@ -86,19 +73,17 @@ class App
             $appKey    = TokenGenerator::generateAppKey();
             $appSecret = TokenGenerator::generateAppSecret();
 
-            $record = new Table\Generated\AppRow([
-                Table\Generated\AppTable::COLUMN_USER_ID => $app->getUserId(),
-                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
-                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
-                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
-                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
-                Table\Generated\AppTable::COLUMN_APP_KEY => $appKey,
-                Table\Generated\AppTable::COLUMN_APP_SECRET => $appSecret,
-                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
-                Table\Generated\AppTable::COLUMN_DATE => new DateTime(),
-            ]);
-
-            $this->appTable->create($record);
+            $row = new Table\Generated\AppRow();
+            $row->setUserId($app->getUserId());
+            $row->setStatus($app->getStatus());
+            $row->setName($app->getName());
+            $row->setUrl($app->getUrl());
+            $row->setParameters($parameters);
+            $row->setAppKey($appKey);
+            $row->setAppSecret($appSecret);
+            $row->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : null);
+            $row->setDate(LocalDateTime::now());
+            $this->appTable->create($row);
 
             $appId = $this->appTable->getLastInsertId();
             $app->setId($appId);
@@ -120,9 +105,9 @@ class App
         return $appId;
     }
 
-    public function update(int $appId, AppUpdate $app, UserContext $context): int
+    public function update(string $appId, AppUpdate $app, UserContext $context): int
     {
-        $existing = $this->appTable->find($appId);
+        $existing = $this->appTable->findOneByIdentifier($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -130,6 +115,8 @@ class App
         if ($existing->getStatus() == Table\App::STATUS_DELETED) {
             throw new StatusCode\GoneException('App was deleted');
         }
+
+        $this->validator->assert($app, $existing);
 
         // parse parameters
         $parameters = $app->getParameters();
@@ -142,16 +129,12 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $record = new Table\Generated\AppRow([
-                Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
-                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
-                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
-                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
-                Table\Generated\AppTable::COLUMN_METADATA => $app->getMetadata() !== null ? json_encode($app->getMetadata()) : null,
-            ]);
-
-            $this->appTable->update($record);
+            $existing->setStatus($app->getStatus() ?? Table\App::STATUS_ACTIVE);
+            $existing->setName($app->getName() ?? $existing->getName());
+            $existing->setUrl($app->getUrl() ?? $existing->getUrl());
+            $existing->setParameters($parameters);
+            $existing->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : $existing->getParameters());
+            $this->appTable->update($existing);
 
             $scopes = $app->getScopes();
             if ($scopes !== null) {
@@ -171,12 +154,12 @@ class App
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($app, $existing, $context));
 
-        return $appId;
+        return $existing->getId();
     }
 
-    public function delete(int $appId, UserContext $context): int
+    public function delete(string $appId, UserContext $context): int
     {
-        $existing = $this->appTable->find($appId);
+        $existing = $this->appTable->findOneByIdentifier($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -185,16 +168,12 @@ class App
             throw new StatusCode\GoneException('App was deleted');
         }
 
-        $record = new Table\Generated\AppRow([
-            Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\AppTable::COLUMN_STATUS => Table\App::STATUS_DELETED,
-        ]);
-
-        $this->appTable->update($record);
+        $existing->setStatus(Table\App::STATUS_DELETED);
+        $this->appTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $appId;
+        return $existing->getId();
     }
 
     protected function insertScopes(int $appId, ?array $scopes): void
@@ -203,10 +182,10 @@ class App
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
-                $this->appScopeTable->create(new Table\Generated\AppScopeRow([
-                    Table\Generated\AppScopeTable::COLUMN_APP_ID => $appId,
-                    Table\Generated\AppScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
-                ]));
+                $row = new Table\Generated\AppScopeRow();
+                $row->setAppId($appId);
+                $row->setScopeId($scope->getId());
+                $this->appScopeTable->create($row);
             }
         }
     }

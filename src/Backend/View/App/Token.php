@@ -1,37 +1,37 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Backend\View\App;
 
-use Fusio\Impl\Backend\View\App\Token\QueryFilter;
+use Fusio\Impl\Backend\Filter\App\Token\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
+use PSX\Nested\Builder;
+use PSX\Nested\Reference;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
  * Token
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Token extends ViewAbstract
@@ -47,48 +47,51 @@ class Token extends ViewAbstract
         }
 
         $condition = $filter->getCondition();
+        $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, Sql::SORT_DESC], [
-                'id' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
-                'appId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
-                'userId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
-                'status' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
-                'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+            'entry' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, OrderBy::DESC], [
+                'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
+                'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
                 'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-                'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+                'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
         ];
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\App\Token::class), 'find'], [$id], [
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\App\Token::class), 'find'], [$id], [
             'id' => Table\Generated\AppTokenTable::COLUMN_ID,
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
+            'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => Table\Generated\AppTable::COLUMN_ID,
                 'userId' => Table\Generated\AppTable::COLUMN_USER_ID,
                 'status' => Table\Generated\AppTable::COLUMN_STATUS,
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
+            'user' => $builder->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                 'id' => Table\Generated\UserTable::COLUMN_ID,
                 'status' => Table\Generated\UserTable::COLUMN_STATUS,
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
             'status' => Table\Generated\AppTokenTable::COLUMN_STATUS,
             'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
-            'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+            'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
             'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-            'expire' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_EXPIRE),
-            'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+            'expire' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_EXPIRE),
+            'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
         ]);
 
-        return $this->build($definition);
+        return $builder->build($definition);
     }
 }

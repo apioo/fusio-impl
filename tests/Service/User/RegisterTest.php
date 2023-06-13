@@ -1,31 +1,28 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Config;
-use Fusio\Impl\Service\User\Captcha;
-use Fusio\Impl\Service\User\Mailer;
+use Fusio\Impl\Service;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
@@ -34,17 +31,18 @@ use Fusio\Model\Consumer\UserRegister;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * RegisterTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class RegisterTest extends ControllerDbTestCase
 {
-    public function getDataSet()
+    public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
@@ -52,12 +50,12 @@ class RegisterTest extends ControllerDbTestCase
     public function testRegister()
     {
         $register = new Register(
-            Environment::getService('user_service'),
+            Environment::getService(Service\User::class),
             $this->newCaptchaService(true),
-            Environment::getService('user_token_service'),
+            Environment::getService(Service\User\Token::class),
             $this->newMailer(true),
             $this->newConfig('private_key', true),
-            Environment::getService('table_manager')->getTable(Table\Role::class)
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
         );
 
         $user = new UserRegister();
@@ -68,10 +66,10 @@ class RegisterTest extends ControllerDbTestCase
         $register->register($user);
 
         // check user
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Environment::getService('connection');
+        /** @var Connection $connection */
+        $connection = Environment::getService(Connection::class);
 
-        $user = $connection->fetchAssoc('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
@@ -85,12 +83,12 @@ class RegisterTest extends ControllerDbTestCase
     public function testRegisterNoApproval()
     {
         $register = new Register(
-            Environment::getService('user_service'),
+            Environment::getService(Service\User::class),
             $this->newCaptchaService(true),
-            Environment::getService('user_token_service'),
+            Environment::getService(Service\User\Token::class),
             $this->newMailer(false),
             $this->newConfig('private_key', false),
-            Environment::getService('table_manager')->getTable(Table\Role::class)
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
         );
 
         $user = new UserRegister();
@@ -101,10 +99,10 @@ class RegisterTest extends ControllerDbTestCase
         $register->register($user);
 
         // check user
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Environment::getService('connection');
+        /** @var Connection $connection */
+        $connection = Environment::getService(Connection::class);
 
-        $user = $connection->fetchAssoc('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
@@ -118,12 +116,12 @@ class RegisterTest extends ControllerDbTestCase
     public function testRegisterNoCaptchaSecret()
     {
         $register = new Register(
-            Environment::getService('user_service'),
+            Environment::getService(Service\User::class),
             $this->newCaptchaService(true),
-            Environment::getService('user_token_service'),
+            Environment::getService(Service\User\Token::class),
             $this->newMailer(true),
             $this->newConfig('', true),
-            Environment::getService('table_manager')->getTable(Table\Role::class)
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
         );
 
         $user = new UserRegister();
@@ -134,10 +132,10 @@ class RegisterTest extends ControllerDbTestCase
         $register->register($user);
 
         // check user
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Environment::getService('connection');
+        /** @var Connection $connection */
+        $connection = Environment::getService(Connection::class);
 
-        $user = $connection->fetchAssoc('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
@@ -150,15 +148,15 @@ class RegisterTest extends ControllerDbTestCase
 
     public function testRegisterInvalidCaptcha()
     {
-        $this->expectException(\PSX\Http\Exception\BadRequestException::class);
+        $this->expectException(BadRequestException::class);
 
         $register = new Register(
-            Environment::getService('user_service'),
+            Environment::getService(Service\User::class),
             $this->newCaptchaService(false),
-            Environment::getService('user_token_service'),
+            Environment::getService(Service\User\Token::class),
             $this->newMailer(false),
             $this->newConfig('private_key', true),
-            Environment::getService('table_manager')->getTable(Table\Role::class)
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
         );
 
         $user = new UserRegister();
@@ -169,13 +167,9 @@ class RegisterTest extends ControllerDbTestCase
         $register->register($user);
     }
 
-    /**
-     * @param boolean $success
-     * @return Captcha
-     */
-    private function newCaptchaService($success)
+    private function newCaptchaService(bool $success): Service\User\Captcha
     {
-        $captcha = $this->getMockBuilder(Captcha::class)
+        $captcha = $this->getMockBuilder(Service\User\Captcha::class)
             ->disableOriginalConstructor()
             ->setMethods(['assertCaptcha'])
             ->getMock();
@@ -192,13 +186,10 @@ class RegisterTest extends ControllerDbTestCase
         return $captcha;
     }
 
-    /**
-     * @return \Fusio\Impl\Service\Config
-     */
-    private function newConfig($reCaptchaSecret, $userApproval)
+    private function newConfig(string $reCaptchaSecret, bool $userApproval): Service\Config
     {
-        /** @var Config $config */
-        $config = Environment::getService('config_service');
+        /** @var Service\Config $config */
+        $config = Environment::getService(Service\Config::class);
 
         $update = new ConfigUpdate();
         $update->setValue($reCaptchaSecret);
@@ -211,13 +202,9 @@ class RegisterTest extends ControllerDbTestCase
         return $config;
     }
 
-    /**
-     * @param boolean $send
-     * @return \Fusio\Impl\Service\User\Mailer
-     */
-    private function newMailer($send)
+    private function newMailer(bool $send): Service\User\Mailer
     {
-        $mailer = $this->getMockBuilder(Mailer::class)
+        $mailer = $this->getMockBuilder(Service\User\Mailer::class)
             ->disableOriginalConstructor()
             ->setMethods(['sendActivationMail'])
             ->getMock();
@@ -233,15 +220,11 @@ class RegisterTest extends ControllerDbTestCase
         return $mailer;
     }
 
-    /**
-     * @param string $name
-     * @return integer
-     */
-    private function getConfigId($name)
+    private function getConfigId(string $name): int
     {
         /** @var Connection $connection */
-        $connection = Environment::getService('connection');
-        $configId   = $connection->fetchColumn('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
+        $connection = Environment::getService(Connection::class);
+        $configId   = $connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
 
         return $configId;
     }

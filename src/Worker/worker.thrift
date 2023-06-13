@@ -50,21 +50,15 @@ struct Execute {
   3: Context context
 }
 
-union Request {
-  1: HttpRequest http,
-  2: RpcRequest rpc
+struct Request {
+  1: map<string, string> arguments,
+  2: string payload,
+  3: RequestContext context
 }
 
-struct HttpRequest {
-  1: string method,
-  2: map<string, string> headers,
-  3: map<string, string> uriFragments,
-  4: map<string, string> parameters,
-  5: string body
-}
-
-struct RpcRequest {
-  1: string arguments
+struct RequestContext {
+  1: string name,
+  2: map<string, string> parameters
 }
 
 struct Context {

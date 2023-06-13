@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -28,54 +27,46 @@ use Fusio\Impl\Event\Event\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\EventCreate;
 use Fusio\Model\Backend\EventUpdate;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Event
 {
     private Table\Event $eventTable;
+    private Event\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Event $eventTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Event $eventTable, Event\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventTable      = $eventTable;
+        $this->eventTable = $eventTable;
+        $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(int $categoryId, EventCreate $event, UserContext $context): int
     {
-        $name = $event->getName();
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name not provided');
-        }
-
-        // check whether event exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Event already exists');
-        }
+        $this->validator->assert($event);
 
         // create event
         try {
             $this->eventTable->beginTransaction();
 
-            $record = new Table\Generated\EventRow([
-                Table\Generated\EventTable::COLUMN_CATEGORY_ID => $categoryId,
-                Table\Generated\EventTable::COLUMN_STATUS => Table\Event::STATUS_ACTIVE,
-                Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
-                Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
-                Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
-                Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
-            ]);
-
-            $this->eventTable->create($record);
+            $row = new Table\Generated\EventRow();
+            $row->setCategoryId($categoryId);
+            $row->setStatus(Table\Event::STATUS_ACTIVE);
+            $row->setName($event->getName());
+            $row->setDescription($event->getDescription());
+            $row->setEventSchema($event->getSchema());
+            $row->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
+            $this->eventTable->create($row);
 
             $eventId = $this->eventTable->getLastInsertId();
             $event->setId($eventId);
@@ -92,9 +83,9 @@ class Event
         return $eventId;
     }
 
-    public function update(int $eventId, EventUpdate $event, UserContext $context): int
+    public function update(string $eventId, EventUpdate $event, UserContext $context): int
     {
-        $existing = $this->eventTable->find($eventId);
+        $existing = $this->eventTable->findOneByIdentifier($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
@@ -103,53 +94,32 @@ class Event
             throw new StatusCode\GoneException('Event was deleted');
         }
 
-        // update event
-        $record = new Table\Generated\EventRow([
-            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
-            Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
-            Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
-            Table\Generated\EventTable::COLUMN_METADATA => $event->getMetadata() !== null ? json_encode($event->getMetadata()) : null,
-        ]);
+        $this->validator->assert($event, $existing);
 
-        $this->eventTable->update($record);
+        // update event
+        $existing->setName($event->getName() ?? $existing->getName());
+        $existing->setDescription($event->getDescription() ?? $existing->getDescription());
+        $existing->setEventSchema($event->getSchema() ?? $existing->getEventSchema());
+        $existing->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : $existing->getMetadata());
+        $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
 
-        return $eventId;
+        return $existing->getId();
     }
 
-    public function delete(int $eventId, UserContext $context): int
+    public function delete(string $eventId, UserContext $context): int
     {
-        $existing = $this->eventTable->find($eventId);
+        $existing = $this->eventTable->findOneByIdentifier($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
-        $record = new Table\Generated\EventRow([
-            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
-            Table\Generated\EventTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
-        ]);
-
-        $this->eventTable->update($record);
+        $existing->setStatus(Table\Rate::STATUS_DELETED);
+        $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        return $eventId;
-    }
-
-    public function exists(string $name): int|false
-    {
-        $condition  = new Condition();
-        $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $name);
-
-        $event = $this->eventTable->findOneBy($condition);
-
-        if ($event instanceof Table\Generated\EventRow) {
-            return $event->getId();
-        } else {
-            return false;
-        }
+        return $existing->getId();
     }
 }

@@ -1,63 +1,56 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service\Generator;
 
+use Fusio\Engine\Schema\SchemaName;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Action;
-use Fusio\Impl\Service\Route;
-use Fusio\Impl\Service\Schema;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model;
-use Fusio\Model\Backend\RouteMethod;
-use Fusio\Model\Backend\RouteMethodResponses;
-use Fusio\Model\Backend\RouteVersion;
-use PSX\Api\Resource;
-use PSX\Http\Exception as StatusCode;
+use PSX\Api\OperationInterface;
 
 /**
  * EntityCreator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class EntityCreator
 {
-    private Route $routeService;
-    private Schema $schemaService;
-    private Action $actionService;
+    private Service\Operation $operationService;
+    private Table\Operation $operationTable;
+    private Service\Schema $schemaService;
+    private Table\Schema $schemaTable;
+    private Service\Action $actionService;
+    private Table\Action $actionTable;
 
-    private array $schemas;
-    private array $actions;
-    private array $routes;
-
-    public function __construct(Route $routeService, Schema $schemaService, Action $actionService)
+    public function __construct(Service\Operation $operationService, Table\Operation $operationTable, Service\Schema $schemaService, Table\Schema $schemaTable, Service\Action $actionService, Table\Action $actionTable)
     {
-        $this->routeService = $routeService;
+        $this->operationService = $operationService;
+        $this->operationTable = $operationTable;
         $this->schemaService = $schemaService;
+        $this->schemaTable = $schemaTable;
         $this->actionService = $actionService;
-
-        $this->schemas = [];
-        $this->actions = [];
-        $this->routes = [];
+        $this->actionTable = $actionTable;
     }
 
     /**
@@ -65,29 +58,27 @@ class EntityCreator
      */
     public function createSchemas(int $categoryId, array $schemas, string $prefix, UserContext $context): void
     {
-        foreach ($schemas as $index => $record) {
+        foreach ($schemas as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $source = $record->getSource();
-            if (isset($source['$import']) && is_iterable($source['$import'])) {
-                $import = [];
-                foreach ($source['$import'] as $name => $schema) {
-                    if (str_starts_with($schema, 'schema:///')) {
-                        $import[$name] = 'schema:///' . $prefix . '_' . substr($schema, 10);
+            $import = $source?->get('$import');
+            if (is_iterable($import) || $import instanceof \stdClass) {
+                $result = [];
+                foreach ($import as $name => $schema) {
+                    if (str_starts_with($schema, 'schema://')) {
+                        $result[$name] = 'schema://' . $this->buildName($prefix, ltrim(substr($schema, 9), '/'));
                     } else {
-                        $import[$name] = $schema;
+                        $result[$name] = $schema;
                     }
                 }
-                $source['$import'] = $import;
-                $record->setSource($source);
+                $source->put('$import', $result);
             }
 
-            $id = $this->schemaService->exists($record->getName() ?? '');
-            if (!$id) {
+            $existing = $this->schemaTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
                 $this->schemaService->create($categoryId, $record, $context);
             }
-
-            $this->schemas[$index] = $record->getName();
         }
     }
 
@@ -96,114 +87,79 @@ class EntityCreator
      */
     public function createActions(int $categoryId, array $actions, string $prefix, UserContext $context): void
     {
-        foreach ($actions as $index => $record) {
+        foreach ($actions as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
-            $id = $this->actionService->exists($record->getName() ?? '');
-            if (!$id) {
+            $existing = $this->actionTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
                 $this->actionService->create($categoryId, $record, $context);
             }
-
-            $this->actions[$index] = $record->getName();
         }
     }
 
     /**
-     * @param Model\Backend\RouteCreate[] $routes
+     * @param Model\Backend\OperationCreate[] $operations
      */
-    public function createRoutes(int $categoryId, array $routes, $basePath, $scopes, ?bool $public, UserContext $context): void
+    public function createOperations(int $categoryId, array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
     {
         $scopes = $scopes ?: [];
+        $reservedSchemaNames = [SchemaName::PASSTHRU, SchemaName::MESSAGE];
 
-        foreach ($routes as $index => $record) {
-            $record->setPath($this->buildPath($basePath, $record->getPath() ?? ''));
+        foreach ($operations as $record) {
+            $record->setActive(true);
+            $record->setPublic($public ?? false);
+            $record->setStability(OperationInterface::STABILITY_EXPERIMENTAL);
+            $record->setName($this->buildName($prefix, $record->getName() ?? '', '.', false));
             $record->setScopes(array_unique(array_merge($scopes, $record->getScopes() ?? [])));
 
-            $config = $record->getConfig() ?? [];
-            foreach ($config as $version) {
-                /** @var RouteVersion $version */
-                $version->setVersion(1);
-                $version->setStatus(Resource::STATUS_DEVELOPMENT);
-                $methods = $version->getMethods() ?? [];
-                foreach ($methods as $method) {
-                    /** @var RouteMethod $method */
-                    $method->setActive(true);
-                    $method->setPublic($public === true);
+            $path = '/' . implode('/', array_filter(explode('/', $basePath . '/' . $record->getHttpPath())));
+            $record->setHttpPath($path);
 
-                    $parameters = $method->getParameters();
-                    if ($parameters !== null) {
-                        $method->setParameters($this->resolveSchema((int) $parameters));
-                    }
+            $incoming = $record->getIncoming();
+            if (!empty($incoming) && !in_array($incoming, $reservedSchemaNames)) {
+                $record->setIncoming($this->buildName($prefix, $incoming));
+            }
 
-                    $request = $method->getRequest();
-                    if ($request !== null) {
-                        $method->setRequest($this->resolveSchema((int) $request));
-                    }
+            $outgoing = $record->getOutgoing();
+            if (!in_array($outgoing, $reservedSchemaNames)) {
+                $record->setOutgoing($this->buildName($prefix, $outgoing));
+            }
 
-                    $responses = $method->getResponses();
-                    if ($responses instanceof RouteMethodResponses) {
-                        foreach ($responses as $statusCode => $response) {
-                            if ($response !== null) {
-                                $responses[$statusCode] = $this->resolveSchema((int) $response);
-                            }
-                        }
-                    }
-
-                    $action = $method->getAction();
-                    if ($action !== null) {
-                        $method->setAction($this->resolveAction((int) $action));
+            $throws = $record->getThrows();
+            if (!empty($throws)) {
+                $result = [];
+                foreach ($throws as $code => $throw) {
+                    if (!in_array($throw, $reservedSchemaNames)) {
+                        $result[$code] = $this->buildName($prefix, $throw);
+                    } else {
+                        $result[$code] = $throw;
                     }
                 }
+                $record->setThrows(Model\Backend\OperationThrows::fromArray($result));
             }
 
-            $id = $this->routeService->exists((string) $record->getPath());
-            if (!$id) {
-                $id = $this->routeService->create($categoryId, $record, $context);
-            }
+            $record->setAction($this->buildName($prefix, $record->getAction()));
 
-            $this->routes[$index] = $id;
+            $existing = $this->operationTable->findOneByName($record->getName() ?? '');
+            if ($existing === null) {
+                $this->operationService->create($categoryId, $record, $context);
+            }
         }
     }
 
-    private function buildPath(string $basePath, string $path): string
+    private function buildName(string $prefix, string $name, string $separator = '_', bool $pascalCase = true): string
     {
-        $parts = array_merge(explode('/', $basePath), explode('/', $path));
+        $parts = explode('_', $prefix);
         $parts = array_filter($parts, function ($value) {
             return $value !== '';
         });
-        return '/' . implode('/', $parts);
-    }
-
-    private function buildName(string $prefix, string $name): string
-    {
-        $parts = explode('_', $prefix . '_' . $name);
-        $parts = array_filter($parts, function ($value) {
-            return $value !== '';
-        });
-        $parts = array_map('ucfirst', $parts);
-        $parts = implode('_', $parts);
+        $parts[] = $name;
+        if ($pascalCase) {
+            $parts = array_map('ucfirst', $parts);
+        } else {
+            $parts = array_map('lcfirst', $parts);
+        }
+        $parts = implode($separator, $parts);
         return $parts;
-    }
-
-    private function resolveSchema(int $schema): string
-    {
-        if ($schema === -1) {
-            return 'Passthru';
-        }
-
-        if (isset($this->schemas[$schema])) {
-            return $this->schemas[$schema];
-        } else {
-            throw new StatusCode\BadRequestException('Could not resolve schema ' . $schema);
-        }
-    }
-
-    private function resolveAction(int $action): string
-    {
-        if (isset($this->actions[$action])) {
-            return $this->actions[$action];
-        } else {
-            throw new StatusCode\BadRequestException('Could not resolve action ' . $action);
-        }
     }
 }

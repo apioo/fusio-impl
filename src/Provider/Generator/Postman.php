@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Provider\Generator;
@@ -28,14 +27,19 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Engine\Schema\SchemaName;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\OperationParameters;
+use Fusio\Model\Backend\OperationSchema;
 use PSX\Api\Util\Inflection;
 
 /**
  * Postman
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Postman implements ProviderInterface
@@ -45,12 +49,9 @@ class Postman implements ProviderInterface
         return 'Import-Postman';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
+    public function setup(SetupInterface $setup, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
-        if (!$import instanceof \stdClass) {
-            return;
-        }
 
         $env = [];
         if (isset($import->variable) && is_array($import->variable)) {
@@ -61,7 +62,14 @@ class Postman implements ProviderInterface
         $this->walk($import, $setup, $resources);
 
         foreach ($resources as $path => $methods) {
-            $setup->addRoute(1, $path, SchemaApiController::class, [], [$this->buildConfig($methods, $setup, $env)]);
+            foreach ($methods as $methodName => $resource) {
+                $methodName = strtoupper($methodName);
+                if (!in_array($methodName, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
+                    continue;
+                }
+
+                $this->buildOperation($methodName, $path, $resource, $setup, $env);
+            }
         }
     }
 
@@ -113,25 +121,7 @@ class Postman implements ProviderInterface
         return $data;
     }
 
-    private function buildConfig(array $methods, SetupInterface $setup, array $env): array
-    {
-        $result = [];
-        foreach ($methods as $methodName => $item) {
-            $methodName = strtoupper($methodName);
-            if (!in_array($methodName, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
-                continue;
-            }
-
-            $result[$methodName] = $this->buildMethod($item, $setup, $env, $methodName);
-        }
-
-        return [
-            'version' => 1,
-            'methods' => $result,
-        ];
-    }
-
-    private function buildMethod(\stdClass $item, SetupInterface $setup, array $env, string $methodName): array
+    private function buildOperation(string $method, string $path, \stdClass $item, SetupInterface $setup, array $env): void
     {
         $name = $item->name ?? null;
         if (empty($name)) {
@@ -142,60 +132,37 @@ class Postman implements ProviderInterface
             $name = substr($name, 0, 58);
         }
 
-        $host = $item->request->url->host ?? null;
-        $path = $item->request->url->path ?? null;
 
-        if (is_array($host)) {
-            $host = implode('.', $host);
-        }
+        $name = $this->buildName([$name, $this->getOperationMethodName($method)]);
 
-        if (!empty($host) && is_array($path)) {
-            $url = rtrim($host, '/') . '/' . implode('/', $path);
-        } else {
-            throw new \RuntimeException('No url provided for ' . $item->name);
-        }
+        $action = new ActionCreate();
+        $action->setName($name);
+        $action->setClass(HttpProcessor::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'url' => $this->getEndpointUrl($item, $env),
+        ]));
+        $setup->addAction($action);
 
-        foreach ($env as $key => $value) {
-            if ($key === 'baseUrl') {
-                $url = str_replace('{{' . $key . '}}', rtrim($value, '/'), $url);
-            } else {
-                $url = str_replace('{{' . $key . '}}', $value, $url);
-            }
-        }
+        $operation = new OperationCreate();
+        $operation->setName($name);
+        $operation->setHttpMethod($method);
+        $operation->setHttpPath($path);
+        $operation->setHttpCode(200);
+        $operation->setPublic(!isset($item->auth));
 
         $query = $item->request->url->query ?? null;
-        $parameters = null;
         if (!empty($query) && is_array($query)) {
-            $schemaName = $this->buildName([$name, 'Query']);
-            $parameters = $setup->addSchema($schemaName, $this->getQuerySchema($query, $schemaName));
-        }
-
-        $name = $this->buildName([$name, $methodName]);
-
-        $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
-            'url' => $url,
-        ]);
-
-        $config = [
-            'active' => true,
-            'public' => !isset($item->auth)
-        ];
-
-        if (!empty($parameters)) {
-            $config['parameters'] = $parameters;
+            $operation->setParameters($this->getParameters($query));
         }
 
         if (isset($item->body)) {
-            $config['request'] = -1;
+            $operation->setIncoming(SchemaName::PASSTHRU);
         }
 
-        if (isset($item->response) && isset($item->response->code)) {
-            $config['responses'][$item->response->code] = -1;
-        }
-
-        $config['action'] = $action;
-
-        return $config;
+        $operation->setOutgoing(SchemaName::PASSTHRU);
+        $operation->setAction($name);
+        $setup->addOperation($operation);
     }
 
     private function buildName(array $parts): string
@@ -217,33 +184,62 @@ class Postman implements ProviderInterface
         return '/' . Inflection::convertPlaceholderToColon(implode('/', $path));
     }
 
-    private function getQuerySchema(array $query, string $schemaName): array
+    private function getParameters(array $query): ?OperationParameters
     {
-        $properties = [];
+        $result = new OperationParameters();
         foreach ($query as $parameter) {
             if (!isset($parameter->key)) {
                 continue;
             }
 
-            $type = [
-                'type' => 'string'
-            ];
+            $schema = new OperationSchema();
+            $schema->setType('string');
 
             if (isset($parameter->description)) {
-                $type['description'] = $parameter->description;
+                $schema->setDescription($parameter->description);
             }
 
-            $properties[$parameter->key] = $type;
+            $result->put($parameter->key, $schema);
         }
 
-        return [
-            'definitions' => [
-                $schemaName => [
-                    'type' => 'object',
-                    'properties' => $properties
-                ]
-            ],
-            '$ref' => $schemaName,
-        ];
+        return $result;
+    }
+
+    private function getEndpointUrl(\stdClass $item, array $env): string
+    {
+        $host = $item->request->url->host ?? null;
+        $path = $item->request->url->path ?? null;
+
+        if (is_array($host)) {
+            $host = implode('.', $host);
+        }
+
+        if (!empty($host) && is_array($path)) {
+            $url = rtrim($host, '/') . '/' . implode('/', $path);
+        } else {
+            throw new \RuntimeException('No url provided for ' . $item->name);
+        }
+
+        foreach ($env as $key => $value) {
+            if ($key === 'baseUrl') {
+                $url = str_replace('{{' . $key . '}}', rtrim($value, '/'), $url);
+            } else {
+                $url = str_replace('{{' . $key . '}}', $value, $url);
+            }
+        }
+
+        return $url;
+    }
+
+    private function getOperationMethodName(string $method): string
+    {
+        return match ($method) {
+            'GET' => 'get',
+            'POST' => 'create',
+            'PUT' => 'update',
+            'PATCH' => 'patch',
+            'DELETE' => 'delete',
+            default => 'execute',
+        };
     }
 }

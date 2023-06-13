@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Service;
@@ -24,7 +23,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Model\Backend\SdkGenerate;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\GeneratorFactoryInterface;
-use PSX\Framework\Config\Config as FrameworkConfig;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -34,15 +33,15 @@ use Symfony\Component\Console\Output\NullOutput;
  * Sdk
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Sdk
 {
     private Application $console;
-    private FrameworkConfig $config;
+    private ConfigInterface $config;
 
-    public function __construct(Application $console, FrameworkConfig $config)
+    public function __construct(Application $console, ConfigInterface $config)
     {
         $this->console = $console;
         $this->config = $config;
@@ -62,14 +61,14 @@ class Sdk
             mkdir($sdkDir);
         }
 
-        $filter = 'external';
+        $filter = 'default';
         $file = 'sdk-' . $format . '-' . $filter . '.zip';
 
         $parameters = [
-            'command'  => 'api:generate',
-            'dir'      => $sdkDir,
-            '--format' => $format,
-            '--filter' => $filter,
+            'command'     => 'generate:sdk',
+            'format'      => $format,
+            '--filter'    => $filter,
+            '--output'    => $sdkDir,
         ];
 
         if (!empty($config)) {
@@ -81,7 +80,7 @@ class Sdk
         $this->console->run(new ArrayInput($parameters), new NullOutput());
         $this->console->setAutoExit($autoExit);
 
-        return $this->config['psx_url'] . '/sdk/' . $file;
+        return $this->config->get('psx_url') . '/sdk/' . $file;
     }
 
     public function getTypes(): array
@@ -94,7 +93,7 @@ class Sdk
             $fileName = $this->getFileName($type);
             $sdkZip = $sdkDir . '/' . $fileName;
             if (is_file($sdkZip)) {
-                $result[$type] = $this->config['psx_url'] . '/sdk/' . $fileName;
+                $result[$type] = $this->config->get('psx_url') . '/sdk/' . $fileName;
             } else {
                 $result[$type] = null;
             }
@@ -117,11 +116,8 @@ class Sdk
             case GeneratorFactoryInterface::MARKUP_MARKDOWN:
                 return 'output-' . $type . '-external.md';
 
-            case GeneratorFactoryInterface::SPEC_RAML:
-                return 'output-' . $type . '-external.raml';
-
             case GeneratorFactoryInterface::SPEC_OPENAPI:
-            case GeneratorFactoryInterface::SPEC_TYPESCHEMA:
+            case GeneratorFactoryInterface::SPEC_TYPEAPI:
                 return 'output-' . $type . '-external.json';
 
             default:

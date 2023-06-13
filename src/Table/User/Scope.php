@@ -1,22 +1,21 @@
 <?php
 /*
- * Fusio
- * A web-application to create dynamically RESTful APIs
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * For the current version and information visit <https://www.fusio-project.org/>
  *
- * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2015-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Fusio\Impl\Table\User;
@@ -27,7 +26,7 @@ use Fusio\Impl\Table\Generated;
  * Scope
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
- * @license http://www.gnu.org/licenses/agpl-3.0
+ * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 class Scope extends Generated\UserScopeTable
@@ -37,9 +36,12 @@ class Scope extends Generated\UserScopeTable
         $sql = 'DELETE FROM fusio_user_scope
                       WHERE user_id = :id';
 
-        $this->connection->executeQuery($sql, array('id' => $userId));
+        $this->connection->executeStatement($sql, ['id' => $userId]);
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     public function getValidScopes(int $userId, array $scopes): array
     {
         $result = $this->getAvailableScopes($userId, true);
@@ -54,6 +56,9 @@ class Scope extends Generated\UserScopeTable
         return $data;
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     public function getAvailableScopes(int $userId, bool $includePlanScopes = false): array
     {
         $assignedScopes = $this->getScopesForUser($userId);
@@ -73,8 +78,9 @@ class Scope extends Generated\UserScopeTable
                                scope.name,
                                scope.description
                           FROM fusio_scope scope
-                         WHERE scope.name LIKE :name';
-                $subScopes = $this->connection->fetchAll($sql, ['name' => $assignedScope['name'] . '.%']);
+                         WHERE scope.name LIKE :name
+                      ORDER BY scope.name ASC';
+                $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;
                 }
@@ -94,9 +100,12 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = user_scope.scope_id
                      WHERE user_scope.user_id = :user_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['user_id' => $userId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['user_id' => $userId]) ?: [];
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function getScopesForPlan(int $userId): array
     {
         $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
@@ -112,6 +121,6 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = plan_scope.scope_id
                      WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAll($sql, ['plan_id' => $planId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
     }
 }
