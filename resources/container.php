@@ -32,6 +32,7 @@ use PSX\Framework\Loader\ContextFactoryInterface;
 use PSX\Framework\Loader\ControllerResolverInterface;
 use PSX\Framework\Loader\RoutingParser\CachedParser;
 use PSX\Framework\Loader\RoutingParserInterface;
+use PSX\Framework\Migration\DependencyFactoryFactory;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Schema;
 use Symfony\Component\Cache\Psr16Cache;
@@ -172,6 +173,9 @@ return static function (ContainerConfigurator $container) {
     $services->set(Framework\Api\Parser\Operation::class);
     $services->get(Api\ApiManager::class)
         ->call('register', ['operation', service(Framework\Api\Parser\Operation::class)]);
+
+    $services->get(DependencyFactoryFactory::class)
+        ->call('addPath', ['Fusio\\Impl\\Migrations', __DIR__ . '/../src']);
 
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();
