@@ -176,9 +176,4 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();
 
-    $services->load('PSX\\Framework\\Controller\\OAuth2\\', __DIR__ . '/../vendor/psx/framework/src/Controller/OAuth2')
-        ->public();
-
-    $services->load('PSX\\Framework\\Controller\\Tool\\', __DIR__ . '/../vendor/psx/framework/src/Controller/Tool')
-        ->public();
 };
