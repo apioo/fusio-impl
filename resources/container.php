@@ -1,5 +1,6 @@
 <?php
 
+use Fusio\Cli;
 use Fusio\Engine\Action;
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\Adapter\ServiceBuilder;
@@ -14,6 +15,8 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
+use Fusio\Impl\Cli\Config;
+use Fusio\Impl\Cli\Transport;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
@@ -138,6 +141,15 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Framework\Loader\ContextFactory::class);
     $services->alias(ContextFactoryInterface::class, Framework\Loader\ContextFactory::class);
+
+    // cli
+    $container->import(Cli\Adapter::getContainerFile());
+
+    $services->set(Config::class);
+    $services->alias(Cli\Config\ConfigInterface::class, Config::class);
+
+    $services->set(Transport::class);
+    $services->alias(Cli\Transport\TransportInterface::class, Transport::class);
 
     // psx
     $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);

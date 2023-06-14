@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command;
+namespace Fusio\Impl\Cli;
 
 use Composer\InstalledVersions;
 use Fusio\Cli\Transport\TransportInterface;
