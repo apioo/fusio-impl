@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Service\Operation;
 
 use Fusio\Impl\Table;
-use PSX\Api\Exception\InvalidApiException;
 use PSX\Api\Operation;
 use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\Specification;
@@ -31,7 +30,6 @@ use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\ReferenceType;
-use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 
 /**
@@ -65,6 +63,7 @@ class SpecificationBuilder
 
         $specification = new Specification();
         $scopes = $this->scopeTable->getScopesForOperation($operationId);
+        $tags = $this->getTagsFromScopes($scopes);
 
         $return = $this->getReturn($row, $specification->getDefinitions());
 
@@ -76,7 +75,7 @@ class SpecificationBuilder
             $operation->setDescription($row->getDescription());
         }
 
-        $operation->setTags($scopes);
+        $operation->setTags($tags);
 
         if (!$row->getPublic()) {
             $operation->setSecurity($scopes);
@@ -197,5 +196,25 @@ class SpecificationBuilder
         }
 
         return substr($source, $pos + 3);
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getTagsFromScopes(array $scopes): array
+    {
+        $tags = [];
+        foreach ($scopes as $scope) {
+            $tagName = $scope;
+            if (str_contains($tagName, '.')) {
+                $parts = explode('.', $scope);
+                $tagName = $parts[array_key_last($parts)] ?? null;
+            }
+            if (!empty($tagName)) {
+                $tags[] = $tagName;
+            }
+        }
+
+        return $tags;
     }
 }

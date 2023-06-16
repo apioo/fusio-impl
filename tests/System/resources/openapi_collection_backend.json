@@ -26,7 +26,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.user"
+        "user"
       ]
     },
     "backend.user.update": {
@@ -60,7 +60,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.user"
+        "user"
       ]
     },
     "backend.user.get": {
@@ -88,7 +88,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.user"
+        "user"
       ]
     },
     "backend.user.create": {
@@ -116,7 +116,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.user"
+        "user"
       ]
     },
     "backend.user.getAll": {
@@ -137,7 +137,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.user"
+        "user"
       ]
     },
     "backend.trash.restore": {
@@ -171,7 +171,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.trash"
+        "trash"
       ]
     },
     "backend.trash.getAllByType": {
@@ -199,7 +199,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.trash"
+        "trash"
       ]
     },
     "backend.trash.getTypes": {
@@ -220,7 +220,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.trash"
+        "trash"
       ]
     },
     "backend.transaction.get": {
@@ -248,7 +248,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.transaction"
+        "transaction"
       ]
     },
     "backend.transaction.getAll": {
@@ -269,7 +269,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.transaction"
+        "transaction"
       ]
     },
     "backend.statistic.getUsedPoints": {
@@ -290,7 +290,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getTimePerRoute": {
@@ -311,7 +311,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getTimeAverage": {
@@ -332,7 +332,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getMostUsedRoutes": {
@@ -353,7 +353,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getMostUsedApps": {
@@ -374,7 +374,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getIssuedTokens": {
@@ -395,7 +395,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getIncomingTransactions": {
@@ -416,7 +416,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getIncomingRequests": {
@@ -437,7 +437,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getErrorsPerRoute": {
@@ -458,7 +458,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.statistic.getCountRequests": {
@@ -479,7 +479,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.statistic"
+        "statistic"
       ]
     },
     "backend.sdk.generate": {
@@ -507,7 +507,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.sdk"
+        "sdk"
       ]
     },
     "backend.sdk.getAll": {
@@ -528,7 +528,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.sdk"
+        "sdk"
       ]
     },
     "backend.scope.delete": {
@@ -556,7 +556,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.scope.update": {
@@ -590,7 +590,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.scope.get": {
@@ -618,7 +618,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.scope.getCategories": {
@@ -639,7 +639,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.scope.create": {
@@ -667,7 +667,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.scope.getAll": {
@@ -688,7 +688,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.scope"
+        "scope"
       ]
     },
     "backend.schema.delete": {
@@ -716,7 +716,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.update": {
@@ -750,7 +750,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.get": {
@@ -778,7 +778,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.updateForm": {
@@ -812,7 +812,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.getPreview": {
@@ -840,7 +840,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.create": {
@@ -868,7 +868,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.schema.getAll": {
@@ -889,7 +889,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.schema"
+        "schema"
       ]
     },
     "backend.operation.delete": {
@@ -917,7 +917,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.operation"
+        "operation"
       ]
     },
     "backend.operation.update": {
@@ -951,7 +951,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.operation"
+        "operation"
       ]
     },
     "backend.operation.get": {
@@ -979,7 +979,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.operation"
+        "operation"
       ]
     },
     "backend.operation.create": {
@@ -1007,7 +1007,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.operation"
+        "operation"
       ]
     },
     "backend.operation.getAll": {
@@ -1028,7 +1028,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.operation"
+        "operation"
       ]
     },
     "backend.role.delete": {
@@ -1056,7 +1056,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.role"
+        "role"
       ]
     },
     "backend.role.update": {
@@ -1090,7 +1090,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.role"
+        "role"
       ]
     },
     "backend.role.get": {
@@ -1118,7 +1118,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.role"
+        "role"
       ]
     },
     "backend.role.create": {
@@ -1146,7 +1146,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.role"
+        "role"
       ]
     },
     "backend.role.getAll": {
@@ -1167,7 +1167,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.role"
+        "role"
       ]
     },
     "backend.rate.delete": {
@@ -1195,7 +1195,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.rate"
+        "rate"
       ]
     },
     "backend.rate.update": {
@@ -1229,7 +1229,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.rate"
+        "rate"
       ]
     },
     "backend.rate.get": {
@@ -1257,7 +1257,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.rate"
+        "rate"
       ]
     },
     "backend.rate.create": {
@@ -1285,7 +1285,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.rate"
+        "rate"
       ]
     },
     "backend.rate.getAll": {
@@ -1306,7 +1306,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.rate"
+        "rate"
       ]
     },
     "backend.plan.delete": {
@@ -1334,7 +1334,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.plan"
+        "plan"
       ]
     },
     "backend.plan.update": {
@@ -1368,7 +1368,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.plan"
+        "plan"
       ]
     },
     "backend.plan.get": {
@@ -1396,7 +1396,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.plan"
+        "plan"
       ]
     },
     "backend.plan.create": {
@@ -1424,7 +1424,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.plan"
+        "plan"
       ]
     },
     "backend.plan.getAll": {
@@ -1445,7 +1445,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.plan"
+        "plan"
       ]
     },
     "backend.page.delete": {
@@ -1473,7 +1473,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.page"
+        "page"
       ]
     },
     "backend.page.update": {
@@ -1507,7 +1507,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.page"
+        "page"
       ]
     },
     "backend.page.get": {
@@ -1535,7 +1535,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.page"
+        "page"
       ]
     },
     "backend.page.create": {
@@ -1563,7 +1563,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.page"
+        "page"
       ]
     },
     "backend.page.getAll": {
@@ -1584,7 +1584,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.page"
+        "page"
       ]
     },
     "backend.marketplace.remove": {
@@ -1612,7 +1612,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.marketplace"
+        "marketplace"
       ]
     },
     "backend.marketplace.update": {
@@ -1640,7 +1640,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.marketplace"
+        "marketplace"
       ]
     },
     "backend.marketplace.get": {
@@ -1668,7 +1668,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.marketplace"
+        "marketplace"
       ]
     },
     "backend.marketplace.install": {
@@ -1696,7 +1696,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.marketplace"
+        "marketplace"
       ]
     },
     "backend.marketplace.getAll": {
@@ -1717,7 +1717,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.marketplace"
+        "marketplace"
       ]
     },
     "backend.log.get": {
@@ -1745,7 +1745,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.log"
+        "log"
       ]
     },
     "backend.log.getAll": {
@@ -1766,7 +1766,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.log"
+        "log"
       ]
     },
     "backend.log.getError": {
@@ -1794,7 +1794,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.log"
+        "log"
       ]
     },
     "backend.log.getAllErrors": {
@@ -1815,7 +1815,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.log"
+        "log"
       ]
     },
     "backend.generator.getChangelog": {
@@ -1849,7 +1849,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.generator"
+        "generator"
       ]
     },
     "backend.generator.executeProvider": {
@@ -1883,7 +1883,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.generator"
+        "generator"
       ]
     },
     "backend.generator.getProviderForm": {
@@ -1911,7 +1911,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.generator"
+        "generator"
       ]
     },
     "backend.generator.getProviders": {
@@ -1932,7 +1932,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.generator"
+        "generator"
       ]
     },
     "backend.event.delete": {
@@ -1960,7 +1960,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.update": {
@@ -1994,7 +1994,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.get": {
@@ -2022,7 +2022,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.create": {
@@ -2050,7 +2050,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.getAll": {
@@ -2071,7 +2071,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.deleteSubscription": {
@@ -2099,7 +2099,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.updateSubscription": {
@@ -2133,7 +2133,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.getSubscription": {
@@ -2161,7 +2161,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.createSubscription": {
@@ -2189,7 +2189,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.event.getAllSubscriptions": {
@@ -2210,7 +2210,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.event"
+        "event"
       ]
     },
     "backend.dashboard.getAll": {
@@ -2231,7 +2231,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.dashboard"
+        "dashboard"
       ]
     },
     "backend.cronjob.delete": {
@@ -2259,7 +2259,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.cronjob"
+        "cronjob"
       ]
     },
     "backend.cronjob.update": {
@@ -2293,7 +2293,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.cronjob"
+        "cronjob"
       ]
     },
     "backend.cronjob.get": {
@@ -2321,7 +2321,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.cronjob"
+        "cronjob"
       ]
     },
     "backend.cronjob.create": {
@@ -2349,7 +2349,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.cronjob"
+        "cronjob"
       ]
     },
     "backend.cronjob.getAll": {
@@ -2370,7 +2370,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.cronjob"
+        "cronjob"
       ]
     },
     "backend.connection.getIntrospectionForEntity": {
@@ -2404,7 +2404,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.getIntrospection": {
@@ -2432,7 +2432,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.getRedirect": {
@@ -2460,7 +2460,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.delete": {
@@ -2488,7 +2488,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.update": {
@@ -2522,7 +2522,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.get": {
@@ -2550,7 +2550,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.getForm": {
@@ -2571,7 +2571,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.getClasses": {
@@ -2592,7 +2592,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.create": {
@@ -2620,7 +2620,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.connection.getAll": {
@@ -2641,7 +2641,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.connection"
+        "connection"
       ]
     },
     "backend.config.update": {
@@ -2675,7 +2675,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.config"
+        "config"
       ]
     },
     "backend.config.get": {
@@ -2703,7 +2703,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.config"
+        "config"
       ]
     },
     "backend.config.getAll": {
@@ -2724,7 +2724,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.config"
+        "config"
       ]
     },
     "backend.category.delete": {
@@ -2752,7 +2752,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.category"
+        "category"
       ]
     },
     "backend.category.update": {
@@ -2786,7 +2786,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.category"
+        "category"
       ]
     },
     "backend.category.get": {
@@ -2814,7 +2814,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.category"
+        "category"
       ]
     },
     "backend.category.insert": {
@@ -2842,7 +2842,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.category"
+        "category"
       ]
     },
     "backend.category.getAll": {
@@ -2863,7 +2863,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.category"
+        "category"
       ]
     },
     "backend.audit.get": {
@@ -2891,7 +2891,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.audit"
+        "audit"
       ]
     },
     "backend.audit.getAll": {
@@ -2912,7 +2912,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.audit"
+        "audit"
       ]
     },
     "backend.app.deleteToken": {
@@ -2946,7 +2946,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.delete": {
@@ -2974,7 +2974,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.update": {
@@ -3008,7 +3008,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.get": {
@@ -3036,7 +3036,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.create": {
@@ -3064,7 +3064,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.getAll": {
@@ -3085,7 +3085,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.getToken": {
@@ -3113,7 +3113,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.app.getAllTokens": {
@@ -3134,7 +3134,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.app"
+        "app"
       ]
     },
     "backend.action.delete": {
@@ -3162,7 +3162,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.update": {
@@ -3196,7 +3196,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.get": {
@@ -3224,7 +3224,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.execute": {
@@ -3258,7 +3258,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.getForm": {
@@ -3279,7 +3279,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.getClasses": {
@@ -3300,7 +3300,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.create": {
@@ -3328,7 +3328,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.action.getAll": {
@@ -3349,7 +3349,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.action"
+        "action"
       ]
     },
     "backend.account.changePassword": {
@@ -3377,7 +3377,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.account"
+        "account"
       ]
     },
     "backend.account.update": {
@@ -3405,7 +3405,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.account"
+        "account"
       ]
     },
     "backend.account.get": {
@@ -3426,7 +3426,7 @@
       ],
       "authorization": true,
       "tags": [
-        "backend.account"
+        "account"
       ]
     }
   },
