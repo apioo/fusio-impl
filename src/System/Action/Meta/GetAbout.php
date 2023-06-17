@@ -129,12 +129,12 @@ class GetAbout implements ActionInterface
 
         $links[] = [
             'rel' => 'openapi',
-            'href' => $baseUrl . 'system/export/openapi/*/*',
+            'href' => $baseUrl . 'system/generator/spec-openapi',
         ];
 
         $links[] = [
-            'rel' => 'documentation',
-            'href' => $baseUrl . 'system/doc',
+            'rel' => 'typeapi',
+            'href' => $baseUrl . 'system/generator/spec-typeapi',
         ];
 
         $links[] = [

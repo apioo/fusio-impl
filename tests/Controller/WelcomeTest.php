@@ -74,11 +74,11 @@ class WelcomeTest extends ControllerDbTestCase
         },
         {
             "rel": "openapi",
-            "href": "http:\/\/127.0.0.1\/system\/export\/openapi\/*\/*"
+            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi"
         },
         {
-            "rel": "documentation",
-            "href": "http:\/\/127.0.0.1\/system\/doc"
+            "rel": "typeapi",
+            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-typeapi"
         },
         {
             "rel": "route",

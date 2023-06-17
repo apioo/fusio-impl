@@ -132,6 +132,8 @@ return static function (ContainerConfigurator $container) {
         ->public();
     $services->load('Fusio\\Impl\\Provider\\Generator\\', __DIR__ . '/../src/Provider/Generator')
         ->public();
+    $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
+        ->public();
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);
@@ -178,6 +180,10 @@ return static function (ContainerConfigurator $container) {
     $services->set(Framework\Api\Scanner\FilterFactory::class);
     $services->alias(Api\Scanner\FilterFactoryInterface::class, Framework\Api\Scanner\FilterFactory::class);
 
+    $services->set(Framework\Api\Configurator\OpenAPI::class)
+        ->arg('$url', param('psx_url'))
+        ->arg('$dispatch', param('psx_dispatch'));
+
     $services->set(Framework\Schema\Parser\Schema::class);
     $services->get(Schema\SchemaManager::class)
         ->call('register', ['schema', service(Framework\Schema\Parser\Schema::class)]);
@@ -188,8 +194,5 @@ return static function (ContainerConfigurator $container) {
 
     $services->get(DependencyFactoryFactory::class)
         ->call('addPath', ['Fusio\\Impl\\Migrations', __DIR__ . '/../src']);
-
-    $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
-        ->public();
 
 };
