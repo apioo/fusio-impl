@@ -353,7 +353,26 @@
           "$ref": "TransactionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -492,7 +511,26 @@
           "$ref": "EventSubscriptionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -513,7 +551,26 @@
           "$ref": "ScopeCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -562,7 +619,26 @@
           "$ref": "PlanCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -679,7 +755,26 @@
           "$ref": "PageCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -728,7 +823,26 @@
           "$ref": "LogCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -777,7 +891,26 @@
           "$ref": "GrantCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -798,7 +931,26 @@
           "$ref": "EventCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -937,7 +1089,26 @@
           "$ref": "AppCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,

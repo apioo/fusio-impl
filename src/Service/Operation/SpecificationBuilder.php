@@ -168,18 +168,12 @@ class SpecificationBuilder
 
     private function buildQueryParametersFromJson(Operation\Arguments $arguments, \stdClass $parameters): void
     {
-        foreach ($parameters as $name => $parameter) {
-            $in = $parameter->in ?? ArgumentInterface::IN_QUERY;
-            if (empty($in) || !is_string($in)) {
-                continue;
-            }
-
-            $schema = $parameter->schema ?? null;
+        foreach ($parameters as $name => $schema) {
             if (!$schema instanceof \stdClass) {
                 continue;
             }
 
-            $arguments->add($name, new Operation\Argument($in, $this->schemaParser->parseType($schema)));
+            $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_QUERY, $this->schemaParser->parseType($schema)));
         }
     }
 

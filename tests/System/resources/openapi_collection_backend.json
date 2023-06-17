@@ -129,7 +129,26 @@
           "$ref": "UserCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -187,6 +206,24 @@
       "arguments": {
         "type": {
           "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
           "schema": {
             "type": "string"
           }
@@ -261,7 +298,70 @@
           "$ref": "TransactionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "planId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "status": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "provider": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -282,7 +382,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -303,7 +490,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -324,7 +598,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -345,7 +706,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -366,7 +814,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -387,7 +922,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -408,7 +1030,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -429,7 +1138,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -450,7 +1246,94 @@
           "$ref": "StatisticChart"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -471,7 +1354,94 @@
           "$ref": "StatisticCount"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -680,7 +1650,32 @@
           "$ref": "ScopeCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "categoryId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -881,7 +1876,32 @@
           "$ref": "SchemaCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "categoryId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1020,7 +2040,32 @@
           "$ref": "OperationCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "categoryId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1159,7 +2204,26 @@
           "$ref": "RoleCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1298,7 +2362,26 @@
           "$ref": "RateCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1437,7 +2520,26 @@
           "$ref": "PlanCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1576,7 +2678,26 @@
           "$ref": "PageCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1758,7 +2879,94 @@
           "$ref": "LogCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "routeId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -1807,7 +3015,26 @@
           "$ref": "LogErrorCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2063,7 +3290,32 @@
           "$ref": "EventCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "categoryId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2202,7 +3454,26 @@
           "$ref": "EventSubscriptionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2362,7 +3633,26 @@
           "$ref": "CronjobCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2563,7 +3853,14 @@
           "$ref": "FormContainer"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "class": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2633,7 +3930,26 @@
           "$ref": "ConnectionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2716,7 +4032,26 @@
           "$ref": "ConfigCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2855,7 +4190,26 @@
           "$ref": "CategoryCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -2904,7 +4258,70 @@
           "$ref": "AuditCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "event": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -3077,7 +4494,26 @@
           "$ref": "AppCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -3126,7 +4562,70 @@
           "$ref": "AppTokenCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "status": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "scope": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -3271,7 +4770,14 @@
           "$ref": "FormContainer"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "class": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
@@ -3341,7 +4847,26 @@
           "$ref": "ActionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "categoryId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
