@@ -22,7 +22,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Model\Backend\SdkGenerate;
 use PSX\Api\GeneratorFactory;
-use PSX\Api\GeneratorFactoryInterface;
+use PSX\Api\Repository\LocalRepository;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;
@@ -39,20 +39,24 @@ use Symfony\Component\Console\Output\NullOutput;
 class Sdk
 {
     private Application $console;
+    private GeneratorFactory $factory;
     private ConfigInterface $config;
 
-    public function __construct(Application $console, ConfigInterface $config)
+    public function __construct(Application $console, GeneratorFactory $factory, ConfigInterface $config)
     {
         $this->console = $console;
+        $this->factory = $factory;
         $this->config = $config;
     }
 
     public function generate(SdkGenerate $record): string
     {
+        $registry = $this->factory->factory();
+
         $format = $record->getFormat();
         $config = $record->getConfig();
 
-        if (!in_array($format, GeneratorFactory::getPossibleTypes())) {
+        if (!in_array($format, $registry->getPossibleTypes())) {
             throw new StatusCode\BadRequestException('Invalid format provided');
         }
 
@@ -65,10 +69,10 @@ class Sdk
         $file = 'sdk-' . $format . '-' . $filter . '.zip';
 
         $parameters = [
-            'command'     => 'generate:sdk',
-            'format'      => $format,
-            '--filter'    => $filter,
-            '--output'    => $sdkDir,
+            'command'  => 'generate:sdk',
+            'type'     => $format,
+            '--filter' => $filter,
+            '--output' => $sdkDir,
         ];
 
         if (!empty($config)) {
@@ -85,9 +89,11 @@ class Sdk
 
     public function getTypes(): array
     {
+        $registry = $this->factory->factory();
+
         $sdkDir = $this->getSdkDir();
         $result = [];
-        $types  = GeneratorFactory::getPossibleTypes();
+        $types  = $registry->getPossibleTypes();
 
         foreach ($types as $type) {
             $fileName = $this->getFileName($type);
@@ -110,14 +116,15 @@ class Sdk
     private function getFileName(string $type): string
     {
         switch ($type) {
-            case GeneratorFactoryInterface::MARKUP_HTML:
+            case LocalRepository::MARKUP_HTML:
                 return 'output-' . $type . '-external.html';
 
-            case GeneratorFactoryInterface::MARKUP_MARKDOWN:
+            case LocalRepository::MARKUP_MARKDOWN:
+            case LocalRepository::MARKUP_CLIENT:
                 return 'output-' . $type . '-external.md';
 
-            case GeneratorFactoryInterface::SPEC_OPENAPI:
-            case GeneratorFactoryInterface::SPEC_TYPEAPI:
+            case LocalRepository::SPEC_OPENAPI:
+            case LocalRepository::SPEC_TYPEAPI:
                 return 'output-' . $type . '-external.json';
 
             default:
