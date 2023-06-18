@@ -401,7 +401,7 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/connection',
                     httpCode: 201,
-                    outgoing: Model\Backend\ConnectionCollection::class,
+                    outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConnectionCreate::class,
                 ),
                 'connection.getClasses' => new Operation(
