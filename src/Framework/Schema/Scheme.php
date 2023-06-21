@@ -27,8 +27,14 @@ namespace Fusio\Impl\Framework\Schema;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Scheme
+enum Scheme: string
 {
+    case SCHEMA = 'schema';
+    case HTTP = 'http';
+    case HTTPS = 'https';
+    case FILE = 'file';
+    case TYPEHUB = 'typehub';
+
     public static function wrap(?string $schemaName): ?string
     {
         if (empty($schemaName)) {
@@ -40,5 +46,22 @@ class Scheme
         }
 
         return 'schema://' . $schemaName;
+    }
+
+    /**
+     * @param string $schema
+     * @return array{Scheme, string}
+     */
+    public static function split(string $schema): array
+    {
+        $pos = strpos('://', $schema);
+        if ($pos === false) {
+            return [self::SCHEMA, $schema];
+        }
+
+        $scheme = substr($schema, 0, $pos);
+        $value = substr($schema, $pos + 3);
+
+        return [self::from($scheme), $value];
     }
 }
