@@ -71,17 +71,17 @@ class Register
 
         $name = $register->getName();
         if (empty($name)) {
-            throw new StatusCode\InternalServerErrorException('No username was provided');
+            throw new StatusCode\BadRequestException('No username was provided');
         }
 
         $email = $register->getEmail();
         if (empty($email)) {
-            throw new StatusCode\InternalServerErrorException('No email was provided');
+            throw new StatusCode\BadRequestException('No email was provided');
         }
 
         $password = $register->getPassword();
         if (empty($password)) {
-            throw new StatusCode\InternalServerErrorException('No password was provided');
+            throw new StatusCode\BadRequestException('No password was provided');
         }
 
         $user = new UserCreate();
