@@ -54,7 +54,7 @@ enum Scheme: string
      */
     public static function split(string $schema): array
     {
-        $pos = strpos('://', $schema);
+        $pos = strpos($schema, '://');
         if ($pos === false) {
             return [self::SCHEMA, $schema];
         }
