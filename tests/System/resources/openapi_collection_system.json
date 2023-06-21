@@ -19,7 +19,14 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [],
@@ -43,7 +50,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [],

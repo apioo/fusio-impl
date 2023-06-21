@@ -19,7 +19,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -53,7 +78,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -81,7 +137,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -109,7 +190,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -149,7 +249,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -183,7 +296,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -229,7 +361,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -250,7 +395,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -278,7 +436,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -362,7 +545,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -470,7 +666,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -578,7 +787,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -686,7 +908,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -794,7 +1029,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -902,7 +1150,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1010,7 +1271,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1118,7 +1392,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1226,7 +1513,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1334,7 +1634,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1442,7 +1755,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1470,7 +1796,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1491,7 +1830,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1519,7 +1871,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1553,7 +1930,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1581,7 +1989,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1602,7 +2035,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1630,7 +2076,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1676,7 +2141,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1704,7 +2182,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1738,7 +2241,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1766,7 +2300,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1800,7 +2359,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1828,7 +2418,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1856,7 +2459,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1902,7 +2524,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1930,7 +2565,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1964,7 +2624,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -1992,7 +2683,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2020,7 +2736,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2066,7 +2801,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2094,7 +2842,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2128,7 +2901,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2156,7 +2960,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2184,7 +3013,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2224,7 +3072,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2252,7 +3113,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2286,7 +3172,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2314,7 +3231,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2342,7 +3284,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2382,7 +3343,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2410,7 +3384,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2444,7 +3443,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2472,7 +3502,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2500,7 +3555,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2540,7 +3614,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2568,7 +3655,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2602,7 +3714,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2630,7 +3773,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2658,7 +3826,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2698,7 +3885,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2726,7 +3926,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2754,7 +3973,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2782,7 +4032,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2810,7 +4085,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2831,7 +4125,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2859,7 +4166,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2967,7 +4299,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -2995,7 +4340,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3035,7 +4393,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3069,7 +4440,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3103,7 +4487,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3131,7 +4528,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3152,7 +4562,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3180,7 +4603,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3214,7 +4662,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3242,7 +4721,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3270,7 +4774,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3316,7 +4839,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3344,7 +4880,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3378,7 +4939,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3406,7 +4998,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3434,7 +5045,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3474,7 +5104,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3495,7 +5138,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3523,7 +5179,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3557,7 +5238,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3585,7 +5297,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3613,7 +5350,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3653,7 +5409,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3687,7 +5456,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3715,7 +5503,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3743,7 +5550,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3771,7 +5591,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3805,7 +5650,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3833,7 +5709,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3861,7 +5762,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3882,7 +5796,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3899,7 +5826,7 @@
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "ConnectionCollection"
+          "$ref": "Message"
         }
       },
       "arguments": {
@@ -3910,7 +5837,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3950,7 +5896,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -3984,7 +5943,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4012,7 +6002,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4052,7 +6067,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4080,7 +6108,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4114,7 +6167,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4142,7 +6226,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4170,7 +6279,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4210,7 +6338,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4238,7 +6379,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4322,7 +6488,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4356,7 +6535,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4384,7 +6588,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4418,7 +6647,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4446,7 +6706,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4474,7 +6759,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4514,7 +6818,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4542,7 +6859,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4626,7 +6962,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4654,7 +7003,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4688,7 +7062,38 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4716,7 +7121,32 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4750,7 +7180,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4778,7 +7221,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4799,7 +7255,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4827,7 +7296,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4867,7 +7355,20 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4895,7 +7396,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4923,7 +7443,26 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [
@@ -4944,7 +7483,20 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 1,
       "security": [

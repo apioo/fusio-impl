@@ -174,6 +174,7 @@ class NewInstallation
                     httpPath: '/account',
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.update' => new Operation(
                     action: Backend\Action\Account\Update::class,
@@ -182,6 +183,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.changePassword' => new Operation(
                     action: Backend\Action\Account\ChangePassword::class,
@@ -190,6 +192,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AccountChangePassword::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.getAll' => new Operation(
                     action: Backend\Action\Action\GetAll::class,
@@ -198,6 +201,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ActionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'categoryId' => TypeFactory::getInteger()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.create' => new Operation(
                     action: Backend\Action\Action\Create::class,
@@ -206,6 +210,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.getClasses' => new Operation(
                     action: Backend\Action\Action\GetIndex::class,
@@ -213,6 +218,7 @@ class NewInstallation
                     httpPath: '/action/list',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionIndex::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.getForm' => new Operation(
                     action: Backend\Action\Action\GetForm::class,
@@ -221,6 +227,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.execute' => new Operation(
                     action: Backend\Action\Action\Execute::class,
@@ -229,6 +236,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ActionExecuteResponse::class,
                     incoming: Model\Backend\ActionExecuteRequest::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.get' => new Operation(
                     action: Backend\Action\Action\Get::class,
@@ -236,6 +244,7 @@ class NewInstallation
                     httpPath: '/action/$action_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Action::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.update' => new Operation(
                     action: Backend\Action\Action\Update::class,
@@ -244,6 +253,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.delete' => new Operation(
                     action: Backend\Action\Action\Delete::class,
@@ -251,6 +261,7 @@ class NewInstallation
                     httpPath: '/action/$action_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.getAllTokens' => new Operation(
                     action: Backend\Action\App\Token\GetAll::class,
@@ -259,6 +270,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\AppTokenCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'status' => TypeFactory::getInteger(), 'scope' => TypeFactory::getString(), 'ip' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.getToken' => new Operation(
                     action: Backend\Action\App\Token\Get::class,
@@ -266,6 +278,7 @@ class NewInstallation
                     httpPath: '/app/token/$token_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\AppToken::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.getAll' => new Operation(
                     action: Backend\Action\App\GetAll::class,
@@ -274,6 +287,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\AppCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.create' => new Operation(
                     action: Backend\Action\App\Create::class,
@@ -282,6 +296,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.get' => new Operation(
                     action: Backend\Action\App\Get::class,
@@ -289,6 +304,7 @@ class NewInstallation
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\App::class,
+                    throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.update' => new Operation(
                     action: Backend\Action\App\Update::class,
@@ -297,6 +313,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.delete' => new Operation(
                     action: Backend\Action\App\Delete::class,
@@ -304,6 +321,7 @@ class NewInstallation
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.deleteToken' => new Operation(
                     action: Backend\Action\App\DeleteToken::class,
@@ -311,6 +329,7 @@ class NewInstallation
                     httpPath: '/app/$app_id<[0-9]+>/token/:token_id',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'audit.getAll' => new Operation(
                     action: Backend\Action\Audit\GetAll::class,
@@ -319,6 +338,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\AuditCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'event' => TypeFactory::getString(), 'ip' => TypeFactory::getString(), 'message' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'audit.get' => new Operation(
                     action: Backend\Action\Audit\Get::class,
@@ -326,6 +346,7 @@ class NewInstallation
                     httpPath: '/audit/$audit_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\Audit::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'category.getAll' => new Operation(
                     action: Backend\Action\Category\GetAll::class,
@@ -334,6 +355,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\CategoryCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'category.insert' => new Operation(
                     action: Backend\Action\Category\Create::class,
@@ -342,6 +364,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CategoryCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'category.get' => new Operation(
                     action: Backend\Action\Category\Get::class,
@@ -349,6 +372,7 @@ class NewInstallation
                     httpPath: '/category/$category_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Category::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'category.update' => new Operation(
                     action: Backend\Action\Category\Update::class,
@@ -356,7 +380,8 @@ class NewInstallation
                     httpPath: '/category/$category_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\CategoryUpdate::class
+                    incoming: Model\Backend\CategoryUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'category.delete' => new Operation(
                     action: Backend\Action\Category\Delete::class,
@@ -364,6 +389,7 @@ class NewInstallation
                     httpPath: '/category/$category_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'config.getAll' => new Operation(
                     action: Backend\Action\Config\GetAll::class,
@@ -372,6 +398,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ConfigCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'config.get' => new Operation(
                     action: Backend\Action\Config\Get::class,
@@ -379,6 +406,7 @@ class NewInstallation
                     httpPath: '/config/$config_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Config::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'config.update' => new Operation(
                     action: Backend\Action\Config\Update::class,
@@ -386,7 +414,8 @@ class NewInstallation
                     httpPath: '/config/$config_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\ConfigUpdate::class
+                    incoming: Model\Backend\ConfigUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getAll' => new Operation(
                     action: Backend\Action\Connection\GetAll::class,
@@ -395,6 +424,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.create' => new Operation(
                     action: Backend\Action\Connection\Create::class,
@@ -403,6 +433,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConnectionCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getClasses' => new Operation(
                     action: Backend\Action\Connection\GetIndex::class,
@@ -410,6 +441,7 @@ class NewInstallation
                     httpPath: '/connection/list',
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionIndex::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getForm' => new Operation(
                     action: Backend\Action\Connection\GetForm::class,
@@ -418,6 +450,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.get' => new Operation(
                     action: Backend\Action\Connection\Get::class,
@@ -425,6 +458,7 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Connection::class,
+                    throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.update' => new Operation(
                     action: Backend\Action\Connection\Update::class,
@@ -432,7 +466,8 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\ConnectionUpdate::class
+                    incoming: Model\Backend\ConnectionUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.delete' => new Operation(
                     action: Backend\Action\Connection\Delete::class,
@@ -440,6 +475,7 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getRedirect' => new Operation(
                     action: Backend\Action\Connection\GetRedirect::class,
@@ -447,6 +483,7 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>/redirect',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getIntrospection' => new Operation(
                     action: Backend\Action\Connection\Introspection\GetEntities::class,
@@ -454,6 +491,7 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>/introspection',
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionIntrospectionEntities::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getIntrospectionForEntity' => new Operation(
                     action: Backend\Action\Connection\Introspection\GetEntity::class,
@@ -461,6 +499,7 @@ class NewInstallation
                     httpPath: '/connection/$connection_id<[0-9]+|^~>/introspection/:entity',
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionIntrospectionEntity::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'cronjob.getAll' => new Operation(
                     action: Backend\Action\Cronjob\GetAll::class,
@@ -469,6 +508,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\CronjobCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'cronjob.create' => new Operation(
                     action: Backend\Action\Cronjob\Create::class,
@@ -477,6 +517,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'cronjob.get' => new Operation(
                     action: Backend\Action\Cronjob\Get::class,
@@ -484,6 +525,7 @@ class NewInstallation
                     httpPath: '/cronjob/$cronjob_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Cronjob::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'cronjob.update' => new Operation(
                     action: Backend\Action\Cronjob\Update::class,
@@ -492,6 +534,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'cronjob.delete' => new Operation(
                     action: Backend\Action\Cronjob\Delete::class,
@@ -499,6 +542,7 @@ class NewInstallation
                     httpPath: '/cronjob/$cronjob_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'dashboard.getAll' => new Operation(
                     action: Backend\Action\Dashboard\GetAll::class,
@@ -506,6 +550,7 @@ class NewInstallation
                     httpPath: '/dashboard',
                     httpCode: 200,
                     outgoing: Model\Backend\Dashboard::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.getAllSubscriptions' => new Operation(
                     action: Backend\Action\Event\Subscription\GetAll::class,
@@ -514,6 +559,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\EventSubscriptionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.createSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Create::class,
@@ -522,6 +568,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.getSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Get::class,
@@ -529,6 +576,7 @@ class NewInstallation
                     httpPath: '/event/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\EventSubscription::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.updateSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Update::class,
@@ -537,6 +585,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.deleteSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Delete::class,
@@ -544,6 +593,7 @@ class NewInstallation
                     httpPath: '/event/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.getAll' => new Operation(
                     action: Backend\Action\Event\GetAll::class,
@@ -552,6 +602,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\EventCollection::class,
                     parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.create' => new Operation(
                     action: Backend\Action\Event\Create::class,
@@ -560,6 +611,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.get' => new Operation(
                     action: Backend\Action\Event\Get::class,
@@ -567,6 +619,7 @@ class NewInstallation
                     httpPath: '/event/$event_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Event::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.update' => new Operation(
                     action: Backend\Action\Event\Update::class,
@@ -575,6 +628,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.delete' => new Operation(
                     action: Backend\Action\Event\Delete::class,
@@ -582,6 +636,7 @@ class NewInstallation
                     httpPath: '/event/$event_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.getProviders' => new Operation(
                     action: Backend\Action\Generator\Index::class,
@@ -589,6 +644,7 @@ class NewInstallation
                     httpPath: '/generator',
                     httpCode: 200,
                     outgoing: Model\Backend\GeneratorIndexProviders::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.getProviderForm' => new Operation(
                     action: Backend\Action\Generator\Form::class,
@@ -596,6 +652,7 @@ class NewInstallation
                     httpPath: '/generator/:provider',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.executeProvider' => new Operation(
                     action: Backend\Action\Generator\Create::class,
@@ -604,6 +661,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\GeneratorProvider::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.getChangelog' => new Operation(
                     action: Backend\Action\Generator\Changelog::class,
@@ -612,6 +670,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\GeneratorProviderChangelog::class,
                     incoming: Model\Backend\GeneratorProviderConfig::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.getAllErrors' => new Operation(
                     action: Backend\Action\Log\Error\GetAll::class,
@@ -620,6 +679,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\LogErrorCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.getError' => new Operation(
                     action: Backend\Action\Log\Error\Get::class,
@@ -627,6 +687,7 @@ class NewInstallation
                     httpPath: '/log/error/$error_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\LogError::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.getAll' => new Operation(
                     action: Backend\Action\Log\GetAll::class,
@@ -635,6 +696,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\LogCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.get' => new Operation(
                     action: Backend\Action\Log\Get::class,
@@ -642,6 +704,7 @@ class NewInstallation
                     httpPath: '/log/$log_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\Log::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'marketplace.getAll' => new Operation(
                     action: Backend\Action\Marketplace\GetAll::class,
@@ -649,6 +712,7 @@ class NewInstallation
                     httpPath: '/marketplace',
                     httpCode: 200,
                     outgoing: Model\Backend\MarketplaceCollection::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'marketplace.install' => new Operation(
                     action: Backend\Action\Marketplace\Install::class,
@@ -657,6 +721,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\MarketplaceInstall::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'marketplace.get' => new Operation(
                     action: Backend\Action\Marketplace\Get::class,
@@ -664,6 +729,7 @@ class NewInstallation
                     httpPath: '/marketplace/:app_name',
                     httpCode: 200,
                     outgoing: Model\Backend\MarketplaceLocalApp::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'marketplace.update' => new Operation(
                     action: Backend\Action\Marketplace\Update::class,
@@ -671,6 +737,7 @@ class NewInstallation
                     httpPath: '/marketplace/:app_name',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'marketplace.remove' => new Operation(
                     action: Backend\Action\Marketplace\Remove::class,
@@ -678,6 +745,7 @@ class NewInstallation
                     httpPath: '/marketplace/:app_name',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,
@@ -686,6 +754,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\PageCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.create' => new Operation(
                     action: Backend\Action\Page\Create::class,
@@ -694,6 +763,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.get' => new Operation(
                     action: Backend\Action\Page\Get::class,
@@ -701,6 +771,7 @@ class NewInstallation
                     httpPath: '/page/$page_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Page::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.update' => new Operation(
                     action: Backend\Action\Page\Update::class,
@@ -709,6 +780,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.delete' => new Operation(
                     action: Backend\Action\Page\Delete::class,
@@ -716,6 +788,7 @@ class NewInstallation
                     httpPath: '/page/$page_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.getAll' => new Operation(
                     action: Backend\Action\Plan\GetAll::class,
@@ -724,6 +797,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\PlanCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.create' => new Operation(
                     action: Backend\Action\Plan\Create::class,
@@ -732,6 +806,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.get' => new Operation(
                     action: Backend\Action\Plan\Get::class,
@@ -739,6 +814,7 @@ class NewInstallation
                     httpPath: '/plan/$plan_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Plan::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.update' => new Operation(
                     action: Backend\Action\Plan\Update::class,
@@ -747,6 +823,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.delete' => new Operation(
                     action: Backend\Action\Plan\Delete::class,
@@ -754,6 +831,7 @@ class NewInstallation
                     httpPath: '/plan/$plan_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'rate.getAll' => new Operation(
                     action: Backend\Action\Rate\GetAll::class,
@@ -762,6 +840,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\RateCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'rate.create' => new Operation(
                     action: Backend\Action\Rate\Create::class,
@@ -770,6 +849,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'rate.get' => new Operation(
                     action: Backend\Action\Rate\Get::class,
@@ -777,6 +857,7 @@ class NewInstallation
                     httpPath: '/rate/$rate_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Rate::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'rate.update' => new Operation(
                     action: Backend\Action\Rate\Update::class,
@@ -785,6 +866,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'rate.delete' => new Operation(
                     action: Backend\Action\Rate\Delete::class,
@@ -792,6 +874,7 @@ class NewInstallation
                     httpPath: '/rate/$rate_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'role.getAll' => new Operation(
                     action: Backend\Action\Role\GetAll::class,
@@ -800,6 +883,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\RoleCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'role.create' => new Operation(
                     action: Backend\Action\Role\Create::class,
@@ -808,6 +892,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'role.get' => new Operation(
                     action: Backend\Action\Role\Get::class,
@@ -815,6 +900,7 @@ class NewInstallation
                     httpPath: '/role/$role_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Role::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'role.update' => new Operation(
                     action: Backend\Action\Role\Update::class,
@@ -823,6 +909,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'role.delete' => new Operation(
                     action: Backend\Action\Role\Delete::class,
@@ -830,6 +917,7 @@ class NewInstallation
                     httpPath: '/role/$role_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.getAll' => new Operation(
                     action: Backend\Action\Operation\GetAll::class,
@@ -838,6 +926,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\OperationCollection::class,
                     parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.create' => new Operation(
                     action: Backend\Action\Operation\Create::class,
@@ -846,6 +935,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.get' => new Operation(
                     action: Backend\Action\Operation\Get::class,
@@ -853,6 +943,7 @@ class NewInstallation
                     httpPath: '/operation/$operation_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Operation::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.update' => new Operation(
                     action: Backend\Action\Operation\Update::class,
@@ -861,6 +952,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.delete' => new Operation(
                     action: Backend\Action\Operation\Delete::class,
@@ -868,6 +960,7 @@ class NewInstallation
                     httpPath: '/operation/$operation_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.getAll' => new Operation(
                     action: Backend\Action\Schema\GetAll::class,
@@ -876,6 +969,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\SchemaCollection::class,
                     parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.create' => new Operation(
                     action: Backend\Action\Schema\Create::class,
@@ -884,6 +978,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.getPreview' => new Operation(
                     action: Backend\Action\Schema\GetPreview::class,
@@ -891,6 +986,7 @@ class NewInstallation
                     httpPath: '/schema/preview/:schema_id',
                     httpCode: 200,
                     outgoing: Model\Backend\SchemaPreviewResponse::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.updateForm' => new Operation(
                     action: Backend\Action\Schema\Form::class,
@@ -899,6 +995,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaForm::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.get' => new Operation(
                     action: Backend\Action\Schema\Get::class,
@@ -906,6 +1003,7 @@ class NewInstallation
                     httpPath: '/schema/$schema_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Schema::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.update' => new Operation(
                     action: Backend\Action\Schema\Update::class,
@@ -914,6 +1012,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.delete' => new Operation(
                     action: Backend\Action\Schema\Delete::class,
@@ -921,6 +1020,7 @@ class NewInstallation
                     httpPath: '/schema/$schema_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.getAll' => new Operation(
                     action: Backend\Action\Scope\GetAll::class,
@@ -929,6 +1029,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ScopeCollection::class,
                     parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.create' => new Operation(
                     action: Backend\Action\Scope\Create::class,
@@ -937,6 +1038,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.getCategories' => new Operation(
                     action: Backend\Action\Scope\GetCategories::class,
@@ -944,6 +1046,7 @@ class NewInstallation
                     httpPath: '/scope/categories',
                     httpCode: 200,
                     outgoing: Model\Backend\ScopeCategories::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.get' => new Operation(
                     action: Backend\Action\Scope\Get::class,
@@ -951,6 +1054,7 @@ class NewInstallation
                     httpPath: '/scope/$scope_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Scope::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.update' => new Operation(
                     action: Backend\Action\Scope\Update::class,
@@ -959,6 +1063,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.delete' => new Operation(
                     action: Backend\Action\Scope\Delete::class,
@@ -966,6 +1071,7 @@ class NewInstallation
                     httpPath: '/scope/$scope_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'sdk.getAll' => new Operation(
                     action: Backend\Action\Sdk\GetAll::class,
@@ -973,6 +1079,7 @@ class NewInstallation
                     httpPath: '/sdk',
                     httpCode: 200,
                     outgoing: Model\Backend\SdkResponse::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'sdk.generate' => new Operation(
                     action: Backend\Action\Sdk\Generate::class,
@@ -981,6 +1088,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SdkGenerate::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getCountRequests' => new Operation(
                     action: Backend\Action\Statistic\GetCountRequests::class,
@@ -989,6 +1097,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticCount::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getErrorsPerRoute' => new Operation(
                     action: Backend\Action\Statistic\GetErrorsPerOperation::class,
@@ -997,6 +1106,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getIncomingRequests' => new Operation(
                     action: Backend\Action\Statistic\GetIncomingRequests::class,
@@ -1005,6 +1115,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getIncomingTransactions' => new Operation(
                     action: Backend\Action\Statistic\GetIncomingTransactions::class,
@@ -1013,6 +1124,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getIssuedTokens' => new Operation(
                     action: Backend\Action\Statistic\GetIssuedTokens::class,
@@ -1021,6 +1133,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getMostUsedApps' => new Operation(
                     action: Backend\Action\Statistic\GetMostUsedApps::class,
@@ -1029,6 +1142,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getMostUsedRoutes' => new Operation(
                     action: Backend\Action\Statistic\GetMostUsedOperations::class,
@@ -1037,6 +1151,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getTimeAverage' => new Operation(
                     action: Backend\Action\Statistic\GetTimeAverage::class,
@@ -1045,6 +1160,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getTimePerRoute' => new Operation(
                     action: Backend\Action\Statistic\GetTimePerOperation::class,
@@ -1053,6 +1169,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getUsedPoints' => new Operation(
                     action: Backend\Action\Statistic\GetUsedPoints::class,
@@ -1061,6 +1178,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'transaction.getAll' => new Operation(
                     action: Backend\Action\Transaction\GetAll::class,
@@ -1069,6 +1187,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\TransactionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'planId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'status' => TypeFactory::getString(), 'provider' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'transaction.get' => new Operation(
                     action: Backend\Action\Transaction\Get::class,
@@ -1076,6 +1195,7 @@ class NewInstallation
                     httpPath: '/transaction/$transaction_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\Transaction::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'trash.getTypes' => new Operation(
                     action: Backend\Action\Trash\GetTypes::class,
@@ -1083,6 +1203,7 @@ class NewInstallation
                     httpPath: '/trash',
                     httpCode: 200,
                     outgoing: Model\Backend\TrashTypes::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'trash.getAllByType' => new Operation(
                     action: Backend\Action\Trash\GetAll::class,
@@ -1091,6 +1212,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\TrashDataCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'trash.restore' => new Operation(
                     action: Backend\Action\Trash\Restore::class,
@@ -1099,6 +1221,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\TrashRestore::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'user.getAll' => new Operation(
                     action: Backend\Action\User\GetAll::class,
@@ -1107,6 +1230,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\UserCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'user.create' => new Operation(
                     action: Backend\Action\User\Create::class,
@@ -1115,6 +1239,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'user.get' => new Operation(
                     action: Backend\Action\User\Get::class,
@@ -1122,6 +1247,7 @@ class NewInstallation
                     httpPath: '/user/$user_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'user.update' => new Operation(
                     action: Backend\Action\User\Update::class,
@@ -1130,6 +1256,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'user.delete' => new Operation(
                     action: Backend\Action\User\Delete::class,
@@ -1137,6 +1264,7 @@ class NewInstallation
                     httpPath: '/user/$user_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
             ],
             'consumer' => [
@@ -1147,6 +1275,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\AppCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.create' => new Operation(
                     action: Consumer\Action\App\Create::class,
@@ -1155,6 +1284,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\AppCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.get' => new Operation(
                     action: Consumer\Action\App\Get::class,
@@ -1162,6 +1292,7 @@ class NewInstallation
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Consumer\App::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.update' => new Operation(
                     action: Consumer\Action\App\Update::class,
@@ -1170,6 +1301,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\AppUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.delete' => new Operation(
                     action: Consumer\Action\App\Delete::class,
@@ -1177,6 +1309,7 @@ class NewInstallation
                     httpPath: '/app/$app_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.getAll' => new Operation(
                     action: Consumer\Action\Event\GetAll::class,
@@ -1185,6 +1318,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\EventCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'grant.getAll' => new Operation(
                     action: Consumer\Action\Grant\GetAll::class,
@@ -1193,6 +1327,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\GrantCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'grant.delete' => new Operation(
                     action: Consumer\Action\Grant\Delete::class,
@@ -1200,6 +1335,7 @@ class NewInstallation
                     httpPath: '/grant/$grant_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.getAll' => new Operation(
                     action: Consumer\Action\Log\GetAll::class,
@@ -1208,6 +1344,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\LogCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'log.get' => new Operation(
                     action: Consumer\Action\Log\Get::class,
@@ -1215,6 +1352,7 @@ class NewInstallation
                     httpPath: '/log/$log_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Log::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.getAll' => new Operation(
                     action: Consumer\Action\Page\GetAll::class,
@@ -1223,6 +1361,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\PageCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.get' => new Operation(
                     action: Consumer\Action\Page\Get::class,
@@ -1230,6 +1369,7 @@ class NewInstallation
                     httpPath: '/page/:page_id',
                     httpCode: 200,
                     outgoing: Model\Consumer\Page::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'payment.portal' => new Operation(
                     action: Consumer\Action\Payment\Portal::class,
@@ -1238,6 +1378,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\PaymentPortalResponse::class,
                     incoming: Model\Consumer\PaymentPortalRequest::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'payment.checkout' => new Operation(
                     action: Consumer\Action\Payment\Checkout::class,
@@ -1246,6 +1387,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\PaymentCheckoutResponse::class,
                     incoming: Model\Consumer\PaymentCheckoutRequest::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.getAll' => new Operation(
                     action: Consumer\Action\Plan\GetAll::class,
@@ -1254,6 +1396,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\PlanCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'plan.get' => new Operation(
                     action: Consumer\Action\Plan\Get::class,
@@ -1261,6 +1404,7 @@ class NewInstallation
                     httpPath: '/plan/$plan_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Plan::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.getAll' => new Operation(
                     action: Consumer\Action\Scope\GetAll::class,
@@ -1269,6 +1413,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\ScopeCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'subscription.getAll' => new Operation(
                     action: Consumer\Action\Event\Subscription\GetAll::class,
@@ -1277,6 +1422,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\EventSubscriptionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'subscription.create' => new Operation(
                     action: Consumer\Action\Event\Subscription\Create::class,
@@ -1285,6 +1431,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\EventSubscriptionCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'subscription.get' => new Operation(
                     action: Consumer\Action\Event\Subscription\Get::class,
@@ -1292,6 +1439,7 @@ class NewInstallation
                     httpPath: '/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Consumer\EventSubscription::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'subscription.update' => new Operation(
                     action: Consumer\Action\Event\Subscription\Update::class,
@@ -1300,6 +1448,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\EventSubscriptionUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'subscription.delete' => new Operation(
                     action: Consumer\Action\Event\Subscription\Delete::class,
@@ -1307,6 +1456,7 @@ class NewInstallation
                     httpPath: '/subscription/$subscription_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'transaction.getAll' => new Operation(
                     action: Consumer\Action\Transaction\GetAll::class,
@@ -1315,6 +1465,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\TransactionCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'transaction.get' => new Operation(
                     action: Consumer\Action\Transaction\Get::class,
@@ -1322,6 +1473,7 @@ class NewInstallation
                     httpPath: '/transaction/$transaction_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Transaction::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.get' => new Operation(
                     action: Consumer\Action\User\Get::class,
@@ -1329,6 +1481,7 @@ class NewInstallation
                     httpPath: '/account',
                     httpCode: 200,
                     outgoing: Model\Consumer\UserAccount::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.update' => new Operation(
                     action: Consumer\Action\User\Update::class,
@@ -1337,6 +1490,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserAccount::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.changePassword' => new Operation(
                     action: Consumer\Action\User\ChangePassword::class,
@@ -1345,6 +1499,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AccountChangePassword::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.activate' => new Operation(
                     action: Consumer\Action\User\Activate::class,
@@ -1353,6 +1508,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserActivate::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.getApp' => new Operation(
@@ -1361,6 +1517,7 @@ class NewInstallation
                     httpPath: '/authorize',
                     httpCode: 200,
                     outgoing: Model\Consumer\AuthorizeMeta::class,
+                    throws: [401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.authorize' => new Operation(
                     action: Consumer\Action\User\Authorize::class,
@@ -1369,6 +1526,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\AuthorizeResponse::class,
                     incoming: Model\Consumer\AuthorizeRequest::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'account.login' => new Operation(
                     action: Consumer\Action\User\Login::class,
@@ -1377,6 +1535,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\UserJWT::class,
                     incoming: Model\Consumer\UserLogin::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.refresh' => new Operation(
@@ -1386,6 +1545,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\UserJWT::class,
                     incoming: Model\Consumer\UserRefresh::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.provider' => new Operation(
@@ -1395,6 +1555,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\UserJWT::class,
                     incoming: Model\Consumer\UserProvider::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.register' => new Operation(
@@ -1404,6 +1565,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserRegister::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.requestPasswordReset' => new Operation(
@@ -1413,6 +1575,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserEmail::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.executePasswordReset' => new Operation(
@@ -1422,6 +1585,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserPasswordReset::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
             ],
@@ -1473,6 +1637,7 @@ class NewInstallation
                     httpPath: '/schema/:name',
                     httpCode: 200,
                     outgoing: Model\System\Schema::class,
+                    throws: [404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'payment.webhook' => new Operation(
@@ -1481,6 +1646,7 @@ class NewInstallation
                     httpPath: '/payment/:provider/webhook',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [500 => Model\Common\Message::class],
                     public: true,
                 ),
             ],
@@ -1491,6 +1657,7 @@ class NewInstallation
                     httpPath: '/revoke',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'getWhoami' => new Operation(
                     action: Authorization\Action\GetWhoami::class,
@@ -1498,6 +1665,7 @@ class NewInstallation
                     httpPath: '/whoami',
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
+                    throws: [500 => Model\Common\Message::class],
                 ),
             ],
         ];
