@@ -670,7 +670,7 @@ JSON;
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Throw "500" contains a schema "Foobar" which does not exist', $data->message);
+        $this->assertStringStartsWith('Throw 500 schema "Foobar" does not exist', $data->message);
     }
 
     public function testPostThrowInvalidStatusCode()

@@ -20,12 +20,16 @@
 
 namespace Fusio\Impl\Service\Operation;
 
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Operation;
 use Fusio\Model\Backend\OperationParameters;
 use Fusio\Model\Backend\OperationThrows;
 use PSX\Api\OperationInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Exception\InvalidSchemaException;
+use PSX\Schema\Exception\ParserException;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type;
 use PSX\Sql\Condition;
 
@@ -41,12 +45,14 @@ class Validator
     private Table\Operation $operationTable;
     private Table\Action $actionTable;
     private Table\Schema $schemaTable;
+    private SchemaManagerInterface $schemaManager;
 
-    public function __construct(Table\Operation $operationTable, Table\Action $actionTable, Table\Schema $schemaTable)
+    public function __construct(Table\Operation $operationTable, Table\Action $actionTable, Table\Schema $schemaTable, SchemaManagerInterface $schemaManager)
     {
         $this->operationTable = $operationTable;
         $this->actionTable = $actionTable;
         $this->schemaTable = $schemaTable;
+        $this->schemaManager = $schemaManager;
     }
 
     public function assert(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
@@ -235,18 +241,12 @@ class Validator
             return;
         }
 
-        $schema = $this->schemaTable->findOneByName($incoming);
-        if (!$schema instanceof Table\Generated\SchemaRow) {
-            throw new StatusCode\BadRequestException('Incoming schema "' . $incoming . '" does not exist');
-        }
+        $this->assertSchema($incoming, 'incoming');
     }
 
     private function assertOutgoing(string $outgoing): void
     {
-        $schema = $this->schemaTable->findOneByName($outgoing);
-        if (!$schema instanceof Table\Generated\SchemaRow) {
-            throw new StatusCode\BadRequestException('Outgoing schema "' . $outgoing . '" does not exist');
-        }
+        $this->assertSchema($outgoing, 'outgoing');
     }
 
     private function assertThrows(?OperationThrows $throws): void
@@ -257,11 +257,7 @@ class Validator
 
         foreach ($throws as $statusCode => $throwName) {
             $this->assertHttpCode((int) $statusCode, 400, 599, 'Throw');
-
-            $schema = $this->schemaTable->findOneByName($throwName);
-            if (!$schema instanceof Table\Generated\SchemaRow) {
-                throw new StatusCode\BadRequestException('Throw "' . $statusCode . '" contains a schema "' . $throwName . '" which does not exist');
-            }
+            $this->assertSchema($throwName, 'throw ' . $statusCode);
         }
     }
 
@@ -270,6 +266,15 @@ class Validator
         $action = $this->actionTable->findOneByName($actionName);
         if (!$action instanceof Table\Generated\ActionRow) {
             throw new StatusCode\BadRequestException('Action "' . $actionName . '" does not exist');
+        }
+    }
+
+    private function assertSchema(string $schema, string $type): void
+    {
+        try {
+            $this->schemaManager->getSchema(Scheme::wrap($schema));
+        } catch (InvalidSchemaException|ParserException $e) {
+            throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist', $e);
         }
     }
 
