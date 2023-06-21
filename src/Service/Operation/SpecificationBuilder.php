@@ -69,7 +69,7 @@ class SpecificationBuilder
 
         $operation = new Operation($row->getHttpMethod(), $row->getHttpPath(), $return);
         $operation->setArguments($this->getArguments($row, $specification->getDefinitions()));
-        $operation->setThrows($this->getThrows($row));
+        $operation->setThrows($this->getThrows($row, $specification->getDefinitions()));
 
         if (!empty($row->getDescription())) {
             $operation->setDescription($row->getDescription());
@@ -96,7 +96,7 @@ class SpecificationBuilder
         $schema = $this->schemaManager->getSchema($outgoing);
         $name = $this->getNameForSchema($outgoing, $schema);
 
-        $definitions->addSchema($name, $this->schemaManager->getSchema($outgoing));
+        $definitions->addSchema($name, $schema);
 
         return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($name));
     }
@@ -112,7 +112,7 @@ class SpecificationBuilder
             $schema = $this->schemaManager->getSchema($incoming);
             $name = $this->getNameForSchema($incoming, $schema);
 
-            $definitions->addSchema($name, $this->schemaManager->getSchema($incoming));
+            $definitions->addSchema($name, $schema);
 
             $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($name)));
         }
@@ -125,7 +125,7 @@ class SpecificationBuilder
         return $arguments;
     }
 
-    private function getThrows(Table\Generated\OperationRow $row): array
+    private function getThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
     {
         $throws = \json_decode($row->getThrows());
         if (!$throws instanceof \stdClass) {
@@ -133,8 +133,13 @@ class SpecificationBuilder
         }
 
         $result = [];
-        foreach ($throws as $httpCode => $schema) {
-            $result[] = new Operation\Response($httpCode, TypeFactory::getReference($schema));
+        foreach ($throws as $httpCode => $throw) {
+            $schema = $this->schemaManager->getSchema($throw);
+            $name = $this->getNameForSchema($throw, $schema);
+
+            $definitions->addSchema($name, $schema);
+
+            $result[] = new Operation\Response($httpCode, TypeFactory::getReference($name));
         }
 
         return $result;
