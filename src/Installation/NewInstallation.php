@@ -200,7 +200,7 @@ class NewInstallation
                     httpPath: '/action',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'categoryId' => TypeFactory::getInteger()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.create' => new Operation(
@@ -601,7 +601,7 @@ class NewInstallation
                     httpPath: '/event',
                     httpCode: 200,
                     outgoing: Model\Backend\EventCollection::class,
-                    parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.create' => new Operation(
@@ -925,7 +925,7 @@ class NewInstallation
                     httpPath: '/operation',
                     httpCode: 200,
                     outgoing: Model\Backend\OperationCollection::class,
-                    parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'operation.create' => new Operation(
@@ -968,7 +968,7 @@ class NewInstallation
                     httpPath: '/schema',
                     httpCode: 200,
                     outgoing: Model\Backend\SchemaCollection::class,
-                    parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'schema.create' => new Operation(
@@ -1028,7 +1028,7 @@ class NewInstallation
                     httpPath: '/scope',
                     httpCode: 200,
                     outgoing: Model\Backend\ScopeCollection::class,
-                    parameters: ['categoryId' => TypeFactory::getInteger(), 'startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'scope.create' => new Operation(

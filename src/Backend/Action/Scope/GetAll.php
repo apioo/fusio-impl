@@ -47,13 +47,8 @@ class GetAll implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $categoryId = (int) $request->get('categoryId');
-        if (empty($categoryId)) {
-            $categoryId = $context->getUser()->getCategoryId();
-        }
-
         return $this->view->getCollection(
-            $categoryId,
+            $context->getUser()->getCategoryId(),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
             $request->get('search'),
