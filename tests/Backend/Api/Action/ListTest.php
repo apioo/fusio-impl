@@ -54,16 +54,8 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor"
         },
         {
-            "name": "Cli-Engine",
-            "class": "Fusio\\Adapter\\Cli\\Action\\CliEngine"
-        },
-        {
             "name": "FastCGI-Processor",
             "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor"
-        },
-        {
-            "name": "Fcgi-Engine",
-            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiEngine"
         },
         {
             "name": "File-Directory-Get",
@@ -72,10 +64,6 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "File-Directory-GetAll",
             "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGetAll"
-        },
-        {
-            "name": "File-Engine",
-            "class": "Fusio\\Adapter\\File\\Action\\FileEngine"
         },
         {
             "name": "File-Processor",
@@ -98,10 +86,6 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
         },
         {
-            "name": "Http-Engine",
-            "class": "Fusio\\Adapter\\Http\\Action\\HttpEngine"
-        },
-        {
             "name": "Inspect-Action",
             "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction"
         },
@@ -112,10 +96,6 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "PHP-Sandbox",
             "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
-        },
-        {
-            "name": "Php-Engine",
-            "class": "Fusio\\Adapter\\Php\\Action\\PhpEngine"
         },
         {
             "name": "SMTP-Send",
