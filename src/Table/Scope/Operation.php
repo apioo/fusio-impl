@@ -53,7 +53,7 @@ class Operation extends Generated\ScopeOperationTable
                   FROM fusio_scope_operation operation
             INNER JOIN fusio_scope scope
                     ON scope.id = operation.scope_id
-                 WHERE operation.route_id = :id
+                 WHERE operation.operation_id = :id
                    AND operation.allow = 1
               ORDER BY operation.id ASC';
 

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -70,11 +71,12 @@ class Operation extends ViewAbstract
             'entry' => $builder->doCollection([$this->getTable(Table\Operation::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
-                'active' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ACTIVE),
-                'public' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_PUBLIC),
+                'active' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_ACTIVE),
+                'public' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_PUBLIC),
                 'stability' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STABILITY),
                 'httpMethod' => Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
                 'httpPath' => Table\Generated\OperationTable::COLUMN_HTTP_PATH,
+                'httpCode' => Table\Generated\OperationTable::COLUMN_HTTP_CODE,
                 'name' => Table\Generated\OperationTable::COLUMN_NAME,
                 'action' => Table\Generated\OperationTable::COLUMN_ACTION,
                 'metadata' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_METADATA),
@@ -91,12 +93,15 @@ class Operation extends ViewAbstract
         $definition = $builder->doEntity([$this->getTable(Table\Operation::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
-            'active' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ACTIVE),
-            'public' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_PUBLIC),
+            'name' => Table\Generated\OperationTable::COLUMN_NAME,
+            'scopes' => $builder->doColumn([$this->getTable(Table\Scope\Operation::class), 'getScopeNamesForOperation'], [new Reference('id')], 'name'),
+            'active' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_ACTIVE),
+            'public' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_PUBLIC),
             'stability' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STABILITY),
+            'description' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_DESCRIPTION),
             'httpMethod' => Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
             'httpPath' => Table\Generated\OperationTable::COLUMN_HTTP_PATH,
-            'name' => Table\Generated\OperationTable::COLUMN_NAME,
+            'httpCode' => Table\Generated\OperationTable::COLUMN_HTTP_CODE,
             'parameters' => $builder->fieldJson(Table\Generated\OperationTable::COLUMN_PARAMETERS),
             'incoming' => Table\Generated\OperationTable::COLUMN_INCOMING,
             'outgoing' => Table\Generated\OperationTable::COLUMN_OUTGOING,

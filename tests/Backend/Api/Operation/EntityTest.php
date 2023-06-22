@@ -63,12 +63,17 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 175,
     "status": 1,
-    "active": 1,
-    "public": 1,
+    "name": "test.listFoo",
+    "scopes": [
+        "bar"
+    ],
+    "active": true,
+    "public": true,
     "stability": 1,
+    "description": 0,
     "httpMethod": "GET",
     "httpPath": "\/foo",
-    "name": "test.listFoo",
+    "httpCode": 200,
     "parameters": [],
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": [],
@@ -93,12 +98,17 @@ JSON;
 {
     "id": 175,
     "status": 1,
-    "active": 1,
-    "public": 1,
+    "name": "test.listFoo",
+    "scopes": [
+        "bar"
+    ],
+    "active": true,
+    "public": true,
     "stability": 1,
+    "description": 0,
     "httpMethod": "GET",
     "httpPath": "\/foo",
-    "name": "test.listFoo",
+    "httpCode": 200,
     "parameters": [],
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": [],
