@@ -2116,12 +2116,6 @@
         }
       },
       "arguments": {
-        "categoryId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
         "startIndex": {
           "in": "query",
           "schema": {
@@ -2499,12 +2493,6 @@
         }
       },
       "arguments": {
-        "categoryId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
         "startIndex": {
           "in": "query",
           "schema": {
@@ -2776,12 +2764,6 @@
         }
       },
       "arguments": {
-        "categoryId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
         "startIndex": {
           "in": "query",
           "schema": {
@@ -4814,12 +4796,6 @@
         }
       },
       "arguments": {
-        "categoryId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
         "startIndex": {
           "in": "query",
           "schema": {
@@ -7343,12 +7319,6 @@
           }
         },
         "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "categoryId": {
           "in": "query",
           "schema": {
             "type": "integer"
