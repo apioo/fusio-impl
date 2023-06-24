@@ -1,5 +1,5 @@
 {
-  "errorsPerRoute": {
+  "errorsPerOperation": {
     "labels": [
       "2015-06-01",
       "2015-06-02",
@@ -212,7 +212,7 @@
       "Amount"
     ]
   },
-  "mostUsedRoutes": {
+  "mostUsedOperations": {
     "labels": [
       "2015-06-01",
       "2015-06-02",
@@ -283,7 +283,7 @@
       "test.listFoo"
     ]
   },
-  "timePerRoute": {
+  "timePerOperation": {
     "labels": [
       "2015-06-01",
       "2015-06-02",
