@@ -134,6 +134,8 @@ return static function (ContainerConfigurator $container) {
         ->public();
     $services->load('Fusio\\Impl\\Authorization\\GrantType\\', __DIR__ . '/../src/Authorization/GrantType')
         ->public();
+    $services->load('Fusio\\Impl\\EventListener\\', __DIR__ . '/../src/EventListener')
+        ->public();
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);

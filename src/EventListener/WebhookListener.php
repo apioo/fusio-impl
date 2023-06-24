@@ -42,7 +42,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function onActionCreate(Event\Action\CreatedEvent $event)
+    public function onActionCreate(Event\Action\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -55,7 +55,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.action.create', $event);
     }
 
-    public function onActionDelete(Event\Action\DeletedEvent $event)
+    public function onActionDelete(Event\Action\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -68,7 +68,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.action.delete', $event);
     }
 
-    public function onActionUpdate(Event\Action\UpdatedEvent $event)
+    public function onActionUpdate(Event\Action\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -81,7 +81,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.action.update', $event);
     }
 
-    public function onAppCreate(Event\App\CreatedEvent $event)
+    public function onAppCreate(Event\App\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -94,7 +94,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.app.create', $event);
     }
 
-    public function onAppDelete(Event\App\DeletedEvent $event)
+    public function onAppDelete(Event\App\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -107,7 +107,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.app.delete', $event);
     }
 
-    public function onAppUpdate(Event\App\UpdatedEvent $event)
+    public function onAppUpdate(Event\App\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -120,7 +120,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.app.update', $event);
     }
 
-    public function onConnectionCreate(Event\Connection\CreatedEvent $event)
+    public function onConnectionCreate(Event\Connection\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -133,7 +133,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.connection.create', $event);
     }
 
-    public function onConnectionDelete(Event\Connection\DeletedEvent $event)
+    public function onConnectionDelete(Event\Connection\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -146,7 +146,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.connection.delete', $event);
     }
 
-    public function onConnectionUpdate(Event\Connection\UpdatedEvent $event)
+    public function onConnectionUpdate(Event\Connection\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -159,7 +159,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.connection.update', $event);
     }
 
-    public function onCronjobCreate(Event\Cronjob\CreatedEvent $event)
+    public function onCronjobCreate(Event\Cronjob\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -172,7 +172,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.cronjob.create', $event);
     }
 
-    public function onCronjobDelete(Event\Cronjob\DeletedEvent $event)
+    public function onCronjobDelete(Event\Cronjob\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -185,7 +185,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.cronjob.delete', $event);
     }
 
-    public function onCronjobUpdate(Event\Cronjob\UpdatedEvent $event)
+    public function onCronjobUpdate(Event\Cronjob\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -198,7 +198,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.cronjob.update', $event);
     }
 
-    public function onEventCreate(Event\Event\CreatedEvent $event)
+    public function onEventCreate(Event\Event\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -211,7 +211,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.create', $event);
     }
 
-    public function onEventDelete(Event\Event\DeletedEvent $event)
+    public function onEventDelete(Event\Event\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -224,7 +224,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.delete', $event);
     }
 
-    public function onEventUpdate(Event\Event\UpdatedEvent $event)
+    public function onEventUpdate(Event\Event\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -237,7 +237,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.update', $event);
     }
 
-    public function onEventSubscriptionCreate(Event\Event\Subscription\CreatedEvent $event)
+    public function onEventSubscriptionCreate(Event\Event\Subscription\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -250,7 +250,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.subscription.create', $event);
     }
 
-    public function onEventSubscriptionDelete(Event\Event\Subscription\DeletedEvent $event)
+    public function onEventSubscriptionDelete(Event\Event\Subscription\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -263,7 +263,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.subscription.delete', $event);
     }
 
-    public function onEventSubscriptionUpdate(Event\Event\Subscription\UpdatedEvent $event)
+    public function onEventSubscriptionUpdate(Event\Event\Subscription\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -276,7 +276,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.subscription.update', $event);
     }
 
-    public function onPlanCreate(Event\Plan\CreatedEvent $event)
+    public function onPlanCreate(Event\Plan\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -289,7 +289,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.plan.create', $event);
     }
 
-    public function onPlanDelete(Event\Plan\DeletedEvent $event)
+    public function onPlanDelete(Event\Plan\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -302,7 +302,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.plan.delete', $event);
     }
 
-    public function onPlanUpdate(Event\Plan\UpdatedEvent $event)
+    public function onPlanUpdate(Event\Plan\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -315,7 +315,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.plan.update', $event);
     }
 
-    public function onRateCreate(Event\Rate\CreatedEvent $event)
+    public function onRateCreate(Event\Rate\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -328,7 +328,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.rate.create', $event);
     }
 
-    public function onRateDelete(Event\Rate\DeletedEvent $event)
+    public function onRateDelete(Event\Rate\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -341,7 +341,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.rate.delete', $event);
     }
 
-    public function onRateUpdate(Event\Rate\UpdatedEvent $event)
+    public function onRateUpdate(Event\Rate\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -354,7 +354,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.rate.update', $event);
     }
 
-    public function onOperationCreate(Event\Operation\CreatedEvent $event)
+    public function onOperationCreate(Event\Operation\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -367,7 +367,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.operation.create', $event);
     }
 
-    public function onOperationDelete(Event\Operation\DeletedEvent $event)
+    public function onOperationDelete(Event\Operation\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -380,7 +380,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.operation.delete', $event);
     }
 
-    public function onOperationUpdate(Event\Operation\UpdatedEvent $event)
+    public function onOperationUpdate(Event\Operation\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -393,7 +393,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.operation.update', $event);
     }
 
-    public function onSchemaCreate(Event\Schema\CreatedEvent $event)
+    public function onSchemaCreate(Event\Schema\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -406,7 +406,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.schema.create', $event);
     }
 
-    public function onSchemaDelete(Event\Schema\DeletedEvent $event)
+    public function onSchemaDelete(Event\Schema\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -419,7 +419,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.schema.delete', $event);
     }
 
-    public function onSchemaUpdate(Event\Schema\UpdatedEvent $event)
+    public function onSchemaUpdate(Event\Schema\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -432,7 +432,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.schema.update', $event);
     }
 
-    public function onScopeCreate(Event\Scope\CreatedEvent $event)
+    public function onScopeCreate(Event\Scope\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -445,7 +445,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.scope.create', $event);
     }
 
-    public function onScopeDelete(Event\Scope\DeletedEvent $event)
+    public function onScopeDelete(Event\Scope\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -458,7 +458,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.scope.delete', $event);
     }
 
-    public function onScopeUpdate(Event\Scope\UpdatedEvent $event)
+    public function onScopeUpdate(Event\Scope\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -471,7 +471,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.scope.update', $event);
     }
 
-    public function onUserCreate(Event\User\CreatedEvent $event)
+    public function onUserCreate(Event\User\CreatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -484,7 +484,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.user.create', $event);
     }
 
-    public function onUserDelete(Event\User\DeletedEvent $event)
+    public function onUserDelete(Event\User\DeletedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
@@ -497,7 +497,7 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.user.delete', $event);
     }
 
-    public function onUserUpdate(Event\User\UpdatedEvent $event)
+    public function onUserUpdate(Event\User\UpdatedEvent $event): void
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
