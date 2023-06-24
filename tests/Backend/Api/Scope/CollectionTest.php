@@ -173,12 +173,10 @@ JSON;
             'description' => 'Test description',
             'routes'      => [[
                 'operationId' => Fixture::getId('fusio_operation', 'test.listFoo'),
-                'allow'   => true,
-                'methods' => 'GET|POST|PUT|PATCH|DELETE',
+                'allow' => true,
             ], [
                 'operationId' => Fixture::getId('fusio_operation', 'inspect.get'),
-                'allow'   => true,
-                'methods' => 'GET|POST|PUT|PATCH|DELETE',
+                'allow' => true,
             ]],
             'metadata'    => $metadata,
         ]));
@@ -211,7 +209,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = $this->connection->createQueryBuilder()
-            ->select('scope_id', 'operation_id', 'allow', 'methods')
+            ->select('scope_id', 'operation_id', 'allow')
             ->from('fusio_scope_operation')
             ->where('scope_id = :scope_id')
             ->orderBy('id', 'DESC')
@@ -224,37 +222,30 @@ JSON;
             'scope_id' => $scopeId,
             'operation_id' => 181,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 180,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 179,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 178,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 177,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 176,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'scope_id' => $scopeId,
             'operation_id' => 175,
             'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ]], $operations);
     }
 

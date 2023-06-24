@@ -145,8 +145,7 @@ class TokenValidator
 
         // get all scopes which are assigned to this route
         $sql = '    SELECT scope.name,
-                           scope_operation.allow,
-                           scope_operation.methods
+                           scope_operation.allow
                       FROM fusio_scope_operation scope_operation
                 INNER JOIN fusio_scope scope
                         ON scope.id = scope_operation.scope_id
@@ -160,7 +159,7 @@ class TokenValidator
 
         foreach ($entitledScopes as $entitledScope) {
             foreach ($availableScopes as $scope) {
-                if ($scope['name'] == $entitledScope && $scope['allow'] == 1 && in_array($requestMethod, explode('|', $scope['methods']))) {
+                if ($scope['name'] == $entitledScope && $scope['allow'] == 1) {
                     $isAllowed = true;
                     break 2;
                 }

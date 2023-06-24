@@ -61,55 +61,48 @@ class EntityTest extends ControllerDbTestCase
     "id": 43,
     "name": "bar",
     "description": "Bar access",
-    "routes": [
+    "operations": [
         {
             "id": 175,
             "scopeId": 43,
             "operationId": 181,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 174,
             "scopeId": 43,
             "operationId": 180,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 173,
             "scopeId": 43,
             "operationId": 179,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 172,
             "scopeId": 43,
             "operationId": 178,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 170,
             "scopeId": 43,
             "operationId": 177,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 168,
             "scopeId": 43,
             "operationId": 176,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 167,
             "scopeId": 43,
             "operationId": 175,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         }
     ]
 }
@@ -132,55 +125,48 @@ JSON;
     "id": 43,
     "name": "bar",
     "description": "Bar access",
-    "routes": [
+    "operations": [
         {
             "id": 175,
             "scopeId": 43,
             "operationId": 181,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 174,
             "scopeId": 43,
             "operationId": 180,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 173,
             "scopeId": 43,
             "operationId": 179,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 172,
             "scopeId": 43,
             "operationId": 178,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 170,
             "scopeId": 43,
             "operationId": 177,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 168,
             "scopeId": 43,
             "operationId": 176,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         },
         {
             "id": 167,
             "scopeId": 43,
             "operationId": 175,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
+            "allow": true
         }
     ]
 }
@@ -260,9 +246,9 @@ JSON;
     public function testDelete()
     {
         // delete all scope references to successful delete an scope
-        $this->connection->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
-        $this->connection->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
-        $this->connection->executeUpdate('DELETE FROM fusio_plan_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
+        $this->connection->executeStatement('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
+        $this->connection->executeStatement('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
+        $this->connection->executeStatement('DELETE FROM fusio_plan_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
