@@ -237,45 +237,6 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.event.update', $event);
     }
 
-    public function onEventSubscriptionCreate(Event\Event\Subscription\CreatedEvent $event): void
-    {
-        $event = (new Builder())
-            ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/event/subscription')
-            ->withType('org.fusio-project.event.create')
-            ->withDataContentType('application/json')
-            ->withData($event->getSubscription())
-            ->build();
-
-        $this->dispatcher->dispatch('fusio.event.subscription.create', $event);
-    }
-
-    public function onEventSubscriptionDelete(Event\Event\Subscription\DeletedEvent $event): void
-    {
-        $event = (new Builder())
-            ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/event/subscription/' . $event->getExisting()->getId())
-            ->withType('org.fusio-project.event.delete')
-            ->withDataContentType('application/json')
-            ->withData($event->getExisting())
-            ->build();
-
-        $this->dispatcher->dispatch('fusio.event.subscription.delete', $event);
-    }
-
-    public function onEventSubscriptionUpdate(Event\Event\Subscription\UpdatedEvent $event): void
-    {
-        $event = (new Builder())
-            ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/event/subscription/' . $event->getSubscription()->getId())
-            ->withType('org.fusio-project.event.update')
-            ->withDataContentType('application/json')
-            ->withData($event->getSubscription())
-            ->build();
-
-        $this->dispatcher->dispatch('fusio.event.subscription.update', $event);
-    }
-
     public function onPlanCreate(Event\Plan\CreatedEvent $event): void
     {
         $event = (new Builder())
@@ -532,10 +493,6 @@ class WebhookListener implements EventSubscriberInterface
             Event\Event\CreatedEvent::class => 'onEventCreate',
             Event\Event\DeletedEvent::class => 'onEventDelete',
             Event\Event\UpdatedEvent::class => 'onEventUpdate',
-
-            Event\Event\Subscription\CreatedEvent::class => 'onEventSubscriptionCreate',
-            Event\Event\Subscription\DeletedEvent::class => 'onEventSubscriptionDelete',
-            Event\Event\Subscription\UpdatedEvent::class => 'onEventSubscriptionUpdate',
 
             Event\Plan\CreatedEvent::class => 'onPlanCreate',
             Event\Plan\DeletedEvent::class => 'onPlanDelete',

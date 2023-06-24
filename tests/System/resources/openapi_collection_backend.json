@@ -611,7 +611,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -690,8 +690,8 @@
         "statistic"
       ]
     },
-    "backend.statistic.getTimePerRoute": {
-      "path": "/backend/statistic/time_per_route",
+    "backend.statistic.getTimePerOperation": {
+      "path": "/backend/statistic/time_per_operation",
       "method": "GET",
       "return": {
         "code": 200,
@@ -732,7 +732,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -853,7 +853,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -932,8 +932,8 @@
         "statistic"
       ]
     },
-    "backend.statistic.getMostUsedRoutes": {
-      "path": "/backend/statistic/most_used_routes",
+    "backend.statistic.getMostUsedOperations": {
+      "path": "/backend/statistic/most_used_operations",
       "method": "GET",
       "return": {
         "code": 200,
@@ -974,7 +974,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1095,7 +1095,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1216,7 +1216,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1337,7 +1337,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1458,7 +1458,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1537,8 +1537,8 @@
         "statistic"
       ]
     },
-    "backend.statistic.getErrorsPerRoute": {
-      "path": "/backend/statistic/errors_per_route",
+    "backend.statistic.getErrorsPerOperation": {
+      "path": "/backend/statistic/errors_per_operation",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1579,7 +1579,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1700,7 +1700,7 @@
             "type": "string"
           }
         },
-        "routeId": {
+        "operationId": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -1872,6 +1872,12 @@
         }
       },
       "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
         {
           "code": 401,
           "schema": {

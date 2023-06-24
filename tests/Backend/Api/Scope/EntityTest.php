@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Scope;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Table;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -268,14 +269,14 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id')
+            ->select('id', 'status')
             ->from('fusio_scope')
-            ->where('id = :id')
+            ->where('id = ' . $this->id)
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => $this->id]);
+        $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEmpty($row);
+        $this->assertEquals(Table\Scope::STATUS_DELETED, $row['status']);
     }
 
     public function testDeleteAppScopeAssigned()

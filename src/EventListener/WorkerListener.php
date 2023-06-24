@@ -32,6 +32,7 @@ use Fusio\Impl\Worker\Generated\Message;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ConnectionConfig;
 use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\InternalServerErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thrift\Exception\TException;
@@ -52,9 +53,9 @@ class WorkerListener implements EventSubscriberInterface
         WorkerPython::class => 'python',
     ];
 
-    private Config $config;
+    private ConfigInterface $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
     }

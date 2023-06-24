@@ -343,34 +343,34 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRouteCreate(Event\Operation\CreatedEvent $event): void
+    public function onOperationCreate(Event\Operation\CreatedEvent $event): void
     {
         $this->log(
             $event->getContext(),
             $event->getOperation()->getId(),
             'operation.create',
-            sprintf('Created operation %s', $event->getOperation()->getHttpPath() ?? ''),
+            sprintf('Created operation %s', $event->getOperation()->getName() ?? ''),
             $event->getOperation()
         );
     }
 
-    public function onRouteDelete(Event\Operation\DeletedEvent $event): void
+    public function onOperationDelete(Event\Operation\DeletedEvent $event): void
     {
         $this->log(
             $event->getContext(),
             $event->getExisting()->getId(),
             'operation.delete',
-            sprintf('Deleted operation %s', $event->getExisting()->getHttpPath())
+            sprintf('Deleted operation %s', $event->getExisting()->getName())
         );
     }
 
-    public function onRouteUpdate(Event\Operation\UpdatedEvent $event): void
+    public function onOperationUpdate(Event\Operation\UpdatedEvent $event): void
     {
         $this->log(
             $event->getContext(),
             $event->getOperation()->getId(),
             'operation.update',
-            sprintf('Updated operation %s', $event->getOperation()->getHttpPath() ?? ''),
+            sprintf('Updated operation %s', $event->getOperation()->getName() ?? ''),
             $event->getOperation()
         );
     }

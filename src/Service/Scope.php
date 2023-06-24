@@ -167,6 +167,21 @@ class Scope
             throw new StatusCode\GoneException('Scope was deleted');
         }
 
+        // check whether the scope is used by an app or user
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppScopeTable::COLUMN_SCOPE_ID, $existing->getId());
+        $appScopes = $this->appScopeTable->getCount($condition);
+        if ($appScopes > 0) {
+            throw new StatusCode\ConflictException('Scope is assigned to an app. Remove the scope from the app in order to delete the scope');
+        }
+
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserScopeTable::COLUMN_SCOPE_ID, $existing->getId());
+        $userScopes = $this->userScopeTable->getCount($condition);
+        if ($userScopes > 0) {
+            throw new StatusCode\ConflictException('Scope is assigned to an user. Remove the scope from the user in order to delete the scope');
+        }
+
         // check whether this is a system scope
         if (in_array($existing->getId(), [1, 2, 3])) {
             throw new StatusCode\BadRequestException('It is not possible to delete a system scope');
