@@ -39,11 +39,11 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll implements ActionInterface
 {
-    private View\Statistic\ErrorsPerOperation $errorsPerRoute;
+    private View\Statistic\ErrorsPerOperation $errorsPerOperation;
     private View\Statistic\IncomingRequests $incomingRequests;
     private View\Statistic\IncomingTransactions $incomingTransactions;
-    private View\Statistic\MostUsedOperations $mostUsedRoutes;
-    private View\Statistic\TimePerOperation $timePerRoute;
+    private View\Statistic\MostUsedOperations $mostUsedOperations;
+    private View\Statistic\TimePerOperation $timePerOperation;
     private View\Dashboard\LatestApps $latestApps;
     private View\Dashboard\LatestRequests $latestRequests;
     private View\Dashboard\LatestUsers $latestUsers;
@@ -51,11 +51,11 @@ class GetAll implements ActionInterface
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerOperation::class);
+        $this->errorsPerOperation = $tableManager->getTable(View\Statistic\ErrorsPerOperation::class);
         $this->incomingRequests = $tableManager->getTable(View\Statistic\IncomingRequests::class);
         $this->incomingTransactions = $tableManager->getTable(View\Statistic\IncomingTransactions::class);
-        $this->mostUsedRoutes = $tableManager->getTable(View\Statistic\MostUsedOperations::class);
-        $this->timePerRoute = $tableManager->getTable(View\Statistic\TimePerOperation::class);
+        $this->mostUsedOperations = $tableManager->getTable(View\Statistic\MostUsedOperations::class);
+        $this->timePerOperation = $tableManager->getTable(View\Statistic\TimePerOperation::class);
         $this->latestApps = $tableManager->getTable(View\Dashboard\LatestApps::class);
         $this->latestRequests = $tableManager->getTable(View\Dashboard\LatestRequests::class);
         $this->latestUsers = $tableManager->getTable(View\Dashboard\LatestUsers::class);
@@ -68,11 +68,11 @@ class GetAll implements ActionInterface
         $transactionFilter = Filter\Transaction\QueryFilter::create($request);
 
         return [
-            'errorsPerRoute' => $this->errorsPerRoute->getView($context->getUser()->getCategoryId(), $logFilter),
+            'errorsPerOperation' => $this->errorsPerOperation->getView($context->getUser()->getCategoryId(), $logFilter),
             'incomingRequests' => $this->incomingRequests->getView($context->getUser()->getCategoryId(), $logFilter),
             'incomingTransactions' => $this->incomingTransactions->getView($transactionFilter),
-            'mostUsedRoutes' => $this->mostUsedRoutes->getView($context->getUser()->getCategoryId(), $logFilter),
-            'timePerRoute' => $this->timePerRoute->getView($context->getUser()->getCategoryId(), $logFilter),
+            'mostUsedOperations' => $this->mostUsedOperations->getView($context->getUser()->getCategoryId(), $logFilter),
+            'timePerOperation' => $this->timePerOperation->getView($context->getUser()->getCategoryId(), $logFilter),
             'latestApps' => $this->latestApps->getView(),
             'latestRequests' => $this->latestRequests->getView($context->getUser()->getCategoryId()),
             'latestUsers' => $this->latestUsers->getView(),
