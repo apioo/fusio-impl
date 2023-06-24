@@ -59,7 +59,7 @@ class Payer
 
         // add usage entry
         $row = new Table\Generated\PlanUsageRow();
-        $row->setOperationId($context->getRouteId());
+        $row->setOperationId($context->getOperationId());
         $row->setUserId($context->getUser()->getId());
         $row->setAppId($context->getApp()->getId());
         $row->setPoints($points);

@@ -50,7 +50,7 @@ class QueryFilterTest extends FilterTestCase
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getRouteId());
+        $this->assertEquals(1, $filter->getOperationId());
         $this->assertEquals(1, $filter->getAppId());
         $this->assertEquals(1, $filter->getUserId());
         $this->assertEquals('127.0.0.1', $filter->getIp());

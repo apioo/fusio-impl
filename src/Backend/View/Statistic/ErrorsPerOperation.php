@@ -50,13 +50,13 @@ class ErrorsPerOperation extends ViewAbstract
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result   = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
-        $routeIds = array();
-        $data     = [];
-        $series   = [];
+        $result = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $operationIds = [];
+        $data = [];
+        $series = [];
 
         foreach ($result as $row) {
-            $routeIds[] = $row['operation_id'];
+            $operationIds[] = $row['operation_id'];
 
             $data[$row['operation_id']] = [];
             $series[$row['operation_id']] = null;
@@ -70,8 +70,8 @@ class ErrorsPerOperation extends ViewAbstract
             }
         }
 
-        if (!empty($routeIds)) {
-            $condition->in('log.operation_id', $routeIds);
+        if (!empty($operationIds)) {
+            $condition->in('log.operation_id', $operationIds);
         }
 
         // fill data with values

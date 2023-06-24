@@ -33,7 +33,7 @@ use PSX\Sql\Condition;
  */
 class QueryFilter extends QueryFilterAbstract
 {
-    protected ?int $routeId = null;
+    protected ?int $operationId = null;
     protected ?int $appId = null;
     protected ?int $userId = null;
     protected ?string $ip = null;
@@ -43,11 +43,11 @@ class QueryFilter extends QueryFilterAbstract
     protected ?string $header = null;
     protected ?string $body = null;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $routeId = null, ?int $appId = null, ?int $userId = null, ?string $ip = null, ?string $userAgent = null, ?string $method = null, ?string $path = null, ?string $header = null, ?string $body = null)
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $operationId = null, ?int $appId = null, ?int $userId = null, ?string $ip = null, ?string $userAgent = null, ?string $method = null, ?string $path = null, ?string $header = null, ?string $body = null)
     {
         parent::__construct($from, $to);
 
-        $this->routeId = $routeId;
+        $this->operationId = $operationId;
         $this->appId = $appId;
         $this->userId = $userId;
         $this->ip = $ip;
@@ -58,9 +58,9 @@ class QueryFilter extends QueryFilterAbstract
         $this->body = $body;
     }
 
-    public function getRouteId(): ?int
+    public function getOperationId(): ?int
     {
-        return $this->routeId;
+        return $this->operationId;
     }
 
     public function getAppId(): ?int
@@ -108,8 +108,8 @@ class QueryFilter extends QueryFilterAbstract
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
 
-        if (!empty($this->routeId)) {
-            $condition->equals($alias . 'route_id', $this->routeId);
+        if (!empty($this->operationId)) {
+            $condition->equals($alias . 'operation_id', $this->operationId);
         }
 
         if (!empty($this->appId)) {
@@ -151,16 +151,16 @@ class QueryFilter extends QueryFilterAbstract
     {
         [$from, $to] = self::getFromAndTo($request);
 
-        $routeId   = self::toInt($request->get('routeId'));
-        $appId     = self::toInt($request->get('appId'));
-        $userId    = self::toInt($request->get('userId'));
-        $ip        = $request->get('ip');
+        $operationId = self::toInt($request->get('operationId'));
+        $appId = self::toInt($request->get('appId'));
+        $userId = self::toInt($request->get('userId'));
+        $ip = $request->get('ip');
         $userAgent = $request->get('userAgent');
-        $method    = $request->get('method');
-        $path      = $request->get('path');
-        $header    = $request->get('header');
-        $body      = $request->get('body');
-        $search    = $request->get('search');
+        $method = $request->get('method');
+        $path = $request->get('path');
+        $header = $request->get('header');
+        $body = $request->get('body');
+        $search = $request->get('search');
 
         // parse search if available
         if (!empty($search)) {
@@ -181,6 +181,6 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        return new self($from, $to, $routeId, $appId, $userId, $ip, $userAgent, $method, $path, $header, $body);
+        return new self($from, $to, $operationId, $appId, $userId, $ip, $userAgent, $method, $path, $header, $body);
     }
 }

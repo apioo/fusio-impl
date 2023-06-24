@@ -170,7 +170,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $user->points = $context->getUser()->getPoints();
 
         $return = new Context();
-        $return->routeId = $context->getRouteId();
+        $return->operationId = $context->getOperationId();
         $return->baseUrl = $context->getBaseUrl();
         $return->app = $app;
         $return->user = $user;
