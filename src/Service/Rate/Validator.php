@@ -40,9 +40,9 @@ class Validator
         $this->rateTable = $rateTable;
     }
 
-    public function assert(Rate $plan, ?Table\Generated\RateRow $existing = null): void
+    public function assert(Rate $rate, ?Table\Generated\RateRow $existing = null): void
     {
-        $name = $plan->getName();
+        $name = $rate->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
         } elseif ($existing === null) {

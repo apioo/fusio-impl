@@ -102,7 +102,7 @@ class Rate
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
-        $this->validator->assert($rate);
+        $this->validator->assert($rate, $existing);
 
         try {
             $this->rateTable->beginTransaction();

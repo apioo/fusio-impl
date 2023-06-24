@@ -97,7 +97,7 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
-        $this->validator->assert($page);
+        $this->validator->assert($page, $existing);
 
         $title = $page->getTitle();
         $slug = $title !== null ? $this->createSlug($title) : null;
