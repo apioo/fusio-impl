@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\Log\QueryFilter;
 use Fusio\Impl\Backend\View;
 
 /**
@@ -46,7 +47,7 @@ class GetErrorsPerOperation implements ActionInterface
     {
         return $this->view->getView(
             $context->getUser()->getCategoryId(),
-            \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
+            QueryFilter::create($request)
         );
     }
 }
