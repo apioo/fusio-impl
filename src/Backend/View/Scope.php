@@ -91,7 +91,7 @@ class Scope extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ID),
                 'scopeId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_SCOPE_ID),
                 'operationId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_OPERATION_ID),
-                'allow' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ALLOW),
+                'allow' => $builder->fieldBoolean(Table\Generated\ScopeOperationTable::COLUMN_ALLOW),
             ]),
         ]);
 
