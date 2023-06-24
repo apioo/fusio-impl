@@ -35,11 +35,11 @@ class QueryFilterTest extends FilterTestCase
     public function testCreate()
     {
         $filter = QueryFilter::create($this->createRequest([
-            'from'    => '2015-08-20',
-            'to'      => '2015-08-30',
-            'routeId' => 1,
-            'appId'   => 1,
-            'userId'  => 1,
+            'from' => '2015-08-20',
+            'to' => '2015-08-30',
+            'operationId' => 1,
+            'appId' => 1,
+            'userId' => 1,
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));

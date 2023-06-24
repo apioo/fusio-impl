@@ -35,17 +35,17 @@ class QueryFilterTest extends FilterTestCase
     public function testCreate()
     {
         $filter = QueryFilter::create($this->createRequest([
-            'from'      => '2015-08-20',
-            'to'        => '2015-08-30',
-            'routeId'   => 1,
-            'appId'     => 1,
-            'userId'    => 1,
-            'ip'        => '127.0.0.1',
+            'from' => '2015-08-20',
+            'to' => '2015-08-30',
+            'operationId' => 1,
+            'appId' => 1,
+            'userId' => 1,
+            'ip' => '127.0.0.1',
             'userAgent' => 'Foo-App',
-            'method'    => 'POST',
-            'path'      => '/foo',
-            'header'    => 'text/xml',
-            'body'      => '<foo />',
+            'method' => 'POST',
+            'path' => '/foo',
+            'header' => 'text/xml',
+            'body' => '<foo />',
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
@@ -62,7 +62,7 @@ class QueryFilterTest extends FilterTestCase
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (date >= ? AND date <= ? AND route_id = ? AND app_id = ? AND user_id = ? AND ip LIKE ? AND user_agent LIKE ? AND method = ? AND path LIKE ? AND header LIKE ? AND body LIKE ?)', $condition->getStatement());
+        $this->assertEquals('WHERE (date >= ? AND date <= ? AND operation_id = ? AND app_id = ? AND user_id = ? AND ip LIKE ? AND user_agent LIKE ? AND method = ? AND path LIKE ? AND header LIKE ? AND body LIKE ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
