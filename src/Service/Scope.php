@@ -103,14 +103,12 @@ class Scope
                 $row->setScopeId($scope->getId());
                 $row->setOperationId($operationId);
                 $row->setAllow(1);
-                $row->setMethods('GET|POST|PUT|PATCH|DELETE');
                 $this->scopeRouteTable->create($row);
             } else {
                 // create new scope
                 $operation = new ScopeOperation();
                 $operation->setOperationId($operationId);
                 $operation->setAllow(true);
-                $operation->setMethods('GET|POST|PUT|PATCH|DELETE');
 
                 $scope = new ScopeCreate();
                 $scope->setName($scopeName);
@@ -230,7 +228,6 @@ class Scope
                     $row->setScopeId($scopeId);
                     $row->setOperationId($operation->getOperationId() ?? throw new \RuntimeException('No operation id provided'));
                     $row->setAllow(1);
-                    $row->setMethods($operation->getMethods());
                     $this->scopeRouteTable->create($row);
                 }
             }

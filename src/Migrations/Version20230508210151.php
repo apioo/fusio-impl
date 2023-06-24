@@ -410,7 +410,6 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->addColumn('scope_id', 'integer');
             $scopeOperationTable->addColumn('operation_id', 'integer');
             $scopeOperationTable->addColumn('allow', 'smallint');
-            $scopeOperationTable->addColumn('methods', 'string', ['length' => 64, 'notnull' => false]);
             $scopeOperationTable->setPrimaryKey(['id']);
         }
 

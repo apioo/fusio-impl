@@ -12,14 +12,13 @@ class ScopeOperationTable extends \PSX\Sql\TableAbstract
     public const COLUMN_SCOPE_ID = 'scope_id';
     public const COLUMN_OPERATION_ID = 'operation_id';
     public const COLUMN_ALLOW = 'allow';
-    public const COLUMN_METHODS = 'methods';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_SCOPE_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x20000a, self::COLUMN_ALLOW => 0x100000, self::COLUMN_METHODS => 0x40a00040);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_SCOPE_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x20000a, self::COLUMN_ALLOW => 0x100000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\ScopeOperationRow>
@@ -199,43 +198,6 @@ class ScopeOperationTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('allow', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\ScopeOperationRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByMethods(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('methods', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByMethods(string $value) : ?\Fusio\Impl\Table\Generated\ScopeOperationRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('methods', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByMethods(string $value, \Fusio\Impl\Table\Generated\ScopeOperationRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('methods', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByMethods(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('methods', $value);
         return $this->doDeleteBy($condition);
     }
     /**

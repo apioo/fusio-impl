@@ -539,8 +539,7 @@ class DataBag
         $this->data['fusio_scope_operation'][$scope . $operation] = [
             'scope_id' => self::getId('fusio_scope', $scope),
             'operation_id' => self::getId('fusio_operation', $operation),
-            'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE'
+            'allow' => 1
         ];
     }
 

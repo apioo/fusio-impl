@@ -19,7 +19,7 @@ class ConfigTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_VALUE => 0xa00200);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_DESCRIPTION => 0xa00200, self::COLUMN_VALUE => 0xa00200);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\ConfigRow>
