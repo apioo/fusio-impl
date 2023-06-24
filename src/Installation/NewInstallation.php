@@ -1071,7 +1071,7 @@ class NewInstallation
                     httpPath: '/scope/$scope_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 409 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'sdk.getAll' => new Operation(
                     action: Backend\Action\Sdk\GetAll::class,
