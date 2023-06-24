@@ -118,6 +118,10 @@ class Category
             throw new StatusCode\NotFoundException('Could not find category');
         }
 
+        if ($existing->getStatus() == Table\Category::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Category was deleted');
+        }
+
         $existing->setStatus(Table\Category::STATUS_DELETED);
         $this->categoryTable->update($existing);
 

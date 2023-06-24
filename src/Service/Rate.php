@@ -135,6 +135,10 @@ class Rate
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
+        if ($existing->getStatus() == Table\Rate::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Rate was deleted');
+        }
+
         $existing->setStatus(Table\Rate::STATUS_DELETED);
         $this->rateTable->update($existing);
 

@@ -29,7 +29,6 @@ use Fusio\Model\Backend\PlanCreate;
 use Fusio\Model\Backend\PlanUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Plan
@@ -106,7 +105,7 @@ class Plan
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
-        if ($existing->getStatus() == Table\Event::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Plan::STATUS_DELETED) {
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
@@ -117,7 +116,6 @@ class Plan
             $price = (int) ($price * 100);
         }
 
-        // update event
         $existing->setName($plan->getName() ?? $existing->getName());
         $existing->setDescription($plan->getDescription() ?? $existing->getDescription());
         $existing->setPrice($price ?? $existing->getPrice());
@@ -146,6 +144,10 @@ class Plan
         $existing = $this->planTable->findOneByIdentifier($planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
+        }
+
+        if ($existing->getStatus() == Table\Plan::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Plan was deleted');
         }
 
         $existing->setStatus(Table\Rate::STATUS_DELETED);

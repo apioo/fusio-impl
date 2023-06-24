@@ -115,6 +115,10 @@ class Event
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
+        if ($existing->getStatus() == Table\Event::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Event was deleted');
+        }
+
         $existing->setStatus(Table\Rate::STATUS_DELETED);
         $this->eventTable->update($existing);
 

@@ -136,6 +136,10 @@ class Role
             throw new StatusCode\NotFoundException('Could not find role');
         }
 
+        if ($existing->getStatus() == Table\Role::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Role was deleted');
+        }
+
         $existing->setStatus(Table\Role::STATUS_DELETED);
         $this->roleTable->update($existing);
 
