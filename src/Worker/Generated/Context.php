@@ -22,7 +22,7 @@ class Context
 
     static public $_TSPEC = array(
         1 => array(
-            'var' => 'routeId',
+            'var' => 'operationId',
             'isRequired' => false,
             'type' => TType::I64,
         ),
@@ -48,7 +48,7 @@ class Context
     /**
      * @var int
      */
-    public $routeId = null;
+    public $operationId = null;
     /**
      * @var string
      */
@@ -65,8 +65,8 @@ class Context
     public function __construct($vals = null)
     {
         if (is_array($vals)) {
-            if (isset($vals['routeId'])) {
-                $this->routeId = $vals['routeId'];
+            if (isset($vals['operationId'])) {
+                $this->operationId = $vals['operationId'];
             }
             if (isset($vals['baseUrl'])) {
                 $this->baseUrl = $vals['baseUrl'];
@@ -101,7 +101,7 @@ class Context
             switch ($fid) {
                 case 1:
                     if ($ftype == TType::I64) {
-                        $xfer += $input->readI64($this->routeId);
+                        $xfer += $input->readI64($this->operationId);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -143,9 +143,9 @@ class Context
     {
         $xfer = 0;
         $xfer += $output->writeStructBegin('Context');
-        if ($this->routeId !== null) {
-            $xfer += $output->writeFieldBegin('routeId', TType::I64, 1);
-            $xfer += $output->writeI64($this->routeId);
+        if ($this->operationId !== null) {
+            $xfer += $output->writeFieldBegin('operationId', TType::I64, 1);
+            $xfer += $output->writeI64($this->operationId);
             $xfer += $output->writeFieldEnd();
         }
         if ($this->baseUrl !== null) {
