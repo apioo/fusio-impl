@@ -200,7 +200,7 @@ class NewInstallation
                     httpPath: '/action',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger()],
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'action.create' => new Operation(
