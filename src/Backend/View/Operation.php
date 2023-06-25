@@ -59,7 +59,11 @@ class Operation extends ViewAbstract
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like(Table\Generated\OperationTable::COLUMN_HTTP_PATH, '%' . $search . '%');
+            if (str_starts_with($search, '/')) {
+                $condition->like(Table\Generated\OperationTable::COLUMN_HTTP_PATH, '%' . $search . '%');
+            } else {
+                $condition->like(Table\Generated\OperationTable::COLUMN_NAME, '%' . $search . '%');
+            }
         }
 
         $builder = new Builder($this->connection);
@@ -98,7 +102,7 @@ class Operation extends ViewAbstract
             'active' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_ACTIVE),
             'public' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_PUBLIC),
             'stability' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STABILITY),
-            'description' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_DESCRIPTION),
+            'description' => Table\Generated\OperationTable::COLUMN_DESCRIPTION,
             'httpMethod' => Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
             'httpPath' => Table\Generated\OperationTable::COLUMN_HTTP_PATH,
             'httpCode' => Table\Generated\OperationTable::COLUMN_HTTP_CODE,
