@@ -148,11 +148,6 @@ class GetAbout implements ActionInterface
         ];
 
         $links[] = [
-            'rel' => 'jsonrpc',
-            'href' => $baseUrl . 'system/jsonrpc',
-        ];
-
-        $links[] = [
             'rel' => 'oauth2',
             'href' => $baseUrl . 'authorization/token',
         ];

@@ -89,10 +89,6 @@ class WelcomeTest extends ControllerDbTestCase
             "href": "http:\/\/127.0.0.1\/system\/health"
         },
         {
-            "rel": "jsonrpc",
-            "href": "http:\/\/127.0.0.1\/system\/jsonrpc"
-        },
-        {
             "rel": "oauth2",
             "href": "http:\/\/127.0.0.1\/authorization\/token"
         },
