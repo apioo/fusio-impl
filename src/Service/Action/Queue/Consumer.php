@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Action\Queue;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Engine\Action\Resolver\DatabaseAction;
 use Fusio\Engine\Processor;
 use Fusio\Impl\Repository\ActionDatabase;
 use Fusio\Impl\Table\Generated\ActionQueueTable;
@@ -36,18 +37,20 @@ class Consumer
 {
     private Processor $processor;
     private Connection $connection;
+    private DatabaseAction $databaseAction;
 
-    public function __construct(Processor $processor, Connection $connection)
+    public function __construct(Processor $processor, Connection $connection, DatabaseAction $databaseAction)
     {
-        $this->processor  = $processor;
+        $this->processor = $processor;
         $this->connection = $connection;
+        $this->databaseAction = $databaseAction;
     }
 
-    public function execute()
+    public function execute(): void
     {
         $repository = new ActionDatabase($this->connection);
         $repository->setAsync(false);
-        $this->processor->push($repository);
+        $this->databaseAction->push($repository);
 
         $qb = $this->connection->createQueryBuilder();
         $qb->select([ActionQueueTable::COLUMN_ID, ActionQueueTable::COLUMN_ACTION, ActionQueueTable::COLUMN_REQUEST, ActionQueueTable::COLUMN_CONTEXT]);
@@ -70,5 +73,7 @@ class Consumer
                 // @TODO maybe log this in the future?
             }
         }
+
+        $this->databaseAction->pop();
     }
 }
