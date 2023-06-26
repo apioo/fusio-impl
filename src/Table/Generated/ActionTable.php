@@ -14,7 +14,6 @@ class ActionTable extends \PSX\Sql\TableAbstract
     public const COLUMN_NAME = 'name';
     public const COLUMN_CLASS = 'class';
     public const COLUMN_ASYNC = 'async';
-    public const COLUMN_ENGINE = 'engine';
     public const COLUMN_CONFIG = 'config';
     public const COLUMN_METADATA = 'metadata';
     public const COLUMN_DATE = 'date';
@@ -24,7 +23,7 @@ class ActionTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_CLASS => 0xa000ff, self::COLUMN_ASYNC => 0x400000, self::COLUMN_ENGINE => 0x40a000ff, self::COLUMN_CONFIG => 0x40b00000, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_CLASS => 0xa000ff, self::COLUMN_ASYNC => 0x400000, self::COLUMN_CONFIG => 0x40b00000, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\ActionRow>
@@ -278,43 +277,6 @@ class ActionTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('async', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\ActionRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByEngine(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('engine', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByEngine(string $value) : ?\Fusio\Impl\Table\Generated\ActionRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('engine', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByEngine(string $value, \Fusio\Impl\Table\Generated\ActionRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('engine', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByEngine(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('engine', $value);
         return $this->doDeleteBy($condition);
     }
     /**

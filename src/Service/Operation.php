@@ -20,14 +20,15 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Framework\Schema\Scheme;
-use Fusio\Model;
+use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Operation\CreatedEvent;
 use Fusio\Impl\Event\Operation\DeletedEvent;
 use Fusio\Impl\Event\Operation\UpdatedEvent;
+use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use Fusio\Model\Backend\OperationCreate;
 use Fusio\Model\Backend\OperationParameters;
 use Fusio\Model\Backend\OperationThrows;
@@ -37,8 +38,6 @@ use PSX\Api\OperationInterface;
 use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\SchemaManagerInterface;
-use PSX\Sql\Condition;
 
 /**
  * Operation
@@ -84,10 +83,10 @@ class Operation
             $row->setHttpCode($operation->getHttpCode());
             $row->setName($operation->getName());
             $row->setParameters($this->wrapParameters($operation->getParameters()));
-            $row->setIncoming(Scheme::wrap($operation->getIncoming()));
-            $row->setOutgoing(Scheme::wrap($operation->getOutgoing()));
+            $row->setIncoming(SchemaScheme::wrap($operation->getIncoming()));
+            $row->setOutgoing(SchemaScheme::wrap($operation->getOutgoing()));
             $row->setThrows($this->wrapThrows($operation->getThrows()));
-            $row->setAction($operation->getAction());
+            $row->setAction(ActionScheme::wrap($operation->getAction()));
             $row->setCosts($operation->getCosts());
             $row->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
             $this->operationTable->create($row);
@@ -151,13 +150,13 @@ class Operation
                 if ($parameters !== null) {
                     $existing->setParameters($this->wrapParameters($parameters));
                 }
-                $existing->setIncoming(Scheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
-                $existing->setOutgoing(Scheme::wrap($operation->getOutgoing() ?? $existing->getOutgoing()));
+                $existing->setIncoming(SchemaScheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
+                $existing->setOutgoing(SchemaScheme::wrap($operation->getOutgoing() ?? $existing->getOutgoing()));
                 $throws = $operation->getThrows();
                 if ($throws !== null) {
                     $existing->setThrows($this->wrapThrows($throws));
                 }
-                $existing->setAction($operation->getAction() ?? $existing->getAction());
+                $existing->setAction(ActionScheme::wrap($operation->getAction() ?? $existing->getAction()));
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
                 $metadata = $operation->getMetadata();
                 if ($metadata !== null) {
@@ -228,7 +227,7 @@ class Operation
         }
 
         foreach ($throws->getAll() as $code => $schema) {
-            $throws->put($code, Scheme::wrap($schema));
+            $throws->put($code, SchemaScheme::wrap($schema));
         }
 
         return \json_encode($throws);

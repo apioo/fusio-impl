@@ -70,14 +70,14 @@ class EntityTest extends ControllerDbTestCase
     "active": true,
     "public": true,
     "stability": 1,
-    "description": 0,
+    "description": "",
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
     "parameters": [],
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": [],
-    "action": "Sql-Select-All",
+    "action": "action:\/\/Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -105,14 +105,14 @@ JSON;
     "active": true,
     "public": true,
     "stability": 1,
-    "description": 0,
+    "description": "",
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
     "parameters": [],
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": [],
-    "action": "Sql-Select-All",
+    "action": "action:\/\/Sql-Select-All",
     "costs": 0
 }
 JSON;

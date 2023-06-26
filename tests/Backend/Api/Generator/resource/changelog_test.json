@@ -35,7 +35,6 @@
     {
       "name": "Action_Select",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "table": "foobar"
       }
@@ -43,7 +42,6 @@
     {
       "name": "Action_Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "table": "foobar"
       }

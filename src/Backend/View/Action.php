@@ -90,7 +90,6 @@ class Action extends ViewAbstract
             'name' => Table\Generated\ActionTable::COLUMN_NAME,
             'class' => Table\Generated\ActionTable::COLUMN_CLASS,
             'async' => Table\Generated\ActionTable::COLUMN_ASYNC,
-            'engine' => Table\Generated\ActionTable::COLUMN_ENGINE,
             'config' => $builder->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
                 return Service\Action::unserializeConfig($config);
             }),

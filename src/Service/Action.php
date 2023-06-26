@@ -24,13 +24,11 @@ use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
-use Fusio\Engine\Factory\Resolver;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
-use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
@@ -67,15 +65,10 @@ class Action
         $name = $action->getName();
         $class = $action->getClass();
 
-        $engine = $action->getEngine();
-        if (empty($engine)) {
-            $engine = EngineDetector::getEngine($class);
-        }
-
         // check source
         $config     = $action->getConfig() ? $action->getConfig()->getAll() : [];
         $parameters = new Parameters($config);
-        $handler    = $this->newAction($class, $engine);
+        $handler    = $this->newAction($class);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
@@ -92,7 +85,6 @@ class Action
             $row->setName($name);
             $row->setClass($class);
             $row->setAsync($action->getAsync() ?? false);
-            $row->setEngine($engine);
             $row->setConfig(self::serializeConfig($config));
             $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
@@ -128,12 +120,11 @@ class Action
 
         $name = $action->getName() ?? $existing->getName();
         $class = $action->getClass() ?? $existing->getClass();
-        $engine = $action->getEngine() ?? $existing->getEngine();
 
         // check source
         $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
         $parameters = new Parameters($config);
-        $handler    = $this->newAction($class, $engine);
+        $handler    = $this->newAction($class);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
@@ -144,7 +135,6 @@ class Action
         $existing->setName($name);
         $existing->setClass($class);
         $existing->setAsync($action->getAsync() ?? $existing->getAsync());
-        $existing->setEngine($engine);
         $existing->setConfig(self::serializeConfig($config));
         $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : $existing->getMetadata());
         $existing->setDate(LocalDateTime::now());
@@ -168,7 +158,7 @@ class Action
 
         $config     = self::unserializeConfig($existing->getConfig());
         $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($existing->getClass(), $existing->getEngine() ?? Resolver\PhpClass::class);
+        $handler    = $this->newAction($existing->getClass());
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
@@ -186,19 +176,13 @@ class Action
     /**
      * Checks whether the provided class is resolvable and returns an action instance
      */
-    private function newAction(string $class, string $engine): ActionInterface
+    private function newAction(string $class): ActionInterface
     {
-        if (!class_exists($engine)) {
-            throw new StatusCode\BadRequestException('Could not resolve engine');
-        }
-
         try {
-            $action = $this->actionFactory->factory($class, $engine);
+            return $this->actionFactory->factory($class);
         } catch (FactoryResolveException $e) {
             throw new StatusCode\BadRequestException($e->getMessage());
         }
-
-        return $action;
     }
 
     public static function serializeConfig(?array $config = null): ?string

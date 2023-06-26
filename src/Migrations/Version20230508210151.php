@@ -31,7 +31,6 @@ final class Version20230508210151 extends AbstractMigration
             $actionTable->addColumn('name', 'string', ['length' => 255]);
             $actionTable->addColumn('class', 'string', ['length' => 255]);
             $actionTable->addColumn('async', 'boolean', ['default' => false]);
-            $actionTable->addColumn('engine', 'string', ['length' => 255, 'notnull' => false]);
             $actionTable->addColumn('config', 'text', ['notnull' => false]);
             $actionTable->addColumn('metadata', 'text', ['notnull' => false]);
             $actionTable->addColumn('date', 'datetime');

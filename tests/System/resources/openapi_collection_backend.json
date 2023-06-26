@@ -7329,6 +7329,12 @@
           "schema": {
             "type": "integer"
           }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
         }
       },
       "throws": [
@@ -7523,9 +7529,6 @@
         },
         "async": {
           "type": "boolean"
-        },
-        "engine": {
-          "type": "string"
         },
         "config": {
           "$ref": "ActionConfig"
@@ -9060,9 +9063,6 @@
         },
         "allow": {
           "type": "boolean"
-        },
-        "methods": {
-          "type": "string"
         }
       }
     },

@@ -21,13 +21,11 @@
 namespace Fusio\Impl\Installation;
 
 use Fusio\Adapter;
-use Fusio\Engine\Factory\Resolver\PhpClass;
+use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Controller\ActionController;
-use Fusio\Impl\Framework\Schema\Scheme;
+use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Table;
-use PSX\Api\OperationInterface;
 use PSX\Schema\TypeInterface;
 
 /**
@@ -123,10 +121,10 @@ class DataBag
                 $path,
                 $operation->httpCode,
                 $this->normalizeParameters($operation->parameters),
-                Scheme::wrap($incomingName),
-                Scheme::wrap($outgoingName),
+                SchemaScheme::wrap($incomingName),
+                SchemaScheme::wrap($outgoingName),
                 $this->normalizeThrows($operation->throws, $category),
-                $actionName,
+                ActionScheme::wrap($actionName),
                 $operation->costs
             );
 
@@ -169,7 +167,7 @@ class DataBag
                 $this->addSchema($category, $schemaName, $class);
             }
 
-            $result[$code] = Scheme::wrap($schemaName);
+            $result[$code] = SchemaScheme::wrap($schemaName);
         }
 
         return $result;
@@ -192,7 +190,6 @@ class DataBag
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
-            'engine' => PhpClass::class,
             'config' => $config,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),

@@ -68,7 +68,6 @@ class EntityTest extends ControllerDbTestCase
     "name": "Sql-Insert",
     "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
     "async": false,
-    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
         "table": "app_news"
@@ -98,7 +97,6 @@ JSON;
     "name": "Sql-Insert",
     "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
     "async": false,
-    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
         "table": "app_news"

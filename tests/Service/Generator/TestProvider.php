@@ -88,7 +88,6 @@ class TestProvider implements ProviderInterface
         $action = new ActionCreate();
         $action->setName('Action_Select');
         $action->setClass(SqlSelectAll::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromIterable([
             'table' => $configuration->get('table'),
         ]));
@@ -97,7 +96,6 @@ class TestProvider implements ProviderInterface
         $action = new ActionCreate();
         $action->setName('Action_Insert');
         $action->setClass(SqlInsert::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromIterable([
             'table' => $configuration->get('table'),
         ]));

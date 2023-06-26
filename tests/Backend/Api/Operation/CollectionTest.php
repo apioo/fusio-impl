@@ -63,7 +63,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.delete",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 180,
@@ -75,7 +75,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.patch",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 179,
@@ -87,7 +87,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.put",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 178,
@@ -99,7 +99,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.post",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 177,
@@ -111,7 +111,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.get",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 176,
@@ -123,7 +123,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/foo",
             "httpCode": 201,
             "name": "test.createFoo",
-            "action": "Sql-Insert"
+            "action": "action:\/\/Sql-Insert"
         },
         {
             "id": 175,
@@ -135,7 +135,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/foo",
             "httpCode": 200,
             "name": "test.listFoo",
-            "action": "Sql-Select-All"
+            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,
@@ -147,7 +147,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "System_Action_Meta_GetAbout"
+            "action": "action:\/\/System_Action_Meta_GetAbout"
         }
     ]
 }
@@ -181,7 +181,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.delete",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 180,
@@ -193,7 +193,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.patch",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 179,
@@ -205,7 +205,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.put",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 178,
@@ -217,7 +217,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.post",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 177,
@@ -229,7 +229,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.get",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         }
     ]
 }
@@ -263,7 +263,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.delete",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 180,
@@ -275,7 +275,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.patch",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 179,
@@ -287,7 +287,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.put",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 178,
@@ -299,7 +299,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.post",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 177,
@@ -311,7 +311,7 @@ JSON;
             "httpPath": "\/inspect\/:foo",
             "httpCode": 200,
             "name": "inspect.get",
-            "action": "Inspect-Action"
+            "action": "action:\/\/Inspect-Action"
         },
         {
             "id": 176,
@@ -323,7 +323,7 @@ JSON;
             "httpPath": "\/foo",
             "httpCode": 201,
             "name": "test.createFoo",
-            "action": "Sql-Insert"
+            "action": "action:\/\/Sql-Insert"
         },
         {
             "id": 175,
@@ -335,7 +335,7 @@ JSON;
             "httpPath": "\/foo",
             "httpCode": 200,
             "name": "test.listFoo",
-            "action": "Sql-Select-All"
+            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,
@@ -347,7 +347,7 @@ JSON;
             "httpPath": "\/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "System_Action_Meta_GetAbout"
+            "action": "action:\/\/System_Action_Meta_GetAbout"
         }
     ]
 }

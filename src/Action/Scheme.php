@@ -18,33 +18,53 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Factory\Resolver;
-
-use Fusio\Adapter\File\Action\FileEngine;
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\Factory\ResolverInterface;
+namespace Fusio\Impl\Action;
 
 /**
- * StaticFile
+ * Scheme
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class StaticFile implements ResolverInterface
+enum Scheme: string
 {
-    private RuntimeInterface $runtime;
+    case ACTION = 'action';
+    case PHP_CLASS = 'class';
+    case CLI = 'cli';
+    case FCGI = 'fcgi';
+    case FILE = 'file';
+    case GRAPHQL = 'graphql';
+    case HTTP = 'http';
+    case PHP = 'php';
 
-    public function __construct(RuntimeInterface $runtime)
+    public static function wrap(?string $actionName): ?string
     {
-        $this->runtime = $runtime;
+        if (empty($actionName)) {
+            return null;
+        }
+
+        if (str_contains($actionName, '://')) {
+            return $actionName;
+        }
+
+        return 'action://' . $actionName;
     }
 
-    public function resolve(string $className): ActionInterface
+    /**
+     * @param string $action
+     * @return array{Scheme, string}
+     */
+    public static function split(string $action): array
     {
-        $engine = new FileEngine($this->runtime);
-        $engine->setFile($className);
-        return $engine;
+        $pos = strpos($action, '://');
+        if ($pos === false) {
+            return [self::ACTION, $action];
+        }
+
+        $scheme = substr($action, 0, $pos);
+        $value = substr($action, $pos + 3);
+
+        return [self::from($scheme), $value];
     }
 }

@@ -18,33 +18,30 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Factory\Resolver;
+namespace Fusio\Impl\Action\Resolver;
 
-use Fusio\Adapter\Php\Action\PhpEngine;
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\Factory\ResolverInterface;
+use Fusio\Adapter\File\Action\FileProcessor;
+use Fusio\Engine\Action\ResolverInterface;
+use Fusio\Engine\Model;
 
 /**
- * PhpFile
+ * StaticFile
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class PhpFile implements ResolverInterface
+class File implements ResolverInterface
 {
-    private RuntimeInterface $runtime;
-
-    public function __construct(RuntimeInterface $runtime)
+    public function getScheme(): string
     {
-        $this->runtime = $runtime;
+        return 'file';
     }
 
-    public function resolve(string $className): ActionInterface
+    public function resolve(string $action): Model\ActionInterface
     {
-        $engine = new PhpEngine($this->runtime);
-        $engine->setFile($className);
-        return $engine;
+        return new Model\Action(1, 'File', FileProcessor::class, false, [
+            'file' => $action,
+        ]);
     }
 }

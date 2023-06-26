@@ -10,7 +10,6 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $name = null;
     private ?string $class = null;
     private ?bool $async = null;
-    private ?string $engine = null;
     private ?string $config = null;
     private ?string $metadata = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
@@ -62,14 +61,6 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->async ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "async" was provided');
     }
-    public function setEngine(?string $engine) : void
-    {
-        $this->engine = $engine;
-    }
-    public function getEngine() : ?string
-    {
-        return $this->engine;
-    }
     public function setConfig(?string $config) : void
     {
         $this->config = $config;
@@ -104,7 +95,6 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('class', $this->class);
         $record->put('async', $this->async);
-        $record->put('engine', $this->engine);
         $record->put('config', $this->config);
         $record->put('metadata', $this->metadata);
         $record->put('date', $this->date);
@@ -123,7 +113,6 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->class = isset($data['class']) && is_string($data['class']) ? $data['class'] : null;
         $row->async = isset($data['async']) && is_bool($data['async']) ? $data['async'] : null;
-        $row->engine = isset($data['engine']) && is_string($data['engine']) ? $data['engine'] : null;
         $row->config = isset($data['config']) && is_string($data['config']) ? $data['config'] : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;
         $row->date = isset($data['date']) && $data['date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['date']) : null;

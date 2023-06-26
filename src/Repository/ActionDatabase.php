@@ -49,7 +49,6 @@ class ActionDatabase implements Repository\ActionInterface
                        name,
                        class,
                        async,
-                       engine,
                        config,
                        date
                   FROM fusio_action
@@ -84,7 +83,6 @@ class ActionDatabase implements Repository\ActionInterface
                        name,
                        class,
                        async,
-                       engine,
                        config,
                        date
                   FROM fusio_action
@@ -112,7 +110,6 @@ class ActionDatabase implements Repository\ActionInterface
             $row['id'],
             $row['name'],
             $row['class'],
-            $row['engine'],
             $this->async ? (bool) $row['async'] : false,
             $config ?? []
         );

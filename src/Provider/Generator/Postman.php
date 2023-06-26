@@ -138,7 +138,6 @@ class Postman implements ProviderInterface
         $action = new ActionCreate();
         $action->setName($name);
         $action->setClass(HttpProcessor::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'url' => $this->getEndpointUrl($item, $env),
         ]));

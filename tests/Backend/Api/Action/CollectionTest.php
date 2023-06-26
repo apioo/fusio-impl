@@ -229,7 +229,6 @@ JSON;
         ), json_encode([
             'name'     => 'Foo',
             'class'    => UtilStaticResponse::class,
-            'engine'   => PhpClass::class,
             'config'   => $config,
             'metadata' => $metadata
         ]));

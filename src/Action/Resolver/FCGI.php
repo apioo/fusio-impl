@@ -18,33 +18,30 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Factory\Resolver;
+namespace Fusio\Impl\Action\Resolver;
 
-use Fusio\Adapter\Http\Action\HttpEngine;
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\Factory\ResolverInterface;
+use Fusio\Adapter\Fcgi\Action\FcgiProcessor;
+use Fusio\Engine\Action\ResolverInterface;
+use Fusio\Engine\Model;
 
 /**
- * HttpUrl
+ * FCGI
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HttpUrl implements ResolverInterface
+class FCGI implements ResolverInterface
 {
-    private RuntimeInterface $runtime;
-
-    public function __construct(RuntimeInterface $runtime)
+    public function getScheme(): string
     {
-        $this->runtime = $runtime;
+        return 'fcgi';
     }
 
-    public function resolve(string $className): ActionInterface
+    public function resolve(string $action): Model\ActionInterface
     {
-        $engine = new HttpEngine($this->runtime);
-        $engine->setUrl($className);
-        return $engine;
+        return new Model\Action(1, 'FCGI', FcgiProcessor::class, false, [
+            'url' => $action,
+        ]);
     }
 }

@@ -17,7 +17,6 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Impl\Cli\Config;
 use Fusio\Impl\Cli\Transport;
-use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
@@ -42,6 +41,7 @@ use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container) {
     $services = ServiceBuilder::build($container);
@@ -54,6 +54,10 @@ return static function (ContainerConfigurator $container) {
     $services
         ->instanceof(WebhookSenderInterface::class)
         ->tag('fusio.webhook.sender');
+
+    $services
+        ->instanceof(Action\ResolverInterface::class)
+        ->tag('fusio.action.resolver');
 
     // engine
     $services->set(ImplRepository\ActionDatabase::class);
@@ -71,15 +75,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(Form\ElementFactory::class);
     $services->alias(Form\ElementFactoryInterface::class, Form\ElementFactory::class);
 
-    $services->set(Factory\Resolver\PhpClass::class);
-    $services->set(Resolver\HttpUrl::class);
-    $services->set(Resolver\PhpFile::class);
-    $services->set(Resolver\StaticFile::class);
-    $services->set(Factory\Action::class)
-        ->call('addResolver', [service(Factory\Resolver\PhpClass::class)])
-        ->call('addResolver', [service(Resolver\HttpUrl::class)])
-        ->call('addResolver', [service(Resolver\PhpFile::class)])
-        ->call('addResolver', [service(Resolver\StaticFile::class)]);
+    $services->set(Action\Resolver\DatabaseAction::class);
+    $services->set(Action\Resolver\PhpClass::class);
+
+
+    $services->set(Factory\Action::class);
     $services->alias(Factory\ActionInterface::class, Factory\Action::class);
 
     $services->set(Factory\Connection::class);
@@ -94,7 +94,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(Producer::class);
     $services->alias(Action\QueueInterface::class, Producer::class);
 
-    $services->set(Processor::class);
+    $services->set(Processor::class)
+        ->arg('$resolvers', tagged_iterator('fusio.action.resolver'));
     $services->alias(ProcessorInterface::class, Processor::class);
 
     $services->set(Dispatcher::class);
@@ -136,6 +137,7 @@ return static function (ContainerConfigurator $container) {
         ->public();
     $services->load('Fusio\\Impl\\EventListener\\', __DIR__ . '/../src/EventListener')
         ->public();
+    $services->load('Fusio\\Impl\\Action\\Resolver\\', __DIR__ . '/../src/Action/Resolver');
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);
