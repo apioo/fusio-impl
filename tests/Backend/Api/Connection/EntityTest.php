@@ -22,7 +22,6 @@ namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
 use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Impl\Service\Connection;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
