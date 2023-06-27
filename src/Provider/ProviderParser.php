@@ -51,7 +51,7 @@ abstract class ProviderParser extends ParserAbstract
             if ($object instanceof ConfigurableInterface) {
                 $result[] = [
                     'name'  => $object->getName(),
-                    'class' => $this->shortName($object::class),
+                    'class' => $this->serialize($object::class),
                 ];
             }
         }
@@ -68,12 +68,19 @@ abstract class ProviderParser extends ParserAbstract
         foreach ($this->objects as $object) {
             if ($object::class === $name) {
                 return $object;
+            } elseif ($this->serialize($object::class) === $name) {
+                return $object;
             } elseif (strcasecmp($this->shortName($object::class), $name) === 0) {
                 return $object;
             }
         }
 
         throw new InvalidProviderException($name);
+    }
+
+    private function serialize(string $class): string
+    {
+        return str_replace('\\', '.', $class);
     }
 
     private function shortName(string $class): string

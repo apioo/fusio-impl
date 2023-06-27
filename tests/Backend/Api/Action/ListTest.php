@@ -51,115 +51,115 @@ class ListTest extends ControllerDbTestCase
     "actions": [
         {
             "name": "CLI-Processor",
-            "class": "CliProcessor"
+            "class": "Fusio.Adapter.Cli.Action.CliProcessor"
         },
         {
             "name": "FastCGI-Processor",
-            "class": "FcgiProcessor"
+            "class": "Fusio.Adapter.Fcgi.Action.FcgiProcessor"
         },
         {
             "name": "File-Directory-Get",
-            "class": "FileDirectoryGet"
+            "class": "Fusio.Adapter.File.Action.FileDirectoryGet"
         },
         {
             "name": "File-Directory-GetAll",
-            "class": "FileDirectoryGetAll"
+            "class": "Fusio.Adapter.File.Action.FileDirectoryGetAll"
         },
         {
             "name": "File-Processor",
-            "class": "FileProcessor"
+            "class": "Fusio.Adapter.File.Action.FileProcessor"
         },
         {
             "name": "GraphQL-Processor",
-            "class": "GraphQLProcessor"
+            "class": "Fusio.Adapter.GraphQL.Action.GraphQLProcessor"
         },
         {
             "name": "HTTP-Composition",
-            "class": "HttpComposition"
+            "class": "Fusio.Adapter.Http.Action.HttpComposition"
         },
         {
             "name": "HTTP-Load-Balancer",
-            "class": "HttpLoadBalancer"
+            "class": "Fusio.Adapter.Http.Action.HttpLoadBalancer"
         },
         {
             "name": "HTTP-Processor",
-            "class": "HttpProcessor"
+            "class": "Fusio.Adapter.Http.Action.HttpProcessor"
         },
         {
             "name": "Inspect-Action",
-            "class": "InspectAction"
+            "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
         },
         {
             "name": "PHP-Processor",
-            "class": "PhpProcessor"
+            "class": "Fusio.Adapter.Php.Action.PhpProcessor"
         },
         {
             "name": "PHP-Sandbox",
-            "class": "PhpSandbox"
+            "class": "Fusio.Adapter.Php.Action.PhpSandbox"
         },
         {
             "name": "SMTP-Send",
-            "class": "SmtpSend"
+            "class": "Fusio.Adapter.Smtp.Action.SmtpSend"
         },
         {
             "name": "SQL-Builder",
-            "class": "SqlBuilder"
+            "class": "Fusio.Adapter.Sql.Action.SqlBuilder"
         },
         {
             "name": "SQL-Delete",
-            "class": "SqlDelete"
+            "class": "Fusio.Adapter.Sql.Action.SqlDelete"
         },
         {
             "name": "SQL-Insert",
-            "class": "SqlInsert"
+            "class": "Fusio.Adapter.Sql.Action.SqlInsert"
         },
         {
             "name": "SQL-Query-All",
-            "class": "SqlQueryAll"
+            "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryAll"
         },
         {
             "name": "SQL-Query-Row",
-            "class": "SqlQueryRow"
+            "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryRow"
         },
         {
             "name": "SQL-Select-All",
-            "class": "SqlSelectAll"
+            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll"
         },
         {
             "name": "SQL-Select-Row",
-            "class": "SqlSelectRow"
+            "class": "Fusio.Adapter.Sql.Action.SqlSelectRow"
         },
         {
             "name": "SQL-Update",
-            "class": "SqlUpdate"
+            "class": "Fusio.Adapter.Sql.Action.SqlUpdate"
         },
         {
             "name": "Util-A\/B-Test",
-            "class": "UtilABTest"
+            "class": "Fusio.Adapter.Util.Action.UtilABTest"
         },
         {
             "name": "Util-Cache",
-            "class": "UtilCache"
+            "class": "Fusio.Adapter.Util.Action.UtilCache"
         },
         {
             "name": "Util-Dispatch-Event",
-            "class": "UtilDispatchEvent"
+            "class": "Fusio.Adapter.Util.Action.UtilDispatchEvent"
         },
         {
             "name": "Util-JSON-Patch",
-            "class": "UtilJsonPatch"
+            "class": "Fusio.Adapter.Util.Action.UtilJsonPatch"
         },
         {
             "name": "Util-Redirect",
-            "class": "UtilRedirect"
+            "class": "Fusio.Adapter.Util.Action.UtilRedirect"
         },
         {
             "name": "Util-Static-Response",
-            "class": "UtilStaticResponse"
+            "class": "Fusio.Adapter.Util.Action.UtilStaticResponse"
         },
         {
             "name": "Void-Action",
-            "class": "VoidAction"
+            "class": "Fusio.Impl.Tests.Adapter.Test.VoidAction"
         }
     ]
 }

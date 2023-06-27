@@ -51,39 +51,39 @@ class ListTest extends ControllerDbTestCase
     "connections": [
         {
             "name": "Filesystem",
-            "class": "Filesystem"
+            "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
             "name": "GraphQL",
-            "class": "GraphQL"
+            "class": "Fusio.Adapter.GraphQL.Connection.GraphQL"
         },
         {
             "name": "HTTP",
-            "class": "Http"
+            "class": "Fusio.Adapter.Http.Connection.Http"
         },
         {
             "name": "Paypal-Connection",
-            "class": "PaypalConnection"
+            "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
             "name": "SMTP",
-            "class": "Smtp"
+            "class": "Fusio.Adapter.Smtp.Connection.Smtp"
         },
         {
             "name": "SOAP",
-            "class": "Soap"
+            "class": "Fusio.Adapter.Soap.Connection.Soap"
         },
         {
             "name": "SQL",
-            "class": "Sql"
+            "class": "Fusio.Adapter.Sql.Connection.Sql"
         },
         {
             "name": "SQL-Advanced",
-            "class": "SqlAdvanced"
+            "class": "Fusio.Adapter.Sql.Connection.SqlAdvanced"
         },
         {
             "name": "Void-Connection",
-            "class": "VoidConnection"
+            "class": "Fusio.Impl.Tests.Adapter.Test.VoidConnection"
         }
     ]
 }

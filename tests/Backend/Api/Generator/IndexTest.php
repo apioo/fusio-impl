@@ -51,35 +51,35 @@ class IndexTest extends ControllerDbTestCase
     "providers": [
         {
             "name": "File-Directory",
-            "class": "FileDirectory"
+            "class": "Fusio.Adapter.File.Generator.FileDirectory"
         },
         {
             "name": "Import-Insomnia",
-            "class": "Insomnia"
+            "class": "Fusio.Impl.Provider.Generator.Insomnia"
         },
         {
             "name": "Import-OpenAPI",
-            "class": "OpenAPI"
+            "class": "Fusio.Impl.Provider.Generator.OpenAPI"
         },
         {
             "name": "Import-Postman",
-            "class": "Postman"
+            "class": "Fusio.Impl.Provider.Generator.Postman"
         },
         {
             "name": "SQL-Database",
-            "class": "SqlDatabase"
+            "class": "Fusio.Adapter.Sql.Generator.SqlDatabase"
         },
         {
             "name": "SQL-Entity",
-            "class": "SqlEntity"
+            "class": "Fusio.Adapter.Sql.Generator.SqlEntity"
         },
         {
             "name": "SQL-Table",
-            "class": "SqlTable"
+            "class": "Fusio.Adapter.Sql.Generator.SqlTable"
         },
         {
             "name": "Test-Provider",
-            "class": "TestProvider"
+            "class": "Fusio.Impl.Tests.Service.Generator.TestProvider"
         }
     ]
 }
