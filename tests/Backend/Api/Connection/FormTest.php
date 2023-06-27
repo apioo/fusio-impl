@@ -113,4 +113,79 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
+
+    public function testGetClassDotNotation()
+    {
+        $response = $this->sendRequest('/backend/connection/form?class=' . str_replace('\\', '.', Sql::class), 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "element": [
+        {
+            "element": "select",
+            "name": "type",
+            "title": "Type",
+            "help": "The driver which is used to connect to the database",
+            "options": [
+                {
+                    "key": "pdo_mysql",
+                    "value": "MySQL"
+                },
+                {
+                    "key": "pdo_pgsql",
+                    "value": "PostgreSQL"
+                },
+                {
+                    "key": "sqlsrv",
+                    "value": "Microsoft SQL Server"
+                },
+                {
+                    "key": "oci8",
+                    "value": "Oracle Database"
+                },
+                {
+                    "key": "sqlanywhere",
+                    "value": "SAP Sybase SQL Anywhere"
+                }
+            ]
+        },
+        {
+            "element": "input",
+            "name": "host",
+            "title": "Host",
+            "help": "The IP or hostname of the database server",
+            "type": "text"
+        },
+        {
+            "element": "input",
+            "name": "username",
+            "title": "Username",
+            "help": "The name of the database user",
+            "type": "text"
+        },
+        {
+            "element": "input",
+            "name": "password",
+            "title": "Password",
+            "help": "The password of the database user",
+            "type": "password"
+        },
+        {
+            "element": "input",
+            "name": "database",
+            "title": "Database",
+            "help": "The name of the database which is used upon connection",
+            "type": "text"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
 }

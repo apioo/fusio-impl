@@ -20,9 +20,8 @@
 
 namespace Fusio\Impl\Provider;
 
-use Fusio\Engine\ConnectionInterface;
-use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
+use Fusio\Engine\Provider\ProviderAbstract;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
@@ -32,11 +31,11 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class PaymentProvider extends ProviderParser
+class PaymentProvider extends ProviderAbstract
 {
-    public function __construct(Factory\ConnectionInterface $factory, Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.payment')] iterable $objects)
+    public function __construct(Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.payment')] iterable $objects)
     {
-        parent::__construct($factory, $elementFactory, $objects);
+        parent::__construct($elementFactory, $objects);
     }
 }
 

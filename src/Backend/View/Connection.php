@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\Form;
-use Fusio\Engine\Parser\ParserInterface;
+use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
@@ -103,7 +103,7 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ParserInterface $connectionParser)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider)
     {
         $builder = new Builder($this->connection);
 
@@ -112,12 +112,12 @@ class Connection extends ViewAbstract
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
-            'config' => $builder->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
+            'config' => $builder->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionProvider) {
                 $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
                 if (!empty($config)) {
-                    $form = $connectionParser->getForm($row[Table\Generated\ConnectionTable::COLUMN_CLASS]);
+                    $form = $connectionProvider->getForm($row[Table\Generated\ConnectionTable::COLUMN_CLASS]);
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();
                         foreach ($elements as $element) {

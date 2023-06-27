@@ -38,17 +38,17 @@ use Fusio\Impl\Provider\ConnectionProvider;
  */
 class GetForm implements ActionInterface
 {
-    private ConnectionProvider $connectionParser;
+    private ConnectionProvider $connectionProvider;
 
     public function __construct(ConnectionProvider $connectionParser)
     {
-        $this->connectionParser = $connectionParser;
+        $this->connectionProvider = $connectionParser;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $className = $request->get('class');
-        $form      = $this->connectionParser->getForm($className);
+        $form      = $this->connectionProvider->getForm($className);
 
         if ($form instanceof Container) {
             return $form;
