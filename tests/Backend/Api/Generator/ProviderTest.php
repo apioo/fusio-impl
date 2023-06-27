@@ -20,13 +20,10 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
-use Fusio\Impl\Service\Route\Config;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Controller\SqlEntityTest;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\OperationInterface;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
