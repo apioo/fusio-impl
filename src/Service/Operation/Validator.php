@@ -20,7 +20,12 @@
 
 namespace Fusio\Impl\Service\Operation;
 
-use Fusio\Impl\Framework\Schema\Scheme;
+use Fusio\Engine\Exception\ActionNotFoundException;
+use Fusio\Engine\Exception\FactoryResolveException;
+use Fusio\Engine\Factory;
+use Fusio\Engine\ProcessorInterface;
+use Fusio\Impl\Action\Scheme as ActionScheme;
+use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Operation;
 use Fusio\Model\Backend\OperationParameters;
@@ -43,16 +48,14 @@ use PSX\Sql\Condition;
 class Validator
 {
     private Table\Operation $operationTable;
-    private Table\Action $actionTable;
-    private Table\Schema $schemaTable;
     private SchemaManagerInterface $schemaManager;
+    private ProcessorInterface $processor;
 
-    public function __construct(Table\Operation $operationTable, Table\Action $actionTable, Table\Schema $schemaTable, SchemaManagerInterface $schemaManager)
+    public function __construct(Table\Operation $operationTable, SchemaManagerInterface $schemaManager, ProcessorInterface $processor)
     {
         $this->operationTable = $operationTable;
-        $this->actionTable = $actionTable;
-        $this->schemaTable = $schemaTable;
         $this->schemaManager = $schemaManager;
+        $this->processor = $processor;
     }
 
     public function assert(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
@@ -263,16 +266,17 @@ class Validator
 
     private function assertAction(string $actionName): void
     {
-        $action = $this->actionTable->findOneByName($actionName);
-        if (!$action instanceof Table\Generated\ActionRow) {
-            throw new StatusCode\BadRequestException('Action "' . $actionName . '" does not exist');
+        try {
+            $this->processor->getAction(ActionScheme::wrap($actionName));
+        } catch (ActionNotFoundException|FactoryResolveException $e) {
+            throw new StatusCode\BadRequestException('Action "' . $actionName . '" does not exist', $e);
         }
     }
 
     private function assertSchema(string $schema, string $type): void
     {
         try {
-            $this->schemaManager->getSchema(Scheme::wrap($schema));
+            $this->schemaManager->getSchema(SchemaScheme::wrap($schema));
         } catch (InvalidSchemaException|ParserException $e) {
             throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist', $e);
         }
