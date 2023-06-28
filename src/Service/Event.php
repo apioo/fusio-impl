@@ -24,6 +24,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\EventCreate;
 use Fusio\Model\Backend\EventUpdate;
@@ -64,7 +65,7 @@ class Event
             $row->setStatus(Table\Event::STATUS_ACTIVE);
             $row->setName($event->getName());
             $row->setDescription($event->getDescription());
-            $row->setEventSchema($event->getSchema());
+            $row->setEventSchema(Scheme::wrap($event->getSchema()));
             $row->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
             $this->eventTable->create($row);
 

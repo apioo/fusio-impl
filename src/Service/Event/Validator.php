@@ -21,10 +21,14 @@
 namespace Fusio\Impl\Service\Event;
 
 use Cron\CronExpression;
+use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Cronjob;
 use Fusio\Model\Backend\Event;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Exception\InvalidSchemaException;
+use PSX\Schema\Exception\ParserException;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * Validator
@@ -36,10 +40,12 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Event $eventTable;
+    private SchemaManagerInterface $schemaManager;
 
-    public function __construct(Table\Event $eventTable)
+    public function __construct(Table\Event $eventTable, SchemaManagerInterface $schemaManager)
     {
         $this->eventTable = $eventTable;
+        $this->schemaManager = $schemaManager;
     }
 
     public function assert(Event $event, ?Table\Generated\EventRow $existing = null): void
@@ -49,6 +55,11 @@ class Validator
             $this->assertName($name, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Event name must not be empty');
+        }
+
+        $schema = $event->getSchema();
+        if ($schema !== null) {
+            $this->assertSchema($schema);
         }
     }
 
@@ -60,6 +71,15 @@ class Validator
 
         if (($existing === null || $name !== $existing->getName()) && $this->eventTable->findOneByName($name)) {
             throw new StatusCode\BadRequestException('Event already exists');
+        }
+    }
+
+    private function assertSchema(string $schema): void
+    {
+        try {
+            $this->schemaManager->getSchema(SchemaScheme::wrap($schema));
+        } catch (InvalidSchemaException|ParserException $e) {
+            throw new StatusCode\BadRequestException('Schema "' . $schema . '" does not exist', $e);
         }
     }
 }
