@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Action;
 
+use PSX\Http\Exception as StatusCode;
+
 /**
  * Scheme
  *
@@ -30,13 +32,10 @@ namespace Fusio\Impl\Action;
 enum Scheme: string
 {
     case ACTION = 'action';
-    case PHP_CLASS = 'class';
-    case CLI = 'cli';
-    case FCGI = 'fcgi';
-    case FILE = 'file';
-    case GRAPHQL = 'graphql';
+    case PHP_CLASS = 'php+class';
     case HTTP = 'http';
-    case PHP = 'php';
+    case HTTPS = 'https';
+    case FILE = 'file';
 
     public static function wrap(?string $actionName): ?string
     {
@@ -45,10 +44,10 @@ enum Scheme: string
         }
 
         if (str_contains($actionName, '://')) {
-            return $actionName;
+            return self::buildAction($actionName);
         }
 
-        return 'action://' . $actionName;
+        return self::buildAction('action://' . $actionName);
     }
 
     /**
@@ -66,5 +65,47 @@ enum Scheme: string
         $value = substr($action, $pos + 3);
 
         return [self::from($scheme), $value];
+    }
+
+    private static function buildAction(string $actionName): string
+    {
+        if (!filter_var($actionName, FILTER_VALIDATE_URL)) {
+            throw new StatusCode\BadRequestException('Provided an invalid action url, must be in the format i.e. action://my_action_name');
+        }
+
+        [$scheme, $value] = self::split($actionName);
+
+        if (empty($value)) {
+            throw new StatusCode\BadRequestException('Provided action url contains an empty value');
+        }
+
+        switch ($scheme) {
+            case self::ACTION:
+                if (!preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $value)) {
+                    throw new StatusCode\BadRequestException('Provided action url contains an invalid action name');
+                }
+                break;
+            case self::PHP_CLASS:
+                $value = str_replace('.', '\\', $value);
+                if (!class_exists($value)) {
+                    throw new StatusCode\BadRequestException('Provided action url contains a not existing PHP class');
+                }
+                $value = str_replace('\\', '.', $value);
+                break;
+            case self::HTTP:
+            case self::HTTPS:
+                $value = str_replace(['http://', 'https://'], '', $value);
+                if (str_contains($value, '://')) {
+                    throw new StatusCode\BadRequestException('Provided action url must _not_ contain a scheme');
+                }
+                break;
+            case self::FILE:
+                if (!is_file($value)) {
+                    throw new StatusCode\BadRequestException('Provided action url contains a not existing file');
+                }
+                break;
+        }
+
+        return $scheme->value . '://' . $value;
     }
 }

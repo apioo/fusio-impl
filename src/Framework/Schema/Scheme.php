@@ -30,6 +30,7 @@ namespace Fusio\Impl\Framework\Schema;
 enum Scheme: string
 {
     case SCHEMA = 'schema';
+    case PHP_CLASS = 'php+class';
     case HTTP = 'http';
     case HTTPS = 'https';
     case FILE = 'file';

@@ -25,7 +25,7 @@ use Fusio\Engine\Action\ResolverInterface;
 use Fusio\Engine\Model;
 
 /**
- * HttpUrl
+ * HTTP
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0

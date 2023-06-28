@@ -20,27 +20,27 @@
 
 namespace Fusio\Impl\Action\Resolver;
 
-use Fusio\Adapter\Fcgi\Action\FcgiProcessor;
+use Fusio\Adapter\Http\Action\HttpProcessor;
 use Fusio\Engine\Action\ResolverInterface;
 use Fusio\Engine\Model;
 
 /**
- * FCGI
+ * HTTPS
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FCGI implements ResolverInterface
+class HTTPS implements ResolverInterface
 {
     public function getScheme(): string
     {
-        return 'fcgi';
+        return 'https';
     }
 
     public function resolve(string $action): Model\ActionInterface
     {
-        return new Model\Action(1, 'FCGI', FcgiProcessor::class, false, [
+        return new Model\Action(1, 'HTTP', HttpProcessor::class, false, [
             'url' => $action,
         ]);
     }
