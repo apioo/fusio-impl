@@ -1,0 +1,115 @@
+{
+  "schemas": [
+    {
+      "name": "FileDirectory_GetAll",
+      "source": {
+        "definitions": {
+          "FileDirectory_GetAll": {
+            "type": "object",
+            "properties": {
+              "totalResults": {
+                "type": "integer"
+              },
+              "itemsPerPage": {
+                "type": "integer"
+              },
+              "startIndex": {
+                "type": "integer"
+              },
+              "entry": {
+                "type": "array",
+                "items": {
+                  "$ref": "FileDirectory_GetAll_Entry"
+                }
+              }
+            }
+          },
+          "FileDirectory_GetAll_Entry": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "fileName": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer"
+              },
+              "contentType": {
+                "type": "string"
+              },
+              "sha1": {
+                "type": "string"
+              },
+              "lastModified": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "$ref": "FileDirectory_GetAll"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "FileDirectory_GetAll",
+      "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGetAll",
+      "config": {
+        "directory": "C:\\www\\projects\\fusio-impl\\tests\\Backend\\Api\\Generator\/resource"
+      }
+    },
+    {
+      "name": "FileDirectory_Get",
+      "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGet",
+      "config": {
+        "directory": "C:\\www\\projects\\fusio-impl\\tests\\Backend\\Api\\Generator\/resource"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "description": "Returns a collection of files",
+      "httpMethod": "GET",
+      "httpPath": "\/",
+      "httpCode": 200,
+      "name": "getAll",
+      "parameters": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "sortBy": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string"
+        },
+        "filterBy": {
+          "type": "string"
+        },
+        "filterOp": {
+          "type": "string"
+        },
+        "filterValue": {
+          "type": "string"
+        }
+      },
+      "outgoing": "FileDirectory_GetAll",
+      "action": "FileDirectory_GetAll"
+    },
+    {
+      "description": "Returns a single file",
+      "httpMethod": "GET",
+      "httpPath": "\/:id",
+      "httpCode": 200,
+      "name": "get",
+      "outgoing": "Passthru",
+      "action": "FileDirectory_Get"
+    }
+  ]
+}

@@ -166,6 +166,52 @@ JSON;
         }
     }
 
+    public function testPostFileDirectory()
+    {
+        $response = $this->sendRequest('/backend/generator/filedirectory', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'path' => '/provider',
+            'scopes' => ['provider'],
+            'public' => true,
+            'config' => [
+                'directory' => __DIR__ . '/resource',
+            ],
+        ]));
+
+        $body = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Provider successfully executed"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        $data = file_get_contents(__DIR__ . '/resource/changelog_filedirectory.json');
+        $data = str_replace('schema:\/\/', 'schema:\/\/Provider_', $data);
+        $data = json_decode($data);
+
+        // check schema
+        foreach ($data->schemas as $schema) {
+            Assert::assertSchema($this->connection, 'Provider_' . $schema->name, json_encode($schema->source));
+        }
+
+        // check action
+        foreach ($data->actions as $action) {
+            Assert::assertAction($this->connection, 'Provider_' . $action->name, $action->class, json_encode($action->config));
+        }
+
+        // check routes
+        foreach ($data->operations as $operation) {
+            $path = rtrim('/provider' . $operation->httpPath, '/');
+            Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'provider.' . $operation->name, $operation->httpMethod, $path, ['provider']);
+        }
+    }
+
     public function testPut()
     {
         $response = $this->sendRequest('/backend/generator/testprovider', 'PUT', array(
@@ -196,6 +242,22 @@ JSON;
 
         $body   = (string) $response->getBody();
         $expect = file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json');
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPutFileDirectory()
+    {
+        $response = $this->sendRequest('/backend/generator/filedirectory', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'directory' => __DIR__ . '/resource',
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = file_get_contents(__DIR__ . '/resource/changelog_filedirectory.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
