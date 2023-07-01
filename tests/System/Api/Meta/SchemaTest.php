@@ -101,22 +101,44 @@ JSON;
 {
     "schema": {
         "definitions": {
-            "Message": {
+            "Collection": {
+                "title": "collection",
                 "type": "object",
                 "properties": {
-                    "success": {
-                        "type": "boolean"
+                    "totalResults": {
+                        "type": "integer"
                     },
-                    "message": {
+                    "itemsPerPage": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "$ref": "Entry"
+                    }
+                }
+            },
+            "Entry": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
                         "type": "string"
                     },
-                    "id": {
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "format": "date-time",
                         "type": "string"
                     }
                 }
             }
         },
-        "$ref": "Message"
+        "$ref": "Collection"
     },
     "form": null
 }

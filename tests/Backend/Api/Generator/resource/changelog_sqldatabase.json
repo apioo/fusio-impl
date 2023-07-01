@@ -3,8 +3,11 @@
     {
       "name": "News_SQL_GetAll",
       "source": {
+        "$import": {
+          "entity": "schema:\/\/News_SQL_Get"
+        },
         "definitions": {
-          "SQL_GetAll": {
+          "News_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -19,45 +22,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "SQL_GetAll_Entry"
+                  "$ref": "entity:News_SQL_Get"
                 }
               }
             }
-          },
-          "SQL_GetAll_Entry": {
-            "definitions": {
-              "SQL_GetAll": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer"
-                  },
-                  "title": {
-                    "type": "string",
-                    "maxLength": 64
-                  },
-                  "content": {
-                    "type": "string",
-                    "maxLength": 255
-                  },
-                  "date": {
-                    "type": "string",
-                    "format": "date-time"
-                  }
-                }
-              }
-            },
-            "$ref": "SQL_GetAll"
           }
         },
-        "$ref": "SQL_GetAll"
+        "$ref": "News_SQL_GetAll"
       }
     },
     {
       "name": "News_SQL_Get",
       "source": {
         "definitions": {
-          "SQL_Get": {
+          "News_SQL_Get": {
             "type": "object",
             "properties": {
               "id": {
@@ -78,7 +56,7 @@
             }
           }
         },
-        "$ref": "SQL_Get"
+        "$ref": "News_SQL_Get"
       }
     }
   ],

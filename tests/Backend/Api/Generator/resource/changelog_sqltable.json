@@ -3,6 +3,9 @@
     {
       "name": "SQL_GetAll",
       "source": {
+        "$import": {
+          "entity": "schema:\/\/SQL_Get"
+        },
         "definitions": {
           "SQL_GetAll": {
             "type": "object",
@@ -19,35 +22,10 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "SQL_GetAll_Entry"
+                  "$ref": "entity:SQL_Get"
                 }
               }
             }
-          },
-          "SQL_GetAll_Entry": {
-            "definitions": {
-              "SQL_GetAll": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer"
-                  },
-                  "title": {
-                    "type": "string",
-                    "maxLength": 64
-                  },
-                  "content": {
-                    "type": "string",
-                    "maxLength": 255
-                  },
-                  "date": {
-                    "type": "string",
-                    "format": "date-time"
-                  }
-                }
-              }
-            },
-            "$ref": "SQL_GetAll"
           }
         },
         "$ref": "SQL_GetAll"
