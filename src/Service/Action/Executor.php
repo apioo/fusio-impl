@@ -57,7 +57,8 @@ class Executor
             $body = new Record();
         }
 
-        if (!str_contains('' . $actionId, '://')) {
+        $actionId = (string) $actionId;
+        if (!str_contains($actionId, '://')) {
             $class = ClassName::unserialize($actionId);
             if (class_exists($class)) {
                 $actionId = 'php+class://' . ClassName::serialize($class);
