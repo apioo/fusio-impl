@@ -58,7 +58,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 3,
             "status": 1,
-            "name": "paypal"
+            "name": "Paypal"
         },
         {
             "id": 2,
@@ -125,7 +125,7 @@ JSON;
         {
             "id": 3,
             "status": 1,
-            "name": "paypal"
+            "name": "Paypal"
         },
         {
             "id": 2,

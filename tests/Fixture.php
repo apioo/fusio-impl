@@ -91,7 +91,7 @@ class Fixture
         $data->addAppCode('Foo-App', 'Developer', 'GHMbtJi0ZuAUnp80', 'authorization');
         $data->addAudit('Backend', 'Administrator', 1, 'app.update', 'Created schema foo', '2015-06-25 22:49:09');
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey), ['foo' => 'bar']);
-        $data->addConnection('paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
+        $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);

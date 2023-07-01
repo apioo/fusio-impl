@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Payment;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -40,7 +39,7 @@ class PortalTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/payment/paypal/portal', 'GET', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -52,7 +51,7 @@ class PortalTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/payment/paypal/portal', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -72,7 +71,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/payment/paypal/portal', 'PUT', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -86,7 +85,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/payment/paypal/portal', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));

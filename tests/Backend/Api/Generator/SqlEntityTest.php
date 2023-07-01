@@ -78,16 +78,16 @@ class SqlEntityTest extends ProviderTestCase
             "help": "The SQL connection which should be used",
             "options": [
                 {
+                    "key": "3",
+                    "value": "Paypal"
+                },
+                {
                     "key": "1",
                     "value": "System"
                 },
                 {
                     "key": "2",
                     "value": "Test"
-                },
-                {
-                    "key": "3",
-                    "value": "paypal"
                 }
             ]
         },

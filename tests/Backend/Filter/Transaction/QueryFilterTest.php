@@ -39,14 +39,14 @@ class QueryFilterTest extends FilterTestCase
             'to'        => '2015-08-30',
             'invoiceId' => 1,
             'status'    => 1,
-            'provider'  => 'paypal',
+            'provider'  => 'Paypal',
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
         $this->assertEquals(1, $filter->getInvoiceId());
         $this->assertEquals(1, $filter->getStatus());
-        $this->assertEquals('paypal', $filter->getProvider());
+        $this->assertEquals('Paypal', $filter->getProvider());
 
         $condition = $filter->getCondition();
 
@@ -56,7 +56,7 @@ class QueryFilterTest extends FilterTestCase
             '2015-08-30 23:59:59',
             1,
             1,
-            'paypal',
+            'Paypal',
         ], $condition->getValues());
     }
 }
