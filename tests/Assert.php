@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Service;
 
 /**
@@ -49,7 +50,7 @@ class Assert extends \PHPUnit\Framework\Assert
 
         self::assertNotEmpty($row['id']);
         self::assertEquals($expectName, $row['name']);
-        self::assertEquals($expectClass, $row['class']);
+        self::assertEquals(ClassName::serialize($expectClass), $row['class']);
         self::assertJsonStringEqualsJsonString($expectConfig, $config, $config);
 
         if ($expectMetadata !== null) {

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
 use Fusio\Adapter\Sql\Connection\SqlAdvanced;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -191,7 +192,7 @@ JSON;
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals(SqlAdvanced::class, $row['class']);
+        $this->assertEquals(ClassName::serialize(SqlAdvanced::class), $row['class']);
         $this->assertNotEmpty($row['config']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
