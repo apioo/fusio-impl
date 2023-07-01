@@ -592,49 +592,5 @@ final class Version20230508210151 extends AbstractMigration
                 }
             }
         }
-
-        // run migration
-        /*
-        if ($this->connection->createSchemaManager()->tablesExist('fusio_routes')) {
-            $count = (int) $this->connection->fetchFirstColumn('SELECT COUNT(*) AS cnt FROM fusio_routes');
-            if ($count > 0) {
-                $routes = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes');
-                foreach ($routes as $route) {
-                    $methods = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_method WHERE route_id = :route_id', ['route_id' => $route['id']]);
-                    foreach ($methods as $method) {
-                        $responses = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_response WHERE method_id = :method_id', ['method_id' => $method['id']]);
-                        foreach ($responses as $response) {
-                            $code = (int) ($response['code'] ?? 0);
-                            if ($code < 200 || $code >= 300) {
-                                continue;
-                            }
-
-                            $operationId = $method['operation_id'];
-
-                            $this->connection->insert('fusio_operation', [
-                                'category_id' => $route['category_id'],
-                                'status' => Table\Operation::STATUS_ACTIVE,
-                                'active' => $method['active'],
-                                'public' => $method['public'],
-                                'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
-                                'description' => $method['description'],
-                                'http_method' => $method['method'],
-                                'http_path' => $route['path'],
-                                'http_code' => $response['code'],
-                                'name' => $method['operation_id'],
-                                'parameters' => '',
-                                'incoming' => Scheme::wrap($method['request']),
-                                'outgoing' => Scheme::wrap($response['response']),
-                                'throws' => '',
-                                'action' => $method['action'],
-                                'costs' => $method['costs'],
-                                'metadata' => $route['metadata'],
-                            ]);
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 }
