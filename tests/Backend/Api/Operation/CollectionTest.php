@@ -147,7 +147,7 @@ class CollectionTest extends ControllerDbTestCase
             "httpPath": "\/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "action:\/\/System_Action_Meta_GetAbout"
+            "action": "php+class:\/\/Fusio.Impl.System.Action.Meta.GetAbout"
         }
     ]
 }
@@ -347,7 +347,7 @@ JSON;
             "httpPath": "\/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "action:\/\/System_Action_Meta_GetAbout"
+            "action": "php+class:\/\/Fusio.Impl.System.Action.Meta.GetAbout"
         }
     ]
 }

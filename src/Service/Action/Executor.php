@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Action;
 
 use Fusio\Engine\Context;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
@@ -54,6 +55,15 @@ class Executor
         $body = $request->getBody();
         if ($body === null) {
             $body = new Record();
+        }
+
+        if (!str_contains('' . $actionId, '://')) {
+            $class = ClassName::unserialize($actionId);
+            if (class_exists($class)) {
+                $actionId = 'php+class://' . ClassName::serialize($class);
+            } else {
+                $actionId = 'action://' . $actionId;
+            }
         }
 
         $app  = $this->appRepository->get(1) ?? throw new \RuntimeException('App 1 not available');

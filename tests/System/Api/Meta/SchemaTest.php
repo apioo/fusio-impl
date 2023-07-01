@@ -101,81 +101,22 @@ JSON;
 {
     "schema": {
         "definitions": {
-            "About": {
+            "Message": {
                 "type": "object",
                 "properties": {
-                    "apiVersion": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
                         "type": "string"
                     },
-                    "title": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "termsOfService": {
-                        "type": "string"
-                    },
-                    "contactName": {
-                        "type": "string"
-                    },
-                    "contactUrl": {
-                        "type": "string"
-                    },
-                    "contactEmail": {
-                        "type": "string"
-                    },
-                    "licenseName": {
-                        "type": "string"
-                    },
-                    "licenseUrl": {
-                        "type": "string"
-                    },
-                    "paymentCurrency": {
-                        "type": "string"
-                    },
-                    "categories": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "apps": {
-                        "$ref": "AboutApps"
-                    },
-                    "links": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "AboutLink"
-                        }
-                    }
-                }
-            },
-            "AboutApps": {
-                "type": "object",
-                "additionalProperties": {
-                    "type": "string"
-                }
-            },
-            "AboutLink": {
-                "type": "object",
-                "properties": {
-                    "rel": {
-                        "type": "string"
-                    },
-                    "href": {
+                    "id": {
                         "type": "string"
                     }
                 }
             }
         },
-        "$ref": "About"
+        "$ref": "Message"
     },
     "form": null
 }

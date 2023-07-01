@@ -42,22 +42,16 @@ class DataSyncronizerTest extends DbTestCase
     public function testSync()
     {
         $config = $this->getConfig('info_title');
-        $operation = $this->getOperation('backend.action.get');
-        $action = $this->getAction('Backend_Action_Action_Get');
-        $schema = $this->getSchema('Backend_Action');
-        $event = $this->getEvent('fusio.action.create');
-        $cronjob = $this->getCronjob('Dispatch_Event');
-        $scope = $this->getScope('backend.action');
+        $operation = $this->getOperation('inspect.get');
+        $action = $this->getAction('Inspect-Action');
+        $schema = $this->getSchema('Passthru');
 
         DataSyncronizer::sync($this->connection);
 
         $this->assertEquals($config, $this->getConfig('info_title'));
-        $this->assertEquals($operation, $this->getOperation('backend.action.get'));
-        $this->assertEquals($action, $this->getAction('Backend_Action_Action_Get'));
-        $this->assertEquals($schema, $this->getSchema('Backend_Action'));
-        $this->assertEquals($event, $this->getEvent('fusio.action.create'));
-        $this->assertEquals($cronjob, $this->getCronjob('Dispatch_Event'));
-        $this->assertEquals($scope, $this->getScope('backend.action'));
+        $this->assertEquals($operation, $this->getOperation('inspect.get'));
+        $this->assertEquals($action, $this->getAction('Inspect-Action'));
+        $this->assertEquals($schema, $this->getSchema('Passthru'));
     }
 
     private function getConfig(string $name): array

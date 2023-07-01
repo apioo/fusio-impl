@@ -20,7 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
-use Fusio\Impl\Tests\Documentation;
+use Fusio\Engine\Inflection\ClassName;
+use Fusio\Impl\System\Action\Meta\GetDebug;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -52,7 +53,7 @@ class ExecuteTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/execute/System_Action_Meta_GetDebug', 'POST', array(
+        $response = $this->sendRequest('/backend/action/execute/' . ClassName::serialize(GetDebug::class), 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Installation;
 
 use Fusio\Adapter;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
@@ -94,22 +95,25 @@ class DataBag
                 $operationName = $name;
             }
 
-            $actionName = $this->getActionName($operation->action);
-            if (!$this->hasId('fusio_action', $actionName)) {
-                $this->addAction($category, $actionName, $operation->action);
+            if (class_exists($operation->action)) {
+                $action = ActionScheme::wrap('php+class://' . ClassName::serialize($operation->action));
+            } else {
+                $action = 'action://' . $operation->action;
             }
 
-            $incomingName = null;
+            $incoming = null;
             if (isset($operation->incoming)) {
-                $incomingName = $this->getSchemaName($operation->incoming);
-                if (!$this->hasId('fusio_schema', $incomingName)) {
-                    $this->addSchema($category, $incomingName, $operation->incoming);
+                if (class_exists($operation->incoming)) {
+                    $incoming = 'php+class://' . ClassName::serialize($operation->incoming);
+                } else {
+                    $incoming = 'schema://' . $operation->incoming;
                 }
             }
 
-            $outgoingName = $this->getSchemaName($operation->outgoing);
-            if (!$this->hasId('fusio_schema', $outgoingName)) {
-                $this->addSchema($category, $outgoingName, $operation->outgoing);
+            if (class_exists($operation->outgoing)) {
+                $outgoing = 'php+class://' . ClassName::serialize($operation->outgoing);
+            } else {
+                $outgoing = 'schema://' . $operation->outgoing;
             }
 
             $this->addOperation(
@@ -121,10 +125,10 @@ class DataBag
                 $path,
                 $operation->httpCode,
                 $this->normalizeParameters($operation->parameters),
-                SchemaScheme::wrap($incomingName),
-                SchemaScheme::wrap($outgoingName),
+                $incoming,
+                $outgoing,
                 $this->normalizeThrows($operation->throws, $category),
-                ActionScheme::wrap($actionName),
+                $action,
                 $operation->costs
             );
 
