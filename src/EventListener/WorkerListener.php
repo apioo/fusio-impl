@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\EventListener;
 
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Event;
 use Fusio\Impl\Worker\Action\WorkerJava;
 use Fusio\Impl\Worker\Action\WorkerJavascript;
@@ -31,7 +32,6 @@ use Fusio\Impl\Worker\Generated\Connection;
 use Fusio\Impl\Worker\Generated\Message;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ConnectionConfig;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\InternalServerErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -177,7 +177,7 @@ class WorkerListener implements EventSubscriberInterface
 
     private function convertClassToType(?string $class): string
     {
-        return str_replace('\\', '.', $class ?? '');
+        return ClassName::serialize($class ?? '');
     }
 
     public static function getSubscribedEvents(): array

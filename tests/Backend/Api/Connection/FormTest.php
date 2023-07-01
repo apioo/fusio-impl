@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
 use Fusio\Adapter\Sql\Connection\Sql;
-use Fusio\Impl\Tests\Documentation;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -116,7 +116,7 @@ JSON;
 
     public function testGetClassDotNotation()
     {
-        $response = $this->sendRequest('/backend/connection/form?class=' . str_replace('\\', '.', Sql::class), 'GET', array(
+        $response = $this->sendRequest('/backend/connection/form?class=' . ClassName::serialize(Sql::class), 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

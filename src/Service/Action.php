@@ -24,6 +24,7 @@ use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
@@ -83,7 +84,7 @@ class Action
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($name);
-            $row->setClass($class);
+            $row->setClass(ClassName::serialize($class));
             $row->setAsync($action->getAsync() ?? false);
             $row->setConfig(self::serializeConfig($config));
             $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
@@ -133,7 +134,7 @@ class Action
 
         // update action
         $existing->setName($name);
-        $existing->setClass($class);
+        $existing->setClass(ClassName::serialize($class));
         $existing->setAsync($action->getAsync() ?? $existing->getAsync());
         $existing->setConfig(self::serializeConfig($config));
         $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : $existing->getMetadata());

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Action;
 
+use Fusio\Engine\Inflection\ClassName;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -86,11 +87,11 @@ enum Scheme: string
                 }
                 break;
             case self::PHP_CLASS:
-                $value = str_replace('.', '\\', $value);
+                $value = ClassName::unserialize($value);
                 if (!class_exists($value)) {
                     throw new StatusCode\BadRequestException('Provided action url contains a not existing PHP class');
                 }
-                $value = str_replace('\\', '.', $value);
+                $value = ClassName::serialize($value);
                 break;
             case self::HTTP:
             case self::HTTPS:

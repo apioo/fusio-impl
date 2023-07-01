@@ -27,6 +27,7 @@ use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Connection\CreatedEvent;
@@ -38,7 +39,6 @@ use Fusio\Model\Backend\ConnectionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Connection
@@ -97,7 +97,7 @@ class Connection
             $row = new Table\Generated\ConnectionRow();
             $row->setStatus(Table\Connection::STATUS_ACTIVE);
             $row->setName($name);
-            $row->setClass($class);
+            $row->setClass(ClassName::serialize($class));
             $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
             $row->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
             $this->connectionTable->create($row);
