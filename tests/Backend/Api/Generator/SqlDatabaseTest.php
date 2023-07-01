@@ -20,32 +20,41 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
-use Fusio\Impl\Tests\Service\Generator\TestProvider;
+use Fusio\Adapter\Sql\Generator\SqlDatabase;
 
 /**
- * ProviderTest
+ * SqlDatabaseTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ProviderTest extends ProviderTestCase
+class SqlDatabaseTest extends ProviderTestCase
 {
     protected function getProviderClass(): string
     {
-        return TestProvider::class;
+        return SqlDatabase::class;
     }
 
     protected function getProviderConfig(): array
     {
         return [
-            'table' => 'foobar'
+            'connection' => 2,
+            'prefix' => 'app_',
         ];
     }
 
     protected function getExpectChangelog(): string
     {
-        return file_get_contents(__DIR__ . '/resource/changelog_test.json');
+        return file_get_contents(__DIR__ . '/resource/changelog_sqldatabase.json');
+    }
+
+    protected function getExpectSchema(): string
+    {
+        $data = $this->getExpectChangelog();
+        $data = str_replace('schema:\/\/', 'schema:\/\/Provider_', $data);
+
+        return $data;
     }
 
     protected function getExpectForm(): string
@@ -54,10 +63,30 @@ class ProviderTest extends ProviderTestCase
 {
     "element": [
         {
+            "element": "select",
+            "name": "connection",
+            "title": "Connection",
+            "help": "The SQL connection which should be used",
+            "options": [
+                {
+                    "key": "1",
+                    "value": "System"
+                },
+                {
+                    "key": "2",
+                    "value": "Test"
+                },
+                {
+                    "key": "3",
+                    "value": "paypal"
+                }
+            ]
+        },
+        {
             "element": "input",
-            "name": "table",
-            "title": "Table",
-            "help": null,
+            "name": "prefix",
+            "title": "Prefix",
+            "help": "Includes only tables which start with this prefix",
             "type": "text"
         }
     ]

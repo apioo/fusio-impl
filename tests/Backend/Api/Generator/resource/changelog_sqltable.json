@@ -1,0 +1,174 @@
+{
+  "schemas": [
+    {
+      "name": "SQL_GetAll",
+      "source": {
+        "definitions": {
+          "SQL_GetAll": {
+            "type": "object",
+            "properties": {
+              "totalResults": {
+                "type": "integer"
+              },
+              "itemsPerPage": {
+                "type": "integer"
+              },
+              "startIndex": {
+                "type": "integer"
+              },
+              "entry": {
+                "type": "array",
+                "items": {
+                  "$ref": "SQL_GetAll_Entry"
+                }
+              }
+            }
+          },
+          "SQL_GetAll_Entry": {
+            "definitions": {
+              "SQL_GetAll": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "maxLength": 64
+                  },
+                  "content": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            },
+            "$ref": "SQL_GetAll"
+          }
+        },
+        "$ref": "SQL_GetAll"
+      }
+    },
+    {
+      "name": "SQL_Get",
+      "source": {
+        "definitions": {
+          "SQL_Get": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "$ref": "SQL_Get"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "SQL_GetAll",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "SQL_Get",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "SQL_Insert",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "SQL_Update",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "SQL_Delete",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "description": "Returns a collection of rows",
+      "httpMethod": "GET",
+      "httpPath": "\/",
+      "httpCode": 200,
+      "name": "getAll",
+      "outgoing": "SQL_GetAll",
+      "action": "SQL_GetAll"
+    },
+    {
+      "description": "Returns a single row",
+      "httpMethod": "GET",
+      "httpPath": "\/:id",
+      "httpCode": 200,
+      "name": "get",
+      "outgoing": "SQL_Get",
+      "action": "SQL_Get"
+    },
+    {
+      "description": "Creates a new row",
+      "httpMethod": "POST",
+      "httpPath": "\/",
+      "httpCode": 201,
+      "name": "create",
+      "outgoing": "Message",
+      "action": "SQL_Insert"
+    },
+    {
+      "description": "Updates an existing row",
+      "httpMethod": "PUT",
+      "httpPath": "\/:id",
+      "httpCode": 200,
+      "name": "update",
+      "outgoing": "Message",
+      "action": "SQL_Update"
+    },
+    {
+      "description": "Deletes an existing row",
+      "httpMethod": "DELETE",
+      "httpPath": "\/:id",
+      "httpCode": 200,
+      "name": "delete",
+      "outgoing": "Message",
+      "action": "SQL_Delete"
+    }
+  ]
+}

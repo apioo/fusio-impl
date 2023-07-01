@@ -20,32 +20,32 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
-use Fusio\Impl\Tests\Service\Generator\TestProvider;
+use Fusio\Adapter\File\Generator\FileDirectory;
 
 /**
- * ProviderTest
+ * FileDirectoryTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ProviderTest extends ProviderTestCase
+class FileDirectoryTest extends ProviderTestCase
 {
     protected function getProviderClass(): string
     {
-        return TestProvider::class;
+        return FileDirectory::class;
     }
 
     protected function getProviderConfig(): array
     {
         return [
-            'table' => 'foobar'
+            'directory' => '.'
         ];
     }
 
     protected function getExpectChangelog(): string
     {
-        return file_get_contents(__DIR__ . '/resource/changelog_test.json');
+        return file_get_contents(__DIR__ . '/resource/changelog_filedirectory.json');
     }
 
     protected function getExpectForm(): string
@@ -55,9 +55,9 @@ class ProviderTest extends ProviderTestCase
     "element": [
         {
             "element": "input",
-            "name": "table",
-            "title": "Table",
-            "help": null,
+            "help": "A path to a directory which you want expose",
+            "name": "directory",
+            "title": "Directory",
             "type": "text"
         }
     ]

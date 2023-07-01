@@ -58,14 +58,14 @@
       "name": "FileDirectory_GetAll",
       "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGetAll",
       "config": {
-        "directory": "C:\\www\\projects\\fusio-impl\\tests\\Backend\\Api\\Generator\/resource"
+        "directory": "."
       }
     },
     {
       "name": "FileDirectory_Get",
       "class": "Fusio\\Adapter\\File\\Action\\FileDirectoryGet",
       "config": {
-        "directory": "C:\\www\\projects\\fusio-impl\\tests\\Backend\\Api\\Generator\/resource"
+        "directory": "."
       }
     }
   ],

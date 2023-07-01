@@ -1,0 +1,174 @@
+{
+  "schemas": [
+    {
+      "name": "News_SQL_GetAll",
+      "source": {
+        "definitions": {
+          "SQL_GetAll": {
+            "type": "object",
+            "properties": {
+              "totalResults": {
+                "type": "integer"
+              },
+              "itemsPerPage": {
+                "type": "integer"
+              },
+              "startIndex": {
+                "type": "integer"
+              },
+              "entry": {
+                "type": "array",
+                "items": {
+                  "$ref": "SQL_GetAll_Entry"
+                }
+              }
+            }
+          },
+          "SQL_GetAll_Entry": {
+            "definitions": {
+              "SQL_GetAll": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "maxLength": 64
+                  },
+                  "content": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            },
+            "$ref": "SQL_GetAll"
+          }
+        },
+        "$ref": "SQL_GetAll"
+      }
+    },
+    {
+      "name": "News_SQL_Get",
+      "source": {
+        "definitions": {
+          "SQL_Get": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "$ref": "SQL_Get"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "News_SQL_GetAll",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "News_SQL_Get",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "News_SQL_Insert",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "News_SQL_Update",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    },
+    {
+      "name": "News_SQL_Delete",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
+      "config": {
+        "connection": "2",
+        "table": "app_news"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "description": "Returns a collection of rows",
+      "httpMethod": "GET",
+      "httpPath": "\/news\/",
+      "httpCode": 200,
+      "name": "news.getAll",
+      "outgoing": "News_SQL_GetAll",
+      "action": "News_SQL_GetAll"
+    },
+    {
+      "description": "Returns a single row",
+      "httpMethod": "GET",
+      "httpPath": "\/news\/:id",
+      "httpCode": 200,
+      "name": "news.get",
+      "outgoing": "News_SQL_Get",
+      "action": "News_SQL_Get"
+    },
+    {
+      "description": "Creates a new row",
+      "httpMethod": "POST",
+      "httpPath": "\/news\/",
+      "httpCode": 201,
+      "name": "news.create",
+      "outgoing": "Message",
+      "action": "News_SQL_Insert"
+    },
+    {
+      "description": "Updates an existing row",
+      "httpMethod": "PUT",
+      "httpPath": "\/news\/:id",
+      "httpCode": 200,
+      "name": "news.update",
+      "outgoing": "Message",
+      "action": "News_SQL_Update"
+    },
+    {
+      "description": "Deletes an existing row",
+      "httpMethod": "DELETE",
+      "httpPath": "\/news\/:id",
+      "httpCode": 200,
+      "name": "news.delete",
+      "outgoing": "Message",
+      "action": "News_SQL_Delete"
+    }
+  ]
+}
