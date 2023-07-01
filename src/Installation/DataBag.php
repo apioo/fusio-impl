@@ -22,10 +22,8 @@ namespace Fusio\Impl\Installation;
 
 use Fusio\Adapter;
 use Fusio\Engine\Inflection\ClassName;
-use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Table;
 use PSX\Schema\TypeInterface;
 
@@ -96,7 +94,7 @@ class DataBag
             }
 
             if (class_exists($operation->action)) {
-                $action = ActionScheme::wrap('php+class://' . ClassName::serialize($operation->action));
+                $action = 'php+class://' . ClassName::serialize($operation->action);
             } else {
                 $action = 'action://' . $operation->action;
             }
@@ -165,13 +163,13 @@ class DataBag
     {
         $result = [];
         foreach ($throws as $code => $class) {
-            $schemaName = $this->getSchemaName($class);
-
-            if (!$this->hasId('fusio_schema', $schemaName)) {
-                $this->addSchema($category, $schemaName, $class);
+            if (class_exists($class)) {
+                $throw = 'php+class://' . ClassName::serialize($class);
+            } else {
+                $throw = 'schema://' . $class;
             }
 
-            $result[$code] = SchemaScheme::wrap($schemaName);
+            $result[$code] = $throw;
         }
 
         return $result;
@@ -621,39 +619,5 @@ class DataBag
         }
 
         return $data;
-    }
-
-    private function hasId(string $type, $name): bool
-    {
-        try {
-            $this->getId($type, $name);
-            return true;
-        } catch (\RuntimeException $e) {
-            return false;
-        }
-    }
-
-    private function getActionName(string $class): string
-    {
-        if (class_exists($class)) {
-            $parts = explode('\\', $class);
-            array_shift($parts); // Fusio
-            array_shift($parts); // Impl
-            return implode('_', $parts);
-        } else {
-            return $class;
-        }
-    }
-
-    private function getSchemaName(string $class): string
-    {
-        if (class_exists($class)) {
-            $parts = explode('\\', $class);
-            array_shift($parts);
-            array_shift($parts);
-            return implode('_', $parts);
-        } else {
-            return $class;
-        }
     }
 }
