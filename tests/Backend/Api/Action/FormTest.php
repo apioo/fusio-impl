@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 

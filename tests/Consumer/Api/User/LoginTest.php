@@ -20,9 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Service\Security\JsonWebToken;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

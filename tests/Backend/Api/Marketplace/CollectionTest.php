@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Marketplace;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

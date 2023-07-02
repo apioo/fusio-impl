@@ -21,10 +21,8 @@
 namespace Fusio\Impl\Tests\Backend\Api\Plan;
 
 use Fusio\Engine\Model\ProductInterface;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * CollectionTest

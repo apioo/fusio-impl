@@ -20,10 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Event;
 
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest

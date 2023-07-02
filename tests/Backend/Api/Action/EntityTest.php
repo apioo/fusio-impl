@@ -22,11 +22,9 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest

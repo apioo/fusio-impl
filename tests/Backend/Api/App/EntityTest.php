@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\App;
 
 use Fusio\Impl\Table;
-use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
