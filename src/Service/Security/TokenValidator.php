@@ -21,12 +21,10 @@
 namespace Fusio\Impl\Service\Security;
 
 use Doctrine\DBAL\Connection;
-use Firebase\JWT\JWT;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 
@@ -52,14 +50,10 @@ class TokenValidator
         $this->userRepository = $userRepository;
     }
 
-    public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context): bool
+    public function assertAuthorization(?string $authorization, Context $context): bool
     {
         $needsAuth = $context->getOperation()->getPublic() !== 1;
-        $requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
 
-        // authorization is required if the method is not public. In case we get
-        // a header from the client we also check the token so that the client
-        // gets maybe another rate limit
         if ($needsAuth || !empty($authorization)) {
             $parts = explode(' ', $authorization ?? '', 2);
             $type = $parts[0] ?? null;
@@ -71,7 +65,7 @@ class TokenValidator
 
             if ($type === 'Bearer' && !empty($accessToken)) {
                 try {
-                    $token = $this->getToken($accessToken, $context->getOperation()->getId(), $requestMethod);
+                    $token = $this->getToken($accessToken, $context->getOperation()->getId());
                 } catch (\UnexpectedValueException $e) {
                     throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
                 }
@@ -107,7 +101,7 @@ class TokenValidator
         return true;
     }
 
-    private function getToken(string $token, int $operationId, string $requestMethod): ?Model\Token
+    private function getToken(string $token, int $operationId): ?Model\Token
     {
         // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
         if (str_contains($token, '.')) {
@@ -176,7 +170,7 @@ class TokenValidator
                 $accessToken['date']
             );
         } else {
-            throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
+            throw new InvalidScopeException('Access to this operation is not in the scope of the provided token');
         }
     }
 

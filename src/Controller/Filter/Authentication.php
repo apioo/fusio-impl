@@ -49,7 +49,6 @@ class Authentication implements FilterInterface
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $success = $this->tokenValidator->assertAuthorization(
-            $request->getMethod(),
             $request->getHeader('Authorization'),
             $this->contextFactory->getActive()
         );
