@@ -37,6 +37,9 @@ final class Version20230508210151 extends AbstractMigration
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
             $actionTable->addUniqueIndex(['name']);
+        } else {
+            $actionTable = $schema->getTable('fusio_action');
+            $actionTable->dropColumn('engine');
         }
 
         if (!$schema->hasTable('fusio_action_queue')) {
@@ -238,6 +241,10 @@ final class Version20230508210151 extends AbstractMigration
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
             $logTable->addIndex(['category_id', 'ip', 'date'], 'IDX_LOG_CID');
+        } else {
+            $logTable = $schema->getTable('fusio_log');
+            $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
+            $logTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
@@ -315,6 +322,10 @@ final class Version20230508210151 extends AbstractMigration
             $planUsageTable->addColumn('points', 'integer');
             $planUsageTable->addColumn('insert_date', 'datetime');
             $planUsageTable->setPrimaryKey(['id']);
+        } else {
+            $planUsageTable = $schema->getTable('fusio_plan_usage');
+            $planUsageTable->addColumn('operation_id', 'integer');
+            $planUsageTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_plan_scope')) {
@@ -358,6 +369,10 @@ final class Version20230508210151 extends AbstractMigration
             $rateAllocationTable->addColumn('app_id', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('authenticated', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->setPrimaryKey(['id']);
+        } else {
+            $rateAllocationTable = $schema->getTable('fusio_rate_allocation');
+            $rateAllocationTable->addColumn('operation_id', 'integer', ['notnull' => false, 'default' => null]);
+            $rateAllocationTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_role')) {
