@@ -117,18 +117,18 @@ class Sdk
     {
         switch ($type) {
             case LocalRepository::MARKUP_HTML:
-                return 'output-' . $type . '-external.html';
+                return 'output-' . $type . '-default.html';
 
             case LocalRepository::MARKUP_MARKDOWN:
             case LocalRepository::MARKUP_CLIENT:
-                return 'output-' . $type . '-external.md';
+                return 'output-' . $type . '-default.md';
 
             case LocalRepository::SPEC_OPENAPI:
             case LocalRepository::SPEC_TYPEAPI:
-                return 'output-' . $type . '-external.json';
+                return 'output-' . $type . '-default.json';
 
             default:
-                return 'sdk-' . $type . '-external.zip';
+                return 'sdk-' . $type . '-default.zip';
         }
     }
 }
