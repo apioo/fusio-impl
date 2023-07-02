@@ -48,6 +48,10 @@ enum Scheme: string
             return self::buildAction($actionName);
         }
 
+        if (class_exists($actionName)) {
+            return self::buildAction('php+class://' . $actionName);
+        }
+
         return self::buildAction('action://' . $actionName);
     }
 

@@ -46,6 +46,10 @@ enum Scheme: string
             return $schemaName;
         }
 
+        if (class_exists($schemaName)) {
+            return 'php+class://' . $schemaName;
+        }
+
         return 'schema://' . $schemaName;
     }
 

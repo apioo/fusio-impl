@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Installation;
 
 use Fusio\Adapter;
+use Fusio\Impl\Action\Scheme;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
@@ -118,12 +119,9 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 900, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false);
-        $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
-        $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
-        $bag->addAction('backend', 'Backend_Action_Connection_RenewToken', Backend\Action\Connection\RenewToken::class);
-        $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
-        $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
-        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', 'Backend_Action_Connection_RenewToken');
+        $bag->addCronjob('backend', 'Execute_Async', '* * * * *', Scheme::wrap(Backend\Action\Action\Async::class));
+        $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', Scheme::wrap(Backend\Action\Event\Execute::class));
+        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', Scheme::wrap(Backend\Action\Connection\RenewToken::class));
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
