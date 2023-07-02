@@ -32,6 +32,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
+use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 
 /**
@@ -148,7 +149,7 @@ class Fixture
                 httpMethod: 'POST',
                 httpPath: '/foo',
                 httpCode: 201,
-                outgoing: 'Passthru',
+                outgoing: Passthru::class,
                 incoming: 'Entry-Schema',
                 costs: 1,
             ),
@@ -157,40 +158,40 @@ class Fixture
                 httpMethod: 'GET',
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
-                outgoing: 'Passthru',
-                incoming: 'Passthru',
+                outgoing: Passthru::class,
+                incoming: Passthru::class,
             ),
             'inspect.post' => new Operation(
                 action: 'Inspect-Action',
                 httpMethod: 'POST',
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
-                outgoing: 'Passthru',
-                incoming: 'Passthru',
+                outgoing: Passthru::class,
+                incoming: Passthru::class,
             ),
             'inspect.put' => new Operation(
                 action: 'Inspect-Action',
                 httpMethod: 'PUT',
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
-                outgoing: 'Passthru',
-                incoming: 'Passthru',
+                outgoing: Passthru::class,
+                incoming: Passthru::class,
             ),
             'inspect.patch' => new Operation(
                 action: 'Inspect-Action',
                 httpMethod: 'PATCH',
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
-                outgoing: 'Passthru',
-                incoming: 'Passthru',
+                outgoing: Passthru::class,
+                incoming: Passthru::class,
             ),
             'inspect.delete' => new Operation(
                 action: 'Inspect-Action',
                 httpMethod: 'DELETE',
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
-                outgoing: 'Passthru',
-                incoming: 'Passthru',
+                outgoing: Passthru::class,
+                incoming: Passthru::class,
             ),
         ]);
 
