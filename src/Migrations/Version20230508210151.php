@@ -636,6 +636,16 @@ final class Version20230508210151 extends AbstractMigration
                         $operationId = $this->guessOperationId($method['method'], $route['path']);
                     }
 
+                    $count = (int) $this->connection->fetchFirstColumn('SELECT COUNT(*) AS cnt FROM fusio_operation WHERE (http_method = :method AND http_path = :path) OR name = :name', [
+                        'method' => $method['method'],
+                        'path' => $route['path'],
+                        'name' => $operationId,
+                    ]);
+
+                    if ($count > 0 ) {
+                        continue;
+                    }
+
                     $this->connection->insert('fusio_operation', [
                         'category_id' => $route['category_id'],
                         'status' => Table\Operation::STATUS_ACTIVE,
@@ -662,10 +672,6 @@ final class Version20230508210151 extends AbstractMigration
             }
         }
 
-        $this->connection->executeStatement('DELETE FROM fusio_routes_response WHERE 1=1');
-        $this->connection->executeStatement('DELETE FROM fusio_routes_method WHERE 1=1');
-        $this->connection->executeStatement('DELETE FROM fusio_routes WHERE 1=1');
-
         $this->connection->executeStatement('DELETE FROM fusio_action WHERE category_id IN (2, 3, 4, 5)');
         $this->connection->executeStatement('DELETE FROM fusio_schema WHERE category_id IN (2, 3, 4, 5)');
         $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
@@ -674,6 +680,7 @@ final class Version20230508210151 extends AbstractMigration
             'category_id' => 2,
             'status' => 1,
             'name' => 'backend.operation',
+            'description' => '',
         ]);
         $operationScopeId = (int) $this->connection->lastInsertId();
 
@@ -683,7 +690,7 @@ final class Version20230508210151 extends AbstractMigration
             'allow' => 1,
         ]);
 
-        $result = $this->connection->fetchAssociative('SELECT * FROM fusio_scope_routes ORDER BY id ASC');
+        $result = $this->connection->fetchAllAssociative('SELECT * FROM fusio_scope_routes ORDER BY id ASC');
         foreach ($result as $row) {
             $operationIds = [];
             foreach ($operationRouteMap as $operationId => $routeId) {
@@ -702,6 +709,10 @@ final class Version20230508210151 extends AbstractMigration
 
             $this->connection->delete('fusio_scope_routes', ['id' => $row['id']]);
         }
+
+        $this->connection->executeStatement('DELETE FROM fusio_routes_response WHERE 1=1');
+        $this->connection->executeStatement('DELETE FROM fusio_routes_method WHERE 1=1');
+        $this->connection->executeStatement('DELETE FROM fusio_routes WHERE 1=1');
     }
 
     private function guessOperationId(string $httpMethod, string $httpPath): string
