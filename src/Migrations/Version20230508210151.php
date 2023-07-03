@@ -633,7 +633,7 @@ final class Version20230508210151 extends AbstractMigration
 
                     $operationId = $method['operation_id'];
                     if (empty($operationId)) {
-                        $operationId = $this->guessOperationId($route['path'], $method['action']);
+                        $operationId = $this->guessOperationId($method['method'], $route['path']);
                     }
 
                     $this->connection->insert('fusio_operation', [
