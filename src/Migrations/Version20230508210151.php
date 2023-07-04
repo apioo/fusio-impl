@@ -624,51 +624,54 @@ final class Version20230508210151 extends AbstractMigration
         foreach ($routes as $route) {
             $methods = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_method WHERE route_id = :route_id ORDER BY id ASC', ['route_id' => $route['id']]);
             foreach ($methods as $method) {
+                $httpCode = 200;
+                $outgoing = 'Passthru';
                 $responses = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_response WHERE method_id = :method_id ORDER BY id ASC', ['method_id' => $method['id']]);
                 foreach ($responses as $response) {
-                    $code = (int) ($response['code'] ?? 0);
-                    if ($code < 200 || $code >= 300) {
-                        continue;
+                    $code = (int) $response['code'];
+                    if ($code >= 200 && $code < 300) {
+                        $httpCode = $code;
+                        $outgoing = $response['response'];
                     }
-
-                    $operationId = $method['operation_id'];
-                    if (empty($operationId)) {
-                        $operationId = $this->guessOperationId($method['method'], $route['path']);
-                    }
-
-                    $count = (int) $this->connection->fetchFirstColumn('SELECT COUNT(*) AS cnt FROM fusio_operation WHERE (http_method = :method AND http_path = :path) OR name = :name', [
-                        'method' => $method['method'],
-                        'path' => $route['path'],
-                        'name' => $operationId,
-                    ]);
-
-                    if ($count > 0 ) {
-                        continue;
-                    }
-
-                    $this->connection->insert('fusio_operation', [
-                        'category_id' => $route['category_id'],
-                        'status' => Table\Operation::STATUS_ACTIVE,
-                        'active' => $method['active'],
-                        'public' => $method['public'],
-                        'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
-                        'description' => $method['description'],
-                        'http_method' => $method['method'],
-                        'http_path' => $route['path'],
-                        'http_code' => $response['code'],
-                        'name' => $operationId,
-                        'parameters' => '',
-                        'incoming' => SchemaScheme::wrap($method['request']),
-                        'outgoing' => SchemaScheme::wrap($response['response']),
-                        'throws' => '',
-                        'action' => ActionScheme::wrap($method['action']),
-                        'costs' => $method['costs'],
-                        'metadata' => $route['metadata'],
-                    ]);
-
-                    $operationId = (int) $this->connection->lastInsertId();
-                    $operationRouteMap[$operationId] = $route['id'];
                 }
+
+                $operationId = $method['operation_id'];
+                if (empty($operationId)) {
+                    $operationId = $this->guessOperationId($method['method'], $route['path']);
+                }
+
+                $existing = $this->connection->fetchAssociative('SELECT * FROM fusio_operation WHERE (http_method = :method AND http_path = :path) OR name = :name', [
+                    'method' => $method['method'],
+                    'path' => $route['path'],
+                    'name' => $operationId,
+                ]);
+
+                if (!empty($existing)) {
+                    continue;
+                }
+
+                $this->connection->insert('fusio_operation', [
+                    'category_id' => $route['category_id'],
+                    'status' => Table\Operation::STATUS_ACTIVE,
+                    'active' => $method['active'],
+                    'public' => $method['public'],
+                    'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
+                    'description' => $method['description'],
+                    'http_method' => $method['method'],
+                    'http_path' => $route['path'],
+                    'http_code' => $httpCode,
+                    'name' => $operationId,
+                    'parameters' => '',
+                    'incoming' => SchemaScheme::wrap($method['request']),
+                    'outgoing' => SchemaScheme::wrap($outgoing),
+                    'throws' => '',
+                    'action' => ActionScheme::wrap($method['action']),
+                    'costs' => $method['costs'],
+                    'metadata' => $route['metadata'],
+                ]);
+
+                $operationId = (int) $this->connection->lastInsertId();
+                $operationRouteMap[$operationId] = $route['id'];
             }
         }
 
