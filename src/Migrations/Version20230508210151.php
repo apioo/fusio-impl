@@ -592,17 +592,18 @@ final class Version20230508210151 extends AbstractMigration
     public function postUp(Schema $schema): void
     {
         $inserts = NewInstallation::getData()->toArray();
-
         foreach ($inserts as $tableName => $rows) {
-            if (!empty($rows)) {
-                $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName);
-                if ($count > 0) {
-                    continue;
-                }
+            if (empty($rows)) {
+                continue;
+            }
 
-                foreach ($rows as $row) {
-                    $this->connection->insert($tableName, $row);
-                }
+            $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+            if ($count > 0) {
+                continue;
+            }
+
+            foreach ($rows as $row) {
+                $this->connection->insert($tableName, $row);
             }
         }
 
@@ -612,5 +613,20 @@ final class Version20230508210151 extends AbstractMigration
 
         // update schema class
         $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
+
+        // add missing events
+        $eventNames = [
+            'fusio.operation.create',
+            'fusio.operation.update',
+            'fusio.operation.delete',
+        ];
+        foreach ($eventNames as $eventName) {
+            $this->connection->insert('fusio_event', [
+                'category_id' => 2,
+                'status' => 1,
+                'name' => $eventName,
+                'description' => '',
+            ]);
+        }
     }
 }
