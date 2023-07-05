@@ -209,6 +209,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.action.create',
                 ),
                 'action.getClasses' => new Operation(
                     action: Backend\Action\Action\GetIndex::class,
@@ -252,6 +253,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ActionUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.action.update',
                 ),
                 'action.delete' => new Operation(
                     action: Backend\Action\Action\Delete::class,
@@ -260,6 +262,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.action.delete',
                 ),
                 'app.getAllTokens' => new Operation(
                     action: Backend\Action\App\Token\GetAll::class,
@@ -295,6 +298,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.app.create',
                 ),
                 'app.get' => new Operation(
                     action: Backend\Action\App\Get::class,
@@ -312,6 +316,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.app.update',
                 ),
                 'app.delete' => new Operation(
                     action: Backend\Action\App\Delete::class,
@@ -320,6 +325,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.app.delete',
                 ),
                 'app.deleteToken' => new Operation(
                     action: Backend\Action\App\DeleteToken::class,
@@ -355,7 +361,7 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
-                'category.insert' => new Operation(
+                'category.create' => new Operation(
                     action: Backend\Action\Category\Create::class,
                     httpMethod: 'POST',
                     httpPath: '/category',
@@ -363,6 +369,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CategoryCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.category.create',
                 ),
                 'category.get' => new Operation(
                     action: Backend\Action\Category\Get::class,
@@ -380,6 +387,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CategoryUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.category.update',
                 ),
                 'category.delete' => new Operation(
                     action: Backend\Action\Category\Delete::class,
@@ -388,6 +396,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.category.delete',
                 ),
                 'config.getAll' => new Operation(
                     action: Backend\Action\Config\GetAll::class,
@@ -414,6 +423,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConfigUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.config.update',
                 ),
                 'connection.getAll' => new Operation(
                     action: Backend\Action\Connection\GetAll::class,
@@ -432,6 +442,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConnectionCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.connection.create',
                 ),
                 'connection.getClasses' => new Operation(
                     action: Backend\Action\Connection\GetIndex::class,
@@ -466,6 +477,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ConnectionUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.connection.update',
                 ),
                 'connection.delete' => new Operation(
                     action: Backend\Action\Connection\Delete::class,
@@ -474,6 +486,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.connection.delete',
                 ),
                 'connection.getRedirect' => new Operation(
                     action: Backend\Action\Connection\GetRedirect::class,
@@ -516,6 +529,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.cronjob.create',
                 ),
                 'cronjob.get' => new Operation(
                     action: Backend\Action\Cronjob\Get::class,
@@ -533,6 +547,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\CronjobUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.cronjob.update',
                 ),
                 'cronjob.delete' => new Operation(
                     action: Backend\Action\Cronjob\Delete::class,
@@ -541,6 +556,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.cronjob.delete',
                 ),
                 'dashboard.getAll' => new Operation(
                     action: Backend\Action\Dashboard\GetAll::class,
@@ -567,6 +583,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.subscription.create',
                 ),
                 'event.getSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Get::class,
@@ -584,6 +601,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventSubscriptionUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.subscription.update',
                 ),
                 'event.deleteSubscription' => new Operation(
                     action: Backend\Action\Event\Subscription\Delete::class,
@@ -592,6 +610,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.subscription.delete',
                 ),
                 'event.getAll' => new Operation(
                     action: Backend\Action\Event\GetAll::class,
@@ -610,6 +629,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.create',
                 ),
                 'event.get' => new Operation(
                     action: Backend\Action\Event\Get::class,
@@ -627,6 +647,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\EventUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.update',
                 ),
                 'event.delete' => new Operation(
                     action: Backend\Action\Event\Delete::class,
@@ -635,6 +656,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.event.delete',
                 ),
                 'generator.getProviders' => new Operation(
                     action: Backend\Action\Generator\Index::class,
@@ -762,6 +784,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.page.create',
                 ),
                 'page.get' => new Operation(
                     action: Backend\Action\Page\Get::class,
@@ -779,6 +802,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PageUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.page.update',
                 ),
                 'page.delete' => new Operation(
                     action: Backend\Action\Page\Delete::class,
@@ -787,6 +811,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.page.delete',
                 ),
                 'plan.getAll' => new Operation(
                     action: Backend\Action\Plan\GetAll::class,
@@ -805,6 +830,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.plan.create',
                 ),
                 'plan.get' => new Operation(
                     action: Backend\Action\Plan\Get::class,
@@ -822,6 +848,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\PlanUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.plan.update',
                 ),
                 'plan.delete' => new Operation(
                     action: Backend\Action\Plan\Delete::class,
@@ -830,6 +857,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.plan.delete',
                 ),
                 'rate.getAll' => new Operation(
                     action: Backend\Action\Rate\GetAll::class,
@@ -848,6 +876,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.rate.create',
                 ),
                 'rate.get' => new Operation(
                     action: Backend\Action\Rate\Get::class,
@@ -865,6 +894,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RateUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.rate.update',
                 ),
                 'rate.delete' => new Operation(
                     action: Backend\Action\Rate\Delete::class,
@@ -873,6 +903,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.rate.delete',
                 ),
                 'role.getAll' => new Operation(
                     action: Backend\Action\Role\GetAll::class,
@@ -891,6 +922,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.role.create',
                 ),
                 'role.get' => new Operation(
                     action: Backend\Action\Role\Get::class,
@@ -908,6 +940,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\RoleUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.role.update',
                 ),
                 'role.delete' => new Operation(
                     action: Backend\Action\Role\Delete::class,
@@ -916,6 +949,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.role.delete',
                 ),
                 'operation.getAll' => new Operation(
                     action: Backend\Action\Operation\GetAll::class,
@@ -934,6 +968,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.operation.create',
                 ),
                 'operation.get' => new Operation(
                     action: Backend\Action\Operation\Get::class,
@@ -951,6 +986,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\OperationUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.operation.update',
                 ),
                 'operation.delete' => new Operation(
                     action: Backend\Action\Operation\Delete::class,
@@ -959,6 +995,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.operation.delete',
                 ),
                 'schema.getAll' => new Operation(
                     action: Backend\Action\Schema\GetAll::class,
@@ -977,6 +1014,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.schema.create',
                 ),
                 'schema.getPreview' => new Operation(
                     action: Backend\Action\Schema\GetPreview::class,
@@ -1011,6 +1049,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\SchemaUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.schema.update',
                 ),
                 'schema.delete' => new Operation(
                     action: Backend\Action\Schema\Delete::class,
@@ -1019,6 +1058,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.schema.delete',
                 ),
                 'scope.getAll' => new Operation(
                     action: Backend\Action\Scope\GetAll::class,
@@ -1037,6 +1077,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.scope.create',
                 ),
                 'scope.getCategories' => new Operation(
                     action: Backend\Action\Scope\GetCategories::class,
@@ -1062,6 +1103,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\ScopeUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.scope.update',
                 ),
                 'scope.delete' => new Operation(
                     action: Backend\Action\Scope\Delete::class,
@@ -1070,6 +1112,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.scope.delete',
                 ),
                 'sdk.getAll' => new Operation(
                     action: Backend\Action\Sdk\GetAll::class,
@@ -1238,6 +1281,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.user.create',
                 ),
                 'user.get' => new Operation(
                     action: Backend\Action\User\Get::class,
@@ -1255,6 +1299,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.user.update',
                 ),
                 'user.delete' => new Operation(
                     action: Backend\Action\User\Delete::class,
@@ -1263,6 +1308,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.user.delete',
                 ),
             ],
             'consumer' => [

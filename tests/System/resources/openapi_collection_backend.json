@@ -6244,7 +6244,7 @@
         "category"
       ]
     },
-    "backend.category.insert": {
+    "backend.category.create": {
       "path": "/backend/category",
       "method": "POST",
       "return": {

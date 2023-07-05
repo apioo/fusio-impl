@@ -145,6 +145,10 @@ class DataBag
                 $this->addScope($category, $scope);
                 $this->addScopeOperation($scope, $operationName);
             }
+
+            if (!empty($operation->eventName)) {
+                $this->addEvent($category, $operation->eventName);
+            }
         }
     }
 
