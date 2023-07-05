@@ -621,6 +621,11 @@ final class Version20230508210151 extends AbstractMigration
             'fusio.operation.delete',
         ];
         foreach ($eventNames as $eventName) {
+            $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_event WHERE name = :name', ['name' => $eventName]);
+            if ($count > 0) {
+                continue;
+            }
+
             $this->connection->insert('fusio_event', [
                 'category_id' => 2,
                 'status' => 1,
