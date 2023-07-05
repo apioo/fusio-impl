@@ -7,8 +7,6 @@ namespace Fusio\Impl\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Action\Scheme as ActionScheme;
-use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Table;
 use PSX\Api\Model\Passthru;
@@ -608,135 +606,11 @@ final class Version20230508210151 extends AbstractMigration
             }
         }
 
-        if ($this->connection->createSchemaManager()->tablesExist(['fusio_routes'])) {
-            $count = (int) $this->connection->fetchFirstColumn('SELECT COUNT(*) AS cnt FROM fusio_routes');
-            if ($count > 0) {
-                $this->runFusio30Migration();
-            }
-        }
-    }
-
-    private function runFusio30Migration(): void
-    {
-        $operationRouteMap = [];
-
-        $routes = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes WHERE category_id NOT IN (2, 3, 4, 5) ORDER BY id ASC');
-        foreach ($routes as $route) {
-            $methods = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_method WHERE route_id = :route_id ORDER BY id ASC', ['route_id' => $route['id']]);
-            foreach ($methods as $method) {
-                $httpCode = 200;
-                $outgoing = 'Passthru';
-                $responses = $this->connection->fetchAllAssociative('SELECT * FROM fusio_routes_response WHERE method_id = :method_id ORDER BY id ASC', ['method_id' => $method['id']]);
-                foreach ($responses as $response) {
-                    $code = (int) $response['code'];
-                    if ($code >= 200 && $code < 300) {
-                        $httpCode = $code;
-                        $outgoing = $response['response'];
-                    }
-                }
-
-                $operationId = $method['operation_id'];
-                if (empty($operationId)) {
-                    $operationId = $this->guessOperationId($method['method'], $route['path']);
-                }
-
-                $existing = $this->connection->fetchAssociative('SELECT * FROM fusio_operation WHERE (http_method = :method AND http_path = :path) OR name = :name', [
-                    'method' => $method['method'],
-                    'path' => $route['path'],
-                    'name' => $operationId,
-                ]);
-
-                if (!empty($existing)) {
-                    continue;
-                }
-
-                $this->connection->insert('fusio_operation', [
-                    'category_id' => $route['category_id'],
-                    'status' => Table\Operation::STATUS_ACTIVE,
-                    'active' => $method['active'],
-                    'public' => $method['public'],
-                    'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
-                    'description' => $method['description'],
-                    'http_method' => $method['method'],
-                    'http_path' => $route['path'],
-                    'http_code' => $httpCode,
-                    'name' => $operationId,
-                    'parameters' => '',
-                    'incoming' => SchemaScheme::wrap($method['request']),
-                    'outgoing' => SchemaScheme::wrap($outgoing),
-                    'throws' => '',
-                    'action' => ActionScheme::wrap($method['action']),
-                    'costs' => $method['costs'],
-                    'metadata' => $route['metadata'],
-                ]);
-
-                $operationId = (int) $this->connection->lastInsertId();
-                $operationRouteMap[$operationId] = $route['id'];
-            }
-        }
-
+        // remove legacy internal actions and schemas
         $this->connection->executeStatement('DELETE FROM fusio_action WHERE category_id IN (2, 3, 4, 5)');
         $this->connection->executeStatement('DELETE FROM fusio_schema WHERE category_id IN (2, 3, 4, 5)');
+
+        // update schema class
         $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
-
-        $this->connection->insert('fusio_scope', [
-            'category_id' => 2,
-            'status' => 1,
-            'name' => 'backend.operation',
-            'description' => '',
-        ]);
-        $operationScopeId = (int) $this->connection->lastInsertId();
-
-        $this->connection->insert('fusio_scope_operation', [
-            'scope_id' => $operationScopeId,
-            'operation_id' => 1,
-            'allow' => 1,
-        ]);
-
-        $result = $this->connection->fetchAllAssociative('SELECT * FROM fusio_scope_routes ORDER BY id ASC');
-        foreach ($result as $row) {
-            $operationIds = [];
-            foreach ($operationRouteMap as $operationId => $routeId) {
-                if ($routeId == $row['route_id']) {
-                    $operationIds[] = $operationId;
-                }
-            }
-
-            foreach ($operationIds as $operationId) {
-                $this->connection->insert('fusio_scope_operation', [
-                    'scope_id' => $row['scope_id'],
-                    'operation_id' => $operationId,
-                    'allow' => 1,
-                ]);
-            }
-
-            $this->connection->delete('fusio_scope_routes', ['id' => $row['id']]);
-        }
-
-        $this->connection->executeStatement('DELETE FROM fusio_routes_response WHERE 1=1');
-        $this->connection->executeStatement('DELETE FROM fusio_routes_method WHERE 1=1');
-        $this->connection->executeStatement('DELETE FROM fusio_routes WHERE 1=1');
-    }
-
-    private function guessOperationId(string $httpMethod, string $httpPath): string
-    {
-        $parts = array_filter(explode('/', $httpPath));
-
-        $parts = array_map(static function(string $part){
-            if ($part[0] === ':') {
-                return substr($part, 1);
-            } elseif ($part[0] === '$') {
-                $pos = strpos($part, '<');
-                if ($pos !== false) {
-                    return substr($part, 1, $pos - 1);
-                } else {
-                    return substr($part, 1);
-                }
-            } else {
-                return $part;
-            }
-        }, $parts);
-
-        return strtolower($httpMethod) . '.' . implode('.', $parts);
     }
 }
