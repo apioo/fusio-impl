@@ -118,7 +118,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid email format');
         }
 
-        if (($existing === null || $email !== $existing->getName()) && $this->userTable->findOneByEmail($email)) {
+        if (($existing === null || $email !== $existing->getEmail()) && $this->userTable->findOneByEmail($email)) {
             throw new StatusCode\BadRequestException('User email already exists');
         }
     }
