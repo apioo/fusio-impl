@@ -42,7 +42,6 @@ class CollectionTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('/consumer/page', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();

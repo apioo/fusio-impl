@@ -1406,6 +1406,7 @@ class NewInstallation
                     outgoing: Model\Consumer\PageCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
                 ),
                 'page.get' => new Operation(
                     action: Consumer\Action\Page\Get::class,
@@ -1414,6 +1415,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Page::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
                 ),
                 'payment.portal' => new Operation(
                     action: Consumer\Action\Payment\Portal::class,
@@ -1562,6 +1564,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\AuthorizeMeta::class,
                     throws: [401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
                 ),
                 'account.authorize' => new Operation(
                     action: Consumer\Action\User\Authorize::class,
@@ -1571,6 +1574,7 @@ class NewInstallation
                     outgoing: Model\Consumer\AuthorizeResponse::class,
                     incoming: Model\Consumer\AuthorizeRequest::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
                 ),
                 'account.login' => new Operation(
                     action: Consumer\Action\User\Login::class,
