@@ -44,7 +44,7 @@ class TypeAPITest extends ControllerDbTestCase
      */
     public function testGetCollection(string $category)
     {
-        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'POST', [
+        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
             'User-Agent' => 'Fusio TestCase',
         ]);
 

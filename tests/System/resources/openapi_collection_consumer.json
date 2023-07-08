@@ -228,6 +228,12 @@
           }
         },
         {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
           "code": 500,
           "schema": {
             "$ref": "Message"
