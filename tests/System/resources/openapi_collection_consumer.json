@@ -281,9 +281,7 @@
       ],
       "description": "",
       "stability": 1,
-      "security": [
-        "consumer.account"
-      ],
+      "security": [],
       "authorization": true,
       "tags": [
         "account"
@@ -321,9 +319,7 @@
       ],
       "description": "",
       "stability": 1,
-      "security": [
-        "consumer.account"
-      ],
+      "security": [],
       "authorization": true,
       "tags": [
         "account"
@@ -1195,9 +1191,7 @@
       ],
       "description": "",
       "stability": 1,
-      "security": [
-        "consumer.page"
-      ],
+      "security": [],
       "authorization": true,
       "tags": [
         "page"
@@ -1248,9 +1242,7 @@
       ],
       "description": "",
       "stability": 1,
-      "security": [
-        "consumer.page"
-      ],
+      "security": [],
       "authorization": true,
       "tags": [
         "page"
