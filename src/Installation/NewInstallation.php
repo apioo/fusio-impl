@@ -1583,7 +1583,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\UserJWT::class,
                     incoming: Model\Consumer\UserLogin::class,
-                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.refresh' => new Operation(
