@@ -10,7 +10,6 @@ use Fusio\Engine\Dispatcher;
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
-use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
@@ -20,8 +19,6 @@ use Fusio\Impl\Cli\Transport;
 use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
-use Fusio\Impl\Provider\ActionProvider;
-use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue\Producer;
 use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
@@ -78,18 +75,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(Action\Resolver\DatabaseAction::class);
     $services->set(Action\Resolver\PhpClass::class);
 
-
     $services->set(Factory\Action::class);
     $services->alias(Factory\ActionInterface::class, Factory\Action::class);
 
     $services->set(Factory\Connection::class);
     $services->alias(Factory\ConnectionInterface::class, Factory\Connection::class);
-
-    $services->set(ActionProvider::class);
-    $services->alias(Parser\ActionInterface::class, ActionProvider::class);
-
-    $services->set(ConnectionProvider::class);
-    $services->alias(Parser\ConnectionInterface::class, ConnectionProvider::class);
 
     $services->set(Producer::class);
     $services->alias(Action\QueueInterface::class, Producer::class);
@@ -148,15 +138,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(Framework\Loader\ContextFactory::class);
     $services->alias(ContextFactoryInterface::class, Framework\Loader\ContextFactory::class);
 
-    // cli
-    $container->import(Cli\Adapter::getContainerFile());
-
-    $services->set(Config::class);
-    $services->alias(Cli\Config\ConfigInterface::class, Config::class);
-
-    $services->set(Transport::class);
-    $services->alias(Cli\Transport\TransportInterface::class, Transport::class);
-
     // psx
     $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);
     $services->set(Framework\Loader\RoutingParser\CompositeParser::class);
@@ -198,5 +179,14 @@ return static function (ContainerConfigurator $container) {
 
     $services->get(DependencyFactoryFactory::class)
         ->call('addPath', ['Fusio\\Impl\\Migrations', __DIR__ . '/../src']);
+
+    // cli
+    $container->import(Cli\Adapter::getContainerFile());
+
+    $services->set(Config::class);
+    $services->alias(Cli\Config\ConfigInterface::class, Config::class);
+
+    $services->set(Transport::class);
+    $services->alias(Cli\Transport\TransportInterface::class, Transport::class);
 
 };
