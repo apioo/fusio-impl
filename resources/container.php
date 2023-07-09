@@ -181,8 +181,6 @@ return static function (ContainerConfigurator $container) {
         ->call('addPath', ['Fusio\\Impl\\Migrations', __DIR__ . '/../src']);
 
     // cli
-    $container->import(Cli\Adapter::getContainerFile());
-
     $services->set(Config::class);
     $services->alias(Cli\Config\ConfigInterface::class, Config::class);
 
