@@ -55,10 +55,17 @@ class FilterFactory extends PSXFilterFactory
             return;
         }
 
-        $result = $this->connection->fetchAllAssociative('SELECT id, name FROM fusio_category');
+        $first = null;
+        $result = $this->connection->fetchAllAssociative('SELECT id, name FROM fusio_category ORDER BY id ASC');
         foreach ($result as $row) {
+            if ($first === null) {
+                $first = $row['name'];
+            }
+
             $this->addFilter($row['name'], new Filter((int) $row['id']));
         }
+
+        $this->setDefault($first);
 
         $this->loaded = true;
     }
