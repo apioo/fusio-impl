@@ -21,43 +21,38 @@
 namespace Fusio\Impl\Tests\System;
 
 use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
- * TypeAPITest
+ * OpenAPITest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TypeAPITest extends ControllerDbTestCase
+class OpenAPITest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
     }
 
-    /**
-     * @dataProvider providerFilter
-     */
-    public function testGenerate(string $category)
+    public function testGenerate()
     {
-        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
+        $response = $this->sendRequest('/system/generator/openapi', 'GET', [
             'User-Agent' => 'Fusio TestCase',
         ]);
 
         $body = (string) $response->getBody();
-        $expect = __DIR__ . '/resources/typeapi_' . $category . '.json';
-        $actual = __DIR__ . '/resources/typeapi_' . $category . '_actual.json';
+        $expect = __DIR__ . '/resources/openapi.json';
+        $actual = __DIR__ . '/resources/openapi_actual.json';
 
         file_put_contents($actual, $body);
 
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
-    public function providerFilter(): array
+    public function providerFilter()
     {
         return [
             ['default'],
