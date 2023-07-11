@@ -159,6 +159,22 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "Void-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.VoidAction"
+        },
+        {
+            "name": "Worker-Java",
+            "class": "Fusio.Impl.Worker.Action.WorkerJava"
+        },
+        {
+            "name": "Worker-Javascript",
+            "class": "Fusio.Impl.Worker.Action.WorkerJavascript"
+        },
+        {
+            "name": "Worker-PHP",
+            "class": "Fusio.Impl.Worker.Action.WorkerPHP"
+        },
+        {
+            "name": "Worker-Python",
+            "class": "Fusio.Impl.Worker.Action.WorkerPython"
         }
     ]
 }
