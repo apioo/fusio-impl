@@ -20,22 +20,21 @@
 
 namespace Fusio\Impl\Backend\Action\Generator;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Generator;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
- * Form
+ * GetForm
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Form implements ActionInterface
+class GetForm implements ActionInterface
 {
     private Generator $generatorService;
 
@@ -46,6 +45,10 @@ class Form implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->generatorService->getForm($request->get('provider'));
+        try {
+            return $this->generatorService->getForm($request->get('provider'));
+        } catch (\Throwable $e) {
+            throw new InternalServerErrorException($e->getMessage(), $e);
+        }
     }
 }

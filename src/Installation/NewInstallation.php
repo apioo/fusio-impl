@@ -667,7 +667,7 @@ class NewInstallation
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.getProviderForm' => new Operation(
-                    action: Backend\Action\Generator\Form::class,
+                    action: Backend\Action\Generator\GetForm::class,
                     httpMethod: 'GET',
                     httpPath: '/generator/:provider',
                     httpCode: 200,

@@ -20,14 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Provider\ConnectionProvider;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * GetForm
@@ -47,13 +46,13 @@ class GetForm implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $className = $request->get('class');
-        $form      = $this->connectionProvider->getForm($className);
+        try {
+            $className = $request->get('class');
+            $form = $this->connectionProvider->getForm($className);
 
-        if ($form instanceof Container) {
-            return $form;
-        } else {
-            return new Container();
+            return $form instanceof Container ? $form : new Container();
+        } catch (\Throwable $e) {
+            throw new InternalServerErrorException($e->getMessage(), $e);
         }
     }
 }
