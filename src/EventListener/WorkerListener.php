@@ -118,7 +118,7 @@ class WorkerListener implements EventSubscriberInterface
         foreach ($worker as $type => $endpoint) {
             $connection = new Connection();
             $connection->name = $name;
-            $connection->type = $this->convertClassToType($class);
+            $connection->type = ClassName::serialize($class);
             if ($config !== null) {
                 $connection->config = $config->getAll();
             }
@@ -144,6 +144,7 @@ class WorkerListener implements EventSubscriberInterface
             return;
         }
 
+        $class = ClassName::unserialize($class);
         $language = self::MAPPING[$class] ?? null;
         if (empty($language)) {
             return;
@@ -173,11 +174,6 @@ class WorkerListener implements EventSubscriberInterface
         if ($message instanceof Message && $message->success === false) {
             throw new InternalServerErrorException('Worker returned an error: ' . $message->message);
         }
-    }
-
-    private function convertClassToType(?string $class): string
-    {
-        return ClassName::serialize($class ?? '');
     }
 
     public static function getSubscribedEvents(): array
