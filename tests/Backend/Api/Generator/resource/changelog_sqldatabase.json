@@ -127,6 +127,7 @@
       "httpPath": "\/news\/",
       "httpCode": 201,
       "name": "news.create",
+      "incoming": "Passthru",
       "outgoing": "Message",
       "action": "News_SQL_Insert"
     },
@@ -136,6 +137,7 @@
       "httpPath": "\/news\/:id",
       "httpCode": 200,
       "name": "news.update",
+      "incoming": "Passthru",
       "outgoing": "Message",
       "action": "News_SQL_Update"
     },

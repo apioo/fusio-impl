@@ -264,7 +264,7 @@
     },
     {
       "name": "Human_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
         "table": "app_human_0",
@@ -322,7 +322,7 @@
     },
     {
       "name": "Location_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
         "table": "app_location_0",
@@ -373,7 +373,7 @@
     },
     {
       "name": "Category_0_SQL_Delete",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
         "table": "app_category_0",

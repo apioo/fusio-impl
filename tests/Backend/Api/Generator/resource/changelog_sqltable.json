@@ -127,6 +127,7 @@
       "httpPath": "\/",
       "httpCode": 201,
       "name": "create",
+      "incoming": "Passthru",
       "outgoing": "Message",
       "action": "SQL_Insert"
     },
@@ -136,6 +137,7 @@
       "httpPath": "\/:id",
       "httpCode": 200,
       "name": "update",
+      "incoming": "Passthru",
       "outgoing": "Message",
       "action": "SQL_Update"
     },
