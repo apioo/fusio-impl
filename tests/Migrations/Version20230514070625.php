@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fusio\Impl\Migrations;
+namespace Fusio\Impl\Tests\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
@@ -19,8 +19,6 @@ final class Version20230514070625 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
-
         $appTable = $schema->createTable('app_news');
         $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $appTable->addColumn('title', 'string', ['length' => 64]);
@@ -31,8 +29,6 @@ final class Version20230514070625 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
-
         $schema->dropTable('app_news');
     }
 

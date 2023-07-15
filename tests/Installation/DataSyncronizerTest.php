@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Migrations;
+namespace Fusio\Impl\Tests\Installation;
 
 use Fusio\Impl\Backend;
 use Fusio\Impl\Installation\DataSyncronizer;
