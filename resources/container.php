@@ -2,17 +2,9 @@
 
 use Fusio\Cli;
 use Fusio\Engine\Action;
-use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\Adapter\ServiceBuilder;
-use Fusio\Engine\Connector;
-use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
-use Fusio\Engine\Factory;
-use Fusio\Engine\Form;
-use Fusio\Engine\Processor;
-use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
-use Fusio\Engine\Response;
 use Fusio\Impl\Cli\Config;
 use Fusio\Impl\Cli\Transport;
 use Fusio\Impl\Framework;
@@ -38,7 +30,6 @@ use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container) {
     $services = ServiceBuilder::build($container);
@@ -51,10 +42,6 @@ return static function (ContainerConfigurator $container) {
     $services
         ->instanceof(WebhookSenderInterface::class)
         ->tag('fusio.webhook.sender');
-
-    $services
-        ->instanceof(Action\ResolverInterface::class)
-        ->tag('fusio.action.resolver');
 
     // engine
     $services->set(ImplRepository\ActionDatabase::class);
@@ -69,36 +56,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(ImplRepository\UserDatabase::class);
     $services->alias(Repository\UserInterface::class, ImplRepository\UserDatabase::class);
 
-    $services->set(Form\ElementFactory::class);
-    $services->alias(Form\ElementFactoryInterface::class, Form\ElementFactory::class);
-
-    $services->set(Action\Resolver\DatabaseAction::class);
-    $services->set(Action\Resolver\PhpClass::class);
-
-    $services->set(Factory\Action::class);
-    $services->alias(Factory\ActionInterface::class, Factory\Action::class);
-
-    $services->set(Factory\Connection::class);
-    $services->alias(Factory\ConnectionInterface::class, Factory\Connection::class);
-
     $services->set(Producer::class);
     $services->alias(Action\QueueInterface::class, Producer::class);
 
-    $services->set(Processor::class)
-        ->arg('$resolvers', tagged_iterator('fusio.action.resolver'));
-    $services->alias(ProcessorInterface::class, Processor::class);
-
     $services->set(Dispatcher::class);
     $services->alias(DispatcherInterface::class, Dispatcher::class);
-
-    $services->set(Connector::class);
-    $services->alias(ConnectorInterface::class, Connector::class);
-
-    $services->set(Response\Factory::class);
-    $services->alias(Response\FactoryInterface::class, Response\Factory::class);
-
-    $services->set(Action\Runtime::class);
-    $services->alias(RuntimeInterface::class, Action\Runtime::class);
 
     // impl
     $services->load('Fusio\\Impl\\Authorization\\Action\\', __DIR__ . '/../src/Authorization/Action');
