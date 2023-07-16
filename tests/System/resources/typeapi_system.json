@@ -4,7 +4,7 @@
   "operations": {
     "system.payment.webhook": {
       "path": "/system/payment/:provider/webhook",
-      "method": "GET",
+      "method": "POST",
       "return": {
         "code": 200,
         "schema": {
