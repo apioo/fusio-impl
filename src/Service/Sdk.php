@@ -80,9 +80,18 @@ class Sdk
         }
 
         $autoExit = $this->console->isAutoExitEnabled();
+        $catchExceptions = $this->console->areExceptionsCaught();
         $this->console->setAutoExit(false);
-        $this->console->run(new ArrayInput($parameters), new NullOutput());
-        $this->console->setAutoExit($autoExit);
+        $this->console->setCatchExceptions(false);
+
+        try {
+            $this->console->run(new ArrayInput($parameters), new NullOutput());
+        } catch (\Throwable $e) {
+            throw new StatusCode\InternalServerErrorException('Could not generate SDK: ' . $e->getMessage(), $e);
+        } finally {
+            $this->console->setAutoExit($autoExit);
+            $this->console->setCatchExceptions($catchExceptions);
+        }
 
         return $this->config->get('psx_url') . '/sdk/' . $file;
     }
