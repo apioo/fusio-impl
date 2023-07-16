@@ -39,29 +39,22 @@ class WebhookTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-        ));
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', [
+            'User-Agent' => 'Fusio TestCase',
+        ]);
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Execution successful"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-        ));
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'POST', [
+            'User-Agent' => 'Fusio TestCase',
+        ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
@@ -75,9 +68,9 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/system/payment/paypal/webhook', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'PUT', [
+            'User-Agent' => 'Fusio TestCase',
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -88,9 +81,9 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/payment/paypal/webhook', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-        ));
+        $response = $this->sendRequest('/system/payment/paypal/webhook', 'DELETE', [
+            'User-Agent' => 'Fusio TestCase',
+        ]);
 
         $body = (string) $response->getBody();
 

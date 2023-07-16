@@ -1690,7 +1690,7 @@ class NewInstallation
                 ),
                 'payment.webhook' => new Operation(
                     action: System\Action\Payment\Webhook::class,
-                    httpMethod: 'GET',
+                    httpMethod: 'POST',
                     httpPath: '/payment/:provider/webhook',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
