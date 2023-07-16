@@ -114,7 +114,9 @@ class Schema
             $this->schemaTable->update($existing);
 
             // check whether we can load the schema
-            $this->schemaManager->getSchema(Scheme::wrap($existing->getName()));
+            $source = Scheme::wrap($existing->getName());
+            $this->schemaManager->clear($source);
+            $this->schemaManager->getSchema($source);
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
