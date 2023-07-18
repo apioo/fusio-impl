@@ -61,11 +61,12 @@ class OIDC extends ProviderAbstract
         }
 
         $data = JWT::decode($idToken);
-        $claimMapping = $this->getClaimMapping($configuration);
 
-        $id    = $data[self::CLAIM_ID] ?? null;
-        $name  = $data[self::CLAIM_NAME] ?? null;
-        $email = $data[self::CLAIM_EMAIL] ?? null;
+        // try standard claims
+        // s. https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+        $id    = $data['sub'] ?? null;
+        $name  = $data['preferred_username'] ?? null;
+        $email = $data['email'] ?? null;
 
         if (!empty($id) && !empty($name)) {
             return new UserDetails($id, $name, $email);
