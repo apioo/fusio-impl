@@ -44,12 +44,10 @@ abstract class ProviderAbstract implements ProviderInterface
     protected const TYPE_GET = 0x2;
 
     private ClientInterface $httpClient;
-    private Config $config;
 
-    public function __construct(ClientInterface $httpClient, Config $config)
+    public function __construct(ClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
-        $this->config = $config;
     }
 
     public function setHttpClient(ClientInterface $httpClient): void
@@ -84,6 +82,12 @@ abstract class ProviderAbstract implements ProviderInterface
 
     protected function obtainAccessToken(string $rawUrl, array $params, int $type = self::TYPE_POST): ?string
     {
+        $data = $this->tokenRequest($rawUrl, $params, $type);
+        return $this->parseAccessToken($data);
+    }
+
+    protected function tokenRequest(string $rawUrl, array $params, int $type = self::TYPE_POST): ?array
+    {
         $headers = [
             'Accept'     => 'application/json',
             'User-Agent' => Base::getUserAgent()
@@ -109,6 +113,11 @@ abstract class ProviderAbstract implements ProviderInterface
             return null;
         }
 
+        return $data;
+    }
+
+    private function parseAccessToken(array $data): ?string
+    {
         if (isset($data['access_token']) && is_string($data['access_token'])) {
             return $data['access_token'];
         } elseif (isset($data['error']) && is_string($data['error'])) {
@@ -117,20 +126,5 @@ abstract class ProviderAbstract implements ProviderInterface
         } else {
             return null;
         }
-    }
-
-    protected function getSecret(): string
-    {
-        return $this->config->getValue($this->getProviderConfigKey($this->getId()));
-    }
-
-    protected function getProviderConfigKey(int $provider): string
-    {
-        return match ($provider) {
-            self::PROVIDER_GITHUB => 'provider_github_secret',
-            self::PROVIDER_GOOGLE => 'provider_google_secret',
-            self::PROVIDER_FACEBOOK => 'provider_facebook_secret',
-            default => '',
-        };
     }
 }

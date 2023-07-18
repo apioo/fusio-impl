@@ -42,15 +42,13 @@ class Provider
 {
     private Service\User $userService;
     private Service\App\Token $appTokenService;
-    private UserProvider $userProvider;
-    private ConfigInterface $config;
+    private Service\Identity $identityService;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, UserProvider $userProvider, ConfigInterface $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, Service\Identity $identityService)
     {
         $this->userService = $userService;
         $this->appTokenService = $appTokenService;
-        $this->userProvider = $userProvider;
-        $this->config = $config;
+        $this->identityService = $identityService;
     }
 
     public function provider(string $providerName, Consumer\UserProvider $request): AccessToken
@@ -70,16 +68,16 @@ class Provider
             throw new StatusCode\BadRequestException('No redirect uri provided');
         }
 
-        /** @var ProviderInterface $provider */
-        $provider = $this->userProvider->getInstance($providerName);
-        $user = $provider->requestUser($code, $clientId, $redirectUri);
+        $configuration = $this->identityService->getConfiguration($providerName);
+
+        $user = $configuration->getProvider()->requestUser($configuration, $code, $clientId, $redirectUri);
 
         if (!$user instanceof UserDetails) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
         $remote = new UserRemote();
-        $remote->setProvider($provider->getId());
+        $remote->setProvider($configuration->getIdentity()->getId());
         $remote->setRemoteId($user->getId());
         $remote->setName($user->getUserName());
         $remote->setEmail($user->getEmail());

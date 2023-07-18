@@ -23,13 +23,13 @@ namespace Fusio\Impl\Provider\User;
 use Fusio\Engine\User\UserDetails;
 
 /**
- * Google
+ * OIDC
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Google extends ProviderAbstract
+class OIDC extends ProviderAbstract
 {
     public function redirect(ConfigurationInterface $configuration): Url
     {
@@ -55,22 +55,38 @@ class Google extends ProviderAbstract
             'grant_type'    => 'authorization_code'
         ];
 
-        $accessToken = $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
-        if (empty($accessToken)) {
+        $idToken = $this->obtainIDToken($configuration->getTokenUri(), $params);
+        if (empty($idToken)) {
             return null;
         }
 
-        $data = $this->obtainUserInfo('https://www.googleapis.com/userinfo/v2/me', $accessToken);
-        if (empty($data)) {
-            return null;
-        }
+        $data = JWT::decode($idToken);
+        $claimMapping = $this->getClaimMapping($configuration);
 
-        $id    = $data->id ?? null;
-        $name  = $data->name ?? null;
-        $email = $data->email ?? null;
+        $id    = $data[self::CLAIM_ID] ?? null;
+        $name  = $data[self::CLAIM_NAME] ?? null;
+        $email = $data[self::CLAIM_EMAIL] ?? null;
 
         if (!empty($id) && !empty($name)) {
             return new UserDetails($id, $name, $email);
+        } else {
+            return null;
+        }
+    }
+
+    protected function obtainIDToken(string $rawUrl, array $params, int $type = self::TYPE_POST): ?string
+    {
+        $data = $this->tokenRequest($rawUrl, $params, $type);
+        return $this->parseIDToken($data);
+    }
+
+    private function parseIDToken(array $data): ?string
+    {
+        if (isset($data['id_token']) && is_string($data['id_token'])) {
+            return $data['id_token'];
+        } elseif (isset($data['error']) && is_string($data['error'])) {
+            $error = Error::fromArray($data);
+            throw new StatusCode\BadRequestException($error->getError() . ': ' . $error->getErrorDescription() . ' (' . $error->getErrorUri() . ')');
         } else {
             return null;
         }

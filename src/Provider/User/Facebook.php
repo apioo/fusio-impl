@@ -31,17 +31,26 @@ use Fusio\Engine\User\UserDetails;
  */
 class Facebook extends ProviderAbstract
 {
-    public function getId(): int
+    public function redirect(ConfigurationInterface $configuration): Url
     {
-        return self::PROVIDER_FACEBOOK;
+        $url = Url::parse($configuration->getAuthroizationUri());
+        $url = $url->setParameters([
+            'response_type' => 'code',
+            'client_id' => $configuration->getClientId(),
+            'state' => '',
+            'redirect_uri' => '',
+            'scope' => 'openid',
+        ]);
+
+        return $url;
     }
 
-    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
     {
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
-            'client_secret' => $this->getSecret(),
+            'client_secret' => $configuration->getClientSecret(),
             'redirect_uri'  => $redirectUri,
         ];
 

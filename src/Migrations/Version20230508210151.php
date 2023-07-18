@@ -224,6 +224,23 @@ final class Version20230508210151 extends AbstractMigration
             $eventTriggerTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_identity')) {
+            $identityTable = $schema->createTable('fusio_identity');
+            $identityTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $identityTable->addColumn('status', 'integer');
+            $identityTable->addColumn('provider', 'string', ['length' => 255]);
+            $identityTable->addColumn('name', 'string', ['length' => 128]);
+            $identityTable->addColumn('role_id', 'integer', ['notnull' => false]);
+            $identityTable->addColumn('client_id', 'string');
+            $identityTable->addColumn('client_secret', 'string');
+            $identityTable->addColumn('authorization_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('token_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('allow_create', 'boolean');
+            $identityTable->addColumn('insert_date', 'datetime');
+            $identityTable->setPrimaryKey(['id']);
+            $identityTable->addUniqueIndex(['name']);
+        }
+
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
