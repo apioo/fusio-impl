@@ -18,41 +18,39 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Installation;
+namespace Fusio\Impl\Consumer\Action\Identity;
 
-use Fusio\Impl\Backend;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\DbTestCase;
-use PSX\Sql\Generator\Generator;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service;
+use Fusio\Model;
 
 /**
- * GenerateTableTest
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GenerateTableTest extends DbTestCase
+class GetAll implements ActionInterface
 {
-    public function getDataSet(): array
+    private Service\Identity $identity;
+
+    public function __construct(Service\Identity $identity)
     {
-        return Fixture::getDataSet();
+        $this->identity = $identity;
     }
 
-    public function testGenerate()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        //$this->markTestSkipped();
+        $body = $request->getPayload();
 
-        $target = __DIR__ . '/../../src/Table/Generated';
-        $namespace = 'Fusio\Impl\Table\Generated';
+        assert($body instanceof Model\Consumer\UserProvider);
 
-        $generator = new Generator($this->connection, $namespace, 'fusio_');
-        $count = 0;
-        foreach ($generator->generate() as $className => $source) {
-            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
-            $count++;
-        }
+        $token = $this->identity->provider($request->get('provider'), $body);
 
-        $this->assertNotEmpty($count);
+        return $this->renderToken($token);
     }
 }

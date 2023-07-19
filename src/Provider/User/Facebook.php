@@ -31,18 +31,14 @@ use Fusio\Engine\User\UserDetails;
  */
 class Facebook extends ProviderAbstract
 {
-    public function redirect(ConfigurationInterface $configuration): Url
+    public function getAuthorizationUri(): ?string
     {
-        $url = Url::parse($configuration->getAuthroizationUri());
-        $url = $url->setParameters([
-            'response_type' => 'code',
-            'client_id' => $configuration->getClientId(),
-            'state' => '',
-            'redirect_uri' => '',
-            'scope' => 'openid',
-        ]);
+        return 'https://www.facebook.com/v17.0/dialog/oauth';
+    }
 
-        return $url;
+    public function getTokenUri(): ?string
+    {
+        return 'https://graph.facebook.com/v17.0/oauth/access_token';
     }
 
     public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
@@ -54,7 +50,7 @@ class Facebook extends ProviderAbstract
             'redirect_uri'  => $redirectUri,
         ];
 
-        $accessToken = $this->obtainAccessToken('https://graph.facebook.com/v12.0/oauth/access_token', $params, self::TYPE_GET);
+        $accessToken = $this->obtainAccessToken($configuration->getAuthorizationUri(), $params, self::TYPE_GET);
         if (empty($accessToken)) {
             return null;
         }

@@ -52,6 +52,14 @@ class TokenGenerator
     }
 
     /**
+     * Generates a random state for OAuth2 authorization
+     */
+    public static function generateState(): string
+    {
+        return self::generateString(32);
+    }
+
+    /**
      * Generates the app key
      */
     public static function generateAppKey(): string

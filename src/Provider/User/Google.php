@@ -31,18 +31,14 @@ use Fusio\Engine\User\UserDetails;
  */
 class Google extends ProviderAbstract
 {
-    public function redirect(ConfigurationInterface $configuration): Url
+    public function getAuthorizationUri(): ?string
     {
-        $url = Url::parse($configuration->getAuthroizationUri());
-        $url = $url->setParameters([
-            'response_type' => 'code',
-            'client_id' => $configuration->getClientId(),
-            'state' => '',
-            'redirect_uri' => '',
-            'scope' => 'openid',
-        ]);
+        return 'https://accounts.google.com/o/oauth2/v2/auth';
+    }
 
-        return $url;
+    public function getTokenUri(): ?string
+    {
+        return 'https://oauth2.googleapis.com/token';
     }
 
     public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
@@ -60,7 +56,7 @@ class Google extends ProviderAbstract
             return null;
         }
 
-        $data = $this->obtainUserInfo('https://www.googleapis.com/userinfo/v2/me', $accessToken);
+        $data = $this->obtainUserInfo('https://openidconnect.googleapis.com/v1/userinfo', $accessToken);
         if (empty($data)) {
             return null;
         }

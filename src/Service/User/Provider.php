@@ -43,12 +43,25 @@ class Provider
     private Service\User $userService;
     private Service\App\Token $appTokenService;
     private Service\Identity $identityService;
+    private ConfigInterface $config;
 
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, Service\Identity $identityService)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, Service\Identity $identityService, ConfigInterface $config)
     {
         $this->userService = $userService;
         $this->appTokenService = $appTokenService;
         $this->identityService = $identityService;
+        $this->config = $config;
+    }
+
+    public function redirect(string $providerName): string
+    {
+        $configuration = $this->identityService->getConfiguration($providerName);
+
+        $callbackUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/redirect/' . $configuration->getIdentity()->getId();
+
+        $redirect = $configuration->getProvider()->redirect($configuration);
+
+        return $redirect;
     }
 
     public function provider(string $providerName, Consumer\UserProvider $request): AccessToken

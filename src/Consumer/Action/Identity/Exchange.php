@@ -18,40 +18,64 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\User;
+namespace Fusio\Impl\Consumer\Action\Identity;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\User\Provider as UserProvider;
+use Fusio\Impl\Service;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
 /**
- * Provider
+ * Exchange
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Provider implements ActionInterface
+class Exchange implements ActionInterface
 {
-    private UserProvider $providerService;
+    private Service\Identity $identity;
 
-    public function __construct(UserProvider $providerService)
+    public function __construct(Service\Identity $identity)
     {
-        $this->providerService = $providerService;
+        $this->identity = $identity;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
+        $error = $request->get('error');
+        $errorDescription = $request->get('error_description');
+        $errorUri = $request->get('error_uri');
 
-        assert($body instanceof Model\Consumer\UserProvider);
+        if (!empty($error)) {
+            throw new StatusCode\BadRequestException('Could not authenticate user: ' . implode(' - ', array_filter([$error, $errorDescription, $errorDescription, $errorUri])));
+        }
 
-        $token = $this->providerService->provider($request->get('provider'), $body);
+        $code = $request->get('code');
+        if (empty($code)) {
+            throw new StatusCode\BadRequestException('No code provided');
+        }
+
+        $clientId = $request->get('client_id');
+        if (empty($clientId)) {
+            throw new StatusCode\BadRequestException('No client id provided');
+        }
+
+        $redirectUri = $request->get('redirect_uri');
+        if (empty($redirectUri)) {
+            throw new StatusCode\BadRequestException('No redirect uri provided');
+        }
+
+        $state = $request->get('state');
+        if (empty($state)) {
+            throw new StatusCode\BadRequestException('No state provided');
+        }
+
+        $token = $this->identity->exchange($request->get('identity'), $code, $clientId, $redirectUri, $state);
 
         return $this->renderToken($token);
     }

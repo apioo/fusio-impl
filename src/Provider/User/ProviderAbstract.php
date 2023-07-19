@@ -22,13 +22,13 @@ namespace Fusio\Impl\Provider\User;
 
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Base;
-use Fusio\Impl\Service\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 use PSX\OAuth2\Error;
+use PSX\Uri\Uri;
 use PSX\Uri\Url;
 
 /**
@@ -53,6 +53,21 @@ abstract class ProviderAbstract implements ProviderInterface
     public function setHttpClient(ClientInterface $httpClient): void
     {
         $this->httpClient = $httpClient;
+    }
+
+    public function getAuthorizationUri(): ?string
+    {
+        return null;
+    }
+
+    public function getTokenUri(): ?string
+    {
+        return null;
+    }
+
+    public function getRedirectUri(Uri $uri): Uri
+    {
+        return $uri;
     }
 
     protected function obtainUserInfo(string $rawUrl, string $accessToken, ?array $parameters = null): ?\stdClass
@@ -84,6 +99,12 @@ abstract class ProviderAbstract implements ProviderInterface
     {
         $data = $this->tokenRequest($rawUrl, $params, $type);
         return $this->parseAccessToken($data);
+    }
+
+    protected function obtainIDToken(string $rawUrl, array $params, int $type = self::TYPE_POST): ?string
+    {
+        $data = $this->tokenRequest($rawUrl, $params, $type);
+        return $this->parseIDToken($data);
     }
 
     protected function tokenRequest(string $rawUrl, array $params, int $type = self::TYPE_POST): ?array
@@ -120,6 +141,18 @@ abstract class ProviderAbstract implements ProviderInterface
     {
         if (isset($data['access_token']) && is_string($data['access_token'])) {
             return $data['access_token'];
+        } elseif (isset($data['error']) && is_string($data['error'])) {
+            $error = Error::fromArray($data);
+            throw new StatusCode\BadRequestException($error->getError() . ': ' . $error->getErrorDescription() . ' (' . $error->getErrorUri() . ')');
+        } else {
+            return null;
+        }
+    }
+
+    private function parseIDToken(array $data): ?string
+    {
+        if (isset($data['id_token']) && is_string($data['id_token'])) {
+            return $data['id_token'];
         } elseif (isset($data['error']) && is_string($data['error'])) {
             $error = Error::fromArray($data);
             throw new StatusCode\BadRequestException($error->getError() . ': ' . $error->getErrorDescription() . ' (' . $error->getErrorUri() . ')');

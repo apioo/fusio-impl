@@ -241,6 +241,16 @@ final class Version20230508210151 extends AbstractMigration
             $identityTable->addUniqueIndex(['name']);
         }
 
+        if (!$schema->hasTable('fusio_identity_request')) {
+            $identityRequestTable = $schema->createTable('fusio_identity');
+            $identityRequestTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $identityRequestTable->addColumn('identity_id', 'integer');
+            $identityRequestTable->addColumn('state', 'string');
+            $identityRequestTable->addColumn('insert_date', 'datetime');
+            $identityRequestTable->setPrimaryKey(['id']);
+            $identityRequestTable->addUniqueIndex(['identity_id', 'state']);
+        }
+
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -530,6 +540,10 @@ final class Version20230508210151 extends AbstractMigration
             $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_trigger_event_id');
         }
 
+        if (isset($identityRequestTable)) {
+            $identityRequestTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'identity_request_identity_id');
+        }
+
         if (isset($planScopeTable)) {
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'plan_scope_scope_id');
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_scope_user_id');
@@ -580,6 +594,8 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_event_response');
         $schema->dropTable('fusio_event_subscription');
         $schema->dropTable('fusio_event_trigger');
+        $schema->dropTable('fusio_identity');
+        $schema->dropTable('fusio_identity_request');
         $schema->dropTable('fusio_log');
         $schema->dropTable('fusio_log_error');
         $schema->dropTable('fusio_operation');

@@ -21,28 +21,23 @@
 namespace Fusio\Impl\Provider\User;
 
 use Fusio\Engine\User\UserDetails;
+use PSX\Uri\Uri;
 
 /**
- * OIDC
+ * OpenID Connect
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class OIDC extends ProviderAbstract
+class OpenIDConnect extends ProviderAbstract
 {
-    public function redirect(ConfigurationInterface $configuration): Url
+    public function getRedirectUri(Uri $uri): Uri
     {
-        $url = Url::parse($configuration->getAuthroizationUri());
-        $url = $url->setParameters([
-            'response_type' => 'code',
-            'client_id' => $configuration->getClientId(),
-            'state' => '',
-            'redirect_uri' => '',
-            'scope' => 'openid',
-        ]);
+        $parameters = $uri->getParameters();
+        $parameters['scope'] = 'openid';
 
-        return $url;
+        return $uri->withParameters($parameters);
     }
 
     public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
@@ -75,21 +70,4 @@ class OIDC extends ProviderAbstract
         }
     }
 
-    protected function obtainIDToken(string $rawUrl, array $params, int $type = self::TYPE_POST): ?string
-    {
-        $data = $this->tokenRequest($rawUrl, $params, $type);
-        return $this->parseIDToken($data);
-    }
-
-    private function parseIDToken(array $data): ?string
-    {
-        if (isset($data['id_token']) && is_string($data['id_token'])) {
-            return $data['id_token'];
-        } elseif (isset($data['error']) && is_string($data['error'])) {
-            $error = Error::fromArray($data);
-            throw new StatusCode\BadRequestException($error->getError() . ': ' . $error->getErrorDescription() . ' (' . $error->getErrorUri() . ')');
-        } else {
-            return null;
-        }
-    }
 }

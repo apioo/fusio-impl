@@ -31,18 +31,14 @@ use Fusio\Engine\User\UserDetails;
  */
 class Github extends ProviderAbstract
 {
-    public function redirect(ConfigurationInterface $configuration): Url
+    public function getAuthorizationUri(): ?string
     {
-        $url = Url::parse($configuration->getAuthroizationUri());
-        $url = $url->setParameters([
-            'response_type' => 'code',
-            'client_id' => $configuration->getClientId(),
-            'state' => '',
-            'redirect_uri' => '',
-            'scope' => 'openid',
-        ]);
+        return 'https://github.com/login/oauth/authorize';
+    }
 
-        return $url;
+    public function getTokenUri(): ?string
+    {
+        return 'https://github.com/login/oauth/access_token';
     }
 
     public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
