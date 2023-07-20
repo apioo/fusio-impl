@@ -18,37 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\Identity;
+namespace Fusio\Impl\Backend\Action\Identity;
 
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
-use Fusio\Model;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Event;
+use Fusio\Impl\Service\Identity;
 
 /**
- * GetAll
+ * Delete
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+class Delete implements ActionInterface
 {
-    private View\Identity $identity;
+    private Identity $identityService;
 
-    public function __construct(View\Identity $identity)
+    public function __construct(Identity $identityService)
     {
-        $this->identity = $identity;
+        $this->identityService = $identityService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->identity->getCollection(
-            1,
-            $context->getUser()->getId(),
-            $request->get('appId'),
+        $this->identityService->delete(
+            $request->get('identity_id'),
+            UserContext::newActionContext($context)
         );
+
+        return [
+            'success' => true,
+            'message' => 'Identity successfully deleted',
+        ];
     }
 }

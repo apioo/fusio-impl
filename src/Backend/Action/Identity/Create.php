@@ -18,37 +18,51 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\Identity;
+namespace Fusio\Impl\Backend\Action\Identity;
 
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
-use Fusio\Model;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Event;
+use Fusio\Impl\Service\Identity;
+use Fusio\Model\Backend\EventCreate;
+use PSX\Http\Environment\HttpResponse;
 
 /**
- * GetAll
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+class Create implements ActionInterface
 {
-    private View\Identity $identity;
+    private Identity $identityService;
 
-    public function __construct(View\Identity $identity)
+    public function __construct(Identity $identityService)
     {
-        $this->identity = $identity;
+        $this->identityService = $identityService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->identity->getCollection(
-            1,
-            $context->getUser()->getId(),
-            $request->get('appId'),
+        $body = $request->getPayload();
+
+        assert($body instanceof IdentityCreate);
+
+        $this->identityService->create(
+            $context->getUser()->getCategoryId(),
+            $body,
+            UserContext::newActionContext($context)
         );
+
+        return new HttpResponse(201, [], [
+            'success' => true,
+            'message' => 'Identity successfully created',
+        ]);
     }
 }

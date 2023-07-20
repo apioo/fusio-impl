@@ -200,7 +200,7 @@ class Identity
         }
 
         $configuration = new Configuration();
-        $user = $this->getProvider($existing)->requestUser($configuration, $code, $clientId, $redirectUri);
+        $user = $this->getProvider($existing)->requestUserInfo($configuration, $code, $redirectUri);
         if (!$user instanceof UserDetails) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }

@@ -40,14 +40,14 @@ class OpenIDConnect extends ProviderAbstract
         return $uri->withParameters($parameters);
     }
 
-    public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
     {
         $params = [
+            'grant_type'    => 'authorization_code',
             'code'          => $code,
-            'client_id'     => $clientId,
+            'client_id'     => $configuration->getClientId(),
             'client_secret' => $configuration->getClientSecret(),
             'redirect_uri'  => $redirectUri,
-            'grant_type'    => 'authorization_code'
         ];
 
         $idToken = $this->obtainIDToken($configuration->getTokenUri(), $params);
@@ -69,5 +69,4 @@ class OpenIDConnect extends ProviderAbstract
             return null;
         }
     }
-
 }

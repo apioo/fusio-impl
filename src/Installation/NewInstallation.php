@@ -56,6 +56,8 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
+        $appsUrl = '';
+
         $bag = new DataBag();
         $bag->addCategory('default');
         $bag->addCategory('backend');
@@ -66,8 +68,8 @@ class NewInstallation
         $bag->addRole('default', 'Backend');
         $bag->addRole('default', 'Consumer');
         $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password);
-        $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
-        $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
+        $bag->addApp('Administrator', 'Fusio', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
@@ -1626,6 +1628,7 @@ class NewInstallation
                     httpPath: '/identity',
                     httpCode: 200,
                     outgoing: Model\Consumer\UserJWT::class,
+                    parameters: ['appId' => TypeFactory::getInteger()],
                     throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),

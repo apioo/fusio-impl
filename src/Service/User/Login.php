@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Framework\Config\ConfigInterface;
@@ -38,12 +39,14 @@ class Login
 {
     private Authenticator $authenticatorService;
     private Service\App\Token $appTokenService;
+    private Table\App $appTable;
     private ConfigInterface $config;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
     {
         $this->authenticatorService = $authenticatorService;
         $this->appTokenService = $appTokenService;
+        $this->appTable = $appTable;
         $this->config = $config;
     }
 
@@ -71,7 +74,7 @@ class Login
             $scopes = $this->authenticatorService->getValidScopes($userId, $scopes);
         }
 
-        $appId = $this->getAppId();
+        $appId = $this->getAppId($login->getAppKey());
 
         return $this->appTokenService->generateAccessToken(
             $appId,
@@ -89,8 +92,10 @@ class Login
             throw new StatusCode\BadRequestException('No refresh token provided');
         }
 
+        $appId = $this->getAppId($refresh->getAppKey());
+
         return $this->appTokenService->refreshAccessToken(
-            $this->getAppId(),
+            $appId,
             $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),
@@ -98,12 +103,18 @@ class Login
         );
     }
 
-    private function getAppId(): int
+    private function getAppId(?string $appKey): int
     {
-        // @TODO this is the consumer app. Probably we need a better way to
-        // define this id
-        $appId = 2;
+        if (empty($appKey)) {
+            // in case the user has not provided an app key we simply use the consumer app
+            return 2;
+        }
 
-        return $appId;
+        $existing = $this->appTable->findOneByAppKey($appKey);
+        if (!$existing instanceof Table\Generated\AppRow) {
+            throw new StatusCode\BadRequestException('Provided an invalid app key');
+        }
+
+        return $existing->getId();
     }
 }

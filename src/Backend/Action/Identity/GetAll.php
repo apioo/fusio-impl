@@ -18,14 +18,16 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\Identity;
+namespace Fusio\Impl\Backend\Action\Identity;
 
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
-use Fusio\Model;
+use Fusio\Impl\Backend\View;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAll
@@ -36,19 +38,22 @@ use Fusio\Model;
  */
 class GetAll implements ActionInterface
 {
-    private View\Identity $identity;
+    private View\Identity $view;
 
-    public function __construct(View\Identity $identity)
+    public function __construct(View\Identity $view)
     {
-        $this->identity = $identity;
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->identity->getCollection(
-            1,
-            $context->getUser()->getId(),
-            $request->get('appId'),
+        return $this->view->getCollection(
+            $context->getUser()->getCategoryId(),
+            (int) $request->get('startIndex'),
+            (int) $request->get('count'),
+            $request->get('search'),
+            $request->get('sortBy'),
+            $request->get('sortOrder')
         );
     }
 }

@@ -18,37 +18,49 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\Identity;
+namespace Fusio\Impl\Backend\Action\Identity;
 
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
-use Fusio\Model;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * GetAll
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+class Get implements ActionInterface
 {
-    private View\Identity $identity;
+    private View\Identity $view;
 
-    public function __construct(View\Identity $identity)
+    public function __construct(View\Identity $view)
     {
-        $this->identity = $identity;
+        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->identity->getCollection(
-            1,
-            $context->getUser()->getId(),
-            $request->get('appId'),
+        $identity = $this->view->getEntity(
+            $request->get('identity_id')
         );
+
+        if (empty($identity)) {
+            throw new StatusCode\NotFoundException('Could not find identity');
+        }
+
+        if ($identity['status'] == Table\Event::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Identity was deleted');
+        }
+
+        return $identity;
     }
 }

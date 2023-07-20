@@ -41,21 +41,26 @@ class Facebook extends ProviderAbstract
         return 'https://graph.facebook.com/v17.0/oauth/access_token';
     }
 
-    public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://graph.facebook.com/v2.5/me';
+    }
+
+    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
     {
         $params = [
             'code'          => $code,
-            'client_id'     => $clientId,
+            'client_id'     => $configuration->getClientId(),
             'client_secret' => $configuration->getClientSecret(),
             'redirect_uri'  => $redirectUri,
         ];
 
-        $accessToken = $this->obtainAccessToken($configuration->getAuthorizationUri(), $params, self::TYPE_GET);
+        $accessToken = $this->obtainAccessToken($configuration->getTokenUri(), $params, Method::GET);
         if (empty($accessToken)) {
             return null;
         }
 
-        $data = $this->obtainUserInfo('https://graph.facebook.com/v2.5/me', $accessToken, ['access_token' => $accessToken, 'fields' => 'id,name,email']);
+        $data = $this->obtainUserInfo($configuration->getUserInfo(), $accessToken, ['access_token' => $accessToken, 'fields' => 'id,name,email']);
         if (empty($data)) {
             return null;
         }
@@ -65,7 +70,7 @@ class Facebook extends ProviderAbstract
         $email = $data->email ?? null;
 
         if (!empty($id) && !empty($name)) {
-            return new UserDetails($id, $name, $email);
+            return new UserInfo($id, $name, $email);
         } else {
             return null;
         }

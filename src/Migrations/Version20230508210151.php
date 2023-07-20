@@ -228,13 +228,16 @@ final class Version20230508210151 extends AbstractMigration
             $identityTable = $schema->createTable('fusio_identity');
             $identityTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $identityTable->addColumn('status', 'integer');
-            $identityTable->addColumn('provider', 'string', ['length' => 255]);
-            $identityTable->addColumn('name', 'string', ['length' => 128]);
+            $identityTable->addColumn('app_id', 'integer');
             $identityTable->addColumn('role_id', 'integer', ['notnull' => false]);
+            $identityTable->addColumn('name', 'string', ['length' => 128]);
+            $identityTable->addColumn('icon', 'string', ['length' => 64]);
+            $identityTable->addColumn('class', 'string', ['length' => 255]);
             $identityTable->addColumn('client_id', 'string');
             $identityTable->addColumn('client_secret', 'string');
             $identityTable->addColumn('authorization_uri', 'string', ['notnull' => false]);
             $identityTable->addColumn('token_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('user_info_uri', 'string', ['notnull' => false]);
             $identityTable->addColumn('allow_create', 'boolean');
             $identityTable->addColumn('insert_date', 'datetime');
             $identityTable->setPrimaryKey(['id']);

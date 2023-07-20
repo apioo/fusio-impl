@@ -41,22 +41,27 @@ class Google extends ProviderAbstract
         return 'https://oauth2.googleapis.com/token';
     }
 
-    public function requestUser(ConfigurationInterface $configuration, string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://openidconnect.googleapis.com/v1/userinfo';
+    }
+
+    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
     {
         $params = [
             'code'          => $code,
-            'client_id'     => $clientId,
+            'client_id'     => $configuration->getClientId(),
             'client_secret' => $configuration->getClientSecret(),
             'redirect_uri'  => $redirectUri,
             'grant_type'    => 'authorization_code'
         ];
 
-        $accessToken = $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
+        $accessToken = $this->obtainAccessToken($configuration->getTokenUri(), $params);
         if (empty($accessToken)) {
             return null;
         }
 
-        $data = $this->obtainUserInfo('https://openidconnect.googleapis.com/v1/userinfo', $accessToken);
+        $data = $this->obtainUserInfo($configuration->getUserInfoUri(), $accessToken);
         if (empty($data)) {
             return null;
         }
