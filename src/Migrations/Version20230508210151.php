@@ -238,6 +238,9 @@ final class Version20230508210151 extends AbstractMigration
             $identityTable->addColumn('authorization_uri', 'string', ['notnull' => false]);
             $identityTable->addColumn('token_uri', 'string', ['notnull' => false]);
             $identityTable->addColumn('user_info_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('id_property', 'string', ['notnull' => false]);
+            $identityTable->addColumn('name_property', 'string', ['notnull' => false]);
+            $identityTable->addColumn('email_property', 'string', ['notnull' => false]);
             $identityTable->addColumn('allow_create', 'boolean');
             $identityTable->addColumn('insert_date', 'datetime');
             $identityTable->setPrimaryKey(['id']);
@@ -245,7 +248,7 @@ final class Version20230508210151 extends AbstractMigration
         }
 
         if (!$schema->hasTable('fusio_identity_request')) {
-            $identityRequestTable = $schema->createTable('fusio_identity');
+            $identityRequestTable = $schema->createTable('fusio_identity_request');
             $identityRequestTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $identityRequestTable->addColumn('identity_id', 'integer');
             $identityRequestTable->addColumn('state', 'string');
@@ -478,7 +481,7 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $userTable->addColumn('role_id', 'integer');
             $userTable->addColumn('plan_id', 'integer', ['notnull' => false]);
-            $userTable->addColumn('provider', 'integer', ['default' => ProviderInterface::PROVIDER_SYSTEM]);
+            $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
             $userTable->addColumn('status', 'integer');
             $userTable->addColumn('remote_id', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('external_id', 'string', ['notnull' => false]);
@@ -490,9 +493,13 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addColumn('metadata', 'text', ['notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
-            $userTable->addUniqueIndex(['provider', 'remote_id']);
+            $userTable->addUniqueIndex(['identity_id', 'remote_id']);
             $userTable->addUniqueIndex(['name']);
             $userTable->addUniqueIndex(['email']);
+        } else {
+            $userTable = $schema->getTable('fusio_rate_allocation');
+            $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
+            $userTable->dropColumn('provider');
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {

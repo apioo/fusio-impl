@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ProviderAbstract;
 
 /**
  * Github
@@ -46,33 +46,8 @@ class Github extends ProviderAbstract
         return 'https://api.github.com/user';
     }
 
-    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
+    public function getNameProperty(): string
     {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $configuration->getClientId(),
-            'client_secret' => $configuration->getClientSecret(),
-            'redirect_uri'  => $redirectUri,
-        ];
-
-        $accessToken = $this->obtainAccessToken($configuration->getTokenUri(), $params);
-        if (empty($accessToken)) {
-            return null;
-        }
-
-        $data = $this->obtainUserInfo($configuration->getUserInfoUri(), $accessToken);
-        if (empty($data)) {
-            return null;
-        }
-
-        $id    = $data->id ?? null;
-        $name  = $data->login ?? null;
-        $email = $data->email ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserInfo($id, $name, $email);
-        } else {
-            return null;
-        }
+        return 'login';
     }
 }

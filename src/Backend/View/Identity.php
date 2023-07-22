@@ -54,8 +54,7 @@ class Identity extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\IdentityTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
-        $condition->in(Table\Generated\IdentityTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\IdentityTable::COLUMN_STATUS, [Table\Identity::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\IdentityTable::COLUMN_NAME, '%' . $search . '%');
@@ -71,6 +70,9 @@ class Identity extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_STATUS),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
+                'icon' => Table\Generated\IdentityTable::COLUMN_ICON,
+                'class' => Table\Generated\IdentityTable::COLUMN_CLASS,
+                'insertDate' => $builder->fieldDateTime(Table\Generated\IdentityTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -85,6 +87,18 @@ class Identity extends ViewAbstract
             'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_STATUS),
             'name' => Table\Generated\IdentityTable::COLUMN_NAME,
+            'icon' => Table\Generated\IdentityTable::COLUMN_ICON,
+            'class' => Table\Generated\IdentityTable::COLUMN_CLASS,
+            'clientId' => Table\Generated\IdentityTable::COLUMN_CLIENT_ID,
+            'clientSecret' => Table\Generated\IdentityTable::COLUMN_CLIENT_SECRET,
+            'authorizationUri' => Table\Generated\IdentityTable::COLUMN_AUTHORIZATION_URI,
+            'tokenUri' => Table\Generated\IdentityTable::COLUMN_TOKEN_URI,
+            'userInfoUri' => Table\Generated\IdentityTable::COLUMN_USER_INFO_URI,
+            'idProperty' => Table\Generated\IdentityTable::COLUMN_ID_PROPERTY,
+            'nameProperty' => Table\Generated\IdentityTable::COLUMN_NAME_PROPERTY,
+            'emailProperty' => Table\Generated\IdentityTable::COLUMN_EMAIL_PROPERTY,
+            'allowCreate' => $builder->fieldBoolean(Table\Generated\IdentityTable::COLUMN_ALLOW_CREATE),
+            'insertDate' => $builder->fieldDateTime(Table\Generated\IdentityTable::COLUMN_INSERT_DATE),
         ]);
 
         return $builder->build($definition);

@@ -68,7 +68,7 @@ class NewInstallation
         $bag->addRole('default', 'Backend');
         $bag->addRole('default', 'Consumer');
         $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password);
-        $bag->addApp('Administrator', 'Fusio', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
         $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
@@ -77,9 +77,9 @@ class NewInstallation
         $bag->addAppScope('Backend', 'backend');
         $bag->addAppScope('Backend', 'authorization');
         $bag->addAppScope('Backend', 'default');
-        $bag->addAppScope('Consumer', 'consumer');
-        $bag->addAppScope('Consumer', 'authorization');
-        $bag->addAppScope('Consumer', 'default');
+        $bag->addAppScope('Developer', 'consumer');
+        $bag->addAppScope('Developer', 'authorization');
+        $bag->addAppScope('Developer', 'default');
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
         $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
@@ -687,6 +687,52 @@ class NewInstallation
                     outgoing: Model\Backend\GeneratorProviderChangelog::class,
                     incoming: Model\Backend\GeneratorProviderConfig::class,
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.getAll' => new Operation(
+                    action: Backend\Action\Identity\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity',
+                    httpCode: 200,
+                    outgoing: Model\Backend\IdentityCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.create' => new Operation(
+                    action: Backend\Action\Identity\Create::class,
+                    httpMethod: 'POST',
+                    httpPath: '/identity',
+                    httpCode: 201,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\IdentityCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.create',
+                ),
+                'identity.get' => new Operation(
+                    action: Backend\Action\Identity\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Backend\Identity::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.update' => new Operation(
+                    action: Backend\Action\Identity\Update::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\IdentityUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.update',
+                ),
+                'identity.delete' => new Operation(
+                    action: Backend\Action\Identity\Delete::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.delete',
                 ),
                 'log.getAllErrors' => new Operation(
                     action: Backend\Action\Log\Error\GetAll::class,

@@ -344,6 +344,22 @@ class DataBag
         ];
     }
 
+    public function addIdentity(string $name, string $icon, string $class, string $clientId, string $clientSecret, ?string $insertDate = null): void
+    {
+        $this->data['fusio_identity'][$name] = [
+            'app_id' => $this->getId('fusio_app', 'Backend'),
+            'role_id' => $this->getId('fusio_role', 'Consumer'),
+            'status' => Table\Identity::STATUS_ACTIVE,
+            'name' => $name,
+            'icon' => $icon,
+            'class' => $class,
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'allow_create' => true,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
     public function addEventSubscription(string $event, string $user, string $endpoint): void
     {
         $this->data['fusio_event_subscription'][] = [

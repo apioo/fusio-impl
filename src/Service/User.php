@@ -20,20 +20,17 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
 use Fusio\Impl\Event\User\DeletedEvent;
-use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use Fusio\Model\Backend\AccountChangePassword;
 use Fusio\Model\Backend\UserCreate;
-use Fusio\Model\Backend\UserRemote;
 use Fusio\Model\Backend\UserUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
@@ -84,7 +81,7 @@ class User
             $row = new Table\Generated\UserRow();
             $row->setRoleId($roleId);
             $row->setPlanId($user->getPlanId());
-            $row->setProvider(ProviderInterface::PROVIDER_SYSTEM);
+            $row->setIdentityId(null);
             $row->setStatus($user->getStatus() ?? Table\User::STATUS_DISABLED);
             $row->setName($user->getName());
             $row->setEmail($user->getEmail());
@@ -112,12 +109,12 @@ class User
         return $userId;
     }
 
-    public function createRemote(UserRemote $remote, UserContext $context): int
+    public function createRemote(int $identityId, string $remoteId, string $name, ?string $email, UserContext $context): int
     {
         // check whether user exists
         $condition  = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_PROVIDER, $remote->getProvider());
-        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remote->getRemoteId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identityId);
+        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remoteId);
 
         $existing = $this->userTable->findOneBy($condition);
         if ($existing instanceof Table\Generated\UserRow) {
@@ -125,13 +122,13 @@ class User
         }
 
         // replace spaces with a dot
-        $remote->setName(str_replace(' ', '.', $remote->getName() ?? ''));
+        $name = str_replace(' ', '.', $name);
 
         // check values
-        $this->validator->assertName($remote->getName());
+        $this->validator->assertName($name);
 
-        if (!empty($remote->getEmail())) {
-            $this->validator->assertEmail($remote->getEmail());
+        if (!empty($email)) {
+            $this->validator->assertEmail($email);
         }
 
         try {
@@ -147,11 +144,11 @@ class User
             // create user
             $row = new Table\Generated\UserRow();
             $row->setRoleId($roleId);
-            $row->setProvider($remote->getProvider() ?? throw new StatusCode\InternalServerErrorException('Invalid provider configured'));
+            $row->setIdentityId($identityId);
             $row->setStatus(Table\User::STATUS_ACTIVE);
-            $row->setRemoteId($remote->getRemoteId());
-            $row->setName($remote->getName() ?? throw new StatusCode\InternalServerErrorException('Invalid name configured'));
-            $row->setEmail($remote->getEmail());
+            $row->setRemoteId($remoteId);
+            $row->setName($name);
+            $row->setEmail($email);
             $row->setPassword(null);
             $row->setPoints($this->configService->getValue('points_default') ?: null);
             $row->setDate(LocalDateTime::now());
@@ -171,8 +168,8 @@ class User
 
         $user = new UserCreate();
         $user->setId($userId);
-        $user->setName($remote->getName());
-        $user->setEmail($remote->getEmail());
+        $user->setName($name);
+        $user->setEmail($email);
 
         $this->eventDispatcher->dispatch(new CreatedEvent($user, $context));
 

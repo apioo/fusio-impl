@@ -20,7 +20,8 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ConfigurationInterface;
+use Fusio\Engine\User\ProviderAbstract;
 
 /**
  * Facebook
@@ -46,33 +47,10 @@ class Facebook extends ProviderAbstract
         return 'https://graph.facebook.com/v2.5/me';
     }
 
-    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
+    protected function getUserInfoParameters(ConfigurationInterface $configuration): array
     {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $configuration->getClientId(),
-            'client_secret' => $configuration->getClientSecret(),
-            'redirect_uri'  => $redirectUri,
+        return [
+            'fields' => 'id,name,email'
         ];
-
-        $accessToken = $this->obtainAccessToken($configuration->getTokenUri(), $params, Method::GET);
-        if (empty($accessToken)) {
-            return null;
-        }
-
-        $data = $this->obtainUserInfo($configuration->getUserInfo(), $accessToken, ['access_token' => $accessToken, 'fields' => 'id,name,email']);
-        if (empty($data)) {
-            return null;
-        }
-
-        $id    = $data->id ?? null;
-        $name  = $data->name ?? null;
-        $email = $data->email ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserInfo($id, $name, $email);
-        } else {
-            return null;
-        }
     }
 }

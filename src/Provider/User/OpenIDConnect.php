@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ProviderAbstract;
 use PSX\Uri\Uri;
 
 /**
@@ -38,35 +38,5 @@ class OpenIDConnect extends ProviderAbstract
         $parameters['scope'] = 'openid';
 
         return $uri->withParameters($parameters);
-    }
-
-    public function requestUserInfo(ConfigurationInterface $configuration, string $code, string $redirectUri): ?UserInfo
-    {
-        $params = [
-            'grant_type'    => 'authorization_code',
-            'code'          => $code,
-            'client_id'     => $configuration->getClientId(),
-            'client_secret' => $configuration->getClientSecret(),
-            'redirect_uri'  => $redirectUri,
-        ];
-
-        $idToken = $this->obtainIDToken($configuration->getTokenUri(), $params);
-        if (empty($idToken)) {
-            return null;
-        }
-
-        $data = JWT::decode($idToken);
-
-        // try standard claims
-        // s. https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
-        $id    = $data['sub'] ?? null;
-        $name  = $data['preferred_username'] ?? null;
-        $email = $data['email'] ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserDetails($id, $name, $email);
-        } else {
-            return null;
-        }
     }
 }

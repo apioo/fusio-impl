@@ -20,16 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Identity;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Event;
 use Fusio\Impl\Service\Identity;
-use Fusio\Model\Backend\EventCreate;
+use Fusio\Model\Backend\IdentityCreate;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -55,7 +52,6 @@ class Create implements ActionInterface
         assert($body instanceof IdentityCreate);
 
         $this->identityService->create(
-            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

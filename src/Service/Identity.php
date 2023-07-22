@@ -20,8 +20,9 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\User\Configuration;
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\UserInfo;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Identity\CreatedEvent;
@@ -29,10 +30,10 @@ use Fusio\Impl\Event\Identity\DeletedEvent;
 use Fusio\Impl\Event\Identity\UpdatedEvent;
 use Fusio\Impl\Provider\UserProvider;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model;
-use Fusio\Model\Backend\UserRemote;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\DateTime\Tests\LocalDateTest;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
@@ -50,15 +51,15 @@ use PSX\Uri\Url;
 class Identity
 {
     private Table\Identity $identityTable;
-    private Table\IdentityRequest $identityRequestTable;
-    private Service\Category\Validator $validator;
+    private Table\Generated\IdentityRequestTable $identityRequestTable;
+    private Identity\Validator $validator;
     private UserProvider $userProvider;
     private Service\User $userService;
     private Service\App\Token $appTokenService;
     private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(/*Table\Identity $identityTable, Table\IdentityRequest $identityRequestTable, */Identity\Validator $validator, UserProvider $userProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Identity\Validator $validator, UserProvider $userProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
@@ -70,9 +71,14 @@ class Identity
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(IdentityCreate $identity, UserContext $context): int
+    public function create(Model\Backend\IdentityCreate $identity, UserContext $context): int
     {
         $this->validator->assert($identity);
+
+        $provider = $this->userProvider->getInstance($identity->getClass());
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provided an invalid identity class');
+        }
 
         try {
             $this->identityTable->beginTransaction();
@@ -80,7 +86,21 @@ class Identity
             // create category
             $row = new Table\Generated\IdentityRow();
             $row->setStatus(Table\Identity::STATUS_ACTIVE);
+            $row->setAppId($identity->getAppId());
+            $row->setRoleId($identity->getRoleId());
             $row->setName($identity->getName());
+            $row->setIcon($identity->getIcon());
+            $row->setClass($identity->getClass());
+            $row->setClientId($identity->getClientId());
+            $row->setClientSecret($identity->getClientSecret());
+            $row->setAuthorizationUri($identity->getAuthorizationUri() ?? $provider->getAuthorizationUri());
+            $row->setTokenUri($identity->getTokenUri() ?? $provider->getTokenUri());
+            $row->setUserInfoUri($identity->getUserInfoUri() ?? $provider->getUserInfoUri());
+            $row->setIdProperty($identity->getIdProperty() ?? $provider->getIdProperty());
+            $row->setNameProperty($identity->getNameProperty() ?? $provider->getNameProperty());
+            $row->setEmailProperty($identity->getEmailProperty() ?? $provider->getEmailProperty());
+            $row->setAllowCreate($identity->getAllowCreate() ?? true);
+            $row->setInsertDate(LocalDateTime::now());
             $this->identityTable->create($row);
 
             $identityId = $this->identityTable->getLastInsertId();
@@ -98,7 +118,7 @@ class Identity
         return $identityId;
     }
 
-    public function update(string $identityId, IdentityUpdate $identity, UserContext $context): int
+    public function update(string $identityId, Model\Backend\IdentityUpdate $identity, UserContext $context): int
     {
         $existing = $this->identityTable->findOneByIdentifier($identityId);
         if (empty($existing)) {
@@ -111,11 +131,28 @@ class Identity
 
         $this->validator->assert($identity, $existing);
 
+        $provider = $this->userProvider->getInstance($existing->getClass());
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provided an invalid identity class');
+        }
+
         try {
             $this->identityTable->beginTransaction();
 
             // update category
+            $existing->setAppId($identity->getAppId() ?? $existing->getAppId());
+            $existing->setRoleId($identity->getRoleId() ?? $existing->getRoleId());
             $existing->setName($identity->getName() ?? $existing->getName());
+            $existing->setIcon($identity->getIcon() ?? $existing->getIcon());
+            $existing->setClientId($identity->getClientId() ?? $existing->getClientId());
+            $existing->setClientSecret($identity->getClientSecret() ?? $existing->getClientSecret());
+            $existing->setAuthorizationUri($identity->getAuthorizationUri() ?? $existing->getAuthorizationUri());
+            $existing->setTokenUri($identity->getTokenUri() ?? $existing->getTokenUri());
+            $existing->setUserInfoUri($identity->getUserInfoUri() ?? $existing->getUserInfoUri());
+            $existing->setIdProperty($identity->getIdProperty() ?? $existing->getIdProperty());
+            $existing->setNameProperty($identity->getNameProperty() ?? $existing->getNameProperty());
+            $existing->setEmailProperty($identity->getEmailProperty() ?? $existing->getEmailProperty());
+            $existing->setAllowCreate($identity->getAllowCreate() ?? $existing->getAllowCreate());
             $this->identityTable->update($existing);
 
             $this->identityTable->commit();
@@ -160,23 +197,28 @@ class Identity
             throw new StatusCode\GoneException('Identity was deleted');
         }
 
+        $provider = $this->userProvider->getInstance($existing->getClass());
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provided an invalid identity class');
+        }
+
         $state = TokenGenerator::generateState();
 
-        $row = new IdentityRequestRow();
-        $row->setIdentity($existing->getId());
+        $row = new Table\Generated\IdentityRequestRow();
+        $row->setIdentityId($existing->getId());
         $row->setState($state);
         $row->setInsertDate(LocalDateTime::now());
-        $this->identityRequestTable->insert($row);
+        $this->identityRequestTable->create($row);
 
         $authorizationUri = Url::parse($existing->getAuthorizationUri());
         $authorizationUri = $authorizationUri->withParameters([
             'response_type' => 'code',
             'client_id' => $existing->getClientId(),
             'state' => $state,
-            'redirect_uri' => $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/provider/' . $existing->getId(),
+            'redirect_uri' => $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange',
         ]);
 
-        return $this->getProvider($existing)->redirect($authorizationUri);
+        return $provider->getRedirectUri($authorizationUri);
     }
 
     public function exchange(string $identityId, string $code, string $clientId, string $redirectUri, string $state): AccessToken
@@ -195,23 +237,27 @@ class Identity
         $condition->equals('state', $state);
         $identityRequest = $this->identityRequestTable->findOneBy($condition);
 
-        if (!$identityRequest instanceof IdentityRequestRow) {
+        if (!$identityRequest instanceof Table\Generated\IdentityRequestRow) {
             throw new StatusCode\BadRequestException('Provided identity state was not requested');
         }
 
-        $configuration = new Configuration();
-        $user = $this->getProvider($existing)->requestUserInfo($configuration, $code, $redirectUri);
-        if (!$user instanceof UserDetails) {
+        if (LocalDateTime::now()->plusHours(1)->isBefore($identityRequest->getInsertDate())) {
+            throw new StatusCode\BadRequestException('Provided identity request is expired');
+        }
+
+        $provider = $this->userProvider->getInstance($existing->getClass());
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provided an invalid identity class');
+        }
+
+        $configuration = new Configuration($existing->getClientId(), $existing->getClientSecret(), $existing->getAuthorizationUri(), $existing->getTokenUri(), $existing->getUserInfoUri(), $existing->getIdProperty(), $existing->getNameProperty(), $existing->getEmailProperty());
+
+        $user = $provider->requestUserInfo($configuration, $code, $redirectUri);
+        if (!$user instanceof UserInfo) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
-        $remote = new UserRemote();
-        $remote->setProvider($existing->getId());
-        $remote->setRemoteId($user->getId());
-        $remote->setName($user->getUserName());
-        $remote->setEmail($user->getEmail());
-
-        $userId = $this->userService->createRemote($remote, UserContext::newAnonymousContext());
+        $userId = $this->userService->createRemote($existing->getId(), $user->getId(), $user->getName(), $user->getEmail(), UserContext::newAnonymousContext());
 
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId);
@@ -229,10 +275,5 @@ class Identity
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token'))
         );
-    }
-
-    private function getProvider(IdentityRow $existing): ProviderInterface
-    {
-        return $this->userProvider->getInstance($existing->getProvider());
     }
 }

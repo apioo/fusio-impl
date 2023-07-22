@@ -18,47 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Identity;
+namespace Fusio\Impl\Event\Identity;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Identity;
-use Fusio\Model\Backend\IdentityUpdate;
+use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\IdentityCreate;
 
 /**
- * Update
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+class CreatedEvent extends EventAbstract
 {
-    private Identity $identityService;
+    private IdentityCreate $identity;
 
-    public function __construct(Identity $identityService)
+    public function __construct(IdentityCreate $identity, UserContext $context)
     {
-        $this->identityService = $identityService;
+        parent::__construct($context);
+
+        $this->identity = $identity;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getIdentity(): IdentityCreate
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof IdentityUpdate);
-
-        $this->identityService->update(
-            $request->get('identity_id'),
-            $body,
-            UserContext::newActionContext($context)
-        );
-
-        return [
-            'success' => true,
-            'message' => 'Identity successfully updated',
-        ];
+        return $this->identity;
     }
 }
