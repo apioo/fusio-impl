@@ -11,7 +11,7 @@ class UserTable extends \PSX\Sql\TableAbstract
     public const COLUMN_ID = 'id';
     public const COLUMN_ROLE_ID = 'role_id';
     public const COLUMN_PLAN_ID = 'plan_id';
-    public const COLUMN_PROVIDER = 'provider';
+    public const COLUMN_IDENTITY_ID = 'identity_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_REMOTE_ID = 'remote_id';
     public const COLUMN_EXTERNAL_ID = 'external_id';
@@ -28,7 +28,7 @@ class UserTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_ROLE_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_PROVIDER => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_EXTERNAL_ID => 0x40a000ff, self::COLUMN_NAME => 0xa00040, self::COLUMN_EMAIL => 0x40a00080, self::COLUMN_PASSWORD => 0x40a000ff, self::COLUMN_POINTS => 0x4020000a, self::COLUMN_TOKEN => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_ROLE_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_IDENTITY_ID => 0x4020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_EXTERNAL_ID => 0x40a000ff, self::COLUMN_NAME => 0xa00040, self::COLUMN_EMAIL => 0x40a00080, self::COLUMN_PASSWORD => 0x40a000ff, self::COLUMN_POINTS => 0x4020000a, self::COLUMN_TOKEN => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
@@ -177,37 +177,37 @@ class UserTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByProvider(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByIdentityId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('provider', $value);
+        $condition->equals('identity_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByProvider(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
+    public function findOneByIdentityId(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('provider', $value);
+        $condition->equals('identity_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByProvider(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
+    public function updateByIdentityId(int $value, \Fusio\Impl\Table\Generated\UserRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('provider', $value);
+        $condition->equals('identity_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByProvider(int $value) : int
+    public function deleteByIdentityId(int $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('provider', $value);
+        $condition->equals('identity_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**
