@@ -58,10 +58,10 @@ class UserAddCommandTest extends ControllerDbTestCase
         $this->assertStringContainsString('Created user bar successful', $actual);
 
         // check user
-        $user = $this->connection->fetchAssociative('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
+        $user = $this->connection->fetchAssociative('SELECT role_id, identity_id, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
 
         $this->assertEquals(1, $user['role_id']);
-        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(1, $user['status']);
         $this->assertEquals(null, $user['remote_id']);
         $this->assertEquals('bar', $user['name']);

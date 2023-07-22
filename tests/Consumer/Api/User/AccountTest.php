@@ -68,6 +68,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.dashboard",
         "backend.event",
         "backend.generator",
+        "backend.identity",
         "backend.log",
         "backend.marketplace",
         "backend.operation",
@@ -87,6 +88,7 @@ class AccountTest extends ControllerDbTestCase
         "consumer.app",
         "consumer.event",
         "consumer.grant",
+        "consumer.identity",
         "consumer.log",
         "consumer.page",
         "consumer.payment",
@@ -152,14 +154,14 @@ JSON;
 
         // check database user
         $sql = $this->connection->createQueryBuilder()
-            ->select('provider', 'status', 'remote_id', 'name', 'email')
+            ->select('identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
 
-        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('Administrator', $row['name']);

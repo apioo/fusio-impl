@@ -21,9 +21,11 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
+use PSX\Sql\TableManager;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -35,7 +37,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Identity extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $userId, ?int $appId, int $startIndex = 0)
+    private ConfigInterface $config;
+
+    public function __construct(TableManager $tableManager, ConfigInterface $config)
+    {
+        parent::__construct($tableManager);
+
+        $this->config = $config;
+    }
+
+    public function getCollection(int $userId, ?int $appId, int $startIndex = 0)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -62,7 +73,9 @@ class Identity extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
                 'icon' => Table\Generated\IdentityTable::COLUMN_ICON,
-                'redirect' => Table\Generated\IdentityTable::COLUMN_REDIRECT,
+                'redirect' => $builder->fieldCallback(Table\Generated\IdentityTable::COLUMN_ID, function($id) {
+                    return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $id . '/redirect';
+                }),
             ]),
         ];
 

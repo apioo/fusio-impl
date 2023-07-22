@@ -18,19 +18,20 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Grant;
+namespace Fusio\Impl\Tests\Consumer\Api\Identity;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Uri\Url;
 
 /**
- * CollectionTest
+ * RedirectTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class RedirectTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -39,40 +40,46 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/grant', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
-{
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 1,
-            "allow": 1,
-            "createDate": "2015-02-27T19:59:15Z",
-            "app": {
-                "id": 1,
-                "name": "Backend",
-                "url": "http:\/\/127.0.0.1\/apps\/fusio"
-            }
-        }
-    ]
-}
-JSON;
+        $url = Url::parse($response->getHeader('Location'));
+        $parameters = $url->getParameters();
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(307, $response->getStatusCode(), $body);
+        $this->assertEquals('code', $parameters['response_type']);
+        $this->assertEquals('foo', $parameters['client_id']);
+        $this->assertNotEmpty($parameters['state']);
+        $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
+    }
+
+    public function testGetRedirect()
+    {
+        $response = $this->sendRequest('/consumer/identity/1/redirect?redirect_uri=' . urlencode('http://127.0.0.1/callback'), 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(307, $response->getStatusCode(), $body);
+
+        $url = Url::parse($response->getHeader('Location'));
+        $parameters = $url->getParameters();
+
+        $this->assertEquals('code', $parameters['response_type']);
+        $this->assertEquals('foo', $parameters['client_id']);
+        $this->assertNotEmpty($parameters['state']);
+        $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/grant', 'POST', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -86,7 +93,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/grant', 'PUT', array(
+        $response = $this->sendRequest('/consumer/identity', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -100,7 +107,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/grant', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

@@ -52,6 +52,7 @@ class Identity
 {
     private Table\Identity $identityTable;
     private Table\Generated\IdentityRequestTable $identityRequestTable;
+    private Table\App $appTable;
     private Identity\Validator $validator;
     private UserProvider $userProvider;
     private Service\User $userService;
@@ -59,10 +60,11 @@ class Identity
     private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Identity\Validator $validator, UserProvider $userProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, UserProvider $userProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
+        $this->appTable = $appTable;
         $this->validator = $validator;
         $this->userProvider = $userProvider;
         $this->userService = $userService;
@@ -186,7 +188,7 @@ class Identity
         return $existing->getId();
     }
 
-    public function redirect(string $identityId): Uri
+    public function redirect(string $identityId, ?string $redirectUri): Uri
     {
         $existing = $this->identityTable->findOneByIdentifier($identityId);
         if (empty($existing)) {
@@ -195,6 +197,19 @@ class Identity
 
         if ($existing->getStatus() == Table\Identity::STATUS_DELETED) {
             throw new StatusCode\GoneException('Identity was deleted');
+        }
+
+        $app = $this->appTable->find($existing->getAppId());
+        if (!$app instanceof Table\Generated\AppRow) {
+            throw new StatusCode\InternalServerErrorException('Configured entity is not assigned to an app');
+        }
+
+        if (!empty($redirectUri)) {
+            $redirectUrl = Url::parse($redirectUri);
+            $appUrl = Url::parse($app->getUrl());
+            if ($redirectUrl->getHost() !== $appUrl->getHost()) {
+                throw new StatusCode\BadRequestException('Provided redirect url must have the same host as the configured app url');
+            }
         }
 
         $provider = $this->userProvider->getInstance($existing->getClass());
@@ -207,6 +222,7 @@ class Identity
         $row = new Table\Generated\IdentityRequestRow();
         $row->setIdentityId($existing->getId());
         $row->setState($state);
+        $row->setRedirectUri($redirectUri);
         $row->setInsertDate(LocalDateTime::now());
         $this->identityRequestTable->create($row);
 

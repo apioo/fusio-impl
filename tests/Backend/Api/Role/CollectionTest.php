@@ -193,7 +193,7 @@ JSON;
 
         $this->assertEquals(2, count($result));
         $this->assertEquals(6, $result[0]['scope_id']);
-        $this->assertEquals(23, $result[1]['scope_id']);
+        $this->assertEquals(24, $result[1]['scope_id']);
     }
 
     public function testPut()

@@ -46,11 +46,10 @@ class Redirect implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof Model\Consumer\UserProvider);
-
-        $redirectUri = $this->identity->redirect($request->get('provider'));
+        $redirectUri = $this->identity->redirect(
+            $request->get('identity'),
+            $request->get('redirect_uri')
+        );
 
         throw new StatusCode\TemporaryRedirectException($redirectUri->toString());
     }

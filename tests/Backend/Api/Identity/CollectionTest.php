@@ -57,7 +57,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "name": "GitHub",
             "icon": "bi-github",
-            "class": "Fusio\\Impl\\Provider\\User\\Github",
+            "class": "Fusio\\Impl\\Provider\\User\\OpenIDConnect",
             "insertDate": "2023-07-22T13:56:00Z"
         }
     ]

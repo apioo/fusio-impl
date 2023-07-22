@@ -252,6 +252,7 @@ final class Version20230508210151 extends AbstractMigration
             $identityRequestTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $identityRequestTable->addColumn('identity_id', 'integer');
             $identityRequestTable->addColumn('state', 'string');
+            $identityRequestTable->addColumn('redirect_uri', 'string', ['notnull' => false]);
             $identityRequestTable->addColumn('insert_date', 'datetime');
             $identityRequestTable->setPrimaryKey(['id']);
             $identityRequestTable->addUniqueIndex(['identity_id', 'state']);

@@ -222,7 +222,7 @@ class ProviderTest extends ControllerDbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    protected function assertToken(string $jwt, string $provider): void
+    protected function assertToken(string $jwt, int $identityId): void
     {
         $jsonWebToken = Environment::getService(JsonWebToken::class);
         $token = $jsonWebToken->decode($jwt);
@@ -252,7 +252,7 @@ class ProviderTest extends ControllerDbTestCase
 
         // check new user
         $sql = $this->connection->createQueryBuilder()
-            ->select('status', 'provider', 'remote_id', 'name', 'email', 'password')
+            ->select('status', 'identity_id', 'remote_id', 'name', 'email', 'password')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
@@ -260,7 +260,7 @@ class ProviderTest extends ControllerDbTestCase
         $row = $this->connection->fetchAssociative($sql, ['id' => $row['user_id']]);
 
         $this->assertEquals(User::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals($provider, $row['provider']);
+        $this->assertEquals($identityId, $row['identity_id']);
         $this->assertEquals('1', $row['remote_id']);
         $this->assertEquals('octocat', $row['name']);
         $this->assertEquals('octocat@github.com', $row['email']);

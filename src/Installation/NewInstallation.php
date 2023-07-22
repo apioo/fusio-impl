@@ -31,6 +31,8 @@ use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use PSX\Api\Model\Passthru;
+use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Schema\TypeFactory;
 
 /**
@@ -56,7 +58,9 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $appsUrl = '';
+        $container = require __DIR__ . '/../../container.php';
+        $config = $container->get(ConfigInterface::class);
+        $appsUrl = $config->get('fusio_apps_url');
 
         $bag = new DataBag();
         $bag->addCategory('default');

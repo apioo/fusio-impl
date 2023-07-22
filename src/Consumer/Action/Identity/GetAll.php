@@ -46,7 +46,6 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->identity->getCollection(
-            1,
             $context->getUser()->getId(),
             $request->get('appId'),
         );

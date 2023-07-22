@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Identity;
 
-use Fusio\Impl\Provider\User\Github;
-use Fusio\Impl\Provider\User\Google;
+use Fusio\Impl\Provider\User\OpenIDConnect;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -62,9 +61,15 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",
-    "class": "Fusio\\Impl\\Provider\\User\\Github",
+    "class": "Fusio\\Impl\\Provider\\User\\OpenIDConnect",
     "clientId": "foo",
     "clientSecret": "bar",
+    "authorizationUri": "http:\/\/127.0.0.1\/authorization",
+    "tokenUri": "http:\/\/127.0.0.1\/token",
+    "userInfoUri": "http:\/\/127.0.0.1\/authorization\/whoami",
+    "idProperty": "id",
+    "nameProperty": "name",
+    "emailProperty": "email",
     "allowCreate": true,
     "insertDate": "2023-07-22T13:56:00Z"
 }
@@ -88,9 +93,15 @@ JSON;
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",
-    "class": "Fusio\\Impl\\Provider\\User\\Github",
+    "class": "Fusio\\Impl\\Provider\\User\\OpenIDConnect",
     "clientId": "foo",
     "clientSecret": "bar",
+    "authorizationUri": "http:\/\/127.0.0.1\/authorization",
+    "tokenUri": "http:\/\/127.0.0.1\/token",
+    "userInfoUri": "http:\/\/127.0.0.1\/authorization\/whoami",
+    "idProperty": "id",
+    "nameProperty": "name",
+    "emailProperty": "email",
     "allowCreate": true,
     "insertDate": "2023-07-22T13:56:00Z"
 }
@@ -161,20 +172,20 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals(1, $row['app_id']);
+        $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(3, $row['role_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('GitGit', $row['name']);
         $this->assertEquals('bi-github', $row['icon']);
-        $this->assertEquals(Github::class, $row['class']);
+        $this->assertEquals(OpenIDConnect::class, $row['class']);
         $this->assertEquals('bar', $row['client_id']);
         $this->assertEquals('foo', $row['client_secret']);
-        $this->assertEquals(null, $row['authorization_uri']);
-        $this->assertEquals(null, $row['token_uri']);
-        $this->assertEquals(null, $row['user_info_uri']);
-        $this->assertEquals(null, $row['id_property']);
-        $this->assertEquals(null, $row['name_property']);
-        $this->assertEquals(null, $row['email_property']);
+        $this->assertEquals('http://127.0.0.1/authorization', $row['authorization_uri']);
+        $this->assertEquals('http://127.0.0.1/token', $row['token_uri']);
+        $this->assertEquals('http://127.0.0.1/authorization/whoami', $row['user_info_uri']);
+        $this->assertEquals('id', $row['id_property']);
+        $this->assertEquals('name', $row['name_property']);
+        $this->assertEquals('email', $row['email_property']);
         $this->assertEquals(1, $row['allow_create']);
     }
 

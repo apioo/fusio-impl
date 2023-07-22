@@ -7,6 +7,7 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
     private ?int $id = null;
     private ?int $identityId = null;
     private ?string $state = null;
+    private ?string $redirectUri = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id) : void
     {
@@ -32,6 +33,14 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
     {
         return $this->state ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "state" was provided');
     }
+    public function setRedirectUri(?string $redirectUri) : void
+    {
+        $this->redirectUri = $redirectUri;
+    }
+    public function getRedirectUri() : ?string
+    {
+        return $this->redirectUri;
+    }
     public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
     {
         $this->insertDate = $insertDate;
@@ -47,6 +56,7 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
         $record->put('id', $this->id);
         $record->put('identity_id', $this->identityId);
         $record->put('state', $this->state);
+        $record->put('redirect_uri', $this->redirectUri);
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
@@ -60,6 +70,7 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->identityId = isset($data['identity_id']) && is_int($data['identity_id']) ? $data['identity_id'] : null;
         $row->state = isset($data['state']) && is_string($data['state']) ? $data['state'] : null;
+        $row->redirectUri = isset($data['redirect_uri']) && is_string($data['redirect_uri']) ? $data['redirect_uri'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;
     }

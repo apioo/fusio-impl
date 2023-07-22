@@ -50,6 +50,10 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->identityId;
     }
+    public function getProvider() : ?int
+    {
+        return $this->identityId;
+    }
     public function setStatus(int $status) : void
     {
         $this->status = $status;

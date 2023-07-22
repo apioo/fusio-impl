@@ -77,7 +77,8 @@ class Authenticator
         }
 
         // we can authenticate only local users
-        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
+        $identityId = $user->getIdentityId();
+        if (!empty($identityId)) {
             return null;
         }
 

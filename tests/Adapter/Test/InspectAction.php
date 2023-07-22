@@ -24,8 +24,8 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
+use Fusio\Engine\Request\RpcRequestContext;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Worker\Generated\RpcRequest;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -58,9 +58,9 @@ class InspectAction extends ActionAbstract
                 'uri_fragments' => $context->getParameters(),
                 'parameters' => $context->getRequest()->getUri()->getParameters(),
             ];
-        } elseif ($context instanceof RpcRequest) {
+        } elseif ($context instanceof RpcRequestContext) {
             $data = [
-                'name' => $context->getName(),
+                'method' => $context->getMethod(),
             ];
         }
 

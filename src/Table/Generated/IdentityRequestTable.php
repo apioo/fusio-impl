@@ -11,6 +11,7 @@ class IdentityRequestTable extends \PSX\Sql\TableAbstract
     public const COLUMN_ID = 'id';
     public const COLUMN_IDENTITY_ID = 'identity_id';
     public const COLUMN_STATE = 'state';
+    public const COLUMN_REDIRECT_URI = 'redirect_uri';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
     {
@@ -18,7 +19,7 @@ class IdentityRequestTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_IDENTITY_ID => 0x20000a, self::COLUMN_STATE => 0xa000ff, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_IDENTITY_ID => 0x20000a, self::COLUMN_STATE => 0xa000ff, self::COLUMN_REDIRECT_URI => 0x40a000ff, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\IdentityRequestRow>
@@ -161,6 +162,43 @@ class IdentityRequestTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('state', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\IdentityRequestRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByRedirectUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('redirect_uri', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByRedirectUri(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRequestRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('redirect_uri', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByRedirectUri(string $value, \Fusio\Impl\Table\Generated\IdentityRequestRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('redirect_uri', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByRedirectUri(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('redirect_uri', $value);
         return $this->doDeleteBy($condition);
     }
     /**

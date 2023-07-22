@@ -18,21 +18,19 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\App;
+namespace Fusio\Impl\Tests\Consumer\Api\Identity;
 
-use Fusio\Impl\Table\App;
 use Fusio\Impl\Tests\Fixture;
-use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * CollectionTest
+ * ExchangeTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class ExchangeTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -41,35 +39,24 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/app', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange?code=foobar&client_id=foo&state=foobar&redirect_uri=' . urlencode('http://127.0.0.1/consumer/identity/1/exchange'), 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 2,
-            "userId": 1,
-            "status": 1,
-            "name": "Developer",
-            "appKey": "[uuid]",
-            "date": "[datetime]"
-        },
-        {
             "id": 1,
-            "userId": 1,
-            "status": 1,
-            "name": "Backend",
-            "appKey": "[uuid]",
-            "date": "[datetime]"
+            "name": "GitHub",
+            "icon": "bi-github",
+            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/1\/redirect"
         }
     ]
 }
@@ -79,64 +66,23 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetUnauthorized()
-    {
-        $response = $this->sendRequest('/consumer/app', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body = (string) $response->getBody();
-        $data = \json_decode($body);
-
-        $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Missing authorization header', $data->message);
-    }
-
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/app', 'POST', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'status' => 3, // status and userID are ignored so it doesnt matter
-            'name'   => 'Foo',
-            'url'    => 'http://google.com',
-            'scopes' => ['foo', 'bar']
+            'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successfully created"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'user_id', 'name', 'url')
-            ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql);
-
-        $this->assertEquals(6, $row['id']);
-        $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('http://google.com', $row['url']);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/app', 'PUT', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -150,7 +96,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/app', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

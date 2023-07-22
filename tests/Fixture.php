@@ -29,6 +29,7 @@ use Fusio\Impl\Installation\DataBag;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Installation\Operation;
 use Fusio\Impl\Provider\User\Github;
+use Fusio\Impl\Provider\User\OpenIDConnect;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
@@ -101,7 +102,8 @@ class Fixture
         $data->addEventSubscription('foo-event', 'Consumer', 'http://www.fusio-project.org/ping');
         $data->addEventTrigger('foo-event', '{"foo":"bar"}', '2018-06-02 14:24:30');
         $data->addEventResponse(0, 0);
-        $data->addIdentity('GitHub', 'bi-github', Github::class, 'foo', 'bar', '2023-07-22 13:56:00');
+        $data->addIdentity('Developer', 'GitHub', 'bi-github', OpenIDConnect::class, 'foo', 'bar', '2023-07-22 13:56:00');
+        $data->addIdentityRequest('GitHub', 'foobar');
         $data->addRate('silver', 5, 8, 'P1M', ['foo' => 'bar']);
         $data->addRate('gold', 10, 16, 'P1M');
         $data->addTransaction('Administrator', 'Plan B', 3999, 'last month', 'next month', '2018-10-05 18:18:00');

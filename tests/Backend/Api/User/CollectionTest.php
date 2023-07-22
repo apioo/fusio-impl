@@ -57,7 +57,6 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 4,
             "roleId": 2,
-            "provider": 1,
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
@@ -67,7 +66,6 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 3,
             "roleId": 3,
-            "provider": 1,
             "status": 2,
             "name": "Disabled",
             "email": "disabled@localhost.com",
@@ -77,7 +75,6 @@ class CollectionTest extends ControllerDbTestCase
             "id": 2,
             "roleId": 3,
             "planId": 1,
-            "provider": 1,
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
@@ -90,7 +87,6 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "roleId": 1,
-            "provider": 1,
             "status": 1,
             "name": "Administrator",
             "email": "admin@localhost.com",
@@ -123,7 +119,6 @@ JSON;
         {
             "id": 4,
             "roleId": 2,
-            "provider": 1,
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
@@ -157,7 +152,6 @@ JSON;
         {
             "id": 4,
             "roleId": 2,
-            "provider": 1,
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
@@ -167,7 +161,6 @@ JSON;
         {
             "id": 3,
             "roleId": 3,
-            "provider": 1,
             "status": 2,
             "name": "Disabled",
             "email": "disabled@localhost.com",
@@ -177,7 +170,6 @@ JSON;
             "id": 2,
             "roleId": 3,
             "planId": 1,
-            "provider": 1,
             "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
@@ -190,7 +182,6 @@ JSON;
         {
             "id": 1,
             "roleId": 1,
-            "provider": 1,
             "status": 1,
             "name": "Administrator",
             "email": "admin@localhost.com",

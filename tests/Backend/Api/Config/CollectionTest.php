@@ -47,7 +47,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 36,
+    "totalResults": 30,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -210,7 +210,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 36,
+    "totalResults": 30,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -341,35 +341,35 @@ JSON;
             "value": "Fusio registration"
         },
         {
-            "id": 29,
+            "id": 23,
             "type": 1,
             "name": "payment_currency",
             "description": "The three-character ISO-4217 currency code which is used to process payments",
             "value": ""
         },
         {
-            "id": 28,
+            "id": 22,
             "type": 1,
             "name": "payment_stripe_portal_configuration",
             "description": "The stripe portal configuration id",
             "value": ""
         },
         {
-            "id": 27,
+            "id": 21,
             "type": 1,
             "name": "payment_stripe_secret",
             "description": "The stripe webhook secret which is needed to verify a webhook request",
             "value": ""
         },
         {
-            "id": 31,
+            "id": 25,
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
             "value": 0
         },
         {
-            "id": 32,
+            "id": 26,
             "type": 3,
             "name": "points_threshold",
             "description": "If a user goes below this points threshold we send an information to the user",
@@ -378,89 +378,47 @@ JSON;
         {
             "id": 19,
             "type": 1,
-            "name": "provider_facebook_key",
-            "description": "Facebook app key",
-            "value": ""
-        },
-        {
-            "id": 20,
-            "type": 1,
-            "name": "provider_facebook_secret",
-            "description": "Facebook app secret",
-            "value": ""
-        },
-        {
-            "id": 23,
-            "type": 1,
-            "name": "provider_github_key",
-            "description": "GitHub app key",
-            "value": ""
-        },
-        {
-            "id": 24,
-            "type": 1,
-            "name": "provider_github_secret",
-            "description": "GitHub app secret",
-            "value": ""
-        },
-        {
-            "id": 21,
-            "type": 1,
-            "name": "provider_google_key",
-            "description": "Google app key",
-            "value": ""
-        },
-        {
-            "id": 22,
-            "type": 1,
-            "name": "provider_google_secret",
-            "description": "Google app secret",
-            "value": ""
-        },
-        {
-            "id": 25,
-            "type": 1,
             "name": "recaptcha_key",
             "description": "ReCaptcha key",
             "value": ""
         },
         {
-            "id": 26,
+            "id": 20,
             "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
             "value": ""
         },
         {
-            "id": 30,
+            "id": 24,
             "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
         },
         {
-            "id": 34,
+            "id": 28,
             "type": 1,
             "name": "system_dispatcher",
             "description": "Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request",
             "value": ""
         },
         {
-            "id": 33,
+            "id": 27,
             "type": 1,
             "name": "system_mailer",
             "description": "Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable",
             "value": ""
         },
         {
-            "id": 36,
+            "id": 30,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": true
         },
         {
-            "id": 35,
+            "id": 29,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
