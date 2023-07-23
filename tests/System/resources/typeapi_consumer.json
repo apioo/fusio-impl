@@ -8,7 +8,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "UserJWT"
+          "$ref": "Passthru"
         }
       },
       "arguments": {
@@ -47,7 +47,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "UserJWT"
+          "$ref": "Passthru"
         }
       },
       "arguments": {
@@ -86,7 +86,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "UserJWT"
+          "$ref": "IdentityCollection"
         }
       },
       "arguments": {
@@ -2198,6 +2198,29 @@
         "T": "Grant"
       }
     },
+    "Identity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "string"
+        }
+      }
+    },
+    "IdentityCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Identity"
+      }
+    },
     "Log": {
       "type": "object",
       "properties": {
@@ -2281,6 +2304,13 @@
       "$ref": "Collection",
       "$template": {
         "T": "Page"
+      }
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     },
     "PaymentCheckoutRequest": {
