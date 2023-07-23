@@ -31,6 +31,8 @@ use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use PSX\Api\Model\Passthru;
+use PSX\Framework\Config\Config;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Schema\TypeFactory;
 
 /**
@@ -56,6 +58,10 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
+        $container = require __DIR__ . '/../../container.php';
+        $config = $container->get(ConfigInterface::class);
+        $appsUrl = $config->get('fusio_apps_url');
+
         $bag = new DataBag();
         $bag->addCategory('default');
         $bag->addCategory('backend');
@@ -66,8 +72,8 @@ class NewInstallation
         $bag->addRole('default', 'Backend');
         $bag->addRole('default', 'Consumer');
         $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password);
-        $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
-        $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
+        $bag->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
@@ -75,9 +81,9 @@ class NewInstallation
         $bag->addAppScope('Backend', 'backend');
         $bag->addAppScope('Backend', 'authorization');
         $bag->addAppScope('Backend', 'default');
-        $bag->addAppScope('Consumer', 'consumer');
-        $bag->addAppScope('Consumer', 'authorization');
-        $bag->addAppScope('Consumer', 'default');
+        $bag->addAppScope('Developer', 'consumer');
+        $bag->addAppScope('Developer', 'authorization');
+        $bag->addAppScope('Developer', 'default');
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
         $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
@@ -96,12 +102,6 @@ class NewInstallation
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
         $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail');
         $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail');
-        $bag->addConfig('provider_facebook_key', Table\Config::FORM_STRING, '', 'Facebook app key');
-        $bag->addConfig('provider_facebook_secret', Table\Config::FORM_STRING, '', 'Facebook app secret');
-        $bag->addConfig('provider_google_key', Table\Config::FORM_STRING, '', 'Google app key');
-        $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
-        $bag->addConfig('provider_github_key', Table\Config::FORM_STRING, '', 'GitHub app key');
-        $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
         $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
         $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request');
@@ -691,6 +691,52 @@ class NewInstallation
                     outgoing: Model\Backend\GeneratorProviderChangelog::class,
                     incoming: Model\Backend\GeneratorProviderConfig::class,
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.getAll' => new Operation(
+                    action: Backend\Action\Identity\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity',
+                    httpCode: 200,
+                    outgoing: Model\Backend\IdentityCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.create' => new Operation(
+                    action: Backend\Action\Identity\Create::class,
+                    httpMethod: 'POST',
+                    httpPath: '/identity',
+                    httpCode: 201,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\IdentityCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.create',
+                ),
+                'identity.get' => new Operation(
+                    action: Backend\Action\Identity\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Backend\Identity::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.update' => new Operation(
+                    action: Backend\Action\Identity\Update::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\IdentityUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.update',
+                ),
+                'identity.delete' => new Operation(
+                    action: Backend\Action\Identity\Delete::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/identity/$identity_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    eventName: 'fusio.identity.delete',
                 ),
                 'log.getAllErrors' => new Operation(
                     action: Backend\Action\Log\Error\GetAll::class,
@@ -1596,16 +1642,6 @@ class NewInstallation
                     throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
-                'account.provider' => new Operation(
-                    action: Consumer\Action\User\Provider::class,
-                    httpMethod: 'POST',
-                    httpPath: '/provider/:provider',
-                    httpCode: 200,
-                    outgoing: Model\Consumer\UserJWT::class,
-                    incoming: Model\Consumer\UserProvider::class,
-                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
-                    public: true,
-                ),
                 'account.register' => new Operation(
                     action: Consumer\Action\User\Register::class,
                     httpMethod: 'POST',
@@ -1633,6 +1669,34 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserPasswordReset::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
+                ),
+                'identity.getAll' => new Operation(
+                    action: Consumer\Action\Identity\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\UserJWT::class,
+                    parameters: ['appId' => TypeFactory::getInteger()],
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
+                ),
+                'identity.exchange' => new Operation(
+                    action: Consumer\Action\Identity\Exchange::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/:identity/exchange',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\UserJWT::class,
+                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    public: true,
+                ),
+                'identity.redirect' => new Operation(
+                    action: Consumer\Action\Identity\Redirect::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/:identity/redirect',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\UserJWT::class,
                     throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),

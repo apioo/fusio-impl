@@ -72,7 +72,7 @@ class RegisterTest extends ControllerDbTestCase
         $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
-        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
         $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);
@@ -105,7 +105,7 @@ class RegisterTest extends ControllerDbTestCase
         $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
-        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_ACTIVE, $user['status']);
         $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);
@@ -138,7 +138,7 @@ class RegisterTest extends ControllerDbTestCase
         $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
-        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
         $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);

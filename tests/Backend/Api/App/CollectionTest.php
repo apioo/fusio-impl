@@ -80,7 +80,7 @@ class CollectionTest extends ControllerDbTestCase
             "id": 2,
             "userId": 1,
             "status": 1,
-            "name": "Consumer",
+            "name": "Developer",
             "appKey": "[uuid]",
             "date": "[datetime]"
         },
@@ -174,7 +174,7 @@ JSON;
             "id": 2,
             "userId": 1,
             "status": 1,
-            "name": "Consumer",
+            "name": "Developer",
             "appKey": "[uuid]",
             "date": "[datetime]"
         },

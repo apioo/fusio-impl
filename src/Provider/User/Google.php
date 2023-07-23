@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ProviderAbstract;
 
 /**
  * Google
@@ -31,39 +31,18 @@ use Fusio\Engine\User\UserDetails;
  */
 class Google extends ProviderAbstract
 {
-    public function getId(): int
+    public function getAuthorizationUri(): ?string
     {
-        return self::PROVIDER_GOOGLE;
+        return 'https://accounts.google.com/o/oauth2/v2/auth';
     }
 
-    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function getTokenUri(): ?string
     {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $this->getSecret(),
-            'redirect_uri'  => $redirectUri,
-            'grant_type'    => 'authorization_code'
-        ];
+        return 'https://oauth2.googleapis.com/token';
+    }
 
-        $accessToken = $this->obtainAccessToken('https://oauth2.googleapis.com/token', $params);
-        if (empty($accessToken)) {
-            return null;
-        }
-
-        $data = $this->obtainUserInfo('https://www.googleapis.com/userinfo/v2/me', $accessToken);
-        if (empty($data)) {
-            return null;
-        }
-
-        $id    = $data->id ?? null;
-        $name  = $data->name ?? null;
-        $email = $data->email ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserDetails($id, $name, $email);
-        } else {
-            return null;
-        }
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://openidconnect.googleapis.com/v1/userinfo';
     }
 }

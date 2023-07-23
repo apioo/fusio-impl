@@ -63,7 +63,8 @@ class ResetPassword
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
+        $identityId = $user->getIdentityId();
+        if (!empty($identityId)) {
             throw new StatusCode\BadRequestException('Provided user is not a local user');
         }
 

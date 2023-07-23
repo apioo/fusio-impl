@@ -59,7 +59,7 @@ class CollectionTest extends ControllerDbTestCase
             "app": {
                 "id": 1,
                 "name": "Backend",
-                "url": "https:\/\/www.fusio-project.org"
+                "url": "http:\/\/127.0.0.1\/apps\/fusio"
             }
         }
     ]

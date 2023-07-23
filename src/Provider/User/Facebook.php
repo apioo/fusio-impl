@@ -20,7 +20,8 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ConfigurationInterface;
+use Fusio\Engine\User\ProviderAbstract;
 
 /**
  * Facebook
@@ -31,38 +32,25 @@ use Fusio\Engine\User\UserDetails;
  */
 class Facebook extends ProviderAbstract
 {
-    public function getId(): int
+    public function getAuthorizationUri(): ?string
     {
-        return self::PROVIDER_FACEBOOK;
+        return 'https://www.facebook.com/v17.0/dialog/oauth';
     }
 
-    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function getTokenUri(): ?string
     {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $this->getSecret(),
-            'redirect_uri'  => $redirectUri,
+        return 'https://graph.facebook.com/v17.0/oauth/access_token';
+    }
+
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://graph.facebook.com/v2.5/me';
+    }
+
+    protected function getUserInfoParameters(ConfigurationInterface $configuration): array
+    {
+        return [
+            'fields' => 'id,name,email'
         ];
-
-        $accessToken = $this->obtainAccessToken('https://graph.facebook.com/v12.0/oauth/access_token', $params, self::TYPE_GET);
-        if (empty($accessToken)) {
-            return null;
-        }
-
-        $data = $this->obtainUserInfo('https://graph.facebook.com/v2.5/me', $accessToken, ['access_token' => $accessToken, 'fields' => 'id,name,email']);
-        if (empty($data)) {
-            return null;
-        }
-
-        $id    = $data->id ?? null;
-        $name  = $data->name ?? null;
-        $email = $data->email ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserDetails($id, $name, $email);
-        } else {
-            return null;
-        }
     }
 }

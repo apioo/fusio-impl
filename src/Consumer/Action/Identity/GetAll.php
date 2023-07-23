@@ -18,55 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\User;
+namespace Fusio\Impl\Consumer\Action\Identity;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\User\Provider as UserProvider;
+use Fusio\Impl\Consumer\View;
 use Fusio\Model;
-use PSX\Http\Exception as StatusCode;
-use PSX\OAuth2\AccessToken;
 
 /**
- * Provider
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Provider implements ActionInterface
+class GetAll implements ActionInterface
 {
-    private UserProvider $providerService;
+    private View\Identity $identity;
 
-    public function __construct(UserProvider $providerService)
+    public function __construct(View\Identity $identity)
     {
-        $this->providerService = $providerService;
+        $this->identity = $identity;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof Model\Consumer\UserProvider);
-
-        $token = $this->providerService->provider($request->get('provider'), $body);
-
-        return $this->renderToken($token);
-    }
-
-    private function renderToken(?AccessToken $token): array
-    {
-        if ($token instanceof AccessToken) {
-            return [
-                'token' => $token->getAccessToken(),
-                'expires_in' => $token->getExpiresIn(),
-                'refresh_token' => $token->getRefreshToken(),
-                'scope' => $token->getScope(),
-            ];
-        } else {
-            throw new StatusCode\BadRequestException('Invalid name or password');
-        }
+        return $this->identity->getCollection(
+            $context->getUser()->getId(),
+            $request->get('appId'),
+        );
     }
 }

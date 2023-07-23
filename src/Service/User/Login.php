@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Framework\Config\ConfigInterface;
@@ -38,12 +39,14 @@ class Login
 {
     private Authenticator $authenticatorService;
     private Service\App\Token $appTokenService;
+    private Table\App $appTable;
     private ConfigInterface $config;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
     {
         $this->authenticatorService = $authenticatorService;
         $this->appTokenService = $appTokenService;
+        $this->appTable = $appTable;
         $this->config = $config;
     }
 

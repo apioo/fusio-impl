@@ -67,7 +67,7 @@ class RegisterTest extends ControllerDbTestCase
 
         // check database user
         $sql = $this->connection->createQueryBuilder()
-            ->select('provider', 'status', 'remote_id', 'name', 'email')
+            ->select('identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -76,7 +76,7 @@ class RegisterTest extends ControllerDbTestCase
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);

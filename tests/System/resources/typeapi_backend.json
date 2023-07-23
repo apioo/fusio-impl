@@ -4405,6 +4405,277 @@
         "log"
       ]
     },
+    "backend.identity.delete": {
+      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "identity_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "backend.identity.update": {
+      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "identity_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "IdentityUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "backend.identity.get": {
+      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Identity"
+        }
+      },
+      "arguments": {
+        "identity_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "backend.identity.create": {
+      "path": "/backend/identity",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "IdentityCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "backend.identity.getAll": {
+      "path": "/backend/identity",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "IdentityCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
     "backend.generator.getChangelog": {
       "path": "/backend/generator/:provider",
       "method": "PUT",
@@ -8438,6 +8709,77 @@
         "type": "any"
       },
       "maxProperties": 16
+    },
+    "Identity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "roleId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "authorizationUri": {
+          "type": "string"
+        },
+        "tokenUri": {
+          "type": "string"
+        },
+        "userInfoUri": {
+          "type": "string"
+        },
+        "idProperty": {
+          "type": "string"
+        },
+        "nameProperty": {
+          "type": "string"
+        },
+        "emailProperty": {
+          "type": "string"
+        },
+        "allowCreate": {
+          "type": "boolean"
+        }
+      }
+    },
+    "IdentityCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Identity"
+      }
+    },
+    "IdentityCreate": {
+      "$extends": "Identity",
+      "type": "object",
+      "required": [
+        "name",
+        "class",
+        "clientId",
+        "clientSecret"
+      ]
+    },
+    "IdentityUpdate": {
+      "$extends": "Identity",
+      "type": "object"
     },
     "Log": {
       "type": "object",

@@ -62,7 +62,7 @@ class ActivateTest extends ControllerDbTestCase
         Environment::getService(Register::class)->register($register);
 
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'provider', 'status', 'remote_id', 'name', 'email')
+            ->select('id', 'identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -71,7 +71,7 @@ class ActivateTest extends ControllerDbTestCase
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(6, $row['id']);
-        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);
@@ -94,7 +94,7 @@ class ActivateTest extends ControllerDbTestCase
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('provider', 'status', 'remote_id', 'name', 'email')
+            ->select('identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->setFirstResult(0)
@@ -102,7 +102,7 @@ class ActivateTest extends ControllerDbTestCase
             ->getSQL();
         $row = $this->connection->fetchAssociative($sql, ['id' => 6]);
 
-        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);

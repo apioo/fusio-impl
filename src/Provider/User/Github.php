@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\User\UserDetails;
+use Fusio\Engine\User\ProviderAbstract;
 
 /**
  * Github
@@ -31,38 +31,23 @@ use Fusio\Engine\User\UserDetails;
  */
 class Github extends ProviderAbstract
 {
-    public function getId(): int
+    public function getAuthorizationUri(): ?string
     {
-        return self::PROVIDER_GITHUB;
+        return 'https://github.com/login/oauth/authorize';
     }
 
-    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
+    public function getTokenUri(): ?string
     {
-        $params = [
-            'code'          => $code,
-            'client_id'     => $clientId,
-            'client_secret' => $this->getSecret(),
-            'redirect_uri'  => $redirectUri,
-        ];
+        return 'https://github.com/login/oauth/access_token';
+    }
 
-        $accessToken = $this->obtainAccessToken('https://github.com/login/oauth/access_token', $params);
-        if (empty($accessToken)) {
-            return null;
-        }
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://api.github.com/user';
+    }
 
-        $data = $this->obtainUserInfo('https://api.github.com/user', $accessToken);
-        if (empty($data)) {
-            return null;
-        }
-
-        $id    = $data->id ?? null;
-        $name  = $data->login ?? null;
-        $email = $data->email ?? null;
-
-        if (!empty($id) && !empty($name)) {
-            return new UserDetails($id, $name, $email);
-        } else {
-            return null;
-        }
+    public function getNameProperty(): string
+    {
+        return 'login';
     }
 }

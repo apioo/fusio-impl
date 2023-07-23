@@ -28,6 +28,10 @@ use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Installation\DataBag;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Installation\Operation;
+use Fusio\Impl\Provider\User\Facebook;
+use Fusio\Impl\Provider\User\Github;
+use Fusio\Impl\Provider\User\Google;
+use Fusio\Impl\Provider\User\OpenIDConnect;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
@@ -68,7 +72,7 @@ class Fixture
         return self::getData()->getId($table, $name);
     }
 
-    private static function appendTestInserts(DataBag $data)
+    private static function appendTestInserts(DataBag $data): void
     {
         $schemaEntrySource = file_get_contents(__DIR__ . '/resources/entry_schema.json');
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
@@ -100,6 +104,14 @@ class Fixture
         $data->addEventSubscription('foo-event', 'Consumer', 'http://www.fusio-project.org/ping');
         $data->addEventTrigger('foo-event', '{"foo":"bar"}', '2018-06-02 14:24:30');
         $data->addEventResponse(0, 0);
+        $data->addIdentity('Developer', 'Facebook', 'bi-facebook', Facebook::class, 'facebook-key', 'facebook-secret', 'https://www.facebook.com/v17.0/dialog/oauth', 'https://graph.facebook.com/v12.0/oauth/access_token', 'https://graph.facebook.com/v2.5/me', 'id', 'name', 'email', '2023-07-22 13:56:00');
+        $data->addIdentity('Developer', 'GitHub', 'bi-github', Github::class, 'github-key', 'github-secret', 'https://github.com/login/oauth/authorize', 'https://github.com/login/oauth/access_token', 'https://api.github.com/user', 'id', 'login', 'email', '2023-07-22 13:56:00');
+        $data->addIdentity('Developer', 'Google', 'bi-google', Google::class, 'google-key', 'google-secret', 'https://accounts.google.com/o/oauth2/v2/auth', 'https://oauth2.googleapis.com/token', 'https://openidconnect.googleapis.com/v1/userinfo', 'id', 'name', 'email', '2023-07-22 13:56:00');
+        $data->addIdentity('Developer', 'OpenID', 'bi-openid', OpenIDConnect::class, 'openid-key', 'openid-secret', 'http://127.0.0.1/authorization/dialog', 'http://127.0.0.1/authorization/token', 'http://127.0.0.1/authorization/whoami', 'id', 'name', 'email', '2023-07-22 13:56:00');
+        $data->addIdentityRequest('Facebook', 'facebook-state');
+        $data->addIdentityRequest('GitHub', 'github-state');
+        $data->addIdentityRequest('Google', 'google-state');
+        $data->addIdentityRequest('OpenID', 'openid-state');
         $data->addRate('silver', 5, 8, 'P1M', ['foo' => 'bar']);
         $data->addRate('gold', 10, 16, 'P1M');
         $data->addTransaction('Administrator', 'Plan B', 3999, 'last month', 'next month', '2018-10-05 18:18:00');
@@ -112,10 +124,10 @@ class Fixture
         $data->addAppScope('Foo-App', 'foo');
         $data->addAppScope('Foo-App', 'bar');
         $data->addAppToken('Backend', 'Administrator', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'backend,authorization', '+1 month');
-        $data->addAppToken('Consumer', 'Administrator', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'consumer,authorization', '+1 month');
+        $data->addAppToken('Developer', 'Administrator', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'consumer,authorization', '+1 month');
         $data->addAppToken('Foo-App', 'Consumer', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
         $data->addAppToken('Foo-App', 'Developer', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'bar', '+1 month');
-        $data->addAppToken('Consumer', 'Consumer', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'consumer', '+1 month');
+        $data->addAppToken('Developer', 'Consumer', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'consumer', '+1 month');
         $data->addAppToken('Backend', 'Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', '+1 month');
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');

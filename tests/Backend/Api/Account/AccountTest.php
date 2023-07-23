@@ -52,7 +52,6 @@ class AccountTest extends ControllerDbTestCase
 {
     "id": 4,
     "roleId": 2,
-    "provider": 1,
     "status": 1,
     "name": "Developer",
     "email": "developer@localhost.com",
@@ -70,6 +69,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.dashboard",
         "backend.event",
         "backend.generator",
+        "backend.identity",
         "backend.log",
         "backend.marketplace",
         "backend.operation",
@@ -89,6 +89,7 @@ class AccountTest extends ControllerDbTestCase
         "consumer.app",
         "consumer.event",
         "consumer.grant",
+        "consumer.identity",
         "consumer.log",
         "consumer.page",
         "consumer.payment",

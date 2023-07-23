@@ -57,50 +57,50 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 43,
+    "id": 45,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 182,
+            "scopeId": 45,
+            "operationId": 188,
+            "allow": true
+        },
+        {
+            "id": 181,
+            "scopeId": 45,
+            "operationId": 187,
+            "allow": true
+        },
+        {
+            "id": 180,
+            "scopeId": 45,
+            "operationId": 186,
+            "allow": true
+        },
+        {
+            "id": 179,
+            "scopeId": 45,
+            "operationId": 185,
+            "allow": true
+        },
+        {
+            "id": 177,
+            "scopeId": 45,
+            "operationId": 184,
+            "allow": true
+        },
+        {
             "id": 175,
-            "scopeId": 43,
-            "operationId": 181,
+            "scopeId": 45,
+            "operationId": 183,
             "allow": true
         },
         {
             "id": 174,
-            "scopeId": 43,
-            "operationId": 180,
-            "allow": true
-        },
-        {
-            "id": 173,
-            "scopeId": 43,
-            "operationId": 179,
-            "allow": true
-        },
-        {
-            "id": 172,
-            "scopeId": 43,
-            "operationId": 178,
-            "allow": true
-        },
-        {
-            "id": 170,
-            "scopeId": 43,
-            "operationId": 177,
-            "allow": true
-        },
-        {
-            "id": 168,
-            "scopeId": 43,
-            "operationId": 176,
-            "allow": true
-        },
-        {
-            "id": 167,
-            "scopeId": 43,
-            "operationId": 175,
+            "scopeId": 45,
+            "operationId": 182,
             "allow": true
         }
     ]
@@ -121,50 +121,50 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 43,
+    "id": 45,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 182,
+            "scopeId": 45,
+            "operationId": 188,
+            "allow": true
+        },
+        {
+            "id": 181,
+            "scopeId": 45,
+            "operationId": 187,
+            "allow": true
+        },
+        {
+            "id": 180,
+            "scopeId": 45,
+            "operationId": 186,
+            "allow": true
+        },
+        {
+            "id": 179,
+            "scopeId": 45,
+            "operationId": 185,
+            "allow": true
+        },
+        {
+            "id": 177,
+            "scopeId": 45,
+            "operationId": 184,
+            "allow": true
+        },
+        {
             "id": 175,
-            "scopeId": 43,
-            "operationId": 181,
+            "scopeId": 45,
+            "operationId": 183,
             "allow": true
         },
         {
             "id": 174,
-            "scopeId": 43,
-            "operationId": 180,
-            "allow": true
-        },
-        {
-            "id": 173,
-            "scopeId": 43,
-            "operationId": 179,
-            "allow": true
-        },
-        {
-            "id": 172,
-            "scopeId": 43,
-            "operationId": 178,
-            "allow": true
-        },
-        {
-            "id": 170,
-            "scopeId": 43,
-            "operationId": 177,
-            "allow": true
-        },
-        {
-            "id": 168,
-            "scopeId": 43,
-            "operationId": 176,
-            "allow": true
-        },
-        {
-            "id": 167,
-            "scopeId": 43,
-            "operationId": 175,
+            "scopeId": 45,
+            "operationId": 182,
             "allow": true
         }
     ]

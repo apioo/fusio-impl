@@ -60,8 +60,8 @@ class EntityTest extends ControllerDbTestCase
     "id": 2,
     "userId": 1,
     "status": 1,
-    "name": "Consumer",
-    "url": "https:\/\/www.fusio-project.org",
+    "name": "Developer",
+    "url": "http:\/\/127.0.0.1\/apps\/developer",
     "appKey": "[uuid]",
     "appSecret": "[app_secret]",
     "scopes": [
@@ -70,6 +70,7 @@ class EntityTest extends ControllerDbTestCase
         "consumer.app",
         "consumer.event",
         "consumer.grant",
+        "consumer.identity",
         "consumer.log",
         "consumer.page",
         "consumer.payment",

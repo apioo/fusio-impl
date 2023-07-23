@@ -224,6 +224,40 @@ final class Version20230508210151 extends AbstractMigration
             $eventTriggerTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_identity')) {
+            $identityTable = $schema->createTable('fusio_identity');
+            $identityTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $identityTable->addColumn('status', 'integer');
+            $identityTable->addColumn('app_id', 'integer');
+            $identityTable->addColumn('role_id', 'integer', ['notnull' => false]);
+            $identityTable->addColumn('name', 'string', ['length' => 128]);
+            $identityTable->addColumn('icon', 'string', ['length' => 64]);
+            $identityTable->addColumn('class', 'string', ['length' => 255]);
+            $identityTable->addColumn('client_id', 'string');
+            $identityTable->addColumn('client_secret', 'string');
+            $identityTable->addColumn('authorization_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('token_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('user_info_uri', 'string', ['notnull' => false]);
+            $identityTable->addColumn('id_property', 'string', ['notnull' => false]);
+            $identityTable->addColumn('name_property', 'string', ['notnull' => false]);
+            $identityTable->addColumn('email_property', 'string', ['notnull' => false]);
+            $identityTable->addColumn('allow_create', 'boolean');
+            $identityTable->addColumn('insert_date', 'datetime');
+            $identityTable->setPrimaryKey(['id']);
+            $identityTable->addUniqueIndex(['name']);
+        }
+
+        if (!$schema->hasTable('fusio_identity_request')) {
+            $identityRequestTable = $schema->createTable('fusio_identity_request');
+            $identityRequestTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $identityRequestTable->addColumn('identity_id', 'integer');
+            $identityRequestTable->addColumn('state', 'string');
+            $identityRequestTable->addColumn('redirect_uri', 'string', ['notnull' => false]);
+            $identityRequestTable->addColumn('insert_date', 'datetime');
+            $identityRequestTable->setPrimaryKey(['id']);
+            $identityRequestTable->addUniqueIndex(['identity_id', 'state']);
+        }
+
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -448,7 +482,7 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $userTable->addColumn('role_id', 'integer');
             $userTable->addColumn('plan_id', 'integer', ['notnull' => false]);
-            $userTable->addColumn('provider', 'integer', ['default' => ProviderInterface::PROVIDER_SYSTEM]);
+            $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
             $userTable->addColumn('status', 'integer');
             $userTable->addColumn('remote_id', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('external_id', 'string', ['notnull' => false]);
@@ -460,9 +494,13 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addColumn('metadata', 'text', ['notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
-            $userTable->addUniqueIndex(['provider', 'remote_id']);
+            $userTable->addUniqueIndex(['identity_id', 'remote_id']);
             $userTable->addUniqueIndex(['name']);
             $userTable->addUniqueIndex(['email']);
+        } else {
+            $userTable = $schema->getTable('fusio_rate_allocation');
+            $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
+            $userTable->dropColumn('provider');
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {
@@ -511,6 +549,10 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($eventTriggerTable)) {
             $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_trigger_event_id');
+        }
+
+        if (isset($identityRequestTable)) {
+            $identityRequestTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'identity_request_identity_id');
         }
 
         if (isset($planScopeTable)) {
@@ -563,6 +605,8 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_event_response');
         $schema->dropTable('fusio_event_subscription');
         $schema->dropTable('fusio_event_trigger');
+        $schema->dropTable('fusio_identity');
+        $schema->dropTable('fusio_identity_request');
         $schema->dropTable('fusio_log');
         $schema->dropTable('fusio_log_error');
         $schema->dropTable('fusio_operation');

@@ -2,6 +2,123 @@
   "baseUrl": "http://127.0.0.1/",
   "security": null,
   "operations": {
+    "consumer.identity.redirect": {
+      "path": "/consumer/identity/:identity/redirect",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "UserJWT"
+        }
+      },
+      "arguments": {
+        "identity": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "consumer.identity.exchange": {
+      "path": "/consumer/identity/:identity/exchange",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "UserJWT"
+        }
+      },
+      "arguments": {
+        "identity": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "consumer.identity.getAll": {
+      "path": "/consumer/identity",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "UserJWT"
+        }
+      },
+      "arguments": {
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
     "consumer.account.executePasswordReset": {
       "path": "/consumer/password_reset",
       "method": "PUT",
@@ -94,51 +211,6 @@
           "in": "body",
           "schema": {
             "$ref": "UserRegister"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 400,
-          "schema": {
-            "$ref": "Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [],
-      "authorization": true,
-      "tags": [
-        "account"
-      ]
-    },
-    "consumer.account.provider": {
-      "path": "/consumer/provider/:provider",
-      "method": "POST",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "UserJWT"
-        }
-      },
-      "arguments": {
-        "provider": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "$ref": "UserProvider"
           }
         }
       },
@@ -2476,20 +2548,6 @@
         },
         "period": {
           "type": "integer"
-        }
-      }
-    },
-    "UserProvider": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "clientId": {
-          "type": "string"
-        },
-        "redirectUri": {
-          "type": "string"
         }
       }
     },

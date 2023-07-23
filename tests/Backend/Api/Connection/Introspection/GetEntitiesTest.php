@@ -66,6 +66,8 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_event_response",
         "fusio_event_subscription",
         "fusio_event_trigger",
+        "fusio_identity",
+        "fusio_identity_request",
         "fusio_log",
         "fusio_log_error",
         "fusio_operation",
