@@ -6,7 +6,6 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Table;
 use PSX\Api\Model\Passthru;

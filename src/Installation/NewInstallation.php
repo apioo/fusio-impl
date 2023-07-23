@@ -30,6 +30,7 @@ use Fusio\Impl\Consumer;
 use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Model;
+use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
 use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
@@ -58,8 +59,7 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $container = require __DIR__ . '/../../container.php';
-        $config = $container->get(ConfigInterface::class);
+        $config = self::getContainer()->get(ConfigInterface::class);
         $appsUrl = $config->get('fusio_apps_url');
 
         $bag = new DataBag();
@@ -1791,5 +1791,20 @@ class NewInstallation
         $lines = file(__DIR__ . '/resources/' . $file);
         $lines = array_map('trim', $lines);
         return implode("\n", $lines);
+    }
+
+    private static function getContainer(): ContainerInterface
+    {
+        global $container;
+        if ($container instanceof ContainerInterface) {
+            return $container;
+        }
+
+        $container = require __DIR__ . '/../../container.php';
+        if ($container instanceof ContainerInterface) {
+            return $container;
+        }
+
+        throw new \RuntimeException('Could not detect global container');
     }
 }
