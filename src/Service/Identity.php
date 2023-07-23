@@ -231,13 +231,13 @@ class Identity
             'response_type' => 'code',
             'client_id' => $existing->getClientId(),
             'state' => $state,
-            'redirect_uri' => $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange',
+            'redirect_uri' => $this->buildRedirectUri($existing),
         ]);
 
         return $provider->getRedirectUri($authorizationUri);
     }
 
-    public function exchange(string $identityId, string $code, string $clientId, string $redirectUri, string $state): AccessToken
+    public function exchange(string $identityId, string $code, string $state): AccessToken
     {
         $existing = $this->identityTable->findOneByIdentifier($identityId);
         if (empty($existing)) {
@@ -268,7 +268,7 @@ class Identity
 
         $configuration = new Configuration($existing->getClientId(), $existing->getClientSecret(), $existing->getAuthorizationUri(), $existing->getTokenUri(), $existing->getUserInfoUri(), $existing->getIdProperty(), $existing->getNameProperty(), $existing->getEmailProperty());
 
-        $user = $provider->requestUserInfo($configuration, $code, $redirectUri);
+        $user = $provider->requestUserInfo($configuration, $code, $this->buildRedirectUri($existing));
         if (!$user instanceof UserInfo) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }
@@ -284,12 +284,32 @@ class Identity
             $appId = 2;
         }
 
-        return $this->appTokenService->generateAccessToken(
+        $accessToken = $this->appTokenService->generateAccessToken(
             $appId,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token'))
         );
+
+        $redirectUri = $identityRequest->getRedirectUri();
+        if (!empty($redirectUri)) {
+            // redirect the user in case a redirect uri was provided
+            $url = Url::parse($redirectUri);
+            $url = $url->withParameters(array_merge($url->getParameters(), [
+                'access_token' => $accessToken->getAccessToken(),
+                'token_type' => $accessToken->getTokenType(),
+                'expires_in' => $accessToken->getExpiresIn(),
+            ]));
+
+            throw new StatusCode\FoundException($url->toString());
+        }
+
+        return $accessToken;
+    }
+
+    private function buildRedirectUri(Table\Generated\IdentityRow $existing): string
+    {
+        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange';
     }
 }

@@ -48,15 +48,39 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 1,
             "status": 1,
+            "name": "Facebook",
+            "icon": "bi-facebook",
+            "class": "Fusio\\Impl\\Provider\\User\\Facebook",
+            "insertDate": "2023-07-22T13:56:00Z"
+        },
+        {
+            "id": 2,
+            "status": 1,
             "name": "GitHub",
             "icon": "bi-github",
+            "class": "Fusio\\Impl\\Provider\\User\\Github",
+            "insertDate": "2023-07-22T13:56:00Z"
+        },
+        {
+            "id": 3,
+            "status": 1,
+            "name": "Google",
+            "icon": "bi-google",
+            "class": "Fusio\\Impl\\Provider\\User\\Google",
+            "insertDate": "2023-07-22T13:56:00Z"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "OpenID",
+            "icon": "bi-openid",
             "class": "Fusio\\Impl\\Provider\\User\\OpenIDConnect",
             "insertDate": "2023-07-22T13:56:00Z"
         }
@@ -75,7 +99,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'appId' => 1,
-            'name' => 'Google',
+            'name' => 'NewIdentity',
             'icon' => 'bi-google',
             'class' => Google::class,
             'clientId' => 'foo',
@@ -104,11 +128,11 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(5, $row['id']);
         $this->assertEquals(1, $row['app_id']);
         $this->assertEquals(null, $row['role_id']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('Google', $row['name']);
+        $this->assertEquals('NewIdentity', $row['name']);
         $this->assertEquals('bi-google', $row['icon']);
         $this->assertEquals(Google::class, $row['class']);
         $this->assertEquals('foo', $row['client_id']);

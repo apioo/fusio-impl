@@ -252,9 +252,9 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = $this->connection->fetchAllAssociative($sql, ['user_id' => 6]);
+        $userScopes = $this->connection->fetchAllAssociative($sql, ['user_id' => 6]);
 
-        $this->assertEquals(40, count($routes));
+        $this->assertEquals(42, count($userScopes));
     }
 
     public function testPostNameExists()

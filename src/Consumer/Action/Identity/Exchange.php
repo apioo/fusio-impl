@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Model;
+use PSX\Framework\Http\Writer\Template;
+use PSX\Framework\Loader\ReverseRouter;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
@@ -39,10 +41,12 @@ use PSX\OAuth2\AccessToken;
 class Exchange implements ActionInterface
 {
     private Service\Identity $identity;
+    private ReverseRouter $reverseRouter;
 
-    public function __construct(Service\Identity $identity)
+    public function __construct(Service\Identity $identity, ReverseRouter $reverseRouter)
     {
         $this->identity = $identity;
+        $this->reverseRouter = $reverseRouter;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -60,37 +64,28 @@ class Exchange implements ActionInterface
             throw new StatusCode\BadRequestException('No code provided');
         }
 
-        $clientId = $request->get('client_id');
-        if (empty($clientId)) {
-            throw new StatusCode\BadRequestException('No client id provided');
-        }
-
-        $redirectUri = $request->get('redirect_uri');
-        if (empty($redirectUri)) {
-            throw new StatusCode\BadRequestException('No redirect uri provided');
-        }
-
         $state = $request->get('state');
         if (empty($state)) {
             throw new StatusCode\BadRequestException('No state provided');
         }
 
-        $token = $this->identity->exchange($request->get('identity'), $code, $clientId, $redirectUri, $state);
+        $token = $this->identity->exchange($request->get('identity'), $code, $state);
 
+        // normally the exchange method throws a redirect exception but in case we have no redirect we simply show the
+        // access token to the user
         return $this->renderToken($token);
     }
 
-    private function renderToken(?AccessToken $token): array
+    private function renderToken(?AccessToken $token): Template
     {
-        if ($token instanceof AccessToken) {
-            return [
-                'token' => $token->getAccessToken(),
-                'expires_in' => $token->getExpiresIn(),
-                'refresh_token' => $token->getRefreshToken(),
-                'scope' => $token->getScope(),
-            ];
-        } else {
-            throw new StatusCode\BadRequestException('Invalid name or password');
-        }
+        $data = [
+            'access_token' => $token->getAccessToken(),
+            'expires_in' => $token->getExpiresIn(),
+            'refresh_token' => $token->getRefreshToken(),
+            'scope' => $token->getScope(),
+        ];
+
+        $templateFile = __DIR__ . '/../../../../resources/template/token.php';
+        return new Template($data, $templateFile, $this->reverseRouter);
     }
 }

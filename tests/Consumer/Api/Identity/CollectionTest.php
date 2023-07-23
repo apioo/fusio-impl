@@ -48,15 +48,33 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 1,
+            "name": "Facebook",
+            "icon": "bi-facebook",
+            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/1\/redirect"
+        },
+        {
+            "id": 2,
             "name": "GitHub",
             "icon": "bi-github",
-            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/1\/redirect"
+            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/2\/redirect"
+        },
+        {
+            "id": 3,
+            "name": "Google",
+            "icon": "bi-google",
+            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/3\/redirect"
+        },
+        {
+            "id": 4,
+            "name": "OpenID",
+            "icon": "bi-openid",
+            "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/4\/redirect"
         }
     ]
 }

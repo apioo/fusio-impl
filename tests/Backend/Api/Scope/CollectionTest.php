@@ -169,7 +169,7 @@ JSON;
         ), json_encode([
             'name'        => 'test',
             'description' => 'Test description',
-            'routes'      => [[
+            'operations'  => [[
                 'operationId' => Fixture::getId('fusio_operation', 'test.listFoo'),
                 'allow' => true,
             ], [
@@ -218,31 +218,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 181,
+            'operation_id' => 184,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 180,
-            'allow' => 1,
-        ], [
-            'scope_id' => $scopeId,
-            'operation_id' => 179,
-            'allow' => 1,
-        ], [
-            'scope_id' => $scopeId,
-            'operation_id' => 178,
-            'allow' => 1,
-        ], [
-            'scope_id' => $scopeId,
-            'operation_id' => 177,
-            'allow' => 1,
-        ], [
-            'scope_id' => $scopeId,
-            'operation_id' => 176,
-            'allow' => 1,
-        ], [
-            'scope_id' => $scopeId,
-            'operation_id' => 175,
+            'operation_id' => 182,
             'allow' => 1,
         ]], $operations);
     }

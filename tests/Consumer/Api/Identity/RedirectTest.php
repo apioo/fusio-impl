@@ -50,9 +50,9 @@ class RedirectTest extends ControllerDbTestCase
         $url = Url::parse($response->getHeader('Location'));
         $parameters = $url->getParameters();
 
-        $this->assertEquals(307, $response->getStatusCode(), $body);
+        $this->assertEquals(302, $response->getStatusCode(), $body);
         $this->assertEquals('code', $parameters['response_type']);
-        $this->assertEquals('foo', $parameters['client_id']);
+        $this->assertEquals('facebook-key', $parameters['client_id']);
         $this->assertNotEmpty($parameters['state']);
         $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
     }
@@ -66,13 +66,13 @@ class RedirectTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(307, $response->getStatusCode(), $body);
+        $this->assertEquals(302, $response->getStatusCode(), $body);
 
         $url = Url::parse($response->getHeader('Location'));
         $parameters = $url->getParameters();
 
         $this->assertEquals('code', $parameters['response_type']);
-        $this->assertEquals('foo', $parameters['client_id']);
+        $this->assertEquals('facebook-key', $parameters['client_id']);
         $this->assertNotEmpty($parameters['state']);
         $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
     }

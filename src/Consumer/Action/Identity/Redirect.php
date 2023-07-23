@@ -51,6 +51,6 @@ class Redirect implements ActionInterface
             $request->get('redirect_uri')
         );
 
-        throw new StatusCode\TemporaryRedirectException($redirectUri->toString());
+        throw new StatusCode\FoundException($redirectUri->toString());
     }
 }

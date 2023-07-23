@@ -344,7 +344,7 @@ class DataBag
         ];
     }
 
-    public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, ?string $insertDate = null): void
+    public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, string $authorizationUri, string $tokenUri, string $userInfoUri, string $idProperty = 'id', string $nameProperty = 'name', string $emailProperty = 'email', ?string $insertDate = null): void
     {
         $this->data['fusio_identity'][$name] = [
             'app_id' => $this->getId('fusio_app', $app),
@@ -355,12 +355,12 @@ class DataBag
             'class' => $class,
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'authorization_uri' => 'http://127.0.0.1/authorization',
-            'token_uri' => 'http://127.0.0.1/token',
-            'user_info_uri' => 'http://127.0.0.1/authorization/whoami',
-            'id_property' => 'id',
-            'name_property' => 'name',
-            'email_property' => 'email',
+            'authorization_uri' => $authorizationUri,
+            'token_uri' => $tokenUri,
+            'user_info_uri' => $userInfoUri,
+            'id_property' => $idProperty,
+            'name_property' => $nameProperty,
+            'email_property' => $emailProperty,
             'allow_create' => true,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
@@ -371,7 +371,7 @@ class DataBag
         $this->data['fusio_identity_request'][] = [
             'identity_id' => $this->getId('fusio_identity', $identity),
             'state' => $state,
-            'redirect_uri' => 'http://127.0.0.1',
+            'redirect_uri' => 'http://127.0.0.1/my/app',
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
