@@ -32,7 +32,6 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
-use PSX\Framework\Config\Config;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Schema\TypeFactory;
 
@@ -1796,11 +1795,6 @@ class NewInstallation
     private static function getContainer(): ContainerInterface
     {
         global $container;
-        if ($container instanceof ContainerInterface) {
-            return $container;
-        }
-
-        $container = require __DIR__ . '/../../container.php';
         if ($container instanceof ContainerInterface) {
             return $container;
         }
