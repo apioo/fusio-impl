@@ -18,36 +18,39 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Provider\User;
+namespace Fusio\Impl\Provider\Identity;
 
-use Fusio\Engine\User\ProviderAbstract;
+use Fusio\Engine\Identity\ProviderAbstract;
+use Fusio\Engine\ParametersInterface;
 
 /**
- * Github
+ * Facebook
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Github extends ProviderAbstract
+class Facebook extends ProviderAbstract
 {
     public function getAuthorizationUri(): ?string
     {
-        return 'https://github.com/login/oauth/authorize';
+        return 'https://www.facebook.com/v17.0/dialog/oauth';
     }
 
     public function getTokenUri(): ?string
     {
-        return 'https://github.com/login/oauth/access_token';
+        return 'https://graph.facebook.com/v17.0/oauth/access_token';
     }
 
     public function getUserInfoUri(): ?string
     {
-        return 'https://api.github.com/user';
+        return 'https://graph.facebook.com/v2.5/me';
     }
 
-    public function getNameProperty(): string
+    protected function getUserInfoParameters(ParametersInterface $configuration): array
     {
-        return 'login';
+        return [
+            'fields' => 'id,name,email'
+        ];
     }
 }

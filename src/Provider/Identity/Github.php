@@ -18,24 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Provider;
+namespace Fusio\Impl\Provider\Identity;
 
-use Fusio\Engine\Form;
-use Fusio\Engine\Provider\ProviderAbstract;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Fusio\Engine\Identity\ProviderAbstract;
 
 /**
- * UserProvider
+ * Github
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class UserProvider extends ProviderAbstract
+class Github extends ProviderAbstract
 {
-    public function __construct(Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.user')] iterable $objects)
+    public function getAuthorizationUri(): ?string
     {
-        parent::__construct($elementFactory, $objects);
+        return 'https://github.com/login/oauth/authorize';
+    }
+
+    public function getTokenUri(): ?string
+    {
+        return 'https://github.com/login/oauth/access_token';
+    }
+
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://api.github.com/user';
+    }
+
+    public function getNameProperty(): string
+    {
+        return 'login';
     }
 }
-

@@ -24,13 +24,13 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * IndexTest
+ * GetIndexTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class IndexTest extends ControllerDbTestCase
+class GetIndexTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {

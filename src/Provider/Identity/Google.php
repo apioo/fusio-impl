@@ -18,41 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Installation;
+namespace Fusio\Impl\Provider\Identity;
 
-use Fusio\Impl\Backend;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\DbTestCase;
-use PSX\Sql\Generator\Generator;
+use Fusio\Engine\Identity\ProviderAbstract;
 
 /**
- * GenerateTableTest
+ * Google
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GenerateTableTest extends DbTestCase
+class Google extends ProviderAbstract
 {
-    public function getDataSet(): array
+    public function getAuthorizationUri(): ?string
     {
-        return Fixture::getDataSet();
+        return 'https://accounts.google.com/o/oauth2/v2/auth';
     }
 
-    public function testGenerate()
+    public function getTokenUri(): ?string
     {
-        #$this->markTestSkipped();
+        return 'https://oauth2.googleapis.com/token';
+    }
 
-        $target = __DIR__ . '/../../src/Table/Generated';
-        $namespace = 'Fusio\Impl\Table\Generated';
-
-        $generator = new Generator($this->connection, $namespace, 'fusio_');
-        $count = 0;
-        foreach ($generator->generate() as $className => $source) {
-            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
-            $count++;
-        }
-
-        $this->assertNotEmpty($count);
+    public function getUserInfoUri(): ?string
+    {
+        return 'https://openidconnect.googleapis.com/v1/userinfo';
     }
 }

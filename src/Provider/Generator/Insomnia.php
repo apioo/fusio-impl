@@ -20,10 +20,8 @@
 
 namespace Fusio\Impl\Provider\Generator;
 
-use Fusio\Adapter\Http\Action\HttpEngine;
 use Fusio\Adapter\Http\Action\HttpProcessor;
 use Fusio\Adapter\Http\Action\HttpSenderAbstract;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;

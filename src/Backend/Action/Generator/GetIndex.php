@@ -18,25 +18,34 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Provider\User;
+namespace Fusio\Impl\Backend\Action\Generator;
 
-use Fusio\Engine\User\ProviderAbstract;
-use PSX\Uri\Uri;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Provider\GeneratorProvider;
 
 /**
- * OpenID Connect
+ * GetIndex
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class OpenIDConnect extends ProviderAbstract
+class GetIndex implements ActionInterface
 {
-    public function getRedirectUri(Uri $uri): Uri
-    {
-        $parameters = $uri->getParameters();
-        $parameters['scope'] = 'openid';
+    private GeneratorProvider $provider;
 
-        return $uri->withParameters($parameters);
+    public function __construct(GeneratorProvider $provider)
+    {
+        $this->provider = $provider;
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    {
+        return [
+            'providers' => $this->provider->getClasses()
+        ];
     }
 }

@@ -82,7 +82,7 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\Mail\\Sender\\', __DIR__ . '/../src/Mail/Sender');
     $services->load('Fusio\\Impl\\Webhook\\Sender\\', __DIR__ . '/../src/Webhook/Sender');
     $services->load('Fusio\\Impl\\Connection\\', __DIR__ . '/../src/Connection');
-    $services->load('Fusio\\Impl\\Provider\\User\\', __DIR__ . '/../src/Provider/User')
+    $services->load('Fusio\\Impl\\Provider\\Identity\\', __DIR__ . '/../src/Provider/Identity')
         ->public();
     $services->load('Fusio\\Impl\\Provider\\Generator\\', __DIR__ . '/../src/Provider/Generator')
         ->public();
@@ -96,7 +96,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(Provider\ConnectionProvider::class);
     $services->set(Provider\GeneratorProvider::class);
     $services->set(Provider\PaymentProvider::class);
-    $services->set(Provider\UserProvider::class);
+    $services->set(Provider\IdentityProvider::class);
 
     $services->set(Framework\Loader\ContextFactory::class);
     $services->alias(ContextFactoryInterface::class, Framework\Loader\ContextFactory::class);

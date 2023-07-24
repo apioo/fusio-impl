@@ -18,39 +18,34 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Provider\User;
+namespace Fusio\Impl\Backend\Action\Identity;
 
-use Fusio\Engine\User\ConfigurationInterface;
-use Fusio\Engine\User\ProviderAbstract;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Provider\IdentityProvider;
 
 /**
- * Facebook
+ * GetIndex
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Facebook extends ProviderAbstract
+class GetIndex implements ActionInterface
 {
-    public function getAuthorizationUri(): ?string
+    private IdentityProvider $identityProvider;
+
+    public function __construct(IdentityProvider $identityProvider)
     {
-        return 'https://www.facebook.com/v17.0/dialog/oauth';
+        $this->identityProvider = $identityProvider;
     }
 
-    public function getTokenUri(): ?string
-    {
-        return 'https://graph.facebook.com/v17.0/oauth/access_token';
-    }
-
-    public function getUserInfoUri(): ?string
-    {
-        return 'https://graph.facebook.com/v2.5/me';
-    }
-
-    protected function getUserInfoParameters(ConfigurationInterface $configuration): array
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
-            'fields' => 'id,name,email'
+            'providers' => $this->identityProvider->getClasses()
         ];
     }
 }

@@ -18,41 +18,28 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Installation;
+namespace Fusio\Impl\Provider\Identity;
 
-use Fusio\Impl\Backend;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\DbTestCase;
-use PSX\Sql\Generator\Generator;
+use Fusio\Engine\Identity\ProviderAbstract;
+use Fusio\Engine\ParametersInterface;
+use PSX\Uri\Uri;
 
 /**
- * GenerateTableTest
+ * OpenID Connect
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GenerateTableTest extends DbTestCase
+class OpenIDConnect extends ProviderAbstract
 {
-    public function getDataSet(): array
+    public function getRedirectUri(ParametersInterface $configuration, string $state, string $redirectUri): Uri
     {
-        return Fixture::getDataSet();
-    }
+        $uri = parent::getRedirectUri($configuration, $state, $redirectUri);
 
-    public function testGenerate()
-    {
-        #$this->markTestSkipped();
+        $parameters = $uri->getParameters();
+        $parameters['scope'] = 'openid';
 
-        $target = __DIR__ . '/../../src/Table/Generated';
-        $namespace = 'Fusio\Impl\Table\Generated';
-
-        $generator = new Generator($this->connection, $namespace, 'fusio_');
-        $count = 0;
-        foreach ($generator->generate() as $className => $source) {
-            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
-            $count++;
-        }
-
-        $this->assertNotEmpty($count);
+        return $uri->withParameters($parameters);
     }
 }

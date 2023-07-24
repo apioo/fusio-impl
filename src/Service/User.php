@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\Identity\UserInfo;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
@@ -109,24 +110,29 @@ class User
         return $userId;
     }
 
-    public function createRemote(int $identityId, string $remoteId, string $name, ?string $email, UserContext $context): int
+    public function createRemote(Table\Generated\IdentityRow $identity, UserInfo $userInfo, UserContext $context): int
     {
         // check whether user exists
         $condition  = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identityId);
-        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remoteId);
+        $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identity->getId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $userInfo->getId());
 
         $existing = $this->userTable->findOneBy($condition);
         if ($existing instanceof Table\Generated\UserRow) {
             return $existing->getId();
         }
 
+        if (!$identity->getAllowCreate()) {
+            throw new StatusCode\BadRequestException('Provided user is not available');
+        }
+
         // replace spaces with a dot
-        $name = str_replace(' ', '.', $name);
+        $name = str_replace(' ', '.', $userInfo->getName());
 
         // check values
         $this->validator->assertName($name);
 
+        $email = $userInfo->getEmail();
         if (!empty($email)) {
             $this->validator->assertEmail($email);
         }
@@ -134,7 +140,13 @@ class User
         try {
             $this->userTable->beginTransaction();
 
-            $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
+            $roleId = $identity->getRoleId();
+            if (!empty($roleId)) {
+                $role = $this->roleTable->find($roleId);
+            } else {
+                $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
+            }
+
             if (empty($role)) {
                 throw new StatusCode\InternalServerErrorException('Invalid default role configured');
             }
@@ -144,9 +156,9 @@ class User
             // create user
             $row = new Table\Generated\UserRow();
             $row->setRoleId($roleId);
-            $row->setIdentityId($identityId);
+            $row->setIdentityId($identity->getId());
             $row->setStatus(Table\User::STATUS_ACTIVE);
-            $row->setRemoteId($remoteId);
+            $row->setRemoteId($userInfo->getId());
             $row->setName($name);
             $row->setEmail($email);
             $row->setPassword(null);

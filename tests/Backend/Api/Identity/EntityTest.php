@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Identity;
 
 use Fusio\Impl\Provider\User\Github;
-use Fusio\Impl\Provider\User\OpenIDConnect;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 

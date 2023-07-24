@@ -18,34 +18,41 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Generator;
+namespace Fusio\Impl\Backend\Action\Identity;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Form\Container;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Provider\GeneratorProvider;
+use Fusio\Impl\Provider\IdentityProvider;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
- * Index
+ * GetForm
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Index implements ActionInterface
+class GetForm implements ActionInterface
 {
-    private GeneratorProvider $provider;
+    private IdentityProvider $identityProvider;
 
-    public function __construct(GeneratorProvider $provider)
+    public function __construct(IdentityProvider $identityProvider)
     {
-        $this->provider = $provider;
+        $this->identityProvider = $identityProvider;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return [
-            'providers' => $this->provider->getClasses()
-        ];
+        try {
+            $className = $request->get('class');
+            $form = $this->identityProvider->getForm($className);
+
+            return $form instanceof Container ? $form : new Container();
+        } catch (\Throwable $e) {
+            throw new InternalServerErrorException($e->getMessage(), $e);
+        }
     }
 }

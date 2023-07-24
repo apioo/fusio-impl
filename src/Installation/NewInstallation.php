@@ -658,7 +658,7 @@ class NewInstallation
                     eventName: 'fusio.event.delete',
                 ),
                 'generator.getProviders' => new Operation(
-                    action: Backend\Action\Generator\Index::class,
+                    action: Backend\Action\Generator\GetIndex::class,
                     httpMethod: 'GET',
                     httpPath: '/generator',
                     httpCode: 200,
@@ -709,6 +709,23 @@ class NewInstallation
                     incoming: Model\Backend\IdentityCreate::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     eventName: 'fusio.identity.create',
+                ),
+                'identity.getClasses' => new Operation(
+                    action: Backend\Action\Identity\GetIndex::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/list',
+                    httpCode: 200,
+                    outgoing: Model\Backend\IdentityIndex::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'identity.getForm' => new Operation(
+                    action: Backend\Action\Identity\GetForm::class,
+                    httpMethod: 'GET',
+                    httpPath: '/identity/form',
+                    httpCode: 200,
+                    outgoing: Model\Common\FormContainer::class,
+                    parameters: ['class' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'identity.get' => new Operation(
                     action: Backend\Action\Identity\Get::class,

@@ -18,31 +18,24 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Provider\User;
+namespace Fusio\Impl\Provider;
 
-use Fusio\Engine\User\ProviderAbstract;
+use Fusio\Engine\Form;
+use Fusio\Engine\Provider\ProviderAbstract;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
- * Google
+ * IdentityProvider
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Google extends ProviderAbstract
+class IdentityProvider extends ProviderAbstract
 {
-    public function getAuthorizationUri(): ?string
+    public function __construct(Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.identity')] iterable $objects)
     {
-        return 'https://accounts.google.com/o/oauth2/v2/auth';
-    }
-
-    public function getTokenUri(): ?string
-    {
-        return 'https://oauth2.googleapis.com/token';
-    }
-
-    public function getUserInfoUri(): ?string
-    {
-        return 'https://openidconnect.googleapis.com/v1/userinfo';
+        parent::__construct($elementFactory, $objects);
     }
 }
+

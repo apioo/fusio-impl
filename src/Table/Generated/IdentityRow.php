@@ -11,14 +11,7 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $name = null;
     private ?string $icon = null;
     private ?string $class = null;
-    private ?string $clientId = null;
-    private ?string $clientSecret = null;
-    private ?string $authorizationUri = null;
-    private ?string $tokenUri = null;
-    private ?string $userInfoUri = null;
-    private ?string $idProperty = null;
-    private ?string $nameProperty = null;
-    private ?string $emailProperty = null;
+    private ?string $config = null;
     private ?bool $allowCreate = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id) : void
@@ -77,69 +70,13 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->class ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "class" was provided');
     }
-    public function setClientId(string $clientId) : void
+    public function setConfig(?string $config) : void
     {
-        $this->clientId = $clientId;
+        $this->config = $config;
     }
-    public function getClientId() : string
+    public function getConfig() : ?string
     {
-        return $this->clientId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "client_id" was provided');
-    }
-    public function setClientSecret(string $clientSecret) : void
-    {
-        $this->clientSecret = $clientSecret;
-    }
-    public function getClientSecret() : string
-    {
-        return $this->clientSecret ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "client_secret" was provided');
-    }
-    public function setAuthorizationUri(?string $authorizationUri) : void
-    {
-        $this->authorizationUri = $authorizationUri;
-    }
-    public function getAuthorizationUri() : ?string
-    {
-        return $this->authorizationUri;
-    }
-    public function setTokenUri(?string $tokenUri) : void
-    {
-        $this->tokenUri = $tokenUri;
-    }
-    public function getTokenUri() : ?string
-    {
-        return $this->tokenUri;
-    }
-    public function setUserInfoUri(?string $userInfoUri) : void
-    {
-        $this->userInfoUri = $userInfoUri;
-    }
-    public function getUserInfoUri() : ?string
-    {
-        return $this->userInfoUri;
-    }
-    public function setIdProperty(?string $idProperty) : void
-    {
-        $this->idProperty = $idProperty;
-    }
-    public function getIdProperty() : ?string
-    {
-        return $this->idProperty;
-    }
-    public function setNameProperty(?string $nameProperty) : void
-    {
-        $this->nameProperty = $nameProperty;
-    }
-    public function getNameProperty() : ?string
-    {
-        return $this->nameProperty;
-    }
-    public function setEmailProperty(?string $emailProperty) : void
-    {
-        $this->emailProperty = $emailProperty;
-    }
-    public function getEmailProperty() : ?string
-    {
-        return $this->emailProperty;
+        return $this->config;
     }
     public function setAllowCreate(bool $allowCreate) : void
     {
@@ -168,14 +105,7 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('icon', $this->icon);
         $record->put('class', $this->class);
-        $record->put('client_id', $this->clientId);
-        $record->put('client_secret', $this->clientSecret);
-        $record->put('authorization_uri', $this->authorizationUri);
-        $record->put('token_uri', $this->tokenUri);
-        $record->put('user_info_uri', $this->userInfoUri);
-        $record->put('id_property', $this->idProperty);
-        $record->put('name_property', $this->nameProperty);
-        $record->put('email_property', $this->emailProperty);
+        $record->put('config', $this->config);
         $record->put('allow_create', $this->allowCreate);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -194,14 +124,7 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->icon = isset($data['icon']) && is_string($data['icon']) ? $data['icon'] : null;
         $row->class = isset($data['class']) && is_string($data['class']) ? $data['class'] : null;
-        $row->clientId = isset($data['client_id']) && is_string($data['client_id']) ? $data['client_id'] : null;
-        $row->clientSecret = isset($data['client_secret']) && is_string($data['client_secret']) ? $data['client_secret'] : null;
-        $row->authorizationUri = isset($data['authorization_uri']) && is_string($data['authorization_uri']) ? $data['authorization_uri'] : null;
-        $row->tokenUri = isset($data['token_uri']) && is_string($data['token_uri']) ? $data['token_uri'] : null;
-        $row->userInfoUri = isset($data['user_info_uri']) && is_string($data['user_info_uri']) ? $data['user_info_uri'] : null;
-        $row->idProperty = isset($data['id_property']) && is_string($data['id_property']) ? $data['id_property'] : null;
-        $row->nameProperty = isset($data['name_property']) && is_string($data['name_property']) ? $data['name_property'] : null;
-        $row->emailProperty = isset($data['email_property']) && is_string($data['email_property']) ? $data['email_property'] : null;
+        $row->config = isset($data['config']) && is_string($data['config']) ? $data['config'] : null;
         $row->allowCreate = isset($data['allow_create']) && is_bool($data['allow_create']) ? $data['allow_create'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

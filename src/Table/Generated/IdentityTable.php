@@ -15,14 +15,7 @@ class IdentityTable extends \PSX\Sql\TableAbstract
     public const COLUMN_NAME = 'name';
     public const COLUMN_ICON = 'icon';
     public const COLUMN_CLASS = 'class';
-    public const COLUMN_CLIENT_ID = 'client_id';
-    public const COLUMN_CLIENT_SECRET = 'client_secret';
-    public const COLUMN_AUTHORIZATION_URI = 'authorization_uri';
-    public const COLUMN_TOKEN_URI = 'token_uri';
-    public const COLUMN_USER_INFO_URI = 'user_info_uri';
-    public const COLUMN_ID_PROPERTY = 'id_property';
-    public const COLUMN_NAME_PROPERTY = 'name_property';
-    public const COLUMN_EMAIL_PROPERTY = 'email_property';
+    public const COLUMN_CONFIG = 'config';
     public const COLUMN_ALLOW_CREATE = 'allow_create';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
@@ -31,7 +24,7 @@ class IdentityTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_ROLE_ID => 0x4020000a, self::COLUMN_NAME => 0xa00080, self::COLUMN_ICON => 0xa00040, self::COLUMN_CLASS => 0xa000ff, self::COLUMN_CLIENT_ID => 0xa000ff, self::COLUMN_CLIENT_SECRET => 0xa000ff, self::COLUMN_AUTHORIZATION_URI => 0x40a000ff, self::COLUMN_TOKEN_URI => 0x40a000ff, self::COLUMN_USER_INFO_URI => 0x40a000ff, self::COLUMN_ID_PROPERTY => 0x40a000ff, self::COLUMN_NAME_PROPERTY => 0x40a000ff, self::COLUMN_EMAIL_PROPERTY => 0x40a000ff, self::COLUMN_ALLOW_CREATE => 0x400000, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_ROLE_ID => 0x4020000a, self::COLUMN_NAME => 0xa00080, self::COLUMN_ICON => 0xa00040, self::COLUMN_CLASS => 0xa000ff, self::COLUMN_CONFIG => 0x40b00000, self::COLUMN_ALLOW_CREATE => 0x400000, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
@@ -328,296 +321,37 @@ class IdentityTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByClientId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByConfig(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_id', $value);
+        $condition->like('config', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByClientId(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
+    public function findOneByConfig(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_id', $value);
+        $condition->like('config', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByClientId(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
+    public function updateByConfig(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_id', $value);
+        $condition->like('config', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByClientId(string $value) : int
+    public function deleteByConfig(string $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_id', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByClientSecret(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_secret', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByClientSecret(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_secret', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByClientSecret(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_secret', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByClientSecret(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('client_secret', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByAuthorizationUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('authorization_uri', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByAuthorizationUri(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('authorization_uri', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByAuthorizationUri(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('authorization_uri', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByAuthorizationUri(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('authorization_uri', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByTokenUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('token_uri', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByTokenUri(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('token_uri', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByTokenUri(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('token_uri', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByTokenUri(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('token_uri', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByUserInfoUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('user_info_uri', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByUserInfoUri(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('user_info_uri', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByUserInfoUri(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('user_info_uri', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByUserInfoUri(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('user_info_uri', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByIdProperty(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('id_property', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByIdProperty(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('id_property', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByIdProperty(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('id_property', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByIdProperty(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('id_property', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByNameProperty(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('name_property', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByNameProperty(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('name_property', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByNameProperty(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('name_property', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByNameProperty(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('name_property', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\IdentityRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByEmailProperty(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('email_property', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByEmailProperty(string $value) : ?\Fusio\Impl\Table\Generated\IdentityRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('email_property', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByEmailProperty(string $value, \Fusio\Impl\Table\Generated\IdentityRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('email_property', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByEmailProperty(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('email_property', $value);
+        $condition->like('config', $value);
         return $this->doDeleteBy($condition);
     }
     /**

@@ -20,15 +20,16 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\User\Configuration;
-use Fusio\Engine\User\ProviderInterface;
-use Fusio\Engine\User\UserInfo;
+use Fusio\Engine\Identity\ProviderInterface;
+use Fusio\Engine\Identity\UserInfo;
+use Fusio\Engine\Inflection\ClassName;
+use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Identity\CreatedEvent;
 use Fusio\Impl\Event\Identity\DeletedEvent;
 use Fusio\Impl\Event\Identity\UpdatedEvent;
-use Fusio\Impl\Provider\UserProvider;
+use Fusio\Impl\Provider\IdentityProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model;
@@ -54,19 +55,19 @@ class Identity
     private Table\Generated\IdentityRequestTable $identityRequestTable;
     private Table\App $appTable;
     private Identity\Validator $validator;
-    private UserProvider $userProvider;
+    private IdentityProvider $identityProvider;
     private Service\User $userService;
     private Service\App\Token $appTokenService;
     private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, UserProvider $userProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
         $this->appTable = $appTable;
         $this->validator = $validator;
-        $this->userProvider = $userProvider;
+        $this->identityProvider = $identityProvider;
         $this->userService = $userService;
         $this->appTokenService = $appTokenService;
         $this->config = $config;
@@ -77,13 +78,15 @@ class Identity
     {
         $this->validator->assert($identity);
 
-        $provider = $this->userProvider->getInstance($identity->getClass());
+        $provider = $this->identityProvider->getInstance($identity->getClass());
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provided an invalid identity class');
         }
 
         try {
             $this->identityTable->beginTransaction();
+
+            $config = $identity->getConfig() ? $identity->getConfig()->getAll() : [];
 
             // create category
             $row = new Table\Generated\IdentityRow();
@@ -92,15 +95,8 @@ class Identity
             $row->setRoleId($identity->getRoleId());
             $row->setName($identity->getName());
             $row->setIcon($identity->getIcon());
-            $row->setClass($identity->getClass());
-            $row->setClientId($identity->getClientId());
-            $row->setClientSecret($identity->getClientSecret());
-            $row->setAuthorizationUri($identity->getAuthorizationUri() ?? $provider->getAuthorizationUri());
-            $row->setTokenUri($identity->getTokenUri() ?? $provider->getTokenUri());
-            $row->setUserInfoUri($identity->getUserInfoUri() ?? $provider->getUserInfoUri());
-            $row->setIdProperty($identity->getIdProperty() ?? $provider->getIdProperty());
-            $row->setNameProperty($identity->getNameProperty() ?? $provider->getNameProperty());
-            $row->setEmailProperty($identity->getEmailProperty() ?? $provider->getEmailProperty());
+            $row->setClass(ClassName::serialize($identity->getClass()));
+            $row->setConfig(self::serializeConfig($config));
             $row->setAllowCreate($identity->getAllowCreate() ?? true);
             $row->setInsertDate(LocalDateTime::now());
             $this->identityTable->create($row);
@@ -133,7 +129,7 @@ class Identity
 
         $this->validator->assert($identity, $existing);
 
-        $provider = $this->userProvider->getInstance($existing->getClass());
+        $provider = $this->identityProvider->getInstance($existing->getClass());
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provided an invalid identity class');
         }
@@ -141,19 +137,14 @@ class Identity
         try {
             $this->identityTable->beginTransaction();
 
+            $config = $identity->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+
             // update category
             $existing->setAppId($identity->getAppId() ?? $existing->getAppId());
             $existing->setRoleId($identity->getRoleId() ?? $existing->getRoleId());
             $existing->setName($identity->getName() ?? $existing->getName());
             $existing->setIcon($identity->getIcon() ?? $existing->getIcon());
-            $existing->setClientId($identity->getClientId() ?? $existing->getClientId());
-            $existing->setClientSecret($identity->getClientSecret() ?? $existing->getClientSecret());
-            $existing->setAuthorizationUri($identity->getAuthorizationUri() ?? $existing->getAuthorizationUri());
-            $existing->setTokenUri($identity->getTokenUri() ?? $existing->getTokenUri());
-            $existing->setUserInfoUri($identity->getUserInfoUri() ?? $existing->getUserInfoUri());
-            $existing->setIdProperty($identity->getIdProperty() ?? $existing->getIdProperty());
-            $existing->setNameProperty($identity->getNameProperty() ?? $existing->getNameProperty());
-            $existing->setEmailProperty($identity->getEmailProperty() ?? $existing->getEmailProperty());
+            $existing->setConfig(self::serializeConfig($config));
             $existing->setAllowCreate($identity->getAllowCreate() ?? $existing->getAllowCreate());
             $this->identityTable->update($existing);
 
@@ -212,7 +203,7 @@ class Identity
             }
         }
 
-        $provider = $this->userProvider->getInstance($existing->getClass());
+        $provider = $this->identityProvider->getInstance($existing->getClass());
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provided an invalid identity class');
         }
@@ -226,15 +217,10 @@ class Identity
         $row->setInsertDate(LocalDateTime::now());
         $this->identityRequestTable->create($row);
 
-        $authorizationUri = Url::parse($existing->getAuthorizationUri());
-        $authorizationUri = $authorizationUri->withParameters([
-            'response_type' => 'code',
-            'client_id' => $existing->getClientId(),
-            'state' => $state,
-            'redirect_uri' => $this->buildRedirectUri($existing),
-        ]);
+        $config = self::unserializeConfig($existing->getConfig());
+        $parameters = new Parameters($config);
 
-        return $provider->getRedirectUri($authorizationUri);
+        return $provider->getRedirectUri($parameters, $state, $this->buildRedirectUri($existing));
     }
 
     public function exchange(string $identityId, string $code, string $state): AccessToken
@@ -261,19 +247,20 @@ class Identity
             throw new StatusCode\BadRequestException('Provided identity request is expired');
         }
 
-        $provider = $this->userProvider->getInstance($existing->getClass());
+        $provider = $this->identityProvider->getInstance($existing->getClass());
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provided an invalid identity class');
         }
 
-        $configuration = new Configuration($existing->getClientId(), $existing->getClientSecret(), $existing->getAuthorizationUri(), $existing->getTokenUri(), $existing->getUserInfoUri(), $existing->getIdProperty(), $existing->getNameProperty(), $existing->getEmailProperty());
+        $config = self::unserializeConfig($existing->getConfig());
+        $parameters = new Parameters($config);
 
-        $user = $provider->requestUserInfo($configuration, $code, $this->buildRedirectUri($existing));
+        $user = $provider->requestUserInfo($parameters, $code, $this->buildRedirectUri($existing));
         if (!$user instanceof UserInfo) {
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
-        $userId = $this->userService->createRemote($existing->getId(), $user->getId(), $user->getName(), $user->getEmail(), UserContext::newAnonymousContext());
+        $userId = $this->userService->createRemote($existing, $user, UserContext::newAnonymousContext());
 
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId);
@@ -313,5 +300,23 @@ class Identity
     private function buildRedirectUri(Table\Generated\IdentityRow $existing): string
     {
         return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange';
+    }
+
+    public static function serializeConfig(?array $config = null): ?string
+    {
+        if (empty($config)) {
+            return null;
+        }
+
+        return \json_encode($config);
+    }
+
+    public static function unserializeConfig(?string $data): ?array
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        return \json_decode($data, true);
     }
 }

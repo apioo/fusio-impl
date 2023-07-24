@@ -20,10 +20,8 @@
 
 namespace Fusio\Impl\Provider\Generator;
 
-use Fusio\Adapter\Http\Action\HttpEngine;
 use Fusio\Adapter\Http\Action\HttpProcessor;
 use Fusio\Adapter\Http\Action\HttpSenderAbstract;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
@@ -39,7 +37,6 @@ use Fusio\Model\Backend\OperationThrows;
 use Fusio\Model\Backend\SchemaCreate;
 use Fusio\Model\Backend\SchemaSource;
 use PSX\Api\Operation\ArgumentInterface;
-use PSX\Api\Operation\Response;
 use PSX\Api\OperationInterface;
 use PSX\Api\Parser;
 use PSX\Api\SpecificationInterface;
