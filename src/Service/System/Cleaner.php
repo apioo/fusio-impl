@@ -41,12 +41,20 @@ class Cleaner
     public function cleanUp(): void
     {
         $this->cleanUpExpiredTokens();
+        $this->cleanUpIdentityRequests();
     }
 
     private function cleanUpExpiredTokens(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_app_token WHERE expire < :now', [
             'now' => (new \DateTime())->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpIdentityRequests(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_identity_request WHERE insert_date < :now', [
+            'now' => (new \DateTime('yesterday'))->format('Y-m-d H:i:s'),
         ]);
     }
 }
