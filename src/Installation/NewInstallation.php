@@ -1675,7 +1675,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserEmail::class,
-                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'account.executePasswordReset' => new Operation(
@@ -1685,7 +1685,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\UserPasswordReset::class,
-                    throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),
                 'identity.getAll' => new Operation(
