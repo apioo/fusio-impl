@@ -88,7 +88,7 @@ class ExchangeTest extends ControllerDbTestCase
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
         $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token', (string) $transaction['request']->getUri());
-        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=facebook-key&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F1%2Fexchange', (string) $transaction['request']->getBody());
+        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=facebook-key&client_secret=facebook-secret&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F1%2Fexchange', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
@@ -135,7 +135,7 @@ class ExchangeTest extends ControllerDbTestCase
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
         $this->assertEquals('https://github.com/login/oauth/access_token', (string) $transaction['request']->getUri());
-        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=github-key&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F2%2Fexchange', (string) $transaction['request']->getBody());
+        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=github-key&client_secret=github-secret&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F2%2Fexchange', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
@@ -182,7 +182,7 @@ class ExchangeTest extends ControllerDbTestCase
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
         $this->assertEquals('https://oauth2.googleapis.com/token', (string) $transaction['request']->getUri());
-        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=google-key&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F3%2Fexchange', (string) $transaction['request']->getBody());
+        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=google-key&client_secret=google-secret&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F3%2Fexchange', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
@@ -229,7 +229,7 @@ class ExchangeTest extends ControllerDbTestCase
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
         $this->assertEquals('http://127.0.0.1/authorization/token', (string) $transaction['request']->getUri());
-        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=openid-key&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F4%2Fexchange', (string) $transaction['request']->getBody());
+        $this->assertEquals('grant_type=authorization_code&code=foobar&client_id=openid-key&client_secret=openid-secret&redirect_uri=http%3A%2F%2F127.0.0.1%2Fconsumer%2Fidentity%2F4%2Fexchange', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
