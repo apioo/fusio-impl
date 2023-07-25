@@ -144,6 +144,12 @@
           }
         },
         {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
           "code": 500,
           "schema": {
             "$ref": "Message"
@@ -178,6 +184,12 @@
       "throws": [
         {
           "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
           "schema": {
             "$ref": "Message"
           }
