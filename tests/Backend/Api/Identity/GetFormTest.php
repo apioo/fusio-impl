@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Provider\Identity\Github;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -41,7 +42,7 @@ class GetFormTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/identity/form?class=' . urlencode(Github::class), 'GET', array(
+        $response = $this->sendRequest('/backend/identity/form?class=' . ClassName::serialize(Github::class), 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

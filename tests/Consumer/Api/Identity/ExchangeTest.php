@@ -20,10 +20,10 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Identity;
 
-use Fusio\Impl\Provider\User\Facebook;
-use Fusio\Impl\Provider\User\Github;
-use Fusio\Impl\Provider\User\Google;
-use Fusio\Impl\Provider\User\OpenIDConnect;
+use Fusio\Impl\Provider\Identity\Facebook;
+use Fusio\Impl\Provider\Identity\Github;
+use Fusio\Impl\Provider\Identity\Google;
+use Fusio\Impl\Provider\Identity\OpenIDConnect;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Tests\Fixture;

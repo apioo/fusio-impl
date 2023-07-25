@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Identity;
 
-use Fusio\Impl\Provider\User\Github;
+use Fusio\Impl\Provider\Identity\Github;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -61,15 +61,17 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",
-    "class": "Fusio\\Impl\\Provider\\User\\Github",
-    "clientId": "github-key",
-    "clientSecret": "github-secret",
-    "authorizationUri": "https:\/\/github.com\/login\/oauth\/authorize",
-    "tokenUri": "https:\/\/github.com\/login\/oauth\/access_token",
-    "userInfoUri": "https:\/\/api.github.com\/user",
-    "idProperty": "id",
-    "nameProperty": "login",
-    "emailProperty": "email",
+    "class": "Fusio\\Impl\\Provider\\Identity\\Github",
+    "config": {
+        "client_id": "github-key",
+        "client_secret": "github-secret",
+        "authorization_uri": "https:\/\/github.com\/login\/oauth\/authorize",
+        "token_uri": "https:\/\/github.com\/login\/oauth\/access_token",
+        "user_info_uri": "https:\/\/api.github.com\/user",
+        "id_property": "id",
+        "name_property": "login",
+        "email_property": "email"
+    },
     "allowCreate": true,
     "insertDate": "2023-07-22T13:56:00Z"
 }
@@ -93,15 +95,17 @@ JSON;
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",
-    "class": "Fusio\\Impl\\Provider\\User\\Github",
-    "clientId": "github-key",
-    "clientSecret": "github-secret",
-    "authorizationUri": "https:\/\/github.com\/login\/oauth\/authorize",
-    "tokenUri": "https:\/\/github.com\/login\/oauth\/access_token",
-    "userInfoUri": "https:\/\/api.github.com\/user",
-    "idProperty": "id",
-    "nameProperty": "login",
-    "emailProperty": "email",
+    "class": "Fusio\\Impl\\Provider\\Identity\\Github",
+    "config": {
+        "client_id": "github-key",
+        "client_secret": "github-secret",
+        "authorization_uri": "https:\/\/github.com\/login\/oauth\/authorize",
+        "token_uri": "https:\/\/github.com\/login\/oauth\/access_token",
+        "user_info_uri": "https:\/\/api.github.com\/user",
+        "id_property": "id",
+        "name_property": "login",
+        "email_property": "email"
+    },
     "allowCreate": true,
     "insertDate": "2023-07-22T13:56:00Z"
 }
@@ -147,8 +151,16 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name' => 'GitGit',
-            'clientId' => 'bar',
-            'clientSecret' => 'foo',
+            'config' => [
+                'client_id' => 'bar',
+                'client_secret' => 'foo',
+                'authorization_uri' => 'https://github.com/login/oauth/authorize',
+                'token_uri' => 'https://github.com/login/oauth/access_token',
+                'user_info_uri' => 'https://api.github.com/user',
+                'id_property' => 'id',
+                'name_property' => 'foo',
+                'email_property' => 'email',
+            ]
         ]));
 
         $body   = (string) $response->getBody();
@@ -164,7 +176,7 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'app_id', 'role_id', 'status', 'name', 'icon', 'class', 'client_id', 'client_secret', 'authorization_uri', 'token_uri', 'user_info_uri', 'id_property', 'name_property', 'email_property', 'allow_create')
+            ->select('id', 'app_id', 'role_id', 'status', 'name', 'icon', 'class', 'config', 'allow_create')
             ->from('fusio_identity')
             ->where('id = ' . $this->id)
             ->getSQL();
@@ -178,14 +190,16 @@ JSON;
         $this->assertEquals('GitGit', $row['name']);
         $this->assertEquals('bi-github', $row['icon']);
         $this->assertEquals(Github::class, $row['class']);
-        $this->assertEquals('bar', $row['client_id']);
-        $this->assertEquals('foo', $row['client_secret']);
-        $this->assertEquals('https://github.com/login/oauth/authorize', $row['authorization_uri']);
-        $this->assertEquals('https://github.com/login/oauth/access_token', $row['token_uri']);
-        $this->assertEquals('https://api.github.com/user', $row['user_info_uri']);
-        $this->assertEquals('id', $row['id_property']);
-        $this->assertEquals('login', $row['name_property']);
-        $this->assertEquals('email', $row['email_property']);
+        $this->assertEquals([
+            'client_id' => 'bar',
+            'client_secret' => 'foo',
+            'authorization_uri' => 'https://github.com/login/oauth/authorize',
+            'token_uri' => 'https://github.com/login/oauth/access_token',
+            'user_info_uri' => 'https://api.github.com/user',
+            'id_property' => 'id',
+            'name_property' => 'foo',
+            'email_property' => 'email',
+        ], \json_decode($row['config'], true));
         $this->assertEquals(1, $row['allow_create']);
     }
 

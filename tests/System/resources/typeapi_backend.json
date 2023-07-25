@@ -4576,6 +4576,81 @@
         "identity"
       ]
     },
+    "backend.identity.getForm": {
+      "path": "/backend/identity/form",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "FormContainer"
+        }
+      },
+      "arguments": {
+        "class": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
+    "backend.identity.getClasses": {
+      "path": "/backend/identity/list",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "IdentityIndex"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.identity"
+      ],
+      "authorization": true,
+      "tags": [
+        "identity"
+      ]
+    },
     "backend.identity.create": {
       "path": "/backend/identity",
       "method": "POST",
@@ -8732,29 +8807,8 @@
         "class": {
           "type": "string"
         },
-        "clientId": {
-          "type": "string"
-        },
-        "clientSecret": {
-          "type": "string"
-        },
-        "authorizationUri": {
-          "type": "string"
-        },
-        "tokenUri": {
-          "type": "string"
-        },
-        "userInfoUri": {
-          "type": "string"
-        },
-        "idProperty": {
-          "type": "string"
-        },
-        "nameProperty": {
-          "type": "string"
-        },
-        "emailProperty": {
-          "type": "string"
+        "config": {
+          "$ref": "IdentityConfig"
         },
         "allowCreate": {
           "type": "boolean"
@@ -8767,15 +8821,43 @@
         "T": "Identity"
       }
     },
+    "IdentityConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
     "IdentityCreate": {
       "$extends": "Identity",
       "type": "object",
       "required": [
+        "appId",
         "name",
-        "class",
-        "clientId",
-        "clientSecret"
+        "icon",
+        "class"
       ]
+    },
+    "IdentityIndex": {
+      "type": "object",
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": {
+            "$ref": "IdentityIndexEntry"
+          }
+        }
+      }
+    },
+    "IdentityIndexEntry": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        }
+      }
     },
     "IdentityUpdate": {
       "$extends": "Identity",

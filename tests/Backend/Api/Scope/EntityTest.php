@@ -62,6 +62,18 @@ class EntityTest extends ControllerDbTestCase
     "description": "Bar access",
     "operations": [
         {
+            "id": 184,
+            "scopeId": 45,
+            "operationId": 190,
+            "allow": true
+        },
+        {
+            "id": 183,
+            "scopeId": 45,
+            "operationId": 189,
+            "allow": true
+        },
+        {
             "id": 182,
             "scopeId": 45,
             "operationId": 188,
@@ -74,33 +86,21 @@ class EntityTest extends ControllerDbTestCase
             "allow": true
         },
         {
-            "id": 180,
+            "id": 179,
             "scopeId": 45,
             "operationId": 186,
             "allow": true
         },
         {
-            "id": 179,
+            "id": 177,
             "scopeId": 45,
             "operationId": 185,
             "allow": true
         },
         {
-            "id": 177,
+            "id": 176,
             "scopeId": 45,
             "operationId": 184,
-            "allow": true
-        },
-        {
-            "id": 175,
-            "scopeId": 45,
-            "operationId": 183,
-            "allow": true
-        },
-        {
-            "id": 174,
-            "scopeId": 45,
-            "operationId": 182,
             "allow": true
         }
     ]
@@ -126,6 +126,18 @@ JSON;
     "description": "Bar access",
     "operations": [
         {
+            "id": 184,
+            "scopeId": 45,
+            "operationId": 190,
+            "allow": true
+        },
+        {
+            "id": 183,
+            "scopeId": 45,
+            "operationId": 189,
+            "allow": true
+        },
+        {
             "id": 182,
             "scopeId": 45,
             "operationId": 188,
@@ -138,33 +150,21 @@ JSON;
             "allow": true
         },
         {
-            "id": 180,
+            "id": 179,
             "scopeId": 45,
             "operationId": 186,
             "allow": true
         },
         {
-            "id": 179,
+            "id": 177,
             "scopeId": 45,
             "operationId": 185,
             "allow": true
         },
         {
-            "id": 177,
+            "id": 176,
             "scopeId": 45,
             "operationId": 184,
-            "allow": true
-        },
-        {
-            "id": 175,
-            "scopeId": 45,
-            "operationId": 183,
-            "allow": true
-        },
-        {
-            "id": 174,
-            "scopeId": 45,
-            "operationId": 182,
             "allow": true
         }
     ]

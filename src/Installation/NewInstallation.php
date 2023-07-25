@@ -657,7 +657,7 @@ class NewInstallation
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     eventName: 'fusio.event.delete',
                 ),
-                'generator.getProviders' => new Operation(
+                'generator.getClasses' => new Operation(
                     action: Backend\Action\Generator\GetIndex::class,
                     httpMethod: 'GET',
                     httpPath: '/generator',
@@ -665,7 +665,7 @@ class NewInstallation
                     outgoing: Model\Backend\GeneratorIndexProviders::class,
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
-                'generator.getProviderForm' => new Operation(
+                'generator.getForm' => new Operation(
                     action: Backend\Action\Generator\GetForm::class,
                     httpMethod: 'GET',
                     httpPath: '/generator/:provider',
