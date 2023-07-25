@@ -58,6 +58,8 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 2,
+    "roleId": 3,
+    "appId": 2,
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",
@@ -92,6 +94,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "id": 2,
+    "roleId": 3,
+    "appId": 2,
     "status": 1,
     "name": "GitHub",
     "icon": "bi-github",

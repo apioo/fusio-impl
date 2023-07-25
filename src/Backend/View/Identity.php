@@ -68,6 +68,8 @@ class Identity extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Identity::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
+                'roleId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ROLE_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_APP_ID),
                 'status' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_STATUS),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
                 'icon' => Table\Generated\IdentityTable::COLUMN_ICON,
@@ -85,6 +87,8 @@ class Identity extends ViewAbstract
 
         $definition = $builder->doEntity([$this->getTable(Table\Identity::class), 'findOneByIdentifier'], [$id], [
             'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
+            'roleId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ROLE_ID),
+            'appId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_APP_ID),
             'status' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_STATUS),
             'name' => Table\Generated\IdentityTable::COLUMN_NAME,
             'icon' => Table\Generated\IdentityTable::COLUMN_ICON,

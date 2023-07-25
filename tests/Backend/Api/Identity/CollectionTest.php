@@ -54,6 +54,8 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
+            "roleId": 3,
+            "appId": 2,
             "status": 1,
             "name": "Facebook",
             "icon": "bi-facebook",
@@ -62,6 +64,8 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "roleId": 3,
+            "appId": 2,
             "status": 1,
             "name": "GitHub",
             "icon": "bi-github",
@@ -70,6 +74,8 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 3,
+            "roleId": 3,
+            "appId": 2,
             "status": 1,
             "name": "Google",
             "icon": "bi-google",
@@ -78,6 +84,8 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 4,
+            "roleId": 3,
+            "appId": 2,
             "status": 1,
             "name": "OpenID",
             "icon": "bi-openid",
