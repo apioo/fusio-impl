@@ -4845,7 +4845,7 @@
         "generator"
       ]
     },
-    "backend.generator.getProviderForm": {
+    "backend.generator.getForm": {
       "path": "/backend/generator/:provider",
       "method": "GET",
       "return": {
@@ -4886,7 +4886,7 @@
         "generator"
       ]
     },
-    "backend.generator.getProviders": {
+    "backend.generator.getClasses": {
       "path": "/backend/generator",
       "method": "GET",
       "return": {
