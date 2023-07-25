@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Provider\Identity;
 
+use Fusio\Engine\Form\BuilderInterface;
+use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Identity\ProviderAbstract;
 use Fusio\Engine\ParametersInterface;
 
@@ -32,6 +34,12 @@ use Fusio\Engine\ParametersInterface;
  */
 class Facebook extends ProviderAbstract
 {
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
+    {
+        $builder->add($elementFactory->newInput('client_id', 'Client-ID', 'text', 'Client-ID'));
+        $builder->add($elementFactory->newInput('client_secret', 'Client-Secret', 'text', 'Client-Secret'));
+    }
+
     public function getAuthorizationUri(): ?string
     {
         return 'https://www.facebook.com/v17.0/dialog/oauth';

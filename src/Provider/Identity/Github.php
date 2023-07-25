@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Provider\Identity;
 
+use Fusio\Engine\Form\BuilderInterface;
+use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Identity\ProviderAbstract;
 
 /**
@@ -31,6 +33,12 @@ use Fusio\Engine\Identity\ProviderAbstract;
  */
 class Github extends ProviderAbstract
 {
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
+    {
+        $builder->add($elementFactory->newInput('client_id', 'Client-ID', 'text', 'Client-ID'));
+        $builder->add($elementFactory->newInput('client_secret', 'Client-Secret', 'text', 'Client-Secret'));
+    }
+
     public function getAuthorizationUri(): ?string
     {
         return 'https://github.com/login/oauth/authorize';

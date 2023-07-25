@@ -64,48 +64,6 @@ class GetFormTest extends ControllerDbTestCase
             "title": "Client-Secret",
             "help": "Client-Secret",
             "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "authorization_uri",
-            "title": "Authorization-Uri",
-            "help": "Client-Secret",
-            "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "token_uri",
-            "title": "Token-Uri",
-            "help": "Client-Secret",
-            "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "user_info_uri",
-            "title": "User-Info-Uri",
-            "help": "Client-Secret",
-            "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "id_property",
-            "title": "ID-Property",
-            "help": "Optional name of the id property from the user-info response",
-            "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "name_property",
-            "title": "Name-Property",
-            "help": "Optional name of the name property from the user-info response",
-            "type": "text"
-        },
-        {
-            "element": "input",
-            "name": "email_property",
-            "title": "Email-Property",
-            "help": "Optional name of the email property from the user-info response",
-            "type": "text"
         }
     ]
 }
