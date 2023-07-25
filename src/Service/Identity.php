@@ -235,8 +235,8 @@ class Identity
         }
 
         $condition = Condition::withAnd();
-        $condition->equals('id', $existing->getId());
-        $condition->equals('state', $state);
+        $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_IDENTITY_ID, $existing->getId());
+        $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_STATE, $state);
         $identityRequest = $this->identityRequestTable->findOneBy($condition);
 
         if (!$identityRequest instanceof Table\Generated\IdentityRequestRow) {
