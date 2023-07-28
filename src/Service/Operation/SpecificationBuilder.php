@@ -117,9 +117,12 @@ class SpecificationBuilder
             $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($name)));
         }
 
-        $parameters = \json_decode($row->getParameters());
-        if ($parameters instanceof \stdClass) {
-            $this->buildQueryParametersFromJson($arguments, $parameters);
+        $rawParameters = $row->getParameters();
+        if (!empty($rawParameters)) {
+            $parameters = \json_decode($rawParameters);
+            if ($parameters instanceof \stdClass) {
+                $this->buildQueryParametersFromJson($arguments, $parameters);
+            }
         }
 
         return $arguments;
