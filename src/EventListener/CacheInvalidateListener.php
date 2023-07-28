@@ -21,11 +21,11 @@
 namespace Fusio\Impl\EventListener;
 
 use Fusio\Impl\Event;
-use PSX\Framework\Loader\RoutingParser\CachedParser;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Cleans specific caches
+ * Clears the global cache if specific entities are updated
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -33,26 +33,41 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class CacheInvalidateListener implements EventSubscriberInterface
 {
-    private CachedParser $cachedParser;
+    private CacheItemPoolInterface $cache;
 
-    public function __construct(CachedParser $cachedParser)
+    public function __construct(CacheItemPoolInterface $cache)
     {
-        $this->cachedParser = $cachedParser;
+        $this->cache = $cache;
     }
 
     public function onOperationCreate(Event\Operation\CreatedEvent $event): void
     {
-        $this->cachedParser->invalidate();
+        $this->cache->clear();
     }
 
     public function onOperationDelete(Event\Operation\DeletedEvent $event): void
     {
-        $this->cachedParser->invalidate();
+        $this->cache->clear();
     }
 
     public function onOperationUpdate(Event\Operation\UpdatedEvent $event): void
     {
-        $this->cachedParser->invalidate();
+        $this->cache->clear();
+    }
+
+    public function onSchemaCreate(Event\Schema\CreatedEvent $event): void
+    {
+        $this->cache->clear();
+    }
+
+    public function onSchemaDelete(Event\Schema\DeletedEvent $event): void
+    {
+        $this->cache->clear();
+    }
+
+    public function onSchemaUpdate(Event\Schema\UpdatedEvent $event): void
+    {
+        $this->cache->clear();
     }
 
     public static function getSubscribedEvents(): array
@@ -61,6 +76,10 @@ class CacheInvalidateListener implements EventSubscriberInterface
             Event\Operation\CreatedEvent::class => 'onOperationCreate',
             Event\Operation\DeletedEvent::class => 'onOperationDelete',
             Event\Operation\UpdatedEvent::class => 'onOperationUpdate',
+
+            Event\Schema\CreatedEvent::class => 'onSchemaCreate',
+            Event\Schema\DeletedEvent::class => 'onSchemaDelete',
+            Event\Schema\UpdatedEvent::class => 'onSchemaUpdate',
         ];
     }
 }
