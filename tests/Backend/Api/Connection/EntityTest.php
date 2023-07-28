@@ -53,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 1,
     "status": 1,
     "name": "System",
-    "class": "Fusio\\Impl\\Connection\\System",
+    "class": "Fusio.Impl.Connection.System",
     "config": {}
 }
 JSON;
@@ -75,7 +75,7 @@ JSON;
     "id": 1,
     "status": 1,
     "name": "System",
-    "class": "Fusio\\Impl\\Connection\\System",
+    "class": "Fusio.Impl.Connection.System",
     "config": {}
 }
 JSON;
@@ -167,7 +167,7 @@ JSON;
         // it is not possible to change the name or class so check whether they
         // have not changed
         $this->assertEquals('System', $row['name']);
-        $this->assertEquals('Fusio\Impl\Connection\System', $row['class']);
+        $this->assertEquals('Fusio.Impl.Connection.System', $row['class']);
     }
 
     public function testDelete()
