@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Installation;
 
 use Fusio\Adapter;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Action\Scheme;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
@@ -113,7 +114,7 @@ class NewInstallation
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request');
         $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length');
         $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
-        $bag->addConnection('System', ConnectionSystem::class);
+        $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class));
         $bag->addRate('Default', 0, 3600, 'PT1H');
         $bag->addRate('Default-Anonymous', 4, 900, 'PT1H');
         $bag->addRateAllocation('Default');
@@ -1805,7 +1806,7 @@ class NewInstallation
     private static function readFile(string $file): string
     {
         $lines = file(__DIR__ . '/resources/' . $file);
-        $lines = array_map('trim', $lines);
+        $lines = array_map('rtrim', $lines);
         return implode("\n", $lines);
     }
 
