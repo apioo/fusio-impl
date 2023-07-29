@@ -75,7 +75,6 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_plan",
         "fusio_plan_scope",
         "fusio_plan_usage",
-        "fusio_provider",
         "fusio_rate",
         "fusio_rate_allocation",
         "fusio_role",
