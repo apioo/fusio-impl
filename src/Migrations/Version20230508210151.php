@@ -6,6 +6,7 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Table;
 use PSX\Api\Model\Passthru;
@@ -16,6 +17,8 @@ use PSX\Api\OperationInterface;
  */
 final class Version20230508210151 extends AbstractMigration
 {
+    private bool $legacy = false;
+
     public function getDescription() : string
     {
         return 'Setup initial tables';
@@ -39,6 +42,7 @@ final class Version20230508210151 extends AbstractMigration
         } else {
             $actionTable = $schema->getTable('fusio_action');
             $actionTable->dropColumn('engine');
+            $this->legacy = true;
         }
 
         if (!$schema->hasTable('fusio_action_queue')) {
@@ -485,6 +489,7 @@ final class Version20230508210151 extends AbstractMigration
             $userTable = $schema->getTable('fusio_user');
             $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
             $userTable->dropColumn('provider');
+            $this->legacy = true;
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {
@@ -636,31 +641,17 @@ final class Version20230508210151 extends AbstractMigration
             }
         }
 
-        // remove legacy internal actions and schemas
-        $this->connection->executeStatement('DELETE FROM fusio_action WHERE category_id IN (2, 3, 4, 5)');
-        $this->connection->executeStatement('DELETE FROM fusio_schema WHERE category_id IN (2, 3, 4, 5)');
+        // upgrade legacy systems
+        if ($this->legacy) {
+            // remove legacy internal actions and schemas
+            $this->connection->executeStatement('DELETE FROM fusio_action WHERE category_id IN (2, 3, 4, 5)');
+            $this->connection->executeStatement('DELETE FROM fusio_schema WHERE category_id IN (2, 3, 4, 5)');
 
-        // update schema class
-        $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
+            // update schema class
+            $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
 
-        // add missing events
-        $eventNames = [
-            'fusio.operation.create',
-            'fusio.operation.update',
-            'fusio.operation.delete',
-        ];
-        foreach ($eventNames as $eventName) {
-            $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_event WHERE name = :name', ['name' => $eventName]);
-            if ($count > 0) {
-                continue;
-            }
-
-            $this->connection->insert('fusio_event', [
-                'category_id' => 2,
-                'status' => 1,
-                'name' => $eventName,
-                'description' => '',
-            ]);
+            // sync data
+            DataSyncronizer::sync($this->connection);
         }
     }
 }
