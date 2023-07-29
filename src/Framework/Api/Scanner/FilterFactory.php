@@ -49,6 +49,12 @@ class FilterFactory extends PSXFilterFactory
         return parent::getFilter($name);
     }
 
+    public function getDefault(): ?string
+    {
+        $this->load();
+        return parent::getDefault();
+    }
+
     private function load(): void
     {
         if ($this->loaded) {
