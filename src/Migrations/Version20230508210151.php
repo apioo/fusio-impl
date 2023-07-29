@@ -363,14 +363,6 @@ final class Version20230508210151 extends AbstractMigration
             $planScopeTable->addUniqueIndex(['plan_id', 'scope_id']);
         }
 
-        if (!$schema->hasTable('fusio_provider')) {
-            $providerTable = $schema->createTable('fusio_provider');
-            $providerTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $providerTable->addColumn('type', 'string');
-            $providerTable->addColumn('class', 'string');
-            $providerTable->setPrimaryKey(['id']);
-        }
-
         if (!$schema->hasTable('fusio_rate')) {
             $rateTable = $schema->createTable('fusio_rate');
             $rateTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -490,7 +482,7 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addUniqueIndex(['name']);
             $userTable->addUniqueIndex(['email']);
         } else {
-            $userTable = $schema->getTable('fusio_rate_allocation');
+            $userTable = $schema->getTable('fusio_user');
             $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
             $userTable->dropColumn('provider');
         }
@@ -570,6 +562,8 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'scope_operation_operation_id');
         }
 
+        $userTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'user_identity_id');
+
         if (isset($userGrantTable)) {
             $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_grant_user_id');
             $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'user_grant_app_id');
@@ -604,7 +598,6 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_operation');
         $schema->dropTable('fusio_plan');
         $schema->dropTable('fusio_plan_usage');
-        $schema->dropTable('fusio_provider');
         $schema->dropTable('fusio_rate');
         $schema->dropTable('fusio_rate_allocation');
         $schema->dropTable('fusio_role');
