@@ -61,7 +61,7 @@ class Token
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function generateAccessToken(int $appId, int $userId, array $scopes, string $ip, DateInterval $expire, ?string $state = null): AccessToken
+    public function generateAccessToken(int $appId, int $userId, array $scopes, string $ip, DateInterval $expire, ?string $state = null, ?string $name = null): AccessToken
     {
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No scopes provided');
