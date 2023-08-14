@@ -153,13 +153,20 @@ class UpgradeCommand extends Command
 
         $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE name LIKE :name', ['name' => 'backend.operation.%']);
         foreach ($operationIds as $operationId) {
-            $this->connection->insert('fusio_scope_operation', [
+            $scopeOperationId = $this->connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope_id AND operation_id = :operation_id', [
                 'scope_id' => $operationScopeId,
                 'operation_id' => $operationId,
-                'allow' => 1,
             ]);
 
-            $output->writeln('Assigned operation ' . $operationId . ' to backend operation scope');
+            if (empty($scopeOperationId)) {
+                $this->connection->insert('fusio_scope_operation', [
+                    'scope_id' => $operationScopeId,
+                    'operation_id' => $operationId,
+                    'allow' => 1,
+                ]);
+
+                $output->writeln('Assigned operation ' . $operationId . ' to backend operation scope');
+            }
         }
 
         $result = $this->connection->fetchAllAssociative('SELECT * FROM fusio_scope_routes ORDER BY id ASC');
