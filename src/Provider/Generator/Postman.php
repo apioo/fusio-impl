@@ -165,11 +165,15 @@ class Postman implements ProviderInterface
 
     private function buildName(array $parts): string
     {
-        $parts = array_map(function($value){
-            return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
-        }, $parts);
+        $result = [];
+        foreach ($parts as $part) {
+            $value = preg_replace('/[^0-9A-Za-z_-]/', '_', $part);
+            if (is_string($value)) {
+                $result[] = $value;
+            }
+        }
 
-        return implode('_', array_filter($parts));
+        return implode('_', array_filter($result));
     }
 
     private function normalizePath(\stdClass $item): string
