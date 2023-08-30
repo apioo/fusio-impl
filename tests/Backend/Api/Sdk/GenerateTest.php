@@ -60,8 +60,25 @@ class GenerateTest extends ControllerDbTestCase
         "markup-client": null,
         "markup-html": null,
         "markup-markdown": null,
+        "spec-typeapi": null,
         "spec-openapi": null,
-        "spec-typeapi": null
+        "model-csharp": null,
+        "model-go": null,
+        "model-graphql": null,
+        "model-html": null,
+        "model-java": null,
+        "model-jsonschema": null,
+        "model-kotlin": null,
+        "model-markdown": null,
+        "model-php": null,
+        "model-protobuf": null,
+        "model-python": null,
+        "model-ruby": null,
+        "model-rust": null,
+        "model-swift": null,
+        "model-typescript": null,
+        "model-typeschema": null,
+        "model-visualbasic": null
     }
 }
 JSON;
