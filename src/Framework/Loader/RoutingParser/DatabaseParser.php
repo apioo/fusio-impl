@@ -21,7 +21,9 @@
 namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Framework\Api\Scanner\Filter;
+use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
+use Fusio\Impl\Framework\Api\Scanner\FilterFactory;
+use Fusio\Impl\Framework\Api\Scanner\CategoriesFilter;
 use Fusio\Impl\Table\Operation as TableOperation;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Framework\Loader\RoutingCollection;
@@ -54,9 +56,12 @@ class DatabaseParser implements RoutingParserInterface
 
         $params = ['status' => TableOperation::STATUS_ACTIVE];
 
-        if ($filter instanceof Filter) {
+        if ($filter instanceof CategoryFilter) {
             $sql.= ' AND category_id = :category_id';
             $params['category_id'] = $filter->getId();
+        } elseif ($filter instanceof CategoriesFilter) {
+            $sql.= ' AND category_id IN (' . implode(', ', array_fill(0, count($filter->getIds()), '?')) . ')';
+            $params = array_merge($params, $filter->getIds());
         }
 
         $sql.= ' ORDER BY operation.id DESC';

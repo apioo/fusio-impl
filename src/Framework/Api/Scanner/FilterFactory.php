@@ -68,10 +68,13 @@ class FilterFactory extends PSXFilterFactory
                 $first = $row['name'];
             }
 
-            $this->addFilter($row['name'], new Filter((int) $row['id']));
+            $this->addFilter($row['name'], new CategoryFilter((int) $row['id']));
         }
 
-        $this->setDefault($first);
+        $this->addFilter('fusio', new CategoriesFilter([2, 3, 4, 5]));
+        $this->addFilter('frontend', new CategoriesFilter([1, 3, 4, 5]));
+        $this->addFilter('app', new CategoriesFilter([1, 5]));
+        $this->setDefault('app');
 
         $this->loaded = true;
     }

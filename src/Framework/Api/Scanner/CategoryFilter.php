@@ -30,7 +30,7 @@ use PSX\Api\Scanner\FilterInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Filter implements FilterInterface
+class CategoryFilter implements FilterInterface
 {
     private int $id;
 
