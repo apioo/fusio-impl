@@ -107,7 +107,7 @@ JSON;
 {
     "success": true,
     "message": "SDK successfully generated",
-    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client-php-default.zip"
+    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client-php-app.zip"
 }
 JSON;
 

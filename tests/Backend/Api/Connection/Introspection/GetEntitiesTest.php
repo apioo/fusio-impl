@@ -83,7 +83,8 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_transaction",
         "fusio_user",
         "fusio_user_grant",
-        "fusio_user_scope"
+        "fusio_user_scope",
+        "messenger_messages"
     ]
 }
 JSON;
