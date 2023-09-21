@@ -55,7 +55,7 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
 
         $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
 
-        $this->assertEquals(4, $cronjob['id']);
+        $this->assertEquals(2, $cronjob['id']);
         $this->assertEquals(1, $cronjob['status']);
         $this->assertEquals('Test-Cron', $cronjob['name']);
         $this->assertEquals('* * * * *', $cronjob['cron']);

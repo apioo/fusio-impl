@@ -11,9 +11,8 @@ use Fusio\Impl\Framework;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Repository as ImplRepository;
-use Fusio\Impl\Service\Action\Queue\Producer;
+use Fusio\Impl\Service\Action\Producer;
 use Fusio\Impl\Service\Event\Dispatcher;
-use Fusio\Impl\Webhook\SenderInterface as WebhookSenderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Api;
@@ -38,10 +37,6 @@ return static function (ContainerConfigurator $container) {
     $services
         ->instanceof(MailSenderInterface::class)
         ->tag('fusio.mailer.sender');
-
-    $services
-        ->instanceof(WebhookSenderInterface::class)
-        ->tag('fusio.webhook.sender');
 
     // engine
     $services->set(ImplRepository\ActionDatabase::class);
@@ -80,7 +75,6 @@ return static function (ContainerConfigurator $container) {
         ->exclude('Generated')
         ->public();
     $services->load('Fusio\\Impl\\Mail\\Sender\\', __DIR__ . '/../src/Mail/Sender');
-    $services->load('Fusio\\Impl\\Webhook\\Sender\\', __DIR__ . '/../src/Webhook/Sender');
     $services->load('Fusio\\Impl\\Connection\\', __DIR__ . '/../src/Connection');
     $services->load('Fusio\\Impl\\Provider\\Identity\\', __DIR__ . '/../src/Provider/Identity')
         ->public();
@@ -91,6 +85,7 @@ return static function (ContainerConfigurator $container) {
     $services->load('Fusio\\Impl\\EventListener\\', __DIR__ . '/../src/EventListener')
         ->public();
     $services->load('Fusio\\Impl\\Action\\Resolver\\', __DIR__ . '/../src/Action/Resolver');
+    $services->load('Fusio\\Impl\\MessengerHandler\\', __DIR__ . '/../src/MessengerHandler');
 
     $services->set(Provider\ActionProvider::class);
     $services->set(Provider\ConnectionProvider::class);

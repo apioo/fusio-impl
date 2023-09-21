@@ -18,39 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Webhook\Sender;
+namespace Fusio\Impl\MessengerHandler;
 
-use Fusio\Impl\Base;
-use Fusio\Impl\Webhook\Message;
-use Fusio\Impl\Webhook\SenderInterface;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Request;
-use PSX\Uri\Url;
+use Fusio\Engine\Processor;
+use Fusio\Impl\Messenger\InvokeAction;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
- * HTTP
+ * InvokeActionHandler
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HTTP implements SenderInterface
+#[AsMessageHandler]
+class InvokeActionHandler
 {
-    public function accept(object $dispatcher): bool
+    private Processor $processor;
+
+    public function __construct(Processor $processor)
     {
-        return $dispatcher instanceof ClientInterface;
+        $this->processor = $processor;
     }
 
-    public function send(object $dispatcher, Message $message): int
+    public function __invoke(InvokeAction $action): void
     {
-        $headers = [
-            'Content-Type' => 'application/json',
-            'User-Agent'   => Base::getUserAgent(),
-        ];
-
-        $request  = new Request(Url::parse($message->getEndpoint()), 'POST', $headers, $message->getPayload());
-        $response = $dispatcher->request($request);
-
-        return $response->getStatusCode();
+        $this->processor->execute($action->getActionId(), $action->getRequest(), $action->getContext());
     }
 }

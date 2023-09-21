@@ -18,29 +18,40 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Webhook;
+namespace Fusio\Impl\Messenger;
 
 /**
- * SenderInterface
+ * SendHttpRequest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface SenderInterface
+class SendHttpRequest
 {
-    /**
-     * Returns whether the sender supports this dispatcher instance
-     * 
-     * @param object $dispatcher
-     * @return boolean
-     */
-    public function accept(object $dispatcher): bool;
+    private int $responseId;
+    private string $endpoint;
+    private mixed $payload;
 
-    /**
-     * Sends an event using the dispatcher. The dispatcher is by default an http client but it also possible to
-     * configure another dispatcher by using the name of an connection. Through this it would be possible to dispatch
-     * events using different message queue systems. By default the sender can handle
-     */
-    public function send(object $dispatcher, Message $message): int;
+    public function __construct(int $responseId, string $endpoint, mixed $payload)
+    {
+        $this->responseId = $responseId;
+        $this->endpoint = $endpoint;
+        $this->payload = $payload;
+    }
+
+    public function getResponseId(): int
+    {
+        return $this->responseId;
+    }
+
+    public function getEndpoint(): string
+    {
+        return $this->endpoint;
+    }
+
+    public function getPayload(): mixed
+    {
+        return $this->payload;
+    }
 }

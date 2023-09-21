@@ -18,39 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Event;
+namespace Fusio\Impl\Service\Action;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
+use Fusio\Engine\Action\QueueInterface;
 use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Event;
+use Fusio\Impl\Messenger\InvokeAction;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * Execute
+ * Producer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Execute implements ActionInterface
+class Producer implements QueueInterface
 {
-    private Event\Executor $executor;
+    private MessageBusInterface $messageBus;
 
-    public function __construct(Event\Executor $executor)
+    public function __construct(MessageBusInterface $messageBus)
     {
-        $this->executor = $executor;
+        $this->messageBus = $messageBus;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function push(string|int $actionId, RequestInterface $request, ContextInterface $context): void
     {
-        $this->executor->execute();
-
-        return [
-            'success' => true,
-            'message' => 'Event successful executed',
-        ];
+        $this->messageBus->dispatch(new InvokeAction($actionId, $request, $context));
     }
 }

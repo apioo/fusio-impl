@@ -18,39 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Action;
-
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Action\Queue\Consumer;
+namespace Fusio\Impl\Messenger;
 
 /**
- * Async
+ * TriggerEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Async implements ActionInterface
+class TriggerEvent
 {
-    private Consumer $consumer;
+    private string $eventName;
+    private mixed $payload;
 
-    public function __construct(Consumer $consumer)
+    public function __construct(string $eventName, mixed $payload)
     {
-        $this->consumer = $consumer;
+        $this->eventName = $eventName;
+        $this->payload = $payload;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getEventName(): string
     {
-        $this->consumer->execute();
+        return $this->eventName;
+    }
 
-        return [
-            'success' => true,
-            'message' => 'Consumer successful executed',
-        ];
+    public function getPayload(): mixed
+    {
+        return $this->payload;
     }
 }

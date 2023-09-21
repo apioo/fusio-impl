@@ -21,9 +21,8 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
-use Fusio\Impl\Table;
-use PSX\DateTime\LocalDateTime;
-use PSX\Sql\Condition;
+use Fusio\Impl\Messenger\TriggerEvent;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Dispatcher
@@ -34,31 +33,15 @@ use PSX\Sql\Condition;
  */
 class Dispatcher implements DispatcherInterface
 {
-    private Table\Event $eventTable;
-    private Table\Event\Trigger $triggerTable;
+    private MessageBusInterface $messageBus;
 
-    public function __construct(Table\Event $eventTable, Table\Event\Trigger $triggerTable)
+    public function __construct(MessageBusInterface $messageBus)
     {
-        $this->eventTable   = $eventTable;
-        $this->triggerTable = $triggerTable;
+        $this->messageBus = $messageBus;
     }
 
     public function dispatch(string $eventName, mixed $payload): void
     {
-        // check whether event exists
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $eventName);
-
-        $event = $this->eventTable->findOneBy($condition);
-        if (empty($event)) {
-            throw new \RuntimeException('Invalid event name');
-        }
-
-        $row = new Table\Generated\EventTriggerRow();
-        $row->setEventId($event->getId());
-        $row->setStatus(Table\Event\Trigger::STATUS_PENDING);
-        $row->setPayload(json_encode($payload));
-        $row->setInsertDate(LocalDateTime::now());
-        $this->triggerTable->create($row);
+        $this->messageBus->dispatch(new TriggerEvent($eventName, $payload));
     }
 }

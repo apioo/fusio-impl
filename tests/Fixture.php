@@ -102,8 +102,7 @@ class Fixture
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);
         $data->addEventSubscription('foo-event', 'Administrator', 'http://www.fusio-project.org/ping');
         $data->addEventSubscription('foo-event', 'Consumer', 'http://www.fusio-project.org/ping');
-        $data->addEventTrigger('foo-event', '{"foo":"bar"}', '2018-06-02 14:24:30');
-        $data->addEventResponse(0, 0);
+        $data->addEventResponse(0);
         $data->addIdentity('Developer', 'Facebook', 'bi-facebook', Facebook::class, 'facebook-key', 'facebook-secret', 'https://www.facebook.com/v17.0/dialog/oauth', 'https://graph.facebook.com/v12.0/oauth/access_token', 'https://graph.facebook.com/v2.5/me', 'id', 'name', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'GitHub', 'bi-github', Github::class, 'github-key', 'github-secret', 'https://github.com/login/oauth/authorize', 'https://github.com/login/oauth/access_token', 'https://api.github.com/user', 'id', 'login', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'Google', 'bi-google', Google::class, 'google-key', 'google-secret', 'https://accounts.google.com/o/oauth2/v2/auth', 'https://oauth2.googleapis.com/token', 'https://openidconnect.googleapis.com/v1/userinfo', 'id', 'name', 'email', '2023-07-22 13:56:00');

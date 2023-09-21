@@ -18,42 +18,43 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Table\Event;
+namespace Fusio\Impl\Messenger;
 
-use Fusio\Impl\Table;
-use Fusio\Impl\Table\Generated;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\RequestInterface;
 
 /**
- * Trigger
+ * InvokeAction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Trigger extends Generated\EventTriggerTable
+class InvokeAction
 {
-    public const STATUS_PENDING = 1;
-    public const STATUS_DONE = 2;
+    private string|int $actionId;
+    private RequestInterface $request;
+    private ContextInterface $context;
 
-    public function getAllPending()
+    public function __construct(string|int $actionId, RequestInterface $request, ContextInterface $context)
     {
-        $sql = 'SELECT id,
-                       event_id
-                  FROM fusio_event_trigger 
-                 WHERE status = :status
-              ORDER BY id ASC';
-
-        return $this->connection->fetchAllAssociative($sql, [
-            'status' => Table\Event\Trigger::STATUS_PENDING
-        ]);
+        $this->actionId = $actionId;
+        $this->request = $request;
+        $this->context = $context;
     }
 
-    public function markDone($triggerId)
+    public function getActionId(): int|string
     {
-        return $this->connection->update('fusio_event_trigger', [
-            'status' => self::STATUS_DONE,
-        ], [
-            'id' => $triggerId,
-        ]);
+        return $this->actionId;
+    }
+
+    public function getRequest(): RequestInterface
+    {
+        return $this->request;
+    }
+
+    public function getContext(): ContextInterface
+    {
+        return $this->context;
     }
 }
