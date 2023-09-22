@@ -9,7 +9,6 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_event_response';
     public const COLUMN_ID = 'id';
-    public const COLUMN_TRIGGER_ID = 'trigger_id';
     public const COLUMN_SUBSCRIPTION_ID = 'subscription_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_CODE = 'code';
@@ -23,7 +22,7 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_TRIGGER_ID => 0x20000a, self::COLUMN_SUBSCRIPTION_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_CODE => 0x4020000a, self::COLUMN_ERROR => 0x40a000ff, self::COLUMN_ATTEMPTS => 0x20000a, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_SUBSCRIPTION_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_CODE => 0x4020000a, self::COLUMN_ERROR => 0x40a000ff, self::COLUMN_ATTEMPTS => 0x20000a, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
@@ -92,43 +91,6 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('id', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByTriggerId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('trigger_id', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByTriggerId(int $value) : ?\Fusio\Impl\Table\Generated\EventResponseRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('trigger_id', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByTriggerId(int $value, \Fusio\Impl\Table\Generated\EventResponseRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('trigger_id', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByTriggerId(int $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('trigger_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

@@ -5,9 +5,9 @@ namespace Fusio\Impl\Table\Generated;
 class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    private ?int $identityId = null;
     private ?int $roleId = null;
     private ?int $planId = null;
-    private ?int $identityId = null;
     private ?int $status = null;
     private ?string $remoteId = null;
     private ?string $externalId = null;
@@ -26,6 +26,14 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    public function setIdentityId(?int $identityId) : void
+    {
+        $this->identityId = $identityId;
+    }
+    public function getIdentityId() : ?int
+    {
+        return $this->identityId;
+    }
     public function setRoleId(int $roleId) : void
     {
         $this->roleId = $roleId;
@@ -41,14 +49,6 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getPlanId() : ?int
     {
         return $this->planId;
-    }
-    public function setIdentityId(?int $identityId) : void
-    {
-        $this->identityId = $identityId;
-    }
-    public function getIdentityId() : ?int
-    {
-        return $this->identityId;
     }
     public function setStatus(int $status) : void
     {
@@ -135,9 +135,9 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
+        $record->put('identity_id', $this->identityId);
         $record->put('role_id', $this->roleId);
         $record->put('plan_id', $this->planId);
-        $record->put('identity_id', $this->identityId);
         $record->put('status', $this->status);
         $record->put('remote_id', $this->remoteId);
         $record->put('external_id', $this->externalId);
@@ -158,9 +158,9 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
+        $row->identityId = isset($data['identity_id']) && is_int($data['identity_id']) ? $data['identity_id'] : null;
         $row->roleId = isset($data['role_id']) && is_int($data['role_id']) ? $data['role_id'] : null;
         $row->planId = isset($data['plan_id']) && is_int($data['plan_id']) ? $data['plan_id'] : null;
-        $row->identityId = isset($data['identity_id']) && is_int($data['identity_id']) ? $data['identity_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->remoteId = isset($data['remote_id']) && is_string($data['remote_id']) ? $data['remote_id'] : null;
         $row->externalId = isset($data['external_id']) && is_string($data['external_id']) ? $data['external_id'] : null;

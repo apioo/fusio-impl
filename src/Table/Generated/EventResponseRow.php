@@ -5,7 +5,6 @@ namespace Fusio\Impl\Table\Generated;
 class EventResponseRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    private ?int $triggerId = null;
     private ?int $subscriptionId = null;
     private ?int $status = null;
     private ?int $code = null;
@@ -20,14 +19,6 @@ class EventResponseRow implements \JsonSerializable, \PSX\Record\RecordableInter
     public function getId() : int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
-    }
-    public function setTriggerId(int $triggerId) : void
-    {
-        $this->triggerId = $triggerId;
-    }
-    public function getTriggerId() : int
-    {
-        return $this->triggerId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "trigger_id" was provided');
     }
     public function setSubscriptionId(int $subscriptionId) : void
     {
@@ -90,7 +81,6 @@ class EventResponseRow implements \JsonSerializable, \PSX\Record\RecordableInter
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
-        $record->put('trigger_id', $this->triggerId);
         $record->put('subscription_id', $this->subscriptionId);
         $record->put('status', $this->status);
         $record->put('code', $this->code);
@@ -108,7 +98,6 @@ class EventResponseRow implements \JsonSerializable, \PSX\Record\RecordableInter
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
-        $row->triggerId = isset($data['trigger_id']) && is_int($data['trigger_id']) ? $data['trigger_id'] : null;
         $row->subscriptionId = isset($data['subscription_id']) && is_int($data['subscription_id']) ? $data['subscription_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->code = isset($data['code']) && is_int($data['code']) ? $data['code'] : null;
