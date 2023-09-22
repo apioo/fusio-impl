@@ -85,8 +85,9 @@ class SendHttpRequestHandler
         }
 
         $existing->setStatus($status);
-        $existing->setCode($code);
         $existing->setAttempts($attempts);
+        $existing->setCode($code);
+        $existing->setBody((string) $response->getBody());
         $existing->setExecuteDate(LocalDateTime::now());
         $this->responseTable->update($existing);
 
