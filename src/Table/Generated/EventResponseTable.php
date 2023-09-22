@@ -11,9 +11,9 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
     public const COLUMN_ID = 'id';
     public const COLUMN_SUBSCRIPTION_ID = 'subscription_id';
     public const COLUMN_STATUS = 'status';
-    public const COLUMN_CODE = 'code';
-    public const COLUMN_ERROR = 'error';
     public const COLUMN_ATTEMPTS = 'attempts';
+    public const COLUMN_CODE = 'code';
+    public const COLUMN_BODY = 'body';
     public const COLUMN_EXECUTE_DATE = 'execute_date';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
@@ -22,7 +22,7 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_SUBSCRIPTION_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_CODE => 0x4020000a, self::COLUMN_ERROR => 0x40a000ff, self::COLUMN_ATTEMPTS => 0x20000a, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_SUBSCRIPTION_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ATTEMPTS => 0x20000a, self::COLUMN_CODE => 0x4020000a, self::COLUMN_BODY => 0x40b00000, self::COLUMN_EXECUTE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
@@ -171,6 +171,43 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
+    public function findByAttempts(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('attempts', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByAttempts(int $value) : ?\Fusio\Impl\Table\Generated\EventResponseRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('attempts', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByAttempts(int $value, \Fusio\Impl\Table\Generated\EventResponseRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('attempts', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByAttempts(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('attempts', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
     public function findByCode(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
@@ -208,74 +245,37 @@ class EventResponseTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByError(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    public function findByBody(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('error', $value);
+        $condition->like('body', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByError(string $value) : ?\Fusio\Impl\Table\Generated\EventResponseRow
+    public function findOneByBody(string $value) : ?\Fusio\Impl\Table\Generated\EventResponseRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('error', $value);
+        $condition->like('body', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByError(string $value, \Fusio\Impl\Table\Generated\EventResponseRow $record) : int
+    public function updateByBody(string $value, \Fusio\Impl\Table\Generated\EventResponseRow $record) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('error', $value);
+        $condition->like('body', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByError(string $value) : int
+    public function deleteByBody(string $value) : int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('error', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\EventResponseRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByAttempts(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('attempts', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByAttempts(int $value) : ?\Fusio\Impl\Table\Generated\EventResponseRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('attempts', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByAttempts(int $value, \Fusio\Impl\Table\Generated\EventResponseRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('attempts', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByAttempts(int $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('attempts', $value);
+        $condition->like('body', $value);
         return $this->doDeleteBy($condition);
     }
     /**
