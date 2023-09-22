@@ -40,9 +40,9 @@ class Response extends Generated\EventResponseTable
     {
         $sql = 'SELECT response.id,
                        response.status,
-                       response.code,
                        response.attempts,
-                       response.error,
+                       response.code,
+                       response.body,
                        response.execute_date
                   FROM fusio_event_response response
                  WHERE response.subscription_id = :id
