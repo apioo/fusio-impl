@@ -43,6 +43,6 @@ class InvokeActionHandler
 
     public function __invoke(InvokeAction $action): void
     {
-        $this->processor->execute($action->getActionId(), $action->getRequest(), $action->getContext());
+        $this->processor->execute($action->getActionId(), $action->getRequest(), $action->getContext(), false);
     }
 }
