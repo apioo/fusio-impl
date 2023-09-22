@@ -115,7 +115,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check zip file
-        $this->assertTrue(is_file(Environment::getConfig('psx_path_public') . '/sdk/sdk-client-php-default.zip'));
+        $this->assertTrue(is_file(Environment::getConfig('psx_path_public') . '/sdk/sdk-client-php-app.zip'));
     }
 
     public function testPut()
