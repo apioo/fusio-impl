@@ -569,7 +569,6 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_event');
         $schema->dropTable('fusio_event_response');
         $schema->dropTable('fusio_event_subscription');
-        $schema->dropTable('fusio_event_trigger');
         $schema->dropTable('fusio_identity');
         $schema->dropTable('fusio_identity_request');
         $schema->dropTable('fusio_log');
