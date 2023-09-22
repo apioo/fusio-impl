@@ -35,8 +35,6 @@
     "firebase/php-jwt": "^6.0",
     "symfony/filesystem": "^6.0",
     "symfony/mailer": "^6.0",
-    "symfony/messenger": "^6.0",
-    "symfony/doctrine-messenger": "^6.0",
     "apache/thrift": "^0.18",
     "dragonmantank/cron-expression": "^3.3"
   },
