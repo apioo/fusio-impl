@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Request;
+use PSX\Json\Parser;
 use PSX\Uri\Url;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -66,7 +67,7 @@ class SendHttpRequestHandler
             'User-Agent'   => Base::getUserAgent(),
         ];
 
-        $request  = new Request(Url::parse($httpRequest->getEndpoint()), 'POST', $headers, $httpRequest->getPayload());
+        $request  = new Request(Url::parse($httpRequest->getEndpoint()), 'POST', $headers, Parser::encode($httpRequest->getPayload()));
         $response = $this->httpClient->request($request);
 
         $code     = $response->getStatusCode();
@@ -84,6 +85,7 @@ class SendHttpRequestHandler
         }
 
         $existing->setStatus($status);
+        $existing->setCode($code);
         $existing->setAttempts($attempts);
         $existing->setExecuteDate(LocalDateTime::now());
         $this->responseTable->update($existing);
