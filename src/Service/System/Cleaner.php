@@ -42,6 +42,7 @@ class Cleaner
     {
         $this->cleanUpExpiredTokens();
         $this->cleanUpIdentityRequests();
+        $this->cleanUpEventResponses();
     }
 
     private function cleanUpExpiredTokens(): void
@@ -55,6 +56,13 @@ class Cleaner
     {
         $this->connection->executeStatement('DELETE FROM fusio_identity_request WHERE insert_date < :now', [
             'now' => (new \DateTime('yesterday'))->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpEventResponses(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_event_response WHERE insert_date < :now', [
+            'now' => (new \DateTime('last month'))->format('Y-m-d H:i:s'),
         ]);
     }
 }
