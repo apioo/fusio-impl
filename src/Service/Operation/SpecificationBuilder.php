@@ -26,6 +26,7 @@ use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
+use PSX\Schema\Parser\Context\NamespaceContext;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
@@ -93,7 +94,7 @@ class SpecificationBuilder
             throw new \RuntimeException('Provided no outgoing schema');
         }
 
-        $schema = $this->schemaManager->getSchema($outgoing);
+        $schema = $this->getSchema($outgoing);
         $name = $this->getNameForSchema($outgoing, $schema);
 
         $definitions->addSchema($name, $schema);
@@ -109,7 +110,7 @@ class SpecificationBuilder
 
         $incoming = $row->getIncoming();
         if (!empty($incoming)) {
-            $schema = $this->schemaManager->getSchema($incoming);
+            $schema = $this->getSchema($incoming);
             $name = $this->getNameForSchema($incoming, $schema);
 
             $definitions->addSchema($name, $schema);
@@ -137,7 +138,7 @@ class SpecificationBuilder
 
         $result = [];
         foreach ($throws as $httpCode => $throw) {
-            $schema = $this->schemaManager->getSchema($throw);
+            $schema = $this->getSchema($throw);
             $name = $this->getNameForSchema($throw, $schema);
 
             $definitions->addSchema($name, $schema);
@@ -218,5 +219,15 @@ class SpecificationBuilder
         }
 
         return $tags;
+    }
+
+    private function getSchema(string $schema): SchemaInterface
+    {
+        $context = null;
+        if (str_starts_with($schema, 'php+class://Fusio.Model')) {
+            $context = new NamespaceContext(2);
+        }
+
+        return $this->schemaManager->getSchema($schema, $context);
     }
 }
