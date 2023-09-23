@@ -19,8 +19,17 @@ final class Version20230922194158 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        if ($schema->hasTable('fusio_action_queue')) {
+            $schema->dropTable('fusio_action_queue');
+        }
+
+        if ($schema->hasTable('fusio_event_trigger')) {
+            $schema->dropTable('fusio_event_trigger');
+        }
+
         $eventResponseTable = $schema->getTable('fusio_event_response');
         if (!$eventResponseTable->hasColumn('body')) {
+            $eventResponseTable->removeForeignKey('event_response_trigger_id');
             $eventResponseTable->dropColumn('trigger_id');
             $eventResponseTable->dropColumn('error');
             $eventResponseTable->addColumn('body', 'text', ['notnull' => false]);
