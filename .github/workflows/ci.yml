@@ -63,3 +63,28 @@ jobs:
         env:
           APP_CONNECTION: ${{ matrix.connection }}
         run: vendor/bin/phpunit
+  typehub:
+    name: TypeHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: none
+      - name: Setup MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE typehub;" -uroot -proot
+          mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test1234';" -uroot -proot
+      - name: Composer install
+        run: composer install --no-interaction --no-ansi --no-progress
+      - name: Setup Fusio
+        run: |
+          php bin/fusio migrate --no-interaction
+          php bin/fusio adduser --role=1 --username=test --email=test@test.com --password=test1234!
+          php bin/fusio login --username=test --password=test1234!
+          php bin/fusio deploy
+          php bin/fusio api:push sdk --client_id="${{ secrets.TYPEHUB_CLIENT_ID }}" --client_secret="${{ secrets.TYPEHUB_CLIENT_SECRET }}"
