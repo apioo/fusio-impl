@@ -86,7 +86,4 @@ jobs:
           APP_CONNECTION: 'pdo-mysql://root:test1234@localhost/fusio'
         run: |
           php bin/fusio migrate --no-interaction
-          php bin/fusio adduser --role=1 --username=test --email=test@test.com --password=test1234!
-          php bin/fusio login --username=test --password=test1234!
-          php bin/fusio deploy
           php bin/fusio api:push sdk --client_id="${{ secrets.TYPEHUB_CLIENT_ID }}" --client_secret="${{ secrets.TYPEHUB_CLIENT_SECRET }}" --filter=fusio
