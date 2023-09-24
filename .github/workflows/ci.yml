@@ -77,14 +77,16 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE typehub;" -uroot -proot
+          mysql -e "CREATE DATABASE fusio;" -uroot -proot
           mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test1234';" -uroot -proot
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Setup Fusio
+        env:
+          APP_CONNECTION: 'pdo-mysql://root:test1234@localhost/fusio'
         run: |
           php bin/fusio migrate --no-interaction
           php bin/fusio adduser --role=1 --username=test --email=test@test.com --password=test1234!
           php bin/fusio login --username=test --password=test1234!
           php bin/fusio deploy
-          php bin/fusio api:push sdk --client_id="${{ secrets.TYPEHUB_CLIENT_ID }}" --client_secret="${{ secrets.TYPEHUB_CLIENT_SECRET }}"
+          php bin/fusio api:push sdk --client_id="${{ secrets.TYPEHUB_CLIENT_ID }}" --client_secret="${{ secrets.TYPEHUB_CLIENT_SECRET }}" --filter=fusio
