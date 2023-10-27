@@ -106,7 +106,7 @@ class Token
         return new AccessToken(
             $accessToken,
             'bearer',
-            $expires->getTimestamp(),
+            $expires->getTimestamp() - $now->getTimestamp(),
             $refreshToken,
             implode(',', $scopes),
             $state
@@ -167,7 +167,7 @@ class Token
         return new AccessToken(
             $accessToken,
             'bearer',
-            $expires->getTimestamp(),
+            $expires->getTimestamp() - $now->getTimestamp(),
             $refreshToken,
             implode(',', $scopes)
         );

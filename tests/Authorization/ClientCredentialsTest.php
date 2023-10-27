@@ -197,7 +197,7 @@ JSON;
         $this->assertArrayHasKey('token_type', $data);
         $this->assertEquals('bearer', $data['token_type']);
         $this->assertArrayHasKey('expires_in', $data);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
+        $this->assertEquals(172800, $data['expires_in']);
         $this->assertArrayHasKey('scope', $data);
         $this->assertEquals($scope, $data['scope']);
 
