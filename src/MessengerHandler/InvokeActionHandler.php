@@ -18,42 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Table\Event;
+namespace Fusio\Impl\MessengerHandler;
 
-use Fusio\Impl\Table;
-use Fusio\Impl\Table\Generated;
+use Fusio\Engine\Processor;
+use Fusio\Impl\Messenger\InvokeAction;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
- * Trigger
+ * InvokeActionHandler
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Trigger extends Generated\EventTriggerTable
+#[AsMessageHandler]
+class InvokeActionHandler
 {
-    public const STATUS_PENDING = 1;
-    public const STATUS_DONE = 2;
+    private Processor $processor;
 
-    public function getAllPending()
+    public function __construct(Processor $processor)
     {
-        $sql = 'SELECT id,
-                       event_id
-                  FROM fusio_event_trigger 
-                 WHERE status = :status
-              ORDER BY id ASC';
-
-        return $this->connection->fetchAllAssociative($sql, [
-            'status' => Table\Event\Trigger::STATUS_PENDING
-        ]);
+        $this->processor = $processor;
     }
 
-    public function markDone($triggerId)
+    public function __invoke(InvokeAction $action): void
     {
-        return $this->connection->update('fusio_event_trigger', [
-            'status' => self::STATUS_DONE,
-        ], [
-            'id' => $triggerId,
-        ]);
+        $this->processor->execute($action->getActionId(), $action->getRequest(), $action->getContext(), false);
     }
 }

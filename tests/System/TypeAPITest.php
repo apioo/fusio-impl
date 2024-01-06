@@ -60,11 +60,8 @@ class TypeAPITest extends ControllerDbTestCase
     public function providerFilter(): array
     {
         return [
-            ['default'],
-            ['backend'],
-            ['consumer'],
-            ['system'],
-            ['authorization'],
+            ['app'],
+            ['fusio'],
         ];
     }
 }

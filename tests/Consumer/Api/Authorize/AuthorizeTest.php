@@ -222,7 +222,7 @@ JSON;
         $this->assertTrue(is_array($data['token']), $body);
         $this->assertNotEmpty($data['token']['access_token'], $body);
         $this->assertEquals('bearer', $data['token']['token_type'], $body);
-        $this->assertContains($data['token']['expires_in'], $this->getExpireTimes(), $body);
+        $this->assertEquals(172800, $data['token']['expires_in'], $body);
         $this->assertEquals('authorization,foo,bar', $data['token']['scope'], $body);
 
         // add state parameter which should be added by the server if available

@@ -34,9 +34,10 @@ class Subscription extends Generated\EventSubscriptionTable
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
 
-    public function getSubscriptionsForEvent($eventId): array
+    public function getSubscriptionsForEvent(int $eventId): array
     {
-        $sql = 'SELECT id
+        $sql = 'SELECT id,
+                       endpoint
                   FROM fusio_event_subscription
                  WHERE event_id = :event_id
                    AND status = :status
@@ -48,14 +49,14 @@ class Subscription extends Generated\EventSubscriptionTable
         ]);
     }
 
-    public function getSubscriptionCount($userId): int
+    public function getSubscriptionCount(int $userId): int
     {
         return (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE user_id = :user_id', [
             'user_id' => $userId
         ]);
     }
 
-    public function deleteAllResponses($subscriptionId): void
+    public function deleteAllResponses(int $subscriptionId): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_event_response WHERE subscription_id = :subscription_id', [
             'subscription_id' => $subscriptionId

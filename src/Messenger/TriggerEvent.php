@@ -18,39 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Event;
-
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Event;
+namespace Fusio\Impl\Messenger;
 
 /**
- * Execute
+ * TriggerEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Execute implements ActionInterface
+class TriggerEvent
 {
-    private Event\Executor $executor;
+    private string $eventName;
+    private mixed $payload;
 
-    public function __construct(Event\Executor $executor)
+    public function __construct(string $eventName, mixed $payload)
     {
-        $this->executor = $executor;
+        $this->eventName = $eventName;
+        $this->payload = $payload;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getEventName(): string
     {
-        $this->executor->execute();
+        return $this->eventName;
+    }
 
-        return [
-            'success' => true,
-            'message' => 'Event successful executed',
-        ];
+    public function getPayload(): mixed
+    {
+        return $this->payload;
     }
 }

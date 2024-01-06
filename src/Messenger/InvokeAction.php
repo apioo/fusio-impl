@@ -18,29 +18,43 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Webhook;
+namespace Fusio\Impl\Messenger;
+
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\RequestInterface;
 
 /**
- * SenderInterface
+ * InvokeAction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface SenderInterface
+class InvokeAction
 {
-    /**
-     * Returns whether the sender supports this dispatcher instance
-     * 
-     * @param object $dispatcher
-     * @return boolean
-     */
-    public function accept(object $dispatcher): bool;
+    private string|int $actionId;
+    private RequestInterface $request;
+    private ContextInterface $context;
 
-    /**
-     * Sends an event using the dispatcher. The dispatcher is by default an http client but it also possible to
-     * configure another dispatcher by using the name of an connection. Through this it would be possible to dispatch
-     * events using different message queue systems. By default the sender can handle
-     */
-    public function send(object $dispatcher, Message $message): int;
+    public function __construct(string|int $actionId, RequestInterface $request, ContextInterface $context)
+    {
+        $this->actionId = $actionId;
+        $this->request = $request;
+        $this->context = $context;
+    }
+
+    public function getActionId(): int|string
+    {
+        return $this->actionId;
+    }
+
+    public function getRequest(): RequestInterface
+    {
+        return $this->request;
+    }
+
+    public function getContext(): ContextInterface
+    {
+        return $this->context;
+    }
 }

@@ -18,39 +18,35 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Webhook\Sender;
+namespace Fusio\Impl\Framework\Api\Scanner;
 
-use Fusio\Impl\Base;
-use Fusio\Impl\Webhook\Message;
-use Fusio\Impl\Webhook\SenderInterface;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Request;
-use PSX\Uri\Url;
+use PSX\Api\OperationInterface;
+use PSX\Api\Scanner\FilterInterface;
 
 /**
- * HTTP
+ * Filter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HTTP implements SenderInterface
+class CategoryFilter implements FilterInterface
 {
-    public function accept(object $dispatcher): bool
+    private int $id;
+
+    public function __construct(int $id)
     {
-        return $dispatcher instanceof ClientInterface;
+        $this->id = $id;
     }
 
-    public function send(object $dispatcher, Message $message): int
+    public function match(OperationInterface $operation): bool
     {
-        $headers = [
-            'Content-Type' => 'application/json',
-            'User-Agent'   => Base::getUserAgent(),
-        ];
+        // we dont need to filter any values since we already filter at the query
+        return true;
+    }
 
-        $request  = new Request(Url::parse($message->getEndpoint()), 'POST', $headers, $message->getPayload());
-        $response = $dispatcher->request($request);
-
-        return $response->getStatusCode();
+    public function getId(): string
+    {
+        return '' . $this->id;
     }
 }

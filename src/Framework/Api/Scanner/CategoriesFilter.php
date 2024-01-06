@@ -18,37 +18,40 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Action\Queue;
+namespace Fusio\Impl\Framework\Api\Scanner;
 
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\RequestInterface;
+use PSX\Api\OperationInterface;
+use PSX\Api\Scanner\FilterInterface;
 
 /**
- * Serializer
+ * GroupFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Serializer
+class CategoriesFilter implements FilterInterface
 {
-    public static function serializeRequest(RequestInterface $request): string
+    private array $ids;
+
+    public function __construct(array $ids)
     {
-        return serialize($request);
+        $this->ids = $ids;
     }
 
-    public static function unserializeRequest(string $data): RequestInterface
+    public function match(OperationInterface $operation): bool
     {
-        return unserialize($data);
+        // we dont need to filter any values since we already filter at the query
+        return true;
     }
 
-    public static function serializeContext(ContextInterface $context): string
+    public function getId(): string
     {
-        return serialize($context);
+        return implode(',', $this->ids);
     }
 
-    public static function unserializeContext(string $data): ContextInterface
+    public function getIds(): array
     {
-        return unserialize($data);
+        return $this->ids;
     }
 }

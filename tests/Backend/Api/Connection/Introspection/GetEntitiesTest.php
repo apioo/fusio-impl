@@ -51,7 +51,6 @@ class GetEntitiesTest extends ControllerDbTestCase
         "app_news",
         "doctrine_migration_versions",
         "fusio_action",
-        "fusio_action_queue",
         "fusio_app",
         "fusio_app_code",
         "fusio_app_scope",
@@ -65,7 +64,6 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_event",
         "fusio_event_response",
         "fusio_event_subscription",
-        "fusio_event_trigger",
         "fusio_identity",
         "fusio_identity_request",
         "fusio_log",
@@ -85,7 +83,8 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_transaction",
         "fusio_user",
         "fusio_user_grant",
-        "fusio_user_scope"
+        "fusio_user_scope",
+        "messenger_messages"
     ]
 }
 JSON;

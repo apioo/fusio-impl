@@ -38,11 +38,14 @@ class MostUsedApps extends ViewAbstract
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most used apps and build data structure
-        $sql = '  SELECT log.app_id
+        $sql = '  SELECT log.app_id,
+                         app.name
                     FROM fusio_log log
+              INNER JOIN fusio_app app
+                      ON log.app_id = app.id
                    WHERE ' . $expression . '
                      AND log.app_id IS NOT NULL
-                GROUP BY log.app_id
+                GROUP BY log.app_id, app.name
                 ORDER BY COUNT(log.app_id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
@@ -56,7 +59,7 @@ class MostUsedApps extends ViewAbstract
             $appIds[] = $row['app_id'];
 
             $data[$row['app_id']] = [];
-            $series[$row['app_id']] = null;
+            $series[$row['app_id']] = $row['name'];
 
             $fromDate = $filter->getFrom();
             $toDate   = $filter->getTo();
@@ -76,19 +79,15 @@ class MostUsedApps extends ViewAbstract
 
         $sql = '    SELECT COUNT(log.id) AS cnt,
                            log.app_id,
-                           app.name,
                            DATE(log.date) AS date
                       FROM fusio_log log
-                INNER JOIN fusio_app app
-                        ON log.app_id = app.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.app_id, app.name';
+                  GROUP BY DATE(log.date), log.app_id';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['app_id']][$row['date']])) {
-                $series[$row['app_id']] = $row['name'];
                 $data[$row['app_id']][$row['date']] = (int) $row['cnt'];
             }
         }

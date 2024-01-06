@@ -139,7 +139,7 @@ class UpgradeCommand extends Command
 
         $operationScopeName = 'backend.operation';
         $operationScopeId = (int) $this->connection->fetchOne('SELECT id FROM fusio_scope WHERE name = :name', ['name' => $operationScopeName]);
-        if (!empty($operationScopeId)) {
+        if (empty($operationScopeId)) {
             $this->connection->insert('fusio_scope', [
                 'category_id' => 2,
                 'status' => 1,
@@ -149,9 +149,16 @@ class UpgradeCommand extends Command
             $operationScopeId = (int) $this->connection->lastInsertId();
 
             $output->writeln('Added backend operation scope ' . $operationScopeId);
+        }
 
-            $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE name LIKE :name', ['name' => 'backend.operation.%']);
-            foreach ($operationIds as $operationId) {
+        $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE name LIKE :name', ['name' => 'backend.operation.%']);
+        foreach ($operationIds as $operationId) {
+            $scopeOperationId = $this->connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope_id AND operation_id = :operation_id', [
+                'scope_id' => $operationScopeId,
+                'operation_id' => $operationId,
+            ]);
+
+            if (empty($scopeOperationId)) {
                 $this->connection->insert('fusio_scope_operation', [
                     'scope_id' => $operationScopeId,
                     'operation_id' => $operationId,

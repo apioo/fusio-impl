@@ -251,6 +251,92 @@
       },
       "parameters": []
     },
+    "/authorization/whoami": {
+      "get": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "authorization.getWhoami",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Backend_User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/authorization/revoke": {
+      "post": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "authorization.revoke",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "/": {
       "get": {
         "operationId": "meta.getAbout",
@@ -260,7 +346,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/About"
+                  "$ref": "#/components/schemas/System_About"
                 }
               }
             }
@@ -272,7 +358,194 @@
   },
   "components": {
     "schemas": {
-      "About": {
+      "Backend_App": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Common_Metadata"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Backend_AppToken"
+            }
+          }
+        }
+      },
+      "Backend_AppToken": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ip": {
+            "type": "string"
+          },
+          "expire": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Backend_User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "roleId": {
+            "type": "integer"
+          },
+          "planId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          },
+          "email": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Backend_App"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Common_Metadata"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Collection": {
+        "title": "collection",
+        "type": "object",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "itemsPerPage": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "$ref": "#/components/schemas/Entry"
+          }
+        }
+      },
+      "Common_Message": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Common_Metadata": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Entry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Passthru": {
+        "description": "No schema information available",
+        "type": "object",
+        "additionalProperties": []
+      },
+      "System_About": {
         "type": "object",
         "properties": {
           "apiVersion": {
@@ -318,23 +591,23 @@
             }
           },
           "apps": {
-            "$ref": "#/components/schemas/AboutApps"
+            "$ref": "#/components/schemas/System_AboutApps"
           },
           "links": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AboutLink"
+              "$ref": "#/components/schemas/System_AboutLink"
             }
           }
         }
       },
-      "AboutApps": {
+      "System_AboutApps": {
         "type": "object",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "AboutLink": {
+      "System_AboutLink": {
         "type": "object",
         "properties": {
           "rel": {
@@ -344,47 +617,6 @@
             "type": "string"
           }
         }
-      },
-      "Collection": {
-        "title": "collection",
-        "type": "object",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "itemsPerPage": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "$ref": "#/components/schemas/Entry"
-          }
-        }
-      },
-      "Entry": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "date": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "Passthru": {
-        "description": "No schema information available",
-        "type": "object",
-        "additionalProperties": []
       }
     },
     "securitySchemes": {

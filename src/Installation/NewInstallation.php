@@ -119,8 +119,6 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 900, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false);
-        $bag->addCronjob('backend', 'Execute_Async', '* * * * *', Scheme::wrap(Backend\Action\Action\Async::class));
-        $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', Scheme::wrap(Backend\Action\Event\Execute::class));
         $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', Scheme::wrap(Backend\Action\Connection\RenewToken::class));
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');

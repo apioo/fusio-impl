@@ -143,7 +143,6 @@ class OpenAPI implements ProviderInterface
         $create->setName($operationId);
         $create->setHttpMethod($operation->getMethod());
         $create->setHttpPath($this->normalizePath($operation->getPath()));
-        $create->setHttpPath($this->normalizePath($operation->getPath()));
         $create->setHttpCode($operation->getReturn()->getCode());
         $create->setParameters($this->getArguments($operation));
         $create->setIncoming($this->getIncoming($operation));

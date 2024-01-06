@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Action\Queue;
+namespace Fusio\Impl\Service\Action;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Engine\Action\QueueInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Table\Generated\ActionQueueTable;
+use Fusio\Impl\Messenger\InvokeAction;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Producer
@@ -35,20 +35,15 @@ use Fusio\Impl\Table\Generated\ActionQueueTable;
  */
 class Producer implements QueueInterface
 {
-    private Connection $connection;
+    private MessageBusInterface $messageBus;
 
-    public function __construct(Connection $connection)
+    public function __construct(MessageBusInterface $messageBus)
     {
-        $this->connection = $connection;
+        $this->messageBus = $messageBus;
     }
 
     public function push(string|int $actionId, RequestInterface $request, ContextInterface $context): void
     {
-        $this->connection->insert(ActionQueueTable::NAME, [
-            ActionQueueTable::COLUMN_ACTION => $actionId,
-            ActionQueueTable::COLUMN_REQUEST => Serializer::serializeRequest($request),
-            ActionQueueTable::COLUMN_CONTEXT => Serializer::serializeContext($context),
-            ActionQueueTable::COLUMN_DATE => (new \DateTime())->format('Y-m-d H:i:s'),
-        ]);
+        $this->messageBus->dispatch(new InvokeAction($actionId, $request, $context));
     }
 }

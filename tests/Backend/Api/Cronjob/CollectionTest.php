@@ -52,7 +52,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
@@ -85,7 +85,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
@@ -118,7 +118,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 4,
+            "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
@@ -174,7 +174,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(3, $row['id']);
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
         $this->assertEquals('Sql-Table', $row['action']);

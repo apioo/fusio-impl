@@ -18,39 +18,40 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Action;
-
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Action\Queue\Consumer;
+namespace Fusio\Impl\Messenger;
 
 /**
- * Async
+ * SendHttpRequest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Async implements ActionInterface
+class SendHttpRequest
 {
-    private Consumer $consumer;
+    private int $responseId;
+    private string $endpoint;
+    private mixed $payload;
 
-    public function __construct(Consumer $consumer)
+    public function __construct(int $responseId, string $endpoint, mixed $payload)
     {
-        $this->consumer = $consumer;
+        $this->responseId = $responseId;
+        $this->endpoint = $endpoint;
+        $this->payload = $payload;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getResponseId(): int
     {
-        $this->consumer->execute();
+        return $this->responseId;
+    }
 
-        return [
-            'success' => true,
-            'message' => 'Consumer successful executed',
-        ];
+    public function getEndpoint(): string
+    {
+        return $this->endpoint;
+    }
+
+    public function getPayload(): mixed
+    {
+        return $this->payload;
     }
 }

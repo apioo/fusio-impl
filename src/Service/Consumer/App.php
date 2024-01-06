@@ -59,7 +59,10 @@ class App
         $this->assertUrl($app->getUrl());
         $this->assertMaxAppCount($context->getUserId());
 
-        $scopes = $this->getValidUserScopes($context->getUserId(), $app->getScopes());
+        $rawScopes = $app->getScopes() ?? [];
+        $rawScopes[] = 'authorization'; // automatically add the authorization scope which a user can not select
+
+        $scopes = $this->getValidUserScopes($context->getUserId(), $rawScopes);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }

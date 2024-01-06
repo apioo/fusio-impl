@@ -83,7 +83,7 @@ class TokenCommand extends Command
 
         $expiresIn = $accessToken->getExpiresIn();
         if (isset($expiresIn)) {
-            $response['Expires'] = date('Y-m-d', $expiresIn);
+            $response['Expires'] = $expiresIn;
         }
 
         $scope = $accessToken->getScope();

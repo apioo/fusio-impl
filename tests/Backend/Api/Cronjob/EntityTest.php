@@ -40,7 +40,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/cronjob/4', 'GET', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -48,7 +48,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 4,
+    "id": 2,
     "status": 1,
     "name": "Test-Cron",
     "cron": "* * * * *",
@@ -83,13 +83,16 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 4,
+    "id": 2,
     "status": 1,
     "name": "Test-Cron",
     "cron": "* * * * *",
     "action": "Sql-Select-All",
     "executeDate": "2015-02-27T19:59:15Z",
     "exitCode": 0,
+    "metadata": {
+        "foo": "bar"
+    },
     "errors": [
         {
             "message": "Syntax error, malformed JSON",
@@ -97,10 +100,7 @@ JSON;
             "file": "[file]",
             "line": 74
         }
-    ],
-    "metadata": {
-        "foo": "bar"
-    }
+    ]
 }
 JSON;
 
@@ -125,7 +125,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/cronjob/4', 'POST', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -143,7 +143,7 @@ JSON;
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/cronjob/4', 'PUT', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -171,9 +171,9 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => 4]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(2, $row['id']);
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
         $this->assertEquals('Inspect', $row['action']);
@@ -182,7 +182,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/cronjob/4', 'DELETE', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -202,12 +202,12 @@ JSON;
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_cronjob')
-            ->where('id = 4')
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(2, $row['id']);
         $this->assertEquals(Table\Cronjob::STATUS_DELETED, $row['status']);
     }
 }

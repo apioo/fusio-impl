@@ -38,12 +38,15 @@ class MostUsedOperations extends ViewAbstract
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most used routes and build data structure
-        $sql = '  SELECT log.operation_id
+        $sql = '  SELECT log.operation_id,
+                         operation.name
                     FROM fusio_log log
+              INNER JOIN fusio_operation operation
+                      ON log.operation_id = operation.id
                    WHERE log.category_id = ?
                      AND log.operation_id IS NOT NULL
                      AND ' . $expression . '
-                GROUP BY log.operation_id
+                GROUP BY log.operation_id, operation.name
                 ORDER BY COUNT(log.operation_id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
@@ -57,7 +60,7 @@ class MostUsedOperations extends ViewAbstract
             $operationIds[] = $row['operation_id'];
 
             $data[$row['operation_id']] = [];
-            $series[$row['operation_id']] = null;
+            $series[$row['operation_id']] = $row['name'];
 
             $fromDate = $filter->getFrom();
             $toDate   = $filter->getTo();
@@ -77,19 +80,15 @@ class MostUsedOperations extends ViewAbstract
 
         $sql = '    SELECT COUNT(log.id) AS cnt,
                            log.operation_id,
-                           operation.name,
                            DATE(log.date) AS date
                       FROM fusio_log log
-                INNER JOIN fusio_operation operation
-                        ON log.operation_id = operation.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.operation_id, operation.name';
+                  GROUP BY DATE(log.date), log.operation_id';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['operation_id']][$row['date']])) {
-                $series[$row['operation_id']] = $row['name'];
                 $data[$row['operation_id']][$row['date']] = (int) $row['cnt'];
             }
         }

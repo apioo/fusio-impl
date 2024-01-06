@@ -60,7 +60,7 @@ class TokenCommandTest extends ControllerDbTestCase
         $this->assertEquals('Backend', $data['App']);
         $this->assertEquals('Administrator', $data['User']);
         $this->assertNotEmpty($data['Token']);
-        $this->assertEquals(date('Y-m-d', strtotime('+1 month')), $data['Expires']);
+        $this->assertEquals(2678400, $data['Expires']);
         $this->assertEquals('backend,authorization', $data['Scope']);
     }
 }

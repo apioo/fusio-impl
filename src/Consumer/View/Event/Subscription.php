@@ -82,10 +82,11 @@ class Subscription extends ViewAbstract
             'event' => 'name',
             'endpoint' => 'endpoint',
             'responses' => $builder->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
-                'status' => $builder->fieldInteger('status'),
-                'code' => $builder->fieldInteger('code'),
-                'attempts' => $builder->fieldInteger('attempts'),
-                'executeDate' => $builder->fieldDateTime('execute_date'),
+                'status' => $builder->fieldInteger(Table\Generated\EventResponseTable::COLUMN_STATUS),
+                'attempts' => $builder->fieldInteger(Table\Generated\EventResponseTable::COLUMN_ATTEMPTS),
+                'code' => $builder->fieldInteger(Table\Generated\EventResponseTable::COLUMN_CODE),
+                'body' => $builder->fieldInteger(Table\Generated\EventResponseTable::COLUMN_BODY),
+                'executeDate' => $builder->fieldDateTime(Table\Generated\EventResponseTable::COLUMN_EXECUTE_DATE),
             ]),
         ]);
 

@@ -65,7 +65,6 @@ class DataBag
             'fusio_app_token' => [],
             'fusio_cronjob_error' => [],
             'fusio_event_subscription' => [],
-            'fusio_event_trigger' => [],
             'fusio_event_response' => [],
             'fusio_log_error' => [],
             'fusio_plan_usage' => [],
@@ -331,10 +330,9 @@ class DataBag
         ];
     }
 
-    public function addEventResponse(int $trigger, int $subscription, ?string $executeDate = null, ?string $insertDate = null): void
+    public function addEventResponse(int $subscription, ?string $executeDate = null, ?string $insertDate = null): void
     {
         $this->data['fusio_event_response'][] = [
-            'trigger_id' => $this->getId('fusio_event_trigger', $trigger),
             'subscription_id' => $this->getId('fusio_event_subscription', $subscription),
             'status' => 2,
             'code' => 200,
@@ -385,16 +383,6 @@ class DataBag
             'user_id' => $this->getId('fusio_user', $user),
             'status' => 1,
             'endpoint' => $endpoint
-        ];
-    }
-
-    public function addEventTrigger(string $event, string $payload, ?string $date = null): void
-    {
-        $this->data['fusio_event_trigger'][] = [
-            'event_id' => $this->getId('fusio_event', $event),
-            'status' => 2,
-            'payload' => $payload,
-            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
