@@ -1,7 +1,8 @@
 name: TypeHub
 on:
-  - pull_request
-  - push
+  push:
+    branches:
+      - master
 jobs:
   typehub:
     name: TypeHub
