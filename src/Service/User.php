@@ -127,7 +127,7 @@ class User
         }
 
         // replace spaces with a dot
-        $name = str_replace(' ', '.', $userInfo->getName());
+        $name = str_replace(' ', '_', $userInfo->getName());
 
         // check values
         $this->validator->assertName($name);
