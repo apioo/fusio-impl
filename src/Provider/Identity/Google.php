@@ -23,6 +23,8 @@ namespace Fusio\Impl\Provider\Identity;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Identity\ProviderAbstract;
+use Fusio\Engine\ParametersInterface;
+use PSX\Uri\Uri;
 
 /**
  * Google
@@ -52,5 +54,30 @@ class Google extends ProviderAbstract
     public function getUserInfoUri(): ?string
     {
         return 'https://openidconnect.googleapis.com/v1/userinfo';
+    }
+
+    public function getRedirectUri(ParametersInterface $configuration, string $state, string $redirectUri): Uri
+    {
+        $uri = parent::getRedirectUri($configuration, $state, $redirectUri);
+
+        $parameters = $uri->getParameters();
+        $parameters['scope'] = 'openid%20profile%20email';
+
+        return $uri->withParameters($parameters);
+    }
+
+    protected function getIdProperty(): string
+    {
+        return 'sub';
+    }
+
+    protected function getNameProperty(): string
+    {
+        return 'name';
+    }
+
+    protected function getEmailProperty(): string
+    {
+        return 'email';
     }
 }
