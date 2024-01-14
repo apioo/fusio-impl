@@ -25,6 +25,7 @@ use Fusio\Impl\Table;
 use PSX\Api\ConfiguratorInterface;
 use PSX\Api\Generator;
 use PSX\Api\Scanner\FilterInterface;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * OpenAPI
@@ -39,11 +40,11 @@ class OpenAPI implements ConfiguratorInterface
     private Service\Config $configService;
     private string $baseUrl;
 
-    public function __construct(Table\Scope $scopeTable, Service\Config $configService, string $url, string $dispatch)
+    public function __construct(Table\Scope $scopeTable, Service\Config $configService, ConfigInterface $config)
     {
         $this->scopeTable    = $scopeTable;
         $this->configService = $configService;
-        $this->baseUrl       = $url . '/' . $dispatch;
+        $this->baseUrl       = $config->get('psx_url') . '/' . $config->get('psx_dispatch');
     }
 
     public function accept(object $generator): bool

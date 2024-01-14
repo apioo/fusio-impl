@@ -123,9 +123,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(Framework\Api\Scanner\FilterFactory::class);
     $services->alias(Api\Scanner\FilterFactoryInterface::class, Framework\Api\Scanner\FilterFactory::class);
 
-    $services->set(Framework\Api\Configurator\OpenAPI::class)
-        ->arg('$url', param('psx_url'))
-        ->arg('$dispatch', param('psx_dispatch'));
+    $services->set(Framework\Api\Configurator\OpenAPI::class);
+    $services->set(Framework\Api\Configurator\TypeAPI::class);
 
     $services->set(Framework\Schema\Parser\Schema::class);
     $services->get(Schema\SchemaManager::class)
