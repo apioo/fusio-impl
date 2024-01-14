@@ -1,570 +1,579 @@
 {
-    "baseUrl": "http://127.0.0.1/",
-    "security": null,
-    "operations": {
-        "inspect.delete": {
-            "path": "/inspect/:foo",
-            "method": "DELETE",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "foo": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "bar"
-            ]
-        },
-        "inspect.patch": {
-            "path": "/inspect/:foo",
-            "method": "PATCH",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "foo": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "bar"
-            ]
-        },
-        "inspect.put": {
-            "path": "/inspect/:foo",
-            "method": "PUT",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "foo": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "bar"
-            ]
-        },
-        "inspect.post": {
-            "path": "/inspect/:foo",
-            "method": "POST",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "foo": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "foo",
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "foo",
-                "bar"
-            ]
-        },
-        "inspect.get": {
-            "path": "/inspect/:foo",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "foo": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                },
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Passthru"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "foo",
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "foo",
-                "bar"
-            ]
-        },
-        "test.createFoo": {
-            "path": "/foo",
-            "method": "POST",
-            "return": {
-                "code": 201,
-                "schema": {
-                    "$ref": "Passthru"
-                }
-            },
-            "arguments": {
-                "payload": {
-                    "in": "body",
-                    "schema": {
-                        "$ref": "Entry"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "bar"
-            ],
-            "authorization": true,
-            "tags": [
-                "bar"
-            ]
-        },
-        "test.listFoo": {
-            "path": "/foo",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Collection"
-                }
-            },
-            "arguments": [],
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": [
-                "bar"
-            ]
-        },
-        "authorization.getWhoami": {
-            "path": "/authorization/whoami",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Backend_User"
-                }
-            },
-            "arguments": [],
-            "throws": [
-                {
-                    "code": 500,
-                    "schema": {
-                        "$ref": "Common_Message"
-                    }
-                }
-            ],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "authorization"
-            ],
-            "authorization": true,
-            "tags": [
-                "authorization"
-            ]
-        },
-        "authorization.revoke": {
-            "path": "/authorization/revoke",
-            "method": "POST",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "Common_Message"
-                }
-            },
-            "arguments": [],
-            "throws": [
-                {
-                    "code": 400,
-                    "schema": {
-                        "$ref": "Common_Message"
-                    }
-                },
-                {
-                    "code": 500,
-                    "schema": {
-                        "$ref": "Common_Message"
-                    }
-                }
-            ],
-            "description": "",
-            "stability": 1,
-            "security": [
-                "authorization"
-            ],
-            "authorization": true,
-            "tags": [
-                "authorization"
-            ]
-        },
-        "meta.getAbout": {
-            "path": "/",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "$ref": "System_About"
-                }
-            },
-            "arguments": [],
-            "throws": [],
-            "description": "",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        }
-    },
-    "definitions": {
-        "Backend_App": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "userId": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string",
-                    "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-                },
-                "url": {
-                    "type": "string"
-                },
-                "parameters": {
-                    "type": "string"
-                },
-                "appKey": {
-                    "type": "string"
-                },
-                "appSecret": {
-                    "type": "string"
-                },
-                "metadata": {
-                    "$ref": "Common_Metadata"
-                },
-                "date": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "tokens": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Backend_AppToken"
-                    }
-                }
-            }
-        },
-        "Backend_AppToken": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "scope": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "ip": {
-                    "type": "string"
-                },
-                "expire": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "date": {
-                    "format": "date-time",
-                    "type": "string"
-                }
-            }
-        },
-        "Backend_User": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "roleId": {
-                    "type": "integer"
-                },
-                "planId": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string",
-                    "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "points": {
-                    "type": "integer"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "apps": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Backend_App"
-                    }
-                },
-                "metadata": {
-                    "$ref": "Common_Metadata"
-                },
-                "date": {
-                    "format": "date-time",
-                    "type": "string"
-                }
-            }
-        },
-        "Collection": {
-            "title": "collection",
-            "type": "object",
-            "properties": {
-                "totalResults": {
-                    "type": "integer"
-                },
-                "itemsPerPage": {
-                    "type": "integer"
-                },
-                "startIndex": {
-                    "type": "integer"
-                },
-                "entry": {
-                    "$ref": "Entry"
-                }
-            }
-        },
-        "Common_Message": {
-            "type": "object",
-            "properties": {
-                "success": {
-                    "type": "boolean"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "Common_Metadata": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "string"
-            }
-        },
-        "Entry": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "date": {
-                    "format": "date-time",
-                    "type": "string"
-                }
-            }
-        },
-        "Passthru": {
-            "description": "No schema information available",
-            "type": "object",
-            "additionalProperties": {
-                "type": "any"
-            }
-        },
-        "System_About": {
-            "type": "object",
-            "properties": {
-                "apiVersion": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "termsOfService": {
-                    "type": "string"
-                },
-                "contactName": {
-                    "type": "string"
-                },
-                "contactUrl": {
-                    "type": "string"
-                },
-                "contactEmail": {
-                    "type": "string"
-                },
-                "licenseName": {
-                    "type": "string"
-                },
-                "licenseUrl": {
-                    "type": "string"
-                },
-                "paymentCurrency": {
-                    "type": "string"
-                },
-                "categories": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "apps": {
-                    "$ref": "System_AboutApps"
-                },
-                "links": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "System_AboutLink"
-                    }
-                }
-            }
-        },
-        "System_AboutApps": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "string"
-            }
-        },
-        "System_AboutLink": {
-            "type": "object",
-            "properties": {
-                "rel": {
-                    "type": "string"
-                },
-                "href": {
-                    "type": "string"
-                }
-            }
-        }
+  "baseUrl": "http://127.0.0.1/",
+  "security": {
+    "type": "oauth2",
+    "tokenUrl": "http://127.0.0.1/authorization/token",
+    "scopes": {
+      "bar": "Bar access",
+      "default": "",
+      "foo": "Foo access",
+      "plan_scope": "Plan scope access"
     }
+  },
+  "operations": {
+    "inspect.delete": {
+      "path": "/inspect/:foo",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "inspect.patch": {
+      "path": "/inspect/:foo",
+      "method": "PATCH",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "inspect.put": {
+      "path": "/inspect/:foo",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "inspect.post": {
+      "path": "/inspect/:foo",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "foo",
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "foo",
+        "bar"
+      ]
+    },
+    "inspect.get": {
+      "path": "/inspect/:foo",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "foo": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Passthru"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "foo",
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "foo",
+        "bar"
+      ]
+    },
+    "test.createFoo": {
+      "path": "/foo",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Passthru"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Entry"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "test.listFoo": {
+      "path": "/foo",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Collection"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "authorization.getWhoami": {
+      "path": "/authorization/whoami",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_User"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "authorization"
+      ],
+      "authorization": true,
+      "tags": [
+        "authorization"
+      ]
+    },
+    "authorization.revoke": {
+      "path": "/authorization/revoke",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "authorization"
+      ],
+      "authorization": true,
+      "tags": [
+        "authorization"
+      ]
+    },
+    "meta.getAbout": {
+      "path": "/",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "System_About"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    }
+  },
+  "definitions": {
+    "Backend_App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "Common_Metadata"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "Backend_AppToken"
+          }
+        }
+      }
+    },
+    "Backend_AppToken": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "roleId": {
+          "type": "integer"
+        },
+        "planId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "$ref": "Backend_App"
+          }
+        },
+        "metadata": {
+          "$ref": "Common_Metadata"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Collection": {
+      "title": "collection",
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "$ref": "Entry"
+        }
+      }
+    },
+    "Common_Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "Common_Metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "System_About": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "termsOfService": {
+          "type": "string"
+        },
+        "contactName": {
+          "type": "string"
+        },
+        "contactUrl": {
+          "type": "string"
+        },
+        "contactEmail": {
+          "type": "string"
+        },
+        "licenseName": {
+          "type": "string"
+        },
+        "licenseUrl": {
+          "type": "string"
+        },
+        "paymentCurrency": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "$ref": "System_AboutApps"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "System_AboutLink"
+          }
+        }
+      }
+    },
+    "System_AboutApps": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "System_AboutLink": {
+      "type": "object",
+      "properties": {
+        "rel": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }
