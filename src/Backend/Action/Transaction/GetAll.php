@@ -20,14 +20,12 @@
 
 namespace Fusio\Impl\Backend\Action\Transaction;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\Transaction\QueryFilter;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAll
@@ -50,7 +48,7 @@ class GetAll implements ActionInterface
         return $this->view->getCollection(
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
-            \Fusio\Impl\Backend\Filter\Transaction\QueryFilter::create($request)
+            QueryFilter::create($request)
         );
     }
 }
