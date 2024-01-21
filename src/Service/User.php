@@ -160,6 +160,7 @@ class User
 
             // create user
             $row = new Table\Generated\UserRow();
+            $row->setTenantId($context->getTenantId());
             $row->setRoleId($roleId);
             $row->setIdentityId($identity->getId());
             $row->setStatus(Table\User::STATUS_ACTIVE);
@@ -212,7 +213,6 @@ class User
             // update user
             $row = new Table\Generated\UserRow();
             $row->setId($existing->getId());
-            $row->setTenantId($context->getTenantId());
             $row->setRoleId($user->getRoleId() ?? $existing->getRoleId());
             $row->setPlanId($user->getPlanId() ?? $existing->getPlanId());
             $row->setStatus($user->getStatus() ?? $existing->getStatus());
@@ -227,7 +227,7 @@ class User
                 $this->userScopeTable->deleteAllFromUser($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $scopes);
+                $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
             }
 
             $this->userTable->commit();
@@ -321,9 +321,9 @@ class User
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
     }
 
-    private function insertScopes(int $userId, array $scopes): void
+    private function insertScopes(int $userId, array $scopes, ?string $tenantId = null): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
+        $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
         foreach ($scopes as $scope) {
             $row = new Table\Generated\UserScopeRow();
             $row->setUserId($userId);
