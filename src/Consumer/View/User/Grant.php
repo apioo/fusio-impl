@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View\User;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -34,17 +36,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Grant extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = null, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
-
-        $count = 16;
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals('user_grant.user_id', $userId);
-        $condition->equals('app.tenant_id', $tenantId);
+        $condition->equals('user_grant.user_id', $context->getUser()->getId());
+        $condition->equals('app.tenant_id', $context->getTenantId());
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);

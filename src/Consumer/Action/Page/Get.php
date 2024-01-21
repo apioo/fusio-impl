@@ -52,7 +52,7 @@ class Get implements ActionInterface
     {
         $entity = $this->view->getEntity(
             $request->get('page_id'),
-            $context->getTenantId()
+            $context
         );
 
         $entity['content'] = $this->replaceVariables($entity['content']);

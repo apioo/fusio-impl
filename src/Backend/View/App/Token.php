@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View\App;
 
-use Fusio\Impl\Backend\Filter\App\Token\QueryFilter;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -36,24 +39,22 @@ use PSX\Sql\ViewAbstract;
  */
 class Token extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(TokenQueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\AppTokenTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\AppTokenTable::COLUMN_DATE]);
 
-        $condition = $filter->getCondition();
         $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, OrderBy::DESC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
                 'appId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),

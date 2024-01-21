@@ -20,8 +20,11 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -33,18 +36,15 @@ use PSX\Sql\ViewAbstract;
  */
 class Scope extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $userId, int $startIndex = 0, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
-
-        $count = 16;
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals('scope.tenant_id', $tenantId);
-        $condition->equals('scope.category_id', $categoryId ?: 1);
-        $condition->equals('user_scope.user_id', $userId);
+        $condition->equals('scope.tenant_id', $context->getTenantId());
+        $condition->equals('scope.category_id', $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('user_scope.user_id', $context->getUser()->getId());
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description', 'scope.metadata'], $condition, 'user_scope.id ASC');

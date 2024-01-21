@@ -33,9 +33,9 @@ use PSX\Sql\ViewAbstract;
  */
 class CountRequests extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter, ContextInterface $context): array
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): array
     {
-        $condition = $filter->getCondition('log');
+        $condition = $filter->getCondition([], 'log');
         $condition->equals('log.tenant_id', $context->getTenantId());
         $condition->equals('log.category_id', $context->getUser()->getCategoryId());
 

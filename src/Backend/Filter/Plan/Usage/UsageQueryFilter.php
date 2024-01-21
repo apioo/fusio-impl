@@ -21,25 +21,25 @@
 namespace Fusio\Impl\Backend\Filter\Plan\Usage;
 
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use PSX\Sql\Condition;
 
 /**
- * QueryFilter
+ * UsageQueryFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilter extends QueryFilterAbstract
+class UsageQueryFilter extends DateQueryFilter
 {
-    protected ?int $operationId = null;
-    protected ?int $userId = null;
-    protected ?int $appId = null;
+    private ?int $operationId = null;
+    private ?int $userId = null;
+    private ?int $appId = null;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $operationId = null, ?int $userId = null, ?int $appId = null)
+    public function __construct(?int $operationId, ?int $userId, ?int $appId, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
-        parent::__construct($from, $to);
+        parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
         $this->operationId = $operationId;
         $this->userId = $userId;
@@ -61,10 +61,10 @@ class QueryFilter extends QueryFilterAbstract
         return $this->appId;
     }
 
-    public function getCondition(?string $alias = null): Condition
+    public function getCondition(array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($alias);
-        $alias     = $alias !== null ? $alias . '.' : '';
+        $condition = parent::getCondition($columnMapping, $alias);
+        $alias = $this->getAlias($alias);
 
         if (!empty($this->operationId)) {
             $condition->equals($alias . 'route_id', $this->operationId);
@@ -81,19 +81,18 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    protected function getDateColumn(): string
+    protected static function getConstructorArguments(RequestInterface $request): array
     {
-        return 'insert_date';
-    }
-
-    public static function create(RequestInterface $request): self
-    {
-        [$from, $to] = self::getFromAndTo($request);
+        $arguments = parent::getConstructorArguments($request);
 
         $operationId = self::toInt($request->get('operationId'));
         $userId = self::toInt($request->get('userId'));
         $appId = self::toInt($request->get('appId'));
 
-        return new self($from, $to, $operationId, $userId, $appId);
+        $arguments['operationId'] = $operationId;
+        $arguments['userId'] = $userId;
+        $arguments['appId'] = $appId;
+
+        return $arguments;
     }
 }

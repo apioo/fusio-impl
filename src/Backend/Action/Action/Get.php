@@ -51,7 +51,7 @@ class Get implements ActionInterface
     {
         $action = $this->view->getEntity(
             $request->get('action_id'),
-            $context->getTenantId()
+            $context
         );
 
         if (empty($action)) {

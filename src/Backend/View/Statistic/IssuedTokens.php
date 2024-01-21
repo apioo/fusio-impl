@@ -33,9 +33,9 @@ use PSX\Sql\ViewAbstract;
  */
 class IssuedTokens extends ViewAbstract
 {
-    public function getView(App\Token\QueryFilter $filter, ContextInterface $context)
+    public function getView(App\Token\TokenQueryFilter $filter, ContextInterface $context)
     {
-        $condition = $filter->getCondition('token');
+        $condition = $filter->getCondition([], 'token');
         $condition->equals('usr.tenant_id', $context->getTenantId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

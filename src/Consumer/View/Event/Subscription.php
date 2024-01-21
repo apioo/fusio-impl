@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View\Event;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -35,17 +37,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Subscription extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
-
-        $count = 16;
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals('event_subscription.user_id', $userId);
-        $condition->equals('event.tenant_id', $tenantId);
+        $condition->equals('event_subscription.user_id', $context->getUser()->getId());
+        $condition->equals('event.tenant_id', $context->getTenantId());
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
@@ -68,12 +67,12 @@ class Subscription extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $subscriptionId, ?string $tenantId = null)
+    public function getEntity(int $subscriptionId, ContextInterface $context)
     {
         $condition = Condition::withAnd();
         $condition->equals('event_subscription.id', $subscriptionId);
-        $condition->equals('event_subscription.user_id', $userId);
-        $condition->equals('event.tenant_id', $tenantId);
+        $condition->equals('event_subscription.user_id', $context->getUser()->getId());
+        $condition->equals('event.tenant_id', $context->getTenantId());
 
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition, 'event_subscription.id DESC');
         $builder = new Builder($this->connection);

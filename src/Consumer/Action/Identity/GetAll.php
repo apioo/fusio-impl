@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Consumer\View;
 use Fusio\Model;
 
@@ -46,8 +47,9 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->identity->getCollection(
-            $context->getUser()->getId(),
             $request->get('appId'),
+            QueryFilter::from($request),
+            $context,
         );
     }
 }

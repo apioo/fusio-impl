@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -36,31 +38,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Plan extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\PlanTable::COLUMN_PRICE);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
-        }
-
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::ASC;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PlanTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\PlanTable::COLUMN_NAME, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -86,11 +73,11 @@ class Plan extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ?string $tenantId = null)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,

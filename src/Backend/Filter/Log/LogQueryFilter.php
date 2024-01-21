@@ -21,31 +21,31 @@
 namespace Fusio\Impl\Backend\Filter\Log;
 
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use PSX\Sql\Condition;
 
 /**
- * QueryFilter
+ * LogQueryFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilter extends QueryFilterAbstract
+class LogQueryFilter extends DateQueryFilter
 {
-    protected ?int $operationId = null;
-    protected ?int $appId = null;
-    protected ?int $userId = null;
-    protected ?string $ip = null;
-    protected ?string $userAgent = null;
-    protected ?string $method = null;
-    protected ?string $path = null;
-    protected ?string $header = null;
-    protected ?string $body = null;
+    private ?int $operationId = null;
+    private ?int $appId = null;
+    private ?int $userId = null;
+    private ?string $ip = null;
+    private ?string $userAgent = null;
+    private ?string $method = null;
+    private ?string $path = null;
+    private ?string $header = null;
+    private ?string $body = null;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $operationId = null, ?int $appId = null, ?int $userId = null, ?string $ip = null, ?string $userAgent = null, ?string $method = null, ?string $path = null, ?string $header = null, ?string $body = null)
+    public function __construct(?int $operationId, ?int $appId, ?int $userId, ?string $ip, ?string $userAgent, ?string $method, ?string $path, ?string $header, ?string $body, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
-        parent::__construct($from, $to);
+        parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
         $this->operationId = $operationId;
         $this->appId = $appId;
@@ -103,10 +103,10 @@ class QueryFilter extends QueryFilterAbstract
         return $this->body;
     }
 
-    public function getCondition(?string $alias = null): Condition
+    public function getCondition(array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($alias);
-        $alias     = $alias !== null ? $alias . '.' : '';
+        $condition = parent::getCondition($columnMapping, $alias);
+        $alias = $this->getAlias($alias);
 
         if (!empty($this->operationId)) {
             $condition->equals($alias . 'operation_id', $this->operationId);
@@ -147,9 +147,9 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request): self
+    protected static function getConstructorArguments(RequestInterface $request): array
     {
-        [$from, $to] = self::getFromAndTo($request);
+        $arguments = parent::getConstructorArguments($request);
 
         $operationId = self::toInt($request->get('operationId'));
         $appId = self::toInt($request->get('appId'));
@@ -160,9 +160,8 @@ class QueryFilter extends QueryFilterAbstract
         $path = $request->get('path');
         $header = $request->get('header');
         $body = $request->get('body');
-        $search = $request->get('search');
 
-        // parse search if available
+        $search = $arguments['search'] ?? null;
         if (!empty($search)) {
             $parts = explode(',', $search);
             foreach ($parts as $part) {
@@ -179,8 +178,20 @@ class QueryFilter extends QueryFilterAbstract
                     $body = $part;
                 }
             }
+
+            $arguments['search'] = null;
         }
 
-        return new self($from, $to, $operationId, $appId, $userId, $ip, $userAgent, $method, $path, $header, $body);
+        $arguments['operationId'] = $operationId;
+        $arguments['appId'] = $appId;
+        $arguments['userId'] = $userId;
+        $arguments['ip'] = $ip;
+        $arguments['userAgent'] = $userAgent;
+        $arguments['method'] = $method;
+        $arguments['path'] = $path;
+        $arguments['header'] = $header;
+        $arguments['body'] = $body;
+
+        return $arguments;
     }
 }

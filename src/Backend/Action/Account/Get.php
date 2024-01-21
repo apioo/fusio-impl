@@ -49,7 +49,7 @@ class Get implements ActionInterface
     {
         return $this->view->getEntity(
             (string) $context->getUser()->getId(),
-            $context->getTenantId()
+            $context
         );
     }
 }

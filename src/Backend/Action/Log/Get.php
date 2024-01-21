@@ -49,7 +49,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $log = $this->view->getEntity(
-            (int) $request->get('log_id')
+            (int) $request->get('log_id'),
+            $context
         );
 
         if (empty($log)) {

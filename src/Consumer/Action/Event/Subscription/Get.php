@@ -49,8 +49,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $subscription = $this->view->getEntity(
-            $context->getUser()->getId(),
-            (int) $request->get('subscription_id')
+            (int) $request->get('subscription_id'),
+            $context,
         );
 
         if (empty($subscription)) {

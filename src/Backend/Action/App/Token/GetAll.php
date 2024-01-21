@@ -27,7 +27,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Backend\Filter\App\Token\QueryFilter;
+use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -49,9 +49,8 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getCollection(
-            (int) $request->get('startIndex'),
-            (int) $request->get('count'),
-            QueryFilter::create($request)
+            TokenQueryFilter::from($request),
+            $context
         );
     }
 }

@@ -33,9 +33,9 @@ use PSX\Sql\ViewAbstract;
  */
 class MostUsedApps extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter, ContextInterface $context)
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context)
     {
-        $condition = $filter->getCondition('log');
+        $condition = $filter->getCondition([], 'log');
         $condition->equals('log.tenant_id', $context->getTenantId());
         $condition->equals('log.category_id', $context->getUser()->getCategoryId());
         $condition->notNil('log.app_id');

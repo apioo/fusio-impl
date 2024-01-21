@@ -64,8 +64,8 @@ class GetAll implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $logFilter = Filter\Log\QueryFilter::create($request);
-        $transactionFilter = Filter\Transaction\QueryFilter::create($request);
+        $logFilter = Filter\Log\LogQueryFilter::from($request);
+        $transactionFilter = Filter\Transaction\TransactionQueryFilter::from($request);
 
         return [
             'errorsPerOperation' => $this->errorsPerOperation->getView($logFilter, $context),

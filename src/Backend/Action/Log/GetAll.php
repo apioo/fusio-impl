@@ -20,14 +20,12 @@
 
 namespace Fusio\Impl\Backend\Action\Log;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAll
@@ -48,10 +46,8 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getCollection(
-            $context->getUser()->getCategoryId(),
-            (int) $request->get('startIndex'),
-            (int) $request->get('count'),
-            \Fusio\Impl\Backend\Filter\Log\QueryFilter::create($request)
+            LogQueryFilter::from($request),
+            $context
         );
     }
 }

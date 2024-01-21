@@ -33,9 +33,9 @@ use PSX\Sql\ViewAbstract;
  */
 class IncomingTransactions extends ViewAbstract
 {
-    public function getView(Transaction\QueryFilter $filter, ContextInterface $context)
+    public function getView(Transaction\TransactionQueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('trans');
+        $condition  = $filter->getCondition([], 'trans');
         $condition->equals('trans.tenant_id', $context->getTenantId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

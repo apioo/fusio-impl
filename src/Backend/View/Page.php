@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -35,31 +37,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Page extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\PageTable::COLUMN_SLUG);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
-        }
-        
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::ASC;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PageTable::COLUMN_TITLE]);
+        $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\PageTable::COLUMN_TITLE, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -80,11 +67,11 @@ class Page extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ?string $tenantId = null)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,

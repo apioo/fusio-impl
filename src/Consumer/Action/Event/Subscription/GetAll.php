@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Consumer\View;
 use PSX\Sql\TableManagerInterface;
 
@@ -48,8 +49,8 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getCollection(
-            $context->getUser()->getId(),
-            (int) $request->get('startIndex')
+            QueryFilter::from($request),
+            $context,
         );
     }
 }

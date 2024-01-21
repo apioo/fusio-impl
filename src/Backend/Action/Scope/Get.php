@@ -49,7 +49,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $scope = $this->view->getEntity(
-            $request->get('scope_id')
+            $request->get('scope_id'),
+            $context
         );
 
         if (empty($scope)) {

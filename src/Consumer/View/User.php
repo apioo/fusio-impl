@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -35,11 +37,11 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity(int $id, ?string $tenantId = null)
+    public function getEntity(ContextInterface $context)
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_ID, $id);
-        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Table\Generated\UserTable::COLUMN_ID, $context->getUser()->getId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $builder = new Builder($this->connection);
 

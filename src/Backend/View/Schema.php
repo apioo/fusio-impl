@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -35,32 +37,17 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\SchemaTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = 'id';
-        }
-
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::DESC;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\SchemaTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
         $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\SchemaTable::COLUMN_NAME, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -79,11 +66,11 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ?string $tenantId = null)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,

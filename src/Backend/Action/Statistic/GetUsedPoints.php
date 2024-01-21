@@ -24,7 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter;
+use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
 use Fusio\Impl\Backend\View;
 
 /**
@@ -46,7 +46,7 @@ class GetUsedPoints implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getView(
-            QueryFilter::create($request),
+            UsageQueryFilter::from($request),
             $context
         );
     }
