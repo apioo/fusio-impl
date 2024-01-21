@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,14 @@ use PSX\Sql\ViewAbstract;
  */
 class TimePerOperation extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter, ?string $tenantId = null)
+    public function getView(Log\QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('log');
+        $condition = $filter->getCondition('log');
+        $condition->equals('log.tenant_id', $context->getTenantId());
+        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
+        $condition->notNil('log.operation_id');
+        $condition->notNil('log.execution_time');
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most slowest routes and build data structure
@@ -43,16 +49,13 @@ class TimePerOperation extends ViewAbstract
                       FROM fusio_log log
                 INNER JOIN fusio_operation operation
                         ON log.operation_id = operation.id
-                     WHERE log.category_id = ?
-                       AND log.operation_id IS NOT NULL
-                       AND log.execution_time IS NOT NULL
-                       AND ' . $expression . '
+                     WHERE ' . $expression . '
                   GROUP BY log.operation_id, operation.name
                   ORDER BY SUM(log.execution_time) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
         $operationIds = [];
         $data = [];
         $series = [];

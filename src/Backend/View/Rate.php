@@ -55,9 +55,7 @@ class Rate extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\RateTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\RateTable::COLUMN_TENANT_ID, $tenantId);
         $condition->in(Table\Generated\RateTable::COLUMN_STATUS, [Table\Rate::STATUS_ACTIVE]);
 
         if (!empty($search)) {

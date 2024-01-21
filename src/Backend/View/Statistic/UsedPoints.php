@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,12 @@ use PSX\Sql\ViewAbstract;
  */
 class UsedPoints extends ViewAbstract
 {
-    public function getView(QueryFilter $filter, ?string $tenantId = null)
+    public function getView(QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('usag');
+        $condition = $filter->getCondition('usag');
+        $condition->equals('oper.tenant_id', $context->getTenantId());
+        $condition->equals('oper.category_id', $context->getUser()->getCategoryId());
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure
@@ -55,6 +59,8 @@ class UsedPoints extends ViewAbstract
         $sql = '  SELECT SUM(usag.points) AS sum_points,
                          DATE(usag.insert_date) AS date
                     FROM fusio_plan_usage usag
+              INNER JOIN fusio_operation oper
+                      ON usag.operation_id = oper.id
                    WHERE ' . $expression . '
                 GROUP BY DATE(usag.insert_date)';
 

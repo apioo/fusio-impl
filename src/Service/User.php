@@ -115,10 +115,7 @@ class User
     {
         // check whether user exists
         $condition  = Condition::withAnd();
-        $tenantId = $context->getTenantId();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identity->getId());
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $userInfo->getId());
 

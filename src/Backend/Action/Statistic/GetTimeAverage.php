@@ -46,8 +46,8 @@ class GetTimeAverage implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getView(
-            $context->getUser()->getCategoryId(),
-            QueryFilter::create($request)
+            QueryFilter::create($request),
+            $context
         );
     }
 }

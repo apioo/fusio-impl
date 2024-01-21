@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Engine\ContextInterface;
 use PSX\Nested\Builder;
 use PSX\Sql\ViewAbstract;
 
@@ -32,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestTransactions extends ViewAbstract
 {
-    public function getView(?string $tenantId = null)
+    public function getView(ContextInterface $context)
     {
         $sql = '  SELECT trans.id,
                          trans.user_id,
@@ -41,13 +42,14 @@ class LatestTransactions extends ViewAbstract
                          trans.amount,
                          trans.insert_date
                     FROM fusio_transaction trans
+                   WHERE trans.tenant_id = :tenant_id
                 ORDER BY trans.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, [], [
+            'entry' => $builder->doCollection($sql, ['tenant_id' => $context->getTenantId()], [
                 'id' => $builder->fieldInteger('id'),
                 'user_id' => $builder->fieldInteger('user_id'),
                 'plan_id' => $builder->fieldInteger('plan_id'),

@@ -54,9 +54,7 @@ class Identity extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
         $condition->in(Table\Generated\IdentityTable::COLUMN_STATUS, [Table\Identity::STATUS_ACTIVE]);
 
         if (!empty($search)) {

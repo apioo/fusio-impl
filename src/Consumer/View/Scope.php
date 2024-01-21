@@ -42,9 +42,7 @@ class Scope extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals('scope.tenant_id', $tenantId);
-        }
+        $condition->equals('scope.tenant_id', $tenantId);
         $condition->equals('scope.category_id', $categoryId ?: 1);
         $condition->equals('user_scope.user_id', $userId);
 

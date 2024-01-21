@@ -41,9 +41,7 @@ class App extends Generated\AppTable
     public function findOneByIdentifier(string $id, ?string $tenantId = null): ?AppRow
     {
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
 
         if (str_starts_with($id, '~')) {
             $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
@@ -57,13 +55,10 @@ class App extends Generated\AppTable
     public function findOneByAppKeyAndSecret(string $appKey, string $appSecret, ?string $tenantId = null): ?AppRow
     {
         $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_APP_KEY, $appKey);
         $condition->equals(self::COLUMN_APP_SECRET, $appSecret);
         $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
-
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
 
         return $this->findOneBy($condition);
     }

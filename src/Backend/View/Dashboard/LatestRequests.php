@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Engine\ContextInterface;
 use PSX\Nested\Builder;
 use PSX\Sql\ViewAbstract;
 
@@ -32,21 +33,22 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestRequests extends ViewAbstract
 {
-    public function getView(int $categoryId, ?string $tenantId = null)
+    public function getView(ContextInterface $context)
     {
         $sql = '  SELECT log.id,
                          log.path,
                          log.ip,
                          log.date
                     FROM fusio_log log
-                   WHERE log.category_id = :category_id
+                   WHERE log.tenant_id = :tenant_id
+                     AND log.category_id = :category_id
                 ORDER BY log.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, ['category_id' => $categoryId], [
+            'entry' => $builder->doCollection($sql, ['tenant_id' => $context->getTenantId(), 'category_id' => $context->getUser()->getCategoryId()], [
                 'id' => $builder->fieldInteger('id'),
                 'path' => 'path',
                 'ip' => 'ip',

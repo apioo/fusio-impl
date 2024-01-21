@@ -55,9 +55,7 @@ class Config extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\ConfigTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\ConfigTable::COLUMN_TENANT_ID, $tenantId);
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ConfigTable::COLUMN_NAME, '%' . $search . '%');

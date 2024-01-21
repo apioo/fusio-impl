@@ -57,9 +57,7 @@ class Connection extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         if (!empty($search)) {

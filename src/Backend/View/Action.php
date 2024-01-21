@@ -55,9 +55,7 @@ class Action extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\ActionTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
 

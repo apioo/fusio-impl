@@ -45,9 +45,7 @@ class Page extends ViewAbstract
         $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\PageTable::COLUMN_STATUS, Table\Page::STATUS_VISIBLE);
 
         $builder = new Builder($this->connection);

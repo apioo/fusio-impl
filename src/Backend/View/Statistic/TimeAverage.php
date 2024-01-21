@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,12 @@ use PSX\Sql\ViewAbstract;
  */
 class TimeAverage extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter, ?string $tenantId = null)
+    public function getView(Log\QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('log');
+        $condition = $filter->getCondition('log');
+        $condition->equals('log.tenant_id', $context->getTenantId());
+        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure
@@ -55,11 +59,10 @@ class TimeAverage extends ViewAbstract
         $sql = '  SELECT AVG(log.execution_time / 1000) AS exec_time,
                          DATE(log.date) AS date
                     FROM fusio_log log
-                   WHERE log.category_id = ?
-                     AND ' . $expression . '
+                   WHERE ' . $expression . '
                 GROUP BY DATE(log.date)';
 
-        $result = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

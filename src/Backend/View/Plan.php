@@ -55,9 +55,7 @@ class Plan extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {

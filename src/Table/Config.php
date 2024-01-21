@@ -44,9 +44,7 @@ class Config extends Generated\ConfigTable
     public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ConfigRow
     {
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
 
         if (str_starts_with($id, '~')) {
             $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));

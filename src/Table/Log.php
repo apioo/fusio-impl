@@ -35,10 +35,7 @@ class Log extends Generated\LogTable
     public function findOneByIdentifier(int $id, ?string $tenantId = null): ?LogRow
     {
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
-
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);

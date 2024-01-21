@@ -55,9 +55,7 @@ class User extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->notEquals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->notEquals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
         $condition->notEquals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_DELETED);
 
         if (!empty($search)) {

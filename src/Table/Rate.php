@@ -39,9 +39,7 @@ class Rate extends Generated\RateTable
     public function findOneByIdentifier(string $id, ?string $tenantId = null): ?RateRow
     {
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
 
         if (str_starts_with($id, '~')) {
             $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));

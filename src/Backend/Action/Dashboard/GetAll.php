@@ -68,15 +68,15 @@ class GetAll implements ActionInterface
         $transactionFilter = Filter\Transaction\QueryFilter::create($request);
 
         return [
-            'errorsPerOperation' => $this->errorsPerOperation->getView($context->getUser()->getCategoryId(), $logFilter),
-            'incomingRequests' => $this->incomingRequests->getView($context->getUser()->getCategoryId(), $logFilter),
-            'incomingTransactions' => $this->incomingTransactions->getView($transactionFilter),
-            'mostUsedOperations' => $this->mostUsedOperations->getView($context->getUser()->getCategoryId(), $logFilter),
-            'timePerOperation' => $this->timePerOperation->getView($context->getUser()->getCategoryId(), $logFilter),
-            'latestApps' => $this->latestApps->getView(),
-            'latestRequests' => $this->latestRequests->getView($context->getUser()->getCategoryId()),
-            'latestUsers' => $this->latestUsers->getView(),
-            'latestTransactions' => $this->latestTransactions->getView(),
+            'errorsPerOperation' => $this->errorsPerOperation->getView($logFilter, $context),
+            'incomingRequests' => $this->incomingRequests->getView($logFilter, $context),
+            'incomingTransactions' => $this->incomingTransactions->getView($transactionFilter, $context),
+            'mostUsedOperations' => $this->mostUsedOperations->getView($logFilter, $context),
+            'timePerOperation' => $this->timePerOperation->getView($logFilter, $context),
+            'latestApps' => $this->latestApps->getView($context),
+            'latestRequests' => $this->latestRequests->getView($context),
+            'latestUsers' => $this->latestUsers->getView($context),
+            'latestTransactions' => $this->latestTransactions->getView($context),
         ];
     }
 }

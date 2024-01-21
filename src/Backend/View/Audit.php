@@ -49,9 +49,7 @@ class Audit extends ViewAbstract
         $sortBy = Table\Generated\AuditTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\AuditTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\AuditTable::COLUMN_TENANT_ID, $tenantId);
 
         $builder = new Builder($this->connection);
 

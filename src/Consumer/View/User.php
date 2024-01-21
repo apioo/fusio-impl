@@ -39,9 +39,7 @@ class User extends ViewAbstract
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\UserTable::COLUMN_ID, $id);
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
 
         $builder = new Builder($this->connection);
 

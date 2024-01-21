@@ -73,9 +73,7 @@ class Authenticator
         $tenantId = $this->config->get('fusio_tenant_id');
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals($column, $username);
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 

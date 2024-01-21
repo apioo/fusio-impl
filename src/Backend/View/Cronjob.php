@@ -55,9 +55,7 @@ class Cronjob extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\CronjobTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\CronjobTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
 

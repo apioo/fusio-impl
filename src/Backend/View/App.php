@@ -55,9 +55,7 @@ class App extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $tenantId);
         $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
 
         if (!empty($search)) {

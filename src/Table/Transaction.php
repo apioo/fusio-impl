@@ -35,11 +35,8 @@ class Transaction extends Generated\TransactionTable
     public function findOneByIdentifier(int $id, ?string $tenantId = null): ?TransactionRow
     {
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        }
-
         $condition->equals(self::COLUMN_ID, $id);
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
 
         return $this->findOneBy($condition);
     }

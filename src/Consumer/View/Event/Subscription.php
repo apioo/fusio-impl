@@ -45,9 +45,7 @@ class Subscription extends ViewAbstract
 
         $condition = Condition::withAnd();
         $condition->equals('event_subscription.user_id', $userId);
-        if (!empty($tenantId)) {
-            $condition->equals('event.tenant_id', $tenantId);
-        }
+        $condition->equals('event.tenant_id', $tenantId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
@@ -75,9 +73,7 @@ class Subscription extends ViewAbstract
         $condition = Condition::withAnd();
         $condition->equals('event_subscription.id', $subscriptionId);
         $condition->equals('event_subscription.user_id', $userId);
-        if (!empty($tenantId)) {
-            $condition->equals('event.tenant_id', $tenantId);
-        }
+        $condition->equals('event.tenant_id', $tenantId);
 
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition, 'event_subscription.id DESC');
         $builder = new Builder($this->connection);

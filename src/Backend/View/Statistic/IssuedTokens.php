@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,11 @@ use PSX\Sql\ViewAbstract;
  */
 class IssuedTokens extends ViewAbstract
 {
-    public function getView(App\Token\QueryFilter $filter, ?string $tenantId = null)
+    public function getView(App\Token\QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('token');
+        $condition = $filter->getCondition('token');
+        $condition->equals('usr.tenant_id', $context->getTenantId());
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure
@@ -55,6 +58,8 @@ class IssuedTokens extends ViewAbstract
         $sql = '  SELECT COUNT(token.id) AS cnt,
                          DATE(token.date) AS date
                     FROM fusio_app_token token
+              INNER JOIN fusio_user usr
+                      ON usr.id = token.user_id
                    WHERE ' . $expression . '
                 GROUP BY DATE(token.date)';
 

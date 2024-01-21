@@ -60,9 +60,7 @@ class Identity extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
 

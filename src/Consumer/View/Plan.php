@@ -45,9 +45,7 @@ class Plan extends ViewAbstract
         $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -76,9 +74,7 @@ class Plan extends ViewAbstract
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_ID, $planId);
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);

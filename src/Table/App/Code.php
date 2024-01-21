@@ -42,25 +42,20 @@ class Code extends Generated\AppCodeTable
                       FROM fusio_app_code code
                 INNER JOIN fusio_app app
                         ON app.id = code.app_id
-                     WHERE app.app_key = :app_key
+                     WHERE app.tenant_id = :tenant_id
+                       AND app.app_key = :app_key
                        AND app.app_secret = :app_secret
                        AND app.status = :status
                        AND code.code = :code
                        AND code.redirect_uri = :redirect_uri';
 
-        $params = [
+        return $this->connection->fetchAssociative($sql, array(
+            'tenant_id'    => $tenantId,
             'app_key'      => $appKey,
             'app_secret'   => $appSecret,
             'status'       => App::STATUS_ACTIVE,
             'code'         => $code,
             'redirect_uri' => $redirectUri ?: '',
-        ];
-
-        if (!empty($tenantId)) {
-            $sql .= ' AND app.tenant_id = :tenant_id';
-            $params['tenant_id'] = $tenantId;
-        }
-
-        return $this->connection->fetchAssociative($sql, $params);
+        ));
     }
 }

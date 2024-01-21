@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,13 @@ use PSX\Sql\ViewAbstract;
  */
 class MostUsedOperations extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter, ?string $tenantId = null)
+    public function getView(Log\QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('log');
+        $condition = $filter->getCondition('log');
+        $condition->equals('log.tenant_id', $context->getTenantId());
+        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
+        $condition->notNil('log.operation_id');
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most used routes and build data structure
@@ -43,15 +48,13 @@ class MostUsedOperations extends ViewAbstract
                     FROM fusio_log log
               INNER JOIN fusio_operation operation
                       ON log.operation_id = operation.id
-                   WHERE log.category_id = ?
-                     AND log.operation_id IS NOT NULL
-                     AND ' . $expression . '
+                   WHERE ' . $expression . '
                 GROUP BY log.operation_id, operation.name
                 ORDER BY COUNT(log.operation_id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result = $this->connection->fetchAllAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
         $operationIds = [];
         $data = [];
         $series = [];

@@ -55,9 +55,7 @@ class Scope extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
         if (!empty($search)) {

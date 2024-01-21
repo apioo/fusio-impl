@@ -44,9 +44,7 @@ class Grant extends ViewAbstract
 
         $condition = Condition::withAnd();
         $condition->equals('user_grant.user_id', $userId);
-        if (!empty($tenantId)) {
-            $condition->equals('app.tenant_id', $tenantId);
-        }
+        $condition->equals('app.tenant_id', $tenantId);
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);

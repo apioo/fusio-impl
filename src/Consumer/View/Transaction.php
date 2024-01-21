@@ -45,9 +45,7 @@ class Transaction extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\TransactionTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);
@@ -76,9 +74,7 @@ class Transaction extends ViewAbstract
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TransactionTable::COLUMN_ID, $transactionId);
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\TransactionTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);

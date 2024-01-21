@@ -46,9 +46,7 @@ class Log extends ViewAbstract
         $sortBy = Table\Generated\LogTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);
@@ -75,9 +73,7 @@ class Log extends ViewAbstract
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);

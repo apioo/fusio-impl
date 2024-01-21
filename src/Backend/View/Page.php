@@ -54,9 +54,7 @@ class Page extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        if (!empty($tenantId)) {
-            $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
-        }
+        $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
         $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
 
         if (!empty($search)) {

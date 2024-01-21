@@ -46,7 +46,8 @@ class GetIncomingTransactions implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getView(
-            QueryFilter::create($request)
+            QueryFilter::create($request),
+            $context
         );
     }
 }

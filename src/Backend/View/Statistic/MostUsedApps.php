@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
 
@@ -32,9 +33,13 @@ use PSX\Sql\ViewAbstract;
  */
 class MostUsedApps extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter, ?string $tenantId = null)
+    public function getView(Log\QueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('log');
+        $condition = $filter->getCondition('log');
+        $condition->equals('log.tenant_id', $context->getTenantId());
+        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
+        $condition->notNil('log.app_id');
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // get the most used apps and build data structure
@@ -44,7 +49,6 @@ class MostUsedApps extends ViewAbstract
               INNER JOIN fusio_app app
                       ON log.app_id = app.id
                    WHERE ' . $expression . '
-                     AND log.app_id IS NOT NULL
                 GROUP BY log.app_id, app.name
                 ORDER BY COUNT(log.app_id) DESC';
 
