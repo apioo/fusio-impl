@@ -35,9 +35,9 @@ use Fusio\Impl\Consumer\View;
  */
 class GetAll implements ActionInterface
 {
-    private View\Grant $view;
+    private View\User\Grant $view;
 
-    public function __construct(View\Grant $view)
+    public function __construct(View\User\Grant $view)
     {
         $this->view = $view;
     }
