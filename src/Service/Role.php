@@ -75,7 +75,7 @@ class Role
             $role->setId($roleId);
 
             // add scopes
-            $this->insertScopes($roleId, $role->getScopes());
+            $this->insertScopes($roleId, $role->getScopes(), $context->getTenantId());
 
             $this->roleTable->commit();
         } catch (\Throwable $e) {
@@ -115,7 +115,7 @@ class Role
                 $this->roleScopeTable->deleteAllFromRole($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $role->getScopes());
+                $this->insertScopes($existing->getId(), $role->getScopes(), $context->getTenantId());
             }
 
             $this->roleTable->commit();
@@ -149,10 +149,10 @@ class Role
         return $existing->getId();
     }
 
-    protected function insertScopes(int $roleId, ?array $scopes): void
+    protected function insertScopes(int $roleId, ?array $scopes, ?string $tenantId = null): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
+            $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\RoleScopeRow();

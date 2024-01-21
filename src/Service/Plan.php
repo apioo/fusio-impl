@@ -84,7 +84,7 @@ class Plan
             $scopes = $plan->getScopes();
             if ($scopes !== null) {
                 // add scopes
-                $this->insertScopes($planId, $scopes);
+                $this->insertScopes($planId, $scopes, $context->getTenantId());
             }
 
             $this->planTable->commit();
@@ -132,7 +132,7 @@ class Plan
             $this->planScopeTable->deleteAllFromPlan($existing->getId());
 
             // add scopes
-            $this->insertScopes($existing->getId(), $scopes);
+            $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
@@ -159,9 +159,9 @@ class Plan
         return $existing->getId();
     }
 
-    private function insertScopes(int $planId, array $scopes): void
+    private function insertScopes(int $planId, array $scopes, ?string $tenantId = null): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
+        $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
 
         foreach ($scopes as $scope) {
             $row = new Table\Generated\PlanScopeRow();
