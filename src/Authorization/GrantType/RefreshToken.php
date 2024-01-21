@@ -52,7 +52,7 @@ class RefreshToken extends RefreshTokenAbstract
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
-        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->config->get('fusio_tenant_id'));
+        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
         if (empty($app)) {
             throw new ServerErrorException('Unknown credentials');
         }
@@ -65,5 +65,15 @@ class RefreshToken extends RefreshTokenAbstract
             new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D')
         );
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

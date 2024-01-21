@@ -58,7 +58,7 @@ class ClientCredentials extends ClientCredentialsAbstract
     protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         // check whether the credentials contain an app key and secret
-        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->config->get('fusio_tenant_id'));
+        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
         if (!empty($app)) {
             $appId  = $app->getId();
             $userId = $app->getUserId();
@@ -92,5 +92,15 @@ class ClientCredentials extends ClientCredentialsAbstract
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token'))
         );
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

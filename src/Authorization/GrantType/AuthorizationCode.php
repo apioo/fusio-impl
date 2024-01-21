@@ -59,7 +59,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $credentials->getClientSecret(),
             $grant->getCode(),
             $grant->getRedirectUri(),
-            $this->config->get('fusio_tenant_id')
+            $this->getTenantId(),
         );
 
         if (empty($code)) {
@@ -85,5 +85,15 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token'))
         );
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }
