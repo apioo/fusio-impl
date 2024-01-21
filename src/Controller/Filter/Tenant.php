@@ -53,5 +53,7 @@ class Tenant implements FilterInterface
         if (!empty($tenantId)) {
             $context->setTenantId($tenantId);
         }
+
+        $filterChain->handle($request, $response);
     }
 }
