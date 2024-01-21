@@ -29,7 +29,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_action')) {
             $actionTable = $schema->createTable('fusio_action');
             $actionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $actionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $actionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $actionTable->addColumn('category_id', 'integer', ['default' => 1]);
             $actionTable->addColumn('status', 'integer', ['default' => Table\Action::STATUS_ACTIVE]);
             $actionTable->addColumn('name', 'string', ['length' => 255]);
@@ -50,7 +50,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_app')) {
             $appTable = $schema->createTable('fusio_app');
             $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $appTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $appTable->addColumn('user_id', 'integer');
             $appTable->addColumn('status', 'integer');
             $appTable->addColumn('name', 'string', ['length' => 64]);
@@ -105,7 +105,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_audit')) {
             $auditTable = $schema->createTable('fusio_audit');
             $auditTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $auditTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $auditTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $auditTable->addColumn('app_id', 'integer');
             $auditTable->addColumn('user_id', 'integer');
             $auditTable->addColumn('ref_id', 'integer', ['notnull' => false]);
@@ -121,7 +121,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_category')) {
             $categoryTable = $schema->createTable('fusio_category');
             $categoryTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $categoryTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $categoryTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $categoryTable->addColumn('status', 'integer');
             $categoryTable->addColumn('name', 'string', ['length' => 64]);
             $categoryTable->setPrimaryKey(['id']);
@@ -132,7 +132,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_config')) {
             $configTable = $schema->createTable('fusio_config');
             $configTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $configTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $configTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $configTable->addColumn('type', 'integer', ['default' => 1]);
             $configTable->addColumn('name', 'string', ['length' => 64]);
             $configTable->addColumn('description', 'string', ['length' => 512]);
@@ -145,7 +145,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_connection')) {
             $connectionTable = $schema->createTable('fusio_connection');
             $connectionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $connectionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $connectionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $connectionTable->addColumn('status', 'integer', ['default' => Table\Connection::STATUS_ACTIVE]);
             $connectionTable->addColumn('name', 'string', ['length' => 255]);
             $connectionTable->addColumn('class', 'string', ['length' => 255]);
@@ -159,7 +159,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_cronjob')) {
             $cronjobTable = $schema->createTable('fusio_cronjob');
             $cronjobTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $cronjobTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $cronjobTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $cronjobTable->addColumn('category_id', 'integer', ['default' => 1]);
             $cronjobTable->addColumn('status', 'integer', ['default' => Table\Cronjob::STATUS_ACTIVE]);
             $cronjobTable->addColumn('name', 'string', ['length' => 64]);
@@ -187,7 +187,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_event')) {
             $eventTable = $schema->createTable('fusio_event');
             $eventTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $eventTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $eventTable->addColumn('category_id', 'integer', ['default' => 1]);
             $eventTable->addColumn('status', 'integer');
             $eventTable->addColumn('name', 'string', ['length' => 64]);
@@ -225,7 +225,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_identity')) {
             $identityTable = $schema->createTable('fusio_identity');
             $identityTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $identityTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $identityTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $identityTable->addColumn('status', 'integer');
             $identityTable->addColumn('app_id', 'integer');
             $identityTable->addColumn('role_id', 'integer', ['notnull' => false]);
@@ -254,7 +254,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $logTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $logTable->addColumn('category_id', 'integer', ['default' => 1]);
             $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
@@ -290,7 +290,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_operation')) {
             $operationTable = $schema->createTable('fusio_operation');
             $operationTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $operationTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $operationTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $operationTable->addColumn('category_id', 'integer', ['default' => 1]);
             $operationTable->addColumn('status', 'integer', ['default' => Table\Operation::STATUS_ACTIVE]);
             $operationTable->addColumn('active', 'integer', ['default' => 0]);
@@ -319,7 +319,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_page')) {
             $pageTable = $schema->createTable('fusio_page');
             $pageTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $pageTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $pageTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $pageTable->addColumn('status', 'integer', ['default' => Table\Page::STATUS_VISIBLE]);
             $pageTable->addColumn('title', 'string', ['length' => 255]);
             $pageTable->addColumn('slug', 'string', ['length' => 255]);
@@ -334,7 +334,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_plan')) {
             $planTable = $schema->createTable('fusio_plan');
             $planTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $planTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $planTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $planTable->addColumn('status', 'integer');
             $planTable->addColumn('name', 'string');
             $planTable->addColumn('description', 'string');
@@ -375,7 +375,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_rate')) {
             $rateTable = $schema->createTable('fusio_rate');
             $rateTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $rateTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $rateTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $rateTable->addColumn('status', 'integer');
             $rateTable->addColumn('priority', 'integer');
             $rateTable->addColumn('name', 'string', ['length' => 64]);
@@ -407,7 +407,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_role')) {
             $roleTable = $schema->createTable('fusio_role');
             $roleTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $roleTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $roleTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $roleTable->addColumn('category_id', 'integer');
             $roleTable->addColumn('status', 'integer');
             $roleTable->addColumn('name', 'string');
@@ -428,7 +428,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_schema')) {
             $schemaTable = $schema->createTable('fusio_schema');
             $schemaTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $schemaTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $schemaTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $schemaTable->addColumn('category_id', 'integer', ['default' => 1]);
             $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
             $schemaTable->addColumn('name', 'string', ['length' => 255]);
@@ -443,7 +443,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_scope')) {
             $scopeTable = $schema->createTable('fusio_scope');
             $scopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $scopeTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $scopeTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $scopeTable->addColumn('category_id', 'integer', ['default' => 1]);
             $scopeTable->addColumn('status', 'integer', ['default' => Table\Scope::STATUS_ACTIVE]);
             $scopeTable->addColumn('name', 'string', ['length' => 32]);
@@ -466,7 +466,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_transaction')) {
             $transactionTable = $schema->createTable('fusio_transaction');
             $transactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $transactionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $transactionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $transactionTable->addColumn('user_id', 'integer');
             $transactionTable->addColumn('plan_id', 'integer');
             $transactionTable->addColumn('transaction_id', 'string');
@@ -483,7 +483,7 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_user')) {
             $userTable = $schema->createTable('fusio_user');
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $userTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false]);
+            $userTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('role_id', 'integer');
             $userTable->addColumn('plan_id', 'integer', ['notnull' => false]);
             $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
