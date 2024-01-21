@@ -18,45 +18,69 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Filter\Plan\Usage;
+namespace Fusio\Impl\Tests\Backend\Filter\Audit;
 
-use Fusio\Impl\Backend\Filter\Plan\Usage\QueryFilter;
+use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
 
 /**
- * QueryFilterTest
+ * AuditQueryFilterTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilterTest extends FilterTestCase
+class AuditQueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create($this->createRequest([
-            'from' => '2015-08-20',
-            'to' => '2015-08-30',
-            'operationId' => 1,
-            'appId' => 1,
-            'userId' => 1,
+        $filter = AuditQueryFilter::from($this->createRequest([
+            'from'    => '2015-08-20',
+            'to'      => '2015-08-30',
+            'appId'   => 1,
+            'userId'  => 1,
+            'event'   => 'create',
+            'ip'      => '127.0.0.1',
+            'message' => 'foo',
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getOperationId());
         $this->assertEquals(1, $filter->getAppId());
         $this->assertEquals(1, $filter->getUserId());
+        $this->assertEquals('create', $filter->getEvent());
+        $this->assertEquals('127.0.0.1', $filter->getIp());
 
-        $condition = $filter->getCondition();
+        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
 
-        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND route_id = ? AND user_id = ? AND app_id = ?)', $condition->getStatement());
+        $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
             1,
             1,
-            1,
+            '%create%',
+            '127.0.0.1',
+            '%foo%',
         ], $condition->getValues());
+    }
+
+    public function testCreateSearchIp()
+    {
+        $filter = AuditQueryFilter::from($this->createRequest([
+            'search' => '93.223.172.206'
+        ]));
+
+        $this->assertEquals('93.223.172.206', $filter->getIp());
+    }
+
+    public function testCreateSearchEvent()
+    {
+        $filter = AuditQueryFilter::from($this->createRequest([
+            'search' => 'create'
+        ]));
+
+        $this->assertEquals('create', $filter->getMessage());
     }
 }
