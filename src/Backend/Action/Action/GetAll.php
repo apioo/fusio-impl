@@ -53,7 +53,8 @@ class GetAll implements ActionInterface
             (int) $request->get('count'),
             $request->get('search'),
             $request->get('sortBy'),
-            $request->get('sortOrder')
+            $request->get('sortOrder'),
+            $context->getTenantId()
         );
     }
 }

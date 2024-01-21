@@ -66,6 +66,7 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             $row = new Table\Generated\ScopeRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Scope::STATUS_ACTIVE);
             $row->setName($scope->getName());

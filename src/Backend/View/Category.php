@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Category extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -54,6 +54,9 @@ class Category extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->in(Table\Generated\CategoryTable::COLUMN_STATUS, [Table\Category::STATUS_ACTIVE]);
 
         if (!empty($search)) {
@@ -76,11 +79,11 @@ class Category extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
             'name' => Table\Generated\CategoryTable::COLUMN_NAME,

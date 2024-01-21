@@ -22,6 +22,10 @@ return [
     'fusio_expire_token'      => 'P2D',
     'fusio_expire_refresh'    => 'P3D',
 
+    // Optional a tenant id of you Fusio instance. This can be used to run multiple clients on the same Fusio
+    // installation. All database entries are separated by the provided tenant id
+    'fusio_tenant_id'         => env('APP_TENANT_ID')->string(),
+
     // The secret key of a project. It is recommended to change this to another random value. This is used i.e. to
     // encrypt the connection credentials in the database. NOTE IF YOU CHANGE THE KEY FUSIO CAN NO LONGER READ ANY DATA
     // WHICH WAS ENCRYPTED BEFORE. BECAUSE OF THAT IT IS RECOMMENDED TO CHANGE THE KEY ONLY BEFORE THE INSTALLATION
@@ -30,7 +34,7 @@ return [
     // Indicates whether the PHP sandbox feature is enabled. If yes it is possible to use the PHP-Sandbox action which
     // executes PHP code directly on the server. The code gets checked by a parser which prevents the use of unsafe
     // functions but there is no guarantee that this is complete safe. Otherwise you can also use the PHP worker which
-    // executes the code at the worker.
+    // executes the code at the worker
     'fusio_php_sandbox'       => true,
 
     // Points to the Fusio provider file which contains specific classes for the system. Please take a look at the
@@ -61,11 +65,11 @@ return [
     'psx_dispatch'            => '',
 
     // Defines the current environment i.e. prod or dev
-    'psx_env'                 => env('APP_ENV')->string()->default('prod'),
+    'psx_env'                 => env('APP_ENV')->string(),
 
     // Whether the app runs in debug mode or not. If not error reporting is set to 0, also several caches are used if
     // the debug mode is false
-    'psx_debug'               => env('APP_DEBUG')->bool()->default(false),
+    'psx_debug'               => env('APP_DEBUG')->bool(),
 
     // Database parameters which are used for the doctrine DBAL connection
     // http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html

@@ -70,6 +70,7 @@ class Log
         }
 
         $this->connection->insert(Table\Generated\LogTable::NAME, array(
+            Table\Generated\LogTable::COLUMN_TENANT_ID => $context->getTenantId(),
             Table\Generated\LogTable::COLUMN_CATEGORY_ID => $context->getOperation()->getCategoryId(),
             Table\Generated\LogTable::COLUMN_OPERATION_ID => $context->getOperation()->getId(),
             Table\Generated\LogTable::COLUMN_APP_ID => $context->getAppId(),

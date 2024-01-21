@@ -1282,6 +1282,22 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
+                'tenant.setup' => new Operation(
+                    action: Backend\Action\Tenant\Setup::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/tenant/:tenant_id',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'tenant.remove' => new Operation(
+                    action: Backend\Action\Tenant\Remove::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/tenant/:tenant_id',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
                 'transaction.getAll' => new Operation(
                     action: Backend\Action\Transaction\GetAll::class,
                     httpMethod: 'GET',

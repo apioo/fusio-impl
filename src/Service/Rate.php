@@ -66,6 +66,7 @@ class Rate
             $this->rateTable->beginTransaction();
 
             $row = new Table\Generated\RateRow();
+            $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Rate::STATUS_ACTIVE);
             $row->setPriority($rate->getPriority());
             $row->setName($rate->getName());

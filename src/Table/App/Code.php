@@ -32,7 +32,7 @@ use Fusio\Impl\Table\Generated;
  */
 class Code extends Generated\AppCodeTable
 {
-    public function getCodeByRequest($appKey, $appSecret, $code, $redirectUri)
+    public function getCodeByRequest(string $appKey, string $appSecret, string $code, ?string $redirectUri, ?string $tenantId = null): array|false
     {
         $sql = '    SELECT code.id,
                            code.app_id,
@@ -48,12 +48,19 @@ class Code extends Generated\AppCodeTable
                        AND code.code = :code
                        AND code.redirect_uri = :redirect_uri';
 
-        return $this->connection->fetchAssociative($sql, array(
+        $params = [
             'app_key'      => $appKey,
             'app_secret'   => $appSecret,
             'status'       => App::STATUS_ACTIVE,
             'code'         => $code,
             'redirect_uri' => $redirectUri ?: '',
-        ));
+        ];
+
+        if (!empty($tenantId)) {
+            $sql .= ' AND app.tenant_id = :tenant_id';
+            $params['tenant_id'] = $tenantId;
+        }
+
+        return $this->connection->fetchAssociative($sql, $params);
     }
 }

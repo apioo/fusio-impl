@@ -6,6 +6,7 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
     private ?int $userId = null;
+    private ?string $tenantId = null;
     private ?int $status = null;
     private ?string $name = null;
     private ?string $url = null;
@@ -29,6 +30,14 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getUserId() : int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
+    }
+    public function setTenantId(?string $tenantId) : void
+    {
+        $this->tenantId = $tenantId;
+    }
+    public function getTenantId() : ?string
+    {
+        return $this->tenantId;
     }
     public function setStatus(int $status) : void
     {
@@ -100,6 +109,7 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('user_id', $this->userId);
+        $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
         $record->put('name', $this->name);
         $record->put('url', $this->url);
@@ -119,6 +129,7 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
+        $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->url = isset($data['url']) && is_string($data['url']) ? $data['url'] : null;

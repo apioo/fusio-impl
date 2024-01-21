@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class IncomingTransactions extends ViewAbstract
 {
-    public function getView(Transaction\QueryFilter $filter)
+    public function getView(Transaction\QueryFilter $filter, ?string $tenantId = null)
     {
         $condition  = $filter->getCondition('trans');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

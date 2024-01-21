@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Config extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -55,6 +55,9 @@ class Config extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\ConfigTable::COLUMN_TENANT_ID, $tenantId);
+        }
 
         if (!empty($search)) {
             $condition->like(Table\Generated\ConfigTable::COLUMN_NAME, '%' . $search . '%');
@@ -80,11 +83,11 @@ class Config extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

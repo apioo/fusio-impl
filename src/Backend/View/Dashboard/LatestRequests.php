@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestRequests extends ViewAbstract
 {
-    public function getView(int $categoryId)
+    public function getView(int $categoryId, ?string $tenantId = null)
     {
         $sql = '  SELECT log.id,
                          log.path,

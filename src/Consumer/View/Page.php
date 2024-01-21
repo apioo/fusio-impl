@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Page extends ViewAbstract
 {
-    public function getCollection(int $startIndex = 0)
+    public function getCollection(int $startIndex = 0, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -45,6 +45,9 @@ class Page extends ViewAbstract
         $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\PageTable::COLUMN_STATUS, Table\Page::STATUS_VISIBLE);
 
         $builder = new Builder($this->connection);
@@ -64,19 +67,11 @@ class Page extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $pageId)
+    public function getEntity(string $pageId, ?string $tenantId = null)
     {
-        if (str_starts_with($pageId, '~')) {
-            $method = 'findOneBySlug';
-            $pageId = urldecode(substr($pageId, 1));
-        } else {
-            $method = 'find';
-            $pageId = (int) $pageId;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Page::class), $method], [$pageId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$pageId, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,

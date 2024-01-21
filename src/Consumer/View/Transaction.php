@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection(int $userId, ?int $startIndex = null)
+    public function getCollection(int $userId, ?int $startIndex = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -45,7 +45,10 @@ class Transaction extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
-        $condition->equals('user_id', $userId);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
+        }
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);
 
@@ -69,11 +72,14 @@ class Transaction extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $transactionId)
+    public function getEntity(int $userId, int $transactionId, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
-        $condition->equals('id', $transactionId);
-        $condition->equals('user_id', $userId);
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_ID, $transactionId);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
+        }
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);
 

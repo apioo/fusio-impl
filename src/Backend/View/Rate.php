@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Rate extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -55,6 +55,9 @@ class Rate extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\RateTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->in(Table\Generated\RateTable::COLUMN_STATUS, [Table\Rate::STATUS_ACTIVE]);
 
         if (!empty($search)) {
@@ -81,11 +84,11 @@ class Rate extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
             'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),

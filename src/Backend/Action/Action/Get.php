@@ -50,7 +50,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $action = $this->view->getEntity(
-            $request->get('action_id')
+            $request->get('action_id'),
+            $context->getTenantId()
         );
 
         if (empty($action)) {

@@ -32,17 +32,25 @@ use PSX\Sql\ViewAbstract;
  */
 class CountRequests extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter, ?string $tenantId = null): array
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         $sql = 'SELECT COUNT(log.id) AS cnt
                   FROM fusio_log log
-                 WHERE log.category_id = ?
-                   AND ' . $expression;
+                 WHERE log.category_id = ?';
 
-        $row = $this->connection->fetchAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $params = [$categoryId];
+        if (!empty($tenantId)) {
+            $sql.= ' AND log.tenant_id = ?';
+            $params[] = $tenantId;
+        }
+
+        $sql.= ' AND ' . $expression;
+        $params = array_merge($params, $condition->getValues());
+
+        $row = $this->connection->fetchAssociative($sql, $params);
 
         return [
             'count' => (int) ($row['cnt'] ?? 0),

@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class TimeAverage extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter, ?string $tenantId = null)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

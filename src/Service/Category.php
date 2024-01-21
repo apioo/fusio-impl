@@ -60,6 +60,7 @@ class Category
 
             // create category
             $row = new Table\Generated\CategoryRow();
+            $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Rate::STATUS_ACTIVE);
             $row->setName($category->getName());
             $this->categoryTable->create($row);

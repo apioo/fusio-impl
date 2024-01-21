@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(int $startIndex, int $count, QueryFilter $filter, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -48,6 +48,10 @@ class Transaction extends ViewAbstract
         $sortBy = Table\Generated\TransactionTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
+        }
+
         $builder = new Builder($this->connection);
 
         $definition = [
@@ -72,11 +76,11 @@ class Transaction extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
             'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),

@@ -130,7 +130,7 @@ class App
         }
 
         $userScopes = $this->userScopeTable->getAvailableScopes($userId);
-        $scopes     = $this->scopeTable->getValidScopes($scopes);
+        $scopes     = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
 
         // check that the user can assign only the scopes which are also
         // assigned to the user account

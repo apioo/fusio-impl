@@ -63,6 +63,7 @@ class Page
             $this->pageTable->beginTransaction();
 
             $row = new Table\Generated\PageRow();
+            $row->setTenantId($context->getTenantId());
             $row->setStatus($page->getStatus());
             $row->setTitle($title);
             $row->setSlug($slug);

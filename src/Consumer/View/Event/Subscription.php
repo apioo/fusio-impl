@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Subscription extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0)
+    public function getCollection(int $userId, int $startIndex = 0, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -45,6 +45,9 @@ class Subscription extends ViewAbstract
 
         $condition = Condition::withAnd();
         $condition->equals('event_subscription.user_id', $userId);
+        if (!empty($tenantId)) {
+            $condition->equals('event.tenant_id', $tenantId);
+        }
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
@@ -67,11 +70,14 @@ class Subscription extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $subscriptionId)
+    public function getEntity(int $userId, int $subscriptionId, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
         $condition->equals('event_subscription.id', $subscriptionId);
         $condition->equals('event_subscription.user_id', $userId);
+        if (!empty($tenantId)) {
+            $condition->equals('event.tenant_id', $tenantId);
+        }
 
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition, 'event_subscription.id DESC');
         $builder = new Builder($this->connection);

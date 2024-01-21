@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class UsedPoints extends ViewAbstract
 {
-    public function getView(QueryFilter $filter)
+    public function getView(QueryFilter $filter, ?string $tenantId = null)
     {
         $condition  = $filter->getCondition('usag');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

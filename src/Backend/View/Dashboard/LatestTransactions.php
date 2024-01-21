@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestTransactions extends ViewAbstract
 {
-    public function getView()
+    public function getView(?string $tenantId = null)
     {
         $sql = '  SELECT trans.id,
                          trans.user_id,

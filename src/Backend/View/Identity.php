@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Identity extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -54,6 +54,9 @@ class Identity extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->in(Table\Generated\IdentityTable::COLUMN_STATUS, [Table\Identity::STATUS_ACTIVE]);
 
         if (!empty($search)) {
@@ -81,11 +84,11 @@ class Identity extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Identity::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Identity::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
             'roleId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ROLE_ID),
             'appId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_APP_ID),

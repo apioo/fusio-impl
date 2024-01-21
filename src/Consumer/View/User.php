@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -34,11 +35,17 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_ID, $id);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
+        }
+
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\User::class), 'findOneBy'], [$condition], [
             'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
             'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
             'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),

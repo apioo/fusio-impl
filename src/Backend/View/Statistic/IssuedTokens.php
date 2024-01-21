@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class IssuedTokens extends ViewAbstract
 {
-    public function getView(App\Token\QueryFilter $filter)
+    public function getView(App\Token\QueryFilter $filter, ?string $tenantId = null)
     {
         $condition  = $filter->getCondition('token');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

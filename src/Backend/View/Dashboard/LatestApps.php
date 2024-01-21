@@ -33,13 +33,14 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestApps extends ViewAbstract
 {
-    public function getView()
+    public function getView(?string $tenantId = null)
     {
         $sql = '  SELECT app.id,
                          app.name,
                          app.date
                     FROM fusio_app app
-                   WHERE app.status = :status
+                   WHERE app.tenant_id = :status
+                     AND app.status = :status
                 ORDER BY app.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);

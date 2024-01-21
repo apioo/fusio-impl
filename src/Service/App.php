@@ -74,6 +74,7 @@ class App
             $appSecret = TokenGenerator::generateAppSecret();
 
             $row = new Table\Generated\AppRow();
+            $row->setTenantId($context->getTenantId());
             $row->setUserId($app->getUserId());
             $row->setStatus($app->getStatus());
             $row->setName($app->getName());
@@ -179,7 +180,7 @@ class App
     protected function insertScopes(int $appId, ?array $scopes): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes);
+            $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\AppScopeRow();

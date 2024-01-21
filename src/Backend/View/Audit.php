@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Audit extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(int $startIndex, int $count, QueryFilter $filter, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -49,6 +49,10 @@ class Audit extends ViewAbstract
         $sortBy = Table\Generated\AuditTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\AuditTable::COLUMN_TENANT_ID, $tenantId);
+        }
+
         $builder = new Builder($this->connection);
 
         $definition = [
@@ -67,11 +71,11 @@ class Audit extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),

@@ -30,13 +30,13 @@ use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * AssertOperation
+ * Operation
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class AssertOperation implements FilterInterface
+class Operation implements FilterInterface
 {
     private Table\Operation $operationTable;
     private ContextFactory $contextFactory;

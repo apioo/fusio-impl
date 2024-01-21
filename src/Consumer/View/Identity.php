@@ -46,7 +46,7 @@ class Identity extends ViewAbstract
         $this->config = $config;
     }
 
-    public function getCollection(int $userId, ?int $appId, int $startIndex = 0)
+    public function getCollection(int $userId, ?int $appId, int $startIndex = 0, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -60,6 +60,9 @@ class Identity extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\IdentityTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
 

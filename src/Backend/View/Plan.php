@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Plan extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -55,6 +55,9 @@ class Plan extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
@@ -85,11 +88,11 @@ class Plan extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,

@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex, QueryFilter $filter)
+    public function getCollection(int $userId, int $startIndex, QueryFilter $filter, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -46,6 +46,9 @@ class Log extends ViewAbstract
         $sortBy = Table\Generated\LogTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);
@@ -68,10 +71,13 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $logId)
+    public function getEntity(int $userId, int $logId, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $builder = new Builder($this->connection);

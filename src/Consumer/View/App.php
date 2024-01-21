@@ -36,9 +36,12 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0, ?string $search = null)
+    public function getCollection(int $userId, int $startIndex = 0, ?string $search = null, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
@@ -66,10 +69,13 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $appId)
+    public function getEntity(int $userId, int $appId, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $appId);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
@@ -101,9 +107,12 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey($appKey, $scope)
+    public function getEntityByAppKey(string $appKey, string $scope, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
         $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $appKey);
 

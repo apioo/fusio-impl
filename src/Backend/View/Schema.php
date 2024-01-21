@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -54,11 +54,14 @@ class Schema extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $tenantId);
+        }
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\SchemaTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $builder = new Builder($this->connection);
@@ -78,11 +81,11 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,

@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Plan extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0)
+    public function getCollection(int $userId, int $startIndex = 0, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -45,6 +45,9 @@ class Plan extends ViewAbstract
         $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -69,10 +72,13 @@ class Plan extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $planId)
+    public function getEntity(int $userId, int $planId, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_ID, $planId);
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);

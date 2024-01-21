@@ -35,6 +35,7 @@ use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -81,6 +82,7 @@ class Action
             $this->actionTable->beginTransaction();
 
             $row = new Table\Generated\ActionRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($name);
@@ -108,7 +110,7 @@ class Action
 
     public function update(string $actionId, ActionUpdate $action, UserContext $context): int
     {
-        $existing = $this->actionTable->findOneByIdentifier($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId, $this->config->get('fusio_tenant_id'));
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -148,7 +150,7 @@ class Action
 
     public function delete(string $actionId, UserContext $context): int
     {
-        $existing = $this->actionTable->findOneByIdentifier($actionId);
+        $existing = $this->actionTable->findOneByIdentifier($actionId, $this->config->get('fusio_tenant_id'));
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }

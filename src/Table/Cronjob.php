@@ -39,12 +39,19 @@ class Cronjob extends Generated\CronjobTable
     public const CODE_SUCCESS = 0;
     public const CODE_ERROR = 1;
 
-    public function findOneByIdentifier(string $id): ?CronjobRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?CronjobRow
     {
-        if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
-        } else {
-            return $this->find((int) $id);
+        $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         }
+
+        if (str_starts_with($id, '~')) {
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
+        } else {
+            $condition->equals(self::COLUMN_ID, (int) $id);
+        }
+
+        return $this->findOneBy($condition);
     }
 }

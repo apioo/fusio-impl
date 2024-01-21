@@ -90,6 +90,7 @@ class Identity
 
             // create category
             $row = new Table\Generated\IdentityRow();
+            $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Identity::STATUS_ACTIVE);
             $row->setAppId($identity->getAppId());
             $row->setRoleId($identity->getRoleId());

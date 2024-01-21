@@ -80,6 +80,7 @@ class User
             $password = $user->getPassword();
 
             $row = new Table\Generated\UserRow();
+            $row->setTenantId($context->getTenantId());
             $row->setRoleId($roleId);
             $row->setPlanId($user->getPlanId());
             $row->setIdentityId(null);
@@ -114,6 +115,10 @@ class User
     {
         // check whether user exists
         $condition  = Condition::withAnd();
+        $tenantId = $context->getTenantId();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identity->getId());
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $userInfo->getId());
 
@@ -207,6 +212,7 @@ class User
             // update user
             $row = new Table\Generated\UserRow();
             $row->setId($existing->getId());
+            $row->setTenantId($context->getTenantId());
             $row->setRoleId($user->getRoleId() ?? $existing->getRoleId());
             $row->setPlanId($user->getPlanId() ?? $existing->getPlanId());
             $row->setStatus($user->getStatus() ?? $existing->getStatus());
@@ -317,7 +323,7 @@ class User
 
     private function insertScopes(int $userId, array $scopes): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes);
+        $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
         foreach ($scopes as $scope) {
             $row = new Table\Generated\UserScopeRow();
             $row->setUserId($userId);

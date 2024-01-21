@@ -45,7 +45,7 @@ class Password extends PasswordAbstract
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
     private Table\App $appTable;
-    private string $expireToken;
+    private ConfigInterface $config;
 
     public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
     {
@@ -53,17 +53,12 @@ class Password extends PasswordAbstract
         $this->appTokenService = $appTokenService;
         $this->scopeService = $scopeService;
         $this->appTable = $appTable;
-        $this->expireToken = $config->get('fusio_expire_token');
+        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
     {
-        $condition = Condition::withAnd();
-        $condition->equals('app_key', $credentials->getClientId());
-        $condition->equals('app_secret', $credentials->getClientSecret());
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->findOneBy($condition);
+        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->config->get('fusio_tenant_id'));
         if (empty($app)) {
             throw new InvalidClientException('Unknown credentials');
         }
@@ -92,7 +87,7 @@ class Password extends PasswordAbstract
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->expireToken)
+            new \DateInterval($this->config->get('fusio_expire_token'))
         );
     }
 }

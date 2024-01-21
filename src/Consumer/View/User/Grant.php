@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\View;
+namespace Fusio\Impl\Consumer\View\User;
 
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Grant extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = null)
+    public function getCollection(int $userId, int $startIndex = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -44,6 +44,9 @@ class Grant extends ViewAbstract
 
         $condition = Condition::withAnd();
         $condition->equals('user_grant.user_id', $userId);
+        if (!empty($tenantId)) {
+            $condition->equals('app.tenant_id', $tenantId);
+        }
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);

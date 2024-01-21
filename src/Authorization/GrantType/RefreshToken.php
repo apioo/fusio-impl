@@ -41,25 +41,18 @@ class RefreshToken extends RefreshTokenAbstract
 {
     private Service\App\Token $appTokenService;
     private Table\App $appTable;
-    private string $expireApp;
-    private string $expireRefresh;
+    private ConfigInterface $config;
 
     public function __construct(Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->appTable        = $appTable;
-        $this->expireApp       = $config->get('fusio_expire_token');
-        $this->expireRefresh   = $config->get('fusio_expire_refresh') ?? 'P3D';
+        $this->config          = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $credentials->getClientId());
-        $condition->equals(Table\Generated\AppTable::COLUMN_APP_SECRET, $credentials->getClientSecret());
-        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->findOneBy($condition);
+        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->config->get('fusio_tenant_id'));
         if (empty($app)) {
             throw new ServerErrorException('Unknown credentials');
         }
@@ -69,8 +62,8 @@ class RefreshToken extends RefreshTokenAbstract
             $app->getId(),
             $grant->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->expireApp),
-            new \DateInterval($this->expireRefresh)
+            new \DateInterval($this->config->get('fusio_expire_token')),
+            new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D')
         );
     }
 }

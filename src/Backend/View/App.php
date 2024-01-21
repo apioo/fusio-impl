@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -55,6 +55,9 @@ class App extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
 
         if (!empty($search)) {
@@ -81,11 +84,11 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
             'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),

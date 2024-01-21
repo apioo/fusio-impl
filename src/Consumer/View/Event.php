@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $userId, int $startIndex = 0)
+    public function getCollection(int $categoryId, int $userId, int $startIndex = 0, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -44,6 +44,9 @@ class Event extends ViewAbstract
         $count = 16;
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
 

@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Role extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -55,6 +55,9 @@ class Role extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->in(Table\Generated\RoleTable::COLUMN_STATUS, [Table\Role::STATUS_ACTIVE]);
 
         if (!empty($search)) {
@@ -78,11 +81,11 @@ class Role extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Role::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Role::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
             'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
             'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),

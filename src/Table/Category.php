@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\CategoryRow;
-use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Sql\Condition;
 
 /**
@@ -36,29 +35,19 @@ class Category extends Generated\CategoryTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id): ?CategoryRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?CategoryRow
     {
+        $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        }
+
         if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
         } else {
-            return $this->find((int) $id);
-        }
-    }
-
-    public function getCategoryIdForPath(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
+            $condition->equals(self::COLUMN_ID, (int) $id);
         }
 
-        $categoryId = (int) $this->connection->fetchOne('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
+        return $this->findOneBy($condition);
     }
 }

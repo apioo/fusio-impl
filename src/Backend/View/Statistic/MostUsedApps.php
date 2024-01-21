@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class MostUsedApps extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter)
+    public function getView(Log\QueryFilter $filter, ?string $tenantId = null)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

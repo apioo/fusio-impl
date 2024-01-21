@@ -42,14 +42,14 @@ class AuthorizationCode extends AuthorizationCodeAbstract
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
     private Table\App\Code $appCodeTable;
-    private string $expireToken;
+    private ConfigInterface $config;
 
     public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, ConfigInterface $config)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->appCodeTable    = $appCodeTable;
-        $this->expireToken     = $config->get('fusio_expire_token');
+        $this->config          = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)
@@ -58,7 +58,8 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $credentials->getClientId(),
             $credentials->getClientSecret(),
             $grant->getCode(),
-            $grant->getRedirectUri()
+            $grant->getRedirectUri(),
+            $this->config->get('fusio_tenant_id')
         );
 
         if (empty($code)) {
@@ -82,7 +83,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $code['user_id'],
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->expireToken)
+            new \DateInterval($this->config->get('fusio_expire_token'))
         );
     }
 }

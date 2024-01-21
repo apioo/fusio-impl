@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Connection extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -57,6 +57,9 @@ class Connection extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         if (!empty($search)) {
@@ -80,19 +83,11 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -103,11 +98,11 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

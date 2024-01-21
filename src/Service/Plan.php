@@ -67,6 +67,7 @@ class Plan
             }
 
             $row = new Table\Generated\PlanRow();
+            $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Plan::STATUS_ACTIVE);
             $row->setName($plan->getName());
             $row->setDescription($plan->getDescription());
@@ -160,7 +161,7 @@ class Plan
 
     private function insertScopes(int $planId, array $scopes): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes);
+        $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
 
         foreach ($scopes as $scope) {
             $row = new Table\Generated\PlanScopeRow();

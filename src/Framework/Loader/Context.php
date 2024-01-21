@@ -36,6 +36,7 @@ use PSX\Framework\Loader\Context as FrameworkContext;
  */
 class Context extends FrameworkContext
 {
+    private ?string $tenantId = null;
     private ?int $categoryId = null;
     private ?AppInterface $app = null;
     private ?UserInterface $user = null;
@@ -43,6 +44,16 @@ class Context extends FrameworkContext
     private ?int $logId = null;
     private ?OperationRow $operation = null;
     private ?UserContext $userContext = null;
+
+    public function getTenantId(): ?string
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?string $tenantId): void
+    {
+        $this->tenantId = $tenantId;
+    }
 
     public function getCategoryId(): int
     {
@@ -145,9 +156,9 @@ class Context extends FrameworkContext
         }
 
         if ($this->user && $this->app) {
-            return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId());
+            return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId(), $this->tenantId);
         } elseif ($this->user) {
-            return $this->userContext = UserContext::newContext($this->user->getId());
+            return $this->userContext = UserContext::newContext($this->user->getId(), null, $this->tenantId);
         } else {
             return $this->userContext = UserContext::newAnonymousContext();
         }

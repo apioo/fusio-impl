@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -54,6 +54,9 @@ class Event extends ViewAbstract
         }
 
         $condition = Condition::withAnd();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
         $condition->in(Table\Generated\EventTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);
 
@@ -79,11 +82,11 @@ class Event extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
             'name' => Table\Generated\EventTable::COLUMN_NAME,

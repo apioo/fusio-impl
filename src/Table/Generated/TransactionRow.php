@@ -5,6 +5,7 @@ namespace Fusio\Impl\Table\Generated;
 class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    private ?string $tenantId = null;
     private ?int $userId = null;
     private ?int $planId = null;
     private ?string $transactionId = null;
@@ -20,6 +21,14 @@ class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
     public function getId() : int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
+    }
+    public function setTenantId(?string $tenantId) : void
+    {
+        $this->tenantId = $tenantId;
+    }
+    public function getTenantId() : ?string
+    {
+        return $this->tenantId;
     }
     public function setUserId(int $userId) : void
     {
@@ -90,6 +99,7 @@ class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
+        $record->put('tenant_id', $this->tenantId);
         $record->put('user_id', $this->userId);
         $record->put('plan_id', $this->planId);
         $record->put('transaction_id', $this->transactionId);
@@ -108,6 +118,7 @@ class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
+        $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->planId = isset($data['plan_id']) && is_int($data['plan_id']) ? $data['plan_id'] : null;
         $row->transactionId = isset($data['transaction_id']) && is_string($data['transaction_id']) ? $data['transaction_id'] : null;

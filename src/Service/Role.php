@@ -64,6 +64,7 @@ class Role
 
             // create role
             $row = new Table\Generated\RoleRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($role->getCategoryId());
             $row->setStatus(Table\Role::STATUS_ACTIVE);
             $row->setName($role->getName());
@@ -151,7 +152,7 @@ class Role
     protected function insertScopes(int $roleId, ?array $scopes): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes);
+            $scopes = $this->scopeTable->getValidScopes($scopes, $this->config->get('fusio_tenant_id'));
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\RoleScopeRow();

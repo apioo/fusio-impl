@@ -59,6 +59,7 @@ class Cronjob
             $this->cronjobTable->beginTransaction();
 
             $row = new Table\Generated\CronjobRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Cronjob::STATUS_ACTIVE);
             $row->setName($cronjob->getName());

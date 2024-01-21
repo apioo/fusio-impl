@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(int $categoryId, int $startIndex, int $count, QueryFilter $filter, ?string $tenantId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -49,6 +49,9 @@ class Log extends ViewAbstract
         $sortBy = Table\Generated\LogTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
+        if (!empty($tenantId)) {
+            $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $tenantId);
+        }
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
         $builder = new Builder($this->connection);
@@ -72,11 +75,11 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
             'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
             'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
