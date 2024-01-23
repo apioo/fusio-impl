@@ -48,7 +48,7 @@ class Identity extends ViewAbstract
         $this->config = $config;
     }
 
-    public function getCollection(int $appId, QueryFilter $filter, ContextInterface $context)
+    public function getCollection(?int $appId, QueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();

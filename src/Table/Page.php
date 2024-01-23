@@ -43,7 +43,7 @@ class Page extends Generated\PageTable
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
 
         if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_TITLE, urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_SLUG, urldecode(substr($id, 1)));
         } else {
             $condition->equals(self::COLUMN_ID, (int) $id);
         }
