@@ -131,7 +131,7 @@ class SpecificationBuilder
 
     private function getThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
     {
-        $throws = \json_decode($row->getThrows());
+        $throws = \json_decode($row->getThrows() ?? '');
         if (!$throws instanceof \stdClass) {
             return [];
         }
