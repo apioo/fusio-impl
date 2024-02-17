@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Dashboard;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -36,19 +37,22 @@ class LatestApps extends ViewAbstract
 {
     public function getView(ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
+
         $sql = '  SELECT app.id,
                          app.name,
                          app.date
                     FROM fusio_app app
-                   WHERE app.tenant_id = :tenant_id
-                     AND app.status = :status
+                         ' . $condition->getStatement($this->connection->getDatabasePlatform()) . '
                 ORDER BY app.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, ['tenant_id' => $context->getTenantId(), 'status' => Table\App::STATUS_ACTIVE], [
+            'entry' => $builder->doCollection($sql, $condition->getValues(), [
                 'id' => $builder->fieldInteger('id'),
                 'name' => 'name',
                 'date' => $builder->fieldDateTime('date'),

@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View\Dashboard;
 
 use Fusio\Engine\ContextInterface;
 use PSX\Nested\Builder;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * LatestRequests
@@ -35,20 +37,23 @@ class LatestRequests extends ViewAbstract
 {
     public function getView(ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+
         $sql = '  SELECT log.id,
                          log.path,
                          log.ip,
                          log.date
                     FROM fusio_log log
-                   WHERE log.tenant_id = :tenant_id
-                     AND log.category_id = :category_id
+                         ' . $condition->getStatement($this->connection->getDatabasePlatform()) . '
                 ORDER BY log.id DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, ['tenant_id' => $context->getTenantId(), 'category_id' => $context->getUser()->getCategoryId()], [
+            'entry' => $builder->doCollection($sql, $condition->getValues(), [
                 'id' => $builder->fieldInteger('id'),
                 'path' => 'path',
                 'ip' => 'ip',
