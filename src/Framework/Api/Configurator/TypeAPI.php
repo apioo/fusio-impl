@@ -59,9 +59,19 @@ class TypeAPI implements ConfiguratorInterface
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $tokenUrl = rtrim($baseUrl, '/') . '/authorization/token';
         $filterId = $filter !== null ? (int) $filter->getId() : 1;
-        $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->config->get('fusio_tenant_id'));
+        $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->getTenantId());
 
         $generator->setBaseUrl($baseUrl);
         $generator->setSecurity(new OAuth2($tokenUrl, null, $scopes));
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

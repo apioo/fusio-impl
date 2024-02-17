@@ -69,10 +69,20 @@ class OpenAPI implements ConfiguratorInterface
 
         $baseUrl    = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $filterId   = $filter !== null ? (int) $filter->getId() : 1;
-        $scopes     = $this->scopeTable->getAvailableScopes($filterId, $this->config->get('fusio_tenant_id'));
+        $scopes     = $this->scopeTable->getAvailableScopes($filterId, $this->getTenantId());
         $tokenUrl   = rtrim($baseUrl, '/') . '/authorization/token';
         $refreshUrl = rtrim($baseUrl, '/') . '/authorization/token';
 
         $generator->setAuthorizationFlow('app', Generator\Spec\ApiAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $scopes);
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }
