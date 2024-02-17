@@ -49,7 +49,7 @@ class Tenant implements FilterInterface
     {
         $context = $this->contextFactory->getActive();
 
-        $tenantId = $this->config->get('APP_TENANT_ID');
+        $tenantId = $this->config->get('fusio_tenant_id');
         if (!empty($tenantId)) {
             $context->setTenantId($tenantId);
         }
