@@ -110,6 +110,12 @@ class UpgradeCommand extends Command
                     continue;
                 }
 
+                $action = $method['action'];
+                if (empty($action)) {
+                    $output->writeln('Skip route method with empty action ' . $operationId . ' (' . $method['method'] . '-' . $route['path'] . ')');
+                    continue;
+                }
+
                 $this->connection->insert('fusio_operation', [
                     'category_id' => $route['category_id'],
                     'status' => Table\Operation::STATUS_ACTIVE,
@@ -125,7 +131,7 @@ class UpgradeCommand extends Command
                     'incoming' => SchemaScheme::wrap($method['request']),
                     'outgoing' => SchemaScheme::wrap($outgoing),
                     'throws' => '',
-                    'action' => ActionScheme::wrap($method['action']),
+                    'action' => ActionScheme::wrap($action),
                     'costs' => $method['costs'],
                     'metadata' => $route['metadata'],
                 ]);
