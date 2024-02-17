@@ -21,10 +21,10 @@
 namespace Fusio\Impl\Backend\View\Dashboard;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
-use Fusio\Impl\Table;
 
 /**
  * LatestRequests
