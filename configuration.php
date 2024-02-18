@@ -29,7 +29,7 @@ return [
     // The secret key of a project. It is recommended to change this to another random value. This is used i.e. to
     // encrypt the connection credentials in the database. NOTE IF YOU CHANGE THE KEY FUSIO CAN NO LONGER READ ANY DATA
     // WHICH WAS ENCRYPTED BEFORE. BECAUSE OF THAT IT IS RECOMMENDED TO CHANGE THE KEY ONLY BEFORE THE INSTALLATION
-    'fusio_project_key'        => '42eec18ffdbffc9fda6110dcc705d6ce',
+    'fusio_project_key'        => env('APP_PROJECT_KEY')->string(),
 
     // Optional an array of action or connection classes which are not allowed to use
     'fusio_action_exclude'     => null,
