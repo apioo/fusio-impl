@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Connection;
 
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Connection;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -34,10 +35,12 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Connection $connectionTable;
+    private ConfigInterface $config;
 
-    public function __construct(Table\Connection $connectionTable)
+    public function __construct(Table\Connection $connectionTable, ConfigInterface $config)
     {
         $this->connectionTable = $connectionTable;
+        $this->config = $config;
     }
 
     public function assert(Connection $connection, ?Table\Generated\ConnectionRow $existing = null): void
