@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Installation\NewInstallation;
 use PSX\Http\Exception\BadRequestException;
 
@@ -62,8 +63,12 @@ class Tenant
         $this->connection = $connection;
     }
 
-    public function setup(string $tenantId): void
+    public function setup(string $tenantId, ContextInterface $context): void
     {
+        if (!empty($context->getTenantId())) {
+            throw new BadRequestException('Tenant operations are only allowed at the root tenant');
+        }
+
         $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_config WHERE tenant_id = :tenant_id', [
             'tenant_id' => $tenantId,
         ]);
@@ -97,8 +102,12 @@ class Tenant
         }
     }
 
-    public function remove(string $tenantId): void
+    public function remove(string $tenantId, ContextInterface $context): void
     {
+        if (!empty($context->getTenantId())) {
+            throw new BadRequestException('Tenant operations are only allowed at the root tenant');
+        }
+
         foreach (self::TENANT_TABLES as $tableName) {
             if ($tableName === 'fusio_operation') {
                 $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_operation WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);

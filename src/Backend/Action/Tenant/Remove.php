@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Exception\BadRequestException;
 
 /**
  * Remove
@@ -45,7 +46,12 @@ class Remove implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->tenantService->remove($request->get('tenant_id'));
+        $tenantId = $request->get('tenant_id');
+        if (empty($tenantId)) {
+            throw new BadRequestException('Missing tenant id');
+        }
+
+        $this->tenantService->remove($tenantId, $context);
 
         return new HttpResponse(200, [], [
             'success' => true,
