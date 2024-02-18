@@ -33,6 +33,28 @@ use PSX\Http\Exception\BadRequestException;
  */
 class Tenant
 {
+    public const TENANT_TABLES = [
+        'fusio_category',
+        'fusio_config',
+        'fusio_connection',
+        'fusio_cronjob',
+        'fusio_action',
+        'fusio_operation',
+        'fusio_page',
+        'fusio_schema',
+        'fusio_transaction',
+        'fusio_role',
+        'fusio_rate',
+        'fusio_plan',
+        'fusio_scope',
+        'fusio_app',
+        'fusio_audit',
+        'fusio_event',
+        'fusio_identity',
+        'fusio_log',
+        'fusio_user',
+    ];
+
     private Connection $connection;
 
     public function __construct(Connection $connection)
@@ -56,12 +78,20 @@ class Tenant
                 continue;
             }
 
-            $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+            if (!in_array($tableName,self::TENANT_TABLES)) {
+                continue;
+            }
+
+            $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName . ' WHERE tenant_id = :tenant_id', [
+                'tenant_id' => $tenantId,
+            ]);
+
             if ($count > 0) {
                 continue;
             }
 
             foreach ($rows as $row) {
+                $row['tenant_id'] = $tenantId;
                 $this->connection->insert($tableName, $row);
             }
         }
@@ -69,30 +99,7 @@ class Tenant
 
     public function remove(string $tenantId): void
     {
-        $tables = [
-            'fusio_category',
-            'fusio_config',
-            'fusio_connection',
-            'fusio_cronjob',
-            'fusio_action',
-            'fusio_operation',
-            'fusio_page',
-            'fusio_schema',
-            'fusio_transaction',
-            'fusio_role',
-            'fusio_rate',
-            'fusio_plan',
-            'fusio_scope',
-
-            'fusio_app',
-            'fusio_audit',
-            'fusio_event',
-            'fusio_identity',
-            'fusio_log',
-            'fusio_user',
-        ];
-
-        foreach ($tables as $tableName) {
+        foreach (self::TENANT_TABLES as $tableName) {
             if ($tableName === 'fusio_operation') {
                 $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_operation WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
                 foreach ($result as $row) {

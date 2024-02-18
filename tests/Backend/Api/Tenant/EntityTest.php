@@ -83,6 +83,21 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDelete()
     {
+        // create a tenant before we delete the data
+        $response = $this->sendRequest('/backend/tenant/customer_a', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'foo' => 'bar',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertTrue($data->success, $body);
+
+        // now delete the tenant
         $response = $this->sendRequest('/backend/tenant/customer_a', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
