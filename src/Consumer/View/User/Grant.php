@@ -42,48 +42,52 @@ class Grant extends ViewAbstract
         $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals('user_grant.user_id', $context->getUser()->getId());
-        $condition->equals('app.tenant_id', $context->getTenantId());
-        $condition->equals('app.status', Table\App::STATUS_ACTIVE);
+        $condition->equals('user_grant.' . Table\Generated\UserGrantTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
-        $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition, 'user_grant.id DESC');
-        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'user_grant.' . Table\Generated\UserGrantTable::COLUMN_ID,
+                'user_grant.' . Table\Generated\UserGrantTable::COLUMN_APP_ID,
+                'user_grant.' . Table\Generated\UserGrantTable::COLUMN_ALLOW,
+                'user_grant.' . Table\Generated\UserGrantTable::COLUMN_DATE,
+                'app.' . Table\Generated\AppTable::COLUMN_NAME,
+                'app.' . Table\Generated\AppTable::COLUMN_URL,
+            ])
+            ->from('fusio_user_grant', 'user_grant')
+            ->innerJoin('user_grant', 'fusio_app', 'app', 'user_grant.' . Table\Generated\UserGrantTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->orderBy('user_grant.' . Table\Generated\UserGrantTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult($startIndex)
+            ->setMaxResults($count);
+
+        $countBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from('fusio_user_grant', 'user_grant')
+            ->innerJoin('user_grant', 'fusio_app', 'app', 'user_grant.' . Table\Generated\UserGrantTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
         $definition = [
-            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
-                'id' => $builder->fieldInteger('id'),
-                'allow' => $builder->fieldInteger('allow'),
-                'createDate' => $builder->fieldDateTime('date'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\UserGrantTable::COLUMN_ID),
+                'allow' => $builder->fieldInteger(Table\Generated\UserGrantTable::COLUMN_ALLOW),
+                'createDate' => $builder->fieldDateTime(Table\Generated\UserGrantTable::COLUMN_DATE),
                 'app' => [
-                    'id' => $builder->fieldInteger('app_id'),
-                    'name' => 'app_name',
-                    'url' => 'app_url',
+                    'id' => $builder->fieldInteger(Table\Generated\UserGrantTable::COLUMN_APP_ID),
+                    'name' => Table\Generated\AppTable::COLUMN_NAME,
+                    'url' => Table\Generated\AppTable::COLUMN_URL,
                 ],
             ]),
         ];
 
         return $builder->build($definition);
-    }
-
-    private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null)
-    {
-        $fields  = implode(',', $fields);
-        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
-        $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
-
-        return <<<SQL
-    SELECT {$fields}
-      FROM fusio_user_grant user_grant
-INNER JOIN fusio_app app
-        ON user_grant.app_id = app.id
-           {$where}
-           {$orderBy}
-SQL;
     }
 }

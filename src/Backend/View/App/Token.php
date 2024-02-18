@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
+use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
@@ -43,18 +44,42 @@ class Token extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\AppTokenTable::COLUMN_ID);
-        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\AppTokenTable::COLUMN_DATE]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\AppTokenTable::COLUMN_DATE], 'token');
+        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'token.' . Table\Generated\AppTokenTable::COLUMN_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_USER_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_STATUS,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_SCOPE,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_IP,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_DATE,
+            ])
+            ->from('fusio_app_token', 'token')
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->orderBy('token.' . Table\Generated\AppTokenTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult($startIndex)
+            ->setMaxResults($count);
+
+        $countBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from('fusio_app_token', 'token')
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
         $definition = [
-            'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
+            'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
                 'appId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
@@ -68,11 +93,32 @@ class Token extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(int $id, ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals('token.' . Table\Generated\AppTokenTable::COLUMN_ID, $id);
+        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'token.' . Table\Generated\AppTokenTable::COLUMN_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_USER_ID,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_STATUS,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_TOKEN,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_SCOPE,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_IP,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_EXPIRE,
+                'token.' . Table\Generated\AppTokenTable::COLUMN_DATE,
+            ])
+            ->from('fusio_app_token', 'token')
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\App\Token::class), 'find'], [$id], [
+        $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
             'id' => Table\Generated\AppTokenTable::COLUMN_ID,
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => Table\Generated\AppTable::COLUMN_ID,

@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View\Log;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -34,45 +36,36 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals('log.category_id', $categoryId ?: 1);
-
-        if (!empty($search)) {
-            $condition->like('message', '%' . $search . '%');
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogErrorTable::COLUMN_MESSAGE], 'error');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
 
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select(['error.id', 'error.message', 'log.path', 'log.date'])
+            ->select([
+                'error.' . Table\Generated\LogErrorTable::COLUMN_ID,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_MESSAGE,
+                'log.' . Table\Generated\LogTable::COLUMN_PATH,
+                'log.' . Table\Generated\LogTable::COLUMN_DATE
+            ])
             ->from('fusio_log_error', 'error')
-            ->innerJoin('error', 'fusio_log', 'log', 'error.log_id = log.id')
-            ->orderBy('error.id', 'DESC')
+            ->innerJoin('error', 'fusio_log', 'log', 'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID . ' = log.' . Table\Generated\LogTable::COLUMN_ID)
+            ->orderBy('error.' . Table\Generated\LogErrorTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
             ->setFirstResult($startIndex)
             ->setMaxResults($count);
-
-        if ($condition->hasCondition()) {
-            $queryBuilder->where($condition->getExpression($this->connection->getDatabasePlatform()));
-            $queryBuilder->setParameters($condition->getValues());
-        }
 
         $countBuilder = $this->connection->createQueryBuilder()
             ->select(['COUNT(*) AS cnt'])
             ->from('fusio_log_error', 'error')
-            ->innerJoin('error', 'fusio_log', 'log', 'error.log_id = log.id');
-
-        if ($condition->hasCondition()) {
-            $countBuilder->where($condition->getExpression($this->connection->getDatabasePlatform()));
-            $countBuilder->setParameters($condition->getValues());
-        }
+            ->innerJoin('error', 'fusio_log', 'log', 'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID . ' = log.' . Table\Generated\LogTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
@@ -81,21 +74,40 @@ class Error extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                'id' => $builder->fieldInteger('id'),
-                'message' => 'message',
-                'path' => 'path',
-                'date' => $builder->fieldDateTime('date'),
+                'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
+                'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
+                'path' => Table\Generated\LogTable::COLUMN_PATH,
+                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals('error.' . Table\Generated\LogErrorTable::COLUMN_ID, $id);
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'error.' . Table\Generated\LogErrorTable::COLUMN_ID,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_MESSAGE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_TRACE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_FILE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_LINE,
+            ])
+            ->from('fusio_log_error', 'error')
+            ->innerJoin('error', 'fusio_log', 'log', 'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID . ' = log.' . Table\Generated\LogTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Log\Error::class), 'find'], [$id], [
+        $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
             'id' => Table\Generated\LogErrorTable::COLUMN_ID,
             'logId' => Table\Generated\LogErrorTable::COLUMN_LOG_ID,
             'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,

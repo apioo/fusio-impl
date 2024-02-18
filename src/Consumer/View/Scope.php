@@ -22,9 +22,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
-use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -42,44 +42,46 @@ class Scope extends ViewAbstract
         $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals('scope.tenant_id', $context->getTenantId());
-        $condition->equals('scope.category_id', $context->getUser()->getCategoryId() ?: 1);
-        $condition->equals('user_scope.user_id', $context->getUser()->getId());
+        $condition->equals('user_scope.' . Table\Generated\UserScopeTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
 
-        $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description', 'scope.metadata'], $condition, 'user_scope.id ASC');
-        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Table\Generated\ScopeTable::COLUMN_ID,
+                'scope.' . Table\Generated\ScopeTable::COLUMN_NAME,
+                'scope.' . Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+                'scope.' . Table\Generated\ScopeTable::COLUMN_METADATA,
+            ])
+            ->from('fusio_user_scope', 'user_scope')
+            ->innerJoin('user_scope', 'fusio_scope', 'scope', 'user_scope.' . Table\Generated\UserScopeTable::COLUMN_SCOPE_ID . ' = scope.' . Table\Generated\ScopeTable::COLUMN_ID)
+            ->orderBy('scope.' . Table\Generated\ScopeTable::COLUMN_ID, 'ASC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult($startIndex)
+            ->setMaxResults($count);
+
+        $countBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from('fusio_user_scope', 'user_scope')
+            ->innerJoin('user_scope', 'fusio_scope', 'scope', 'user_scope.' . Table\Generated\UserScopeTable::COLUMN_SCOPE_ID . ' = scope.' . Table\Generated\ScopeTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
         $definition = [
-            'totalResults' => $builder->doValue($countSql, $condition->getValues(), $builder->fieldInteger('cnt')),
+            'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection($querySql, $condition->getValues(), [
-                'id' => $builder->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
-                'metadata' => $builder->fieldJson('metadata'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+                'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+                'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+                'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
             ]),
         ];
 
         return $builder->build($definition);
-    }
-
-    private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null): string
-    {
-        $fields  = implode(',', $fields);
-        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
-        $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
-
-        return <<<SQL
-    SELECT {$fields}
-      FROM fusio_user_scope user_scope
-INNER JOIN fusio_scope scope
-        ON user_scope.scope_id = scope.id
-           {$where}
-           {$orderBy}
-SQL;
     }
 }

@@ -41,21 +41,26 @@ class LatestApps extends ViewAbstract
         $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
-        $sql = '  SELECT app.id,
-                         app.name,
-                         app.date
-                    FROM fusio_app app
-                         ' . $condition->getStatement($this->connection->getDatabasePlatform()) . '
-                ORDER BY app.id DESC';
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'app.' . Table\Generated\AppTable::COLUMN_ID,
+                'app.' . Table\Generated\AppTable::COLUMN_NAME,
+                'app.' . Table\Generated\AppTable::COLUMN_DATE
+            ])
+            ->from('fusio_app', 'app')
+            ->orderBy('app.' . Table\Generated\AppTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(6);
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, $condition->getValues(), [
-                'id' => $builder->fieldInteger('id'),
-                'name' => 'name',
-                'date' => $builder->fieldDateTime('date'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'name' => Table\Generated\AppTable::COLUMN_NAME,
+                'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
             ]),
         ];
 

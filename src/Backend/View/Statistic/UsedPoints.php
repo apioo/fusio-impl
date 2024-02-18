@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * UsedPoints
@@ -36,8 +37,8 @@ class UsedPoints extends ViewAbstract
     public function getView(UsageQueryFilter $filter, ContextInterface $context)
     {
         $condition = $filter->getCondition([], 'usag');
-        $condition->equals('oper.tenant_id', $context->getTenantId());
-        $condition->equals('oper.category_id', $context->getUser()->getCategoryId());
+        $condition->equals('oper.' . Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('oper.' . Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 

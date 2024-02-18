@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * MostUsedApps
@@ -36,9 +37,9 @@ class MostUsedApps extends ViewAbstract
     public function getView(Log\LogQueryFilter $filter, ContextInterface $context)
     {
         $condition = $filter->getCondition([], 'log');
-        $condition->equals('log.tenant_id', $context->getTenantId());
-        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
-        $condition->notNil('log.app_id');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->notNil('log.' . Table\Generated\LogTable::COLUMN_APP_ID);
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 

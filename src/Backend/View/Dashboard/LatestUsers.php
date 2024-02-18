@@ -41,23 +41,28 @@ class LatestUsers extends ViewAbstract
         $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
-        $sql = '  SELECT usr.id,
-                         usr.status,
-                         usr.name,
-                         usr.date
-                    FROM fusio_user usr
-                         ' . $condition->getStatement($this->connection->getDatabasePlatform()) . '
-                ORDER BY usr.id DESC';
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'usr.' . Table\Generated\UserTable::COLUMN_ID,
+                'usr.' . Table\Generated\UserTable::COLUMN_STATUS,
+                'usr.' . Table\Generated\UserTable::COLUMN_NAME,
+                'usr.' . Table\Generated\UserTable::COLUMN_DATE,
+            ])
+            ->from('fusio_user', 'usr')
+            ->orderBy('usr.' . Table\Generated\UserTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(6);
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, $condition->getValues(), [
-                'id' => $builder->fieldInteger('id'),
-                'status' => $builder->fieldInteger('status'),
-                'name' => 'name',
-                'date' => $builder->fieldDateTime('date'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
+                'date' => $builder->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
             ]),
         ];
 

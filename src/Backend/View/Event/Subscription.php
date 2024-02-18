@@ -20,11 +20,12 @@
 
 namespace Fusio\Impl\Backend\View\Event;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -36,32 +37,45 @@ use PSX\Sql\ViewAbstract;
  */
 class Subscription extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT], 'subscription');
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->in('subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_STATUS, [Table\Event\Subscription::STATUS_ACTIVE]);
 
-        $sortBy = Table\Generated\EventSubscriptionTable::COLUMN_ID;
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_USER_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT,
+            ])
+            ->from('fusio_event_subscription', 'subscription')
+            ->innerJoin('subscription', 'fusio_event', 'event', 'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
+            ->orderBy('subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult($startIndex)
+            ->setMaxResults($count);
 
-        $condition = Condition::withAnd();
-        $condition->in(Table\Generated\EventSubscriptionTable::COLUMN_STATUS, [Table\Event\Subscription::STATUS_ACTIVE]);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT, '%' . $search . '%');
-        }
+        $countBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from('fusio_event_subscription', 'subscription')
+            ->innerJoin('subscription', 'fusio_event', 'event', 'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
         $definition = [
-            'totalResults' => $this->getTable(Table\Event\Subscription::class)->getCount($condition),
+            'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Event\Subscription::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'id' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_ID),
                 'eventId' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_USER_ID),
@@ -72,11 +86,28 @@ class Subscription extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals('subscription.' . Table\Generated\EventTable::COLUMN_ID, $id);
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_USER_ID,
+                'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT,
+            ])
+            ->from('fusio_event_subscription', 'subscription')
+            ->innerJoin('subscription', 'fusio_event', 'event', 'subscription.' . Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Event\Subscription::class), 'find'], [$id], [
+        $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
             'id' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_ID),
             'eventId' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID),
             'userId' => $builder->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_USER_ID),

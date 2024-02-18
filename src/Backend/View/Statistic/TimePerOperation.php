@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * TimePerOperation
@@ -36,10 +37,10 @@ class TimePerOperation extends ViewAbstract
     public function getView(Log\LogQueryFilter $filter, ContextInterface $context)
     {
         $condition = $filter->getCondition([], 'log');
-        $condition->equals('log.tenant_id', $context->getTenantId());
-        $condition->equals('log.category_id', $context->getUser()->getCategoryId());
-        $condition->notNil('log.operation_id');
-        $condition->notNil('log.execution_time');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->notNil('log.' . Table\Generated\LogTable::COLUMN_OPERATION_ID);
+        $condition->notNil('log.' . Table\Generated\LogTable::COLUMN_EXECUTION_TIME);
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
