@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Provider\ConnectionProvider;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * GetIndex
@@ -36,10 +37,12 @@ use Fusio\Impl\Provider\ConnectionProvider;
 class GetIndex implements ActionInterface
 {
     private ConnectionProvider $connectionParser;
+    private ConfigInterface $config;
 
-    public function __construct(ConnectionProvider $connectionParser)
+    public function __construct(ConnectionProvider $connectionParser, ConfigInterface $config)
     {
         $this->connectionParser = $connectionParser;
+        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
