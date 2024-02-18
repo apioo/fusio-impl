@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Connection;
 
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\Connection;
 use PSX\Http\Exception as StatusCode;
 
@@ -42,6 +43,8 @@ class Validator
 
     public function assert(Connection $connection, ?Table\Generated\ConnectionRow $existing = null): void
     {
+        $this->assertExcluded($connection);
+
         $name = $connection->getName();
         if ($name !== null) {
             $this->assertName($name, $existing);
@@ -58,6 +61,20 @@ class Validator
 
         if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByName($name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
+        }
+    }
+
+    private function assertExcluded(Connection $record): void
+    {
+        $class = ltrim((string) $record->getClass(), '\\');
+
+        $excluded = $this->config->get('fusio_connection_exclude');
+        if (empty($excluded)) {
+            return;
+        }
+
+        if (in_array($class, $excluded)) {
+            throw new StatusCode\BadRequestException('The usage of this connection is disabled');
         }
     }
 }

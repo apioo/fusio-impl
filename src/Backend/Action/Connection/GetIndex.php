@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -47,7 +45,7 @@ class GetIndex implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
-            'connections' => $this->connectionParser->getClasses()
+            'connections' => $this->connectionParser->getClasses($this->config->get('fusio_connection_exclude'))
         ];
     }
 }

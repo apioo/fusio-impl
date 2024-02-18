@@ -47,7 +47,7 @@ class Validator
 
     public function assert(Action $action, ?ActionRow $existing = null): void
     {
-        $this->assertSandboxAccess($action);
+        $this->assertExcluded($action);
 
         $name = $action->getName();
         if ($name !== null) {
@@ -86,12 +86,17 @@ class Validator
         }
     }
 
-    private function assertSandboxAccess(Action $record): void
+    private function assertExcluded(Action $record): void
     {
         $class = ltrim((string) $record->getClass(), '\\');
 
-        if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
-            throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
+        $excluded = $this->config->get('fusio_action_exclude');
+        if (empty($excluded)) {
+            return;
+        }
+
+        if (in_array($class, $excluded)) {
+            throw new StatusCode\BadRequestException('The usage of this action is disabled');
         }
     }
 }
