@@ -51,7 +51,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $entity = $this->view->getEntity(
-            $request->get('page_id')
+            $request->get('page_id'),
+            $context
         );
 
         $entity['content'] = $this->replaceVariables($entity['content']);

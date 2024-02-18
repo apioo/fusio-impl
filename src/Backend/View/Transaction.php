@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View;
 
-use Fusio\Impl\Backend\Filter\Transaction\QueryFilter;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\Filter\Transaction\TransactionQueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -35,26 +38,23 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(TransactionQueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\TransactionTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID, DateQueryFilter::COLUMN_DATE => Table\Generated\TransactionTable::COLUMN_INSERT_DATE]);
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
 
-        $sortBy = Table\Generated\TransactionTable::COLUMN_ID;
-
-        $condition = $filter->getCondition();
         $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
                 'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
@@ -72,11 +72,11 @@ class Transaction extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
             'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),

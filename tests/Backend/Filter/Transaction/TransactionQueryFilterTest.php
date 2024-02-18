@@ -18,68 +18,46 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Filter\Audit;
+namespace Fusio\Impl\Tests\Backend\Filter\Transaction;
 
-use Fusio\Impl\Backend\Filter\Audit\QueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\Transaction\TransactionQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
 
 /**
- * QueryFilterTest
+ * TransactionQueryFilterTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilterTest extends FilterTestCase
+class TransactionQueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create($this->createRequest([
-            'from'    => '2015-08-20',
-            'to'      => '2015-08-30',
-            'appId'   => 1,
-            'userId'  => 1,
-            'event'   => 'create',
-            'ip'      => '127.0.0.1',
-            'message' => 'foo',
+        $filter = TransactionQueryFilter::from($this->createRequest([
+            'from'      => '2015-08-20',
+            'to'        => '2015-08-30',
+            'invoiceId' => 1,
+            'status'    => 1,
+            'provider'  => 'Paypal',
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getAppId());
-        $this->assertEquals(1, $filter->getUserId());
-        $this->assertEquals('create', $filter->getEvent());
-        $this->assertEquals('127.0.0.1', $filter->getIp());
+        $this->assertEquals(1, $filter->getInvoiceId());
+        $this->assertEquals(1, $filter->getStatus());
+        $this->assertEquals('Paypal', $filter->getProvider());
 
-        $condition = $filter->getCondition();
+        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'insert_date']);
 
-        $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatement());
+        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND invoice_id = ? AND status = ? AND provider LIKE ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
             1,
             1,
-            '%create%',
-            '127.0.0.1',
-            '%foo%',
+            'Paypal',
         ], $condition->getValues());
-    }
-
-    public function testCreateSearchIp()
-    {
-        $filter = QueryFilter::create($this->createRequest([
-            'search' => '93.223.172.206'
-        ]));
-
-        $this->assertEquals('93.223.172.206', $filter->getIp());
-    }
-
-    public function testCreateSearchEvent()
-    {
-        $filter = QueryFilter::create($this->createRequest([
-            'search' => 'create'
-        ]));
-
-        $this->assertEquals('create', $filter->getMessage());
     }
 }

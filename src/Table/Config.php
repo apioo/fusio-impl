@@ -22,6 +22,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\CategoryRow;
 use Fusio\Impl\Table\Generated\ConfigRow;
+use PSX\Sql\Condition;
 
 /**
  * Config
@@ -40,16 +41,21 @@ class Config extends Generated\ConfigTable
     public const FORM_TEXT     = 6;
     public const FORM_SECRET   = 7;
 
-    public function findOneByIdentifier(string $id): ?ConfigRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ConfigRow
     {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+
         if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
         } else {
-            return $this->find((int) $id);
+            $condition->equals(self::COLUMN_ID, (int) $id);
         }
+
+        return $this->findOneBy($condition);
     }
 
-    public function getValue($name)
+    public function getValue(string $name): array|false
     {
         return $this->connection->fetchAssociative('SELECT id, value, type FROM fusio_config WHERE name = :name', [
             'name' => $name

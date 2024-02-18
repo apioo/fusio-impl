@@ -72,6 +72,7 @@ class Operation
             $this->operationTable->beginTransaction();
 
             $row = new Table\Generated\OperationRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Operation::STATUS_ACTIVE);
             $row->setActive($operation->getActive() !== null ? (int) $operation->getActive() : 1);

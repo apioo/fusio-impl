@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -35,16 +37,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $userId, int $startIndex = 0)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\EventTable::COLUMN_NAME);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $count = 16;
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -53,7 +55,7 @@ class Event extends ViewAbstract
             'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, 'name', OrderBy::ASC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,

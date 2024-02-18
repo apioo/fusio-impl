@@ -48,8 +48,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getEntity(
-            $context->getUser()->getId(),
-            (int) $request->get('transaction_id')
+            (int) $request->get('transaction_id'),
+            $context
         );
     }
 }

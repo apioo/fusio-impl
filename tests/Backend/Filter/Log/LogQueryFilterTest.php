@@ -20,21 +20,22 @@
 
 namespace Fusio\Impl\Tests\Backend\Filter\Log;
 
-use Fusio\Impl\Backend\Filter\Log\QueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
 
 /**
- * QueryFilterTest
+ * LogQueryFilterTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilterTest extends FilterTestCase
+class LogQueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2015-08-20',
             'to' => '2015-08-30',
             'operationId' => 1,
@@ -60,7 +61,7 @@ class QueryFilterTest extends FilterTestCase
         $this->assertEquals('text/xml', $filter->getHeader());
         $this->assertEquals('<foo />', $filter->getBody());
 
-        $condition = $filter->getCondition();
+        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
 
         $this->assertEquals('WHERE (date >= ? AND date <= ? AND operation_id = ? AND app_id = ? AND user_id = ? AND ip LIKE ? AND user_agent LIKE ? AND method = ? AND path LIKE ? AND header LIKE ? AND body LIKE ?)', $condition->getStatement());
         $this->assertEquals([
@@ -80,7 +81,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateFromLargerToFlip()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2015-08-30',
             'to'   => '2015-08-20',
         ]));
@@ -91,7 +92,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateFromToExceeded()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2014-08-20',
             'to'   => '2015-08-30',
         ]));
@@ -102,7 +103,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchIp()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'search' => '93.223.172.206'
         ]));
 
@@ -111,7 +112,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchPath()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'search' => '/foo/bar'
         ]));
 
@@ -120,7 +121,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchMethod()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'search' => 'GET'
         ]));
 
@@ -129,7 +130,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchHeader()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'search' => 'User-Agent: Foo'
         ]));
 
@@ -138,7 +139,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchBody()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = LogQueryFilter::from($this->createRequest([
             'search' => '{"foo": "bar"}'
         ]));
 

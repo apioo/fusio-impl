@@ -10,6 +10,7 @@ class RoleTable extends \PSX\Sql\TableAbstract
     public const NAME = 'fusio_role';
     public const COLUMN_ID = 'id';
     public const COLUMN_CATEGORY_ID = 'category_id';
+    public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_NAME = 'name';
     public function getName() : string
@@ -18,7 +19,7 @@ class RoleTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\RoleRow>
@@ -124,6 +125,43 @@ class RoleTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('category_id', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\RoleRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByTenantId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByTenantId(string $value) : ?\Fusio\Impl\Table\Generated\RoleRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByTenantId(string $value, \Fusio\Impl\Table\Generated\RoleRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByTenantId(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

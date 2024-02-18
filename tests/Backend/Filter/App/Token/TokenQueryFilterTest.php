@@ -20,21 +20,22 @@
 
 namespace Fusio\Impl\Tests\Backend\Filter\App\Token;
 
-use Fusio\Impl\Backend\Filter\App\Token\QueryFilter;
+use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
 
 /**
- * QueryFilterTest
+ * TokenQueryFilterTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilterTest extends FilterTestCase
+class TokenQueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = TokenQueryFilter::from($this->createRequest([
             'from'      => '2015-08-20',
             'to'        => '2015-08-30',
             'appId'     => 1,
@@ -52,7 +53,7 @@ class QueryFilterTest extends FilterTestCase
         $this->assertEquals('foo', $filter->getScope());
         $this->assertEquals('127.0.0.1', $filter->getIp());
 
-        $condition = $filter->getCondition();
+        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
 
         $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND status = ? AND scope LIKE ? AND ip LIKE ?)', $condition->getStatement());
         $this->assertEquals([
@@ -68,7 +69,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateFromLargerToFlip()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = TokenQueryFilter::from($this->createRequest([
             'from' => '2015-08-30',
             'to'   => '2015-08-20',
         ]));
@@ -79,7 +80,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateFromToExceeded()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = TokenQueryFilter::from($this->createRequest([
             'from' => '2014-08-20',
             'to'   => '2015-08-30',
         ]));
@@ -90,7 +91,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchIp()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = TokenQueryFilter::from($this->createRequest([
             'search' => '93.223.172.206'
         ]));
 
@@ -99,7 +100,7 @@ class QueryFilterTest extends FilterTestCase
 
     public function testCreateSearchScope()
     {
-        $filter = QueryFilter::create($this->createRequest([
+        $filter = TokenQueryFilter::from($this->createRequest([
             'search' => 'foo'
         ]));
 

@@ -50,7 +50,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         // if we provide no explicit scopes we get all scopes assigned to the user
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.tenant,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
     }
 
     public function testPostSpecificScope()
@@ -74,7 +74,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.tenant,backend.transaction,backend.trash,backend.user,consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,authorization,foo,bar', 4);
     }
 
     /**

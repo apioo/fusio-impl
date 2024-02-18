@@ -62,7 +62,7 @@ class App
         $rawScopes = $app->getScopes() ?? [];
         $rawScopes[] = 'authorization'; // automatically add the authorization scope which a user can not select
 
-        $scopes = $this->getValidUserScopes($context->getUserId(), $rawScopes);
+        $scopes = $this->getValidUserScopes($context->getUserId(), $rawScopes, $context->getTenantId());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
@@ -94,7 +94,7 @@ class App
         $this->assertName($app->getName());
         $this->assertUrl($app->getUrl());
 
-        $scopes = $this->getValidUserScopes($context->getUserId(), $app->getScopes());
+        $scopes = $this->getValidUserScopes($context->getUserId(), $app->getScopes(), $context->getTenantId());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
@@ -123,14 +123,14 @@ class App
         return $this->appService->delete((string) $appId, $context);
     }
 
-    protected function getValidUserScopes(int $userId, ?array $scopes): array
+    protected function getValidUserScopes(int $userId, ?array $scopes, ?string $tenantId = null): array
     {
         if (empty($scopes)) {
             return [];
         }
 
         $userScopes = $this->userScopeTable->getAvailableScopes($userId);
-        $scopes     = $this->scopeTable->getValidScopes($scopes);
+        $scopes     = $this->scopeTable->getValidScopes($scopes, $tenantId);
 
         // check that the user can assign only the scopes which are also
         // assigned to the user account

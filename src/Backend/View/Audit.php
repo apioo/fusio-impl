@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View;
 
-use Fusio\Impl\Backend\Filter\Audit\QueryFilter;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -36,26 +39,23 @@ use PSX\Sql\ViewAbstract;
  */
 class Audit extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(AuditQueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\AuditTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AuditTable::COLUMN_MESSAGE, DateQueryFilter::COLUMN_DATE => Table\Generated\AuditTable::COLUMN_DATE]);
+        $condition->equals(Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
 
-        $sortBy = Table\Generated\AuditTable::COLUMN_ID;
-
-        $condition = $filter->getCondition();
         $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
                 'event' => Table\Generated\AuditTable::COLUMN_EVENT,
                 'ip' => Table\Generated\AuditTable::COLUMN_IP,
@@ -67,11 +67,11 @@ class Audit extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\AppRow;
 use Fusio\Impl\Table\Generated\OperationRow;
+use PSX\Sql\Condition;
 
 /**
  * App
@@ -37,12 +38,28 @@ class App extends Generated\AppTable
     public const STATUS_DEACTIVATED = 0x3;
     public const STATUS_DELETED     = 0x4;
 
-    public function findOneByIdentifier(string $id): ?AppRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?AppRow
     {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+
         if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
         } else {
-            return $this->find((int) $id);
+            $condition->equals(self::COLUMN_ID, (int) $id);
         }
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByAppKeyAndSecret(string $appKey, string $appSecret, ?string $tenantId = null): ?AppRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_APP_KEY, $appKey);
+        $condition->equals(self::COLUMN_APP_SECRET, $appSecret);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
+
+        return $this->findOneBy($condition);
     }
 }

@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -38,30 +40,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Connection extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\ConnectionTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = Table\Generated\ConnectionTable::COLUMN_ID;
-        }
-
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::DESC;
-        }
-
-        $condition = Condition::withAnd();
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\ConnectionTable::COLUMN_NAME, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -80,19 +68,11 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ContextInterface $context)
     {
-        if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
-            $id = urldecode(substr($id, 1));
-        } else {
-            $method = 'find';
-            $id = (int) $id;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -103,11 +83,11 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ?string $tenantId = null)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $tenantId], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

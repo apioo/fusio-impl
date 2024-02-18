@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
+use Fusio\Impl\Table;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -32,17 +34,19 @@ use PSX\Sql\ViewAbstract;
  */
 class CountRequests extends ViewAbstract
 {
-    public function getView(int $categoryId, Log\QueryFilter $filter)
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): array
     {
-        $condition  = $filter->getCondition('log');
+        $condition = $filter->getCondition([], 'log');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         $sql = 'SELECT COUNT(log.id) AS cnt
                   FROM fusio_log log
-                 WHERE log.category_id = ?
-                   AND ' . $expression;
+                 WHERE ' . $expression;
 
-        $row = $this->connection->fetchAssociative($sql, array_merge([$categoryId], $condition->getValues()));
+        $row = $this->connection->fetchAssociative($sql, $condition->getValues());
 
         return [
             'count' => (int) ($row['cnt'] ?? 0),

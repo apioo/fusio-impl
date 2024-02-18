@@ -28,6 +28,7 @@
       "backend.scope": "",
       "backend.sdk": "",
       "backend.statistic": "",
+      "backend.tenant": "",
       "backend.transaction": "",
       "backend.trash": "",
       "backend.user": ""
@@ -2706,6 +2707,112 @@
       "authorization": true,
       "tags": [
         "transaction"
+      ]
+    },
+    "backend.tenant.remove": {
+      "path": "/backend/tenant/:tenant_id",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "tenant_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.tenant"
+      ],
+      "authorization": true,
+      "tags": [
+        "tenant"
+      ]
+    },
+    "backend.tenant.setup": {
+      "path": "/backend/tenant/:tenant_id",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "tenant_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.tenant"
+      ],
+      "authorization": true,
+      "tags": [
+        "tenant"
       ]
     },
     "backend.statistic.getUsedPoints": {

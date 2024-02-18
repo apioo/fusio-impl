@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -32,30 +35,39 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestTransactions extends ViewAbstract
 {
-    public function getView()
+    public function getView(ContextInterface $context)
     {
-        $sql = '  SELECT trans.id,
-                         trans.user_id,
-                         trans.plan_id,
-                         trans.transaction_id,
-                         trans.amount,
-                         trans.insert_date
-                    FROM fusio_transaction trans
-                ORDER BY trans.id DESC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'trans.' . Table\Generated\TransactionTable::COLUMN_ID,
+                'trans.' . Table\Generated\TransactionTable::COLUMN_USER_ID,
+                'trans.' . Table\Generated\TransactionTable::COLUMN_PLAN_ID,
+                'trans.' . Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+                'trans.' . Table\Generated\TransactionTable::COLUMN_AMOUNT,
+                'trans.' . Table\Generated\TransactionTable::COLUMN_INSERT_DATE,
+            ])
+            ->from('fusio_transaction', 'trans')
+            ->orderBy('trans.' . Table\Generated\TransactionTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(6);
+
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, [], [
-                'id' => $builder->fieldInteger('id'),
-                'user_id' => $builder->fieldInteger('user_id'),
-                'plan_id' => $builder->fieldInteger('plan_id'),
-                'transactionId' => 'transaction_id',
-                'amount' => $builder->fieldCallback('amount', function($value){
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+                'user_id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+                'plan_id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+                'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+                'amount' => $builder->fieldCallback(Table\Generated\TransactionTable::COLUMN_AMOUNT, function($value){
                     return round($value / 100, 2);
                 }),
-                'date' => $builder->fieldDateTime('insert_date'),
+                'date' => $builder->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
 

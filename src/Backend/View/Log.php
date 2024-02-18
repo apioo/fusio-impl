@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View;
 
-use Fusio\Impl\Backend\Filter\Log\QueryFilter;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -36,20 +39,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, QueryFilter $filter)
+    public function getCollection(LogQueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\LogTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        $sortBy = Table\Generated\LogTable::COLUMN_ID;
-
-        $condition = $filter->getCondition();
-        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogTable::COLUMN_PATH, DateQueryFilter::COLUMN_DATE => Table\Generated\LogTable::COLUMN_DATE]);
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
 
         $builder = new Builder($this->connection);
 
@@ -57,7 +56,7 @@ class Log extends ViewAbstract
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, OrderBy::DESC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
                 'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
                 'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),
@@ -72,11 +71,11 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id)
+    public function getEntity(int $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
             'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
             'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),

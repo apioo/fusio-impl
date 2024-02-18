@@ -50,7 +50,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $role = $this->view->getEntity(
-            $request->get('role_id')
+            $request->get('role_id'),
+            $context
         );
 
         if (empty($role)) {

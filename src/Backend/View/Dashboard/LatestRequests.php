@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -32,25 +35,34 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestRequests extends ViewAbstract
 {
-    public function getView(int $categoryId)
+    public function getView(ContextInterface $context)
     {
-        $sql = '  SELECT log.id,
-                         log.path,
-                         log.ip,
-                         log.date
-                    FROM fusio_log log
-                   WHERE log.category_id = :category_id
-                ORDER BY log.id DESC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'log.' . Table\Generated\LogTable::COLUMN_ID,
+                'log.' . Table\Generated\LogTable::COLUMN_PATH,
+                'log.' . Table\Generated\LogTable::COLUMN_IP,
+                'log.' . Table\Generated\LogTable::COLUMN_DATE,
+            ])
+            ->from('fusio_log', 'log')
+            ->orderBy('log.' . Table\Generated\LogTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(6);
+
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, ['category_id' => $categoryId], [
-                'id' => $builder->fieldInteger('id'),
-                'path' => 'path',
-                'ip' => 'ip',
-                'date' => $builder->fieldDateTime('date'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'path' => Table\Generated\LogTable::COLUMN_PATH,
+                'ip' => Table\Generated\LogTable::COLUMN_IP,
+                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 

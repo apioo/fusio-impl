@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -35,31 +37,17 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\EventTable::COLUMN_NAME);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = Table\Generated\EventTable::COLUMN_NAME;
-        }
-
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::ASC;
-        }
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
         $condition->in(Table\Generated\EventTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\EventTable::COLUMN_NAME, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -79,11 +67,11 @@ class Event extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
             'name' => Table\Generated\EventTable::COLUMN_NAME,

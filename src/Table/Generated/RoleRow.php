@@ -6,6 +6,7 @@ class RoleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
     private ?int $categoryId = null;
+    private ?string $tenantId = null;
     private ?int $status = null;
     private ?string $name = null;
     public function setId(int $id) : void
@@ -23,6 +24,14 @@ class RoleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getCategoryId() : int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
+    }
+    public function setTenantId(?string $tenantId) : void
+    {
+        $this->tenantId = $tenantId;
+    }
+    public function getTenantId() : ?string
+    {
+        return $this->tenantId;
     }
     public function setStatus(int $status) : void
     {
@@ -46,6 +55,7 @@ class RoleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('category_id', $this->categoryId);
+        $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
         $record->put('name', $this->name);
         return $record;
@@ -59,6 +69,7 @@ class RoleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->categoryId = isset($data['category_id']) && is_int($data['category_id']) ? $data['category_id'] : null;
+        $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         return $row;

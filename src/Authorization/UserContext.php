@@ -34,12 +34,14 @@ class UserContext
     private int $userId;
     private int $appId;
     private string $ip;
+    private ?string $tenantId;
 
-    public function __construct(int $userId, int $appId, string $ip)
+    public function __construct(int $userId, int $appId, string $ip, ?string $tenantId = null)
     {
         $this->userId = $userId;
-        $this->appId  = $appId;
-        $this->ip     = $ip;
+        $this->appId = $appId;
+        $this->ip = $ip;
+        $this->tenantId = $tenantId;
     }
 
     public function getUserId(): int
@@ -57,9 +59,14 @@ class UserContext
         return $this->ip;
     }
 
-    public static function newContext(int $userId, ?int $appId = null): self
+    public function getTenantId(): ?string
     {
-        return new UserContext($userId, $appId ?? 1, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+        return $this->tenantId;
+    }
+
+    public static function newContext(int $userId, ?int $appId = null, ?string $tenantId = null): self
+    {
+        return new UserContext($userId, $appId ?? 1, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
     }
 
     public static function newAnonymousContext(): self
@@ -74,6 +81,6 @@ class UserContext
 
     public static function newActionContext(ContextInterface $context): self
     {
-        return self::newContext($context->getUser()->getId(), $context->getApp()->getId());
+        return self::newContext($context->getUser()->getId(), $context->getApp()->getId(), $context->getTenantId());
     }
 }

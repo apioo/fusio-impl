@@ -20,8 +20,10 @@
 
 namespace Fusio\Impl\Backend\View\Dashboard;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -33,25 +35,34 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestUsers extends ViewAbstract
 {
-    public function getView()
+    public function getView(ContextInterface $context)
     {
-        $sql = '  SELECT usr.id,
-                         usr.status,
-                         usr.name,
-                         usr.date
-                    FROM fusio_user usr
-                   WHERE usr.status = :status 
-                ORDER BY usr.id DESC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'usr.' . Table\Generated\UserTable::COLUMN_ID,
+                'usr.' . Table\Generated\UserTable::COLUMN_STATUS,
+                'usr.' . Table\Generated\UserTable::COLUMN_NAME,
+                'usr.' . Table\Generated\UserTable::COLUMN_DATE,
+            ])
+            ->from('fusio_user', 'usr')
+            ->orderBy('usr.' . Table\Generated\UserTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(6);
+
         $builder = new Builder($this->connection);
 
         $definition = [
-            'entry' => $builder->doCollection($sql, ['status' => Table\User::STATUS_ACTIVE], [
-                'id' => $builder->fieldInteger('id'),
-                'status' => $builder->fieldInteger('status'),
-                'name' => 'name',
-                'date' => $builder->fieldDateTime('date'),
+            'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
+                'date' => $builder->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
             ]),
         ];
 

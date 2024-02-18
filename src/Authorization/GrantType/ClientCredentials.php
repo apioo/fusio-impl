@@ -44,7 +44,7 @@ class ClientCredentials extends ClientCredentialsAbstract
     private Service\App\Token $appTokenService;
     private Service\Scope $scopeService;
     private Table\App $appTable;
-    private string $expireToken;
+    private ConfigInterface $config;
 
     public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
     {
@@ -52,13 +52,13 @@ class ClientCredentials extends ClientCredentialsAbstract
         $this->appTokenService = $appTokenService;
         $this->scopeService = $scopeService;
         $this->appTable = $appTable;
-        $this->expireToken = $config->get('fusio_expire_token');
+        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         // check whether the credentials contain an app key and secret
-        $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
+        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
         if (!empty($app)) {
             $appId  = $app->getId();
             $userId = $app->getUserId();
@@ -90,22 +90,17 @@ class ClientCredentials extends ClientCredentialsAbstract
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->expireToken)
+            new \DateInterval($this->config->get('fusio_expire_token'))
         );
     }
 
-    private function getApp(string $appKey, string $appSecret): ?Table\Generated\AppRow
+    private function getTenantId(): ?string
     {
-        $condition = Condition::withAnd();
-        $condition->equals('app_key', $appKey);
-        $condition->equals('app_secret', $appSecret);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->findOneBy($condition);
-        if (empty($app)) {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
             return null;
         }
 
-        return $app;
+        return $tenantId;
     }
 }

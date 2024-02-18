@@ -55,7 +55,7 @@ class Invoker
         $costs = $operation->getCosts();
 
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser());
+        $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser(), $this->config->get('fusio_tenant_id'));
 
         if ($costs > 0) {
             // as anonymous user it is not possible to pay

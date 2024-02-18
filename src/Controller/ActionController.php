@@ -47,7 +47,8 @@ class ActionController extends ControllerAbstract
         return [
             ...parent::getPreFilter(),
             UserAgentEnforcer::class,
-            Filter\AssertOperation::class,
+            Filter\Tenant::class,
+            Filter\Operation::class,
             Filter\Authentication::class,
             Filter\RequestLimit::class,
             Filter\Logger::class,

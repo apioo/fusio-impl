@@ -24,7 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Filter\Transaction\QueryFilter;
+use Fusio\Impl\Backend\Filter\Transaction\TransactionQueryFilter;
 use Fusio\Impl\Backend\View;
 
 /**
@@ -46,7 +46,8 @@ class GetIncomingTransactions implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getView(
-            QueryFilter::create($request)
+            TransactionQueryFilter::from($request),
+            $context
         );
     }
 }

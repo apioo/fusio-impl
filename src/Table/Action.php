@@ -35,12 +35,17 @@ class Action extends Generated\ActionTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id): ?ActionRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ActionRow
     {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+
         if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
         } else {
-            return $this->find((int) $id);
+            $condition->equals(self::COLUMN_ID, (int) $id);
         }
+
+        return $this->findOneBy($condition);
     }
 }

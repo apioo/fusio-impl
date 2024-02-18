@@ -51,7 +51,7 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 5,
     "startIndex": 0,
-    "itemsPerPage": 32,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 3,

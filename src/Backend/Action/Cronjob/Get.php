@@ -50,7 +50,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $cronjob = $this->view->getEntity(
-            $request->get('cronjob_id')
+            $request->get('cronjob_id'),
+            $context
         );
 
         if (empty($cronjob)) {

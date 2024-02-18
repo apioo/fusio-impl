@@ -27,6 +27,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserActivate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -41,12 +42,14 @@ class Authenticator
 {
     private Table\User $userTable;
     private Table\User\Scope $userScopeTable;
+    private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable = $userTable;
         $this->userScopeTable = $userScopeTable;
+        $this->config = $config;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -67,7 +70,13 @@ class Authenticator
             $column = Table\Generated\UserTable::COLUMN_EMAIL;
         }
 
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            $tenantId = null;
+        }
+
         $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals($column, $username);
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 

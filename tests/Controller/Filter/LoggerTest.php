@@ -70,7 +70,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(184, $log['operation_id']);
+        $this->assertEquals(186, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -105,7 +105,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(184, $log['operation_id']);
+        $this->assertEquals(186, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -141,7 +141,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(184, $log['operation_id']);
+        $this->assertEquals(186, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);

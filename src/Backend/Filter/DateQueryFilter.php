@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\View;
+namespace Fusio\Impl\Backend\Filter;
 
 use Fusio\Engine\RequestInterface;
 use PSX\Sql\Condition;
@@ -30,13 +30,17 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-abstract class QueryFilterAbstract
+class DateQueryFilter extends QueryFilter
 {
-    protected \DateTimeImmutable $from;
-    protected \DateTimeImmutable $to;
+    public const COLUMN_DATE = 'date';
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to)
+    private \DateTimeImmutable $from;
+    private \DateTimeImmutable $to;
+
+    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
+        parent::__construct($startIndex, $count, $search, $sortBy, $sortOrder);
+
         $this->from = $from;
         $this->to = $to;
     }
@@ -51,31 +55,36 @@ abstract class QueryFilterAbstract
         return $this->to;
     }
 
-    public function getCondition(?string $alias = null): Condition
+    public function getCondition(array $columnMapping, ?string $alias = null): Condition
     {
-        $alias     = $alias !== null ? $alias . '.' : '';
-        $condition = Condition::withAnd();
-        $condition->greaterThan($alias . $this->getDateColumn(), $this->from->format('Y-m-d 00:00:00'));
-        $condition->lessThan($alias . $this->getDateColumn(), $this->to->format('Y-m-d 23:59:59'));
+        $condition = parent::getCondition($columnMapping, $alias);
+        $alias = $this->getAlias($alias);
+
+        if (isset($columnMapping[self::COLUMN_DATE])) {
+            $condition->greaterThan($alias . $columnMapping[self::COLUMN_DATE], $this->from->format('Y-m-d 00:00:00'));
+            $condition->lessThan($alias . $columnMapping[self::COLUMN_DATE], $this->to->format('Y-m-d 23:59:59'));
+        }
 
         return $condition;
     }
 
-    protected function getDateColumn(): string
+    protected static function toInt(mixed $value): ?int
     {
-        return 'date';
+        return !empty($value) ? (int) $value : null;
     }
 
-    protected static function getFromAndTo(RequestInterface $request): array
+    protected static function getConstructorArguments(RequestInterface $request): array
     {
+        $arguments = parent::getConstructorArguments($request);
+
         $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
-        $to   = new \DateTimeImmutable($request->get('to') ?? 'now');
+        $to = new \DateTimeImmutable($request->get('to') ?? 'now');
 
         // from date is large then to date
         if ($from->getTimestamp() > $to->getTimestamp()) {
-            $tmp  = clone $from;
+            $tmp = clone $from;
             $from = $to;
-            $to   = $tmp;
+            $to = $tmp;
         }
 
         // check if diff between from and to is larger than ca 2 months
@@ -83,11 +92,9 @@ abstract class QueryFilterAbstract
             $to = $from->add(new \DateInterval('P2M'));
         }
 
-        return [$from, $to];
-    }
+        $arguments['from'] = $from;
+        $arguments['to'] = $to;
 
-    protected static function toInt(mixed $value): ?int
-    {
-        return !empty($value) ? (int) $value : null;
+        return $arguments;
     }
 }

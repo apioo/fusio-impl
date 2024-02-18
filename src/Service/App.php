@@ -74,6 +74,7 @@ class App
             $appSecret = TokenGenerator::generateAppSecret();
 
             $row = new Table\Generated\AppRow();
+            $row->setTenantId($context->getTenantId());
             $row->setUserId($app->getUserId());
             $row->setStatus($app->getStatus());
             $row->setName($app->getName());
@@ -90,7 +91,7 @@ class App
 
             $scopes = $app->getScopes();
             if ($scopes !== null) {
-                $this->insertScopes($appId, $scopes);
+                $this->insertScopes($appId, $scopes, $context->getTenantId());
             }
 
             $this->appTable->commit();
@@ -142,7 +143,7 @@ class App
                 $this->appScopeTable->deleteAllFromApp($existing->getId());
 
                 // insert scopes
-                $this->insertScopes($existing->getId(), $scopes);
+                $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
             }
 
             $this->appTable->commit();
@@ -176,10 +177,10 @@ class App
         return $existing->getId();
     }
 
-    protected function insertScopes(int $appId, ?array $scopes): void
+    protected function insertScopes(int $appId, ?array $scopes, ?string $tenantId = null): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes);
+            $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\AppScopeRow();

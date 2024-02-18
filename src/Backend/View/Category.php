@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -35,30 +37,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Category extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\CategoryTable::COLUMN_NAME);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = Table\Generated\CategoryTable::COLUMN_NAME;
-        }
-
-        if ($sortOrder === null) {
-            $sortOrder = OrderBy::ASC;
-        }
-
-        $condition = Condition::withAnd();
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\CategoryTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\CategoryTable::COLUMN_STATUS, [Table\Category::STATUS_ACTIVE]);
-
-        if (!empty($search)) {
-            $condition->like(Table\Generated\CategoryTable::COLUMN_NAME, '%' . $search . '%');
-        }
 
         $builder = new Builder($this->connection);
 
@@ -76,11 +64,11 @@ class Category extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
             'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
             'name' => Table\Generated\CategoryTable::COLUMN_NAME,

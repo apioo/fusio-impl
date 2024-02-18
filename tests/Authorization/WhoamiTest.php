@@ -80,6 +80,7 @@ class WhoamiTest extends ControllerDbTestCase
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.tenant",
         "backend.transaction",
         "backend.trash",
         "backend.user",

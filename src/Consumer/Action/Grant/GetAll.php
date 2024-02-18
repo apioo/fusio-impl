@@ -20,14 +20,12 @@
 
 namespace Fusio\Impl\Consumer\Action\Grant;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Consumer\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAll
@@ -38,9 +36,9 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll implements ActionInterface
 {
-    private View\Grant $view;
+    private View\User\Grant $view;
 
-    public function __construct(View\Grant $view)
+    public function __construct(View\User\Grant $view)
     {
         $this->view = $view;
     }
@@ -48,7 +46,8 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getCollection(
-            $context->getUser()->getId()
+            QueryFilter::from($request),
+            $context
         );
     }
 }

@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Consumer\Action\App;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -29,7 +27,6 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * Get
@@ -50,8 +47,8 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->view->getEntity(
-            $context->getUser()->getId(),
-            (int) $request->get('app_id')
+            (int) $request->get('app_id'),
+            $context
         );
 
         if (empty($app)) {

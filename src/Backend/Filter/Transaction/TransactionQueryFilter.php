@@ -21,25 +21,25 @@
 namespace Fusio\Impl\Backend\Filter\Transaction;
 
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use PSX\Sql\Condition;
 
 /**
- * QueryFilter
+ * TransactionQueryFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilter extends QueryFilterAbstract
+class TransactionQueryFilter extends DateQueryFilter
 {
-    protected ?int $invoiceId = null;
-    protected ?int $status = null;
-    protected ?string $provider = null;
+    private ?int $invoiceId = null;
+    private ?int $status = null;
+    private ?string $provider = null;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $invoiceId = null, ?int $status = null, ?string $provider = null)
+    public function __construct(?int $invoiceId, ?int $status, ?string $provider, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
-        parent::__construct($from, $to);
+        parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
         $this->invoiceId = $invoiceId;
         $this->status = $status;
@@ -61,10 +61,10 @@ class QueryFilter extends QueryFilterAbstract
         return $this->provider;
     }
 
-    public function getCondition(?string $alias = null): Condition
+    public function getCondition(array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($alias);
-        $alias     = $alias !== null ? $alias . '.' : '';
+        $condition = parent::getCondition($columnMapping, $alias);
+        $alias = $this->getAlias($alias);
 
         if (!empty($this->invoiceId)) {
             $condition->equals($alias . 'invoice_id', $this->invoiceId);
@@ -81,21 +81,15 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    protected function getDateColumn(): string
+    protected static function getConstructorArguments(RequestInterface $request): array
     {
-        return 'insert_date';
-    }
-
-    public static function create(RequestInterface $request): self
-    {
-        [$from, $to] = self::getFromAndTo($request);
+        $arguments = parent::getConstructorArguments($request);
 
         $invoiceId = self::toInt($request->get('invoiceId'));
-        $status    = self::toInt($request->get('status'));
-        $provider  = $request->get('provider');
-        $search    = $request->get('search');
+        $status = self::toInt($request->get('status'));
+        $provider = $request->get('provider');
 
-        // parse search if available
+        $search = $arguments['search'] ?? null;
         if (!empty($search)) {
             $parts = explode(',', $search);
             foreach ($parts as $part) {
@@ -106,8 +100,14 @@ class QueryFilter extends QueryFilterAbstract
                     $provider = $part;
                 }
             }
+
+            $arguments['search'] = null;
         }
 
-        return new self($from, $to, $invoiceId, $status, $provider);
+        $arguments['invoiceId'] = $invoiceId;
+        $arguments['status'] = $status;
+        $arguments['provider'] = $provider;
+
+        return $arguments;
     }
 }

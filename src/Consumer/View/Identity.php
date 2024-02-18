@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Nested\Builder;
@@ -46,20 +48,20 @@ class Identity extends ViewAbstract
         $this->config = $config;
     }
 
-    public function getCollection(int $userId, ?int $appId, int $startIndex = 0)
+    public function getCollection(?int $appId, QueryFilter $filter, ContextInterface $context)
     {
-        if (empty($startIndex) || $startIndex < 0) {
-            $startIndex = 0;
-        }
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\IdentityTable::COLUMN_NAME);
+        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         if (empty($appId)) {
             // by default we use the consumer app
             $appId = 2;
         }
 
-        $count = 16;
-
-        $condition = Condition::withAnd();
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\IdentityTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
 
@@ -69,7 +71,7 @@ class Identity extends ViewAbstract
             'totalResults' => $this->getTable(Table\Identity::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $builder->doCollection([$this->getTable(Table\Identity::class), 'findAll'], [$condition, $startIndex, $count, 'name', OrderBy::ASC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\Identity::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
                 'icon' => Table\Generated\IdentityTable::COLUMN_ICON,

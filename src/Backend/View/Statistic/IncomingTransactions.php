@@ -20,8 +20,10 @@
 
 namespace Fusio\Impl\Backend\View\Statistic;
 
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Transaction;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * IncomingTransactions
@@ -32,9 +34,11 @@ use PSX\Sql\ViewAbstract;
  */
 class IncomingTransactions extends ViewAbstract
 {
-    public function getView(Transaction\QueryFilter $filter)
+    public function getView(Transaction\TransactionQueryFilter $filter, ContextInterface $context)
     {
-        $condition  = $filter->getCondition('trans');
+        $condition  = $filter->getCondition([], 'trans');
+        $condition->equals('trans.' . Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
+
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure

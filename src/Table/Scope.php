@@ -36,21 +36,27 @@ class Scope extends Generated\ScopeTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id): ?ScopeRow
+    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ScopeRow
     {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+
         if (str_starts_with($id, '~')) {
-            return $this->findOneByName(urldecode(substr($id, 1)));
+            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
         } else {
-            return $this->find((int) $id);
+            $condition->equals(self::COLUMN_ID, (int) $id);
         }
+
+        return $this->findOneBy($condition);
     }
 
-    public function getValidScopes(array $names): array
+    public function getValidScopes(array $names, ?string $tenantId = null): array
     {
         $names = array_filter($names);
 
         if (!empty($names)) {
             $condition = Condition::withAnd();
+            $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
             $condition->in(self::COLUMN_NAME, $names);
             return $this->findAll($condition, 0, 1024);
         } else {
@@ -58,9 +64,10 @@ class Scope extends Generated\ScopeTable
         }
     }
 
-    public function getAvailableScopes(int $categoryId): array
+    public function getAvailableScopes(int $categoryId, ?string $tenantId = null): array
     {
         $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
 
         $result = $this->findAll($condition, 0, 1024, 'name', OrderBy::ASC);

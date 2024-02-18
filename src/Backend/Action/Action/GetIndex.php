@@ -20,13 +20,12 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Provider\ActionProvider;
+use PSX\Framework\Config\ConfigInterface;
 
 /**
  * GetIndex
@@ -38,16 +37,18 @@ use Fusio\Impl\Provider\ActionProvider;
 class GetIndex implements ActionInterface
 {
     private ActionProvider $actionParser;
+    private ConfigInterface $config;
 
-    public function __construct(ActionProvider $actionParser)
+    public function __construct(ActionProvider $actionParser, ConfigInterface $config)
     {
         $this->actionParser = $actionParser;
+        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
-            'actions' => $this->actionParser->getClasses()
+            'actions' => $this->actionParser->getClasses($this->config->get('fusio_action_exclude'))
         ];
     }
 }

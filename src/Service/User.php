@@ -80,6 +80,7 @@ class User
             $password = $user->getPassword();
 
             $row = new Table\Generated\UserRow();
+            $row->setTenantId($context->getTenantId());
             $row->setRoleId($roleId);
             $row->setPlanId($user->getPlanId());
             $row->setIdentityId(null);
@@ -114,6 +115,7 @@ class User
     {
         // check whether user exists
         $condition  = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identity->getId());
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $userInfo->getId());
 
@@ -155,6 +157,7 @@ class User
 
             // create user
             $row = new Table\Generated\UserRow();
+            $row->setTenantId($context->getTenantId());
             $row->setRoleId($roleId);
             $row->setIdentityId($identity->getId());
             $row->setStatus(Table\User::STATUS_ACTIVE);
@@ -221,7 +224,7 @@ class User
                 $this->userScopeTable->deleteAllFromUser($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $scopes);
+                $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
             }
 
             $this->userTable->commit();
@@ -315,9 +318,9 @@ class User
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
     }
 
-    private function insertScopes(int $userId, array $scopes): void
+    private function insertScopes(int $userId, array $scopes, ?string $tenantId = null): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes);
+        $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
         foreach ($scopes as $scope) {
             $row = new Table\Generated\UserScopeRow();
             $row->setUserId($userId);

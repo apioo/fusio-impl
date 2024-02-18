@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -36,15 +38,17 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0, ?string $search = null)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
-        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
+        $startIndex = $filter->getStartIndex();
+        $count = $filter->getCount();
+        $sortBy = $filter->getSortBy(Table\Generated\AppTable::COLUMN_ID);
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        if (!empty($search)) {
-            $condition->like(Table\Generated\AppTable::COLUMN_NAME, '%' . $search . '%');
-        }
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTable::COLUMN_NAME]);
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
 
@@ -52,7 +56,7 @@ class App extends ViewAbstract
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
-            'entry' => $builder->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, 16, null, OrderBy::DESC], [
+            'entry' => $builder->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
@@ -66,11 +70,12 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $userId, int $appId)
+    public function getEntity(int $appId, ContextInterface $context)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $appId);
-        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -101,9 +106,10 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey($appKey, $scope)
+    public function getEntityByAppKey(string $appKey, string $scope, ?string $tenantId = null)
     {
         $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
         $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $appKey);
 

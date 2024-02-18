@@ -61,6 +61,7 @@ class Event
             $this->eventTable->beginTransaction();
 
             $row = new Table\Generated\EventRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Event::STATUS_ACTIVE);
             $row->setName($event->getName());

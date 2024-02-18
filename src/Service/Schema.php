@@ -65,6 +65,7 @@ class Schema
             $this->schemaTable->beginTransaction();
 
             $row = new Table\Generated\SchemaRow();
+            $row->setTenantId($context->getTenantId());
             $row->setCategoryId($categoryId);
             $row->setStatus(Table\Schema::STATUS_ACTIVE);
             $row->setName($schema->getName());

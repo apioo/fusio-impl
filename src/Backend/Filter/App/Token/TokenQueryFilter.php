@@ -21,27 +21,27 @@
 namespace Fusio\Impl\Backend\Filter\App\Token;
 
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use PSX\Sql\Condition;
 
 /**
- * QueryFilter
+ * TokenQueryFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class QueryFilter extends QueryFilterAbstract
+class TokenQueryFilter extends DateQueryFilter
 {
-    protected ?int $appId = null;
-    protected ?int $userId = null;
-    protected ?int $status = null;
-    protected ?string $scope = null;
-    protected ?string $ip = null;
+    private ?int $appId = null;
+    private ?int $userId = null;
+    private ?int $status = null;
+    private ?string $scope = null;
+    private ?string $ip = null;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, ?int $appId = null, ?int $userId = null, ?int $status = null, ?string $scope = null, ?string $ip = null)
+    public function __construct(?int $appId, ?int $userId, ?int $status, ?string $scope, ?string $ip, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
-        parent::__construct($from, $to);
+        parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
         $this->appId = $appId;
         $this->userId = $userId;
@@ -75,10 +75,10 @@ class QueryFilter extends QueryFilterAbstract
         return $this->ip;
     }
 
-    public function getCondition(?string $alias = null): Condition
+    public function getCondition(array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($alias);
-        $alias     = $alias !== null ? $alias . '.' : '';
+        $condition = parent::getCondition($columnMapping, $alias);
+        $alias = $this->getAlias($alias);
 
         if (!empty($this->appId)) {
             $condition->equals($alias . 'app_id', $this->appId);
@@ -103,18 +103,17 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request): self
+    protected static function getConstructorArguments(RequestInterface $request): array
     {
-        [$from, $to] = self::getFromAndTo($request);
+        $arguments = parent::getConstructorArguments($request);
 
-        $appId  = self::toInt($request->get('appId'));
+        $appId = self::toInt($request->get('appId'));
         $userId = self::toInt($request->get('userId'));
         $status = self::toInt($request->get('status'));
-        $scope  = $request->get('scope');
-        $ip     = $request->get('ip');
-        $search = $request->get('search');
+        $scope = $request->get('scope');
+        $ip = $request->get('ip');
 
-        // parse search if available
+        $search = $arguments['search'] ?? null;
         if (!empty($search)) {
             $parts = explode(',', $search);
             foreach ($parts as $part) {
@@ -125,8 +124,16 @@ class QueryFilter extends QueryFilterAbstract
                     $scope = $part;
                 }
             }
+
+            $arguments['search'] = null;
         }
 
-        return new self($from, $to, $appId, $userId, $status, $scope, $ip);
+        $arguments['appId'] = $appId;
+        $arguments['userId'] = $userId;
+        $arguments['status'] = $status;
+        $arguments['scope'] = $scope;
+        $arguments['ip'] = $ip;
+
+        return $arguments;
     }
 }
