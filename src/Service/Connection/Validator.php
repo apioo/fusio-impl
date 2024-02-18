@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Service\Connection;
 
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\Connection;
 use PSX\Http\Exception as StatusCode;
 
