@@ -9,11 +9,11 @@ return [
     // programming languages. For more information please take a look at our worker documentation:
     // https://docs.fusio-project.org/docs/concepts/worker_api/
     /*
-    'fusio_worker'            => [
-        'java'                => 'localhost:9090',
-        'javascript'          => 'localhost:9091',
-        'php'                 => 'localhost:9092',
-        'python'              => 'localhost:9093',
+    'fusio_worker'             => [
+        'java'                 => 'localhost:9090',
+        'javascript'           => 'localhost:9091',
+        'php'                  => 'localhost:9092',
+        'python'               => 'localhost:9093',
     ],
     */
 
