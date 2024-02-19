@@ -58,8 +58,8 @@ return [
 
     // Optional an SDKgen access token which adds support for different SDK generators
     // https://sdkgen.app/
-    'sdkgen_client_id'        => env('SDKGEN_CLIENT_ID')->string(),
-    'sdkgen_client_secret'    => env('SDKGEN_CLIENT_SECRET')->string(),
+    'sdkgen_client_id'         => env('SDKGEN_CLIENT_ID')->string(),
+    'sdkgen_client_secret'     => env('SDKGEN_CLIENT_SECRET')->string(),
 
     // The url to the psx public folder (i.e. http://api.acme.com or http://127.0.0.1/psx/public)
     'psx_url'                  => env('APP_URL')->string(),
