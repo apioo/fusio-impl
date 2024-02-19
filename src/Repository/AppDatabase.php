@@ -20,10 +20,12 @@
 
 namespace Fusio\Impl\Repository;
 
-use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Sql\Condition;
 
 /**
  * AppDatabase
@@ -34,31 +36,39 @@ use Fusio\Impl\Table;
  */
 class AppDatabase implements Repository\AppInterface
 {
-    private DBALConnection $connection;
+    private Connection $connection;
+    private ConfigInterface $config;
 
-    public function __construct(DBALConnection $connection)
+    public function __construct(Connection $connection, ConfigInterface $config)
     {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     public function getAll(): array
     {
-        $sql = 'SELECT id,
-                       user_id,
-                       status,
-                       name,
-                       url,
-                       parameters,
-                       app_key
-                  FROM fusio_app
-                 WHERE status = :status
-              ORDER BY id DESC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
-        $apps   = [];
-        $result = $this->connection->fetchAllAssociative($sql, [
-            'status' => Table\App::STATUS_ACTIVE
-        ]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\AppTable::COLUMN_ID,
+                Table\Generated\AppTable::COLUMN_USER_ID,
+                Table\Generated\AppTable::COLUMN_STATUS,
+                Table\Generated\AppTable::COLUMN_NAME,
+                Table\Generated\AppTable::COLUMN_URL,
+                Table\Generated\AppTable::COLUMN_PARAMETERS,
+                Table\Generated\AppTable::COLUMN_APP_KEY,
+            ])
+            ->from('fusio_app', 'app')
+            ->orderBy(Table\Generated\AppTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        $apps = [];
         foreach ($result as $row) {
             $apps[] = $this->newApp($row, []);
         }
@@ -72,20 +82,28 @@ class AppDatabase implements Repository\AppInterface
             return null;
         }
 
-        $sql = 'SELECT id,
-                       user_id,
-                       status,
-                       name,
-                       url,
-                       parameters,
-                       app_key
-                  FROM fusio_app
-                 WHERE id = :id';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_ID, $id);
 
-        $row = $this->connection->fetchAssociative($sql, array('id' => $id));
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\AppTable::COLUMN_ID,
+                Table\Generated\AppTable::COLUMN_USER_ID,
+                Table\Generated\AppTable::COLUMN_STATUS,
+                Table\Generated\AppTable::COLUMN_NAME,
+                Table\Generated\AppTable::COLUMN_URL,
+                Table\Generated\AppTable::COLUMN_PARAMETERS,
+                Table\Generated\AppTable::COLUMN_APP_KEY,
+            ])
+            ->from('fusio_app', 'app')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         if (!empty($row)) {
-            return $this->newApp($row, $this->getScopes($row['id']));
+            return $this->newApp($row, $this->getScopes($row[Table\Generated\AppTable::COLUMN_ID]));
         } else {
             return null;
         }
@@ -93,15 +111,22 @@ class AppDatabase implements Repository\AppInterface
 
     protected function getScopes(string|int $appId): array
     {
-        $sql = '    SELECT scope.name
-                      FROM fusio_app_scope app_scope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = app_scope.scope_id
-                     WHERE app_scope.app_id = :app_id';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\AppScopeTable::COLUMN_APP_ID, $appId);
 
-        $result = $this->connection->fetchAllAssociative($sql, array('app_id' => $appId)) ?: array();
-        $names  = array();
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Table\Generated\ScopeTable::COLUMN_NAME,
+            ])
+            ->from('fusio_app_scope', 'app_scope')
+            ->innerJoin('app_scope', 'fusio_scope', 'scope', 'app_scope.' . Table\Generated\AppScopeTable::COLUMN_SCOPE_ID . ' = scope.' . Table\Generated\ScopeTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        $names = [];
         foreach ($result as $row) {
             $names[] = $row['name'];
         }
@@ -112,20 +137,30 @@ class AppDatabase implements Repository\AppInterface
     protected function newApp(array $row, array $scopes): Model\AppInterface
     {
         $parameters = [];
-        if (!empty($row['parameters'])) {
-            parse_str($row['parameters'], $parameters);
+        if (!empty($row[Table\Generated\AppTable::COLUMN_PARAMETERS])) {
+            parse_str($row[Table\Generated\AppTable::COLUMN_PARAMETERS], $parameters);
         }
 
         return new Model\App(
             false,
-            $row['id'],
-            $row['user_id'],
-            $row['status'],
-            $row['name'],
-            $row['url'],
-            $row['app_key'],
+            $row[Table\Generated\AppTable::COLUMN_ID],
+            $row[Table\Generated\AppTable::COLUMN_USER_ID],
+            $row[Table\Generated\AppTable::COLUMN_STATUS],
+            $row[Table\Generated\AppTable::COLUMN_NAME],
+            $row[Table\Generated\AppTable::COLUMN_URL],
+            $row[Table\Generated\AppTable::COLUMN_APP_KEY],
             $parameters,
             $scopes
         );
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

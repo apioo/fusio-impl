@@ -30,6 +30,7 @@ use Fusio\Impl\Service\Security\TokenValidator;
 use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\FilterChain;
@@ -181,7 +182,7 @@ class AuthenticationTest extends DbTestCase
         $row->setPublic(0);
         $context->setOperation($row);
 
-        $app = (new AppDatabase($this->connection))->get(1);
+        $app = (new AppDatabase($this->connection, Environment::getService(ConfigInterface::class)))->get(1);
         $context->setApp($app);
     }
 }

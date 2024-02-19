@@ -20,11 +20,13 @@
 
 namespace Fusio\Impl\Repository;
 
-use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Sql\Condition;
 
 /**
  * ActionDatabase
@@ -35,31 +37,39 @@ use Fusio\Impl\Table;
  */
 class ActionDatabase implements Repository\ActionInterface
 {
-    private DBALConnection $connection;
+    private Connection $connection;
+    private ConfigInterface $config;
     private bool $async = true;
 
-    public function __construct(DBALConnection $connection)
+    public function __construct(Connection $connection, ConfigInterface $config)
     {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     public function getAll(): array
     {
-        $sql = 'SELECT id,
-                       name,
-                       class,
-                       async,
-                       config,
-                       date
-                  FROM fusio_action
-                 WHERE status = :status
-              ORDER BY name ASC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\ActionTable::COLUMN_ID,
+                Table\Generated\ActionTable::COLUMN_NAME,
+                Table\Generated\ActionTable::COLUMN_CLASS,
+                Table\Generated\ActionTable::COLUMN_ASYNC,
+                Table\Generated\ActionTable::COLUMN_CONFIG,
+                Table\Generated\ActionTable::COLUMN_DATE,
+            ])
+            ->from('fusio_action', 'action')
+            ->orderBy(Table\Generated\ActionTable::COLUMN_NAME, 'ASC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         $actions = [];
-        $result  = $this->connection->fetchAllAssociative($sql, [
-            'status' => Table\Action::STATUS_ACTIVE
-        ]);
-
         foreach ($result as $row) {
             $actions[] = $this->newAction($row);
         }
@@ -74,21 +84,29 @@ class ActionDatabase implements Repository\ActionInterface
         }
 
         if (is_numeric($id)) {
-            $column = 'id';
+            $column = Table\Generated\ActionTable::COLUMN_ID;
         } else {
-            $column = 'name';
+            $column = Table\Generated\ActionTable::COLUMN_NAME;
         }
 
-        $sql = 'SELECT id,
-                       name,
-                       class,
-                       async,
-                       config,
-                       date
-                  FROM fusio_action
-                 WHERE ' . $column . ' = :id';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals($column, $id);
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\ActionTable::COLUMN_ID,
+                Table\Generated\ActionTable::COLUMN_NAME,
+                Table\Generated\ActionTable::COLUMN_CLASS,
+                Table\Generated\ActionTable::COLUMN_ASYNC,
+                Table\Generated\ActionTable::COLUMN_CONFIG,
+                Table\Generated\ActionTable::COLUMN_DATE,
+            ])
+            ->from('fusio_action', 'action')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         if (!empty($row)) {
             return $this->newAction($row);
@@ -104,14 +122,24 @@ class ActionDatabase implements Repository\ActionInterface
 
     protected function newAction(array $row): Model\ActionInterface
     {
-        $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
+        $config = !empty($row[Table\Generated\ActionTable::COLUMN_CONFIG]) ? Service\Action::unserializeConfig($row[Table\Generated\ActionTable::COLUMN_CONFIG]) : [];
 
         return new Model\Action(
-            $row['id'],
-            $row['name'],
-            $row['class'],
-            $this->async ? (bool) $row['async'] : false,
+            $row[Table\Generated\ActionTable::COLUMN_ID],
+            $row[Table\Generated\ActionTable::COLUMN_NAME],
+            $row[Table\Generated\ActionTable::COLUMN_CLASS],
+            $this->async ? (bool) $row[Table\Generated\ActionTable::COLUMN_ASYNC] : false,
             $config ?? []
         );
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

@@ -24,6 +24,8 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Sql\Condition;
 
 /**
  * UserDatabase
@@ -35,31 +37,39 @@ use Fusio\Impl\Table;
 class UserDatabase implements Repository\UserInterface
 {
     private Connection $connection;
+    private ConfigInterface $config;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, ConfigInterface $config)
     {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     public function getAll(): array
     {
-        $sql = 'SELECT id,
-                       role_id,
-                       plan_id,
-                       status,
-                       external_id,
-                       name,
-                       email,
-                       points
-                  FROM fusio_user
-                 WHERE status = :status
-              ORDER BY id DESC';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
-        $users  = [];
-        $result = $this->connection->fetchAllAssociative($sql, [
-            'status' => Table\User::STATUS_ACTIVE,
-        ]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\UserTable::COLUMN_ID,
+                Table\Generated\UserTable::COLUMN_ROLE_ID,
+                Table\Generated\UserTable::COLUMN_PLAN_ID,
+                Table\Generated\UserTable::COLUMN_STATUS,
+                Table\Generated\UserTable::COLUMN_EXTERNAL_ID,
+                Table\Generated\UserTable::COLUMN_NAME,
+                Table\Generated\UserTable::COLUMN_EMAIL,
+                Table\Generated\UserTable::COLUMN_POINTS,
+            ])
+            ->from('fusio_user', 'usr')
+            ->orderBy(Table\Generated\UserTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        $users = [];
         foreach ($result as $row) {
             $users[] = $this->newUser($row);
         }
@@ -73,18 +83,26 @@ class UserDatabase implements Repository\UserInterface
             return null;
         }
 
-        $sql = 'SELECT id,
-                       role_id,
-                       plan_id,
-                       status,
-                       external_id,
-                       name,
-                       email,
-                       points
-                  FROM fusio_user
-                 WHERE id = :id';
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_ID, $id);
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\UserTable::COLUMN_ID,
+                Table\Generated\UserTable::COLUMN_ROLE_ID,
+                Table\Generated\UserTable::COLUMN_PLAN_ID,
+                Table\Generated\UserTable::COLUMN_STATUS,
+                Table\Generated\UserTable::COLUMN_EXTERNAL_ID,
+                Table\Generated\UserTable::COLUMN_NAME,
+                Table\Generated\UserTable::COLUMN_EMAIL,
+                Table\Generated\UserTable::COLUMN_POINTS,
+            ])
+            ->from('fusio_user', 'usr')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         if (!empty($row)) {
             return $this->newUser($row);
@@ -97,25 +115,47 @@ class UserDatabase implements Repository\UserInterface
     {
         return new Model\User(
             false,
-            $row['id'],
-            $row['role_id'],
-            $this->getCategoryForRole($row['role_id']),
-            $row['status'],
-            $row['name'],
-            $row['email'] ?? '',
-            $row['points'] ?? 0,
-            $row['external_id'] ?? null,
-            $row['plan_id'] ?? null
+            $row[Table\Generated\UserTable::COLUMN_ID],
+            $row[Table\Generated\UserTable::COLUMN_ROLE_ID],
+            $this->getCategoryForRole($row[Table\Generated\UserTable::COLUMN_ROLE_ID]),
+            $row[Table\Generated\UserTable::COLUMN_STATUS],
+            $row[Table\Generated\UserTable::COLUMN_NAME],
+            $row[Table\Generated\UserTable::COLUMN_EMAIL] ?? '',
+            $row[Table\Generated\UserTable::COLUMN_POINTS] ?? 0,
+            $row[Table\Generated\UserTable::COLUMN_EXTERNAL_ID] ?? null,
+            $row[Table\Generated\UserTable::COLUMN_PLAN_ID] ?? null
         );
     }
 
     private function getCategoryForRole($roleId): int
     {
-        $categoryId = $this->connection->fetchOne('SELECT category_id FROM fusio_role WHERE id = :id', ['id' => $roleId]);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\RoleTable::COLUMN_ID, $roleId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\RoleTable::COLUMN_CATEGORY_ID,
+            ])
+            ->from('fusio_role', 'rol')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $categoryId = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($categoryId)) {
             return 0;
         }
 
         return (int) $categoryId;
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }
