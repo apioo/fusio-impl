@@ -21,8 +21,11 @@
 namespace Fusio\Impl\Framework\Api\Scanner;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Table;
 use PSX\Api\Scanner\FilterFactory as PSXFilterFactory;
 use PSX\Api\Scanner\FilterInterface;
+use PSX\Framework\Config\ConfigInterface;
+use PSX\Sql\Condition;
 
 /**
  * FilterFactory
@@ -34,13 +37,15 @@ use PSX\Api\Scanner\FilterInterface;
 class FilterFactory extends PSXFilterFactory
 {
     private Connection $connection;
+    private ConfigInterface $config;
     private bool $loaded = false;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, ConfigInterface $config)
     {
         parent::__construct();
 
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     public function getFilter(string $name): ?FilterInterface
@@ -61,14 +66,27 @@ class FilterFactory extends PSXFilterFactory
             return;
         }
 
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $this->getTenantId());
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\CategoryTable::COLUMN_ID,
+                Table\Generated\CategoryTable::COLUMN_NAME,
+            ])
+            ->from('fusio_category', 'category')
+            ->orderBy(Table\Generated\CategoryTable::COLUMN_ID, 'ASC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
         $first = null;
-        $result = $this->connection->fetchAllAssociative('SELECT id, name FROM fusio_category ORDER BY id ASC');
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
         foreach ($result as $row) {
             if ($first === null) {
-                $first = $row['name'];
+                $first = $row[Table\Generated\CategoryTable::COLUMN_NAME];
             }
 
-            $this->addFilter($row['name'], new CategoryFilter((int) $row['id']));
+            $this->addFilter($row[Table\Generated\CategoryTable::COLUMN_NAME], new CategoryFilter((int) $row[Table\Generated\CategoryTable::COLUMN_ID]));
         }
 
         $this->addFilter('fusio', new CategoriesFilter([2, 3, 4, 5]));
@@ -77,5 +95,15 @@ class FilterFactory extends PSXFilterFactory
         $this->setDefault('app');
 
         $this->loaded = true;
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

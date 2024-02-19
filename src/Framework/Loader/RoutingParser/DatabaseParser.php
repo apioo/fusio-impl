@@ -21,14 +21,15 @@
 namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
-use Fusio\Impl\Framework\Api\Scanner\FilterFactory;
 use Fusio\Impl\Framework\Api\Scanner\CategoriesFilter;
+use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
+use Fusio\Impl\Table;
 use Fusio\Impl\Table\Operation as TableOperation;
 use PSX\Api\Scanner\FilterInterface;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Loader\RoutingCollection;
-use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
+use PSX\Sql\Condition;
 
 /**
  * DatabaseParser
@@ -40,48 +41,63 @@ use PSX\Framework\Loader\RoutingParserInterface;
 class DatabaseParser implements RoutingParserInterface
 {
     private Connection $connection;
+    private ConfigInterface $config;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, ConfigInterface $config)
     {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     public function getCollection(?FilterInterface $filter = null): RoutingCollection
     {
-        $sql = 'SELECT operation.id,
-                       operation.http_method,
-                       operation.http_path
-                  FROM fusio_operation operation
-                 WHERE operation.status = :status';
-
-        $params = ['status' => TableOperation::STATUS_ACTIVE];
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, TableOperation::STATUS_ACTIVE);
 
         if ($filter instanceof CategoryFilter) {
-            $sql.= ' AND category_id = :category_id';
-            $params['category_id'] = $filter->getId();
+            $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $filter->getId());
         } elseif ($filter instanceof CategoriesFilter) {
-            $sql.= ' AND category_id IN (' . implode(', ', array_fill(0, count($filter->getIds()), '?')) . ')';
-            $params = array_merge($params, $filter->getIds());
+            $condition->in(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $filter->getIds());
         }
 
-        $sql.= ' ORDER BY operation.id DESC';
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\OperationTable::COLUMN_ID,
+                Table\Generated\OperationTable::COLUMN_HTTP_METHOD,
+                Table\Generated\OperationTable::COLUMN_HTTP_PATH,
+            ])
+            ->from('fusio_operation', 'operation')
+            ->orderBy(Table\Generated\OperationTable::COLUMN_ID, 'DESC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
         $collection = new RoutingCollection();
-        $result = $this->connection->fetchAllAssociative($sql, $params);
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         foreach ($result as $row) {
-            $controller = 'operation://' . $row['id'];
-            $method = $row['id'];
+            $controller = 'operation://' . $row[Table\Generated\OperationTable::COLUMN_ID];
+            $method = $row[Table\Generated\OperationTable::COLUMN_ID];
 
-            if ($row['http_method'] === 'GET') {
-                $methods = ['OPTIONS', 'HEAD', $row['http_method']];
+            if ($row[Table\Generated\OperationTable::COLUMN_HTTP_METHOD] === 'GET') {
+                $methods = ['OPTIONS', 'HEAD', $row[Table\Generated\OperationTable::COLUMN_HTTP_METHOD]];
             } else {
-                $methods = ['OPTIONS', $row['http_method']];
+                $methods = ['OPTIONS', $row[Table\Generated\OperationTable::COLUMN_HTTP_METHOD]];
             }
 
-            $collection->add($methods, $row['http_path'], [$controller, $method]);
+            $collection->add($methods, $row[Table\Generated\OperationTable::COLUMN_HTTP_PATH], [$controller, $method]);
         }
 
         return $collection;
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }
