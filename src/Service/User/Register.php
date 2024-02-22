@@ -53,7 +53,7 @@ class Register
         $this->roleTable      = $roleTable;
     }
 
-    public function register(UserRegister $register): int
+    public function register(UserRegister $register, UserContext $context): int
     {
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
@@ -95,7 +95,7 @@ class Register
 
         // send activation mail
         if ($approval) {
-            $token = $this->tokenService->generateToken($userId);
+            $token = $this->tokenService->generateToken($context->getTenantId(), $userId);
 
             $this->mailerService->sendActivationMail($name, $email, $token);
         }

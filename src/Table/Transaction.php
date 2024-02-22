@@ -32,11 +32,11 @@ use PSX\Sql\Condition;
  */
 class Transaction extends Generated\TransactionTable
 {
-    public function findOneByIdentifier(int $id, ?string $tenantId = null): ?TransactionRow
+    public function findOneByIdentifier(?string $tenantId, int $id): ?TransactionRow
     {
         $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_ID, $id);
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }

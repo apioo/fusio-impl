@@ -106,13 +106,13 @@ class Authenticator
         return null;
     }
 
-    public function getValidScopes(int $userId, array $scopes): array
+    public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
-        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+        return Table\Scope::getNames($this->userScopeTable->getValidScopes($tenantId, $userId, $scopes));
     }
 
-    public function getAvailableScopes(int $userId): array
+    public function getAvailableScopes(?string $tenantId, int $userId): array
     {
-        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
+        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($tenantId, $userId));
     }
 }

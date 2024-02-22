@@ -36,7 +36,7 @@ class Rate extends Generated\RateTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?RateRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?RateRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

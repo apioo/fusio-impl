@@ -32,7 +32,7 @@ use PSX\Sql\Condition;
  */
 class Audit extends Generated\AuditTable
 {
-    public function findOneByIdentifier(int $id, ?string $tenantId = null): ?AuditRow
+    public function findOneByIdentifier(?string $tenantId, int $id): ?AuditRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

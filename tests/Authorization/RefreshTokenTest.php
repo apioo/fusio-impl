@@ -43,7 +43,7 @@ class RefreshTokenTest extends ControllerDbTestCase
     {
         // update insert date so that the refresh token is not expired
         $qb  = $this->connection->createQueryBuilder();
-        $qb->update('fusio_app_token')
+        $qb->update('fusio_token')
             ->set('date', ':date')
             ->setParameter('date', date('Y-m-d H:i:s'));
 
@@ -72,7 +72,7 @@ class RefreshTokenTest extends ControllerDbTestCase
         $this->assertEquals('bar', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);

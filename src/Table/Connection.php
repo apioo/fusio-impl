@@ -35,7 +35,7 @@ class Connection extends Generated\ConnectionTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ConnectionRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?ConnectionRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

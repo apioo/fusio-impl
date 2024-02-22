@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
@@ -50,7 +51,7 @@ class Login
         $this->config = $config;
     }
 
-    public function login(UserLogin $login): ?AccessToken
+    public function login(UserLogin $login, UserContext $context): ?AccessToken
     {
         $username = $login->getUsername();
         if (empty($username)) {
@@ -69,15 +70,14 @@ class Login
 
         $scopes = $login->getScopes();
         if (empty($scopes)) {
-            $scopes = $this->authenticatorService->getAvailableScopes($userId);
+            $scopes = $this->authenticatorService->getAvailableScopes($context->getTenantId(), $userId);
         } else {
-            $scopes = $this->authenticatorService->getValidScopes($userId, $scopes);
+            $scopes = $this->authenticatorService->getValidScopes($context->getTenantId(), $userId, $scopes);
         }
 
-        $appId = $this->getAppId();
-
         return $this->appTokenService->generateAccessToken(
-            $appId,
+            $context->getTenantId(),
+            null,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
@@ -85,7 +85,7 @@ class Login
         );
     }
 
-    public function refresh(UserRefresh $refresh): AccessToken
+    public function refresh(UserRefresh $refresh, UserContext $context): AccessToken
     {
         $refreshToken = $refresh->getRefreshToken();
         if (empty($refreshToken)) {
@@ -93,20 +93,11 @@ class Login
         }
 
         return $this->appTokenService->refreshAccessToken(
-            $this->getAppId(),
+            $context->getTenantId(),
             $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))
         );
-    }
-
-    private function getAppId(): int
-    {
-        // @TODO this is the consumer app. Probably we need a better way to
-        // define this id
-        $appId = 2;
-
-        return $appId;
     }
 }

@@ -73,7 +73,7 @@ class Rate extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
             'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),

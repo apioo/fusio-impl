@@ -68,6 +68,7 @@ class NewInstallation
         $bag->addCategory('consumer');
         $bag->addCategory('system');
         $bag->addCategory('authorization');
+        $bag->addCategory('default', 'customer_a');
         $bag->addRole('default', 'Administrator');
         $bag->addRole('default', 'Backend');
         $bag->addRole('default', 'Consumer');

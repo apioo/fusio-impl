@@ -202,7 +202,7 @@ JSON;
         $this->assertEquals($scope, $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals($appId, $row['app_id']);
         $this->assertEquals($userId, $row['user_id']);

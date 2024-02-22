@@ -77,7 +77,7 @@ class Payment
             throw new StatusCode\BadRequestException('No plan id provided');
         }
 
-        $product    = $this->getProduct($planId);
+        $product = $this->getProduct($context->getTenantId(), $planId);
         $connection = $this->connector->getConnection($name);
 
         // validate return url
@@ -120,9 +120,9 @@ class Payment
         return $provider->portal($connection, $user, $returnUrl, $configurationId);
     }
 
-    private function getProduct(int $planId): ProductInterface
+    private function getProduct(?string $tenantId, int $planId): ProductInterface
     {
-        $plan = $this->planTable->find($planId);
+        $plan = $this->planTable->findOneByTenantAndId($tenantId, $planId);
         if (!$plan instanceof Table\Generated\PlanRow) {
             throw new StatusCode\BadRequestException('Invalid plan id');
         }

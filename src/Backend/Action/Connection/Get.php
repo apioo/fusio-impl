@@ -62,7 +62,8 @@ class Get implements ActionInterface
         $connection = $this->view->getEntityWithConfig(
             $request->get('connection_id'),
             $this->config->get('fusio_project_key'),
-            $this->connectionParser
+            $this->connectionParser,
+            $context
         );
 
         if (empty($connection)) {

@@ -20,11 +20,11 @@
 
 namespace Fusio\Impl\Service\Security;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Table\App\Token as AppToken;
+use Fusio\Impl\Table;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 
@@ -37,17 +37,21 @@ use PSX\OAuth2\Exception\InvalidScopeException;
  */
 class TokenValidator
 {
-    private Connection $connection;
     private JsonWebToken $jsonWebToken;
     private Repository\AppInterface $appRepository;
     private Repository\UserInterface $userRepository;
+    private Table\Token $tokenTable;
+    private Table\Scope $scopeTable;
+    private ConfigInterface $config;
 
-    public function __construct(Connection $connection, JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository, Table\Token $tokenTable, Table\Scope $scopeTable, ConfigInterface $config)
     {
-        $this->connection = $connection;
         $this->jsonWebToken = $jsonWebToken;
         $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
+        $this->tokenTable = $tokenTable;
+        $this->scopeTable = $scopeTable;
+        $this->config = $config;
     }
 
     public function assertAuthorization(?string $authorization, Context $context): bool
@@ -108,25 +112,7 @@ class TokenValidator
             $this->jsonWebToken->decode($token);
         }
 
-        $now = new \DateTime();
-        $sql = 'SELECT app_token.id,
-                       app_token.app_id,
-                       app_token.user_id,
-                       app_token.token,
-                       app_token.scope,
-                       app_token.expire,
-                       app_token.date
-                  FROM fusio_app_token app_token
-                 WHERE app_token.token = :token
-                   AND app_token.status = :status
-                   AND (app_token.expire IS NULL OR app_token.expire > :now)';
-
-        $accessToken = $this->connection->fetchAssociative($sql, [
-            'token' => $token,
-            'status' => AppToken::STATUS_ACTIVE,
-            'now' => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
-        ]);
-
+        $accessToken = $this->tokenTable->findByAccessToken($this->getTenantId(), $token);
         if (empty($accessToken)) {
             return null;
         }
@@ -135,17 +121,10 @@ class TokenValidator
         $entitledScopes = explode(',', $accessToken['scope']);
 
         // if the user has a global scope like backend or consumer replace them with all sub scopes
-        $entitledScopes = $this->substituteGlobalScopes($entitledScopes);
+        $entitledScopes = $this->substituteGlobalScopes($this->getTenantId(), $entitledScopes);
 
         // get all scopes which are assigned to this route
-        $sql = '    SELECT scope.name,
-                           scope_operation.allow
-                      FROM fusio_scope_operation scope_operation
-                INNER JOIN fusio_scope scope
-                        ON scope.id = scope_operation.scope_id
-                     WHERE scope_operation.operation_id = :operation';
-
-        $availableScopes = $this->connection->fetchAllAssociative($sql, ['operation' => $operationId]);
+        $availableScopes = $this->scopeTable->findByOperationId($this->getTenantId(), $operationId);
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request
@@ -153,7 +132,7 @@ class TokenValidator
 
         foreach ($entitledScopes as $entitledScope) {
             foreach ($availableScopes as $scope) {
-                if ($scope['name'] == $entitledScope && $scope['allow'] == 1) {
+                if ($scope[Table\Generated\ScopeTable::COLUMN_NAME] == $entitledScope && $scope[Table\Generated\ScopeOperationTable::COLUMN_ALLOW] == 1) {
                     $isAllowed = true;
                     break 2;
                 }
@@ -162,12 +141,12 @@ class TokenValidator
 
         if ($isAllowed) {
             return new Model\Token(
-                $accessToken['id'],
-                $accessToken['app_id'],
-                $accessToken['user_id'],
+                $accessToken[Table\Generated\TokenTable::COLUMN_ID],
+                $accessToken[Table\Generated\TokenTable::COLUMN_APP_ID],
+                $accessToken[Table\Generated\TokenTable::COLUMN_USER_ID],
                 $entitledScopes,
-                $accessToken['expire'],
-                $accessToken['date']
+                $accessToken[Table\Generated\TokenTable::COLUMN_EXPIRE],
+                $accessToken[Table\Generated\TokenTable::COLUMN_DATE]
             );
         } else {
             throw new InvalidScopeException('Access to this operation is not in the scope of the provided token');
@@ -178,21 +157,28 @@ class TokenValidator
      * If the user has as entitled scope a global scope like backend or consumer he has the right to access every sub
      * scope, so we add them to the entitled scopes
      */
-    private function substituteGlobalScopes(array $entitledScopes): array
+    private function substituteGlobalScopes(?string $tenantId, array $entitledScopes): array
     {
         $scopes = $entitledScopes;
         foreach ($entitledScopes as $scope) {
             if (!str_contains($scope, '.')) {
-                $sql = 'SELECT scope.name
-                          FROM fusio_scope scope
-                         WHERE scope.name LIKE :name';
-                $result = $this->connection->fetchAllAssociative($sql, ['name' => $scope . '.%']);
-                foreach ($result as $row) {
-                    $scopes[] = $row['name'];
+                $subScopes = $this->scopeTable->findSubScopes($tenantId, $scope);
+                foreach ($subScopes as $subScope) {
+                    $scopes[] = $subScope;
                 }
             }
         }
 
         return array_unique($scopes);
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

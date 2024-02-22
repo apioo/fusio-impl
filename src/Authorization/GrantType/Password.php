@@ -58,7 +58,7 @@ class Password extends PasswordAbstract
 
     protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
     {
-        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
+        $app = $this->appTable->findOneByAppKeyAndSecret($this->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
         if (empty($app)) {
             throw new InvalidClientException('Unknown credentials');
         }
@@ -76,13 +76,14 @@ class Password extends PasswordAbstract
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($scope, $app->getId(), $userId);
+        $scopes = $this->scopeService->getValidScopes($this->getTenantId(), $scope, $app->getId(), $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
+            $this->getTenantId(),
             $app->getId(),
             $userId,
             $scopes,

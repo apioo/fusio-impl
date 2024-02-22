@@ -36,7 +36,7 @@ class Plan extends Generated\PlanTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?PlanRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?PlanRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -50,24 +50,39 @@ class Plan extends Generated\PlanTable
         return $this->findOneBy($condition);
     }
 
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?PlanRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
+        return $this->findOneBy($condition);
+    }
+
     /**
      * Returns an array of plans which are currently active for the provided user
      *
      * @return PlanRow[]
      */
-    public function getActivePlansForUser(int $userId): array
+    public function getActivePlansForUser(?string $tenantId, int $userId): array
     {
-        $query = 'SELECT plan.* 
-                    FROM fusio_transaction trx
-              INNER JOIN fusio_plan plan
-                      ON plan.id = trx.plan_id
-                   WHERE trx.user_id = :user_id 
-                     AND :now >= trx.period_start
-                     AND :now <= trx.period_end';
-        $result = $this->connection->fetchAllAssociative($query, [
-            'user_id' => $userId,
-            'now' => date('Y-m-d H:i:s'),
-        ]);
+        $now = new \DateTime();
+
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Generated\TransactionTable::COLUMN_USER_ID, $userId);
+        $condition->lessThan(Generated\TransactionTable::COLUMN_PERIOD_START, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
+        $condition->greaterThan(Generated\TransactionTable::COLUMN_PERIOD_END, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'plan.*',
+            ])
+            ->from('fusio_transaction', 'trx')
+            ->innerJoin('trx', 'fusio_plan', 'plan', 'plan.' . self::COLUMN_ID . ' = trx.' . Generated\TransactionTable::COLUMN_PLAN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         $plans = [];
         foreach ($result as $row) {

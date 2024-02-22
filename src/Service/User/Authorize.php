@@ -98,7 +98,7 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($request->getScope() ?? '', $app->getId(), $userId);
+        $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
@@ -117,6 +117,7 @@ class Authorize
 
                 // generate access token
                 $accessToken = $this->appTokenService->generateAccessToken(
+                    $app->getTenantId(),
                     $app->getId(),
                     $userId,
                     $scopes,

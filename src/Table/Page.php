@@ -37,7 +37,7 @@ class Page extends Generated\PageTable
     public const STATUS_INVISIBLE = 2;
     public const STATUS_DELETED   = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?PageRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?PageRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

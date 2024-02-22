@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User\Login as UserLogin;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
@@ -51,7 +52,7 @@ class Login implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserLogin);
 
-        $token = $this->loginService->login($body);
+        $token = $this->loginService->login($body, UserContext::newActionContext($context));
 
         return $this->renderToken($token);
     }

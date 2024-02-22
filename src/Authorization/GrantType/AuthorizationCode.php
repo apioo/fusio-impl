@@ -72,13 +72,14 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($code['scope'], (int) $code['app_id'], (int) $code['user_id']);
+        $scopes = $this->scopeService->getValidScopes($this->getTenantId(), $code['scope'], (int) $code['app_id'], (int) $code['user_id']);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
+            $this->getTenantId(),
             $code['app_id'],
             $code['user_id'],
             $scopes,

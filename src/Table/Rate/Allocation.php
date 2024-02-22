@@ -23,6 +23,7 @@ namespace Fusio\Impl\Table\Rate;
 use Fusio\Engine\Model;
 use Fusio\Impl\Table\Generated;
 use Fusio\Impl\Table\Rate;
+use PSX\Sql\Condition;
 
 /**
  * Allocation
@@ -41,32 +42,39 @@ class Allocation extends Generated\RateAllocationTable
         $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
-    public function getRateForRequest(Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
+    public function getRateForRequest(?string $tenantId, Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
     {
-        $sql = '    SELECT rate.rate_limit,
-                           rate.timespan
-                      FROM fusio_rate_allocation rate_allocation
-                INNER JOIN fusio_rate rate
-                        ON rate_allocation.rate_id = rate.id 
-                     WHERE rate.status = :status
-                       AND (rate_allocation.operation_id IS NULL OR rate_allocation.operation_id = :operation_id)
-                       AND (rate_allocation.user_id IS NULL OR rate_allocation.user_id = :user_id)
-                       AND (rate_allocation.plan_id IS NULL OR rate_allocation.plan_id = :plan_id)
-                       AND (rate_allocation.app_id IS NULL OR rate_allocation.app_id = :app_id)
-                       AND (rate_allocation.authenticated IS NULL OR rate_allocation.authenticated = :authenticated)';
+        $condition = Condition::withAnd();
+        $condition->equals(Generated\RateTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Generated\RateTable::COLUMN_STATUS, Rate::STATUS_ACTIVE);
+        $condition->add(Condition::withOr()
+            ->nil('rate_allocation.' . self::COLUMN_OPERATION_ID)
+            ->equals('rate_allocation.' . self::COLUMN_OPERATION_ID, $operation->getId()));
+        $condition->add(Condition::withOr()
+            ->nil('rate_allocation.' . self::COLUMN_USER_ID)
+            ->equals('rate_allocation.' . self::COLUMN_USER_ID, $user->getId()));
+        $condition->add(Condition::withOr()
+            ->nil('rate_allocation.' . self::COLUMN_PLAN_ID)
+            ->equals('rate_allocation.' . self::COLUMN_PLAN_ID, $user->getPlanId()));
+        $condition->add(Condition::withOr()
+            ->nil('rate_allocation.' . self::COLUMN_APP_ID)
+            ->equals('rate_allocation.' . self::COLUMN_APP_ID, $app->getId()));
+        $condition->add(Condition::withOr()
+            ->nil('rate_allocation.' . self::COLUMN_AUTHENTICATED)
+            ->equals('rate_allocation.' . self::COLUMN_AUTHENTICATED, $user->isAnonymous() ? 0 : 1));
 
-        $params = [
-            'status' => Rate::STATUS_ACTIVE,
-            'operation_id' => $operation->getId(),
-            'user_id' => $user->getId(),
-            'plan_id' => $user->getPlanId(),
-            'app_id' => $app->getId(),
-            'authenticated' => $app->isAnonymous() ? 0 : 1,
-        ];
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'rate.' . Generated\RateTable::COLUMN_RATE_LIMIT,
+                'rate.' . Generated\RateTable::COLUMN_TIMESPAN,
+            ])
+            ->from('fusio_rate_allocation', 'rate_allocation')
+            ->innerJoin('rate_allocation', 'fusio_rate', 'rate', 'rate_allocation.' . self::COLUMN_RATE_ID . ' = rate.' . Generated\RateTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('rate.' . Generated\RateTable::COLUMN_PRIORITY, 'DESC')
+            ->setParameters($condition->getValues());
 
-        $sql.= ' ORDER BY rate.priority DESC';
-
-        $row = $this->connection->fetchAssociative($sql, $params);
+        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($row)) {
             throw new \RuntimeException('Could not find rate for request');
         }

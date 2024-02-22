@@ -38,12 +38,12 @@ use PSX\Http\ResponseInterface;
  */
 class RequestLimit implements FilterInterface
 {
-    private Service\Rate $rateService;
+    private Service\Rate\Limiter $limiterService;
     private ContextFactory $contextFactory;
 
-    public function __construct(Service\Rate $rateService, ContextFactory $contextFactory)
+    public function __construct(Service\Rate\Limiter $limiterService, ContextFactory $contextFactory)
     {
-        $this->rateService    = $rateService;
+        $this->limiterService = $limiterService;
         $this->contextFactory = $contextFactory;
     }
 
@@ -51,7 +51,7 @@ class RequestLimit implements FilterInterface
     {
         $context = $this->contextFactory->getActive();
 
-        $success = $this->rateService->assertLimit(
+        $success = $this->limiterService->assertLimit(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
             $context->getOperation(),
             $context->getApp(),

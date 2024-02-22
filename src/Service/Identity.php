@@ -119,7 +119,7 @@ class Identity
 
     public function update(string $identityId, Model\Backend\IdentityUpdate $identity, UserContext $context): int
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -163,7 +163,7 @@ class Identity
 
     public function delete(string $identityId, UserContext $context): int
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -180,9 +180,9 @@ class Identity
         return $existing->getId();
     }
 
-    public function redirect(string $identityId, ?string $redirectUri): Uri
+    public function redirect(string $identityId, ?string $redirectUri, UserContext $context): Uri
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -224,9 +224,9 @@ class Identity
         return $provider->getRedirectUri($parameters, $state, $this->buildRedirectUri($existing));
     }
 
-    public function exchange(string $identityId, string $code, string $state): AccessToken
+    public function exchange(string $identityId, string $code, string $state, UserContext $context): AccessToken
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -264,7 +264,7 @@ class Identity
         $userId = $this->userService->createRemote($existing, $user, UserContext::newAnonymousContext());
 
         // get scopes for user
-        $scopes = $this->userService->getAvailableScopes($userId);
+        $scopes = $this->userService->getAvailableScopes($userId, $context);
 
         $appId = $existing->getAppId();
         if (empty($appId)) {
@@ -273,6 +273,7 @@ class Identity
         }
 
         $accessToken = $this->appTokenService->generateAccessToken(
+            $context->getTenantId(),
             $appId,
             $userId,
             $scopes,

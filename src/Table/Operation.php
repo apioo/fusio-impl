@@ -36,7 +36,7 @@ class Operation extends Generated\OperationTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?OperationRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?OperationRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -47,6 +47,14 @@ class Operation extends Generated\OperationTable
             $condition->equals(self::COLUMN_ID, (int) $id);
         }
 
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?OperationRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
         return $this->findOneBy($condition);
     }
 

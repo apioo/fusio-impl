@@ -73,7 +73,7 @@ class App extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
             'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
@@ -82,16 +82,16 @@ class App extends ViewAbstract
             'parameters' => Table\Generated\AppTable::COLUMN_PARAMETERS,
             'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
             'appSecret' => Table\Generated\AppTable::COLUMN_APP_SECRET,
-            'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'tokens' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
-                'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
-                'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
-                'status' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
-                'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
-                'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
-                'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-                'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
-                'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+            'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [$context->getTenantId(), new Reference('id')], 'name'),
+            'tokens' => $builder->doCollection([$this->getTable(Table\Token::class), 'getTokensByApp'], [$context->getTenantId(), new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
+                'token' => Table\Generated\TokenTable::COLUMN_TOKEN,
+                'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
+                'ip' => Table\Generated\TokenTable::COLUMN_IP,
+                'expire' => Table\Generated\TokenTable::COLUMN_EXPIRE,
+                'date' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_DATE),
             ]),
             'metadata' => $builder->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
             'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),

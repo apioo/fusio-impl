@@ -52,6 +52,7 @@ class GetApp implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->view->getEntityByAppKey(
+            $context->getTenantId(),
             $request->get('client_id'),
             $request->get('scope')
         );

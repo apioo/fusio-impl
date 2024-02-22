@@ -46,7 +46,7 @@ class Token
     /**
      * Returns a user for the provided one time token. Note we delete the token in case we can return a valid user
      */
-    public function getUser(string $token): int
+    public function getUser(?string $tenantId, string $token): int
     {
         try {
             $this->jsonWebToken->decode($token);
@@ -54,7 +54,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid token provided');
         }
 
-        $user = $this->userTable->findOneByToken($token);
+        $user = $this->userTable->findOneByTenantAndToken($tenantId, $token);
         if (empty($user)) {
             throw new StatusCode\BadRequestException('Could not find user for token');
         }
@@ -67,9 +67,9 @@ class Token
     /**
      * Generates a one time token for the user and assigns the token to the user
      */
-    public function generateToken(int $userId): string
+    public function generateToken(?string $tenantId, int $userId): string
     {
-        $existing = $this->userTable->find($userId);
+        $existing = $this->userTable->findOneByTenantAndId($tenantId, $userId);
         if (!$existing instanceof Table\Generated\UserRow) {
             throw new \RuntimeException('Could not find provided user id');
         }

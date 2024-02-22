@@ -58,7 +58,7 @@ class ClientCredentials extends ClientCredentialsAbstract
     protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         // check whether the credentials contain an app key and secret
-        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
+        $app = $this->appTable->findOneByAppKeyAndSecret($this->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
         if (!empty($app)) {
             $appId  = $app->getId();
             $userId = $app->getUserId();
@@ -79,14 +79,15 @@ class ClientCredentials extends ClientCredentialsAbstract
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($scope, $appId, $userId);
+        $scopes = $this->scopeService->getValidScopes($this->getTenantId(), $scope, $appId, $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
-            $appId === null ? 1 : $appId,
+            $this->getTenantId(),
+            $appId,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',

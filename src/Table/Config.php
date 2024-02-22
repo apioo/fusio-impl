@@ -41,7 +41,7 @@ class Config extends Generated\ConfigTable
     public const FORM_TEXT     = 6;
     public const FORM_SECRET   = 7;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ConfigRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?ConfigRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -55,10 +55,22 @@ class Config extends Generated\ConfigTable
         return $this->findOneBy($condition);
     }
 
-    public function getValue(string $name): array|false
+    public function getValue(?string $tenantId, string $name): array|false
     {
-        return $this->connection->fetchAssociative('SELECT id, value, type FROM fusio_config WHERE name = :name', [
-            'name' => $name
-        ]);
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'config.' . self::COLUMN_ID,
+                'config.' . self::COLUMN_VALUE,
+                'config.' . self::COLUMN_TYPE,
+            ])
+            ->from('fusio_config', 'config')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

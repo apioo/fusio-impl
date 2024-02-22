@@ -68,7 +68,7 @@ class Page extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$pageId, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$context->getTenantId(), $pageId], [
             'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,

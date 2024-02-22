@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Framework\Schema\Parser;
 
 use Doctrine\DBAL\Connection;
+use PSX\Framework\Config\ConfigInterface;
 use PSX\Schema\Exception\ParserException;
 use PSX\Schema\Parser\ContextInterface;
 use PSX\Schema\Parser\Popo;
@@ -28,6 +29,8 @@ use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\ParserInterface;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
+use PSX\Sql\Condition;
+use Fusio\Impl\Table;
 
 /**
  * Schema
@@ -41,25 +44,36 @@ class Schema implements ParserInterface
     private Connection $connection;
     private Popo $popo;
     private TypeSchema $typeSchema;
+    private ConfigInterface $config;
 
-    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager, ConfigInterface $config)
     {
         $this->connection = $connection;
         $this->popo = new Popo();
         $this->typeSchema = new TypeSchema($schemaManager);
+        $this->config = $config;
     }
 
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->getTenantId());
+
         if (is_numeric($schema)) {
-            $column = 'id';
-            $value  = (int) $schema;
+            $condition->equals(Table\Generated\SchemaTable::COLUMN_ID, (int) $schema);
         } else {
-            $column = 'name';
-            $value  = ltrim($schema, '/');
+            $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, ltrim($schema, '/'));
         }
 
-        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE ' . $column . ' = :value', ['value' => $value]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\SchemaTable::COLUMN_SOURCE,
+            ])
+            ->from('fusio_schema', 'schema')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $source = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($source)) {
             throw new ParserException('Could not find schema ' . $schema);
         }
@@ -69,5 +83,15 @@ class Schema implements ParserInterface
         } else {
             return $this->typeSchema->parse($source, $context);
         }
+    }
+
+    private function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
     }
 }

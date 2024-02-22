@@ -110,7 +110,7 @@ class Action
 
     public function update(string $actionId, ActionUpdate $action, UserContext $context): int
     {
-        $existing = $this->actionTable->findOneByIdentifier($actionId, $context->getTenantId());
+        $existing = $this->actionTable->findOneByIdentifier($context->getTenantId(), $actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -150,7 +150,7 @@ class Action
 
     public function delete(string $actionId, UserContext $context): int
     {
-        $existing = $this->actionTable->findOneByIdentifier($actionId, $context->getTenantId());
+        $existing = $this->actionTable->findOneByIdentifier($context->getTenantId(), $actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }

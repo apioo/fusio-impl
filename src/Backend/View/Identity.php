@@ -69,11 +69,11 @@ class Identity extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ?string $tenantId = null)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Identity::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Identity::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
             'roleId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ROLE_ID),
             'appId' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_APP_ID),

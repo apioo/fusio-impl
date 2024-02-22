@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Model;
 use PSX\Framework\Http\Writer\Template;
@@ -69,7 +70,12 @@ class Exchange implements ActionInterface
             throw new StatusCode\BadRequestException('No state provided');
         }
 
-        $token = $this->identity->exchange($request->get('identity'), $code, $state);
+        $token = $this->identity->exchange(
+            $request->get('identity'),
+            $code,
+            $state,
+            UserContext::newActionContext($context)
+        );
 
         // normally the exchange method throws a redirect exception but in case we have no redirect we simply show the
         // access token to the user

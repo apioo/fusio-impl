@@ -45,22 +45,22 @@ class Token extends ViewAbstract
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\AppTokenTable::COLUMN_DATE], 'token');
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE], 'token');
         $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
-                'token.' . Table\Generated\AppTokenTable::COLUMN_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_USER_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_STATUS,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_SCOPE,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_IP,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_DATE,
+                'token.' . Table\Generated\TokenTable::COLUMN_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_APP_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_USER_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_STATUS,
+                'token.' . Table\Generated\TokenTable::COLUMN_SCOPE,
+                'token.' . Table\Generated\TokenTable::COLUMN_IP,
+                'token.' . Table\Generated\TokenTable::COLUMN_DATE,
             ])
             ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
-            ->orderBy('token.' . Table\Generated\AppTokenTable::COLUMN_ID, 'DESC')
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->orderBy('token.' . Table\Generated\TokenTable::COLUMN_ID, 'DESC')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues())
             ->setFirstResult($startIndex)
@@ -69,7 +69,7 @@ class Token extends ViewAbstract
         $countBuilder = $this->connection->createQueryBuilder()
             ->select(['COUNT(*) AS cnt'])
             ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
@@ -80,13 +80,13 @@ class Token extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
-                'appId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
-                'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
-                'status' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
-                'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
-                'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-                'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+                'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
+                'appId' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_APP_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
+                'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
+                'ip' => Table\Generated\TokenTable::COLUMN_IP,
+                'date' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_DATE),
             ]),
         ];
 
@@ -96,30 +96,30 @@ class Token extends ViewAbstract
     public function getEntity(int $id, ContextInterface $context)
     {
         $condition = Condition::withAnd();
-        $condition->equals('token.' . Table\Generated\AppTokenTable::COLUMN_ID, $id);
+        $condition->equals('token.' . Table\Generated\TokenTable::COLUMN_ID, $id);
         $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
-                'token.' . Table\Generated\AppTokenTable::COLUMN_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_USER_ID,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_STATUS,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_TOKEN,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_SCOPE,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_IP,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_EXPIRE,
-                'token.' . Table\Generated\AppTokenTable::COLUMN_DATE,
+                'token.' . Table\Generated\TokenTable::COLUMN_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_APP_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_USER_ID,
+                'token.' . Table\Generated\TokenTable::COLUMN_STATUS,
+                'token.' . Table\Generated\TokenTable::COLUMN_TOKEN,
+                'token.' . Table\Generated\TokenTable::COLUMN_SCOPE,
+                'token.' . Table\Generated\TokenTable::COLUMN_IP,
+                'token.' . Table\Generated\TokenTable::COLUMN_EXPIRE,
+                'token.' . Table\Generated\TokenTable::COLUMN_DATE,
             ])
             ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\AppTokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-            'id' => Table\Generated\AppTokenTable::COLUMN_ID,
+            'id' => Table\Generated\TokenTable::COLUMN_ID,
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => Table\Generated\AppTable::COLUMN_ID,
                 'userId' => Table\Generated\AppTable::COLUMN_USER_ID,
@@ -131,12 +131,12 @@ class Token extends ViewAbstract
                 'status' => Table\Generated\UserTable::COLUMN_STATUS,
                 'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
-            'status' => Table\Generated\AppTokenTable::COLUMN_STATUS,
-            'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
-            'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
-            'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-            'expire' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_EXPIRE),
-            'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+            'status' => Table\Generated\TokenTable::COLUMN_STATUS,
+            'token' => Table\Generated\TokenTable::COLUMN_TOKEN,
+            'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
+            'ip' => Table\Generated\TokenTable::COLUMN_IP,
+            'expire' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_EXPIRE),
+            'date' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_DATE),
         ]);
 
         return $builder->build($definition);

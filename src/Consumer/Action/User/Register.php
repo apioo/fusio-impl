@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User\Register as UserRegister;
 use Fusio\Model;
 
@@ -51,7 +52,7 @@ class Register implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserRegister);
 
-        $this->registerService->register($body);
+        $this->registerService->register($body, UserContext::newActionContext($context));
 
         return [
             'success' => true,

@@ -62,18 +62,20 @@ class TokenCommand extends Command
             ->addArgument('appId', InputArgument::REQUIRED, 'Name or ID of the app')
             ->addArgument('userId', InputArgument::REQUIRED, 'Name or ID of the user')
             ->addArgument('scopes', InputArgument::REQUIRED, 'Comma separated list of scopes')
-            ->addArgument('expire', InputArgument::REQUIRED, 'Interval when the token expires (i.e. P1D for one day)');
+            ->addArgument('expire', InputArgument::REQUIRED, 'Interval when the token expires (i.e. P1D for one day)')
+            ->addArgument('tenantId', InputArgument::OPTIONAL, 'The tenant id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $app    = $this->findApp($input->getArgument('appId'));
-        $user   = $this->findUser($input->getArgument('userId'));
-        $scopes = $this->parseScopes($input->getArgument('scopes'), $app, $user);
+        $tenantId = $input->getArgument('tenantId');
+        $app = $this->findApp($input->getArgument('appId'));
+        $user = $this->findUser($input->getArgument('userId'));
+        $scopes = $this->parseScopes($tenantId, $input->getArgument('scopes'), $app, $user);
         $expire = $this->parseExpire($input->getArgument('expire'));
-        $ip     = '127.0.0.1';
+        $ip = '127.0.0.1';
 
-        $accessToken = $this->appTokenService->generateAccessToken($app->getId(), $user->getId(), $scopes, $ip, $expire);
+        $accessToken = $this->appTokenService->generateAccessToken($tenantId, $app->getId(), $user->getId(), $scopes, $ip, $expire);
 
         $response = [
             'App'   => $app->getName(),
@@ -128,9 +130,9 @@ class TokenCommand extends Command
         return $user;
     }
 
-    private function parseScopes(mixed $scopes, Table\Generated\AppRow $app, Table\Generated\UserRow $user): array
+    private function parseScopes(?string $tenantId, mixed $scopes, Table\Generated\AppRow $app, Table\Generated\UserRow $user): array
     {
-        return $this->scopeService->getValidScopes((string) $scopes, $app->getId(), $user->getId());
+        return $this->scopeService->getValidScopes($tenantId, (string) $scopes, $app->getId(), $user->getId());
     }
 
     private function parseExpire(mixed $expire): DateInterval

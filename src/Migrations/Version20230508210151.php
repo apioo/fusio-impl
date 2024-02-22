@@ -72,21 +72,6 @@ final class Version20230508210151 extends AbstractMigration
             $appScopeTable->addUniqueIndex(['app_id', 'scope_id']);
         }
 
-        if (!$schema->hasTable('fusio_app_token')) {
-            $appTokenTable = $schema->createTable('fusio_app_token');
-            $appTokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appTokenTable->addColumn('app_id', 'integer');
-            $appTokenTable->addColumn('user_id', 'integer');
-            $appTokenTable->addColumn('status', 'integer', ['default' => 1]);
-            $appTokenTable->addColumn('token', 'string', ['length' => 512]);
-            $appTokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
-            $appTokenTable->addColumn('scope', 'string', ['length' => 1023]);
-            $appTokenTable->addColumn('ip', 'string', ['length' => 40]);
-            $appTokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
-            $appTokenTable->addColumn('date', 'datetime');
-            $appTokenTable->setPrimaryKey(['id']);
-        }
-
         if (!$schema->hasTable('fusio_app_code')) {
             $appCodeTable = $schema->createTable('fusio_app_code');
             $appCodeTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -448,6 +433,24 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_token')) {
+            $tokenTable = $schema->createTable('fusio_token');
+            $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $tokenTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $tokenTable->addColumn('app_id', 'integer', ['notnull' => false]);
+            $tokenTable->addColumn('user_id', 'integer');
+            $tokenTable->addColumn('status', 'integer', ['default' => 1]);
+            $tokenTable->addColumn('token', 'string', ['length' => 512]);
+            $tokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
+            $tokenTable->addColumn('scope', 'string', ['length' => 1023]);
+            $tokenTable->addColumn('ip', 'string', ['length' => 40]);
+            $tokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
+            $tokenTable->addColumn('date', 'datetime');
+            $tokenTable->setPrimaryKey(['id']);
+            $tokenTable->addUniqueIndex(['tenant_id', 'status', 'token']);
+            $tokenTable->addUniqueIndex(['tenant_id', 'refresh']);
+        }
+
         if (!$schema->hasTable('fusio_transaction')) {
             $transactionTable = $schema->createTable('fusio_transaction');
             $transactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -521,9 +524,9 @@ final class Version20230508210151 extends AbstractMigration
             $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'app_scope_scope_id');
         }
 
-        if (isset($appTokenTable)) {
-            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_token_app_id');
-            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_token_user_id');
+        if (isset($tokenTable)) {
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_token_app_id');
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_token_user_id');
         }
 
         if (isset($eventResponseTable)) {
@@ -581,7 +584,6 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_app');
         $schema->dropTable('fusio_app_code');
         $schema->dropTable('fusio_app_scope');
-        $schema->dropTable('fusio_app_token');
         $schema->dropTable('fusio_audit');
         $schema->dropTable('fusio_config');
         $schema->dropTable('fusio_connection');
@@ -604,6 +606,7 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_schema');
         $schema->dropTable('fusio_scope');
         $schema->dropTable('fusio_scope_operation');
+        $schema->dropTable('fusio_token');
         $schema->dropTable('fusio_user');
         $schema->dropTable('fusio_user_grant');
         $schema->dropTable('fusio_user_scope');

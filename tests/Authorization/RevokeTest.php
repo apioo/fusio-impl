@@ -56,7 +56,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check whether the token was revoked
-        $status = $this->connection->fetchOne('SELECT status FROM fusio_app_token WHERE token = :token', ['token' => 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf']);
+        $status = $this->connection->fetchOne('SELECT status FROM fusio_token WHERE token = :token', ['token' => 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf']);
 
         $this->assertEquals(Token::STATUS_DELETED, $status);
     }

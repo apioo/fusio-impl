@@ -32,7 +32,7 @@ use PSX\Sql\Condition;
  */
 class Log extends Generated\LogTable
 {
-    public function findOneByIdentifier(int $id, ?string $tenantId = null): ?LogRow
+    public function findOneByIdentifier(?string $tenantId, int $id): ?LogRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

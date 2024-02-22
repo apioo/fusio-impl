@@ -89,7 +89,7 @@ class Page
 
     public function update(string $pageId, PageUpdate $page, UserContext $context): int
     {
-        $existing = $this->pageTable->findOneByIdentifier($pageId);
+        $existing = $this->pageTable->findOneByIdentifier($context->getTenantId(), $pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }
@@ -118,7 +118,7 @@ class Page
 
     public function delete(string $pageId, UserContext $context): int
     {
-        $existing = $this->pageTable->findOneByIdentifier($pageId);
+        $existing = $this->pageTable->findOneByIdentifier($context->getTenantId(), $pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }

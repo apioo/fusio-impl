@@ -52,13 +52,14 @@ class RefreshToken extends RefreshTokenAbstract
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
-        $app = $this->appTable->findOneByAppKeyAndSecret($credentials->getClientId(), $credentials->getClientSecret(), $this->getTenantId());
+        $app = $this->appTable->findOneByAppKeyAndSecret($this->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
         if (empty($app)) {
             throw new ServerErrorException('Unknown credentials');
         }
 
         // refresh access token
         return $this->appTokenService->refreshAccessToken(
+            $this->getTenantId(),
             $app->getId(),
             $grant->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',

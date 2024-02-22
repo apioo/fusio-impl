@@ -84,7 +84,7 @@ class Plan
             $scopes = $plan->getScopes();
             if ($scopes !== null) {
                 // add scopes
-                $this->insertScopes($planId, $scopes, $context->getTenantId());
+                $this->insertScopes($context->getTenantId(), $planId, $scopes);
             }
 
             $this->planTable->commit();
@@ -101,7 +101,7 @@ class Plan
 
     public function update(string $planId, PlanUpdate $plan, UserContext $context): int
     {
-        $existing = $this->planTable->findOneByIdentifier($planId);
+        $existing = $this->planTable->findOneByIdentifier($context->getTenantId(), $planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -132,7 +132,7 @@ class Plan
             $this->planScopeTable->deleteAllFromPlan($existing->getId());
 
             // add scopes
-            $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
+            $this->insertScopes($context->getTenantId(), $existing->getId(), $scopes);
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
@@ -142,7 +142,7 @@ class Plan
 
     public function delete(string $planId, UserContext $context): int
     {
-        $existing = $this->planTable->findOneByIdentifier($planId);
+        $existing = $this->planTable->findOneByIdentifier($context->getTenantId(), $planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -159,9 +159,9 @@ class Plan
         return $existing->getId();
     }
 
-    private function insertScopes(int $planId, array $scopes, ?string $tenantId = null): void
+    private function insertScopes(?string $tenantId, int $planId, array $scopes): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
+        $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);
 
         foreach ($scopes as $scope) {
             $row = new Table\Generated\PlanScopeRow();

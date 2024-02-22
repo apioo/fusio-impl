@@ -35,7 +35,7 @@ class Identity extends Generated\IdentityTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?IdentityRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?IdentityRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

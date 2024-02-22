@@ -36,7 +36,7 @@ class Event extends Generated\EventTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?EventRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?EventRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

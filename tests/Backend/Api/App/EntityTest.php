@@ -186,7 +186,7 @@ JSON;
 
         /** @var Table\App\Scope $table */
         $table = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class);
-        $scopes = $table->getAvailableScopes($this->id);
+        $scopes = $table->getAvailableScopes(null, $this->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -234,7 +234,7 @@ JSON;
 
         /** @var Table\App\Scope $table */
         $table = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class);
-        $scopes = $table->getAvailableScopes($this->id);
+        $scopes = $table->getAvailableScopes(null, $this->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
