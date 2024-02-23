@@ -65,6 +65,10 @@ class Log
 
         $now = new \DateTime();
 
+        if (strlen($userAgent) > 255) {
+            $userAgent = substr($userAgent, 0, 255);
+        }
+
         if (strlen($path) > 1023) {
             $path = substr($path, 0, 1023);
         }
