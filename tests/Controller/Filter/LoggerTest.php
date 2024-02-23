@@ -81,6 +81,41 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
+    public function testHandleLongUserAgent()
+    {
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory());
+
+        $request  = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0 ' . str_repeat('a', 1024)]]);
+        $response = new Response();
+
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response));
+
+        $logService = Environment::getService(Log::class);
+
+        $logger = new Logger($logService, $contextFactory);
+        $logger->handle($request, $response, $filterChain);
+
+        $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
+
+        $this->assertEquals(3, $log['id']);
+        $this->assertEquals(184, $log['operation_id']);
+        $this->assertEquals(1, $log['app_id']);
+        $this->assertEquals(1, $log['user_id']);
+        $this->assertEquals('127.0.0.1', $log['ip']);
+        $this->assertEquals('FooAgent 1.0 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', $log['user_agent']);
+        $this->assertEquals('GET', $log['method']);
+        $this->assertEquals('/foo', $log['path']);
+        $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', $log['header']);
+        $this->assertEquals('', $log['body']);
+    }
+
     public function testHandleLongPath()
     {
         $contextFactory = new ContextFactory();
