@@ -264,7 +264,7 @@ class NewInstallation
                     eventName: 'fusio.action.delete',
                 ),
                 'app.getAllTokens' => new Operation(
-                    action: Backend\Action\App\Token\GetAll::class,
+                    action: Backend\Action\Token\GetAll::class,
                     httpMethod: 'GET',
                     httpPath: '/app/token',
                     httpCode: 200,
@@ -273,7 +273,7 @@ class NewInstallation
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.getToken' => new Operation(
-                    action: Backend\Action\App\Token\Get::class,
+                    action: Backend\Action\Token\Get::class,
                     httpMethod: 'GET',
                     httpPath: '/app/token/$token_id<[0-9]+>',
                     httpCode: 200,

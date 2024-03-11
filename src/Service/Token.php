@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\App;
+namespace Fusio\Impl\Service;
 
 use DateInterval;
 use DateTime;

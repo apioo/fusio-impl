@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\View\App;
+namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
@@ -28,7 +28,6 @@ use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
-use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**

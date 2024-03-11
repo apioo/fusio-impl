@@ -39,15 +39,13 @@ use PSX\OAuth2\AccessToken;
 class Login
 {
     private Authenticator $authenticatorService;
-    private Service\App\Token $appTokenService;
-    private Table\App $appTable;
+    private Service\Token $tokenService;
     private ConfigInterface $config;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, ConfigInterface $config)
     {
         $this->authenticatorService = $authenticatorService;
-        $this->appTokenService = $appTokenService;
-        $this->appTable = $appTable;
+        $this->tokenService = $tokenService;
         $this->config = $config;
     }
 
@@ -75,7 +73,7 @@ class Login
             $scopes = $this->authenticatorService->getValidScopes($context->getTenantId(), $userId, $scopes);
         }
 
-        return $this->appTokenService->generateAccessToken(
+        return $this->tokenService->generateAccessToken(
             $context->getTenantId(),
             null,
             $userId,
@@ -92,7 +90,7 @@ class Login
             throw new StatusCode\BadRequestException('No refresh token provided');
         }
 
-        return $this->appTokenService->refreshAccessToken(
+        return $this->tokenService->refreshAccessToken(
             $context->getTenantId(),
             $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',

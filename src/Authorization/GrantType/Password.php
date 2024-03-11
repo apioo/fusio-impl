@@ -42,15 +42,15 @@ use PSX\Sql\Condition;
 class Password extends PasswordAbstract
 {
     private Service\User\Authenticator $authenticatorService;
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private Service\Scope $scopeService;
     private Table\App $appTable;
     private ConfigInterface $config;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
     {
         $this->authenticatorService = $authenticatorService;
-        $this->appTokenService = $appTokenService;
+        $this->tokenService = $tokenService;
         $this->scopeService = $scopeService;
         $this->appTable = $appTable;
         $this->config = $config;
@@ -72,7 +72,7 @@ class Password extends PasswordAbstract
         $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
-            $scope = implode(',', $this->authenticatorService->getAvailableScopes($userId));
+            $scope = implode(',', $this->authenticatorService->getAvailableScopes($this->getTenantId(), $userId));
         }
 
         // validate scopes
@@ -82,7 +82,7 @@ class Password extends PasswordAbstract
         }
 
         // generate access token
-        return $this->appTokenService->generateAccessToken(
+        return $this->tokenService->generateAccessToken(
             $this->getTenantId(),
             $app->getId(),
             $userId,

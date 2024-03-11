@@ -21,14 +21,11 @@
 namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
 use PSX\OAuth2\AccessToken;
-use PSX\OAuth2\Exception\ServerErrorException;
 use PSX\OAuth2\Grant;
-use PSX\Sql\Condition;
 
 /**
  * RefreshToken
@@ -39,28 +36,19 @@ use PSX\Sql\Condition;
  */
 class RefreshToken extends RefreshTokenAbstract
 {
-    private Service\App\Token $appTokenService;
-    private Table\App $appTable;
+    private Service\Token $tokenService;
     private ConfigInterface $config;
 
-    public function __construct(Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, ConfigInterface $config)
     {
-        $this->appTokenService = $appTokenService;
-        $this->appTable        = $appTable;
-        $this->config          = $config;
+        $this->tokenService = $tokenService;
+        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
-        $app = $this->appTable->findOneByAppKeyAndSecret($this->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
-        if (empty($app)) {
-            throw new ServerErrorException('Unknown credentials');
-        }
-
-        // refresh access token
-        return $this->appTokenService->refreshAccessToken(
+        return $this->tokenService->refreshAccessToken(
             $this->getTenantId(),
-            $app->getId(),
             $grant->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),

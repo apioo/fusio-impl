@@ -39,19 +39,19 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TokenCommand extends Command
 {
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private Service\Scope $scopeService;
     private Table\App $appTable;
     private Table\User $userTable;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)
     {
         parent::__construct();
 
-        $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->appTable        = $appTable;
-        $this->userTable       = $userTable;
+        $this->tokenService = $tokenService;
+        $this->scopeService = $scopeService;
+        $this->appTable = $appTable;
+        $this->userTable = $userTable;
     }
 
     protected function configure(): void
@@ -75,7 +75,7 @@ class TokenCommand extends Command
         $expire = $this->parseExpire($input->getArgument('expire'));
         $ip = '127.0.0.1';
 
-        $accessToken = $this->appTokenService->generateAccessToken($tenantId, $app->getId(), $user->getId(), $scopes, $ip, $expire);
+        $accessToken = $this->tokenService->generateAccessToken($tenantId, $app->getId(), $user->getId(), $scopes, $ip, $expire);
 
         $response = [
             'App'   => $app->getName(),

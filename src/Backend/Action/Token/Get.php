@@ -18,39 +18,42 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\App\Token;
+namespace Fusio\Impl\Backend\Action\Token;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
-use PSX\Sql\TableManagerInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * GetAll
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+class Get implements ActionInterface
 {
-    private View\App\Token $view;
+    private View\Token $view;
 
-    public function __construct(View\App\Token $view)
+    public function __construct(View\Token $view)
     {
         $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->view->getCollection(
-            TokenQueryFilter::from($request),
+        $token = $this->view->getEntity(
+            (int) $request->get('token_id'),
             $context
         );
+
+        if (empty($token)) {
+            throw new StatusCode\NotFoundException('Could not find token');
+        }
+
+        return $token;
     }
 }

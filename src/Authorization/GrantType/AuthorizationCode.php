@@ -39,17 +39,17 @@ use PSX\OAuth2\Grant;
  */
 class AuthorizationCode extends AuthorizationCodeAbstract
 {
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private Service\Scope $scopeService;
     private Table\App\Code $appCodeTable;
     private ConfigInterface $config;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, ConfigInterface $config)
     {
-        $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->appCodeTable    = $appCodeTable;
-        $this->config          = $config;
+        $this->tokenService = $tokenService;
+        $this->scopeService = $scopeService;
+        $this->appCodeTable = $appCodeTable;
+        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)
@@ -78,7 +78,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         }
 
         // generate access token
-        return $this->appTokenService->generateAccessToken(
+        return $this->tokenService->generateAccessToken(
             $this->getTenantId(),
             $code['app_id'],
             $code['user_id'],

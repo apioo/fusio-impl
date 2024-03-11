@@ -57,11 +57,11 @@ class Identity
     private Identity\Validator $validator;
     private IdentityProvider $identityProvider;
     private Service\User $userService;
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\Token $tokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
@@ -69,7 +69,7 @@ class Identity
         $this->validator = $validator;
         $this->identityProvider = $identityProvider;
         $this->userService = $userService;
-        $this->appTokenService = $appTokenService;
+        $this->tokenService = $tokenService;
         $this->config = $config;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -272,7 +272,7 @@ class Identity
             $appId = 2;
         }
 
-        $accessToken = $this->appTokenService->generateAccessToken(
+        $accessToken = $this->tokenService->generateAccessToken(
             $context->getTenantId(),
             $appId,
             $userId,

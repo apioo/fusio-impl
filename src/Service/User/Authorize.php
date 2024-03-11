@@ -39,21 +39,21 @@ use PSX\Uri\Url;
  */
 class Authorize
 {
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private Service\Scope $scopeService;
     private Service\App\Code $appCodeService;
     private Table\App $appTable;
     private Table\User\Grant $userGrantTable;
     private ConfigInterface $config;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
     {
-        $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->appCodeService  = $appCodeService;
-        $this->appTable        = $appTable;
-        $this->userGrantTable  = $userGrantTable;
-        $this->config          = $config;
+        $this->tokenService = $tokenService;
+        $this->scopeService = $scopeService;
+        $this->appCodeService = $appCodeService;
+        $this->appTable = $appTable;
+        $this->userGrantTable = $userGrantTable;
+        $this->config = $config;
     }
 
     public function authorize(int $userId, AuthorizeRequest $request): array
@@ -116,7 +116,7 @@ class Authorize
                 }
 
                 // generate access token
-                $accessToken = $this->appTokenService->generateAccessToken(
+                $accessToken = $this->tokenService->generateAccessToken(
                     $app->getTenantId(),
                     $app->getId(),
                     $userId,
