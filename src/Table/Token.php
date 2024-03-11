@@ -86,11 +86,10 @@ class Token extends Generated\TokenTable
         return $this->findOneBy($con);
     }
 
-    public function getTokenByToken(?string $tenantId, int $appId, string $token): ?Generated\TokenRow
+    public function getTokenByToken(?string $tenantId, string $token): ?Generated\TokenRow
     {
         $con = Condition::withAnd();
         $con->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $con->equals(self::COLUMN_APP_ID, $appId);
         $con->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
         $con->greater(self::COLUMN_EXPIRE, (new DateTime())->format('Y-m-d H:i:s'));
         $con->equals(self::COLUMN_TOKEN, $token);
@@ -98,16 +97,15 @@ class Token extends Generated\TokenTable
         return $this->findOneBy($con);
     }
 
-    public function removeTokenFromApp(?string $tenantId, int $appId, int $tokenId): void
+    public function removeTokenFromApp(?string $tenantId, int $tokenId): void
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(self::COLUMN_APP_ID, $appId);
         $condition->equals(self::COLUMN_ID, $tokenId);
 
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->update('fusio_token', 'token');
-        $queryBuilder->set('token.' . self::COLUMN_STATUS, '?');
+        $queryBuilder->update('fusio_token');
+        $queryBuilder->set(self::COLUMN_STATUS, '?');
         $queryBuilder->where($condition->getExpression($this->connection->getDatabasePlatform()));
         $queryBuilder->setParameters(array_merge([self::STATUS_DELETED], $condition->getValues()));
 
@@ -126,8 +124,8 @@ class Token extends Generated\TokenTable
         $condition->equals(self::COLUMN_USER_ID, $userId);
 
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->update('fusio_token', 'token');
-        $queryBuilder->set('token.' . self::COLUMN_STATUS, '?');
+        $queryBuilder->update('fusio_token');
+        $queryBuilder->set(self::COLUMN_STATUS, '?');
         $queryBuilder->where($condition->getExpression($this->connection->getDatabasePlatform()));
         $queryBuilder->setParameters(array_merge([self::STATUS_DELETED], $condition->getValues()));
 

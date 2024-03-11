@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Authorization;
 
-use Fusio\Impl\Table\App\Token;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Http\ResponseInterface;
@@ -184,7 +184,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    private function assertAccessToken(ResponseInterface $response, string $scope, int $userId, int $appId = 1)
+    private function assertAccessToken(ResponseInterface $response, string $scope, int $userId, ?int $appId = null): void
     {
         $body = (string) $response->getBody();
         $data = Parser::decode($body, true);

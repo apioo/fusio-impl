@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Authorization;
 
-use Fusio\Impl\Table\App\Token;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Json\Parser;

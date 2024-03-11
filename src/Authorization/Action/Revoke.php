@@ -61,11 +61,11 @@ class Revoke implements ActionInterface
             throw new StatusCode\BadRequestException('No token provided');
         }
 
-        $row = $this->table->getTokenByToken($context->getTenantId(), $context->getApp()->getId(), $token);
+        $row = $this->table->getTokenByToken($context->getTenantId(), $token);
 
         // the token must be assigned to the user
-        if ($row instanceof Table\Generated\TokenRow && $row->getAppId() == $context->getApp()->getId() && $row->getUserId() == $context->getUser()->getId()) {
-            $this->tokenService->removeToken($row->getAppId(), $row->getId(), UserContext::newActionContext($context));
+        if ($row instanceof Table\Generated\TokenRow && $row->getUserId() == $context->getUser()->getId()) {
+            $this->tokenService->removeToken($row->getId(), UserContext::newActionContext($context));
 
             return [
                 'success' => true

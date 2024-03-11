@@ -162,7 +162,7 @@ class TokenValidator
         $scopes = $entitledScopes;
         foreach ($entitledScopes as $scope) {
             if (!str_contains($scope, '.')) {
-                $subScopes = $this->scopeTable->findSubScopes($tenantId, $scope);
+                $subScopes = Table\Scope::getNames($this->scopeTable->findSubScopes($tenantId, $scope));
                 foreach ($subScopes as $subScope) {
                     $scopes[] = $subScope;
                 }

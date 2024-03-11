@@ -101,11 +101,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getAppId(),
+            $event->getTokenId(),
             'app.generate_token',
             'Generated token for app',
             Record::fromArray([
-                'appId' => $event->getAppId(),
                 'tokenId' => $event->getTokenId(),
                 'accessToken' => $event->getAccessToken(),
                 'scope' => $event->getScopes(),
@@ -494,7 +493,7 @@ class AuditListener implements EventSubscriberInterface
     private function log(UserContext $context, ?int $refId, string $event, string $message, ?object $content = null): void
     {
         $row = new Table\Generated\AuditRow();
-        $row->setAppId($context->getAppId());
+        $row->setAppId($context->getAppId() ?? 0);
         $row->setUserId($context->getUserId());
         $row->setRefId($refId);
         $row->setEvent($event);

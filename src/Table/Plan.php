@@ -68,10 +68,11 @@ class Plan extends Generated\PlanTable
         $now = new \DateTime();
 
         $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(Generated\TransactionTable::COLUMN_USER_ID, $userId);
-        $condition->lessThan(Generated\TransactionTable::COLUMN_PERIOD_START, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
-        $condition->greaterThan(Generated\TransactionTable::COLUMN_PERIOD_END, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
+        $condition->equals('plan.' . self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals('trx.' . Generated\TransactionTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals('trx.' . Generated\TransactionTable::COLUMN_USER_ID, $userId);
+        $condition->lessThan('trx.' . Generated\TransactionTable::COLUMN_PERIOD_START, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
+        $condition->greaterThan('trx.' . Generated\TransactionTable::COLUMN_PERIOD_END, $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()));
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([

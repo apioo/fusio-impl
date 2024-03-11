@@ -81,7 +81,7 @@ class LoginTest extends ControllerDbTestCase
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
-        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
@@ -123,7 +123,7 @@ class LoginTest extends ControllerDbTestCase
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
-        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);

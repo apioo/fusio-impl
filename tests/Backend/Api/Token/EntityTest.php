@@ -18,19 +18,20 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\App\Token;
+namespace Fusio\Impl\Tests\Backend\Api\Token;
 
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * CollectionTest
+ * EntityTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class EntityTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -39,99 +40,37 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/app/token/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
-            "status": 1,
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testGetSearch()
-    {
-        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=bar', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-
-        $expect = <<<JSON
-{
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
-            "status": 1,
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testGetCount()
-    {
-        $response = $this->sendRequest('/backend/app/token?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-
-        $expect = <<<JSON
-{
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 80,
-    "entry": [
-        {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
-            "status": 1,
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        }
-    ]
+    "id": 1,
+    "app": {
+        "id": 1,
+        "userId": 1,
+        "status": 1,
+        "name": "Backend"
+    },
+    "user": {
+        "id": 1,
+        "status": 1,
+        "name": "Administrator"
+    },
+    "status": 1,
+    "token": "da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf",
+    "scope": [
+        "backend",
+        "authorization"
+    ],
+    "ip": "127.0.0.1",
+    "expire": "[datetime]",
+    "date": "[datetime]"
 }
 JSON;
 
@@ -141,7 +80,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/app/token', 'POST', array(
+        $response = $this->sendRequest('/backend/app/token/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -155,7 +94,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/app/token', 'PUT', array(
+        $response = $this->sendRequest('/backend/app/token/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -169,7 +108,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/app/token', 'DELETE', array(
+        $response = $this->sendRequest('/backend/app/token/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

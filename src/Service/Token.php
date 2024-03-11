@@ -24,8 +24,8 @@ use DateInterval;
 use DateTime;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\App\GeneratedTokenEvent;
-use Fusio\Impl\Event\App\RemovedTokenEvent;
+use Fusio\Impl\Event\Token\GeneratedTokenEvent;
+use Fusio\Impl\Event\Token\RemovedTokenEvent;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -67,7 +67,7 @@ class Token
             throw new StatusCode\BadRequestException('No scopes provided');
         }
 
-        $app  = $this->getApp($tenantId, $appId);
+        $app  = $appId !== null ? $this->getApp($tenantId, $appId) : null;
         $user = $this->getUser($tenantId, $userId);
 
         $now     = new \DateTime();
@@ -80,7 +80,7 @@ class Token
 
         $row = new Table\Generated\TokenRow();
         $row->setTenantId($tenantId);
-        $row->setAppId($app->getId());
+        $row->setAppId($app?->getId());
         $row->setUserId($user->getId());
         $row->setStatus(Table\Token::STATUS_ACTIVE);
         $row->setToken($accessToken);
@@ -95,13 +95,12 @@ class Token
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
-            $appId,
             $tokenId,
             $accessToken,
             $scopes,
             $expires,
             $now,
-            new UserContext($appId, $userId, $ip)
+            new UserContext($userId, $appId, $ip, $tenantId)
         ));
 
         return new AccessToken(
@@ -130,7 +129,6 @@ class Token
             throw new StatusCode\BadRequestException('Refresh token is expired');
         }
 
-        $app = $this->getApp($tenantId, $token->getAppId());
         $user = $this->getUser($tenantId, $token->getUserId());
 
         $scopes  = explode(',', $token->getScope());
@@ -151,13 +149,12 @@ class Token
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
-            $app->getId(),
             $token->getId(),
             $accessToken,
             $scopes,
             $expires,
             $now,
-            new UserContext($token->getUserId(), $app->getId(), $ip)
+            new UserContext($token->getUserId(), $token->getAppId(), $ip, $tenantId)
         ));
 
         return new AccessToken(
@@ -169,13 +166,11 @@ class Token
         );
     }
 
-    public function removeToken(int $appId, int $tokenId, UserContext $context): void
+    public function removeToken(int $tokenId, UserContext $context): void
     {
-        $app = $this->getApp($context->getTenantId(), $appId);
+        $this->tokenTable->removeTokenFromApp($context->getTenantId(), $tokenId);
 
-        $this->tokenTable->removeTokenFromApp($context->getTenantId(), $app->getId(), $tokenId);
-
-        $this->eventDispatcher->dispatch(new RemovedTokenEvent($appId, $tokenId, $context));
+        $this->eventDispatcher->dispatch(new RemovedTokenEvent($tokenId, $context));
     }
 
     private function generateJWT(Table\Generated\UserRow $user, DateTime $now, DateTime $expires): string

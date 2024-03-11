@@ -58,7 +58,7 @@ class IssuedTokens extends ViewAbstract
         // fill values
         $sql = '  SELECT COUNT(token.id) AS cnt,
                          DATE(token.date) AS date
-                    FROM fusio_app_token token
+                    FROM fusio_token token
               INNER JOIN fusio_user usr
                       ON usr.id = token.user_id
                    WHERE ' . $expression . '

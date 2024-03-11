@@ -47,7 +47,7 @@ class Cleaner
 
     private function cleanUpExpiredTokens(): void
     {
-        $this->connection->executeStatement('DELETE FROM fusio_app_token WHERE expire < :now', [
+        $this->connection->executeStatement('DELETE FROM fusio_token WHERE expire < :now', [
             'now' => (new \DateTime())->format('Y-m-d H:i:s'),
         ]);
     }

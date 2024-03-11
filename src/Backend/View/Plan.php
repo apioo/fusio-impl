@@ -88,7 +88,7 @@ class Plan extends ViewAbstract
             'points' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
             'period' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
-            'scopes' => $builder->doColumn([$this->getTable(Table\Plan\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'scopes' => $builder->doColumn([$this->getTable(Table\Plan\Scope::class), 'getAvailableScopes'], [new Reference(Table\Generated\PlanTable::COLUMN_TENANT_ID), new Reference(Table\Generated\PlanTable::COLUMN_ID)], 'name'),
         ]);
 
         return $builder->build($definition);

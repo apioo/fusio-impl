@@ -86,8 +86,8 @@ class User extends ViewAbstract
             'email' => Table\Generated\UserTable::COLUMN_EMAIL,
             'points' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
             'metadata' => $builder->fieldJson(Table\Generated\UserTable::COLUMN_METADATA),
-            'scopes' => $builder->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'plans' => $builder->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference('id')], [
+            'scopes' => $builder->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference(Table\Generated\UserTable::COLUMN_TENANT_ID), new Reference(Table\Generated\UserTable::COLUMN_ID)], 'name'),
+            'plans' => $builder->doCollection([$this->getTable(Table\Plan::class), 'getActivePlansForUser'], [new Reference(Table\Generated\UserTable::COLUMN_TENANT_ID), new Reference(Table\Generated\UserTable::COLUMN_ID)], [
                 'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'price' => $builder->fieldCallback(Table\Generated\PlanTable::COLUMN_PRICE, function($value){

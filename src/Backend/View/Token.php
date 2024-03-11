@@ -45,7 +45,6 @@ class Token extends ViewAbstract
         $count = $filter->getCount();
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE], 'token');
-        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
@@ -57,8 +56,7 @@ class Token extends ViewAbstract
                 'token.' . Table\Generated\TokenTable::COLUMN_IP,
                 'token.' . Table\Generated\TokenTable::COLUMN_DATE,
             ])
-            ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->from('fusio_token', 'token')
             ->orderBy('token.' . Table\Generated\TokenTable::COLUMN_ID, 'DESC')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues())
@@ -67,8 +65,7 @@ class Token extends ViewAbstract
 
         $countBuilder = $this->connection->createQueryBuilder()
             ->select(['COUNT(*) AS cnt'])
-            ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->from('fusio_token', 'token')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
@@ -96,7 +93,6 @@ class Token extends ViewAbstract
     {
         $condition = Condition::withAnd();
         $condition->equals('token.' . Table\Generated\TokenTable::COLUMN_ID, $id);
-        $condition->equals('app.' . Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
@@ -110,8 +106,7 @@ class Token extends ViewAbstract
                 'token.' . Table\Generated\TokenTable::COLUMN_EXPIRE,
                 'token.' . Table\Generated\TokenTable::COLUMN_DATE,
             ])
-            ->from('fusio_app_token', 'token')
-            ->innerJoin('token', 'fusio_app', 'app', 'token.' . Table\Generated\TokenTable::COLUMN_APP_ID . ' = app.' . Table\Generated\AppTable::COLUMN_ID)
+            ->from('fusio_token', 'token')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Event\App;
+namespace Fusio\Impl\Event\Token;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
@@ -32,20 +32,13 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class RemovedTokenEvent extends EventAbstract
 {
-    private int $appId;
     private int $tokenId;
 
-    public function __construct(int $appId, int $tokenId, UserContext $context)
+    public function __construct(int $tokenId, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->appId   = $appId;
         $this->tokenId = $tokenId;
-    }
-
-    public function getAppId(): int
-    {
-        return $this->appId;
     }
 
     public function getTokenId(): int

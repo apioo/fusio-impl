@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Tests\Fixture;
@@ -59,7 +60,7 @@ class ActivateTest extends ControllerDbTestCase
         $register->setName('baz');
         $register->setEmail('baz@localhost.com');
         $register->setPassword('test1234!');
-        Environment::getService(Register::class)->register($register);
+        Environment::getService(Register::class)->register($register, UserContext::newAnonymousContext());
 
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'identity_id', 'status', 'remote_id', 'name', 'email')

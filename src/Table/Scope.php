@@ -58,7 +58,7 @@ class Scope extends Generated\ScopeTable
         return $this->findOneBy($condition);
     }
 
-    public function findByOperationId(string $tenantId, int $operationId): array
+    public function findByOperationId(?string $tenantId, int $operationId): array
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -78,7 +78,7 @@ class Scope extends Generated\ScopeTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
-    public function findSubScopes(string $tenantId, string $scope): array
+    public function findSubScopes(?string $tenantId, string $scope): array
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -93,9 +93,7 @@ class Scope extends Generated\ScopeTable
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
-        $result = $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
-
-        return self::getNames($result);
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
     public function getValidScopes(?string $tenantId, array $names): array
