@@ -32,7 +32,7 @@ use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * System
@@ -43,13 +43,11 @@ use PSX\Framework\Config\ConfigInterface;
  */
 class System implements ConnectionInterface, PingableInterface, IntrospectableInterface
 {
-    private ConfigInterface $config;
-    private DBAL\Tools\DsnParser $parser;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(FrameworkConfig $frameworkConfig)
     {
-        $this->config = $config;
-        $this->parser = new DBAL\Tools\DsnParser();
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getName(): string
@@ -59,7 +57,7 @@ class System implements ConnectionInterface, PingableInterface, IntrospectableIn
 
     public function getConnection(ParametersInterface $config): DBAL\Connection
     {
-        $params = $this->parser->parse($this->config->get('psx_connection'));
+        $params = $this->frameworkConfig->getDoctrineConnectionParameters();
         $config = new DBAL\Configuration();
         $config->setSchemaAssetsFilter(static function($assetName) {
             if ($assetName instanceof AbstractAsset) {

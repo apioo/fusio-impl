@@ -20,9 +20,8 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Service\Mail\MailerInterface;
 use Fusio\Impl\Service;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\Mail\MailerInterface;
 
 /**
  * Mailer
@@ -35,19 +34,19 @@ class Mailer
 {
     private Service\Config $configService;
     private MailerInterface $mailer;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\Config $configService, MailerInterface $mailer, ConfigInterface $config)
+    public function __construct(Service\Config $configService, MailerInterface $mailer, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->configService = $configService;
         $this->mailer = $mailer;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function sendActivationMail(string $name, string $email, string $token)
     {
         $this->sendMail('mail_register', $email, [
-            'apps_url' => $this->config->get('fusio_apps_url'),
+            'apps_url' => $this->frameworkConfig->getAppsUrl(),
             'name' => $name,
             'email' => $email,
             'token' => $token
@@ -57,7 +56,7 @@ class Mailer
     public function sendResetPasswordMail(string $name, string $email, string $token)
     {
         $this->sendMail('mail_pw_reset', $email, [
-            'apps_url' => $this->config->get('fusio_apps_url'),
+            'apps_url' => $this->frameworkConfig->getAppsUrl(),
             'name' => $name,
             'email' => $email,
             'token' => $token
@@ -67,7 +66,7 @@ class Mailer
     public function sendPointsThresholdMail(string $name, string $email, int $points)
     {
         $this->sendMail('mail_points', $email, [
-            'apps_url' => $this->config->get('fusio_apps_url'),
+            'apps_url' => $this->frameworkConfig->getAppsUrl(),
             'name' => $name,
             'email' => $email,
             'points' => $points

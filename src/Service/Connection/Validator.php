@@ -20,9 +20,9 @@
 
 namespace Fusio\Impl\Service\Connection;
 
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Connection;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -35,12 +35,12 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Connection $connectionTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Connection $connectionTable, ConfigInterface $config)
+    public function __construct(Table\Connection $connectionTable, FrameworkConfig $frameworkConfig)
     {
         $this->connectionTable = $connectionTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function assert(Connection $connection, ?Table\Generated\ConnectionRow $existing = null): void
@@ -70,7 +70,7 @@ class Validator
     {
         $class = ltrim((string) $record->getClass(), '\\');
 
-        $excluded = $this->config->get('fusio_connection_exclude');
+        $excluded = $this->frameworkConfig->getConnectionExclude();
         if (empty($excluded)) {
             return;
         }

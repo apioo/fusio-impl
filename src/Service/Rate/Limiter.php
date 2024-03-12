@@ -21,8 +21,8 @@
 namespace Fusio\Impl\Service\Rate;
 
 use Fusio\Engine\Model;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
@@ -38,18 +38,18 @@ class Limiter
 {
     private Table\Rate\Allocation $rateAllocationTable;
     private Table\Log $logTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, ConfigInterface $config)
+    public function __construct(Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, FrameworkConfig $frameworkConfig)
     {
         $this->rateAllocationTable = $rateAllocationTable;
         $this->logTable = $logTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
     {
-        $rate = $this->rateAllocationTable->getRateForRequest($this->getTenantId(), $operation, $app, $user);
+        $rate = $this->rateAllocationTable->getRateForRequest($this->frameworkConfig->getTenantId(), $operation, $app, $user);
         if (empty($rate)) {
             return false;
         }
@@ -80,7 +80,7 @@ class Limiter
         $past->sub(new \DateInterval($timespan));
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
         $isAnonymous = true;
         if (!$user->isAnonymous()) {
@@ -101,15 +101,5 @@ class Limiter
         $condition->between(Table\Generated\LogTable::COLUMN_DATE, $past->format('Y-m-d H:i:s'), $now->format('Y-m-d H:i:s'));
 
         return $this->logTable->getCount($condition);
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

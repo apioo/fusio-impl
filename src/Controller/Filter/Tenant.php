@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -36,12 +36,12 @@ use PSX\Http\ResponseInterface;
  */
 class Tenant implements FilterInterface
 {
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private ContextFactory $contextFactory;
 
-    public function __construct(ConfigInterface $config, ContextFactory $contextFactory)
+    public function __construct(FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
     {
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->contextFactory = $contextFactory;
     }
 
@@ -49,7 +49,7 @@ class Tenant implements FilterInterface
     {
         $context = $this->contextFactory->getActive();
 
-        $tenantId = $this->config->get('fusio_tenant_id');
+        $tenantId = $this->frameworkConfig->getTenantId();
         if (!empty($tenantId)) {
             $context->setTenantId($tenantId);
         }

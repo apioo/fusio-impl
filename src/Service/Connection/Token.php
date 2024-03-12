@@ -31,7 +31,6 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\ConnectionConfig;
 use Fusio\Model\Backend\ConnectionUpdate;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
@@ -53,16 +52,16 @@ class Token
     private ClientInterface $httpClient;
     private Service\Connection $connectionService;
     private Service\Security\JsonWebToken $jsonWebToken;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Service\Security\JsonWebToken $jsonWebToken, ConfigInterface $config)
+    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Service\Security\JsonWebToken $jsonWebToken, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->factory = $factory;
         $this->repository = $repository;
         $this->httpClient = $httpClient;
         $this->connectionService = $connectionService;
         $this->jsonWebToken = $jsonWebToken;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     /**
@@ -291,6 +290,6 @@ class Token
 
     private function newRedirectUri(string $connectionId): string
     {
-        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'system/connection/' . $connectionId . '/callback';
+        return $this->frameworkConfig->getDispatchUrl('system', 'connection', $connectionId, 'callback');
     }
 }

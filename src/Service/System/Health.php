@@ -25,7 +25,6 @@ use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -41,11 +40,11 @@ class Health
     private Factory\Connection $connectionFactory;
     private string $secretKey;
 
-    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, ConfigInterface $config)
+    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, FrameworkConfig $frameworkConfig)
     {
-        $this->connectionTable   = $connectionTable;
+        $this->connectionTable = $connectionTable;
         $this->connectionFactory = $connectionFactory;
-        $this->secretKey         = $config->get('fusio_project_key');
+        $this->secretKey = $frameworkConfig->getProjectKey();
     }
 
     public function check(): Service\Health\CheckResult

@@ -24,7 +24,6 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -44,16 +43,16 @@ class Authorize
     private Service\App\Code $appCodeService;
     private Table\App $appTable;
     private Table\User\Grant $userGrantTable;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->tokenService = $tokenService;
         $this->scopeService = $scopeService;
         $this->appCodeService = $appCodeService;
         $this->appTable = $appTable;
         $this->userGrantTable = $userGrantTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function authorize(int $userId, AuthorizeRequest $request): array
@@ -122,7 +121,7 @@ class Authorize
                     $userId,
                     $scopes,
                     $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-                    new \DateInterval($this->config->get('fusio_expire_token')),
+                    $this->frameworkConfig->getExpireTokenInterval(),
                     $state
                 );
 

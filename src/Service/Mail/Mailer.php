@@ -23,11 +23,8 @@ namespace Fusio\Impl\Service\Mail;
 use Fusio\Impl\Mail\Message;
 use Fusio\Impl\Mail\SenderInterface;
 use Fusio\Impl\Service\Connection\Resolver;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mailer\Transport\NullTransport;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 
 /**
  * Mailer
@@ -40,14 +37,14 @@ class Mailer implements MailerInterface
 {
     private Resolver $resolver;
     private SenderFactory $senderFactory;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private SymfonyMailerInterface $mailer;
 
-    public function __construct(Resolver $resolver, SenderFactory $senderFactory, ConfigInterface $config, SymfonyMailerInterface $mailer)
+    public function __construct(Resolver $resolver, SenderFactory $senderFactory, FrameworkConfig $frameworkConfig, SymfonyMailerInterface $mailer)
     {
         $this->resolver = $resolver;
         $this->senderFactory = $senderFactory;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->mailer = $mailer;
     }
 
@@ -58,7 +55,7 @@ class Mailer implements MailerInterface
             $dispatcher = $this->mailer;
         }
 
-        $from = $this->config->get('fusio_mail_sender');
+        $from = $this->frameworkConfig->getMailSender();
         if (empty($from)) {
             $from = 'registration@' . $this->getHostname();
         }
@@ -81,21 +78,11 @@ class Mailer implements MailerInterface
      */
     private function getHostname(): string
     {
-        $host = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
+        $host = parse_url($this->frameworkConfig->getUrl(), PHP_URL_HOST);
         if (empty($host)) {
             $host = $_SERVER['SERVER_NAME'] ?? 'unknown';
         }
 
         return $host;
-    }
-
-    private function createTransport(): TransportInterface
-    {
-        $mailer = $this->config->get('fusio_mailer');
-        if ($this->config->get('psx_debug') === false && !empty($mailer)) {
-            return Transport::fromDsn($mailer);
-        } else {
-            return new NullTransport();
-        }
     }
 }

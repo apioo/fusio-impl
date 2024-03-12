@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
 use PSX\OAuth2\AccessToken;
@@ -37,32 +36,22 @@ use PSX\OAuth2\Grant;
 class RefreshToken extends RefreshTokenAbstract
 {
     private Service\Token $tokenService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\Token $tokenService, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->tokenService = $tokenService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
         return $this->tokenService->refreshAccessToken(
-            $this->getTenantId(),
+            $this->frameworkConfig->getTenantId(),
             $grant->getRefreshToken(),
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token')),
-            new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D')
+            $this->frameworkConfig->getExpireTokenInterval(),
+            $this->frameworkConfig->getExpireRefreshInterval()
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

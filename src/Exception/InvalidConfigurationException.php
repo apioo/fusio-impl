@@ -18,33 +18,15 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Connection;
-
-use Doctrine\DBAL\Connection;
-use Fusio\Engine\Parameters;
-use Fusio\Impl\Connection\System;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use PHPUnit\Framework\TestCase;
-use PSX\Framework\Config\Config;
+namespace Fusio\Impl\Exception;
 
 /**
- * SystemTest
+ * InvalidConfigurationException
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SystemTest extends TestCase
+class InvalidConfigurationException extends \Exception
 {
-    public function testConnection()
-    {
-        $config = new FrameworkConfig(new Config([
-            'psx_connection' => 'pdo-sqlite:///:memory:'
-        ]));
-
-        $connection = new System($config);
-
-        $this->assertEquals('System', $connection->getName());
-        $this->assertInstanceOf(Connection::class, $connection->getConnection(new Parameters([])));
-    }
 }

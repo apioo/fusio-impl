@@ -23,10 +23,10 @@ namespace Fusio\Impl\Framework\Loader\RoutingParser;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Api\Scanner\CategoriesFilter;
 use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Operation as TableOperation;
 use PSX\Api\Scanner\FilterInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Loader\RoutingCollection;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Sql\Condition;
@@ -41,18 +41,18 @@ use PSX\Sql\Condition;
 class DatabaseParser implements RoutingParserInterface
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getCollection(?FilterInterface $filter = null): RoutingCollection
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, TableOperation::STATUS_ACTIVE);
 
         if ($filter instanceof CategoryFilter) {
@@ -89,15 +89,5 @@ class DatabaseParser implements RoutingParserInterface
         }
 
         return $collection;
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

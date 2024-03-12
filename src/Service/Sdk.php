@@ -20,11 +20,11 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Backend\SdkGenerate;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\Repository\LocalRepository;
 use PSX\Api\Scanner\FilterFactoryInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -41,14 +41,14 @@ class Sdk
 {
     private Application $console;
     private GeneratorFactory $factory;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private FilterFactoryInterface $filterFactory;
 
-    public function __construct(Application $console, GeneratorFactory $factory, ConfigInterface $config, FilterFactoryInterface $filterFactory)
+    public function __construct(Application $console, GeneratorFactory $factory, FrameworkConfig $frameworkConfig, FilterFactoryInterface $filterFactory)
     {
         $this->console = $console;
         $this->factory = $factory;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->filterFactory = $filterFactory;
     }
 
@@ -96,7 +96,7 @@ class Sdk
             $this->console->setCatchExceptions($catchExceptions);
         }
 
-        return $this->config->get('psx_url') . '/sdk/' . $file;
+        return $this->frameworkConfig->getUrl('sdk', $file);
     }
 
     public function getTypes(): array
@@ -111,7 +111,7 @@ class Sdk
             $fileName = $this->getFileName($type);
             $sdkZip = $sdkDir . '/' . $fileName;
             if (is_file($sdkZip)) {
-                $result[$type] = $this->config->get('psx_url') . '/sdk/' . $fileName;
+                $result[$type] = $this->frameworkConfig->getUrl('sdk', $fileName);
             } else {
                 $result[$type] = null;
             }
@@ -122,7 +122,7 @@ class Sdk
 
     private function getSdkDir(): string
     {
-        return $this->config->get('psx_path_public') . '/sdk';
+        return $this->frameworkConfig->getPathPublic('sdk');
     }
 
     private function getFileName(string $type): string

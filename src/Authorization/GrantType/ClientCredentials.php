@@ -22,14 +22,12 @@ namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\ClientCredentialsAbstract;
 use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\InvalidClientException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 use PSX\OAuth2\Grant;
-use PSX\Sql\Condition;
 
 /**
  * ClientCredentials
@@ -43,22 +41,22 @@ class ClientCredentials extends ClientCredentialsAbstract
     private Service\User\Authenticator $authenticatorService;
     private Service\Token $tokenService;
     private Service\Scope $scopeService;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private Table\App $appTable;
-    private ConfigInterface $config;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\Scope $scopeService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\Scope $scopeService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable)
     {
         $this->authenticatorService = $authenticatorService;
         $this->tokenService = $tokenService;
         $this->scopeService = $scopeService;
+        $this->frameworkConfig = $frameworkConfig;
         $this->appTable = $appTable;
-        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         // check whether the credentials contain an app key and secret
-        $app = $this->appTable->findOneByAppKeyAndSecret($this->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
+        $app = $this->appTable->findOneByAppKeyAndSecret($this->frameworkConfig->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
         if (!empty($app)) {
             $appId  = $app->getId();
             $userId = $app->getUserId();
@@ -75,33 +73,23 @@ class ClientCredentials extends ClientCredentialsAbstract
         $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
-            $scope = implode(',', $this->authenticatorService->getAvailableScopes($this->getTenantId(), $userId));
+            $scope = implode(',', $this->authenticatorService->getAvailableScopes($this->frameworkConfig->getTenantId(), $userId));
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($this->getTenantId(), $scope, $appId, $userId);
+        $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $scope, $appId, $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->tokenService->generateAccessToken(
-            $this->getTenantId(),
+            $this->frameworkConfig->getTenantId(),
             $appId,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

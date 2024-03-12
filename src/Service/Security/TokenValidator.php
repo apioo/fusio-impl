@@ -23,8 +23,8 @@ namespace Fusio\Impl\Service\Security;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 
@@ -42,16 +42,16 @@ class TokenValidator
     private Repository\UserInterface $userRepository;
     private Table\Token $tokenTable;
     private Table\Scope $scopeTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository, Table\Token $tokenTable, Table\Scope $scopeTable, ConfigInterface $config)
+    public function __construct(JsonWebToken $jsonWebToken, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository, Table\Token $tokenTable, Table\Scope $scopeTable, FrameworkConfig $frameworkConfig)
     {
         $this->jsonWebToken = $jsonWebToken;
         $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
         $this->tokenTable = $tokenTable;
         $this->scopeTable = $scopeTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function assertAuthorization(?string $authorization, Context $context): bool
@@ -112,7 +112,7 @@ class TokenValidator
             $this->jsonWebToken->decode($token);
         }
 
-        $accessToken = $this->tokenTable->findByAccessToken($this->getTenantId(), $token);
+        $accessToken = $this->tokenTable->findByAccessToken($this->frameworkConfig->getTenantId(), $token);
         if (empty($accessToken)) {
             return null;
         }
@@ -121,10 +121,10 @@ class TokenValidator
         $entitledScopes = explode(',', $accessToken['scope']);
 
         // if the user has a global scope like backend or consumer replace them with all sub scopes
-        $entitledScopes = $this->substituteGlobalScopes($this->getTenantId(), $entitledScopes);
+        $entitledScopes = $this->substituteGlobalScopes($this->frameworkConfig->getTenantId(), $entitledScopes);
 
         // get all scopes which are assigned to this route
-        $availableScopes = $this->scopeTable->findByOperationId($this->getTenantId(), $operationId);
+        $availableScopes = $this->scopeTable->findByOperationId($this->frameworkConfig->getTenantId(), $operationId);
 
         // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
         // which explicit allows the request
@@ -170,15 +170,5 @@ class TokenValidator
         }
 
         return array_unique($scopes);
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

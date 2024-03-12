@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -30,7 +28,6 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -44,15 +41,15 @@ use PSX\Sql\OrderBy;
 class GetAbout implements ActionInterface
 {
     private Service\Config $configService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private Table\Category $categoryTable;
     private Table\Scope $scopeTable;
     private Marketplace\Repository\Local $localRepository;
 
-    public function __construct(Service\Config $configService, ConfigInterface $config, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
+    public function __construct(Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
     {
         $this->configService = $configService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->categoryTable = $categoryTable;
         $this->scopeTable = $scopeTable;
         $this->localRepository = $localRepository;
@@ -80,7 +77,7 @@ class GetAbout implements ActionInterface
 
     private function getApps(): array
     {
-        $appsUrl = $this->config->get('fusio_apps_url');
+        $appsUrl = $this->frameworkConfig->getAppsUrl();
         $apps = $this->localRepository->fetchAll();
 
         $result = [];
@@ -119,7 +116,7 @@ class GetAbout implements ActionInterface
 
     private function getLinks(): array
     {
-        $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
+        $baseUrl = $this->frameworkConfig->getDispatchUrl();
         $links = [];
 
         $links[] = [

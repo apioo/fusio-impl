@@ -22,10 +22,8 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
@@ -40,13 +38,13 @@ class Login
 {
     private Authenticator $authenticatorService;
     private Service\Token $tokenService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->authenticatorService = $authenticatorService;
         $this->tokenService = $tokenService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function login(UserLogin $login, UserContext $context): ?AccessToken
@@ -79,7 +77,7 @@ class Login
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
     }
 
@@ -94,8 +92,8 @@ class Login
             $context->getTenantId(),
             $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token')),
-            new \DateInterval($this->config->get('fusio_expire_refresh'))
+            $this->frameworkConfig->getExpireTokenInterval(),
+            $this->frameworkConfig->getExpireRefreshInterval()
         );
     }
 }

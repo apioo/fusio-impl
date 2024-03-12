@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\Adapter;
 
 use Fusio\Engine\AdapterInterface;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * The installer inserts only the action and connection classes through the database connection. All other entries are
@@ -33,16 +33,16 @@ use PSX\Framework\Config\ConfigInterface;
  */
 class Installer
 {
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(FrameworkConfig $frameworkConfig)
     {
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function install(AdapterInterface $adapter): void
     {
-        $providerFile = $this->config->get('fusio_provider');
+        $providerFile = $this->frameworkConfig->getProviderFile();
         if (!is_file($providerFile)) {
             throw new \RuntimeException('Configured provider file does not exist: ' . $providerFile);
         }

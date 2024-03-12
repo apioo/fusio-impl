@@ -35,7 +35,6 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 use PSX\Sql\Condition;
@@ -58,10 +57,10 @@ class Identity
     private IdentityProvider $identityProvider;
     private Service\User $userService;
     private Service\Token $tokenService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\Token $tokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
@@ -70,7 +69,7 @@ class Identity
         $this->identityProvider = $identityProvider;
         $this->userService = $userService;
         $this->tokenService = $tokenService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -278,7 +277,7 @@ class Identity
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
 
         $redirectUri = $identityRequest->getRedirectUri();
@@ -301,7 +300,7 @@ class Identity
 
     private function buildRedirectUri(Table\Generated\IdentityRow $existing): string
     {
-        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange';
+        return $this->frameworkConfig->getDispatchUrl('consumer', 'identity', $existing->getId(), 'exchange');
     }
 
     public static function serializeConfig(?array $config = null): ?string

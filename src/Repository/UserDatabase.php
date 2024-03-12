@@ -23,8 +23,8 @@ namespace Fusio\Impl\Repository;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -37,18 +37,18 @@ use PSX\Sql\Condition;
 class UserDatabase implements Repository\UserInterface
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getAll(): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -84,7 +84,7 @@ class UserDatabase implements Repository\UserInterface
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\UserTable::COLUMN_ID, $id);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -130,7 +130,7 @@ class UserDatabase implements Repository\UserInterface
     private function getCategoryForRole($roleId): int
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\RoleTable::COLUMN_ID, $roleId);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -147,15 +147,5 @@ class UserDatabase implements Repository\UserInterface
         }
 
         return (int) $categoryId;
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

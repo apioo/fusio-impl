@@ -22,7 +22,6 @@ namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\AuthorizationCodeAbstract;
 use PSX\OAuth2\Exception\InvalidClientException;
@@ -41,15 +40,15 @@ class AuthorizationCode extends AuthorizationCodeAbstract
 {
     private Service\Token $tokenService;
     private Service\Scope $scopeService;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private Table\App\Code $appCodeTable;
-    private ConfigInterface $config;
 
-    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\System\FrameworkConfig $frameworkConfig, Table\App\Code $appCodeTable)
     {
         $this->tokenService = $tokenService;
         $this->scopeService = $scopeService;
+        $this->frameworkConfig = $frameworkConfig;
         $this->appCodeTable = $appCodeTable;
-        $this->config = $config;
     }
 
     protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)
@@ -59,7 +58,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $credentials->getClientSecret(),
             $grant->getCode(),
             $grant->getRedirectUri(),
-            $this->getTenantId(),
+            $this->frameworkConfig->getTenantId(),
         );
 
         if (empty($code)) {
@@ -72,29 +71,19 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($this->getTenantId(), $code['scope'], (int) $code['app_id'], (int) $code['user_id']);
+        $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $code['scope'], (int) $code['app_id'], (int) $code['user_id']);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->tokenService->generateAccessToken(
-            $this->getTenantId(),
+            $this->frameworkConfig->getTenantId(),
             $code['app_id'],
             $code['user_id'],
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

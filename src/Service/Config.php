@@ -22,10 +22,10 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Config\UpdatedEvent;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConfigUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -38,13 +38,13 @@ use PSX\Http\Exception as StatusCode;
 class Config
 {
     private Table\Config $configTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Config $configTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Config $configTable, FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
         $this->configTable = $configTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -65,7 +65,7 @@ class Config
 
     public function getValue(string $name)
     {
-        $config = $this->configTable->getValue($this->getTenantId(), $name);
+        $config = $this->configTable->getValue($this->frameworkConfig->getTenantId(), $name);
         if (!empty($config)) {
             return self::convertValueToType($config['value'], $config['type']);
         } else {
@@ -92,15 +92,5 @@ class Config
             default:
                 return $value;
         }
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

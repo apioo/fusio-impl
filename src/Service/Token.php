@@ -27,10 +27,10 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Token\GeneratedEvent;
 use Fusio\Impl\Event\Token\RemovedEvent;
 use Fusio\Impl\Service\Security\JsonWebToken;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
@@ -47,16 +47,16 @@ class Token
     private Table\App $appTable;
     private Table\User $userTable;
     private Table\Token $tokenTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private JsonWebToken $jsonWebToken;
     private EventDispatcherInterface  $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\Token $tokenTable, ConfigInterface $config, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\User $userTable, Table\Token $tokenTable, FrameworkConfig $frameworkConfig, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable = $appTable;
         $this->userTable = $userTable;
         $this->tokenTable = $tokenTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->jsonWebToken = $jsonWebToken;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -175,7 +175,7 @@ class Token
 
     private function generateJWT(Table\Generated\UserRow $user, DateTime $now, DateTime $expires): string
     {
-        $baseUrl = $this->config->get('psx_url');
+        $baseUrl = $this->frameworkConfig->getUrl();
 
         $payload = [
             'iss'  => $baseUrl,

@@ -20,11 +20,10 @@
 
 namespace Fusio\Impl\Service\Action;
 
-use Fusio\Adapter\Php\Action\PhpSandbox;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated\ActionRow;
 use Fusio\Model\Backend\Action;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -37,12 +36,12 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Action $actionTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Action $actionTable, ConfigInterface $config)
+    public function __construct(Table\Action $actionTable, FrameworkConfig $frameworkConfig)
     {
         $this->actionTable = $actionTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function assert(Action $action, ?ActionRow $existing = null): void
@@ -90,7 +89,7 @@ class Validator
     {
         $class = ltrim((string) $record->getClass(), '\\');
 
-        $excluded = $this->config->get('fusio_action_exclude');
+        $excluded = $this->frameworkConfig->getActionExclude();
         if (empty($excluded)) {
             return;
         }

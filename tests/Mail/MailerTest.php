@@ -82,7 +82,7 @@ class MailerTest extends ControllerDbTestCase
         $mailer = new Service\Mail\Mailer(
             Environment::getService(Resolver::class),
             new SenderFactory([$sender]),
-            Environment::getService(ConfigInterface::class),
+            Environment::getService(Service\System\FrameworkConfig::class),
             Environment::getService(MailerInterface::class)
         );
 

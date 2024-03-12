@@ -21,7 +21,8 @@
 namespace Fusio\Impl\Framework\Schema\Parser;
 
 use Doctrine\DBAL\Connection;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
 use PSX\Schema\Exception\ParserException;
 use PSX\Schema\Parser\ContextInterface;
 use PSX\Schema\Parser\Popo;
@@ -30,7 +31,6 @@ use PSX\Schema\ParserInterface;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\Condition;
-use Fusio\Impl\Table;
 
 /**
  * Schema
@@ -44,20 +44,20 @@ class Schema implements ParserInterface
     private Connection $connection;
     private Popo $popo;
     private TypeSchema $typeSchema;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager, ConfigInterface $config)
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
         $this->popo = new Popo();
         $this->typeSchema = new TypeSchema($schemaManager);
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
         if (is_numeric($schema)) {
             $condition->equals(Table\Generated\SchemaTable::COLUMN_ID, (int) $schema);
@@ -83,15 +83,5 @@ class Schema implements ParserInterface
         } else {
             return $this->typeSchema->parse($source, $context);
         }
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

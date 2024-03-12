@@ -33,11 +33,11 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Connection\CreatedEvent;
 use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConnectionCreate;
 use Fusio\Model\Backend\ConnectionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -55,12 +55,12 @@ class Connection
     private string $secretKey;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Connection $connectionTable, Connection\Validator $validator, Factory\Connection $connectionFactory, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Connection $connectionTable, Connection\Validator $validator, Factory\Connection $connectionFactory, FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
         $this->connectionTable = $connectionTable;
         $this->validator = $validator;
         $this->connectionFactory = $connectionFactory;
-        $this->secretKey = $config->get('fusio_project_key');
+        $this->secretKey = $frameworkConfig->getProjectKey();
         $this->eventDispatcher = $eventDispatcher;
     }
 

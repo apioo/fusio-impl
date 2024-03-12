@@ -25,7 +25,6 @@ use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -38,19 +37,19 @@ use PSX\Sql\Condition;
 class ActionDatabase implements Repository\ActionInterface
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private bool $async = true;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getAll(): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -90,7 +89,7 @@ class ActionDatabase implements Repository\ActionInterface
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals($column, $id);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -131,15 +130,5 @@ class ActionDatabase implements Repository\ActionInterface
             $this->async ? (bool) $row[Table\Generated\ActionTable::COLUMN_ASYNC] : false,
             $config ?? []
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

@@ -35,7 +35,6 @@ use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**

@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Cli;
 
 use Fusio\Cli\Config\ConfigInterface;
-use PSX\Framework\Config\ConfigInterface as FrameworkConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * Config
@@ -32,15 +32,15 @@ use PSX\Framework\Config\ConfigInterface as FrameworkConfigInterface;
  */
 class Config implements ConfigInterface
 {
-    private FrameworkConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(FrameworkConfigInterface $config)
+    public function __construct(FrameworkConfig $frameworkConfig)
     {
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getBaseDir(): string
     {
-        return $this->config->get('psx_path_app');
+        return $this->frameworkConfig->getPathApp();
     }
 }

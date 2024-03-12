@@ -22,7 +22,7 @@ namespace Fusio\Impl\Service\Marketplace\Repository;
 
 use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
@@ -42,10 +42,10 @@ class Remote implements RepositoryInterface
     private bool $sslVerify;
     private ?array $apps = null;
 
-    public function __construct(ClientInterface $httpClient, ConfigInterface $config)
+    public function __construct(ClientInterface $httpClient, FrameworkConfig $frameworkConfig)
     {
         $this->httpClient = $httpClient;
-        $this->marketplaceUrl = $config->get('fusio_marketplace_url');
+        $this->marketplaceUrl = $frameworkConfig->getMarketplaceUrl();
         $this->sslVerify = true;
     }
 

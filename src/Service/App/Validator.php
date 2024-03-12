@@ -20,21 +20,9 @@
 
 namespace Fusio\Impl\Service\App;
 
-use DateInterval;
-use DateTime;
-use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\App\GeneratedTokenEvent;
-use Fusio\Impl\Event\App\RemovedTokenEvent;
-use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\App;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
-use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
-use PSX\OAuth2\AccessToken;
 use PSX\Sql\Condition;
 
 /**
