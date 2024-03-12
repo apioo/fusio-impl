@@ -97,13 +97,13 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onAppGenerateToken(Event\App\GeneratedTokenEvent $event): void
+    public function onGenerateToken(Event\Token\GeneratedEvent $event): void
     {
         $this->log(
             $event->getContext(),
             $event->getTokenId(),
-            'app.generate_token',
-            'Generated token for app',
+            'token.generate',
+            'Generated token',
             Record::fromArray([
                 'tokenId' => $event->getTokenId(),
                 'accessToken' => $event->getAccessToken(),
@@ -114,15 +114,14 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onAppRemoveToken(Event\App\RemovedTokenEvent $event): void
+    public function onRemoveToken(Event\Token\RemovedEvent $event): void
     {
         $this->log(
             $event->getContext(),
-            $event->getAppId(),
-            'app.remove_token',
-            'Removed token from app',
+            $event->getTokenId(),
+            'token.remove',
+            'Removed token',
             Record::fromArray([
-                'appId' => $event->getAppId(),
                 'tokenId' => $event->getTokenId()
             ])
         );
@@ -522,8 +521,6 @@ class AuditListener implements EventSubscriberInterface
 
             Event\App\CreatedEvent::class => 'onAppCreate',
             Event\App\DeletedEvent::class => 'onAppDelete',
-            Event\App\GeneratedTokenEvent::class => 'onAppGenerateToken',
-            Event\App\RemovedTokenEvent::class => 'onAppRemoveToken',
             Event\App\UpdatedEvent::class => 'onAppUpdate',
 
             Event\Config\UpdatedEvent::class => 'onConfigUpdate',
@@ -563,6 +560,9 @@ class AuditListener implements EventSubscriberInterface
             Event\Scope\CreatedEvent::class => 'onScopeCreate',
             Event\Scope\DeletedEvent::class => 'onScopeDelete',
             Event\Scope\UpdatedEvent::class => 'onScopeUpdate',
+
+            Event\Token\GeneratedEvent::class => 'onTokenGenerate',
+            Event\Token\RemovedEvent::class => 'onTokenRemove',
 
             Event\User\ChangedPasswordEvent::class => 'onUserChangePassword',
             Event\User\ChangedStatusEvent::class => 'onUserChangeStatus',

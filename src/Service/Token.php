@@ -24,8 +24,8 @@ use DateInterval;
 use DateTime;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Token\GeneratedTokenEvent;
-use Fusio\Impl\Event\Token\RemovedTokenEvent;
+use Fusio\Impl\Event\Token\GeneratedEvent;
+use Fusio\Impl\Event\Token\RemovedEvent;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -94,7 +94,7 @@ class Token
         $tokenId = $this->tokenTable->getLastInsertId();
 
         // dispatch event
-        $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
+        $this->eventDispatcher->dispatch(new GeneratedEvent(
             $tokenId,
             $accessToken,
             $scopes,
@@ -148,7 +148,7 @@ class Token
         $this->tokenTable->update($token);
 
         // dispatch event
-        $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
+        $this->eventDispatcher->dispatch(new GeneratedEvent(
             $token->getId(),
             $accessToken,
             $scopes,
@@ -170,7 +170,7 @@ class Token
     {
         $this->tokenTable->removeTokenFromApp($context->getTenantId(), $tokenId);
 
-        $this->eventDispatcher->dispatch(new RemovedTokenEvent($tokenId, $context));
+        $this->eventDispatcher->dispatch(new RemovedEvent($tokenId, $context));
     }
 
     private function generateJWT(Table\Generated\UserRow $user, DateTime $now, DateTime $expires): string

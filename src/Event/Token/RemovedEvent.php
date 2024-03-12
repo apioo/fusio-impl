@@ -24,53 +24,25 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * GeneratedTokenEvent
+ * RemovedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GeneratedTokenEvent extends EventAbstract
+class RemovedEvent extends EventAbstract
 {
     private int $tokenId;
-    private string $accessToken;
-    private array $scopes;
-    private \DateTimeInterface $expires;
-    private \DateTimeInterface $now;
 
-    public function __construct(int $tokenId, string $accessToken, array $scopes, \DateTimeInterface $expires, \DateTimeInterface $now, UserContext $context)
+    public function __construct(int $tokenId, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->tokenId     = $tokenId;
-        $this->accessToken = $accessToken;
-        $this->scopes      = $scopes;
-        $this->expires     = $expires;
-        $this->now         = $now;
+        $this->tokenId = $tokenId;
     }
 
     public function getTokenId(): int
     {
         return $this->tokenId;
-    }
-
-    public function getAccessToken(): string
-    {
-        return $this->accessToken;
-    }
-
-    public function getExpires(): \DateTimeInterface
-    {
-        return $this->expires;
-    }
-
-    public function getNow(): \DateTimeInterface
-    {
-        return $this->now;
-    }
-
-    public function getScopes(): array
-    {
-        return $this->scopes;
     }
 }
