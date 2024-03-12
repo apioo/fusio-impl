@@ -117,7 +117,7 @@ class Scope extends Generated\ScopeTable
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
 
-        $result = $this->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
+        $result = $this->findAll($condition, 0, 1024, self::COLUMN_NAME, OrderBy::ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row->getName()] = $row->getDescription();
