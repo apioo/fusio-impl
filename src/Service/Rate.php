@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
@@ -31,8 +30,6 @@ use Fusio\Model\Backend\RateCreate;
 use Fusio\Model\Backend\RateUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\ResponseInterface;
-use PSX\Sql\Condition;
 
 /**
  * Rate
@@ -45,15 +42,13 @@ class Rate
 {
     private Table\Rate $rateTable;
     private Table\Rate\Allocation $rateAllocationTable;
-    private Table\Log $logTable;
     private Rate\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, Rate\Validator $validator, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Rate\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
         $this->rateTable = $rateTable;
         $this->rateAllocationTable = $rateAllocationTable;
-        $this->logTable = $logTable;
         $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -94,7 +89,7 @@ class Rate
 
     public function update(string $rateId, RateUpdate $rate, UserContext $context): int
     {
-        $existing = $this->rateTable->findOneByIdentifier($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($context->getTenantId(), $rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -131,7 +126,7 @@ class Rate
 
     public function delete(string $rateId, UserContext $context): int
     {
-        $existing = $this->rateTable->findOneByIdentifier($rateId);
+        $existing = $this->rateTable->findOneByIdentifier($context->getTenantId(), $rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -146,53 +141,6 @@ class Rate
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
-    {
-        $rate = $this->rateAllocationTable->getRateForRequest($operation, $app, $user);
-        if (empty($rate)) {
-            return false;
-        }
-
-        $count     = $this->getRequestCount($ip, $rate['timespan'], $app);
-        $rateLimit = (int) $rate['rate_limit'];
-
-        if ($response !== null) {
-            $response->setHeader('RateLimit-Limit', '' . $rateLimit);
-            $response->setHeader('RateLimit-Remaining', '' . ($rateLimit - $count));
-        }
-
-        if ($count >= $rateLimit) {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
-        }
-
-        return true;
-    }
-
-    private function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int
-    {
-        if (empty($timespan)) {
-            return 0;
-        }
-
-        $now  = new \DateTime();
-        $past = new \DateTime();
-        $past->sub(new \DateInterval($timespan));
-
-        $condition = Condition::withAnd();
-        // we count only requests to the default category
-        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, 1);
-
-        if ($app->isAnonymous()) {
-            $condition->equals(Table\Generated\LogTable::COLUMN_IP, $ip);
-        } else {
-            $condition->equals(Table\Generated\LogTable::COLUMN_APP_ID, $app->getId());
-        }
-
-        $condition->between(Table\Generated\LogTable::COLUMN_DATE, $past->format('Y-m-d H:i:s'), $now->format('Y-m-d H:i:s'));
-
-        return $this->logTable->getCount($condition);
     }
 
     /**

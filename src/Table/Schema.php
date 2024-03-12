@@ -36,7 +36,7 @@ class Schema extends Generated\SchemaTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?SchemaRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?SchemaRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

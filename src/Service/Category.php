@@ -82,7 +82,7 @@ class Category
 
     public function update(string $categoryId, CategoryUpdate $category, UserContext $context): int
     {
-        $existing = $this->categoryTable->findOneByIdentifier($categoryId);
+        $existing = $this->categoryTable->findOneByIdentifier($context->getTenantId(), $categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }
@@ -114,7 +114,7 @@ class Category
 
     public function delete(string $categoryId, UserContext $context): int
     {
-        $existing = $this->categoryTable->findOneByIdentifier($categoryId);
+        $existing = $this->categoryTable->findOneByIdentifier($context->getTenantId(), $categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }

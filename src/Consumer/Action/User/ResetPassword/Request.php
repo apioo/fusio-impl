@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
 use Fusio\Model\Consumer\UserEmail;
 
@@ -51,7 +52,7 @@ class Request implements ActionInterface
 
         assert($body instanceof UserEmail);
 
-        $this->resetService->resetPassword($body);
+        $this->resetService->resetPassword($body, UserContext::newActionContext($context));
 
         return [
             'success' => true,

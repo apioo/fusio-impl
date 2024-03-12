@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -29,11 +27,9 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service\Connection\Token;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * Get
@@ -45,14 +41,14 @@ use PSX\Sql\TableManagerInterface;
 class Get implements ActionInterface
 {
     private View\Connection $view;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private ConnectionProvider $connectionParser;
     private Token $tokenService;
 
-    public function __construct(View\Connection $view, ConfigInterface $config, ConnectionProvider $connectionParser, Token $tokenService)
+    public function __construct(View\Connection $view, FrameworkConfig $frameworkConfig, ConnectionProvider $connectionParser, Token $tokenService)
     {
         $this->view = $view;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->connectionParser = $connectionParser;
         $this->tokenService = $tokenService;
     }
@@ -61,8 +57,9 @@ class Get implements ActionInterface
     {
         $connection = $this->view->getEntityWithConfig(
             $request->get('connection_id'),
-            $this->config->get('fusio_project_key'),
-            $this->connectionParser
+            $this->frameworkConfig->getProjectKey(),
+            $this->connectionParser,
+            $context
         );
 
         if (empty($connection)) {

@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Authorization;
 
-use Fusio\Impl\Table\App\Token;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Http\ResponseInterface;
@@ -184,7 +184,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    private function assertAccessToken(ResponseInterface $response, string $scope, int $userId, int $appId = 1)
+    private function assertAccessToken(ResponseInterface $response, string $scope, int $userId, ?int $appId = null): void
     {
         $body = (string) $response->getBody();
         $data = Parser::decode($body, true);
@@ -202,7 +202,7 @@ JSON;
         $this->assertEquals($scope, $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals($appId, $row['app_id']);
         $this->assertEquals($userId, $row['user_id']);

@@ -25,7 +25,6 @@ use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Record\RecordInterface;
-use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
@@ -72,7 +71,7 @@ class Config extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

@@ -24,8 +24,6 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\MarketplaceInstall;
-use PSX\Framework\Config\Config;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -41,16 +39,16 @@ class Installer
 {
     private Repository\Local $localRepository;
     private Repository\Remote $remoteRepository;
-    private ConfigInterface $config;
     private Service\Config $configService;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private Filesystem $filesystem;
 
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, ConfigInterface $config)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
         $this->configService = $configService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->filesystem = new Filesystem();
     }
 
@@ -124,7 +122,7 @@ class Installer
             throw new StatusCode\BadRequestException('App is not installed');
         }
 
-        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+        $appsDir = $this->frameworkConfig->getAppsDir();
         $appsDir.= '/' . $localApp->getName();
 
         $this->replaceVariables($appsDir);
@@ -136,7 +134,7 @@ class Installer
     {
         $zipFile = $this->downloadZip($remoteApp);
 
-        $appDir = $this->config->get('psx_path_cache') . '/app-' . $remoteApp->getName();
+        $appDir = $this->frameworkConfig->getPathCache('app-' . $remoteApp->getName());
         $appDir = $this->unzipFile($zipFile, $appDir);
 
         $this->writeMetaFile($appDir, $remoteApp);
@@ -150,7 +148,7 @@ class Installer
 
     private function downloadZip(App $app): string
     {
-        $appFile = $this->config->get('psx_path_cache') . '/app-' . $app->getName() . '_' . uniqid() . '.zip';
+        $appFile = $this->frameworkConfig->getPathCache('app-' . $app->getName() . '_' . uniqid() . '.zip');
 
         $this->remoteRepository->downloadZip($app, $appFile);
 
@@ -192,23 +190,23 @@ class Installer
 
     private function moveToPublic(string $appDir, App $app): void
     {
-        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+        $appsDir = $this->frameworkConfig->getAppsDir();
 
         $this->filesystem->rename($appDir, $appsDir . '/' . $app->getName());
     }
 
     private function moveToTrash(App $app): void
     {
-        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+        $appsDir = $this->frameworkConfig->getAppsDir();
         $appDir = $appsDir . '/' . $app->getName();
 
-        $this->filesystem->rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid());
+        $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
     private function replaceVariables(string $appDir): void
     {
-        $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $url = $this->config->get('fusio_apps_url');
+        $apiUrl = $this->frameworkConfig->getDispatchUrl();
+        $url = $this->frameworkConfig->getAppsUrl();
         $basePath = parse_url($url, PHP_URL_PATH);
 
         $env = array_merge($_ENV, [

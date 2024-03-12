@@ -18,45 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\App\Token;
+namespace Fusio\Impl\Event\Token;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * Get
+ * RemovedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+class RemovedEvent extends EventAbstract
 {
-    private View\App\Token $view;
+    private int $tokenId;
 
-    public function __construct(View\App\Token $view)
+    public function __construct(int $tokenId, UserContext $context)
     {
-        $this->view = $view;
+        parent::__construct($context);
+
+        $this->tokenId = $tokenId;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getTokenId(): int
     {
-        $token = $this->view->getEntity(
-            (int) $request->get('token_id'),
-            $context
-        );
-
-        if (empty($token)) {
-            throw new StatusCode\NotFoundException('Could not find token');
-        }
-
-        return $token;
+        return $this->tokenId;
     }
 }

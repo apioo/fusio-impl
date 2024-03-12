@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User\Activate as UserActivate;
 use Fusio\Model;
 
@@ -51,7 +52,7 @@ class Activate implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserActivate);
 
-        $this->activateService->activate($body);
+        $this->activateService->activate($body, UserContext::newActionContext($context));
 
         return [
             'success' => true,

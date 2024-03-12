@@ -293,7 +293,7 @@ class ExchangeTest extends ControllerDbTestCase
         // check database access token
         $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
+            ->from('fusio_token')
             ->where('token = :token')
             ->getSQL();
 

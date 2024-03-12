@@ -21,10 +21,10 @@
 namespace Fusio\Impl\Framework\Api\Scanner;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use PSX\Api\Scanner\FilterFactory as PSXFilterFactory;
 use PSX\Api\Scanner\FilterInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -37,15 +37,15 @@ use PSX\Sql\Condition;
 class FilterFactory extends PSXFilterFactory
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
     private bool $loaded = false;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, FrameworkConfig $frameworkConfig)
     {
         parent::__construct();
 
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getFilter(string $name): ?FilterInterface
@@ -67,7 +67,7 @@ class FilterFactory extends PSXFilterFactory
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
@@ -95,15 +95,5 @@ class FilterFactory extends PSXFilterFactory
         $this->setDefault('app');
 
         $this->loaded = true;
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

@@ -75,13 +75,13 @@ class LoginTest extends ControllerDbTestCase
         // check database access token
         $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
+            ->from('fusio_token')
             ->where('token = :token')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
-        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
@@ -117,13 +117,13 @@ class LoginTest extends ControllerDbTestCase
         // check database access token
         $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
+            ->from('fusio_token')
             ->where('token = :token')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->token]);
 
-        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
@@ -173,7 +173,7 @@ class LoginTest extends ControllerDbTestCase
         // check database access token
         $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
+            ->from('fusio_token')
             ->where('token = :token')
             ->getSQL();
 

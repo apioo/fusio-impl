@@ -21,6 +21,8 @@
 namespace Fusio\Impl\Framework\Schema\Parser;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
 use PSX\Schema\Exception\ParserException;
 use PSX\Schema\Parser\ContextInterface;
 use PSX\Schema\Parser\Popo;
@@ -28,6 +30,7 @@ use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\ParserInterface;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
+use PSX\Sql\Condition;
 
 /**
  * Schema
@@ -41,25 +44,36 @@ class Schema implements ParserInterface
     private Connection $connection;
     private Popo $popo;
     private TypeSchema $typeSchema;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
         $this->popo = new Popo();
         $this->typeSchema = new TypeSchema($schemaManager);
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
+        $condition = Condition::withAnd();
+        $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+
         if (is_numeric($schema)) {
-            $column = 'id';
-            $value  = (int) $schema;
+            $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_ID, (int) $schema);
         } else {
-            $column = 'name';
-            $value  = ltrim($schema, '/');
+            $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_NAME, ltrim($schema, '/'));
         }
 
-        $source = $this->connection->fetchOne('SELECT source FROM fusio_schema WHERE ' . $column . ' = :value', ['value' => $value]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'sm.' . Table\Generated\SchemaTable::COLUMN_SOURCE,
+            ])
+            ->from('fusio_schema', 'sm')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $source = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($source)) {
             throw new ParserException('Could not find schema ' . $schema);
         }

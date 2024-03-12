@@ -70,7 +70,7 @@ class Schema extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,

@@ -39,12 +39,12 @@ use PSX\Http\Exception as StatusCode;
  */
 class Revoke implements ActionInterface
 {
-    private Service\App\Token $appTokenService;
-    private Table\App\Token $table;
+    private Service\Token $tokenService;
+    private Table\Token $table;
 
-    public function __construct(Service\App\Token $appTokenService, Table\App\Token $table)
+    public function __construct(Service\Token $tokenService, Table\Token $table)
     {
-        $this->appTokenService = $appTokenService;
+        $this->tokenService = $tokenService;
         $this->table = $table;
     }
 
@@ -61,11 +61,11 @@ class Revoke implements ActionInterface
             throw new StatusCode\BadRequestException('No token provided');
         }
 
-        $row = $this->table->getTokenByToken($context->getApp()->getId(), $token);
+        $row = $this->table->getTokenByToken($context->getTenantId(), $token);
 
         // the token must be assigned to the user
-        if ($row instanceof Table\Generated\AppTokenRow && $row->getAppId() == $context->getApp()->getId() && $row->getUserId() == $context->getUser()->getId()) {
-            $this->appTokenService->removeToken($row->getAppId(), $row->getId(), UserContext::newActionContext($context));
+        if ($row instanceof Table\Generated\TokenRow && $row->getUserId() == $context->getUser()->getId()) {
+            $this->tokenService->removeToken($row->getId(), UserContext::newActionContext($context));
 
             return [
                 'success' => true

@@ -20,18 +20,13 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetApp
@@ -52,6 +47,7 @@ class GetApp implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->view->getEntityByAppKey(
+            $context->getTenantId(),
             $request->get('client_id'),
             $request->get('scope')
         );

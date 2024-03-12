@@ -75,7 +75,7 @@ class Log extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
             'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
             'operationId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_OPERATION_ID),

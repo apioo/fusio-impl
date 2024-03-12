@@ -23,8 +23,8 @@ namespace Fusio\Impl\Repository;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -37,18 +37,18 @@ use PSX\Sql\Condition;
 class AppDatabase implements Repository\AppInterface
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getAll(): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -83,7 +83,7 @@ class AppDatabase implements Repository\AppInterface
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $id);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -112,7 +112,7 @@ class AppDatabase implements Repository\AppInterface
     protected function getScopes(string|int $appId): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\AppScopeTable::COLUMN_APP_ID, $appId);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -152,15 +152,5 @@ class AppDatabase implements Repository\AppInterface
             $parameters,
             $scopes
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

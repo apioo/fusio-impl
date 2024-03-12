@@ -24,7 +24,6 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -39,21 +38,21 @@ use PSX\Uri\Url;
  */
 class Authorize
 {
-    private Service\App\Token $appTokenService;
+    private Service\Token $tokenService;
     private Service\Scope $scopeService;
     private Service\App\Code $appCodeService;
     private Table\App $appTable;
     private Table\User\Grant $userGrantTable;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, ConfigInterface $config)
+    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Service\System\FrameworkConfig $frameworkConfig)
     {
-        $this->appTokenService = $appTokenService;
-        $this->scopeService    = $scopeService;
-        $this->appCodeService  = $appCodeService;
-        $this->appTable        = $appTable;
-        $this->userGrantTable  = $userGrantTable;
-        $this->config          = $config;
+        $this->tokenService = $tokenService;
+        $this->scopeService = $scopeService;
+        $this->appCodeService = $appCodeService;
+        $this->appTable = $appTable;
+        $this->userGrantTable = $userGrantTable;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function authorize(int $userId, AuthorizeRequest $request): array
@@ -98,7 +97,7 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($request->getScope() ?? '', $app->getId(), $userId);
+        $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
@@ -116,12 +115,13 @@ class Authorize
                 }
 
                 // generate access token
-                $accessToken = $this->appTokenService->generateAccessToken(
+                $accessToken = $this->tokenService->generateAccessToken(
+                    $app->getTenantId(),
                     $app->getId(),
                     $userId,
                     $scopes,
                     $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-                    new \DateInterval($this->config->get('fusio_expire_token')),
+                    $this->frameworkConfig->getExpireTokenInterval(),
                     $state
                 );
 

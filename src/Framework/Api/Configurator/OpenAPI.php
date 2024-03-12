@@ -25,7 +25,6 @@ use Fusio\Impl\Table;
 use PSX\Api\ConfiguratorInterface;
 use PSX\Api\Generator;
 use PSX\Api\Scanner\FilterInterface;
-use PSX\Framework\Config\ConfigInterface;
 
 /**
  * OpenAPI
@@ -38,13 +37,13 @@ class OpenAPI implements ConfiguratorInterface
 {
     private Table\Scope $scopeTable;
     private Service\Config $configService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Scope $scopeTable, Service\Config $configService, ConfigInterface $config)
+    public function __construct(Table\Scope $scopeTable, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig)
     {
-        $this->scopeTable    = $scopeTable;
+        $this->scopeTable = $scopeTable;
         $this->configService = $configService;
-        $this->config        = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function accept(object $generator): bool
@@ -67,22 +66,11 @@ class OpenAPI implements ConfiguratorInterface
         $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
         $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
-        $baseUrl    = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $filterId   = $filter !== null ? (int) $filter->getId() : 1;
-        $scopes     = $this->scopeTable->getAvailableScopes($filterId, $this->getTenantId());
-        $tokenUrl   = rtrim($baseUrl, '/') . '/authorization/token';
-        $refreshUrl = rtrim($baseUrl, '/') . '/authorization/token';
+        $filterId = $filter !== null ? (int) $filter->getId() : 1;
+        $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());
+        $tokenUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
+        $refreshUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
 
         $generator->setAuthorizationFlow('app', Generator\Spec\ApiAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $scopes);
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

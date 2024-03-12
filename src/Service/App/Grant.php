@@ -34,12 +34,12 @@ use PSX\Http\Exception as StatusCode;
 class Grant
 {
     private Table\User\Grant $userGrantTable;
-    private Table\App\Token $appTokenTable;
+    private Table\Token $tokenTable;
 
-    public function __construct(Table\User\Grant $userGrantTable, Table\App\Token $appTokenTable)
+    public function __construct(Table\User\Grant $userGrantTable, Table\Token $tokenTable)
     {
         $this->userGrantTable = $userGrantTable;
-        $this->appTokenTable = $appTokenTable;
+        $this->tokenTable = $tokenTable;
     }
 
     public function delete(int $grantId, UserContext $context): int
@@ -61,7 +61,7 @@ class Grant
             $this->userGrantTable->delete($grant);
 
             // delete tokens
-            $this->appTokenTable->removeAllTokensFromAppAndUser($grant->getAppId(), $grant->getUserId());
+            $this->tokenTable->removeAllTokensFromAppAndUser($context->getTenantId(), $grant->getAppId(), $grant->getUserId());
 
             $this->userGrantTable->commit();
         } catch (\Throwable $e) {

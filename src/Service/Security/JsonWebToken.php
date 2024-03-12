@@ -22,7 +22,7 @@ namespace Fusio\Impl\Service\Security;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * JsonWebToken
@@ -35,20 +35,20 @@ class JsonWebToken
 {
     private const ALGO = 'HS256';
 
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(FrameworkConfig $frameworkConfig)
     {
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function encode(array $payload): string
     {
-        return JWT::encode($payload, $this->config->get('fusio_project_key'), self::ALGO);
+        return JWT::encode($payload, $this->frameworkConfig->getProjectKey(), self::ALGO);
     }
 
     public function decode(string $jwt): \stdClass
     {
-        return JWT::decode($jwt, new Key($this->config->get('fusio_project_key'), self::ALGO));
+        return JWT::decode($jwt, new Key($this->frameworkConfig->getProjectKey(), self::ALGO));
     }
 }

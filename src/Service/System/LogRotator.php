@@ -57,6 +57,7 @@ class LogRotator
         if (!$schema->hasTable($tableName)) {
             $auditTable = $schema->createTable($tableName);
             $auditTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $auditTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $auditTable->addColumn('app_id', 'integer');
             $auditTable->addColumn('user_id', 'integer');
             $auditTable->addColumn('ref_id', 'integer', ['notnull' => false]);
@@ -74,7 +75,7 @@ class LogRotator
         }
 
         // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT app_id, user_id, ref_id, event, ip, message, content, date FROM fusio_audit');
+        $result = $this->connection->fetchAllAssociative('SELECT tenant_id, app_id, user_id, ref_id, event, ip, message, content, date FROM fusio_audit');
         foreach ($result as $row) {
             $this->connection->insert($tableName, $row);
         }
@@ -95,6 +96,7 @@ class LogRotator
         if (!$schema->hasTable($tableName)) {
             $logTable = $schema->createTable($tableName);
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $logTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
@@ -115,7 +117,7 @@ class LogRotator
         }
 
         // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT operation_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
+        $result = $this->connection->fetchAllAssociative('SELECT tenant_id, operation_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
         foreach ($result as $row) {
             $this->connection->insert($tableName, $row);
         }

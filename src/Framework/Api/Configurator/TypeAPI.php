@@ -20,12 +20,12 @@
 
 namespace Fusio\Impl\Framework\Api\Configurator;
 
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use PSX\Api\ConfiguratorInterface;
 use PSX\Api\Generator;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Api\Security\OAuth2;
-use PSX\Framework\Config\ConfigInterface;
 
 /**
  * TypeAPI
@@ -37,12 +37,12 @@ use PSX\Framework\Config\ConfigInterface;
 class TypeAPI implements ConfiguratorInterface
 {
     private Table\Scope $scopeTable;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Scope $scopeTable, ConfigInterface $config)
+    public function __construct(Table\Scope $scopeTable, FrameworkConfig $frameworkConfig)
     {
         $this->scopeTable = $scopeTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function accept(object $generator): bool
@@ -56,22 +56,12 @@ class TypeAPI implements ConfiguratorInterface
             throw new \InvalidArgumentException('Provided an invalid generator');
         }
 
-        $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $tokenUrl = rtrim($baseUrl, '/') . '/authorization/token';
+        $baseUrl = $this->frameworkConfig->getDispatchUrl();
+        $tokenUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
         $filterId = $filter !== null ? (int) $filter->getId() : 1;
-        $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->getTenantId());
+        $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());
 
         $generator->setBaseUrl($baseUrl);
         $generator->setSecurity(new OAuth2($tokenUrl, null, $scopes));
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

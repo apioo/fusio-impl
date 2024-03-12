@@ -62,7 +62,7 @@ class DataBag
             'fusio_transaction' => [],
             'fusio_app_code' => [],
             'fusio_app_scope' => [],
-            'fusio_app_token' => [],
+            'fusio_token' => [],
             'fusio_cronjob_error' => [],
             'fusio_event_subscription' => [],
             'fusio_event_response' => [],
@@ -188,9 +188,10 @@ class DataBag
         return $result;
     }
 
-    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null): void
+    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_action'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
@@ -201,9 +202,10 @@ class DataBag
         ];
     }
 
-    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null): void
+    public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_app'][$name] = [
+            'tenant_id' => $tenantId,
             'user_id' => $this->getId('fusio_user', $user),
             'status' => $status,
             'name' => $name,
@@ -236,24 +238,10 @@ class DataBag
         ];
     }
 
-    public function addAppToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null): void
-    {
-        $this->data['fusio_app_token'][] = [
-            'app_id' => $this->getId('fusio_app', $app),
-            'user_id' => $this->getId('fusio_user', $user),
-            'status' => Table\App\Token::STATUS_ACTIVE,
-            'token' => $token,
-            'refresh' => $refresh,
-            'scope' => $scope,
-            'ip' => '127.0.0.1',
-            'expire' => (new \DateTime($expire))->format('Y-m-d H:i:s'),
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
-        ];
-    }
-
-    public function addAudit(string $app, string $user, int $ref, string $event, string $message, ?string $date = null): void
+    public function addAudit(string $app, string $user, int $ref, string $event, string $message, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_audit'][] = [
+            'tenant_id' => $tenantId,
             'app_id' => $this->getId('fusio_app', $app),
             'user_id' => $this->getId('fusio_user', $user),
             'ref_id' => $ref,
@@ -265,17 +253,19 @@ class DataBag
         ];
     }
 
-    public function addCategory(string $category): void
+    public function addCategory(string $category, ?string $tenantId = null): void
     {
         $this->data['fusio_category'][$category] = [
+            'tenant_id' => $tenantId,
             'status' => Table\Category::STATUS_ACTIVE,
             'name' => $category,
         ];
     }
 
-    public function addConfig(string $name, int $type, $value, string $description): void
+    public function addConfig(string $name, int $type, $value, string $description, ?string $tenantId = null): void
     {
         $this->data['fusio_config'][$name] = [
+            'tenant_id' => $tenantId,
             'name' => $name,
             'type' => $type,
             'description' => $description,
@@ -283,9 +273,10 @@ class DataBag
         ];
     }
 
-    public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null): void
+    public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_connection'][$name] = [
+            'tenant_id' => $tenantId,
             'status' => Table\Connection::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
@@ -294,9 +285,10 @@ class DataBag
         ];
     }
 
-    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null): void
+    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_cronjob'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Cronjob::STATUS_ACTIVE,
             'name' => $name,
@@ -319,9 +311,10 @@ class DataBag
         ];
     }
 
-    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null): void
+    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_event'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Event::STATUS_ACTIVE,
             'name' => $name,
@@ -342,9 +335,10 @@ class DataBag
         ];
     }
 
-    public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, string $authorizationUri, string $tokenUri, string $userInfoUri, string $idProperty = 'id', string $nameProperty = 'name', string $emailProperty = 'email', ?string $insertDate = null): void
+    public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, string $authorizationUri, string $tokenUri, string $userInfoUri, string $idProperty = 'id', string $nameProperty = 'name', string $emailProperty = 'email', ?string $insertDate = null, ?string $tenantId = null): void
     {
         $this->data['fusio_identity'][$name] = [
+            'tenant_id' => $tenantId,
             'app_id' => $this->getId('fusio_app', $app),
             'role_id' => $this->getId('fusio_role', 'Consumer'),
             'status' => Table\Identity::STATUS_ACTIVE,
@@ -386,9 +380,10 @@ class DataBag
         ];
     }
 
-    public function addLog(string $category, string $app, string $operation): void
+    public function addLog(string $category, string $app, string $operation, ?string $tenantId = null): void
     {
         $this->data['fusio_log'][] = [
+            'tenant_id' => $tenantId,
             'category_id' => $this->getId('fusio_category', $category),
             'app_id' => $this->getId('fusio_app', $app),
             'operation_id' => $this->getId('fusio_operation', $operation),
@@ -414,9 +409,10 @@ class DataBag
         ];
     }
 
-    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null): void
+    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_page'][$slug] = [
+            'tenant_id' => $tenantId,
             'status' => $status,
             'title' => $title,
             'slug' => $slug,
@@ -426,9 +422,10 @@ class DataBag
         ];
     }
 
-    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null): void
+    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_plan'][$name] = [
+            'tenant_id' => $tenantId,
             'status' => Table\Plan::STATUS_ACTIVE,
             'name' => $name,
             'description' => '',
@@ -459,9 +456,25 @@ class DataBag
         ];
     }
 
-    public function addTransaction(string $user, string $plan, int $amount, string $periodStart, string $periodEnd, ?string $date = null): void
+    public function addToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null): void
+    {
+        $this->data['fusio_token'][] = [
+            'app_id' => $this->getId('fusio_app', $app),
+            'user_id' => $this->getId('fusio_user', $user),
+            'status' => Table\Token::STATUS_ACTIVE,
+            'token' => $token,
+            'refresh' => $refresh,
+            'scope' => $scope,
+            'ip' => '127.0.0.1',
+            'expire' => (new \DateTime($expire))->format('Y-m-d H:i:s'),
+            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addTransaction(string $user, string $plan, int $amount, string $periodStart, string $periodEnd, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_transaction'][] = [
+            'tenant_id' => $tenantId,
             'user_id' => $this->getId('fusio_user', $user),
             'plan_id' => $this->getId('fusio_plan', $plan),
             'transaction_id' => '[transaction_id]',
@@ -473,9 +486,10 @@ class DataBag
         ];
     }
 
-    public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null): void
+    public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_rate'][$name] = [
+            'tenant_id' => $tenantId,
             'status' => Table\Rate::STATUS_ACTIVE,
             'priority' => $priority,
             'name' => $name,
@@ -497,9 +511,10 @@ class DataBag
         ];
     }
 
-    public function addRole(string $category, string $name): void
+    public function addRole(string $category, string $name, ?string $tenantId = null): void
     {
         $this->data['fusio_role'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Role::STATUS_ACTIVE,
             'name' => $name,
@@ -514,9 +529,10 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?int $costs = null, ?array $metadata = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_operation'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
@@ -537,9 +553,10 @@ class DataBag
         ];
     }
 
-    public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null): void
+    public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_schema'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => self::getId('fusio_category', $category),
             'status' => Table\Schema::STATUS_ACTIVE,
             'name' => $name,
@@ -549,9 +566,10 @@ class DataBag
         ];
     }
 
-    public function addScope(string $category, string $name, string $description = '', ?array $metadata = null): void
+    public function addScope(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_scope'][$name] = [
+            'tenant_id' => $tenantId,
             'category_id' => self::getId('fusio_category', $category),
             'name' => $name,
             'description' => $description,
@@ -568,9 +586,10 @@ class DataBag
         ];
     }
 
-    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null): void
+    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_user'][$name] = [
+            'tenant_id' => $tenantId,
             'role_id' => self::getId('fusio_role', $role),
             'plan_id' => $plan !== null ? self::getId('fusio_plan', $plan) : null,
             'status' => $status,

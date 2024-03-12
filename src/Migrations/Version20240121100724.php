@@ -27,6 +27,14 @@ final class Version20240121100724 extends AbstractMigration
                 $table->addIndex(['tenant_id']);
             }
         }
+
+        if ($schema->hasTable('fusio_app_token')) {
+            $tokenTable = $schema->getTable('fusio_app_token');
+            $tokenTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $tokenTable->addIndex(['tenant_id']);
+
+            $schema->renameTable('fusio_app_token', 'fusio_token');
+        }
     }
 
     public function down(Schema $schema): void

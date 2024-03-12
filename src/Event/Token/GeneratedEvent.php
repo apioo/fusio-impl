@@ -18,42 +18,35 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Event\App;
+namespace Fusio\Impl\Event\Token;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * GeneratedTokenEvent
+ * GeneratedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GeneratedTokenEvent extends EventAbstract
+class GeneratedEvent extends EventAbstract
 {
-    private int $appId;
     private int $tokenId;
     private string $accessToken;
     private array $scopes;
     private \DateTimeInterface $expires;
     private \DateTimeInterface $now;
 
-    public function __construct(int $appId, int $tokenId, string $accessToken, array $scopes, \DateTimeInterface $expires, \DateTimeInterface $now, UserContext $context)
+    public function __construct(int $tokenId, string $accessToken, array $scopes, \DateTimeInterface $expires, \DateTimeInterface $now, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->appId       = $appId;
         $this->tokenId     = $tokenId;
         $this->accessToken = $accessToken;
         $this->scopes      = $scopes;
         $this->expires     = $expires;
         $this->now         = $now;
-    }
-
-    public function getAppId(): int
-    {
-        return $this->appId;
     }
 
     public function getTokenId(): int

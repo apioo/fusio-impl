@@ -74,7 +74,7 @@ class Cronjob extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Cronjob::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Cronjob::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => Table\Generated\CronjobTable::COLUMN_ID,
             'status' => $builder->fieldInteger(Table\Generated\CronjobTable::COLUMN_STATUS),
             'name' => Table\Generated\CronjobTable::COLUMN_NAME,

@@ -75,7 +75,7 @@ class Role
             $role->setId($roleId);
 
             // add scopes
-            $this->insertScopes($roleId, $role->getScopes(), $context->getTenantId());
+            $this->insertScopes($context->getTenantId(), $roleId, $role->getScopes());
 
             $this->roleTable->commit();
         } catch (\Throwable $e) {
@@ -91,7 +91,7 @@ class Role
 
     public function update(string $roleId, RoleUpdate $role, UserContext $context): int
     {
-        $existing = $this->roleTable->findOneByIdentifier($roleId);
+        $existing = $this->roleTable->findOneByIdentifier($context->getTenantId(), $roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
@@ -115,7 +115,7 @@ class Role
                 $this->roleScopeTable->deleteAllFromRole($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $role->getScopes(), $context->getTenantId());
+                $this->insertScopes($context->getTenantId(), $existing->getId(), $role->getScopes());
             }
 
             $this->roleTable->commit();
@@ -132,7 +132,7 @@ class Role
 
     public function delete(string $roleId, UserContext $context): int
     {
-        $existing = $this->roleTable->findOneByIdentifier($roleId);
+        $existing = $this->roleTable->findOneByIdentifier($context->getTenantId(), $roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
@@ -149,10 +149,10 @@ class Role
         return $existing->getId();
     }
 
-    protected function insertScopes(int $roleId, ?array $scopes, ?string $tenantId = null): void
+    protected function insertScopes(?string $tenantId, int $roleId, ?array $scopes): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
+            $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\RoleScopeRow();

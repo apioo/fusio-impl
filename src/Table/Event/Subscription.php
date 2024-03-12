@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table\Event;
 
 use Fusio\Impl\Table\Generated;
+use PSX\Sql\Condition;
 
 /**
  * Subscription
@@ -36,17 +37,21 @@ class Subscription extends Generated\EventSubscriptionTable
 
     public function getSubscriptionsForEvent(int $eventId): array
     {
-        $sql = 'SELECT id,
-                       endpoint
-                  FROM fusio_event_subscription
-                 WHERE event_id = :event_id
-                   AND status = :status
-              ORDER BY id ASC';
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_EVENT_ID, $eventId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 
-        return $this->connection->fetchAllAssociative($sql, [
-            'event_id' => $eventId,
-            'status'   => self::STATUS_ACTIVE,
-        ]);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'subscription.' . self::COLUMN_ID,
+                'subscription.' . self::COLUMN_ENDPOINT,
+            ])
+            ->from('fusio_event_subscription', 'subscription')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('subscription.' . self::COLUMN_ID, 'ASC')
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
     public function getSubscriptionCount(int $userId): int

@@ -20,11 +20,10 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
@@ -38,19 +37,17 @@ use PSX\OAuth2\AccessToken;
 class Login
 {
     private Authenticator $authenticatorService;
-    private Service\App\Token $appTokenService;
-    private Table\App $appTable;
-    private ConfigInterface $config;
+    private Service\Token $tokenService;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\App\Token $appTokenService, Table\App $appTable, ConfigInterface $config)
+    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->authenticatorService = $authenticatorService;
-        $this->appTokenService = $appTokenService;
-        $this->appTable = $appTable;
-        $this->config = $config;
+        $this->tokenService = $tokenService;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
-    public function login(UserLogin $login): ?AccessToken
+    public function login(UserLogin $login, UserContext $context): ?AccessToken
     {
         $username = $login->getUsername();
         if (empty($username)) {
@@ -69,44 +66,34 @@ class Login
 
         $scopes = $login->getScopes();
         if (empty($scopes)) {
-            $scopes = $this->authenticatorService->getAvailableScopes($userId);
+            $scopes = $this->authenticatorService->getAvailableScopes($context->getTenantId(), $userId);
         } else {
-            $scopes = $this->authenticatorService->getValidScopes($userId, $scopes);
+            $scopes = $this->authenticatorService->getValidScopes($context->getTenantId(), $userId, $scopes);
         }
 
-        $appId = $this->getAppId();
-
-        return $this->appTokenService->generateAccessToken(
-            $appId,
+        return $this->tokenService->generateAccessToken(
+            $context->getTenantId(),
+            null,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
     }
 
-    public function refresh(UserRefresh $refresh): AccessToken
+    public function refresh(UserRefresh $refresh, UserContext $context): AccessToken
     {
         $refreshToken = $refresh->getRefreshToken();
         if (empty($refreshToken)) {
             throw new StatusCode\BadRequestException('No refresh token provided');
         }
 
-        return $this->appTokenService->refreshAccessToken(
-            $this->getAppId(),
+        return $this->tokenService->refreshAccessToken(
+            $context->getTenantId(),
             $refreshToken,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token')),
-            new \DateInterval($this->config->get('fusio_expire_refresh'))
+            $this->frameworkConfig->getExpireTokenInterval(),
+            $this->frameworkConfig->getExpireRefreshInterval()
         );
-    }
-
-    private function getAppId(): int
-    {
-        // @TODO this is the consumer app. Probably we need a better way to
-        // define this id
-        $appId = 2;
-
-        return $appId;
     }
 }

@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Table\Event;
 
-use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated;
+use PSX\Sql\Condition;
 
 /**
  * Response
@@ -38,20 +38,26 @@ class Response extends Generated\EventResponseTable
 
     public function getAllBySubscription(int $subscriptionId): array
     {
-        $sql = 'SELECT response.id,
-                       response.status,
-                       response.attempts,
-                       response.code,
-                       response.body,
-                       response.execute_date
-                  FROM fusio_event_response response
-                 WHERE response.subscription_id = :id
-              ORDER BY response.execute_date DESC, response.id ASC';
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_SUBSCRIPTION_ID, $subscriptionId);
 
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 8);
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'response.' . self::COLUMN_ID,
+                'response.' . self::COLUMN_STATUS,
+                'response.' . self::COLUMN_ATTEMPTS,
+                'response.' . self::COLUMN_CODE,
+                'response.' . self::COLUMN_BODY,
+                'response.' . self::COLUMN_EXECUTE_DATE,
+            ])
+            ->from('fusio_event_response', 'response')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('response.' . self::COLUMN_EXECUTE_DATE, 'DESC')
+            ->orderBy('response.' . self::COLUMN_ID, 'ASC')
+            ->setParameters($condition->getValues())
+            ->setFirstResult(0)
+            ->setMaxResults(8);
 
-        return $this->connection->fetchAllAssociative($sql, [
-            'id' => $subscriptionId
-        ]);
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

@@ -20,14 +20,12 @@
 
 namespace Fusio\Impl\Backend\Action\App;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\App;
+use Fusio\Impl\Service;
 
 /**
  * DeleteToken
@@ -38,9 +36,9 @@ use Fusio\Impl\Service\App;
  */
 class DeleteToken implements ActionInterface
 {
-    private App\Token $tokenService;
+    private Service\Token $tokenService;
 
-    public function __construct(App\Token $tokenService)
+    public function __construct(Service\Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
@@ -48,7 +46,6 @@ class DeleteToken implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->removeToken(
-            (int) $request->get('app_id'),
             (int) $request->get('token_id'),
             UserContext::newActionContext($context)
         );

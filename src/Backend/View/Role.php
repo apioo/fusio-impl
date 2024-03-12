@@ -70,7 +70,7 @@ class Role extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Role::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Role::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
             'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
             'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),

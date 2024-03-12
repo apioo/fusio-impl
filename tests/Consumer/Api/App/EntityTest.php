@@ -168,7 +168,7 @@ JSON;
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
 
-        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(2);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 2);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);

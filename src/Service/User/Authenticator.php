@@ -25,10 +25,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Model\Consumer\UserActivate;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use PSX\Framework\Config\ConfigInterface;
-use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
 /**
@@ -42,14 +39,14 @@ class Authenticator
 {
     private Table\User $userTable;
     private Table\User\Scope $userScopeTable;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, Service\System\FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable = $userTable;
         $this->userScopeTable = $userScopeTable;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -70,13 +67,8 @@ class Authenticator
             $column = Table\Generated\UserTable::COLUMN_EMAIL;
         }
 
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            $tenantId = null;
-        }
-
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals($column, $username);
         $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
@@ -106,13 +98,13 @@ class Authenticator
         return null;
     }
 
-    public function getValidScopes(int $userId, array $scopes): array
+    public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
-        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+        return Table\Scope::getNames($this->userScopeTable->getValidScopes($tenantId, $userId, $scopes));
     }
 
-    public function getAvailableScopes(int $userId): array
+    public function getAvailableScopes(?string $tenantId, int $userId): array
     {
-        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
+        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($tenantId, $userId));
     }
 }

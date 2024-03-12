@@ -42,9 +42,9 @@ class Scope extends Generated\UserScopeTable
     /**
      * @return list<array<string, mixed>>
      */
-    public function getValidScopes(int $userId, array $scopes): array
+    public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
-        $result = $this->getAvailableScopes($userId, true);
+        $result = $this->getAvailableScopes($tenantId, $userId, true);
         $data   = array();
 
         foreach ($result as $scope) {
@@ -59,13 +59,13 @@ class Scope extends Generated\UserScopeTable
     /**
      * @return list<array<string, mixed>>
      */
-    public function getAvailableScopes(int $userId, bool $includePlanScopes = false): array
+    public function getAvailableScopes(?string $tenantId, int $userId, bool $includePlanScopes = false): array
     {
-        $assignedScopes = $this->getScopesForUser($userId);
+        $assignedScopes = $this->getScopesForUser($tenantId, $userId);
 
         // get scopes for plan
         if ($includePlanScopes) {
-            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($userId));
+            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($tenantId, $userId));
         }
 
         $scopes = [];
@@ -90,7 +90,7 @@ class Scope extends Generated\UserScopeTable
         return array_values($scopes);
     }
 
-    private function getScopesForUser(int $userId): array
+    private function getScopesForUser(?string $tenantId, int $userId): array
     {
         $sql = '    SELECT scope.id,
                            scope.name,
@@ -106,7 +106,7 @@ class Scope extends Generated\UserScopeTable
     /**
      * @return list<array<string, mixed>>
      */
-    private function getScopesForPlan(int $userId): array
+    private function getScopesForPlan(?string $tenantId, int $userId): array
     {
         $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
         if (empty($planId)) {

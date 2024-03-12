@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserEmail;
@@ -49,7 +49,7 @@ class ResetPassword
         $this->userTable = $userTable;
     }
 
-    public function resetPassword(UserEmail $reset): void
+    public function resetPassword(UserEmail $reset, UserContext $context): void
     {
         $this->captchaService->assertCaptcha($reset->getCaptcha());
 
@@ -58,7 +58,7 @@ class ResetPassword
             throw new StatusCode\NotFoundException('No email was provided');
         }
 
-        $user = $this->userTable->findOneByEmail($email);
+        $user = $this->userTable->findOneByTenantAndEmail($context->getTenantId(), $email);
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -74,20 +74,20 @@ class ResetPassword
         }
 
         // set onetime token for the user
-        $token = $this->tokenService->generateToken($user->getId());
+        $token = $this->tokenService->generateToken($context->getTenantId(), $user->getId());
 
         // send reset mail
         $this->mailerService->sendResetPasswordMail($user->getName(), $email, $token);
     }
 
-    public function changePassword(UserPasswordReset $reset): void
+    public function changePassword(UserPasswordReset $reset, UserContext $context): void
     {
         $token = $reset->getToken();
         if (empty($token)) {
             throw new StatusCode\NotFoundException('No token was provided');
         }
 
-        $userId = $this->tokenService->getUser($token);
+        $userId = $this->tokenService->getUser($context->getTenantId(), $token);
         if (empty($userId)) {
             throw new StatusCode\NotFoundException('Invalid token provided');
         }
@@ -97,7 +97,7 @@ class ResetPassword
             throw new StatusCode\BadRequestException('Provided no new password');
         }
 
-        $result = $this->userTable->changePassword($userId, null, $newPassword, false);
+        $result = $this->userTable->changePassword($context->getTenantId(), $userId, null, $newPassword, false);
         if (!$result) {
             throw new StatusCode\BadRequestException('Could not change password');
         }

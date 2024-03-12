@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Authorization;
 
-use Fusio\Impl\Table\App\Token;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Http\ResponseInterface;
@@ -133,7 +133,7 @@ JSON;
         $this->assertEquals('authorization', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(4, $row['user_id']);

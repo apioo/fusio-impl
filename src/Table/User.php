@@ -37,7 +37,7 @@ class User extends Generated\UserTable
     public const STATUS_ACTIVE   = 1;
     public const STATUS_DELETED  = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?UserRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?UserRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -51,18 +51,67 @@ class User extends Generated\UserTable
         return $this->findOneBy($condition);
     }
 
-    public function changePassword(int $userId, ?string $oldPassword, string $newPassword, bool $verifyOld = true): bool
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?UserRow
     {
-        $password = $this->connection->fetchOne('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndEmail(?string $tenantId, string $email): ?UserRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_EMAIL, $email);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndToken(?string $tenantId, string $token): ?UserRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_TOKEN, $token);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findRemoteUser(?string $tenantId, int $identityId, string $remoteId): ?UserRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_IDENTITY_ID, $identityId);
+        $condition->equals(self::COLUMN_REMOTE_ID, $remoteId);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function changePassword(?string $tenantId, int $userId, ?string $oldPassword, string $newPassword, bool $verifyOld = true): bool
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $userId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'usr.' . self::COLUMN_PASSWORD,
+            ])
+            ->from('fusio_user', 'usr')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $password = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($password)) {
             return false;
         }
 
         if (!$verifyOld || password_verify($oldPassword ?? '', $password)) {
             $this->connection->update('fusio_user', [
-                'password' => \password_hash($newPassword, PASSWORD_DEFAULT),
+                self::COLUMN_PASSWORD => \password_hash($newPassword, PASSWORD_DEFAULT),
             ], [
-                'id' => $userId,
+                self::COLUMN_ID => $userId,
             ]);
 
             return true;
@@ -85,5 +134,22 @@ class User extends Generated\UserTable
             'id' => $userId,
             'points' => $points,
         ]);
+    }
+
+    public function getPlanId(?string $tenantId, int $userId): int
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $userId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'usr.' . self::COLUMN_PLAN_ID,
+            ])
+            ->from('fusio_user', 'usr')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

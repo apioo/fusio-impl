@@ -89,16 +89,16 @@ class App extends ViewAbstract
             'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
             'appSecret' => Table\Generated\AppTable::COLUMN_APP_SECRET,
             'metadata' => $builder->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
-            'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'tokens' => $builder->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
-                'id' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
-                'userId' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
-                'status' => $builder->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
-                'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
-                'scope' => $builder->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
-                'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
-                'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
-                'date' => $builder->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
+            'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [$context->getTenantId(), new Reference('id')], 'name'),
+            'tokens' => $builder->doCollection([$this->getTable(Table\Token::class), 'getTokensByApp'], [$context->getTenantId(), new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
+                'userId' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_USER_ID),
+                'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
+                'token' => Table\Generated\TokenTable::COLUMN_TOKEN,
+                'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
+                'ip' => Table\Generated\TokenTable::COLUMN_IP,
+                'expire' => Table\Generated\TokenTable::COLUMN_EXPIRE,
+                'date' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_DATE),
             ]),
             'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
         ]);
@@ -106,7 +106,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey(string $appKey, string $scope, ?string $tenantId = null)
+    public function getEntityByAppKey(?string $tenantId, string $appKey, string $scope)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
@@ -119,7 +119,7 @@ class App extends ViewAbstract
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'name' => Table\Generated\AppTable::COLUMN_NAME,
             'url' => Table\Generated\AppTable::COLUMN_URL,
-            'scopes' => $builder->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [new Reference('id'), explode(',', $scope), ['backend']], [
+            'scopes' => $builder->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [$tenantId, new Reference('id'), explode(',', $scope), ['backend']], [
                 'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,

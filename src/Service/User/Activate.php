@@ -44,14 +44,14 @@ class Activate
         $this->tokenService = $tokenService;
     }
 
-    public function activate(UserActivate $activate): void
+    public function activate(UserActivate $activate, UserContext $context): void
     {
         $token = $activate->getToken();
         if (empty($token)) {
             throw new StatusCode\BadRequestException('No token provided');
         }
 
-        $userId = $this->tokenService->getUser($token);
+        $userId = $this->tokenService->getUser($context->getTenantId(), $token);
         if (!empty($userId)) {
             $this->userService->changeStatus($userId, Table\User::STATUS_ACTIVE, UserContext::newAnonymousContext());
         } else {

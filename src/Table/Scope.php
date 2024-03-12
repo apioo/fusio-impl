@@ -36,7 +36,7 @@ class Scope extends Generated\ScopeTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?ScopeRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?ScopeRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -50,7 +50,54 @@ class Scope extends Generated\ScopeTable
         return $this->findOneBy($condition);
     }
 
-    public function getValidScopes(array $names, ?string $tenantId = null): array
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?ScopeRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
+        return $this->findOneBy($condition);
+    }
+
+    public function findByOperationId(?string $tenantId, int $operationId): array
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
+        $condition->equals(Generated\ScopeOperationTable::COLUMN_OPERATION_ID, $operationId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . self::COLUMN_NAME,
+                'scope_operation.' . Generated\ScopeOperationTable::COLUMN_ALLOW,
+            ])
+            ->from('fusio_scope_operation', 'scope_operation')
+            ->innerJoin('scope_operation', 'fusio_scope', 'scope', 'scope_operation.' . Generated\ScopeOperationTable::COLUMN_SCOPE_ID . ' = scope.' . self::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+    }
+
+    public function findSubScopes(?string $tenantId, string $scope): array
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
+        $condition->like(self::COLUMN_NAME, $scope . '.%');
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . self::COLUMN_NAME,
+            ])
+            ->from('fusio_scope', 'scope')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('scope.' . self::COLUMN_NAME, 'ASC')
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+    }
+
+    public function getValidScopes(?string $tenantId, array $names): array
     {
         $names = array_filter($names);
 
@@ -70,7 +117,7 @@ class Scope extends Generated\ScopeTable
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
 
-        $result = $this->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
+        $result = $this->findAll($condition, 0, 1024, self::COLUMN_NAME, OrderBy::ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row->getName()] = $row->getDescription();

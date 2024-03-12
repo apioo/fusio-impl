@@ -21,6 +21,8 @@
 namespace Fusio\Impl\Table\Plan;
 
 use Fusio\Impl\Table\Generated;
+use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 
 /**
  * Scope
@@ -39,17 +41,24 @@ class Scope extends Generated\PlanScopeTable
         $this->connection->executeQuery($sql, ['id' => $planId]);
     }
 
-    public function getAvailableScopes(int $planId): array
+    public function getAvailableScopes(?string $tenantId, int $planId): array
     {
-        $sql = '    SELECT scope.id,
-                           scope.name,
-                           scope.description
-                      FROM fusio_plan_scope plan_scope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = plan_scope.scope_id
-                     WHERE plan_scope.plan_id = :plan_id
-                  ORDER BY scope.id ASC';
+        $condition = Condition::withAnd();
+        $condition->equals(Generated\ScopeTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_PLAN_ID, $planId);
 
-        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Generated\ScopeTable::COLUMN_ID,
+                'scope.' . Generated\ScopeTable::COLUMN_NAME,
+                'scope.' . Generated\ScopeTable::COLUMN_DESCRIPTION,
+            ])
+            ->from('fusio_plan_scope', 'plan_scope')
+            ->innerJoin('plan_scope', 'fusio_scope', 'scope', 'plan_scope.' . self::COLUMN_SCOPE_ID . ' = scope.' . Generated\ScopeTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('scope.' . self::COLUMN_ID, 'ASC')
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
     }
 }

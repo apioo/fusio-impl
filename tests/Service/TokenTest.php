@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Service\App;
+namespace Fusio\Impl\Tests\Service;
 
-use Firebase\JWT\JWT;
-use Fusio\Impl\Service\App\Token;
 use Fusio\Impl\Service\Security\JsonWebToken;
+use Fusio\Impl\Service\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,7 +45,7 @@ class TokenTest extends ControllerDbTestCase
     {
         /** @var Token $tokenService */
         $tokenService = Environment::getService(Token::class);
-        $token = $tokenService->generateAccessToken(1, 1, ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
+        $token = $tokenService->generateAccessToken(null, 1, 1, ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
 
         $this->assertInstanceOf(AccessToken::class, $token);
         $this->assertEquals('bearer', $token->getTokenType());

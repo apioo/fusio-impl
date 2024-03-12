@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
 use Fusio\Model\Consumer\UserPasswordReset;
 
@@ -51,7 +52,7 @@ class Execute implements ActionInterface
 
         assert($body instanceof UserPasswordReset);
 
-        $this->resetService->changePassword($body);
+        $this->resetService->changePassword($body, UserContext::newActionContext($context));
 
         return [
             'success' => true,

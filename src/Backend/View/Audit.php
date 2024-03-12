@@ -67,11 +67,11 @@ class Audit extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ?string $tenantId = null)
+    public function getEntity(int $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),

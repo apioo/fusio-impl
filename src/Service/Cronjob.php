@@ -85,7 +85,7 @@ class Cronjob
 
     public function update(string $cronjobId, CronjobUpdate $cronjob, UserContext $context): int
     {
-        $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
+        $existing = $this->cronjobTable->findOneByIdentifier($context->getTenantId(), $cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
@@ -109,7 +109,7 @@ class Cronjob
 
     public function delete(string $cronjobId, UserContext $context): int
     {
-        $existing = $this->cronjobTable->findOneByIdentifier($cronjobId);
+        $existing = $this->cronjobTable->findOneByIdentifier($context->getTenantId(), $cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }

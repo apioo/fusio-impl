@@ -20,15 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Marketplace;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Dto\Marketplace\App;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\Marketplace;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * GetAll
@@ -41,18 +39,18 @@ class GetAll implements ActionInterface
 {
     private Marketplace\Repository\Remote $remoteRepository;
     private Marketplace\Repository\Local $localRepository;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, ConfigInterface $config)
+    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, FrameworkConfig $frameworkConfig)
     {
         $this->remoteRepository = $remoteRepository;
         $this->localRepository = $localRepository;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if ($this->config->get('fusio_marketplace')) {
+        if ($this->frameworkConfig->isMarketplaceEnabled()) {
             $result = $this->fetchRemoteApps();
         } else {
             $result = $this->fetchLocalApps();
@@ -74,7 +72,7 @@ class GetAll implements ActionInterface
             $localApp = $this->localRepository->fetchByName($remoteApp->getName());
             if ($localApp instanceof App) {
                 $app['local'] = $localApp->toArray();
-                $app['local']['startUrl'] = $this->config->get('fusio_apps_url') . '/' . $localApp->getName();
+                $app['local']['startUrl'] = $this->frameworkConfig->getAppsUrl() . '/' . $localApp->getName();
             }
 
             $result[$remoteApp->getName()] = $app;
@@ -91,7 +89,7 @@ class GetAll implements ActionInterface
         foreach ($apps as $localApp) {
             $app = $localApp->toArray();
             $app['local'] = $localApp->toArray();
-            $app['local']['startUrl'] = $this->config->get('fusio_apps_url') . '/' . $localApp->getName();
+            $app['local']['startUrl'] = $this->frameworkConfig->getAppsUrl() . '/' . $localApp->getName();
 
             $result[$localApp->getName()] = $app;
         }

@@ -233,7 +233,7 @@ JSON;
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('app_id', 'user_id', 'status', 'token', 'scope', 'expire')
-            ->from('fusio_app_token')
+            ->from('fusio_token')
             ->where('token = :token')
             ->setFirstResult(0)
             ->setMaxResults(1)

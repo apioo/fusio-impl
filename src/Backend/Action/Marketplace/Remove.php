@@ -20,15 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Marketplace;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -41,17 +39,17 @@ use PSX\Http\Exception as StatusCode;
 class Remove implements ActionInterface
 {
     private Installer $installerService;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Installer $installerService, ConfigInterface $config)
+    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig)
     {
         $this->installerService = $installerService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if (!$this->config->get('fusio_marketplace')) {
+        if (!$this->frameworkConfig->isMarketplaceEnabled()) {
             throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 

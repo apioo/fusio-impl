@@ -22,6 +22,7 @@ namespace Fusio\Impl\Table\App;
 
 use Fusio\Impl\Table\App;
 use Fusio\Impl\Table\Generated;
+use PSX\Sql\Condition;
 
 /**
  * Code
@@ -34,33 +35,27 @@ class Code extends Generated\AppCodeTable
 {
     public function getCodeByRequest(string $appKey, string $appSecret, string $code, ?string $redirectUri, ?string $tenantId = null): array|false
     {
-        $sql = '    SELECT code.id,
-                           code.app_id,
-                           code.user_id,
-                           code.scope,
-                           code.date
-                      FROM fusio_app_code code
-                INNER JOIN fusio_app app
-                        ON app.id = code.app_id
-                     WHERE app.app_key = :app_key
-                       AND app.app_secret = :app_secret
-                       AND app.status = :status
-                       AND code.code = :code
-                       AND code.redirect_uri = :redirect_uri';
+        $condition = Condition::withAnd();
+        $condition->equals('app.' . Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals('app.' . Generated\AppTable::COLUMN_STATUS, App::STATUS_ACTIVE);
+        $condition->equals('app.' . Generated\AppTable::COLUMN_APP_KEY, $appKey);
+        $condition->equals('app.' . Generated\AppTable::COLUMN_APP_SECRET, $appSecret);
+        $condition->equals('app_code.' . self::COLUMN_CODE, $code);
+        $condition->equals('app_code.' . self::COLUMN_REDIRECT_URI, $redirectUri ?: '');
 
-        $params = [
-            'app_key'      => $appKey,
-            'app_secret'   => $appSecret,
-            'status'       => App::STATUS_ACTIVE,
-            'code'         => $code,
-            'redirect_uri' => $redirectUri ?: '',
-        ];
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'app_code.' . self::COLUMN_ID,
+                'app_code.' . self::COLUMN_APP_ID,
+                'app_code.' . self::COLUMN_USER_ID,
+                'app_code.' . self::COLUMN_SCOPE,
+                'app_code.' . self::COLUMN_DATE,
+            ])
+            ->from('fusio_app_code', 'app_code')
+            ->innerJoin('app_code', 'fusio_app', 'app', 'app_code.' . self::COLUMN_APP_ID . ' = app.' . Generated\AppTable::COLUMN_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
 
-        if (!empty($tenantId)) {
-            $sql.= ' AND app.tenant_id = :tenant_id';
-            $params['tenant_id'] = $tenantId;
-        }
-
-        return $this->connection->fetchAssociative($sql, $params);
+        return $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

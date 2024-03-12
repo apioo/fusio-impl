@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Config\UpdatedEvent;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ConfigUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -37,17 +38,19 @@ use PSX\Http\Exception as StatusCode;
 class Config
 {
     private Table\Config $configTable;
+    private FrameworkConfig $frameworkConfig;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Config $configTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Config $configTable, FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
-        $this->configTable     = $configTable;
+        $this->configTable = $configTable;
+        $this->frameworkConfig = $frameworkConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function update(string $configId, ConfigUpdate $config, UserContext $context): int
     {
-        $existing = $this->configTable->findOneByIdentifier($configId);
+        $existing = $this->configTable->findOneByIdentifier($context->getTenantId(), $configId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find config');
         }
@@ -62,7 +65,7 @@ class Config
 
     public function getValue(string $name)
     {
-        $config = $this->configTable->getValue($name);
+        $config = $this->configTable->getValue($this->frameworkConfig->getTenantId(), $name);
         if (!empty($config)) {
             return self::convertValueToType($config['value'], $config['type']);
         } else {

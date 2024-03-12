@@ -53,7 +53,7 @@ class Form implements ActionInterface
         assert($body instanceof SchemaForm);
 
         $this->schemaService->updateForm(
-            (int) $request->get('schema_id'),
+            $request->get('schema_id'),
             $body,
             UserContext::newActionContext($context)
         );

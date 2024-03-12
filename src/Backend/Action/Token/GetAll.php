@@ -18,38 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Event\App;
+namespace Fusio\Impl\Backend\Action\Token;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
+use Fusio\Impl\Backend\View;
 
 /**
- * RemovedTokenEvent
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RemovedTokenEvent extends EventAbstract
+class GetAll implements ActionInterface
 {
-    private int $appId;
-    private int $tokenId;
+    private View\Token $view;
 
-    public function __construct(int $appId, int $tokenId, UserContext $context)
+    public function __construct(View\Token $view)
     {
-        parent::__construct($context);
-
-        $this->appId   = $appId;
-        $this->tokenId = $tokenId;
+        $this->view = $view;
     }
 
-    public function getAppId(): int
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->appId;
-    }
-
-    public function getTokenId(): int
-    {
-        return $this->tokenId;
+        return $this->view->getCollection(
+            TokenQueryFilter::from($request),
+            $context
+        );
     }
 }

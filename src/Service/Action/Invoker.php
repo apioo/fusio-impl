@@ -25,7 +25,6 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -39,13 +38,13 @@ class Invoker
 {
     private Processor $processor;
     private Service\Plan\Payer $planPayerService;
-    private ConfigInterface $config;
+    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, ConfigInterface $config)
+    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Service\System\FrameworkConfig $frameworkConfig)
     {
         $this->processor = $processor;
         $this->planPayerService = $planPayerService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function invoke(RequestInterface $request, Context $context): mixed
@@ -54,8 +53,8 @@ class Invoker
         $action = $operation->getAction();
         $costs = $operation->getCosts();
 
-        $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser(), $this->config->get('fusio_tenant_id'));
+        $baseUrl = $this->frameworkConfig->getDispatchUrl();
+        $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser(), $this->frameworkConfig->getTenantId());
 
         if ($costs > 0) {
             // as anonymous user it is not possible to pay

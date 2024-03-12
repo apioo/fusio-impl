@@ -91,7 +91,7 @@ class App
 
             $scopes = $app->getScopes();
             if ($scopes !== null) {
-                $this->insertScopes($appId, $scopes, $context->getTenantId());
+                $this->insertScopes($context->getTenantId(), $appId, $scopes);
             }
 
             $this->appTable->commit();
@@ -108,7 +108,7 @@ class App
 
     public function update(string $appId, AppUpdate $app, UserContext $context): int
     {
-        $existing = $this->appTable->findOneByIdentifier($appId);
+        $existing = $this->appTable->findOneByIdentifier($context->getTenantId(), $appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -143,7 +143,7 @@ class App
                 $this->appScopeTable->deleteAllFromApp($existing->getId());
 
                 // insert scopes
-                $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
+                $this->insertScopes($context->getTenantId(), $existing->getId(), $scopes);
             }
 
             $this->appTable->commit();
@@ -160,7 +160,7 @@ class App
 
     public function delete(string $appId, UserContext $context): int
     {
-        $existing = $this->appTable->findOneByIdentifier($appId);
+        $existing = $this->appTable->findOneByIdentifier($context->getTenantId(), $appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -177,10 +177,10 @@ class App
         return $existing->getId();
     }
 
-    protected function insertScopes(int $appId, ?array $scopes, ?string $tenantId = null): void
+    protected function insertScopes(?string $tenantId, int $appId, ?array $scopes): void
     {
         if (!empty($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
+            $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);
 
             foreach ($scopes as $scope) {
                 $row = new Table\Generated\AppScopeRow();

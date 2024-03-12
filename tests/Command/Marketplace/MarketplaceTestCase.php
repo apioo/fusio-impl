@@ -24,6 +24,7 @@ use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\Marketplace\Repository\Local;
 use Fusio\Impl\Service\Marketplace\Repository\Remote;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -60,7 +61,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
             Environment::getService(Local::class),
             $this->getRemoteRepository(),
             Environment::getService(Config::class),
-            Environment::getService(ConfigInterface::class)
+            Environment::getService(FrameworkConfig::class)
         );
     }
 
@@ -79,7 +80,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
 
         $httpClient = new Client(['handler' => HandlerStack::create($mock)]);
 
-        return $this->remote = new Remote($httpClient, Environment::getService(ConfigInterface::class));
+        return $this->remote = new Remote($httpClient, Environment::getService(FrameworkConfig::class));
     }
 
     private function getMarketplaceYaml(string $sha1Hash)

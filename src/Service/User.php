@@ -113,13 +113,7 @@ class User
 
     public function createRemote(Table\Generated\IdentityRow $identity, UserInfo $userInfo, UserContext $context): int
     {
-        // check whether user exists
-        $condition  = Condition::withAnd();
-        $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\UserTable::COLUMN_IDENTITY_ID, $identity->getId());
-        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $userInfo->getId());
-
-        $existing = $this->userTable->findOneBy($condition);
+        $existing = $this->userTable->findRemoteUser($context->getTenantId(), $identity->getId(), $userInfo->getId());
         if ($existing instanceof Table\Generated\UserRow) {
             return $existing->getId();
         }
@@ -193,7 +187,7 @@ class User
 
     public function update(string $userId, UserUpdate $user, UserContext $context): int
     {
-        $existing = $this->userTable->findOneByIdentifier($userId);
+        $existing = $this->userTable->findOneByIdentifier($context->getTenantId(), $userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -208,15 +202,14 @@ class User
             $this->userTable->beginTransaction();
 
             // update user
-            $row = new Table\Generated\UserRow();
-            $row->setId($existing->getId());
-            $row->setRoleId($user->getRoleId() ?? $existing->getRoleId());
-            $row->setPlanId($user->getPlanId() ?? $existing->getPlanId());
-            $row->setStatus($user->getStatus() ?? $existing->getStatus());
-            $row->setName($user->getName() ?? $existing->getName());
-            $row->setEmail($user->getEmail() ?? $existing->getEmail());
-            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
-            $this->userTable->update($row);
+            $existing->setTenantId($context->getTenantId());
+            $existing->setRoleId($user->getRoleId() ?? $existing->getRoleId());
+            $existing->setPlanId($user->getPlanId() ?? $existing->getPlanId());
+            $existing->setStatus($user->getStatus() ?? $existing->getStatus());
+            $existing->setName($user->getName() ?? $existing->getName());
+            $existing->setEmail($user->getEmail() ?? $existing->getEmail());
+            $existing->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $this->userTable->update($existing);
 
             $scopes = $user->getScopes();
             if ($scopes !== null) {
@@ -224,7 +217,7 @@ class User
                 $this->userScopeTable->deleteAllFromUser($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing->getId(), $scopes, $context->getTenantId());
+                $this->insertScopes($context->getTenantId(), $existing->getId(), $scopes);
             }
 
             $this->userTable->commit();
@@ -241,7 +234,7 @@ class User
 
     public function delete(string $userId, UserContext $context): int
     {
-        $existing = $this->userTable->findOneByIdentifier($userId);
+        $existing = $this->userTable->findOneByIdentifier($context->getTenantId(), $userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -302,7 +295,7 @@ class User
         $this->validator->assertPassword($newPassword);
 
         // change password
-        $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
+        $result = $this->userTable->changePassword($context->getTenantId(), $userId, $oldPassword, $newPassword);
 
         if ($result) {
             $this->eventDispatcher->dispatch(new ChangedPasswordEvent($changePassword, $context));
@@ -313,14 +306,14 @@ class User
         }
     }
 
-    public function getAvailableScopes(int $userId): array
+    public function getAvailableScopes(int $userId, UserContext $context): array
     {
-        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
+        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($context->getTenantId(), $userId));
     }
 
-    private function insertScopes(int $userId, array $scopes, ?string $tenantId = null): void
+    private function insertScopes(?string $tenantId, int $userId, array $scopes): void
     {
-        $scopes = $this->scopeTable->getValidScopes($scopes, $tenantId);
+        $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);
         foreach ($scopes as $scope) {
             $row = new Table\Generated\UserScopeRow();
             $row->setUserId($userId);

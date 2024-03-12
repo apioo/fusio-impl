@@ -20,15 +20,12 @@
 
 namespace Fusio\Impl\Consumer\Action\Page;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
-use PSX\Framework\Config\ConfigInterface;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * Get
@@ -40,12 +37,12 @@ use PSX\Sql\TableManagerInterface;
 class Get implements ActionInterface
 {
     private View\Page $view;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(View\Page $view, ConfigInterface $config)
+    public function __construct(View\Page $view, FrameworkConfig $frameworkConfig)
     {
         $this->view = $view;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -62,9 +59,9 @@ class Get implements ActionInterface
 
     private function replaceVariables(string $content): string
     {
-        $baseUrl = $this->config->get('psx_url');
-        $apiUrl = $baseUrl . '/' . $this->config->get('psx_dispatch');
-        $url = $this->config->get('fusio_apps_url');
+        $baseUrl = $this->frameworkConfig->getUrl();
+        $apiUrl = $this->frameworkConfig->getDispatchUrl();
+        $url = $this->frameworkConfig->getAppsUrl();
         $basePath = parse_url($url, PHP_URL_PATH);
 
         $env = [

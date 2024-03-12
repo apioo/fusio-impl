@@ -72,7 +72,7 @@ class Connection extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $context->getTenantId()], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -83,11 +83,11 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ?string $tenantId = null)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$id, $tenantId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

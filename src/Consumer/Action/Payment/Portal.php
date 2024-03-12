@@ -20,16 +20,13 @@
 
 namespace Fusio\Impl\Consumer\Action\Payment;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Payment;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Consumer\PaymentPortalRequest;
-use PSX\Framework\Config\Config;
-use PSX\Framework\Config\ConfigInterface;
 
 /**
  * Portal
@@ -41,12 +38,12 @@ use PSX\Framework\Config\ConfigInterface;
 class Portal implements ActionInterface
 {
     private Payment $transactionService;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Payment $transactionService, ConfigInterface $config)
+    public function __construct(Payment $transactionService, FrameworkConfig $frameworkConfig)
     {
         $this->transactionService = $transactionService;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -58,7 +55,7 @@ class Portal implements ActionInterface
         $returnUrl = $body->getReturnUrl();
         if (empty($returnUrl)) {
             // in case we have no return url we use the developer portal
-            $returnUrl = $this->config->get('fusio_apps_url') . '/developer';
+            $returnUrl = $this->frameworkConfig->getAppsUrl() . '/developer';
         }
 
         $redirectUrl = $this->transactionService->portal(

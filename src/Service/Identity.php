@@ -35,7 +35,6 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 use PSX\Sql\Condition;
@@ -57,11 +56,11 @@ class Identity
     private Identity\Validator $validator;
     private IdentityProvider $identityProvider;
     private Service\User $userService;
-    private Service\App\Token $appTokenService;
-    private ConfigInterface $config;
+    private Service\Token $tokenService;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\App\Token $appTokenService, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
     {
         $this->identityTable = $identityTable;
         $this->identityRequestTable = $identityRequestTable;
@@ -69,8 +68,8 @@ class Identity
         $this->validator = $validator;
         $this->identityProvider = $identityProvider;
         $this->userService = $userService;
-        $this->appTokenService = $appTokenService;
-        $this->config = $config;
+        $this->tokenService = $tokenService;
+        $this->frameworkConfig = $frameworkConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -119,7 +118,7 @@ class Identity
 
     public function update(string $identityId, Model\Backend\IdentityUpdate $identity, UserContext $context): int
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -163,7 +162,7 @@ class Identity
 
     public function delete(string $identityId, UserContext $context): int
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -180,9 +179,9 @@ class Identity
         return $existing->getId();
     }
 
-    public function redirect(string $identityId, ?string $redirectUri): Uri
+    public function redirect(string $identityId, ?string $redirectUri, UserContext $context): Uri
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -224,9 +223,9 @@ class Identity
         return $provider->getRedirectUri($parameters, $state, $this->buildRedirectUri($existing));
     }
 
-    public function exchange(string $identityId, string $code, string $state): AccessToken
+    public function exchange(string $identityId, string $code, string $state, UserContext $context): AccessToken
     {
-        $existing = $this->identityTable->findOneByIdentifier($identityId);
+        $existing = $this->identityTable->findOneByIdentifier($context->getTenantId(), $identityId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find identity');
         }
@@ -264,7 +263,7 @@ class Identity
         $userId = $this->userService->createRemote($existing, $user, UserContext::newAnonymousContext());
 
         // get scopes for user
-        $scopes = $this->userService->getAvailableScopes($userId);
+        $scopes = $this->userService->getAvailableScopes($userId, $context);
 
         $appId = $existing->getAppId();
         if (empty($appId)) {
@@ -272,12 +271,13 @@ class Identity
             $appId = 2;
         }
 
-        $accessToken = $this->appTokenService->generateAccessToken(
+        $accessToken = $this->tokenService->generateAccessToken(
+            $context->getTenantId(),
             $appId,
             $userId,
             $scopes,
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_token'))
+            $this->frameworkConfig->getExpireTokenInterval()
         );
 
         $redirectUri = $identityRequest->getRedirectUri();
@@ -300,7 +300,7 @@ class Identity
 
     private function buildRedirectUri(Table\Generated\IdentityRow $existing): string
     {
-        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'consumer/identity/' . $existing->getId() . '/exchange';
+        return $this->frameworkConfig->getDispatchUrl('consumer', 'identity', $existing->getId(), 'exchange');
     }
 
     public static function serializeConfig(?array $config = null): ?string

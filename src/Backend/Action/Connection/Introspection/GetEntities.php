@@ -26,6 +26,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Connection;
 
 /**
@@ -46,7 +47,11 @@ class GetEntities implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $introspection = $this->connectionService->getIntrospection((int) $request->get('connection_id'));
+        $introspection = $this->connectionService->getIntrospection(
+            $request->get('connection_id'),
+            UserContext::newActionContext($context)
+        );
+
         $entities = $introspection->getEntities();
         sort($entities);
 

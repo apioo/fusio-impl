@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
@@ -48,7 +49,8 @@ class Redirect implements ActionInterface
     {
         $redirectUri = $this->identity->redirect(
             $request->get('identity'),
-            $request->get('redirect_uri')
+            $request->get('redirect_uri'),
+            UserContext::newActionContext($context)
         );
 
         throw new StatusCode\FoundException($redirectUri->toString());

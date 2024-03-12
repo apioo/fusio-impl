@@ -42,18 +42,20 @@ use PSX\Sql\Condition;
 class Scope
 {
     private Table\Scope $scopeTable;
-    private Table\Scope\Operation $scopeRouteTable;
+    private Table\Scope\Operation $scopeOperationTable;
     private Table\App\Scope $appScopeTable;
     private Table\User\Scope $userScopeTable;
+    private Table\Operation $operationTable;
     private Scope\Validator $validator;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, Scope\Validator $validator, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeOperationTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, Table\Operation $operationTable, Scope\Validator $validator, EventDispatcherInterface $eventDispatcher)
     {
         $this->scopeTable = $scopeTable;
-        $this->scopeRouteTable = $scopeRouteTable;
+        $this->scopeOperationTable = $scopeOperationTable;
         $this->appScopeTable = $appScopeTable;
         $this->userScopeTable = $userScopeTable;
+        $this->operationTable = $operationTable;
         $this->validator = $validator;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -77,7 +79,7 @@ class Scope
             $scopeId = $this->scopeTable->getLastInsertId();
             $scope->setId($scopeId);
 
-            $this->insertOperations($scopeId, $scope->getOperations() ?? []);
+            $this->insertOperations($context->getTenantId(), $scopeId, $scope->getOperations() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -94,18 +96,18 @@ class Scope
     public function createForOperation(int $categoryId, int $operationId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
-        $this->scopeRouteTable->deleteAllFromOperation($operationId);
+        $this->scopeOperationTable->deleteAllFromOperation($operationId);
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
-            $scope = $this->scopeTable->findOneByName($scopeName);
+            $scope = $this->scopeTable->findOneByTenantAndName($context->getTenantId(), $scopeName);
             if ($scope instanceof Table\Generated\ScopeRow) {
-                // assign route to scope
+                // assign scope to operation
                 $row = new Table\Generated\ScopeOperationRow();
                 $row->setScopeId($scope->getId());
                 $row->setOperationId($operationId);
                 $row->setAllow(1);
-                $this->scopeRouteTable->create($row);
+                $this->scopeOperationTable->create($row);
             } else {
                 // create new scope
                 $operation = new ScopeOperation();
@@ -122,7 +124,7 @@ class Scope
 
     public function update(string $scopeId, ScopeUpdate $scope, UserContext $context): int
     {
-        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -141,9 +143,9 @@ class Scope
             $existing->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
             $this->scopeTable->update($existing);
 
-            $this->scopeRouteTable->deleteAllFromScope($existing->getId());
+            $this->scopeOperationTable->deleteAllFromScope($existing->getId());
 
-            $this->insertOperations($existing->getId(), $scope->getOperations() ?? []);
+            $this->insertOperations($context->getTenantId(), $existing->getId(), $scope->getOperations() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -159,7 +161,7 @@ class Scope
 
     public function delete(string $scopeId, UserContext $context): int
     {
-        $existing = $this->scopeTable->findOneByIdentifier($scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -184,8 +186,9 @@ class Scope
         }
 
         // check whether this is a system scope
-        if (in_array($existing->getId(), [1, 2, 3])) {
-            throw new StatusCode\BadRequestException('It is not possible to delete a system scope');
+        $systemScopes = ['default', 'backend', 'consumer', 'system', 'authorization'];
+        if (in_array($existing->getName(), $systemScopes)) {
+            throw new StatusCode\BadRequestException('It is not possible to delete one of the system scopes: ' . implode(', ', $systemScopes));
         }
 
         try {
@@ -209,16 +212,16 @@ class Scope
     /**
      * Returns all scope names which are valid for the app and the user. The scopes are a comma separated list
      */
-    public function getValidScopes(string $scopes, ?int $appId, ?int $userId): array
+    public function getValidScopes(?string $tenantId, string $scopes, ?int $appId, ?int $userId): array
     {
         $scopes = self::split($scopes);
 
         if ($appId !== null) {
-            $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
+            $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($tenantId, $appId, $scopes));
         }
 
         if ($userId !== null) {
-            $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+            $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($tenantId, $userId, $scopes));
         }
 
         return $scopes;
@@ -227,16 +230,21 @@ class Scope
     /**
      * @param ScopeOperation[] $operations
      */
-    protected function insertOperations(int $scopeId, ?array $operations): void
+    protected function insertOperations(?string $tenantId, int $scopeId, ?array $operations): void
     {
         if (!empty($operations)) {
-            foreach ($operations as $operation) {
-                if ($operation->getAllow()) {
+            foreach ($operations as $scopeOperation) {
+                if ($scopeOperation->getAllow()) {
+                    $operation = $this->operationTable->findOneByTenantAndId($tenantId, $scopeOperation->getOperationId());
+                    if (!$operation instanceof Table\Generated\OperationRow) {
+                        throw new StatusCode\BadRequestException('Could not find provided operation id: ' . $scopeOperation->getOperationId());
+                    }
+
                     $row = new Table\Generated\ScopeOperationRow();
                     $row->setScopeId($scopeId);
-                    $row->setOperationId($operation->getOperationId() ?? throw new \RuntimeException('No operation id provided'));
+                    $row->setOperationId($operation->getId());
                     $row->setAllow(1);
-                    $this->scopeRouteTable->create($row);
+                    $this->scopeOperationTable->create($row);
                 }
             }
         }

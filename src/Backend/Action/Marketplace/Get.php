@@ -20,15 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Marketplace;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Dto\Marketplace\App;
-use PSX\Framework\Config\ConfigInterface;
+use Fusio\Impl\Service\Marketplace;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -42,13 +40,13 @@ class Get implements ActionInterface
 {
     private Marketplace\Repository\Remote $remoteRepository;
     private Marketplace\Repository\Local $localRepository;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, ConfigInterface $config)
+    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, FrameworkConfig $frameworkConfig)
     {
         $this->remoteRepository = $remoteRepository;
         $this->localRepository = $localRepository;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -61,7 +59,7 @@ class Get implements ActionInterface
             throw new StatusCode\NotFoundException('Could not find local app');
         }
 
-        if ($this->config->get('fusio_marketplace')) {
+        if ($this->frameworkConfig->isMarketplaceEnabled()) {
             $remoteApp = $this->remoteRepository->fetchByName(
                 $request->get('app_name')
             );

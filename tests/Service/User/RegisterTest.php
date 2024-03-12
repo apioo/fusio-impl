@@ -63,7 +63,7 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user);
+        $register->register($user, UserContext::newAnonymousContext());
 
         // check user
         /** @var Connection $connection */
@@ -96,7 +96,7 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user);
+        $register->register($user, UserContext::newAnonymousContext());
 
         // check user
         /** @var Connection $connection */
@@ -129,7 +129,7 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user);
+        $register->register($user, UserContext::newAnonymousContext());
 
         // check user
         /** @var Connection $connection */
@@ -164,7 +164,7 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user);
+        $register->register($user, UserContext::newAnonymousContext());
     }
 
     private function newCaptchaService(bool $success): Service\User\Captcha

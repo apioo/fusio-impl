@@ -21,6 +21,8 @@
 namespace Fusio\Impl\Table\App;
 
 use Fusio\Impl\Table\Generated;
+use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 
 /**
  * Scope
@@ -39,9 +41,9 @@ class Scope extends Generated\AppScopeTable
         $this->connection->executeQuery($sql, array('app_id' => $appId));
     }
 
-    public function getValidScopes(int $appId, array $scopes): array
+    public function getValidScopes(?string $tenantId, int $appId, array $scopes): array
     {
-        $result = $this->getAvailableScopes($appId, true);
+        $result = $this->getAvailableScopes($tenantId, $appId, true);
         $data   = array();
 
         foreach ($result as $scope) {
@@ -53,13 +55,13 @@ class Scope extends Generated\AppScopeTable
         return $data;
     }
 
-    public function getAvailableScopes(int $appId, bool $includePlanScopes = false): array
+    public function getAvailableScopes(?string $tenantId, int $appId, bool $includePlanScopes = false): array
     {
-        $assignedScopes = $this->getScopesForApp($appId);
+        $assignedScopes = $this->getScopesForApp($tenantId, $appId);
 
         // get scopes from plan
         if ($includePlanScopes) {
-            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($appId));
+            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($tenantId, $appId));
         }
 
         $scopes = [];
@@ -68,13 +70,7 @@ class Scope extends Generated\AppScopeTable
 
             if (!str_contains($assignedScope['name'], '.')) {
                 // load all sub scopes
-                $sql = 'SELECT scope.id,
-                               scope.name,
-                               scope.description
-                          FROM fusio_scope scope
-                         WHERE scope.name LIKE :name
-                      ORDER BY scope.name ASC';
-                $subScopes = $this->connection->fetchAllAssociative($sql, ['name' => $assignedScope['name'] . '.%']);
+                $subScopes = $this->getTable(Table\Scope::class)->findSubScopes($tenantId, $assignedScope['name']);
                 foreach ($subScopes as $subScope) {
                     $scopes[$subScope['name']] = $subScope;
                 }
@@ -84,39 +80,57 @@ class Scope extends Generated\AppScopeTable
         return array_values($scopes);
     }
 
-    private function getScopesForApp(int $appId): array
+    private function getScopesForApp(?string $tenantId, int $appId): array
     {
-        $sql = '    SELECT scope.id,
-                           scope.name,
-                           scope.description
-                      FROM fusio_app_scope app_scope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = app_scope.scope_id
-                     WHERE app_scope.app_id = :app_id
-                  ORDER BY scope.id ASC';
-        return $this->connection->fetchAllAssociative($sql, ['app_id' => $appId]) ?: [];
+        $condition = Condition::withAnd();
+        $condition->equals(Generated\ScopeTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Generated\ScopeTable::COLUMN_STATUS, Table\Scope::STATUS_ACTIVE);
+        $condition->equals(self::COLUMN_APP_ID, $appId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Generated\ScopeTable::COLUMN_ID,
+                'scope.' . Generated\ScopeTable::COLUMN_NAME,
+                'scope.' . Generated\ScopeTable::COLUMN_DESCRIPTION,
+            ])
+            ->from('fusio_app_scope', 'app_scope')
+            ->innerJoin('app_scope', 'fusio_scope', 'scope', 'scope.' . Generated\ScopeTable::COLUMN_ID . ' = app_scope.' . self::COLUMN_SCOPE_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
     }
 
-    private function getScopesForPlan(int $appId): array
+    private function getScopesForPlan(?string $tenantId, int $appId): array
     {
-        $userId = (int) $this->connection->fetchOne('SELECT user_id FROM fusio_app WHERE id = :app_id', ['app_id' => $appId]);
+        $userId = $this->getTable(Table\App::class)->getUserId($tenantId, $appId);
         if (empty($userId)) {
             return [];
         }
 
-        $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
+        $planId = $this->getTable(Table\User::class)->getPlanId($tenantId, $appId);
         if (empty($planId)) {
             return [];
         }
 
-        $sql = '    SELECT scope.id,
-                           scope.name,
-                           scope.description
-                      FROM fusio_plan_scope plan_scope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = plan_scope.scope_id
-                     WHERE plan_scope.plan_id = :plan_id
-                  ORDER BY scope.id ASC';
-        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
+        $condition = Condition::withAnd();
+        $condition->equals(Generated\ScopeTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Generated\ScopeTable::COLUMN_STATUS, Table\Scope::STATUS_ACTIVE);
+        $condition->equals(Generated\PlanScopeTable::COLUMN_PLAN_ID, $planId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Generated\ScopeTable::COLUMN_ID,
+                'scope.' . Generated\ScopeTable::COLUMN_NAME,
+                'scope.' . Generated\ScopeTable::COLUMN_DESCRIPTION,
+            ])
+            ->from('fusio_plan_scope', 'plan_scope')
+            ->innerJoin('plan_scope', 'fusio_scope', 'scope', 'scope.' . Generated\ScopeTable::COLUMN_ID . ' = plan_scope.' . Generated\PlanScopeTable::COLUMN_SCOPE_ID)
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
+            ->setParameters($condition->getValues());
+
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
     }
 }

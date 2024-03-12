@@ -240,7 +240,7 @@ JSON;
         $this->assertEquals('', $row['parameters']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 6);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -289,7 +289,7 @@ JSON;
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('foo=bar&bar=1', $row['parameters']);
 
-        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 6);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);

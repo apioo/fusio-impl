@@ -32,11 +32,11 @@ use Fusio\Engine\ContextInterface;
 class UserContext
 {
     private int $userId;
-    private int $appId;
+    private ?int $appId;
     private string $ip;
     private ?string $tenantId;
 
-    public function __construct(int $userId, int $appId, string $ip, ?string $tenantId = null)
+    public function __construct(int $userId, ?int $appId, string $ip, ?string $tenantId = null)
     {
         $this->userId = $userId;
         $this->appId = $appId;
@@ -49,7 +49,7 @@ class UserContext
         return $this->userId;
     }
 
-    public function getAppId(): int
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
@@ -66,7 +66,7 @@ class UserContext
 
     public static function newContext(int $userId, ?int $appId = null, ?string $tenantId = null): self
     {
-        return new UserContext($userId, $appId ?? 1, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
+        return new UserContext($userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
     }
 
     public static function newAnonymousContext(): self
@@ -81,6 +81,11 @@ class UserContext
 
     public static function newActionContext(ContextInterface $context): self
     {
-        return self::newContext($context->getUser()->getId(), $context->getApp()->getId(), $context->getTenantId());
+        $appId = null;
+        if (!$context->getApp()->isAnonymous()) {
+            $appId = $context->getApp()->getId();
+        }
+
+        return self::newContext($context->getUser()->getId(), $appId, $context->getTenantId());
     }
 }

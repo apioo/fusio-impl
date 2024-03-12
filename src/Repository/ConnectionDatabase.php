@@ -24,8 +24,8 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service\Connection as ConnectionService;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -38,18 +38,18 @@ use PSX\Sql\Condition;
 class ConnectionDatabase implements Repository\ConnectionInterface
 {
     private Connection $connection;
-    private ConfigInterface $config;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connection $connection, ConfigInterface $config)
+    public function __construct(Connection $connection, FrameworkConfig $frameworkConfig)
     {
         $this->connection = $connection;
-        $this->config = $config;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getAll(): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -82,7 +82,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
         }
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $this->getTenantId());
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals($column, $id);
 
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -107,7 +107,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
 
     private function newConnection(array $row): Model\ConnectionInterface
     {
-        $config = !empty($row[Table\Generated\ConnectionTable::COLUMN_CONFIG]) ? ConnectionService\Encrypter::decrypt($row[Table\Generated\ConnectionTable::COLUMN_CONFIG], $this->config->get('fusio_project_key')) : [];
+        $config = !empty($row[Table\Generated\ConnectionTable::COLUMN_CONFIG]) ? ConnectionService\Encrypter::decrypt($row[Table\Generated\ConnectionTable::COLUMN_CONFIG], $this->frameworkConfig->getProjectKey()) : [];
 
         return new Model\Connection(
             $row[Table\Generated\ConnectionTable::COLUMN_ID],
@@ -115,15 +115,5 @@ class ConnectionDatabase implements Repository\ConnectionInterface
             $row[Table\Generated\ConnectionTable::COLUMN_CLASS],
             $config
         );
-    }
-
-    private function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 }

@@ -33,7 +33,6 @@ use Fusio\Impl\Service\Payment\Webhook;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\PaymentCheckoutRequest;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\RequestInterface;
 
@@ -50,18 +49,18 @@ class Payment
     private PaymentProvider $paymentProvider;
     private Webhook $webhook;
     private Service\Config $configService;
+    private Service\System\FrameworkConfig $frameworkConfig;
     private Table\Plan $planTable;
-    private ConfigInterface $config;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Table\Plan $planTable, ConfigInterface $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
         $this->paymentProvider = $paymentProvider;
         $this->webhook = $webhook;
         $this->configService = $configService;
+        $this->frameworkConfig = $frameworkConfig;
         $this->planTable = $planTable;
-        $this->config = $config;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -77,7 +76,7 @@ class Payment
             throw new StatusCode\BadRequestException('No plan id provided');
         }
 
-        $product    = $this->getProduct($planId);
+        $product = $this->getProduct($context->getTenantId(), $planId);
         $connection = $this->connector->getConnection($name);
 
         // validate return url
@@ -103,7 +102,7 @@ class Payment
 
         $webhookSecret = $this->configService->getValue('payment_' . strtolower($name) . '_secret');
 
-        $provider->webhook($request, $this->webhook, $webhookSecret, $this->config->get('psx_url'));
+        $provider->webhook($request, $this->webhook, $webhookSecret, $this->frameworkConfig->getUrl());
     }
 
     public function portal(string $name, UserInterface $user, string $returnUrl): ?string
@@ -120,9 +119,9 @@ class Payment
         return $provider->portal($connection, $user, $returnUrl, $configurationId);
     }
 
-    private function getProduct(int $planId): ProductInterface
+    private function getProduct(?string $tenantId, int $planId): ProductInterface
     {
-        $plan = $this->planTable->find($planId);
+        $plan = $this->planTable->findOneByTenantAndId($tenantId, $planId);
         if (!$plan instanceof Table\Generated\PlanRow) {
             throw new StatusCode\BadRequestException('Invalid plan id');
         }
@@ -148,7 +147,7 @@ class Payment
             $returnUrl,
             $returnUrl,
             $currency,
-            $this->config->get('psx_url')
+            $this->frameworkConfig->getUrl()
         );
     }
 }

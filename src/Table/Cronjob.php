@@ -39,7 +39,7 @@ class Cronjob extends Generated\CronjobTable
     public const CODE_SUCCESS = 0;
     public const CODE_ERROR = 1;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?CronjobRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?CronjobRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

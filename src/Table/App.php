@@ -38,7 +38,7 @@ class App extends Generated\AppTable
     public const STATUS_DEACTIVATED = 0x3;
     public const STATUS_DELETED     = 0x4;
 
-    public function findOneByIdentifier(string $id, ?string $tenantId = null): ?AppRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?AppRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -52,7 +52,16 @@ class App extends Generated\AppTable
         return $this->findOneBy($condition);
     }
 
-    public function findOneByAppKeyAndSecret(string $appKey, string $appSecret, ?string $tenantId = null): ?AppRow
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?AppRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByAppKeyAndSecret(?string $tenantId, string $appKey, string $appSecret): ?AppRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -61,5 +70,22 @@ class App extends Generated\AppTable
         $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 
         return $this->findOneBy($condition);
+    }
+
+    public function getUserId(?string $tenantId, int $appId): int
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $appId);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'app.' . self::COLUMN_USER_ID,
+            ])
+            ->from('fusio_app', 'app')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }
