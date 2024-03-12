@@ -91,6 +91,7 @@ class Scope extends Generated\ScopeTable
             ])
             ->from('fusio_scope', 'scope')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('scope.' . self::COLUMN_NAME, 'ASC')
             ->setParameters($condition->getValues());
 
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
