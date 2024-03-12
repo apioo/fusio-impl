@@ -42,6 +42,26 @@ class FrameworkConfig
         $this->parser = new DBAL\Tools\DsnParser();
     }
 
+    public function getExpireTokenInterval(): \DateInterval
+    {
+        return new \DateInterval($this->config->get('fusio_expire_token'));
+    }
+
+    public function getExpireRefreshInterval(): \DateInterval
+    {
+        return new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D');
+    }
+
+    public function getTenantId(): ?string
+    {
+        $tenantId = $this->config->get('fusio_tenant_id');
+        if (empty($tenantId)) {
+            return null;
+        }
+
+        return $tenantId;
+    }
+
     public function getProjectKey(): string
     {
         return $this->config->get('fusio_project_key');
@@ -62,9 +82,9 @@ class FrameworkConfig
         return $this->config->get('fusio_provider');
     }
 
-    public function getMarketplaceUrl(): string
+    public function getMailSender(): ?string
     {
-        return $this->config->get('fusio_marketplace_url');
+        return $this->config->get('fusio_mail_sender');
     }
 
     public function isMarketplaceEnabled(): bool
@@ -72,39 +92,19 @@ class FrameworkConfig
         return !!$this->config->get('fusio_marketplace');
     }
 
-    public function getAppsUrl(): string
+    public function getMarketplaceUrl(): string
     {
         return $this->config->get('fusio_marketplace_url');
+    }
+
+    public function getAppsUrl(): string
+    {
+        return $this->config->get('fusio_apps_url');
     }
 
     public function getAppsDir(): string
     {
         return $this->config->get('fusio_apps_dir') ?: $this->getPathPublic();
-    }
-
-    public function getExpireTokenInterval(): \DateInterval
-    {
-        return new \DateInterval($this->config->get('fusio_expire_token'));
-    }
-
-    public function getExpireRefreshInterval(): \DateInterval
-    {
-        return new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D');
-    }
-
-    public function getMailSender(): ?string
-    {
-        return $this->config->get('fusio_mail_sender');
-    }
-
-    public function getTenantId(): ?string
-    {
-        $tenantId = $this->config->get('fusio_tenant_id');
-        if (empty($tenantId)) {
-            return null;
-        }
-
-        return $tenantId;
     }
 
     public function getUrl(...$pathFragment): string
@@ -117,14 +117,14 @@ class FrameworkConfig
         return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
     }
 
-    public function getPathPublic(...$directoryFragment): string
-    {
-        return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
-    }
-
     public function getPathCache(...$directoryFragment): string
     {
         return $this->config->get('psx_path_cache') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
+    }
+
+    public function getPathPublic(...$directoryFragment): string
+    {
+        return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
     public function getPathApp(): string
