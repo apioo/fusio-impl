@@ -97,7 +97,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onGenerateToken(Event\Token\GeneratedEvent $event): void
+    public function onTokenGenerate(Event\Token\GeneratedEvent $event): void
     {
         $this->log(
             $event->getContext(),
@@ -114,7 +114,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRemoveToken(Event\Token\RemovedEvent $event): void
+    public function onTokenRemove(Event\Token\RemovedEvent $event): void
     {
         $this->log(
             $event->getContext(),
