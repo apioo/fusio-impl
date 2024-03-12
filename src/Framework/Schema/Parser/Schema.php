@@ -57,19 +57,19 @@ class Schema implements ParserInterface
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
         if (is_numeric($schema)) {
-            $condition->equals(Table\Generated\SchemaTable::COLUMN_ID, (int) $schema);
+            $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_ID, (int) $schema);
         } else {
-            $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, ltrim($schema, '/'));
+            $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_NAME, ltrim($schema, '/'));
         }
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
-                Table\Generated\SchemaTable::COLUMN_SOURCE,
+                'sm.' . Table\Generated\SchemaTable::COLUMN_SOURCE,
             ])
-            ->from('fusio_schema', 'schema')
+            ->from('fusio_schema', 'sm')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
