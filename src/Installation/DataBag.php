@@ -41,22 +41,22 @@ class DataBag
     public function __construct()
     {
         $this->data = [
+            'fusio_category' => [],
+            'fusio_role' => [],
+            'fusio_plan' => [],
             'fusio_user' => [],
             'fusio_action' => [],
             'fusio_app' => [],
             'fusio_audit' => [],
             'fusio_config' => [],
-            'fusio_category' => [],
+            'fusio_operation' => [],
             'fusio_connection' => [],
             'fusio_cronjob' => [],
             'fusio_event' => [],
             'fusio_log' => [],
-            'fusio_plan' => [],
             'fusio_provider' => [],
             'fusio_page' => [],
-            'fusio_role' => [],
             'fusio_rate' => [],
-            'fusio_operation' => [],
             'fusio_schema' => [],
             'fusio_scope' => [],
             'fusio_transaction' => [],
@@ -77,10 +77,10 @@ class DataBag
         ];
     }
 
-    public function addOperations(string $category, array $operations): void
+    public function addOperations(?string $tenantId, string $category, array $operations): void
     {
-        $this->addCategory($category);
-        $this->addScope($category, $category);
+        $this->addCategory($category, tenantId: $tenantId);
+        $this->addScope($category, $category, tenantId: $tenantId);
 
         foreach ($operations as $name => $operation) {
             /** @var Operation $operation */
@@ -124,29 +124,30 @@ class DataBag
                 $this->normalizeParameters($operation->parameters),
                 $incoming,
                 $outgoing,
-                $this->normalizeThrows($operation->throws, $category),
+                $this->normalizeThrows($operation->throws),
                 $action,
-                $operation->costs
+                $operation->costs,
+                tenantId: $tenantId
             );
 
             if (in_array($category, ['backend', 'consumer'])) {
                 $parts = explode('.', $name);
                 $scope = $category . '.' . $parts[0];
-                $this->addScope($category, $scope);
-                $this->addScopeOperation($scope, $operationName);
+                $this->addScope($category, $scope, tenantId: $tenantId);
+                $this->addScopeOperation($scope, $operationName, tenantId: $tenantId);
 
                 if (isset($parts[1]) && in_array($parts[1], ['create', 'update', 'delete'])) {
                     $eventName = 'fusio.' . $parts[0] . '.' . $parts[1];
-                    $this->addEvent($category, $eventName);
+                    $this->addEvent($category, $eventName, tenantId: $tenantId);
                 }
             } elseif ($category === 'authorization') {
                 $scope = $category;
-                $this->addScope($category, $scope);
-                $this->addScopeOperation($scope, $operationName);
+                $this->addScope($category, $scope, tenantId: $tenantId);
+                $this->addScopeOperation($scope, $operationName, tenantId: $tenantId);
             }
 
             if (!empty($operation->eventName)) {
-                $this->addEvent($category, $operation->eventName);
+                $this->addEvent($category, $operation->eventName, tenantId: $tenantId);
             }
         }
     }
@@ -162,7 +163,7 @@ class DataBag
         return $result;
     }
 
-    private function normalizeThrows(array $throws, string $category): array
+    private function normalizeThrows(array $throws): array
     {
         $result = [];
         foreach ($throws as $code => $class) {
@@ -192,7 +193,7 @@ class DataBag
     {
         $this->data['fusio_action'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getId('fusio_category', $category),
+            'category_id' => self::getReference('fusio_category', $category, $tenantId),
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
@@ -206,7 +207,7 @@ class DataBag
     {
         $this->data['fusio_app'][$name] = [
             'tenant_id' => $tenantId,
-            'user_id' => $this->getId('fusio_user', $user),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'status' => $status,
             'name' => $name,
             'url' => $url,
@@ -218,11 +219,11 @@ class DataBag
         ];
     }
 
-    public function addAppCode(string $app, string $user, string $code, string $scope, ?string $date = null): void
+    public function addAppCode(string $app, string $user, string $code, string $scope, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_app_code'][] = [
-            'app_id' => $this->getId('fusio_app', $app),
-            'user_id' => $this->getId('fusio_user', $user),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'code' => $code,
             'redirect_uri' => '',
             'scope' => $scope,
@@ -230,11 +231,11 @@ class DataBag
         ];
     }
 
-    public function addAppScope(string $app, string $scope): void
+    public function addAppScope(string $app, string $scope, ?string $tenantId = null): void
     {
         $this->data['fusio_app_scope'][] = [
-            'app_id' => $this->getId('fusio_app', $app),
-            'scope_id' => $this->getId('fusio_scope', $scope),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
         ];
     }
 
@@ -242,8 +243,8 @@ class DataBag
     {
         $this->data['fusio_audit'][] = [
             'tenant_id' => $tenantId,
-            'app_id' => $this->getId('fusio_app', $app),
-            'user_id' => $this->getId('fusio_user', $user),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'ref_id' => $ref,
             'event' => $event,
             'ip' => '127.0.0.1',
@@ -289,7 +290,7 @@ class DataBag
     {
         $this->data['fusio_cronjob'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => $this->getId('fusio_category', $category),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Cronjob::STATUS_ACTIVE,
             'name' => $name,
             'cron' => $cron,
@@ -300,10 +301,10 @@ class DataBag
         ];
     }
 
-    public function addCronjobError(string $cronjob, string $message): void
+    public function addCronjobError(string $cronjob, string $message, ?string $tenantId = null): void
     {
         $this->data['fusio_cronjob_error'][] = [
-            'cronjob_id' => $this->getId('fusio_cronjob', $cronjob),
+            'cronjob_id' => $this->getReference('fusio_cronjob', $cronjob, $tenantId),
             'message' => $message,
             'trace' => '[trace]',
             'file' => '[file]',
@@ -315,7 +316,7 @@ class DataBag
     {
         $this->data['fusio_event'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => $this->getId('fusio_category', $category),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Event::STATUS_ACTIVE,
             'name' => $name,
             'description' => $description,
@@ -323,10 +324,10 @@ class DataBag
         ];
     }
 
-    public function addEventResponse(int $subscription, ?string $executeDate = null, ?string $insertDate = null): void
+    public function addEventResponse(int $subscription, ?string $executeDate = null, ?string $insertDate = null, ?string $tenantId = null): void
     {
         $this->data['fusio_event_response'][] = [
-            'subscription_id' => $this->getId('fusio_event_subscription', $subscription),
+            'subscription_id' => $subscription,
             'status' => 2,
             'code' => 200,
             'attempts' => 1,
@@ -339,8 +340,8 @@ class DataBag
     {
         $this->data['fusio_identity'][$name] = [
             'tenant_id' => $tenantId,
-            'app_id' => $this->getId('fusio_app', $app),
-            'role_id' => $this->getId('fusio_role', 'Consumer'),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'role_id' => $this->getReference('fusio_role', 'Consumer', $tenantId),
             'status' => Table\Identity::STATUS_ACTIVE,
             'name' => $name,
             'icon' => $icon,
@@ -360,21 +361,21 @@ class DataBag
         ];
     }
 
-    public function addIdentityRequest(string $identity, string $state, ?string $insertDate = null): void
+    public function addIdentityRequest(string $identity, string $state, ?string $insertDate = null, ?string $tenantId = null): void
     {
         $this->data['fusio_identity_request'][] = [
-            'identity_id' => $this->getId('fusio_identity', $identity),
+            'identity_id' => $this->getReference('fusio_identity', $identity, $tenantId),
             'state' => $state,
             'redirect_uri' => 'http://127.0.0.1/my/app',
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
-    public function addEventSubscription(string $event, string $user, string $endpoint): void
+    public function addEventSubscription(string $event, string $user, string $endpoint, ?string $tenantId = null): void
     {
         $this->data['fusio_event_subscription'][] = [
-            'event_id' => $this->getId('fusio_event', $event),
-            'user_id' => $this->getId('fusio_user', $user),
+            'event_id' => $this->getReference('fusio_event', $event, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'status' => 1,
             'endpoint' => $endpoint
         ];
@@ -384,9 +385,9 @@ class DataBag
     {
         $this->data['fusio_log'][] = [
             'tenant_id' => $tenantId,
-            'category_id' => $this->getId('fusio_category', $category),
-            'app_id' => $this->getId('fusio_app', $app),
-            'operation_id' => $this->getId('fusio_operation', $operation),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'ip' => '127.0.0.1',
             'user_agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36',
             'method' => 'GET',
@@ -401,7 +402,7 @@ class DataBag
     public function addLogError(int $log): void
     {
         $this->data['fusio_log_error'][] = [
-            'log_id' => $this->getId('fusio_log', $log),
+            'log_id' => $log,
             'message' => 'Syntax error, malformed JSON',
             'trace' => '[trace]',
             'file' => '[file]',
@@ -437,30 +438,31 @@ class DataBag
         ];
     }
 
-    public function addPlanUsage(string $operation, string $user, string $app, int $points, ?string $date = null): void
+    public function addPlanUsage(string $operation, string $user, string $app, int $points, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_plan_usage'][] = [
-            'operation_id' => $this->getId('fusio_operation', $operation),
-            'user_id' => $this->getId('fusio_user', $user),
-            'app_id' => $this->getId('fusio_app', $app),
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'points' => $points,
             'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
-    public function addPlanScope(string $plan, string $scope): void
+    public function addPlanScope(string $plan, string $scope, ?string $tenantId = null): void
     {
         $this->data['fusio_plan_scope'][] = [
-            'plan_id' => $this->getId('fusio_plan', $plan),
-            'scope_id' => $this->getId('fusio_scope', $scope),
+            'plan_id' => $this->getReference('fusio_plan', $plan, $tenantId),
+            'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
         ];
     }
 
-    public function addToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null): void
+    public function addToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_token'][] = [
-            'app_id' => $this->getId('fusio_app', $app),
-            'user_id' => $this->getId('fusio_user', $user),
+            'tenant_id' => $tenantId,
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'status' => Table\Token::STATUS_ACTIVE,
             'token' => $token,
             'refresh' => $refresh,
@@ -475,8 +477,8 @@ class DataBag
     {
         $this->data['fusio_transaction'][] = [
             'tenant_id' => $tenantId,
-            'user_id' => $this->getId('fusio_user', $user),
-            'plan_id' => $this->getId('fusio_plan', $plan),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'plan_id' => $this->getReference('fusio_plan', $plan, $tenantId),
             'transaction_id' => '[transaction_id]',
             'amount' => $amount,
             'points' => 1000,
@@ -499,14 +501,14 @@ class DataBag
         ];
     }
 
-    public function addRateAllocation(string $rate, ?string $operation = null, ?string $user = null, ?string $plan = null, ?string $app = null, ?bool $authenticated = null): void
+    public function addRateAllocation(string $rate, ?string $operation = null, ?string $user = null, ?string $plan = null, ?string $app = null, ?bool $authenticated = null, ?string $tenantId = null): void
     {
         $this->data['fusio_rate_allocation'][] = [
-            'rate_id' => $this->getId('fusio_rate', $rate),
-            'operation_id' => $operation !== null ? $this->getId('fusio_operation', $operation) : null,
-            'user_id' => $user !== null ? $this->getId('fusio_user', $user) : null,
-            'plan_id' => $plan !== null ? $this->getId('fusio_plan', $plan) : null,
-            'app_id' => $app !== null ? $this->getId('fusio_app', $app) : null,
+            'rate_id' => $this->getReference('fusio_rate', $rate, $tenantId),
+            'operation_id' => $operation !== null ? $this->getReference('fusio_operation', $operation, $tenantId) : null,
+            'user_id' => $user !== null ? $this->getReference('fusio_user', $user, $tenantId) : null,
+            'plan_id' => $plan !== null ? $this->getReference('fusio_plan', $plan, $tenantId) : null,
+            'app_id' => $app !== null ? $this->getReference('fusio_app', $app, $tenantId) : null,
             'authenticated' => $authenticated !== null ? ($authenticated ? 1 : 0) : null,
         ];
     }
@@ -515,17 +517,17 @@ class DataBag
     {
         $this->data['fusio_role'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => $this->getId('fusio_category', $category),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Role::STATUS_ACTIVE,
             'name' => $name,
         ];
     }
 
-    public function addRoleScope(string $role, string $scope): void
+    public function addRoleScope(string $role, string $scope, ?string $tenantId = null): void
     {
         $this->data['fusio_role_scope'][$role . $scope] = [
-            'role_id' => $this->getId('fusio_role', $role),
-            'scope_id' => $this->getId('fusio_scope', $scope),
+            'role_id' => $this->getReference('fusio_role', $role, $tenantId),
+            'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
         ];
     }
 
@@ -533,7 +535,7 @@ class DataBag
     {
         $this->data['fusio_operation'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getId('fusio_category', $category),
+            'category_id' => self::getReference('fusio_category', $category, $tenantId),
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
             'public' => $public ? 1 : 0,
@@ -557,7 +559,7 @@ class DataBag
     {
         $this->data['fusio_schema'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getId('fusio_category', $category),
+            'category_id' => self::getReference('fusio_category', $category, $tenantId),
             'status' => Table\Schema::STATUS_ACTIVE,
             'name' => $name,
             'source' => $source,
@@ -570,18 +572,18 @@ class DataBag
     {
         $this->data['fusio_scope'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getId('fusio_category', $category),
+            'category_id' => self::getReference('fusio_category', $category, $tenantId),
             'name' => $name,
             'description' => $description,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
-    public function addScopeOperation(string $scope, string $operation): void
+    public function addScopeOperation(string $scope, string $operation, ?string $tenantId = null): void
     {
         $this->data['fusio_scope_operation'][$scope . $operation] = [
-            'scope_id' => self::getId('fusio_scope', $scope),
-            'operation_id' => self::getId('fusio_operation', $operation),
+            'scope_id' => self::getReference('fusio_scope', $scope, $tenantId),
+            'operation_id' => self::getReference('fusio_operation', $operation, $tenantId),
             'allow' => 1
         ];
     }
@@ -590,8 +592,8 @@ class DataBag
     {
         $this->data['fusio_user'][$name] = [
             'tenant_id' => $tenantId,
-            'role_id' => self::getId('fusio_role', $role),
-            'plan_id' => $plan !== null ? self::getId('fusio_plan', $plan) : null,
+            'role_id' => self::getReference('fusio_role', $role, $tenantId),
+            'plan_id' => $plan !== null ? self::getReference('fusio_plan', $plan, $tenantId) : null,
             'status' => $status,
             'name' => $name,
             'email' => $email,
@@ -602,19 +604,19 @@ class DataBag
         ];
     }
 
-    public function addUserScope(string $user, string $scope): void
+    public function addUserScope(string $user, string $scope, ?string $tenantId = null): void
     {
         $this->data['fusio_user_scope'][] = [
-            'user_id' => $this->getId('fusio_user', $user),
-            'scope_id' => $this->getId('fusio_scope', $scope),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
         ];
     }
 
-    public function addUserGrant(string $user, string $app, bool $allow, ?string $date = null): void
+    public function addUserGrant(string $user, string $app, bool $allow, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_user_grant'][] = [
-            'user_id' => $this->getId('fusio_user', $user),
-            'app_id' => $this->getId('fusio_app', $app),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'allow' => $allow,
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
@@ -629,21 +631,13 @@ class DataBag
         $this->data[$table] = $rows;
     }
 
-    public function getId(string $type, $name): int
+    public function getReference(string $type, string $name, ?string $tenantId): Reference
     {
         if (!isset($this->data[$type])) {
             throw new \RuntimeException('Provided an invalid type ' . $type);
         }
 
-        $index = 1;
-        foreach ($this->data[$type] as $key => $value) {
-            if ($name === $key) {
-                return $index;
-            }
-            $index++;
-        }
-
-        throw new \RuntimeException('Could not find name ' . $name . ' for type ' . $type);
+        return new Reference($type, $name, $tenantId);
     }
 
     public function replace(string $type, $name, $key, $value): void

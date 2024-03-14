@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Installation\NewInstallation;
+use Fusio\Impl\Installation\Reference;
 use PSX\Http\Exception\BadRequestException;
 
 /**
@@ -54,6 +55,7 @@ class Tenant
         'fusio_identity',
         'fusio_log',
         'fusio_user',
+        'fusio_token',
     ];
 
     private Connection $connection;
@@ -69,6 +71,10 @@ class Tenant
             throw new BadRequestException('Tenant operations are only allowed at the root tenant');
         }
 
+        if (!preg_match('/^[A-Za-z0-9_]{3,64}$/', $tenantId)) {
+            throw new BadRequestException('Provided tenant must be in the format: [A-Za-z0-9_]{3,64}');
+        }
+
         $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_config WHERE tenant_id = :tenant_id', [
             'tenant_id' => $tenantId,
         ]);
@@ -77,26 +83,15 @@ class Tenant
             throw new BadRequestException('Provided tenant is already configured');
         }
 
-        $inserts = NewInstallation::getData()->toArray();
+        $inserts = NewInstallation::getData($tenantId)->toArray();
         foreach ($inserts as $tableName => $rows) {
-            if (empty($rows)) {
-                continue;
-            }
-
-            if (!in_array($tableName,self::TENANT_TABLES)) {
-                continue;
-            }
-
-            $count = $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $tableName . ' WHERE tenant_id = :tenant_id', [
-                'tenant_id' => $tenantId,
-            ]);
-
-            if ($count > 0) {
-                continue;
-            }
-
             foreach ($rows as $row) {
-                $row['tenant_id'] = $tenantId;
+                foreach ($row as $key => $value) {
+                    if ($value instanceof Reference) {
+                        $row[$key] = $value->resolve($this->connection);
+                    }
+                }
+
                 $this->connection->insert($tableName, $row);
             }
         }

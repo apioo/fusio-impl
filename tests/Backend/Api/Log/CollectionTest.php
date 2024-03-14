@@ -38,7 +38,7 @@ class CollectionTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->operationId = Fixture::getId('fusio_operation', 'test.listFoo');
+        $this->operationId = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
     }
 
     public function getDataSet(): array

@@ -28,6 +28,7 @@ use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Installation\DataBag;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Installation\Operation;
+use Fusio\Impl\Installation\Reference;
 use Fusio\Impl\Provider\Identity\Facebook;
 use Fusio\Impl\Provider\Identity\Github;
 use Fusio\Impl\Provider\Identity\Google;
@@ -67,9 +68,9 @@ class Fixture
         return self::$data = $data;
     }
 
-    public static function getId(string $table, string $name): ?int
+    public static function getReference(string $table, string $name, ?string $tenantId = null): Reference
     {
-        return self::getData()->getId($table, $name);
+        return self::getData()->getReference($table, $name, $tenantId);
     }
 
     private static function appendTestInserts(DataBag $data): void
@@ -102,7 +103,7 @@ class Fixture
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);
         $data->addEventSubscription('foo-event', 'Administrator', 'http://www.fusio-project.org/ping');
         $data->addEventSubscription('foo-event', 'Consumer', 'http://www.fusio-project.org/ping');
-        $data->addEventResponse(0);
+        $data->addEventResponse(1);
         $data->addIdentity('Developer', 'Facebook', 'bi-facebook', Facebook::class, 'facebook-key', 'facebook-secret', 'https://www.facebook.com/v17.0/dialog/oauth', 'https://graph.facebook.com/v12.0/oauth/access_token', 'https://graph.facebook.com/v2.5/me', 'id', 'name', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'GitHub', 'bi-github', Github::class, 'github-key', 'github-secret', 'https://github.com/login/oauth/authorize', 'https://github.com/login/oauth/access_token', 'https://api.github.com/user', 'id', 'login', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'Google', 'bi-google', Google::class, 'google-key', 'google-secret', 'https://accounts.google.com/o/oauth2/v2/auth', 'https://oauth2.googleapis.com/token', 'https://openidconnect.googleapis.com/v1/userinfo', 'id', 'name', 'email', '2023-07-22 13:56:00');
@@ -145,7 +146,7 @@ class Fixture
         $data->addUserScope('Developer', 'bar');
         $data->addUserGrant('Administrator', 'Backend', true, '2015-02-27 19:59:15');
 
-        $data->addOperations('default', [
+        $data->addOperations(null, 'default', [
             'test.listFoo' => new Operation(
                 action: 'Sql-Select-All',
                 httpMethod: 'GET',
@@ -208,7 +209,7 @@ class Fixture
 
         $data->addLog('default', 'Foo-App', 'test.listFoo');
         $data->addLog('default', 'Foo-App', 'test.listFoo');
-        $data->addLogError(0);
+        $data->addLogError(1);
         $data->addPlanUsage('test.listFoo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', 'test.listFoo');
         $data->addRateAllocation('gold', 'test.createFoo', null, null, null, true);

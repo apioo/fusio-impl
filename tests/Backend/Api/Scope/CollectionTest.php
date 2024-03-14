@@ -170,10 +170,10 @@ JSON;
             'name'        => 'test',
             'description' => 'Test description',
             'operations'  => [[
-                'operationId' => Fixture::getId('fusio_operation', 'test.listFoo'),
+                'operationId' => Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection),
                 'allow' => true,
             ], [
-                'operationId' => Fixture::getId('fusio_operation', 'inspect.get'),
+                'operationId' => Fixture::getReference('fusio_operation', 'inspect.get')->resolve($this->connection),
                 'allow' => true,
             ]],
             'metadata'    => $metadata,

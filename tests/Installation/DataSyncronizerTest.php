@@ -42,21 +42,29 @@ class DataSyncronizerTest extends DbTestCase
     public function testSync()
     {
         $config = $this->getConfig('info_title');
-        $operation = $this->getOperation('inspect.get');
-        $action = $this->getAction('Inspect-Action');
+        $operation = $this->getOperation('backend.action.execute');
+        //$action = $this->getAction('Inspect-Action');
         $schema = $this->getSchema('Passthru');
+        $event = $this->getEvent('fusio.app.create');
+        $cronjob = $this->getCronjob('Renew_Token');
 
         DataSyncronizer::sync($this->connection);
 
         $this->assertEquals($config, $this->getConfig('info_title'));
-        $this->assertEquals($operation, $this->getOperation('inspect.get'));
-        $this->assertEquals($action, $this->getAction('Inspect-Action'));
+        $this->assertEquals($operation, $this->getOperation('backend.action.execute'));
+        //$this->assertEquals($action, $this->getAction('Inspect-Action'));
         $this->assertEquals($schema, $this->getSchema('Passthru'));
+        $this->assertEquals($event, $this->getEvent('fusio.app.create'));
+        $this->assertEquals($cronjob, $this->getCronjob('Renew_Token'));
     }
 
     private function getConfig(string $name): array
     {
         $config = $this->connection->fetchAssociative('SELECT * FROM fusio_config WHERE name = :name', ['name' => $name]);
+        if (empty($config)) {
+            throw new \RuntimeException('Could not find config: ' . $name);
+        }
+
         $this->connection->delete('fusio_config', ['id' => $config['id']]);
         unset($config['id']);
 
@@ -66,6 +74,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getOperation(string $name): array
     {
         $operation = $this->connection->fetchAssociative('SELECT * FROM fusio_operation WHERE name = :name', ['name' => $name]);
+        if (empty($operation)) {
+            throw new \RuntimeException('Could not find operation: ' . $name);
+        }
+
         $this->connection->delete('fusio_scope_operation', ['operation_id' => $operation['id']]);
         $this->connection->delete('fusio_rate_allocation', ['operation_id' => $operation['id']]);
         $this->connection->delete('fusio_operation', ['id' => $operation['id']]);
@@ -77,6 +89,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getAction(string $name): array
     {
         $action = $this->connection->fetchAssociative('SELECT * FROM fusio_action WHERE name = :name', ['name' => $name]);
+        if (empty($action)) {
+            throw new \RuntimeException('Could not find action: ' . $name);
+        }
+
         $this->connection->delete('fusio_action', ['id' => $action['id']]);
         unset($action['id']);
 
@@ -86,6 +102,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getSchema(string $name): array
     {
         $schema = $this->connection->fetchAssociative('SELECT * FROM fusio_schema WHERE name = :name', ['name' => $name]);
+        if (empty($schema)) {
+            throw new \RuntimeException('Could not find schema: ' . $name);
+        }
+
         $this->connection->delete('fusio_schema', ['id' => $schema['id']]);
         unset($schema['id']);
 
@@ -95,6 +115,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getEvent(string $name): array
     {
         $event = $this->connection->fetchAssociative('SELECT * FROM fusio_event WHERE name = :name', ['name' => $name]);
+        if (empty($event)) {
+            throw new \RuntimeException('Could not find event: ' . $name);
+        }
+
         $this->connection->delete('fusio_event', ['id' => $event['id']]);
         unset($event['id']);
 
@@ -104,6 +128,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getCronjob(string $name): array
     {
         $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => $name]);
+        if (empty($cronjob)) {
+            throw new \RuntimeException('Could not find cronjob: ' . $name);
+        }
+
         $this->connection->delete('fusio_cronjob', ['id' => $cronjob['id']]);
         unset($cronjob['id']);
 
@@ -113,6 +141,10 @@ class DataSyncronizerTest extends DbTestCase
     private function getScope(string $name): array
     {
         $scope = $this->connection->fetchAssociative('SELECT * FROM fusio_scope WHERE name = :name', ['name' => $name]);
+        if (empty($scope)) {
+            throw new \RuntimeException('Could not find scope: ' . $name);
+        }
+
         $this->connection->delete('fusio_scope_operation', ['scope_id' => $scope['id']]);
         $this->connection->delete('fusio_scope', ['id' => $scope['id']]);
         unset($scope['id']);

@@ -263,7 +263,7 @@ class LoggerTest extends DbTestCase
     {
         $app = new App(false, 1, 0, 0, '', '', '', [], []);
         $user = new User(false, 1, 0, 0, 0, '', '', 0);
-        $id = Fixture::getId('fusio_operation', 'test.listFoo');
+        $id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
 
         $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
 

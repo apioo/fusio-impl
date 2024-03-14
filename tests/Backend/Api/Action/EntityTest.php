@@ -41,7 +41,7 @@ class EntityTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getId('fusio_action', 'Sql-Insert');
+        $this->id = Fixture::getReference('fusio_action', 'Sql-Insert')->resolve($this->connection);
     }
 
     public function getDataSet(): array

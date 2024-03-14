@@ -41,7 +41,7 @@ class DataSyncronizer
 
         $configs = $data->getData('fusio_config');
         foreach ($configs as $config) {
-            $configId = $connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', [
+            $configId = $connection->fetchOne('SELECT id FROM fusio_config WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $config['name']
             ]);
 
@@ -53,7 +53,7 @@ class DataSyncronizer
         $operations = $data->getData('fusio_operation');
         $operationMap = [];
         foreach ($operations as $row) {
-            $operationId = $connection->fetchOne('SELECT id FROM fusio_operation WHERE name = :name', [
+            $operationId = $connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $row['name']
             ]);
 
@@ -61,12 +61,14 @@ class DataSyncronizer
                 self::insert($connection, 'fusio_operation', $row);
             }
 
-            $operationMap[$data->getId('fusio_operation', $row['name'])] = $operationId;
+            $id = $data->getReference('fusio_operation', $row['name'], null)->resolve($connection);
+
+            $operationMap[$id] = $operationId;
         }
 
         $actions = $data->getData('fusio_action');
         foreach ($actions as $action) {
-            $actionId = $connection->fetchOne('SELECT id FROM fusio_action WHERE name = :name', [
+            $actionId = $connection->fetchOne('SELECT id FROM fusio_action WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $action['name']
             ]);
 
@@ -77,7 +79,7 @@ class DataSyncronizer
 
         $schemas = $data->getData('fusio_schema');
         foreach ($schemas as $schema) {
-            $schemaId = $connection->fetchOne('SELECT id FROM fusio_schema WHERE name = :name', [
+            $schemaId = $connection->fetchOne('SELECT id FROM fusio_schema WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $schema['name']
             ]);
 
@@ -88,7 +90,7 @@ class DataSyncronizer
 
         $events = $data->getData('fusio_event');
         foreach ($events as $event) {
-            $eventId = $connection->fetchOne('SELECT id FROM fusio_event WHERE name = :name', [
+            $eventId = $connection->fetchOne('SELECT id FROM fusio_event WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $event['name']
             ]);
 
@@ -99,7 +101,7 @@ class DataSyncronizer
 
         $cronjobs = $data->getData('fusio_cronjob');
         foreach ($cronjobs as $cronjob) {
-            $cronjobId = $connection->fetchOne('SELECT id FROM fusio_cronjob WHERE name = :name', [
+            $cronjobId = $connection->fetchOne('SELECT id FROM fusio_cronjob WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $cronjob['name']
             ]);
 
@@ -111,7 +113,7 @@ class DataSyncronizer
         $scopes = $data->getData('fusio_scope');
         $scopeMap = [];
         foreach ($scopes as $scope) {
-            $scopeId = $connection->fetchOne('SELECT id FROM fusio_scope WHERE name = :name', [
+            $scopeId = $connection->fetchOne('SELECT id FROM fusio_scope WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $scope['name']
             ]);
 
@@ -120,13 +122,15 @@ class DataSyncronizer
                 $scopeId = $connection->lastInsertId();
             }
 
-            $scopeMap[$data->getId('fusio_scope', $scope['name'])] = $scopeId;
+            $id = $data->getReference('fusio_scope', $scope['name'], null)->resolve($connection);
+
+            $scopeMap[$id] = $scopeId;
         }
 
         $scopeOperations = $data->getData('fusio_scope_operation');
         foreach ($scopeOperations as $scopeOperation) {
-            $scopeId = $scopeMap[$scopeOperation['scope_id']] ?? null;
-            $operationId = $operationMap[$scopeOperation['operation_id']] ?? null;
+            $scopeId = $scopeMap[$scopeOperation['scope_id']->resolve($connection)] ?? null;
+            $operationId = $operationMap[$scopeOperation['operation_id']->resolve($connection)] ?? null;
 
             if (empty($scopeId) || empty($operationId)) {
                 continue;
@@ -153,6 +157,12 @@ class DataSyncronizer
         foreach ($columns as $column) {
             if (isset($data[$column->getName()])) {
                 $row[$column->getName()] = $data[$column->getName()];
+            }
+        }
+
+        foreach ($row as $key => $value) {
+            if ($value instanceof Reference) {
+                $row[$key] = $value->resolve($connection);
             }
         }
 

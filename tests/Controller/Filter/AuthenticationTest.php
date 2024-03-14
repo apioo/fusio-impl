@@ -178,7 +178,7 @@ class AuthenticationTest extends DbTestCase
 
     private function newContext(Context $context): void
     {
-        $id = Fixture::getId('fusio_operation', 'test.listFoo');
+        $id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
         $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
         $row->setPublic(0);
         $context->setOperation($row);

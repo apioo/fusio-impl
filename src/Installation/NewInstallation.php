@@ -45,14 +45,8 @@ use PSX\Schema\TypeFactory;
  */
 class NewInstallation
 {
-    private static ?DataBag $data = null;
-
-    public static function getData(): DataBag
+    public static function getData(?string $tenantId = null): DataBag
     {
-        if (self::$data) {
-            return self::$data;
-        }
-
         $backendAppKey     = TokenGenerator::generateAppKey();
         $backendAppSecret  = TokenGenerator::generateAppSecret();
         $consumerAppKey    = TokenGenerator::generateAppKey();
@@ -63,92 +57,95 @@ class NewInstallation
         $appsUrl = $config->get('fusio_apps_url');
 
         $bag = new DataBag();
-        $bag->addCategory('default');
-        $bag->addCategory('backend');
-        $bag->addCategory('consumer');
-        $bag->addCategory('system');
-        $bag->addCategory('authorization');
-        $bag->addCategory('default', 'customer_a');
-        $bag->addRole('default', 'Administrator');
-        $bag->addRole('default', 'Backend');
-        $bag->addRole('default', 'Consumer');
-        $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password);
-        $bag->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
-        $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
-        $bag->addScope('backend', 'backend', 'Global access to the backend API');
-        $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
-        $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
-        $bag->addScope('default', 'default', 'Default scope');
-        $bag->addAppScope('Backend', 'backend');
-        $bag->addAppScope('Backend', 'authorization');
-        $bag->addAppScope('Backend', 'default');
-        $bag->addAppScope('Developer', 'consumer');
-        $bag->addAppScope('Developer', 'authorization');
-        $bag->addAppScope('Developer', 'default');
-        $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
-        $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
-        $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
-        $bag->addConfig('consumer_subscription', Table\Config::FORM_NUMBER, 8, 'The max amount of subscriptions a consumer can add');
-        $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application');
-        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation');
-        $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL');
-        $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization');
-        $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL');
-        $bag->addConfig('info_contact_email', Table\Config::FORM_STRING, '', 'The email address of the contact person/organization. MUST be in the format of an email address');
-        $bag->addConfig('info_license_name', Table\Config::FORM_STRING, '', 'The license name used for the API');
-        $bag->addConfig('info_license_url', Table\Config::FORM_STRING, '', 'A URL to the license used for the API. MUST be in the format of a URL');
-        $bag->addConfig('mail_register_subject', Table\Config::FORM_STRING, 'Fusio registration', 'Subject of the activation mail');
-        $bag->addConfig('mail_register_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . '{apps_url}/developer/register/activate/{token}', 'Body of the activation mail');
-        $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail');
-        $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
-        $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail');
-        $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail');
-        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key');
-        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
-        $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request');
-        $bag->addConfig('payment_stripe_portal_configuration', Table\Config::FORM_STRING, '', 'The stripe portal configuration id');
-        $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments');
-        $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
-        $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
-        $bag->addConfig('points_threshold', Table\Config::FORM_NUMBER, 0, 'If a user goes below this points threshold we send an information to the user');
-        $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable');
-        $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request');
-        $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length');
-        $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
-        $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class));
-        $bag->addRate('Default', 0, 3600, 'PT1H');
-        $bag->addRate('Default-Anonymous', 4, 900, 'PT1H');
-        $bag->addRateAllocation('Default');
-        $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false);
-        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', Scheme::wrap(Backend\Action\Connection\RenewToken::class));
-        $bag->addRoleScope('Administrator', 'authorization');
-        $bag->addRoleScope('Administrator', 'backend');
-        $bag->addRoleScope('Administrator', 'consumer');
-        $bag->addRoleScope('Administrator', 'default');
-        $bag->addRoleScope('Backend', 'authorization');
-        $bag->addRoleScope('Backend', 'backend');
-        $bag->addRoleScope('Backend', 'default');
-        $bag->addRoleScope('Consumer', 'authorization');
-        $bag->addRoleScope('Consumer', 'consumer');
-        $bag->addRoleScope('Consumer', 'default');
-        $bag->addSchema('default', 'Passthru', Passthru::class);
-        $bag->addSchema('default', 'Message', Model\Common\Message::class);
-        $bag->addUserScope('Administrator', 'backend');
-        $bag->addUserScope('Administrator', 'consumer');
-        $bag->addUserScope('Administrator', 'authorization');
-        $bag->addUserScope('Administrator', 'default');
-        $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE);
-        $bag->addPage('Getting started', 'getting-started', self::readFile('getting-started.html'));
-        $bag->addPage('API', 'api', self::readFile('api.html'));
-        $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
-        $bag->addPage('Support', 'support', self::readFile('support.html'));
-        $bag->addPage('SDK', 'sdk', self::readFile('sdk.html'));
+        $bag->addCategory('default', tenantId: $tenantId);
+        $bag->addCategory('backend', tenantId: $tenantId);
+        $bag->addCategory('consumer', tenantId: $tenantId);
+        $bag->addCategory('system', tenantId: $tenantId);
+        $bag->addCategory('authorization', tenantId: $tenantId);
+        $bag->addCategory('default', tenantId: $tenantId);
+        $bag->addRole('default', 'Administrator', tenantId: $tenantId);
+        $bag->addRole('default', 'Backend', tenantId: $tenantId);
+        $bag->addRole('default', 'Consumer', tenantId: $tenantId);
+        $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password, tenantId: $tenantId);
+        $bag->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret, tenantId: $tenantId);
+        $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret, tenantId: $tenantId);
+        $bag->addScope('backend', 'backend', 'Global access to the backend API', tenantId: $tenantId);
+        $bag->addScope('consumer', 'consumer', 'Global access to the consumer API', tenantId: $tenantId);
+        $bag->addScope('authorization', 'authorization', 'Authorization API endpoint', tenantId: $tenantId);
+        $bag->addScope('default', 'default', 'Default scope', tenantId: $tenantId);
+        $bag->addAppScope('Backend', 'backend', tenantId: $tenantId);
+        $bag->addAppScope('Backend', 'authorization', tenantId: $tenantId);
+        $bag->addAppScope('Backend', 'default', tenantId: $tenantId);
+        $bag->addAppScope('Developer', 'consumer', tenantId: $tenantId);
+        $bag->addAppScope('Developer', 'authorization', tenantId: $tenantId);
+        $bag->addAppScope('Developer', 'default', tenantId: $tenantId);
+        $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', tenantId: $tenantId);
+        $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register', tenantId: $tenantId);
+        $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow', tenantId: $tenantId);
+        $bag->addConfig('consumer_subscription', Table\Config::FORM_NUMBER, 8, 'The max amount of subscriptions a consumer can add', tenantId: $tenantId);
+        $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application', tenantId: $tenantId);
+        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
+        $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL', tenantId: $tenantId);
+        $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization', tenantId: $tenantId);
+        $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL', tenantId: $tenantId);
+        $bag->addConfig('info_contact_email', Table\Config::FORM_STRING, '', 'The email address of the contact person/organization. MUST be in the format of an email address', tenantId: $tenantId);
+        $bag->addConfig('info_license_name', Table\Config::FORM_STRING, '', 'The license name used for the API', tenantId: $tenantId);
+        $bag->addConfig('info_license_url', Table\Config::FORM_STRING, '', 'A URL to the license used for the API. MUST be in the format of a URL', tenantId: $tenantId);
+        $bag->addConfig('mail_register_subject', Table\Config::FORM_STRING, 'Fusio registration', 'Subject of the activation mail', tenantId: $tenantId);
+        $bag->addConfig('mail_register_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . '{apps_url}/developer/register/activate/{token}', 'Body of the activation mail', tenantId: $tenantId);
+        $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail', tenantId: $tenantId);
+        $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail', tenantId: $tenantId);
+        $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail', tenantId: $tenantId);
+        $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail', tenantId: $tenantId);
+        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key', tenantId: $tenantId);
+        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret', tenantId: $tenantId);
+        $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request', tenantId: $tenantId);
+        $bag->addConfig('payment_stripe_portal_configuration', Table\Config::FORM_STRING, '', 'The stripe portal configuration id', tenantId: $tenantId);
+        $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments', tenantId: $tenantId);
+        $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration', tenantId: $tenantId);
+        $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers', tenantId: $tenantId);
+        $bag->addConfig('points_threshold', Table\Config::FORM_NUMBER, 0, 'If a user goes below this points threshold we send an information to the user', tenantId: $tenantId);
+        $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable', tenantId: $tenantId);
+        $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request', tenantId: $tenantId);
+        $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length', tenantId: $tenantId);
+        $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email', tenantId: $tenantId);
+        if ($tenantId === null) {
+            // we add the system connection only at the root tenant
+            $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class), tenantId: $tenantId);
+        }
+        $bag->addRate('Default', 0, 3600, 'PT1H', tenantId: $tenantId);
+        $bag->addRate('Default-Anonymous', 4, 900, 'PT1H', tenantId: $tenantId);
+        $bag->addRateAllocation('Default', tenantId: $tenantId);
+        $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false, tenantId: $tenantId);
+        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', Scheme::wrap(Backend\Action\Connection\RenewToken::class), tenantId: $tenantId);
+        $bag->addRoleScope('Administrator', 'authorization', tenantId: $tenantId);
+        $bag->addRoleScope('Administrator', 'backend', tenantId: $tenantId);
+        $bag->addRoleScope('Administrator', 'consumer', tenantId: $tenantId);
+        $bag->addRoleScope('Administrator', 'default', tenantId: $tenantId);
+        $bag->addRoleScope('Backend', 'authorization', tenantId: $tenantId);
+        $bag->addRoleScope('Backend', 'backend', tenantId: $tenantId);
+        $bag->addRoleScope('Backend', 'default', tenantId: $tenantId);
+        $bag->addRoleScope('Consumer', 'authorization', tenantId: $tenantId);
+        $bag->addRoleScope('Consumer', 'consumer', tenantId: $tenantId);
+        $bag->addRoleScope('Consumer', 'default', tenantId: $tenantId);
+        $bag->addSchema('default', 'Passthru', Passthru::class, tenantId: $tenantId);
+        $bag->addSchema('default', 'Message', Model\Common\Message::class, tenantId: $tenantId);
+        $bag->addUserScope('Administrator', 'backend', tenantId: $tenantId);
+        $bag->addUserScope('Administrator', 'consumer', tenantId: $tenantId);
+        $bag->addUserScope('Administrator', 'authorization', tenantId: $tenantId);
+        $bag->addUserScope('Administrator', 'default', tenantId: $tenantId);
+        $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE, tenantId: $tenantId);
+        $bag->addPage('Getting started', 'getting-started', self::readFile('getting-started.html'), tenantId: $tenantId);
+        $bag->addPage('API', 'api', self::readFile('api.html'), tenantId: $tenantId);
+        $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'), tenantId: $tenantId);
+        $bag->addPage('Support', 'support', self::readFile('support.html'), tenantId: $tenantId);
+        $bag->addPage('SDK', 'sdk', self::readFile('sdk.html'), tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
-            $bag->addOperations($category, $operations);
+            $bag->addOperations($tenantId, $category, $operations);
         }
 
-        return self::$data = $bag;
+        return $bag;
     }
 
     private static function getOperations(): array

@@ -8,6 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Installation\NewInstallation;
+use Fusio\Impl\Installation\Reference;
 use Fusio\Impl\Table;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
@@ -634,6 +635,12 @@ final class Version20230508210151 extends AbstractMigration
             }
 
             foreach ($rows as $row) {
+                foreach ($row as $key => $value) {
+                    if ($value instanceof Reference) {
+                        $row[$key] = $value->resolve($this->connection);
+                    }
+                }
+
                 $this->connection->insert($tableName, $row);
             }
         }

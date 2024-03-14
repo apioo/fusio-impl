@@ -39,7 +39,7 @@ class EntityTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->eventId = Fixture::getId('fusio_event', 'foo-event');
+        $this->eventId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
     }
 
     public function getDataSet(): array

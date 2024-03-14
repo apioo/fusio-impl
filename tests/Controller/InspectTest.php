@@ -36,15 +36,6 @@ use PSX\Json\Parser;
  */
 class InspectTest extends ControllerDbTestCase
 {
-    private ?int $id;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->id = Fixture::getId('fusio_operation', 'test.listFoo');
-    }
-
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
