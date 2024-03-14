@@ -193,7 +193,7 @@ class DataBag
     {
         $this->data['fusio_action'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getReference('fusio_category', $category, $tenantId),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
@@ -535,7 +535,7 @@ class DataBag
     {
         $this->data['fusio_operation'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getReference('fusio_category', $category, $tenantId),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
             'public' => $public ? 1 : 0,
@@ -559,7 +559,7 @@ class DataBag
     {
         $this->data['fusio_schema'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getReference('fusio_category', $category, $tenantId),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Schema::STATUS_ACTIVE,
             'name' => $name,
             'source' => $source,
@@ -572,7 +572,7 @@ class DataBag
     {
         $this->data['fusio_scope'][$name] = [
             'tenant_id' => $tenantId,
-            'category_id' => self::getReference('fusio_category', $category, $tenantId),
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'name' => $name,
             'description' => $description,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
@@ -582,8 +582,8 @@ class DataBag
     public function addScopeOperation(string $scope, string $operation, ?string $tenantId = null): void
     {
         $this->data['fusio_scope_operation'][$scope . $operation] = [
-            'scope_id' => self::getReference('fusio_scope', $scope, $tenantId),
-            'operation_id' => self::getReference('fusio_operation', $operation, $tenantId),
+            'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'allow' => 1
         ];
     }
@@ -592,8 +592,8 @@ class DataBag
     {
         $this->data['fusio_user'][$name] = [
             'tenant_id' => $tenantId,
-            'role_id' => self::getReference('fusio_role', $role, $tenantId),
-            'plan_id' => $plan !== null ? self::getReference('fusio_plan', $plan, $tenantId) : null,
+            'role_id' => $this->getReference('fusio_role', $role, $tenantId),
+            'plan_id' => $plan !== null ? $this->getReference('fusio_plan', $plan, $tenantId) : null,
             'status' => $status,
             'name' => $name,
             'email' => $email,
