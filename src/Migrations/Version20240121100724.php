@@ -49,7 +49,6 @@ final class Version20240121100724 extends AbstractMigration
             $webhookResponseTable = $schema->getTable('fusio_event_response');
             $webhookResponseTable->addColumn('webhook_id', 'integer');
             $webhookResponseTable->dropColumn('subscription_id');
-            $webhookResponseTable->addForeignKeyConstraint($schema->getTable('fusio_webhook'), ['webhook_id'], ['id'], [], 'webhook_response_webhook_id');
 
             $schema->renameTable('fusio_event_response', 'fusio_webhook_response');
         }

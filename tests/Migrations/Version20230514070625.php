@@ -19,12 +19,14 @@ final class Version20230514070625 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $appTable = $schema->createTable('app_news');
-        $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $appTable->addColumn('title', 'string', ['length' => 64]);
-        $appTable->addColumn('content', 'string', ['length' => 255]);
-        $appTable->addColumn('date', 'datetime');
-        $appTable->setPrimaryKey(['id']);
+        if (!$schema->hasTable('app_news')) {
+            $appTable = $schema->createTable('app_news');
+            $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $appTable->addColumn('title', 'string', ['length' => 64]);
+            $appTable->addColumn('content', 'string', ['length' => 255]);
+            $appTable->addColumn('date', 'datetime');
+            $appTable->setPrimaryKey(['id']);
+        }
     }
 
     public function down(Schema $schema) : void

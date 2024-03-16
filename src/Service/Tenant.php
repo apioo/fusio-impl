@@ -36,6 +36,7 @@ use PSX\Http\Exception\BadRequestException;
 class Tenant
 {
     public const TENANT_TABLES = [
+        'fusio_role',
         'fusio_category',
         'fusio_config',
         'fusio_connection',
@@ -45,7 +46,6 @@ class Tenant
         'fusio_page',
         'fusio_schema',
         'fusio_transaction',
-        'fusio_role',
         'fusio_rate',
         'fusio_plan',
         'fusio_scope',
@@ -103,43 +103,25 @@ class Tenant
             throw new BadRequestException('Tenant operations are only allowed at the root tenant');
         }
 
+        $relations = [
+            'fusio_app' => ['fusio_app_scope' => 'app_id'],
+            'fusio_cronjob' => ['fusio_cronjob_error' => 'cronjob_id'],
+            'fusio_log' => ['fusio_log_error' => 'log_id'],
+            'fusio_operation' => ['fusio_plan_usage' => 'operation_id', 'fusio_scope_operation' => 'operation_id'],
+            'fusio_plan' => ['fusio_plan_scope' => 'plan_id'],
+            'fusio_role' => ['fusio_role_scope' => 'role_id'],
+            'fusio_rate' => ['fusio_rate_allocation' => 'rate_id'],
+            'fusio_scope' => ['fusio_scope_operation' => 'scope_id', 'fusio_plan_scope' => 'scope_id', 'fusio_role_scope' => 'scope_id', 'fusio_user_scope' => 'scope_id', 'fusio_app_scope' => 'scope_id'],
+            'fusio_user' => ['fusio_user_grant' => 'user_id', 'fusio_user_scope' => 'user_id'],
+        ];
+
         foreach (self::TENANT_TABLES as $tableName) {
-            if ($tableName === 'fusio_operation') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_operation WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
+            if (isset($relations[$tableName])) {
+                $result = $this->connection->fetchAllAssociative('SELECT id FROM ' . $tableName . ' WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
                 foreach ($result as $row) {
-                    $this->connection->delete('fusio_plan_usage', ['operation_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_cronjob') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_cronjob WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_cronjob_error', ['cronjob_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_event') {
-            } elseif ($tableName === 'fusio_role') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_role WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_role_scope', ['role_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_rate') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_rate WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_rate_allocation', ['rate_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_plan') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_plan WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_plan_scope', ['plan_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_user') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_user WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_user_grant', ['user_id' => $row['id']]);
-                    $this->connection->delete('fusio_user_scope', ['user_id' => $row['id']]);
-                }
-            } elseif ($tableName === 'fusio_scope') {
-                $result = $this->connection->fetchAllAssociative('SELECT id FROM fusio_scope WHERE tenant_id = :tenant_id', ['tenant_id' => $tenantId]);
-                foreach ($result as $row) {
-                    $this->connection->delete('fusio_scope_operation', ['scope_id' => $row['id']]);
+                    foreach ($relations[$tableName] as $foreignTable => $column) {
+                        $this->connection->delete($foreignTable, [$column => $row['id']]);
+                    }
                 }
             }
 

@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Tenant;
 
+use Fusio\Impl\Tests\Adapter\Test\InspectAction;
+use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -32,6 +34,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private const TENANT_ID = 'customer_a';
+
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
@@ -39,7 +43,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/tenant/customer_a', 'GET', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -53,7 +57,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/tenant/customer_a', 'POST', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -67,7 +71,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/tenant/customer_a', 'PUT', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -84,7 +88,7 @@ class EntityTest extends ControllerDbTestCase
     public function testDelete()
     {
         // create a tenant before we delete the data
-        $response = $this->sendRequest('/backend/tenant/customer_a', 'PUT', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -97,8 +101,12 @@ class EntityTest extends ControllerDbTestCase
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertTrue($data->success, $body);
 
+        // insert resources
+        $this->connection->insert('fusio_action', ['tenant_id' => self::TENANT_ID, 'category_id' => 1, 'status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'date' => '2024-03-16 13:57:39']);
+        $this->connection->insert('fusio_connection', ['tenant_id' => self::TENANT_ID, 'status' => 1, 'name' => 'Paypal', 'class' => PaypalConnection::class]);
+
         // now delete the tenant
-        $response = $this->sendRequest('/backend/tenant/customer_a', 'DELETE', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

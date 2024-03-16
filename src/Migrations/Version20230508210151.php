@@ -18,8 +18,6 @@ use PSX\Api\OperationInterface;
  */
 final class Version20230508210151 extends AbstractMigration
 {
-    private bool $legacy = false;
-
     public function getDescription() : string
     {
         return 'Setup initial tables';
@@ -41,10 +39,6 @@ final class Version20230508210151 extends AbstractMigration
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
             $actionTable->addUniqueIndex(['tenant_id', 'name']);
-        } else {
-            $actionTable = $schema->getTable('fusio_action');
-            $actionTable->dropColumn('engine');
-            $this->legacy = true;
         }
 
         if (!$schema->hasTable('fusio_app')) {
@@ -225,10 +219,6 @@ final class Version20230508210151 extends AbstractMigration
             $logTable->setPrimaryKey(['id']);
             $logTable->addIndex(['tenant_id']);
             $logTable->addIndex(['category_id', 'ip', 'date'], 'IDX_LOG_CID');
-        } else {
-            $logTable = $schema->getTable('fusio_log');
-            $logTable->addColumn('operation_id', 'integer', ['notnull' => false]);
-            $logTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
@@ -309,10 +299,6 @@ final class Version20230508210151 extends AbstractMigration
             $planUsageTable->addColumn('points', 'integer');
             $planUsageTable->addColumn('insert_date', 'datetime');
             $planUsageTable->setPrimaryKey(['id']);
-        } else {
-            $planUsageTable = $schema->getTable('fusio_plan_usage');
-            $planUsageTable->addColumn('operation_id', 'integer');
-            $planUsageTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_plan_scope')) {
@@ -349,10 +335,6 @@ final class Version20230508210151 extends AbstractMigration
             $rateAllocationTable->addColumn('app_id', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('authenticated', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->setPrimaryKey(['id']);
-        } else {
-            $rateAllocationTable = $schema->getTable('fusio_rate_allocation');
-            $rateAllocationTable->addColumn('operation_id', 'integer', ['notnull' => false, 'default' => null]);
-            $rateAllocationTable->dropColumn('route_id');
         }
 
         if (!$schema->hasTable('fusio_role')) {
@@ -466,11 +448,6 @@ final class Version20230508210151 extends AbstractMigration
             $userTable->addUniqueIndex(['tenant_id', 'identity_id', 'remote_id']);
             $userTable->addUniqueIndex(['tenant_id', 'name']);
             $userTable->addUniqueIndex(['tenant_id', 'email']);
-        } else {
-            $userTable = $schema->getTable('fusio_user');
-            $userTable->addColumn('identity_id', 'integer', ['notnull' => false]);
-            $userTable->dropColumn('provider');
-            $this->legacy = true;
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {
@@ -541,9 +518,11 @@ final class Version20230508210151 extends AbstractMigration
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_scope_user_id');
         }
 
-        $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_rate'), ['rate_id'], ['id'], [], 'rate_allocation_rate_id');
-        $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'rate_allocation_operation_id');
-        $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'rate_allocation_app_id');
+        if (isset($rateAllocationTable)) {
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_rate'), ['rate_id'], ['id'], [], 'rate_allocation_rate_id');
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'rate_allocation_operation_id');
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'rate_allocation_app_id');
+        }
 
         if (isset($roleTable)) {
             $roleTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'role_category_id');
@@ -559,7 +538,9 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'scope_operation_operation_id');
         }
 
-        $userTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'user_identity_id');
+        if (isset($userTable)) {
+            $userTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'user_identity_id');
+        }
 
         if (isset($userGrantTable)) {
             $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_grant_user_id');
@@ -645,19 +626,6 @@ final class Version20230508210151 extends AbstractMigration
 
                 $this->connection->insert($tableName, $row);
             }
-        }
-
-        // upgrade legacy systems
-        if ($this->legacy) {
-            // remove legacy internal actions and schemas
-            $this->connection->executeStatement('DELETE FROM fusio_action WHERE category_id IN (2, 3, 4, 5)');
-            $this->connection->executeStatement('DELETE FROM fusio_schema WHERE category_id IN (2, 3, 4, 5)');
-
-            // update schema class
-            $this->connection->update('fusio_schema', ['source' => Passthru::class], ['name' => 'Passthru']);
-
-            // sync data
-            DataSyncronizer::sync($this->connection);
         }
     }
 }
