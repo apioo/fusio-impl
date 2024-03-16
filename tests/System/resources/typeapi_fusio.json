@@ -876,7 +876,7 @@
       ]
     },
     "consumer.transaction.get": {
-      "path": "/consumer/transaction/$transaction_id<[0-9]+>",
+      "path": "/consumer/transaction/$transaction_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -982,7 +982,7 @@
       ]
     },
     "consumer.webhook.delete": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
+      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1035,7 +1035,7 @@
       ]
     },
     "consumer.webhook.update": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
+      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1100,7 +1100,7 @@
       ]
     },
     "consumer.webhook.get": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
+      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1306,7 +1306,7 @@
       ]
     },
     "consumer.plan.get": {
-      "path": "/consumer/plan/$plan_id<[0-9]+>",
+      "path": "/consumer/plan/$plan_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1873,7 +1873,7 @@
       ]
     },
     "consumer.app.delete": {
-      "path": "/consumer/app/$app_id<[0-9]+>",
+      "path": "/consumer/app/$app_id<[0-9]+|^~>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1926,7 +1926,7 @@
       ]
     },
     "consumer.app.update": {
-      "path": "/consumer/app/$app_id<[0-9]+>",
+      "path": "/consumer/app/$app_id<[0-9]+|^~>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1991,7 +1991,7 @@
       ]
     },
     "consumer.app.get": {
-      "path": "/consumer/app/$app_id<[0-9]+>",
+      "path": "/consumer/app/$app_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -2144,7 +2144,7 @@
       ]
     },
     "backend.webhook.delete": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -2197,7 +2197,7 @@
       ]
     },
     "backend.webhook.update": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -2262,7 +2262,7 @@
       ]
     },
     "backend.webhook.get": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -2409,7 +2409,7 @@
       ]
     },
     "backend.user.delete": {
-      "path": "/backend/user/$user_id<[0-9]+>",
+      "path": "/backend/user/$user_id<[0-9]+|^~>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -2462,7 +2462,7 @@
       ]
     },
     "backend.user.update": {
-      "path": "/backend/user/$user_id<[0-9]+>",
+      "path": "/backend/user/$user_id<[0-9]+|^~>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -2527,7 +2527,7 @@
       ]
     },
     "backend.user.get": {
-      "path": "/backend/user/$user_id<[0-9]+>",
+      "path": "/backend/user/$user_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
@@ -9147,7 +9147,7 @@
       ]
     },
     "backend.app.delete": {
-      "path": "/backend/app/$app_id<[0-9]+>",
+      "path": "/backend/app/$app_id<[0-9]+|^~>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -9200,7 +9200,7 @@
       ]
     },
     "backend.app.update": {
-      "path": "/backend/app/$app_id<[0-9]+>",
+      "path": "/backend/app/$app_id<[0-9]+|^~>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -9265,7 +9265,7 @@
       ]
     },
     "backend.app.get": {
-      "path": "/backend/app/$app_id<[0-9]+>",
+      "path": "/backend/app/$app_id<[0-9]+|^~>",
       "method": "GET",
       "return": {
         "code": 200,
