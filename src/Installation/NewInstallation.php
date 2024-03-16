@@ -299,7 +299,7 @@ class NewInstallation
                 'app.get' => new Operation(
                     action: Backend\Action\App\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\App::class,
                     throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -307,7 +307,7 @@ class NewInstallation
                 'app.update' => new Operation(
                     action: Backend\Action\App\Update::class,
                     httpMethod: 'PUT',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AppUpdate::class,
@@ -317,7 +317,7 @@ class NewInstallation
                 'app.delete' => new Operation(
                     action: Backend\Action\App\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1315,7 +1315,7 @@ class NewInstallation
                 'user.get' => new Operation(
                     action: Backend\Action\User\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/user/$user_id<[0-9]+>',
+                    httpPath: '/user/$user_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1323,7 +1323,7 @@ class NewInstallation
                 'user.update' => new Operation(
                     action: Backend\Action\User\Update::class,
                     httpMethod: 'PUT',
-                    httpPath: '/user/$user_id<[0-9]+>',
+                    httpPath: '/user/$user_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\UserUpdate::class,
@@ -1333,7 +1333,7 @@ class NewInstallation
                 'user.delete' => new Operation(
                     action: Backend\Action\User\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/user/$user_id<[0-9]+>',
+                    httpPath: '/user/$user_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1361,7 +1361,7 @@ class NewInstallation
                 'webhook.get' => new Operation(
                     action: Backend\Action\Webhook\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Backend\Webhook::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1369,7 +1369,7 @@ class NewInstallation
                 'webhook.update' => new Operation(
                     action: Backend\Action\Webhook\Update::class,
                     httpMethod: 'PUT',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\WebhookUpdate::class,
@@ -1379,7 +1379,7 @@ class NewInstallation
                 'webhook.delete' => new Operation(
                     action: Backend\Action\Webhook\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1408,7 +1408,7 @@ class NewInstallation
                 'app.get' => new Operation(
                     action: Consumer\Action\App\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Consumer\App::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1416,7 +1416,7 @@ class NewInstallation
                 'app.update' => new Operation(
                     action: Consumer\Action\App\Update::class,
                     httpMethod: 'PUT',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\AppUpdate::class,
@@ -1425,7 +1425,7 @@ class NewInstallation
                 'app.delete' => new Operation(
                     action: Consumer\Action\App\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/app/$app_id<[0-9]+>',
+                    httpPath: '/app/$app_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1522,7 +1522,7 @@ class NewInstallation
                 'plan.get' => new Operation(
                     action: Consumer\Action\Plan\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/plan/$plan_id<[0-9]+>',
+                    httpPath: '/plan/$plan_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Plan::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1557,7 +1557,7 @@ class NewInstallation
                 'webhook.get' => new Operation(
                     action: Consumer\Action\Webhook\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Webhook::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1565,7 +1565,7 @@ class NewInstallation
                 'webhook.update' => new Operation(
                     action: Consumer\Action\Webhook\Update::class,
                     httpMethod: 'PUT',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Consumer\WebhookUpdate::class,
@@ -1574,7 +1574,7 @@ class NewInstallation
                 'webhook.delete' => new Operation(
                     action: Consumer\Action\Webhook\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/webhook/$webhook_id<[0-9]+>',
+                    httpPath: '/webhook/$webhook_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -1591,7 +1591,7 @@ class NewInstallation
                 'transaction.get' => new Operation(
                     action: Consumer\Action\Transaction\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/transaction/$transaction_id<[0-9]+>',
+                    httpPath: '/transaction/$transaction_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Consumer\Transaction::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
