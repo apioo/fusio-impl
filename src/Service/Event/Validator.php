@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Event;
 
 use Cron\CronExpression;
 use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Cronjob;
 use Fusio\Model\Backend\Event;
@@ -41,18 +42,22 @@ class Validator
 {
     private Table\Event $eventTable;
     private SchemaManagerInterface $schemaManager;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Event $eventTable, SchemaManagerInterface $schemaManager)
+    public function __construct(Table\Event $eventTable, SchemaManagerInterface $schemaManager, UsageLimiter $usageLimiter)
     {
         $this->eventTable = $eventTable;
         $this->schemaManager = $schemaManager;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Event $event, ?Table\Generated\EventRow $existing = null): void
+    public function assert(Event $event, ?string $tenantId, ?Table\Generated\EventRow $existing = null): void
     {
+        $this->usageLimiter->assertEventCount($tenantId);
+
         $name = $event->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Event name must not be empty');
         }
@@ -63,13 +68,13 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\EventRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\EventRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_\\.]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid event name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->eventTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->eventTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Event already exists');
         }
     }

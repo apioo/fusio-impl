@@ -52,7 +52,7 @@ class Cronjob
 
     public function create(int $categoryId, CronjobCreate $cronjob, UserContext $context): int
     {
-        $this->validator->assert($cronjob);
+        $this->validator->assert($cronjob, $context->getTenantId());
 
         // create cronjob
         try {
@@ -94,7 +94,7 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $this->validator->assert($cronjob, $existing);
+        $this->validator->assert($cronjob, $context->getTenantId(), $existing);
 
         $existing->setName($cronjob->getName() ?? $existing->getName());
         $existing->setCron($cronjob->getCron() ?? $existing->getCron());

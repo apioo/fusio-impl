@@ -61,7 +61,7 @@ class Cleaner
 
     private function cleanUpEventResponses(): void
     {
-        $this->connection->executeStatement('DELETE FROM fusio_event_response WHERE insert_date < :now', [
+        $this->connection->executeStatement('DELETE FROM fusio_webhook_response WHERE insert_date < :now', [
             'now' => (new \DateTime('last month'))->format('Y-m-d H:i:s'),
         ]);
     }

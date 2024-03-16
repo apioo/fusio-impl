@@ -60,6 +60,15 @@ class User extends Generated\UserTable
         return $this->findOneBy($condition);
     }
 
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?UserRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
+
+        return $this->findOneBy($condition);
+    }
+
     public function findOneByTenantAndEmail(?string $tenantId, string $email): ?UserRow
     {
         $condition = Condition::withAnd();

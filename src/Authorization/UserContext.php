@@ -69,14 +69,14 @@ class UserContext
         return new UserContext($userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
     }
 
-    public static function newAnonymousContext(): self
+    public static function newAnonymousContext(?string $tenantId = null): self
     {
-        return self::newContext(1, 1);
+        return self::newContext(1, 1, $tenantId);
     }
 
-    public static function newCommandContext(): self
+    public static function newCommandContext(?string $tenantId = null): self
     {
-        return self::newContext(1, 1);
+        return self::newContext(1, 1, $tenantId);
     }
 
     public static function newActionContext(ContextInterface $context): self

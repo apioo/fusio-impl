@@ -31,7 +31,8 @@
       "backend.tenant": "",
       "backend.transaction": "",
       "backend.trash": "",
-      "backend.user": ""
+      "backend.user": "",
+      "backend.webhook": ""
     }
   },
   "operations": {
@@ -980,8 +981,8 @@
         "transaction"
       ]
     },
-    "consumer.subscription.delete": {
-      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+    "consumer.webhook.delete": {
+      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -990,7 +991,7 @@
         }
       },
       "arguments": {
-        "subscription_id": {
+        "webhook_id": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -1026,15 +1027,15 @@
       "description": "",
       "stability": 1,
       "security": [
-        "consumer.subscription"
+        "consumer.webhook"
       ],
       "authorization": true,
       "tags": [
-        "subscription"
+        "webhook"
       ]
     },
-    "consumer.subscription.update": {
-      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+    "consumer.webhook.update": {
+      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1043,7 +1044,7 @@
         }
       },
       "arguments": {
-        "subscription_id": {
+        "webhook_id": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -1052,7 +1053,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_EventSubscriptionUpdate"
+            "$ref": "Consumer_WebhookUpdate"
           }
         }
       },
@@ -1091,24 +1092,24 @@
       "description": "",
       "stability": 1,
       "security": [
-        "consumer.subscription"
+        "consumer.webhook"
       ],
       "authorization": true,
       "tags": [
-        "subscription"
+        "webhook"
       ]
     },
-    "consumer.subscription.get": {
-      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
+    "consumer.webhook.get": {
+      "path": "/consumer/webhook/$webhook_id<[0-9]+>",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_EventSubscription"
+          "$ref": "Consumer_Webhook"
         }
       },
       "arguments": {
-        "subscription_id": {
+        "webhook_id": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -1144,15 +1145,15 @@
       "description": "",
       "stability": 1,
       "security": [
-        "consumer.subscription"
+        "consumer.webhook"
       ],
       "authorization": true,
       "tags": [
-        "subscription"
+        "webhook"
       ]
     },
-    "consumer.subscription.create": {
-      "path": "/consumer/subscription",
+    "consumer.webhook.create": {
+      "path": "/consumer/webhook",
       "method": "POST",
       "return": {
         "code": 201,
@@ -1164,7 +1165,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Consumer_EventSubscriptionCreate"
+            "$ref": "Consumer_WebhookCreate"
           }
         }
       },
@@ -1191,20 +1192,20 @@
       "description": "",
       "stability": 1,
       "security": [
-        "consumer.subscription"
+        "consumer.webhook"
       ],
       "authorization": true,
       "tags": [
-        "subscription"
+        "webhook"
       ]
     },
-    "consumer.subscription.getAll": {
-      "path": "/consumer/subscription",
+    "consumer.webhook.getAll": {
+      "path": "/consumer/webhook",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Consumer_EventSubscriptionCollection"
+          "$ref": "Consumer_WebhookCollection"
         }
       },
       "arguments": {
@@ -1244,11 +1245,11 @@
       "description": "",
       "stability": 1,
       "security": [
-        "consumer.subscription"
+        "consumer.webhook"
       ],
       "authorization": true,
       "tags": [
-        "subscription"
+        "webhook"
       ]
     },
     "consumer.scope.getAll": {
@@ -2140,6 +2141,271 @@
       "authorization": true,
       "tags": [
         "app"
+      ]
+    },
+    "backend.webhook.delete": {
+      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "webhook_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.webhook"
+      ],
+      "authorization": true,
+      "tags": [
+        "webhook"
+      ]
+    },
+    "backend.webhook.update": {
+      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "webhook_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Backend_WebhookUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.webhook"
+      ],
+      "authorization": true,
+      "tags": [
+        "webhook"
+      ]
+    },
+    "backend.webhook.get": {
+      "path": "/backend/webhook/$webhook_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_Webhook"
+        }
+      },
+      "arguments": {
+        "webhook_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.webhook"
+      ],
+      "authorization": true,
+      "tags": [
+        "webhook"
+      ]
+    },
+    "backend.webhook.create": {
+      "path": "/backend/webhook",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Backend_WebhookCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.webhook"
+      ],
+      "authorization": true,
+      "tags": [
+        "webhook"
+      ]
+    },
+    "backend.webhook.getAll": {
+      "path": "/backend/webhook",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_WebhookCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.webhook"
+      ],
+      "authorization": true,
+      "tags": [
+        "webhook"
       ]
     },
     "backend.user.delete": {
@@ -7437,271 +7703,6 @@
         "event"
       ]
     },
-    "backend.event.deleteSubscription": {
-      "path": "/backend/event/subscription/$subscription_id<[0-9]+>",
-      "method": "DELETE",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Common_Message"
-        }
-      },
-      "arguments": {
-        "subscription_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.event"
-      ],
-      "authorization": true,
-      "tags": [
-        "event"
-      ]
-    },
-    "backend.event.updateSubscription": {
-      "path": "/backend/event/subscription/$subscription_id<[0-9]+>",
-      "method": "PUT",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Common_Message"
-        }
-      },
-      "arguments": {
-        "subscription_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "$ref": "Backend_EventSubscriptionUpdate"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 400,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.event"
-      ],
-      "authorization": true,
-      "tags": [
-        "event"
-      ]
-    },
-    "backend.event.getSubscription": {
-      "path": "/backend/event/subscription/$subscription_id<[0-9]+>",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Backend_EventSubscription"
-        }
-      },
-      "arguments": {
-        "subscription_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.event"
-      ],
-      "authorization": true,
-      "tags": [
-        "event"
-      ]
-    },
-    "backend.event.createSubscription": {
-      "path": "/backend/event/subscription",
-      "method": "POST",
-      "return": {
-        "code": 201,
-        "schema": {
-          "$ref": "Common_Message"
-        }
-      },
-      "arguments": {
-        "payload": {
-          "in": "body",
-          "schema": {
-            "$ref": "Backend_EventSubscriptionCreate"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 400,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.event"
-      ],
-      "authorization": true,
-      "tags": [
-        "event"
-      ]
-    },
-    "backend.event.getAllSubscriptions": {
-      "path": "/backend/event/subscription",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Backend_EventSubscriptionCollection"
-        }
-      },
-      "arguments": {
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "search": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.event"
-      ],
-      "authorization": true,
-      "tags": [
-        "event"
-      ]
-    },
     "backend.dashboard.getAll": {
       "path": "/backend/dashboard",
       "method": "GET",
@@ -10780,72 +10781,6 @@
         "name"
       ]
     },
-    "Backend_EventSubscription": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "eventId": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "endpoint": {
-          "type": "string"
-        },
-        "responses": {
-          "type": "array",
-          "items": {
-            "$ref": "Backend_EventSubscriptionResponse"
-          }
-        }
-      }
-    },
-    "Backend_EventSubscriptionCollection": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_EventSubscription"
-      }
-    },
-    "Backend_EventSubscriptionCreate": {
-      "$extends": "Backend_EventSubscription",
-      "type": "object",
-      "required": [
-        "eventId",
-        "userId",
-        "endpoint"
-      ]
-    },
-    "Backend_EventSubscriptionResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "code": {
-          "type": "integer"
-        },
-        "attempts": {
-          "type": "integer"
-        },
-        "error": {
-          "type": "string"
-        },
-        "executeDate": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_EventSubscriptionUpdate": {
-      "$extends": "Backend_EventSubscription",
-      "type": "object"
-    },
     "Backend_EventUpdate": {
       "$extends": "Backend_Event",
       "type": "object"
@@ -11833,6 +11768,76 @@
       "$extends": "Backend_User",
       "type": "object"
     },
+    "Backend_Webhook": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "eventId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "$ref": "Backend_WebhookResponse"
+          }
+        }
+      }
+    },
+    "Backend_WebhookCollection": {
+      "$ref": "Common_Collection",
+      "$template": {
+        "T": "Backend_Webhook"
+      }
+    },
+    "Backend_WebhookCreate": {
+      "$extends": "Backend_Webhook",
+      "type": "object",
+      "required": [
+        "eventId",
+        "userId",
+        "name",
+        "endpoint"
+      ]
+    },
+    "Backend_WebhookResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "attempts": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "string"
+        },
+        "executeDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_WebhookUpdate": {
+      "$extends": "Backend_Webhook",
+      "type": "object"
+    },
     "Common_Collection": {
       "type": "object",
       "properties": {
@@ -12158,82 +12163,6 @@
       "$template": {
         "T": "Consumer_Event"
       }
-    },
-    "Consumer_EventSubscription": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "event": {
-          "type": "string"
-        },
-        "endpoint": {
-          "type": "string"
-        },
-        "responses": {
-          "type": "array",
-          "items": {
-            "$ref": "Consumer_EventSubscriptionResponse"
-          }
-        }
-      }
-    },
-    "Consumer_EventSubscriptionCollection": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Consumer_EventSubscription"
-      }
-    },
-    "Consumer_EventSubscriptionCreate": {
-      "type": "object",
-      "properties": {
-        "event": {
-          "type": "string"
-        },
-        "endpoint": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "event",
-        "endpoint"
-      ]
-    },
-    "Consumer_EventSubscriptionResponse": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "integer"
-        },
-        "code": {
-          "type": "integer"
-        },
-        "attempts": {
-          "type": "string"
-        },
-        "executeDate": {
-          "type": "string"
-        }
-      }
-    },
-    "Consumer_EventSubscriptionUpdate": {
-      "type": "object",
-      "properties": {
-        "event": {
-          "type": "string"
-        },
-        "endpoint": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "event",
-        "endpoint"
-      ]
     },
     "Consumer_Grant": {
       "type": "object",
@@ -12640,6 +12569,93 @@
         "name",
         "email",
         "password"
+      ]
+    },
+    "Consumer_Webhook": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "event": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "$ref": "Consumer_WebhookResponse"
+          }
+        }
+      }
+    },
+    "Consumer_WebhookCollection": {
+      "$ref": "Common_Collection",
+      "$template": {
+        "T": "Consumer_Webhook"
+      }
+    },
+    "Consumer_WebhookCreate": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "event",
+        "name",
+        "endpoint"
+      ]
+    },
+    "Consumer_WebhookResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "attempts": {
+          "type": "string"
+        },
+        "executeDate": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_WebhookUpdate": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "event",
+        "name",
+        "endpoint"
       ]
     },
     "Passthru": {

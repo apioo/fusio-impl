@@ -75,7 +75,7 @@ class Identity
 
     public function create(Model\Backend\IdentityCreate $identity, UserContext $context): int
     {
-        $this->validator->assert($identity);
+        $this->validator->assert($identity, $context->getTenantId());
 
         $provider = $this->identityProvider->getInstance($identity->getClass());
         if (!$provider instanceof ProviderInterface) {
@@ -127,7 +127,7 @@ class Identity
             throw new StatusCode\GoneException('Identity was deleted');
         }
 
-        $this->validator->assert($identity, $existing);
+        $this->validator->assert($identity, $context->getTenantId(), $existing);
 
         $provider = $this->identityProvider->getInstance($existing->getClass());
         if (!$provider instanceof ProviderInterface) {

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Role;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Role;
 use PSX\Http\Exception as StatusCode;
@@ -34,29 +35,33 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Role $roleTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Role $roleTable)
+    public function __construct(Table\Role $roleTable, UsageLimiter $usageLimiter)
     {
         $this->roleTable = $roleTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Role $role, ?Table\Generated\RoleRow $existing = null): void
+    public function assert(Role $role, ?string $tenantId, ?Table\Generated\RoleRow $existing = null): void
     {
+        $this->usageLimiter->assertRoleCount($tenantId);
+
         $name = $role->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Role name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\RoleRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\RoleRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid role name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->roleTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->roleTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Role already exists');
         }
     }

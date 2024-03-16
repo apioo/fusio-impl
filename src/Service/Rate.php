@@ -55,7 +55,7 @@ class Rate
 
     public function create(RateCreate $rate, UserContext $context): int
     {
-        $this->validator->assert($rate);
+        $this->validator->assert($rate, $context->getTenantId());
 
         try {
             $this->rateTable->beginTransaction();
@@ -98,7 +98,7 @@ class Rate
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
-        $this->validator->assert($rate, $existing);
+        $this->validator->assert($rate, $context->getTenantId(), $existing);
 
         try {
             $this->rateTable->beginTransaction();

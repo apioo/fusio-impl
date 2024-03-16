@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\ConfigRow;
+use Fusio\Impl\Table\Generated\OperationRow;
 use Fusio\Impl\Table\Generated\PageRow;
 use PSX\Sql\Condition;
 
@@ -39,14 +40,27 @@ class Page extends Generated\PageTable
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?PageRow
     {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndSlug($tenantId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
+        }
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?PageRow
+    {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
 
-        if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_SLUG, urldecode(substr($id, 1)));
-        } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
-        }
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndSlug(?string $tenantId, string $slug): ?PageRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_SLUG, $slug);
 
         return $this->findOneBy($condition);
     }

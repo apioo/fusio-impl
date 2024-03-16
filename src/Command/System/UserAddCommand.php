@@ -64,11 +64,14 @@ class UserAddCommand extends Command
             ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Administrator, 2=Backend, 3=Consumer]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
-            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
+            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password')
+            ->addOption('tenant', 't', InputOption::VALUE_OPTIONAL, 'The tenant id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $tenantId = $input->getOption('tenant');
+
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
@@ -87,8 +90,8 @@ class UserAddCommand extends Command
         $name = $input->getOption('username');
         if ($name === null) {
             $question = new Question('Enter the username: ');
-            $question->setValidator(function ($value) {
-                $this->validator->assertName($value);
+            $question->setValidator(function ($value) use ($tenantId) {
+                $this->validator->assertName($value, $tenantId);
                 return $value;
             });
 
@@ -98,15 +101,15 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid name');
             }
 
-            $this->validator->assertName($name);
+            $this->validator->assertName($name, $tenantId);
         }
 
         // email
         $email = $input->getOption('email');
         if ($email === null) {
             $question = new Question('Enter the email: ');
-            $question->setValidator(function ($value) {
-                $this->validator->assertEmail($value);
+            $question->setValidator(function ($value) use ($tenantId) {
+                $this->validator->assertEmail($value, $tenantId);
                 return $value;
             });
 
@@ -116,7 +119,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid email');
             }
 
-            $this->validator->assertEmail($email);
+            $this->validator->assertEmail($email, $tenantId);
         }
 
         // password

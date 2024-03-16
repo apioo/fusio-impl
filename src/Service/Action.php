@@ -61,7 +61,7 @@ class Action
 
     public function create(int $categoryId, ActionCreate $action, UserContext $context): int
     {
-        $this->validator->assert($action);
+        $this->validator->assert($action, $context->getTenantId());
 
         $name = $action->getName();
         $class = $action->getClass();
@@ -118,7 +118,7 @@ class Action
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        $this->validator->assert($action, $existing);
+        $this->validator->assert($action, $context->getTenantId(), $existing);
 
         $name = $action->getName() ?? $existing->getName();
         $class = $action->getClass() ?? $existing->getClass();

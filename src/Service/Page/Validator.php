@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Page;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Page;
 use PSX\Http\Exception as StatusCode;
@@ -34,17 +35,21 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Page $pageTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Page $pageTable)
+    public function __construct(Table\Page $pageTable, UsageLimiter $usageLimiter)
     {
         $this->pageTable = $pageTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Page $page, ?Table\Generated\PageRow $existing = null): void
+    public function assert(Page $page, ?string $tenantId, ?Table\Generated\PageRow $existing = null): void
     {
+        $this->usageLimiter->assertPageCount($tenantId);
+
         $title = $page->getTitle();
         if ($title !== null) {
-            $this->assertTitle($title, $existing);
+            $this->assertTitle($title, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Page title must not be empty');
         }
@@ -55,13 +60,13 @@ class Validator
         }
     }
 
-    private function assertTitle(string $title, ?Table\Generated\PageRow $existing = null): void
+    private function assertTitle(string $title, ?string $tenantId, ?Table\Generated\PageRow $existing = null): void
     {
         if (empty($title)) {
             throw new StatusCode\BadRequestException('Invalid page title');
         }
 
-        if (($existing === null || $title !== $existing->getTitle()) && $this->pageTable->findOneByTitle($title)) {
+        if (($existing === null || $title !== $existing->getTitle()) && $this->pageTable->findOneByTenantAndSlug($tenantId, SlugBuilder::build($title))) {
             throw new StatusCode\BadRequestException('Page already exists');
         }
     }

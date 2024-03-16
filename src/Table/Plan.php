@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\OperationRow;
 use Fusio\Impl\Table\Generated\PageRow;
 use Fusio\Impl\Table\Generated\PlanRow;
 use PSX\Sql\Condition;
@@ -38,16 +39,11 @@ class Plan extends Generated\PlanTable
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?PlanRow
     {
-        $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-
         if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
         } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
         }
-
-        return $this->findOneBy($condition);
     }
 
     public function findOneByTenantAndId(?string $tenantId, int $id): ?PlanRow
@@ -55,6 +51,16 @@ class Plan extends Generated\PlanTable
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?PlanRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
+
         return $this->findOneBy($condition);
     }
 

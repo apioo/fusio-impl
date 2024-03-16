@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\CronjobRow;
+use Fusio\Impl\Table\Generated\IdentityRow;
 use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Sql\Condition;
 
@@ -38,16 +39,11 @@ class Operation extends Generated\OperationTable
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?OperationRow
     {
-        $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-
         if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
         } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
         }
-
-        return $this->findOneBy($condition);
     }
 
     public function findOneByTenantAndId(?string $tenantId, int $id): ?OperationRow
@@ -55,6 +51,16 @@ class Operation extends Generated\OperationTable
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?OperationRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
+
         return $this->findOneBy($condition);
     }
 

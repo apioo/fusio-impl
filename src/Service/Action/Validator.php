@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Action;
 
 use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated\ActionRow;
 use Fusio\Model\Backend\Action;
@@ -37,20 +38,24 @@ class Validator
 {
     private Table\Action $actionTable;
     private FrameworkConfig $frameworkConfig;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Action $actionTable, FrameworkConfig $frameworkConfig)
+    public function __construct(Table\Action $actionTable, FrameworkConfig $frameworkConfig, UsageLimiter $usageLimiter)
     {
         $this->actionTable = $actionTable;
         $this->frameworkConfig = $frameworkConfig;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Action $action, ?ActionRow $existing = null): void
+    public function assert(Action $action, ?string $tenantId, ?ActionRow $existing = null): void
     {
+        $this->usageLimiter->assertActionCount($tenantId);
+
         $this->assertExcluded($action);
 
         $name = $action->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Action name must not be empty');
@@ -67,13 +72,13 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?ActionRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?ActionRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid action name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->actionTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->actionTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
     }

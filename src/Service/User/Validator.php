@@ -21,13 +21,11 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\Generated\UserRow;
 use Fusio\Model\Backend\User;
 use Fusio\Model\Backend\UserCreate;
-use Fusio\Model\Backend\UserRemote;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Validator
@@ -42,20 +40,24 @@ class Validator
     private Table\Role $roleTable;
     private Table\Plan $planTable;
     private Service\Config $configService;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\User $userTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService)
+    public function __construct(Table\User $userTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, UsageLimiter $usageLimiter)
     {
         $this->userTable = $userTable;
         $this->roleTable = $roleTable;
         $this->planTable = $planTable;
         $this->configService = $configService;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(User $user, ?Table\Generated\UserRow $existing = null): void
+    public function assert(User $user, ?string $tenantId, ?Table\Generated\UserRow $existing = null): void
     {
+        $this->usageLimiter->assertUserCount($tenantId);
+
         $roleId = $user->getRoleId();
         if ($roleId !== null) {
-            $this->assertRoleId($roleId);
+            $this->assertRoleId($roleId, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('User role id must not be empty');
@@ -64,12 +66,12 @@ class Validator
 
         $planId = $user->getPlanId();
         if ($planId !== null) {
-            $this->assertPlanId($planId);
+            $this->assertPlanId($planId, $tenantId);
         }
 
         $name = $user->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('User name must not be empty');
@@ -78,7 +80,7 @@ class Validator
 
         $email = $user->getEmail();
         if ($email !== null) {
-            $this->assertEmail($email, $existing);
+            $this->assertEmail($email, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('User email must not be empty');
@@ -97,18 +99,18 @@ class Validator
         }
     }
 
-    public function assertName(?string $name, ?Table\Generated\UserRow $existing = null): void
+    public function assertName(?string $name, ?string $tenantId, ?Table\Generated\UserRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_\\.]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid user name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->userTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->userTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('User name already exists');
         }
     }
 
-    public function assertEmail(?string $email, ?Table\Generated\UserRow $existing = null): void
+    public function assertEmail(?string $email, ?string $tenantId, ?Table\Generated\UserRow $existing = null): void
     {
         if (empty($email)) {
             throw new StatusCode\BadRequestException('Email must not be empty');
@@ -118,7 +120,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid email format');
         }
 
-        if (($existing === null || $email !== $existing->getEmail()) && $this->userTable->findOneByEmail($email)) {
+        if (($existing === null || $email !== $existing->getEmail()) && $this->userTable->findOneByTenantAndEmail($tenantId, $email)) {
             throw new StatusCode\BadRequestException('User email already exists');
         }
     }
@@ -178,17 +180,17 @@ class Validator
         }
     }
 
-    private function assertRoleId(int $roleId): void
+    private function assertRoleId(int $roleId, ?string $tenantId): void
     {
-        $role = $this->roleTable->find($roleId);
+        $role = $this->roleTable->findOneByTenantAndId($tenantId, $roleId);
         if (!$role instanceof Table\Generated\RoleRow) {
             throw new StatusCode\BadRequestException('Provided role id does not exist');
         }
     }
 
-    private function assertPlanId(int $planId): void
+    private function assertPlanId(int $planId, ?string $tenantId): void
     {
-        $plan = $this->planTable->find($planId);
+        $plan = $this->planTable->findOneByTenantAndId($tenantId, $planId);
         if (!$plan instanceof Table\Generated\PlanRow) {
             throw new StatusCode\BadRequestException('Provided plan id does not exist');
         }

@@ -82,8 +82,8 @@ class EntityTest extends ControllerDbTestCase
         "consumer.payment",
         "consumer.plan",
         "consumer.scope",
-        "consumer.subscription",
         "consumer.transaction",
+        "consumer.webhook",
         "authorization",
         "foo",
         "bar"
@@ -208,7 +208,7 @@ JSON;
 
         $this->assertEquals(1, count($scopes));
         $this->assertEquals(2, $scopes[0]['user_id']);
-        $this->assertEquals(46, $scopes[0]['scope_id']);
+        $this->assertEquals(47, $scopes[0]['scope_id']);
     }
 
     public function testDelete()

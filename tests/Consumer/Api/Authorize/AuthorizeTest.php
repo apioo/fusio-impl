@@ -53,12 +53,12 @@ class AuthorizeTest extends ControllerDbTestCase
     "url": "http:\/\/google.com",
     "scopes": [
         {
-            "id": 45,
+            "id": 46,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 46,
+            "id": 47,
             "name": "bar",
             "description": "Bar access"
         }

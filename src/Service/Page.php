@@ -24,6 +24,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Page\CreatedEvent;
 use Fusio\Impl\Event\Page\DeletedEvent;
 use Fusio\Impl\Event\Page\UpdatedEvent;
+use Fusio\Impl\Service\Page\SlugBuilder;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\PageCreate;
 use Fusio\Model\Backend\PageUpdate;
@@ -53,10 +54,10 @@ class Page
 
     public function create(PageCreate $page, UserContext $context): int
     {
-        $this->validator->assert($page);
+        $this->validator->assert($page, $context->getTenantId());
 
         $title = $page->getTitle();
-        $slug = $this->createSlug($title);
+        $slug = SlugBuilder::build($title);
 
         // create page
         try {
@@ -98,10 +99,10 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
-        $this->validator->assert($page, $existing);
+        $this->validator->assert($page, $context->getTenantId(), $existing);
 
         $title = $page->getTitle();
-        $slug = $title !== null ? $this->createSlug($title) : null;
+        $slug = $title !== null ? SlugBuilder::build($title) : null;
 
         // update action
         $existing->setStatus($page->getStatus() ?? $existing->getStatus());
@@ -133,21 +134,5 @@ class Page
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
-    }
-
-    /**
-     * Generates a slug from the title
-     *
-     * @see https://haensel.pro/php/php-function-create-slugs-from-string
-     * @param string $title
-     * @return string
-     */
-    private function createSlug(string $title): string
-    {
-        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $title);
-        $slug = preg_replace('/[^a-zA-Z0-9\/_|+ -]/', '', $slug);
-        $slug = strtolower(trim($slug, '-'));
-        $slug = preg_replace('/[\/_|+ -]+/', '-', $slug);
-        return $slug;
     }
 }

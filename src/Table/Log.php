@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\IdentityRow;
 use Fusio\Impl\Table\Generated\LogRow;
 use PSX\Sql\Condition;
 
@@ -32,7 +33,12 @@ use PSX\Sql\Condition;
  */
 class Log extends Generated\LogTable
 {
-    public function findOneByIdentifier(?string $tenantId, int $id): ?LogRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?LogRow
+    {
+        return $this->findOneByTenantAndId($tenantId, (int) $id);
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?LogRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);

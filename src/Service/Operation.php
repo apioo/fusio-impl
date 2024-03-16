@@ -65,7 +65,7 @@ class Operation
 
     public function create(int $categoryId, OperationCreate $operation, UserContext $context): int
     {
-        $this->validator->assert($operation);
+        $this->validator->assert($operation, $context->getTenantId());
 
         // create operation
         try {
@@ -128,7 +128,7 @@ class Operation
             throw new StatusCode\GoneException('Operation was deleted');
         }
 
-        $this->validator->assert($operation, $existing);
+        $this->validator->assert($operation, $context->getTenantId(), $existing);
 
         $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
 

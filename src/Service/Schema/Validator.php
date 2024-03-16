@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Schema;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Schema;
 use PSX\Http\Exception as StatusCode;
@@ -34,29 +35,33 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Schema $schemaTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Schema $schemaTable)
+    public function __construct(Table\Schema $schemaTable, UsageLimiter $usageLimiter)
     {
         $this->schemaTable = $schemaTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Schema $schema, ?Table\Generated\SchemaRow $existing = null): void
+    public function assert(Schema $schema, ?string $tenantId, ?Table\Generated\SchemaRow $existing = null): void
     {
+        $this->usageLimiter->assertSchemaCount($tenantId);
+
         $name = $schema->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Schema name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\SchemaRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\SchemaRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->schemaTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->schemaTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Schema already exists');
         }
     }

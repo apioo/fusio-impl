@@ -30,7 +30,7 @@ use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
 /**
- * Developer
+ * App
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -79,9 +79,9 @@ class App
         return $this->appService->create($backendApp, $context);
     }
 
-    public function update(int $appId, AppUpdate $app, UserContext $context): int
+    public function update(string $appId, AppUpdate $app, UserContext $context): int
     {
-        $existing = $this->appTable->find($appId);
+        $existing = $this->appTable->findOneByIdentifier($context->getTenantId(), $appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -104,23 +104,21 @@ class App
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);
 
-        return $this->appService->update((string) $appId, $backendApp, $context);
+        return $this->appService->update((string) $existing->getId(), $backendApp, $context);
     }
 
-    public function delete(int $appId, UserContext $context): int
+    public function delete(string $appId, UserContext $context): int
     {
-        $userId = $context->getUserId();
-        $app    = $this->appTable->find($appId);
-
-        if (empty($app)) {
+        $existing = $this->appTable->findOneByIdentifier($context->getTenantId(), $appId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app->getUserId() != $userId) {
+        if ($existing->getUserId() != $context->getUserId()) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
-        return $this->appService->delete((string) $appId, $context);
+        return $this->appService->delete((string) $existing->getId(), $context);
     }
 
     protected function getValidUserScopes(?string $tenantId, int $userId, ?array $scopes): array

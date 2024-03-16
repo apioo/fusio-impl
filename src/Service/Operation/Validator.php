@@ -26,6 +26,7 @@ use Fusio\Engine\Factory;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Operation;
 use Fusio\Model\Backend\OperationParameters;
@@ -50,19 +51,23 @@ class Validator
     private Table\Operation $operationTable;
     private SchemaManagerInterface $schemaManager;
     private ProcessorInterface $processor;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Operation $operationTable, SchemaManagerInterface $schemaManager, ProcessorInterface $processor)
+    public function __construct(Table\Operation $operationTable, SchemaManagerInterface $schemaManager, ProcessorInterface $processor, UsageLimiter $usageLimiter)
     {
         $this->operationTable = $operationTable;
         $this->schemaManager = $schemaManager;
         $this->processor = $processor;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Operation $operation, ?Table\Generated\OperationRow $existing = null): void
+    public function assert(Operation $operation, ?string $tenantId, ?Table\Generated\OperationRow $existing = null): void
     {
+        $this->usageLimiter->assertOperationCount($tenantId);
+
         $name = $operation->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Operation name must not be empty');
@@ -105,7 +110,7 @@ class Validator
             }
         }
 
-        $this->assertHttpMethodAndPathExisting($operation, $existing);
+        $this->assertHttpMethodAndPathExisting($operation, $tenantId, $existing);
         $this->assertParameters($operation->getParameters());
         $this->assertIncoming($operation->getIncoming());
 
@@ -130,13 +135,13 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\OperationRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\OperationRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\_\\.]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid operation name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->operationTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->operationTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Operation already exists');
         }
     }
@@ -195,7 +200,7 @@ class Validator
         }
     }
 
-    private function assertHttpMethodAndPathExisting(Operation $operation, ?Table\Generated\OperationRow $existing): void
+    private function assertHttpMethodAndPathExisting(Operation $operation, ?string $tenantId, ?Table\Generated\OperationRow $existing): void
     {
         if ($existing instanceof Table\Generated\OperationRow && $existing->getHttpMethod() === $operation->getHttpMethod() && $existing->getHttpPath() === $operation->getHttpPath()) {
             // in case we update an existing operation and the method and path has not changed, we dont need to validate
@@ -203,6 +208,7 @@ class Validator
         }
 
         $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\OperationTable::COLUMN_HTTP_METHOD, $operation->getHttpMethod());
         $condition->equals(Table\Generated\OperationTable::COLUMN_HTTP_PATH, $operation->getHttpPath());
         if ($this->operationTable->getCount($condition) > 0) {

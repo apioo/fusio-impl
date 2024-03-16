@@ -58,7 +58,7 @@ class App
 
     public function create(AppCreate $app, UserContext $context): int
     {
-        $this->validator->assert($app);
+        $this->validator->assert($app, $context->getTenantId());
 
         // parse parameters
         $parameters = $app->getParameters();
@@ -117,7 +117,7 @@ class App
             throw new StatusCode\GoneException('App was deleted');
         }
 
-        $this->validator->assert($app, $existing);
+        $this->validator->assert($app, $context->getTenantId(), $existing);
 
         // parse parameters
         $parameters = $app->getParameters();

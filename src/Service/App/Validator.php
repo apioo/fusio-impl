@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\App;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\App;
 use PSX\Http\Exception as StatusCode;
@@ -36,18 +37,22 @@ class Validator
 {
     private Table\App $appTable;
     private Table\User $userTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\App $appTable, Table\User $userTable)
+    public function __construct(Table\App $appTable, Table\User $userTable, UsageLimiter $usageLimiter)
     {
         $this->appTable = $appTable;
         $this->userTable = $userTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(App $app, ?Table\Generated\AppRow $existing = null): void
+    public function assert(App $app, ?string $tenantId, ?Table\Generated\AppRow $existing = null): void
     {
+        $this->usageLimiter->assertAppCount($tenantId);
+
         $userId = $app->getUserId();
         if ($userId !== null) {
-            $this->assertUser($userId);
+            $this->assertUser($userId, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('App name must not be empty');
@@ -58,7 +63,7 @@ class Validator
 
         $name = $app->getName();
         if ($name !== null) {
-            $this->assertName($name, $userId, $existing);
+            $this->assertName($name, $tenantId, $userId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('App name must not be empty');
@@ -66,15 +71,15 @@ class Validator
         }
     }
 
-    private function assertUser(int $userId): void
+    private function assertUser(int $userId, ?string $tenantId): void
     {
-        $user = $this->userTable->find($userId);
+        $user = $this->userTable->findOneByTenantAndId($tenantId, $userId);
         if (empty($user)) {
             throw new StatusCode\BadRequestException('Provided user id does not exist');
         }
     }
 
-    private function assertName(string $name, int $userId, ?Table\Generated\AppRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, int $userId, ?Table\Generated\AppRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid action name');
@@ -82,6 +87,7 @@ class Validator
 
         if ($existing === null || $name !== $existing->getName()) {
             $condition  = Condition::withAnd();
+            $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
             $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
             $condition->notEquals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_DELETED);
             $condition->equals(Table\Generated\AppTable::COLUMN_NAME, $name);

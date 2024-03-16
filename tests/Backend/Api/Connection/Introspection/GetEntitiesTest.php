@@ -61,8 +61,6 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_cronjob",
         "fusio_cronjob_error",
         "fusio_event",
-        "fusio_event_response",
-        "fusio_event_subscription",
         "fusio_identity",
         "fusio_identity_request",
         "fusio_log",
@@ -84,6 +82,8 @@ class GetEntitiesTest extends ControllerDbTestCase
         "fusio_user",
         "fusio_user_grant",
         "fusio_user_scope",
+        "fusio_webhook",
+        "fusio_webhook_response",
         "messenger_messages"
     ]
 }

@@ -35,6 +35,24 @@ final class Version20240121100724 extends AbstractMigration
 
             $schema->renameTable('fusio_app_token', 'fusio_token');
         }
+
+        if ($schema->hasTable('fusio_event_subscription')) {
+            $webhookTable = $schema->getTable('fusio_event_subscription');
+            $webhookTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $webhookTable->addColumn('name', 'string', ['length' => 32]);
+            $webhookTable->addIndex(['tenant_id']);
+
+            $schema->renameTable('fusio_event_subscription', 'fusio_webhook');
+        }
+
+        if ($schema->hasTable('fusio_event_response')) {
+            $webhookResponseTable = $schema->getTable('fusio_event_response');
+            $webhookResponseTable->addColumn('webhook_id', 'integer');
+            $webhookResponseTable->dropColumn('subscription_id');
+            $webhookResponseTable->addForeignKeyConstraint($schema->getTable('fusio_webhook'), ['webhook_id'], ['id'], [], 'webhook_response_webhook_id');
+
+            $schema->renameTable('fusio_event_response', 'fusio_webhook_response');
+        }
     }
 
     public function down(Schema $schema): void

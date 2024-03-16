@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Plan;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Plan;
 use PSX\Http\Exception as StatusCode;
@@ -34,30 +35,34 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Plan $planTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Plan $planTable)
+    public function __construct(Table\Plan $planTable, UsageLimiter $usageLimiter)
     {
         $this->planTable = $planTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Plan $plan, ?Table\Generated\PlanRow $existing = null): void
+    public function assert(Plan $plan, ?string $tenantId, ?Table\Generated\PlanRow $existing = null): void
     {
+        $this->usageLimiter->assertPlanCount($tenantId);
+
         $name = $plan->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Plan name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\PlanRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\PlanRow $existing = null): void
     {
         if (empty($name)) {
             throw new StatusCode\BadRequestException('Invalid plan name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->planTable->findOneByName($name)) {
-            throw new StatusCode\BadRequestException('Event already exists');
+        if (($existing === null || $name !== $existing->getName()) && $this->planTable->findOneByTenantAndName($tenantId, $name)) {
+            throw new StatusCode\BadRequestException('Plan already exists');
         }
     }
 }

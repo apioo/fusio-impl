@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Cronjob;
 
 use Cron\CronExpression;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Cronjob;
 use PSX\Http\Exception as StatusCode;
@@ -35,17 +36,21 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Cronjob $cronjobTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Cronjob $cronjobTable)
+    public function __construct(Table\Cronjob $cronjobTable, UsageLimiter $usageLimiter)
     {
         $this->cronjobTable = $cronjobTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Cronjob $cronjob, ?Table\Generated\CronjobRow $existing = null): void
+    public function assert(Cronjob $cronjob, ?string $tenantId, ?Table\Generated\CronjobRow $existing = null): void
     {
+        $this->usageLimiter->assertCronjobCount($tenantId);
+
         $name = $cronjob->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Cronjob name must not be empty');
@@ -62,13 +67,13 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\CronjobRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\CronjobRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
     }

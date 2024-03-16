@@ -62,7 +62,7 @@ class Scope
 
     public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
     {
-        $this->validator->assert($scope);
+        $this->validator->assert($scope, $context->getTenantId());
 
         try {
             $this->scopeTable->beginTransaction();
@@ -133,7 +133,7 @@ class Scope
             throw new StatusCode\GoneException('Scope was deleted');
         }
 
-        $this->validator->assert($scope, $existing);
+        $this->validator->assert($scope, $context->getTenantId(), $existing);
 
         try {
             $this->scopeTable->beginTransaction();

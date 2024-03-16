@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Category;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Category;
 use PSX\Http\Exception as StatusCode;
@@ -35,29 +36,33 @@ use PSX\Sql\Condition;
 class Validator
 {
     private Table\Category $categoryTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Category $categoryTable)
+    public function __construct(Table\Category $categoryTable, UsageLimiter $usageLimiter)
     {
         $this->categoryTable = $categoryTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Category $category, ?Table\Generated\CategoryRow $existing = null): void
+    public function assert(Category $category, ?string $tenantId, ?Table\Generated\CategoryRow $existing = null): void
     {
+        $this->usageLimiter->assertCategoryCount($tenantId);
+
         $name = $category->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Category name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\CategoryRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\CategoryRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid category name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->categoryTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->categoryTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Category already exists');
         }
     }

@@ -29,13 +29,20 @@ namespace Fusio\Impl\Messenger;
  */
 class TriggerEvent
 {
+    private ?string $tenantId;
     private string $eventName;
     private mixed $payload;
 
-    public function __construct(string $eventName, mixed $payload)
+    public function __construct(?string $tenantId, string $eventName, mixed $payload)
     {
+        $this->tenantId = $tenantId;
         $this->eventName = $eventName;
         $this->payload = $payload;
+    }
+
+    public function getTenantId(): ?string
+    {
+        return $this->tenantId;
     }
 
     public function getEventName(): string

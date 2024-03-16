@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Scope;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Scope;
 use PSX\Http\Exception as StatusCode;
@@ -34,17 +35,21 @@ use PSX\Http\Exception as StatusCode;
 class Validator
 {
     private Table\Scope $scopeTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Scope $scopeTable)
+    public function __construct(Table\Scope $scopeTable, UsageLimiter $usageLimiter)
     {
         $this->scopeTable = $scopeTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Scope $scope, ?Table\Generated\ScopeRow $existing = null): void
+    public function assert(Scope $scope, ?string $tenantId, ?Table\Generated\ScopeRow $existing = null): void
     {
+        $this->usageLimiter->assertScopeCount($tenantId);
+
         $name = $scope->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Scope name must not be empty');
@@ -59,13 +64,13 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\ScopeRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\ScopeRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_\\.]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid scope name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->scopeTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->scopeTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }
     }

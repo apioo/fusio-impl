@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
             $cronjob = new CronjobCreate();
             $cronjob->setName('test');
             $cronjob->setCron($cron);
-            Environment::getService(Validator::class)->assert($cronjob);
+            Environment::getService(Validator::class)->assert($cronjob, null);
 
             $this->assertTrue($expect);
         } catch (BadRequestException $e) {

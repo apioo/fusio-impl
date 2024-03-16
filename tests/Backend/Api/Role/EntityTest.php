@@ -72,8 +72,8 @@ class EntityTest extends ControllerDbTestCase
         "consumer.payment",
         "consumer.plan",
         "consumer.scope",
-        "consumer.subscription",
         "consumer.transaction",
+        "consumer.webhook",
         "authorization",
         "default"
     ]
@@ -110,8 +110,8 @@ JSON;
         "consumer.payment",
         "consumer.plan",
         "consumer.scope",
-        "consumer.subscription",
         "consumer.transaction",
+        "consumer.webhook",
         "authorization",
         "default"
     ]

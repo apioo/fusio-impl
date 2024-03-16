@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\CategoryRow;
 use Fusio\Impl\Table\Generated\ConnectionRow;
 use PSX\Sql\Condition;
 
@@ -37,14 +38,27 @@ class Connection extends Generated\ConnectionTable
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?ConnectionRow
     {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
+        }
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?ConnectionRow
+    {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
 
-        if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
-        } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
-        }
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?ConnectionRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
     }

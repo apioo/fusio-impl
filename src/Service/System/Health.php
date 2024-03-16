@@ -47,9 +47,9 @@ class Health
         $this->secretKey = $frameworkConfig->getProjectKey();
     }
 
-    public function check(): Service\Health\CheckResult
+    public function check(): Health\CheckResult
     {
-        $checks = new Service\Health\CheckResult();
+        $checks = new Health\CheckResult();
 
         $condition  = Condition::withAnd();
         $condition->equals('status', Table\Connection::STATUS_ACTIVE);

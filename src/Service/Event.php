@@ -54,7 +54,7 @@ class Event
 
     public function create(int $categoryId, EventCreate $event, UserContext $context): int
     {
-        $this->validator->assert($event);
+        $this->validator->assert($event, $context->getTenantId());
 
         // create event
         try {
@@ -96,7 +96,7 @@ class Event
             throw new StatusCode\GoneException('Event was deleted');
         }
 
-        $this->validator->assert($event, $existing);
+        $this->validator->assert($event, $context->getTenantId(), $existing);
 
         // update event
         $existing->setName($event->getName() ?? $existing->getName());

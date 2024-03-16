@@ -178,29 +178,6 @@ final class Version20230508210151 extends AbstractMigration
             $eventTable->addUniqueIndex(['tenant_id', 'name']);
         }
 
-        if (!$schema->hasTable('fusio_event_response')) {
-            $eventResponseTable = $schema->createTable('fusio_event_response');
-            $eventResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventResponseTable->addColumn('subscription_id', 'integer');
-            $eventResponseTable->addColumn('status', 'integer');
-            $eventResponseTable->addColumn('attempts', 'integer');
-            $eventResponseTable->addColumn('code', 'integer', ['notnull' => false]);
-            $eventResponseTable->addColumn('body', 'text', ['notnull' => false]);
-            $eventResponseTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
-            $eventResponseTable->addColumn('insert_date', 'datetime');
-            $eventResponseTable->setPrimaryKey(['id']);
-        }
-
-        if (!$schema->hasTable('fusio_event_subscription')) {
-            $eventSubscriptionTable = $schema->createTable('fusio_event_subscription');
-            $eventSubscriptionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventSubscriptionTable->addColumn('event_id', 'integer');
-            $eventSubscriptionTable->addColumn('user_id', 'integer');
-            $eventSubscriptionTable->addColumn('status', 'integer');
-            $eventSubscriptionTable->addColumn('endpoint', 'string', ['length' => 255]);
-            $eventSubscriptionTable->setPrimaryKey(['id']);
-        }
-
         if (!$schema->hasTable('fusio_identity')) {
             $identityTable = $schema->createTable('fusio_identity');
             $identityTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -516,6 +493,31 @@ final class Version20230508210151 extends AbstractMigration
             $userScopeTable->addUniqueIndex(['user_id', 'scope_id']);
         }
 
+        if (!$schema->hasTable('fusio_webhook')) {
+            $webhookTable = $schema->createTable('fusio_webhook');
+            $webhookTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $webhookTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $webhookTable->addColumn('event_id', 'integer');
+            $webhookTable->addColumn('user_id', 'integer');
+            $webhookTable->addColumn('status', 'integer');
+            $webhookTable->addColumn('name', 'string', ['length' => 32]);
+            $webhookTable->addColumn('endpoint', 'string', ['length' => 255]);
+            $webhookTable->setPrimaryKey(['id']);
+        }
+
+        if (!$schema->hasTable('fusio_webhook_response')) {
+            $webhookResponseTable = $schema->createTable('fusio_webhook_response');
+            $webhookResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $webhookResponseTable->addColumn('webhook_id', 'integer');
+            $webhookResponseTable->addColumn('status', 'integer');
+            $webhookResponseTable->addColumn('attempts', 'integer');
+            $webhookResponseTable->addColumn('code', 'integer', ['notnull' => false]);
+            $webhookResponseTable->addColumn('body', 'text', ['notnull' => false]);
+            $webhookResponseTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
+            $webhookResponseTable->addColumn('insert_date', 'datetime');
+            $webhookResponseTable->setPrimaryKey(['id']);
+        }
+
         if (isset($appTable)) {
             $appTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_user_id');
         }
@@ -528,15 +530,6 @@ final class Version20230508210151 extends AbstractMigration
         if (isset($tokenTable)) {
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_token_app_id');
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_token_user_id');
-        }
-
-        if (isset($eventResponseTable)) {
-            $eventResponseTable->addForeignKeyConstraint($schema->getTable('fusio_event_subscription'), ['subscription_id'], ['id'], [], 'event_response_subscription_id');
-        }
-
-        if (isset($eventSubscriptionTable)) {
-            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_subscription_event_id');
-            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'event_subscription_user_id');
         }
 
         if (isset($identityRequestTable)) {
@@ -577,6 +570,15 @@ final class Version20230508210151 extends AbstractMigration
             $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'user_scope_scope_id');
             $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_scope_user_id');
         }
+
+        if (isset($webhookTable)) {
+            $webhookTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'webhook_event_id');
+            $webhookTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'webhook_user_id');
+        }
+
+        if (isset($webhookResponseTable)) {
+            $webhookResponseTable->addForeignKeyConstraint($schema->getTable('fusio_webhook'), ['webhook_id'], ['id'], [], 'webhook_response_webhook_id');
+        }
     }
 
     public function down(Schema $schema) : void
@@ -591,8 +593,6 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_cronjob');
         $schema->dropTable('fusio_cronjob_error');
         $schema->dropTable('fusio_event');
-        $schema->dropTable('fusio_event_response');
-        $schema->dropTable('fusio_event_subscription');
         $schema->dropTable('fusio_identity');
         $schema->dropTable('fusio_identity_request');
         $schema->dropTable('fusio_log');
@@ -611,6 +611,8 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_user');
         $schema->dropTable('fusio_user_grant');
         $schema->dropTable('fusio_user_scope');
+        $schema->dropTable('fusio_webhook');
+        $schema->dropTable('fusio_webhook_response');
     }
 
     /**

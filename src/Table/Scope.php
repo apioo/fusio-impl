@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\SchemaRow;
 use Fusio\Impl\Table\Generated\ScopeRow;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -38,14 +39,18 @@ class Scope extends Generated\ScopeTable
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?ScopeRow
     {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
+        }
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?ScopeRow
+    {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-
-        if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
-        } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
-        }
+        $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }
@@ -55,6 +60,7 @@ class Scope extends Generated\ScopeTable
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_NAME, $name);
+
         return $this->findOneBy($condition);
     }
 

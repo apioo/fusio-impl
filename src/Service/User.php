@@ -70,7 +70,7 @@ class User
 
     public function create(UserCreate $user, UserContext $context): int
     {
-        $this->validator->assert($user);
+        $this->validator->assert($user, $context->getTenantId());
 
         $roleId = $user->getRoleId();
 
@@ -126,11 +126,11 @@ class User
         $name = str_replace(' ', '_', $userInfo->getName());
 
         // check values
-        $this->validator->assertName($name);
+        $this->validator->assertName($name, $context->getTenantId());
 
         $email = $userInfo->getEmail();
         if (!empty($email)) {
-            $this->validator->assertEmail($email);
+            $this->validator->assertEmail($email, $context->getTenantId());
         }
 
         try {
@@ -138,9 +138,9 @@ class User
 
             $roleId = $identity->getRoleId();
             if (!empty($roleId)) {
-                $role = $this->roleTable->find($roleId);
+                $role = $this->roleTable->findOneByTenantAndId($context->getTenantId(), $roleId);
             } else {
-                $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
+                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
             }
 
             if (empty($role)) {
@@ -196,7 +196,7 @@ class User
             throw new StatusCode\GoneException('User was deleted');
         }
 
-        $this->validator->assert($user, $existing);
+        $this->validator->assert($user, $context->getTenantId(), $existing);
 
         try {
             $this->userTable->beginTransaction();

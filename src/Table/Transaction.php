@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Table\Generated\ScopeRow;
 use Fusio\Impl\Table\Generated\TransactionRow;
 use PSX\Sql\Condition;
 
@@ -32,11 +33,29 @@ use PSX\Sql\Condition;
  */
 class Transaction extends Generated\TransactionTable
 {
-    public function findOneByIdentifier(?string $tenantId, int $id): ?TransactionRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?TransactionRow
+    {
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndTransactionId($tenantId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
+        }
+    }
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?TransactionRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndTransactionId(?string $tenantId, string $transactionId): ?TransactionRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_TRANSACTION_ID, $transactionId);
 
         return $this->findOneBy($condition);
     }

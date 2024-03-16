@@ -53,7 +53,7 @@ class Category
 
     public function create(CategoryCreate $category, UserContext $context): int
     {
-        $this->validator->assert($category);
+        $this->validator->assert($category, $context->getTenantId());
 
         try {
             $this->categoryTable->beginTransaction();
@@ -91,7 +91,7 @@ class Category
             throw new StatusCode\GoneException('Category was deleted');
         }
 
-        $this->validator->assert($category, $existing);
+        $this->validator->assert($category, $context->getTenantId(), $existing);
 
         try {
             $this->categoryTable->beginTransaction();

@@ -59,7 +59,7 @@ class Schema
 
     public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
     {
-        $this->validator->assert($schema);
+        $this->validator->assert($schema, $context->getTenantId());
 
         try {
             $this->schemaTable->beginTransaction();
@@ -103,7 +103,7 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $this->validator->assert($schema, $existing);
+        $this->validator->assert($schema, $context->getTenantId(), $existing);
 
         try {
             $this->schemaTable->beginTransaction();

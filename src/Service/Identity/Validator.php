@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Identity;
 
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Identity;
 use PSX\Http\Exception as StatusCode;
@@ -35,29 +36,33 @@ use PSX\Sql\Condition;
 class Validator
 {
     private Table\Identity $identityTable;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Identity $identityTable)
+    public function __construct(Table\Identity $identityTable, UsageLimiter $usageLimiter)
     {
         $this->identityTable = $identityTable;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Identity $identity, ?Table\Generated\IdentityRow $existing = null): void
+    public function assert(Identity $identity, ?string $tenantId, ?Table\Generated\IdentityRow $existing = null): void
     {
+        $this->usageLimiter->assertIdentityCount($tenantId);
+
         $name = $identity->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Identity name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\IdentityRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\IdentityRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid identity name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->identityTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->identityTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Identity already exists');
         }
     }

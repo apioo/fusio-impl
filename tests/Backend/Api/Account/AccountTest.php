@@ -85,6 +85,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.transaction",
         "backend.trash",
         "backend.user",
+        "backend.webhook",
         "consumer",
         "consumer.account",
         "consumer.app",
@@ -96,8 +97,8 @@ class AccountTest extends ControllerDbTestCase
         "consumer.payment",
         "consumer.plan",
         "consumer.scope",
-        "consumer.subscription",
         "consumer.transaction",
+        "consumer.webhook",
         "authorization",
         "foo",
         "bar"

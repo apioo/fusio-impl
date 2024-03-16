@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Connection;
 
 use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Connection;
 use PSX\Http\Exception as StatusCode;
@@ -36,32 +37,36 @@ class Validator
 {
     private Table\Connection $connectionTable;
     private FrameworkConfig $frameworkConfig;
+    private UsageLimiter $usageLimiter;
 
-    public function __construct(Table\Connection $connectionTable, FrameworkConfig $frameworkConfig)
+    public function __construct(Table\Connection $connectionTable, FrameworkConfig $frameworkConfig, UsageLimiter $usageLimiter)
     {
         $this->connectionTable = $connectionTable;
         $this->frameworkConfig = $frameworkConfig;
+        $this->usageLimiter = $usageLimiter;
     }
 
-    public function assert(Connection $connection, ?Table\Generated\ConnectionRow $existing = null): void
+    public function assert(Connection $connection, ?string $tenantId, ?Table\Generated\ConnectionRow $existing = null): void
     {
+        $this->usageLimiter->assertConnectionCount($tenantId);
+
         $this->assertExcluded($connection);
 
         $name = $connection->getName();
         if ($name !== null) {
-            $this->assertName($name, $existing);
+            $this->assertName($name, $tenantId, $existing);
         } elseif ($existing === null) {
             throw new StatusCode\BadRequestException('Connection name must not be empty');
         }
     }
 
-    private function assertName(string $name, ?Table\Generated\ConnectionRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\ConnectionRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByName($name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
     }

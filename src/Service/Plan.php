@@ -56,7 +56,7 @@ class Plan
 
     public function create(PlanCreate $plan, UserContext $context): int
     {
-        $this->validator->assert($plan);
+        $this->validator->assert($plan, $context->getTenantId());
 
         try {
             $this->planTable->beginTransaction();
@@ -110,7 +110,7 @@ class Plan
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
-        $this->validator->assert($plan, $existing);
+        $this->validator->assert($plan, $context->getTenantId(), $existing);
 
         $price = $plan->getPrice();
         if ($price !== null) {

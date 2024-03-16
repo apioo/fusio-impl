@@ -57,7 +57,7 @@ class Role
 
     public function create(RoleCreate $role, UserContext $context): int
     {
-        $this->validator->assert($role);
+        $this->validator->assert($role, $context->getTenantId());
 
         try {
             $this->roleTable->beginTransaction();
@@ -100,7 +100,7 @@ class Role
             throw new StatusCode\GoneException('Role was deleted');
         }
 
-        $this->validator->assert($role, $existing);
+        $this->validator->assert($role, $context->getTenantId(), $existing);
 
         try {
             $this->roleTable->beginTransaction();

@@ -64,8 +64,8 @@ class DataBag
             'fusio_app_scope' => [],
             'fusio_token' => [],
             'fusio_cronjob_error' => [],
-            'fusio_event_subscription' => [],
-            'fusio_event_response' => [],
+            'fusio_webhook' => [],
+            'fusio_webhook_response' => [],
             'fusio_log_error' => [],
             'fusio_plan_usage' => [],
             'fusio_rate_allocation' => [],
@@ -324,18 +324,6 @@ class DataBag
         ];
     }
 
-    public function addEventResponse(int $subscription, ?string $executeDate = null, ?string $insertDate = null, ?string $tenantId = null): void
-    {
-        $this->data['fusio_event_response'][] = [
-            'subscription_id' => $subscription,
-            'status' => 2,
-            'code' => 200,
-            'attempts' => 1,
-            'execute_date' => (new \DateTime($executeDate ?? 'now'))->format('Y-m-d H:i:s'),
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
-        ];
-    }
-
     public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, string $authorizationUri, string $tokenUri, string $userInfoUri, string $idProperty = 'id', string $nameProperty = 'name', string $emailProperty = 'email', ?string $insertDate = null, ?string $tenantId = null): void
     {
         $this->data['fusio_identity'][$name] = [
@@ -371,13 +359,27 @@ class DataBag
         ];
     }
 
-    public function addEventSubscription(string $event, string $user, string $endpoint, ?string $tenantId = null): void
+    public function addWebhook(string $event, string $user, string $name, string $endpoint, ?string $tenantId = null): void
     {
-        $this->data['fusio_event_subscription'][] = [
+        $this->data['fusio_webhook'][$name] = [
+            'tenant_id' => $tenantId,
             'event_id' => $this->getReference('fusio_event', $event, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'status' => 1,
+            'name' => $name,
             'endpoint' => $endpoint
+        ];
+    }
+
+    public function addWebhookResponse(int $webhookId, ?string $executeDate = null, ?string $insertDate = null): void
+    {
+        $this->data['fusio_webhook_response'][] = [
+            'webhook_id' => $webhookId,
+            'status' => 2,
+            'code' => 200,
+            'attempts' => 1,
+            'execute_date' => (new \DateTime($executeDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 

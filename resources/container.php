@@ -13,6 +13,8 @@ use Fusio\Impl\Provider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Producer;
 use Fusio\Impl\Service\Event\Dispatcher;
+use Fusio\Impl\Service\Tenant\LimiterInterface;
+use Fusio\Impl\Tenant\UnlimitedLimiter;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Api;
@@ -95,6 +97,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Framework\Loader\ContextFactory::class);
     $services->alias(ContextFactoryInterface::class, Framework\Loader\ContextFactory::class);
+
+    $services->set(UnlimitedLimiter::class);
+    $services->alias(LimiterInterface::class, UnlimitedLimiter::class);
 
     // psx
     $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);

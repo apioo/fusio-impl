@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Impl\Messenger\TriggerEvent;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
@@ -34,14 +35,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class Dispatcher implements DispatcherInterface
 {
     private MessageBusInterface $messageBus;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $messageBus, FrameworkConfig $frameworkConfig)
     {
         $this->messageBus = $messageBus;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function dispatch(string $eventName, mixed $payload): void
     {
-        $this->messageBus->dispatch(new TriggerEvent($eventName, $payload));
+        $this->messageBus->dispatch(new TriggerEvent($this->frameworkConfig->getTenantId(), $eventName, $payload));
     }
 }

@@ -66,7 +66,7 @@ class Connection
 
     public function create(ConnectionCreate $connection, UserContext $context): int
     {
-        $this->validator->assert($connection);
+        $this->validator->assert($connection, $context->getTenantId());
 
         $name = $connection->getName();
         $class = $connection->getClass();
@@ -129,7 +129,7 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $this->validator->assert($connection, $existing);
+        $this->validator->assert($connection, $context->getTenantId(), $existing);
 
         $class = $connection->getClass();
 

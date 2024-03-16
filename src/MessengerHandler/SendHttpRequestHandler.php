@@ -42,10 +42,10 @@ class SendHttpRequestHandler
 {
     public const MAX_ATTEMPTS = 3;
 
-    private Table\Event\Response $responseTable;
+    private Table\Webhook\Response $responseTable;
     private ClientInterface $httpClient;
 
-    public function __construct(Table\Event\Response $responseTable, ClientInterface $httpClient)
+    public function __construct(Table\Webhook\Response $responseTable, ClientInterface $httpClient)
     {
         $this->responseTable = $responseTable;
         $this->httpClient = $httpClient;
@@ -54,17 +54,17 @@ class SendHttpRequestHandler
     public function __invoke(SendHttpRequest $httpRequest): void
     {
         $existing = $this->responseTable->find($httpRequest->getResponseId());
-        if (!$existing instanceof Table\Generated\EventResponseRow) {
+        if (!$existing instanceof Table\Generated\WebhookResponseRow) {
             return;
         }
 
-        if ($existing->getStatus() !== Table\Event\Response::STATUS_PENDING) {
+        if ($existing->getStatus() !== Table\Webhook\Response::STATUS_PENDING) {
             return;
         }
 
         $headers = [
             'Content-Type' => 'application/json',
-            'User-Agent'   => Base::getUserAgent(),
+            'User-Agent' => Base::getUserAgent(),
         ];
 
         $request  = new Request(Url::parse($httpRequest->getEndpoint()), 'POST', $headers, Parser::encode($httpRequest->getPayload()));
@@ -74,14 +74,14 @@ class SendHttpRequestHandler
         $attempts = $existing->getAttempts() + 1;
 
         if (($code >= 200 && $code < 400) || $code == 410) {
-            $status = Table\Event\Response::STATUS_DONE;
+            $status = Table\Webhook\Response::STATUS_DONE;
         } else {
-            $status = Table\Event\Response::STATUS_PENDING;
+            $status = Table\Webhook\Response::STATUS_PENDING;
         }
 
         // mark response as exceeded in case max attempts is reached
         if ($attempts >= self::MAX_ATTEMPTS) {
-            $status = Table\Event\Response::STATUS_EXCEEDED;
+            $status = Table\Webhook\Response::STATUS_EXCEEDED;
         }
 
         $existing->setStatus($status);
@@ -91,7 +91,7 @@ class SendHttpRequestHandler
         $existing->setExecuteDate(LocalDateTime::now());
         $this->responseTable->update($existing);
 
-        if ($status === Table\Event\Response::STATUS_PENDING) {
+        if ($status === Table\Webhook\Response::STATUS_PENDING) {
             throw new \RuntimeException('Request is still pending');
         }
     }

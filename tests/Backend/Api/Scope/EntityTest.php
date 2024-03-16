@@ -57,49 +57,49 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 46,
+    "id": 47,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
             "id": 186,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 192,
             "allow": true
         },
         {
             "id": 185,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 191,
             "allow": true
         },
         {
             "id": 184,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 190,
             "allow": true
         },
         {
             "id": 183,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 189,
             "allow": true
         },
         {
             "id": 181,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 188,
             "allow": true
         },
         {
             "id": 179,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 187,
             "allow": true
         },
         {
             "id": 178,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 186,
             "allow": true
         }
@@ -121,49 +121,49 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 46,
+    "id": 47,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
             "id": 186,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 192,
             "allow": true
         },
         {
             "id": 185,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 191,
             "allow": true
         },
         {
             "id": 184,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 190,
             "allow": true
         },
         {
             "id": 183,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 189,
             "allow": true
         },
         {
             "id": 181,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 188,
             "allow": true
         },
         {
             "id": 179,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 187,
             "allow": true
         },
         {
             "id": 178,
-            "scopeId": 46,
+            "scopeId": 47,
             "operationId": 186,
             "allow": true
         }

@@ -245,35 +245,35 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onEventSubscriptionCreate(Event\Event\Subscription\CreatedEvent $event): void
+    public function onWebhookCreate(Event\Webhook\CreatedEvent $event): void
     {
         $this->log(
             $event->getContext(),
-            $event->getSubscription()->getId(),
-            'event.subscription.create',
-            sprintf('Created event subscription %s', $event->getSubscription()->getEndpoint() ?? ''),
-            $event->getSubscription()
+            $event->getWebhook()->getId(),
+            'webhook.create',
+            sprintf('Created webhook %s', $event->getWebhook()->getName() ?? ''),
+            $event->getWebhook()
         );
     }
 
-    public function onEventSubscriptionDelete(Event\Event\Subscription\DeletedEvent $event): void
+    public function onWebhookDelete(Event\Webhook\DeletedEvent $event): void
     {
         $this->log(
             $event->getContext(),
             $event->getExisting()->getId(),
-            'event.subscription.delete',
-            sprintf('Deleted event subscription %s', $event->getExisting()->getEndpoint())
+            'webhook.delete',
+            sprintf('Deleted webhook %s', $event->getExisting()->getEndpoint())
         );
     }
 
-    public function onEventSubscriptionUpdate(Event\Event\Subscription\UpdatedEvent $event): void
+    public function onWebhookUpdate(Event\Webhook\UpdatedEvent $event): void
     {
         $this->log(
             $event->getContext(),
-            $event->getSubscription()->getId(),
-            'event.subscription.update',
-            sprintf('Updated event subscription %s', $event->getSubscription()->getEndpoint() ?? ''),
-            $event->getSubscription()
+            $event->getWebhook()->getId(),
+            'webhook.update',
+            sprintf('Updated webhook %s', $event->getWebhook()->getName() ?? ''),
+            $event->getWebhook()
         );
     }
 
@@ -537,10 +537,6 @@ class AuditListener implements EventSubscriberInterface
             Event\Event\DeletedEvent::class => 'onEventDelete',
             Event\Event\UpdatedEvent::class => 'onEventUpdate',
 
-            Event\Event\Subscription\CreatedEvent::class => 'onEventSubscriptionCreate',
-            Event\Event\Subscription\DeletedEvent::class => 'onEventSubscriptionDelete',
-            Event\Event\Subscription\UpdatedEvent::class => 'onEventSubscriptionUpdate',
-
             Event\Plan\CreatedEvent::class => 'onPlanCreate',
             Event\Plan\DeletedEvent::class => 'onPlanDelete',
             Event\Plan\UpdatedEvent::class => 'onPlanUpdate',
@@ -569,6 +565,10 @@ class AuditListener implements EventSubscriberInterface
             Event\User\CreatedEvent::class => 'onUserCreate',
             Event\User\DeletedEvent::class => 'onUserDelete',
             Event\User\UpdatedEvent::class => 'onUserUpdate',
+
+            Event\Webhook\CreatedEvent::class => 'onWebhookCreate',
+            Event\Webhook\DeletedEvent::class => 'onWebhookDelete',
+            Event\Webhook\UpdatedEvent::class => 'onWebhookUpdate',
         ];
     }
 }
