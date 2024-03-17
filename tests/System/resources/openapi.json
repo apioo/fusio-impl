@@ -402,12 +402,12 @@
           "tokens": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Backend_AppToken"
+              "$ref": "#/components/schemas/Backend_Token"
             }
           }
         }
       },
-      "Backend_AppToken": {
+      "Backend_Token": {
         "type": "object",
         "properties": {
           "id": {
@@ -416,7 +416,7 @@
           "status": {
             "type": "integer"
           },
-          "token": {
+          "name": {
             "type": "string"
           },
           "scope": {

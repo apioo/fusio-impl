@@ -271,12 +271,17 @@ class Identity
             $appId = 2;
         }
 
-        $accessToken = $this->tokenService->generateAccessToken(
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $name = 'Identity Provider ' . $existing->getName() . ' by ' . $userAgent . ' (' . $ip . ')';
+
+        $accessToken = $this->tokenService->generate(
             $context->getTenantId(),
             $appId,
             $userId,
+            $name,
             $scopes,
-            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $ip,
             $this->frameworkConfig->getExpireTokenInterval()
         );
 

@@ -132,6 +132,30 @@ class Scope extends Generated\ScopeTable
         return $scopes;
     }
 
+    public function getValidUserScopes(?string $tenantId, int $userId, ?array $scopes): array
+    {
+        if (empty($scopes)) {
+            return [];
+        }
+
+        $userScopes = $this->getTable(User\Scope::class)->getAvailableScopes($tenantId, $userId);
+        $scopes = $this->getValidScopes($tenantId, $scopes);
+
+        // check that the user can assign only the scopes which are also assigned to the user account
+        $scopes = array_filter($scopes, function (Generated\ScopeRow $scope) use ($userScopes) {
+            foreach ($userScopes as $userScope) {
+                if ($userScope['id'] == $scope->getId()) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        return array_map(function (Generated\ScopeRow $scope) {
+            return $scope->getName();
+        }, $scopes);
+    }
+
     public static function getNames(array $result): array
     {
         return array_map(function ($row) {

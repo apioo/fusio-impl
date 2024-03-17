@@ -9,6 +9,7 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $userId = null;
     private ?string $tenantId = null;
     private ?int $status = null;
+    private ?string $name = null;
     private ?string $token = null;
     private ?string $refresh = null;
     private ?string $scope = null;
@@ -54,6 +55,14 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getStatus() : int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
+    }
+    public function setName(?string $name) : void
+    {
+        $this->name = $name;
+    }
+    public function getName() : ?string
+    {
+        return $this->name;
     }
     public function setToken(string $token) : void
     {
@@ -112,6 +121,7 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('user_id', $this->userId);
         $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
+        $record->put('name', $this->name);
         $record->put('token', $this->token);
         $record->put('refresh', $this->refresh);
         $record->put('scope', $this->scope);
@@ -132,6 +142,7 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
+        $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->token = isset($data['token']) && is_string($data['token']) ? $data['token'] : null;
         $row->refresh = isset($data['refresh']) && is_string($data['refresh']) ? $data['refresh'] : null;
         $row->scope = isset($data['scope']) && is_string($data['scope']) ? $data['scope'] : null;

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table;
 
 use DateTime;
+use Fusio\Impl\Table\Generated\TokenRow;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -35,6 +36,15 @@ class Token extends Generated\TokenTable
 {
     const STATUS_ACTIVE  = 0x1;
     const STATUS_DELETED = 0x2;
+
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?TokenRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
 
     public function findByAccessToken(?string $tenantId, string $token): array|false
     {
@@ -97,7 +107,7 @@ class Token extends Generated\TokenTable
         return $this->findOneBy($con);
     }
 
-    public function removeTokenFromApp(?string $tenantId, int $tokenId): void
+    public function removeToken(?string $tenantId, int $tokenId): void
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
@@ -130,5 +140,14 @@ class Token extends Generated\TokenTable
         $queryBuilder->setParameters(array_merge([self::STATUS_DELETED], $condition->getValues()));
 
         $this->connection->executeStatement($queryBuilder->getSQL(), $queryBuilder->getParameters());
+    }
+
+    public function getCountForUser(?string $tenantId, int $userId): int
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_USER_ID, $userId);
+
+        return $this->getCount($condition);
     }
 }

@@ -190,21 +190,26 @@ class CategoriesTest extends ControllerDbTestCase
                 },
                 {
                     "id": 29,
-                    "name": "backend.transaction",
+                    "name": "backend.token",
                     "description": ""
                 },
                 {
                     "id": 30,
-                    "name": "backend.trash",
+                    "name": "backend.transaction",
                     "description": ""
                 },
                 {
                     "id": 31,
-                    "name": "backend.user",
+                    "name": "backend.trash",
                     "description": ""
                 },
                 {
                     "id": 32,
+                    "name": "backend.user",
+                    "description": ""
+                },
+                {
+                    "id": 33,
                     "name": "backend.webhook",
                     "description": ""
                 }
@@ -220,62 +225,67 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 43,
+                    "id": 45,
                     "name": "consumer.account",
                     "description": ""
                 },
                 {
-                    "id": 33,
+                    "id": 34,
                     "name": "consumer.app",
                     "description": ""
                 },
                 {
-                    "id": 34,
+                    "id": 35,
                     "name": "consumer.event",
                     "description": ""
                 },
                 {
-                    "id": 35,
+                    "id": 36,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 44,
+                    "id": 46,
                     "name": "consumer.identity",
                     "description": ""
                 },
                 {
-                    "id": 36,
+                    "id": 37,
                     "name": "consumer.log",
                     "description": ""
                 },
                 {
-                    "id": 37,
+                    "id": 38,
                     "name": "consumer.page",
                     "description": ""
                 },
                 {
-                    "id": 38,
+                    "id": 39,
                     "name": "consumer.payment",
                     "description": ""
                 },
                 {
-                    "id": 39,
+                    "id": 40,
                     "name": "consumer.plan",
                     "description": ""
                 },
                 {
-                    "id": 40,
+                    "id": 41,
                     "name": "consumer.scope",
                     "description": ""
                 },
                 {
                     "id": 42,
+                    "name": "consumer.token",
+                    "description": ""
+                },
+                {
+                    "id": 44,
                     "name": "consumer.transaction",
                     "description": ""
                 },
                 {
-                    "id": 41,
+                    "id": 43,
                     "name": "consumer.webhook",
                     "description": ""
                 }
@@ -286,7 +296,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 47,
+                    "id": 49,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -296,12 +306,12 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 46,
+                    "id": 48,
                     "name": "foo",
                     "description": "Foo access"
                 },
                 {
-                    "id": 48,
+                    "id": 50,
                     "name": "plan_scope",
                     "description": "Plan scope access"
                 }
@@ -312,7 +322,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 45,
+                    "id": 47,
                     "name": "system",
                     "description": ""
                 }

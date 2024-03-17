@@ -82,21 +82,13 @@ class Webhook extends Generated\WebhookTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
-    public function getWebhookCount(?string $tenantId, int $userId): int
+    public function getCountForUser(?string $tenantId, int $userId): int
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_USER_ID, $userId);
 
-        $queryBuilder = $this->connection->createQueryBuilder()
-            ->select([
-                'COUNT(webhook.id) AS cnt',
-            ])
-            ->from('fusio_webhook', 'webhook')
-            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
-            ->setParameters($condition->getValues());
-
-        return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
+        return $this->getCount($condition);
     }
 
     public function deleteAllResponses(int $webhookId): void

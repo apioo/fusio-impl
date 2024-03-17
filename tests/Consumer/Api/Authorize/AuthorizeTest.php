@@ -53,12 +53,12 @@ class AuthorizeTest extends ControllerDbTestCase
     "url": "http:\/\/google.com",
     "scopes": [
         {
-            "id": 46,
+            "id": 48,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 47,
+            "id": 49,
             "name": "bar",
             "description": "Bar access"
         }
@@ -244,7 +244,7 @@ JSON;
         ]);
 
         $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals($data['token']['access_token'], $row['token']);
         $this->assertEquals('authorization,foo,bar', $row['scope']);

@@ -18,42 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Authorization;
+namespace Fusio\Impl\Consumer\Action\Token;
 
-use Fusio\Impl\Authorization\TokenGenerator;
-use PHPUnit\Framework\TestCase;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Consumer\Token;
+use Fusio\Model\Consumer\TokenCreate;
+use PSX\Http\Environment\HttpResponse;
 
 /**
- * TokenGeneratorTest
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TokenGeneratorTest extends TestCase
+class Create implements ActionInterface
 {
-    public function testGenerateRefreshToken()
+    private Token $tokenService;
+
+    public function __construct(Token $tokenService)
     {
-        $this->assertEquals(80, strlen(TokenGenerator::generateRefreshToken()));
+        $this->tokenService = $tokenService;
     }
 
-    public function testGenerateCode()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertEquals(16, strlen(TokenGenerator::generateCode()));
-    }
+        $body = $request->getPayload();
 
-    public function testGenerateAppKey()
-    {
-        $this->assertEquals(36, strlen(TokenGenerator::generateAppKey()));
-    }
+        assert($body instanceof TokenCreate);
 
-    public function testGenerateAppSecret()
-    {
-        $this->assertEquals(64, strlen(TokenGenerator::generateAppSecret()));
-    }
+        $token = $this->tokenService->create(
+            $body,
+            UserContext::newActionContext($context)
+        );
 
-    public function testGenerateUserPassword()
-    {
-        $this->assertEquals(20, strlen(TokenGenerator::generateUserPassword()));
+        return new HttpResponse(201, [], $token);
     }
 }

@@ -39,7 +39,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -73,7 +73,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=bar', 'GET', array(
+        $response = $this->sendRequest('/backend/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=bar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -107,7 +107,7 @@ JSON;
 
     public function testGetCount()
     {
-        $response = $this->sendRequest('/backend/app/token?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/token?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -141,7 +141,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/app/token', 'POST', array(
+        $response = $this->sendRequest('/backend/token', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -155,7 +155,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/app/token', 'PUT', array(
+        $response = $this->sendRequest('/backend/token', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -169,7 +169,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/app/token', 'DELETE', array(
+        $response = $this->sendRequest('/backend/token', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

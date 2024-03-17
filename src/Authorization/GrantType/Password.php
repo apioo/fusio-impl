@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
+use Fusio\Impl\Authorization\TokenNameBuilder;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\OAuth2\Credentials;
@@ -79,13 +80,18 @@ class Password extends PasswordAbstract
             throw new InvalidScopeException('No valid scope given');
         }
 
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $name = 'OAuth2 Resource Owner Password Credentials by ' . $userAgent . ' (' . $ip . ')';
+
         // generate access token
-        return $this->tokenService->generateAccessToken(
+        return $this->tokenService->generate(
             $this->frameworkConfig->getTenantId(),
             $app->getId(),
             $userId,
+            $name,
             $scopes,
-            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $ip,
             $this->frameworkConfig->getExpireTokenInterval()
         );
     }

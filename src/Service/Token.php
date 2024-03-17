@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service;
 
 use DateInterval;
 use DateTime;
+use DateTimeInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Token\GeneratedEvent;
@@ -61,28 +62,32 @@ class Token
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function generateAccessToken(?string $tenantId, ?int $appId, int $userId, array $scopes, string $ip, DateInterval $expire, ?string $state = null): AccessToken
+    public function generate(?string $tenantId, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken
     {
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No scopes provided');
         }
 
-        $app  = $appId !== null ? $this->getApp($tenantId, $appId) : null;
+        $now = new DateTime();
+        $app = $appId !== null ? $this->getApp($tenantId, $appId, $userId) : null;
         $user = $this->getUser($tenantId, $userId);
+        $expires = $this->getExpires($expire, $now);
 
-        $now     = new \DateTime();
-        $expires = new \DateTime();
-        $expires->add($expire);
+        // trim long user agents
+        if (strlen($name) > 250) {
+            $name = substr($name, 0, 250);
+        }
 
         // generate access token
         $accessToken  = $this->generateJWT($user, $now, $expires);
-        $refreshToken = TokenGenerator::generateToken();
+        $refreshToken = TokenGenerator::generateRefreshToken();
 
         $row = new Table\Generated\TokenRow();
         $row->setTenantId($tenantId);
         $row->setAppId($app?->getId());
         $row->setUserId($user->getId());
         $row->setStatus(Table\Token::STATUS_ACTIVE);
+        $row->setName($name);
         $row->setToken($accessToken);
         $row->setRefresh($refreshToken);
         $row->setScope(implode(',', $scopes));
@@ -113,67 +118,47 @@ class Token
         );
     }
 
-    public function refreshAccessToken(?string $tenantId, string $refreshToken, string $ip, DateInterval $expireApp, DateInterval $expireRefresh): AccessToken
+    public function refresh(?string $tenantId, string $name, string $refreshToken, string $ip, DateInterval|DateTimeInterface $expire, DateInterval $expireRefresh): AccessToken
     {
-        $token = $this->tokenTable->findOneByTenantAndRefreshToken($tenantId, $refreshToken);
-        if (empty($token)) {
+        $existing = $this->tokenTable->findOneByTenantAndRefreshToken($tenantId, $refreshToken);
+        if (empty($existing)) {
             throw new StatusCode\BadRequestException('Invalid refresh token');
         }
 
         // check expire date
-        $now = new \DateTime();
-        $date = $token->getDate()->toDateTime();
+        $now = new DateTime();
+        $date = $existing->getDate()->toDateTime();
         $expires = $date->add($expireRefresh);
 
         if ($expires < $now) {
             throw new StatusCode\BadRequestException('Refresh token is expired');
         }
 
-        $user = $this->getUser($tenantId, $token->getUserId());
+        $scopes = explode(',', $existing->getScope());
 
-        $scopes  = explode(',', $token->getScope());
-        $expires = new \DateTime();
-        $expires->add($expireApp);
+        // delete existing token
+        $existing->setStatus(Table\Token::STATUS_DELETED);
+        $this->tokenTable->update($existing);
 
-        // generate access token
-        $accessToken  = $this->generateJWT($user, $now, $expires);
-        $refreshToken = TokenGenerator::generateToken();
-
-        $token->setStatus(Table\Token::STATUS_ACTIVE);
-        $token->setToken($accessToken);
-        $token->setRefresh($refreshToken);
-        $token->setIp($ip);
-        $token->setExpire(LocalDateTime::from($expires));
-        $token->setDate(LocalDateTime::from($now));
-        $this->tokenTable->update($token);
-
-        // dispatch event
-        $this->eventDispatcher->dispatch(new GeneratedEvent(
-            $token->getId(),
-            $accessToken,
+        return $this->generate(
+            $tenantId,
+            $existing->getAppId(),
+            $existing->getUserId(),
+            $name,
             $scopes,
-            $expires,
-            $now,
-            new UserContext($token->getUserId(), $token->getAppId(), $ip, $tenantId)
-        ));
-
-        return new AccessToken(
-            $accessToken,
-            'bearer',
-            $expires->getTimestamp() - $now->getTimestamp(),
-            $refreshToken,
-            implode(',', $scopes)
+            $ip,
+            $expire
         );
     }
 
-    public function removeToken(int $tokenId, UserContext $context): void
+    public function remove(int $tokenId, UserContext $context): void
     {
-        $this->tokenTable->removeTokenFromApp($context->getTenantId(), $tokenId);
+        $this->tokenTable->removeToken($context->getTenantId(), $tokenId);
 
         $this->eventDispatcher->dispatch(new RemovedEvent($tokenId, $context));
     }
 
-    private function generateJWT(Table\Generated\UserRow $user, DateTime $now, DateTime $expires): string
+    private function generateJWT(Table\Generated\UserRow $user, DateTimeInterface $now, DateTimeInterface $expires): string
     {
         $baseUrl = $this->frameworkConfig->getUrl();
 
@@ -188,14 +173,18 @@ class Token
         return $this->jsonWebToken->encode($payload);
     }
 
-    private function getApp(?string $tenantId, int $appId): Table\Generated\AppRow
+    private function getApp(?string $tenantId, int $appId, int $userId): Table\Generated\AppRow
     {
         $app = $this->appTable->findOneByTenantAndId($tenantId, $appId);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Invalid app');
         }
 
-        if ($app->getStatus() != Table\App::STATUS_ACTIVE) {
+        if ($app->getUserId() !== $userId) {
+            throw new StatusCode\BadRequestException('Provided app is not assigned to the user');
+        }
+
+        if ($app->getStatus() !== Table\App::STATUS_ACTIVE) {
             throw new StatusCode\BadRequestException('Invalid app status');
         }
 
@@ -214,5 +203,26 @@ class Token
         }
 
         return $user;
+    }
+
+    private function getExpires(DateInterval|DateTimeInterface $expire, DateTimeInterface $now): DateTimeInterface
+    {
+        if ($expire instanceof DateInterval) {
+            $expires = new DateTime();
+            $expires->add($expire);
+
+            return $expires;
+        } else {
+            $diff = $now->diff($expire);
+            if ($diff->days > 365) {
+                throw new StatusCode\BadRequestException('Expire date can only be max 365 days into the future');
+            }
+
+            if ($diff->invert) {
+                throw new StatusCode\BadRequestException('Expire date must be in the future');
+            }
+
+            return $expire;
+        }
     }
 }

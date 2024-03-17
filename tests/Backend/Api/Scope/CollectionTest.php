@@ -52,17 +52,17 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 48,
+            "id": 50,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 47,
+            "id": 49,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 46,
+            "id": 48,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -97,7 +97,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 46,
+            "id": 48,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -127,17 +127,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 48,
+            "id": 50,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 47,
+            "id": 49,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 46,
+            "id": 48,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -201,7 +201,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(49, $row['id']);
+        $this->assertEquals(51, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);

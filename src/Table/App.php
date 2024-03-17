@@ -93,4 +93,13 @@ class App extends Generated\AppTable
 
         return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
+
+    public function getCountForUser(?string $tenantId, int $userId): int
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_USER_ID, $userId);
+
+        return $this->getCount($condition);
+    }
 }

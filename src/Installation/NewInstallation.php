@@ -80,9 +80,10 @@ class NewInstallation
         $bag->addAppScope('Developer', 'authorization', tenantId: $tenantId);
         $bag->addAppScope('Developer', 'default', tenantId: $tenantId);
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', tenantId: $tenantId);
-        $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register', tenantId: $tenantId);
+        $bag->addConfig('consumer_max_apps', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can generate', tenantId: $tenantId);
+        $bag->addConfig('consumer_max_tokens', Table\Config::FORM_NUMBER, 16, 'The max amount of tokens a consumer can generate', tenantId: $tenantId);
+        $bag->addConfig('consumer_max_webhooks', Table\Config::FORM_NUMBER, 8, 'The max amount of webhooks a consumer can register', tenantId: $tenantId);
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow', tenantId: $tenantId);
-        $bag->addConfig('consumer_subscription', Table\Config::FORM_NUMBER, 8, 'The max amount of subscriptions a consumer can add', tenantId: $tenantId);
         $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application', tenantId: $tenantId);
         $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
         $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL', tenantId: $tenantId);
@@ -259,23 +260,6 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     throws: [404 => Model\Common\Message::class, 401 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     eventName: 'fusio.action.delete',
-                ),
-                'app.getAllTokens' => new Operation(
-                    action: Backend\Action\Token\GetAll::class,
-                    httpMethod: 'GET',
-                    httpPath: '/app/token',
-                    httpCode: 200,
-                    outgoing: Model\Backend\AppTokenCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'status' => TypeFactory::getInteger(), 'scope' => TypeFactory::getString(), 'ip' => TypeFactory::getString()],
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
-                ),
-                'app.getToken' => new Operation(
-                    action: Backend\Action\Token\Get::class,
-                    httpMethod: 'GET',
-                    httpPath: '/app/token/$token_id<[0-9]+>',
-                    httpCode: 200,
-                    outgoing: Model\Backend\AppToken::class,
-                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'app.getAll' => new Operation(
                     action: Backend\Action\App\GetAll::class,
@@ -1250,6 +1234,23 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
+                'token.getAll' => new Operation(
+                    action: Backend\Action\Token\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/token',
+                    httpCode: 200,
+                    outgoing: Model\Backend\TokenCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'status' => TypeFactory::getInteger(), 'scope' => TypeFactory::getString(), 'ip' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.get' => new Operation(
+                    action: Backend\Action\Token\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/token/$token_id<[0-9]+>',
+                    httpCode: 200,
+                    outgoing: Model\Backend\Token::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
                 'transaction.getAll' => new Operation(
                     action: Backend\Action\Transaction\GetAll::class,
                     httpMethod: 'GET',
@@ -1535,6 +1536,49 @@ class NewInstallation
                     outgoing: Model\Consumer\ScopeCollection::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.getAll' => new Operation(
+                    action: Consumer\Action\Token\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/token',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\TokenCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.create' => new Operation(
+                    action: Consumer\Action\Token\Create::class,
+                    httpMethod: 'POST',
+                    httpPath: '/token',
+                    httpCode: 201,
+                    outgoing: Model\Consumer\TokenAccessToken::class,
+                    incoming: Model\Consumer\TokenCreate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.get' => new Operation(
+                    action: Consumer\Action\Token\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/token/$token_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\Token::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.update' => new Operation(
+                    action: Consumer\Action\Token\Update::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/token/$token_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\TokenAccessToken::class,
+                    incoming: Model\Consumer\TokenUpdate::class,
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'token.delete' => new Operation(
+                    action: Consumer\Action\Token\Delete::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/token/$token_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'webhook.getAll' => new Operation(
                     action: Consumer\Action\Webhook\GetAll::class,

@@ -115,10 +115,15 @@ class Authorize
                 }
 
                 // generate access token
-                $accessToken = $this->tokenService->generateAccessToken(
+                $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+                $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+                $name = 'OAuth2 Authorization Code by ' . $userAgent . ' (' . $ip . ')';
+
+                $accessToken = $this->tokenService->generate(
                     $app->getTenantId(),
                     $app->getId(),
                     $userId,
+                    $name,
                     $scopes,
                     $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
                     $this->frameworkConfig->getExpireTokenInterval(),

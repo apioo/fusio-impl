@@ -48,10 +48,10 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 3,
-    "type": 1,
-    "name": "authorization_url",
-    "description": "Url where the user can authorize for the OAuth2 flow",
-    "value": ""
+    "type": 3,
+    "name": "consumer_max_tokens",
+    "description": "The max amount of tokens a consumer can generate",
+    "value": 16
 }
 JSON;
 
@@ -69,7 +69,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": 3,
+    "id": 5,
     "type": 1,
     "name": "authorization_url",
     "description": "Url where the user can authorize for the OAuth2 flow",
@@ -101,7 +101,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'value' => 'foo,bar',
+            'value' => 32,
         ]));
 
         $body   = (string) $response->getBody();
@@ -125,10 +125,10 @@ JSON;
         $row = $this->connection->fetchAssociative($sql, ['id' => 3]);
 
         $this->assertEquals(3, $row['id']);
-        $this->assertEquals(1, $row['type']);
-        $this->assertEquals('authorization_url', $row['name']);
-        $this->assertEquals('Url where the user can authorize for the OAuth2 flow', $row['description']);
-        $this->assertEquals('foo,bar', $row['value']);
+        $this->assertEquals(3, $row['type']);
+        $this->assertEquals('consumer_max_tokens', $row['name']);
+        $this->assertEquals('The max amount of tokens a consumer can generate', $row['description']);
+        $this->assertEquals(32, $row['value']);
     }
 
     public function testDelete()

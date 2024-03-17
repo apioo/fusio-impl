@@ -18,9 +18,13 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Webhook;
+namespace Fusio\Impl\Tests\Consumer\Api\Token;
 
+use Fusio\Impl\Table\App;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
+use Monolog\DateTimeImmutable;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -39,24 +43,66 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/webhook', 'GET', array(
+        $response = $this->sendRequest('/consumer/token', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 6,
+            "status": 1,
+            "scope": [
+                "backend"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
+        },
+        {
+            "id": 5,
+            "status": 1,
+            "scope": [
+                "consumer"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "scope": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "scope": [
+                "consumer",
+                "authorization"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
+        },
+        {
             "id": 1,
             "status": 1,
-            "event": "foo-event",
-            "endpoint": "http:\/\/www.fusio-project.org\/ping"
+            "scope": [
+                "backend",
+                "authorization"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
         }
     ]
 }
@@ -66,33 +112,44 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetUnauthorized()
+    {
+        $response = $this->sendRequest('/consumer/token', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(401, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Missing authorization header', $data->message);
+    }
+
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
+        $response = $this->sendRequest('/consumer/token', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'event' => 'foo-event',
-            'name' => 'test',
-            'endpoint' => 'http://127.0.0.1/new-callback.php',
+            'name' => 'Foo',
+            'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format(\DateTimeInterface::RFC3339),
+            'scope' => ['foo', 'bar']
         ]));
 
         $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Webhook successfully created"
-}
-JSON;
-
-        $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertNotEmpty($data->access_token);
+        $this->assertEquals('bearer', $data->token_type);
+        $this->assertEquals(345600, $data->expires_in);
+        $this->assertNotEmpty($data->refresh_token);
+        $this->assertEquals('bar,foo,authorization', $data->scope);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'event_id', 'user_id', 'status', 'name', 'endpoint')
-            ->from('fusio_webhook')
+            ->select('id', 'status', 'app_id', 'user_id', 'name', 'token', 'refresh', 'scope')
+            ->from('fusio_token')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -100,49 +157,19 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(3, $row['id']);
-        $this->assertEquals(56, $row['event_id']);
+        $this->assertEquals(7, $row['id']);
+        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('test', $row['name']);
-        $this->assertEquals('http://127.0.0.1/new-callback.php', $row['endpoint']);
-    }
-
-    public function testPostEmptyEndpoint()
-    {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
-            'event' => 'foo-event',
-            'endpoint' => '',
-        ]));
-
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertStringContainsString('/ the following properties are required: name', $body, $body);
-    }
-
-    public function testPostInvalidEndpoint()
-    {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
-            'event' => 'foo-event',
-            'endpoint' => 'foobar',
-        ]));
-
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertStringContainsString('/ the following properties are required: name', $body, $body);
+        $this->assertEquals('Foo', $row['name']);
+        $this->assertNotEmpty($row['token']);
+        $this->assertNotEmpty($row['refresh']);
+        $this->assertEquals('bar,foo,authorization', $row['scope']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/webhook', 'PUT', array(
+        $response = $this->sendRequest('/consumer/token', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -156,7 +183,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/webhook', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/token', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

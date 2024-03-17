@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\View;
+namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
@@ -47,21 +47,24 @@ class Token extends ViewAbstract
         $sortBy = $filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID);
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE]);
+        $condition = $filter->getCondition([]);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_STATUS, Table\Token::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
-            'itemsPerPage' => $count,
+            'itemsPerPage' => 16,
             'entry' => $builder->doCollection([$this->getTable(Table\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
-                'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
+                'id' => Table\Generated\TokenTable::COLUMN_ID,
+                'status' => Table\Generated\TokenTable::COLUMN_STATUS,
                 'name' => Table\Generated\TokenTable::COLUMN_NAME,
                 'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
                 'ip' => Table\Generated\TokenTable::COLUMN_IP,
+                'expire' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_EXPIRE),
                 'date' => $builder->fieldDateTime(Table\Generated\TokenTable::COLUMN_DATE),
             ]),
         ];
@@ -69,11 +72,17 @@ class Token extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(int $tokenId, ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\TokenTable::COLUMN_ID, $tokenId);
+        $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
+
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Token::class), 'findOneByTenantAndId'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Token::class), 'findOneBy'], [$condition], [
             'id' => Table\Generated\TokenTable::COLUMN_ID,
             'status' => Table\Generated\TokenTable::COLUMN_STATUS,
             'name' => Table\Generated\TokenTable::COLUMN_NAME,

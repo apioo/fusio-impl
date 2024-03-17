@@ -74,8 +74,9 @@ class TokenCommand extends Command
         $scopes = $this->parseScopes($tenantId, $input->getArgument('scopes'), $app, $user);
         $expire = $this->parseExpire($input->getArgument('expire'));
         $ip = '127.0.0.1';
+        $name = 'CLI';
 
-        $accessToken = $this->tokenService->generateAccessToken($tenantId, $app->getId(), $user->getId(), $scopes, $ip, $expire);
+        $accessToken = $this->tokenService->generate($tenantId, $app->getId(), $user->getId(), $name, $scopes, $ip, $expire);
 
         $response = [
             'App'   => $app->getName(),

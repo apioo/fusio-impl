@@ -185,7 +185,7 @@ JSON;
         $result = $this->connection->fetchAllAssociative($sql, ['plan_id' => 1]);
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals(47, $result[0]['scope_id']);
+        $this->assertEquals(49, $result[0]['scope_id']);
     }
 
     public function testDelete()

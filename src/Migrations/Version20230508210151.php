@@ -400,6 +400,7 @@ final class Version20230508210151 extends AbstractMigration
             $tokenTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $tokenTable->addColumn('user_id', 'integer');
             $tokenTable->addColumn('status', 'integer', ['default' => 1]);
+            $tokenTable->addColumn('name', 'string', ['length' => 255, 'notnull' => false]);
             $tokenTable->addColumn('token', 'string', ['length' => 512]);
             $tokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
             $tokenTable->addColumn('scope', 'string', ['length' => 1023]);

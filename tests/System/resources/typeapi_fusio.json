@@ -29,6 +29,7 @@
       "backend.sdk": "",
       "backend.statistic": "",
       "backend.tenant": "",
+      "backend.token": "",
       "backend.transaction": "",
       "backend.trash": "",
       "backend.user": "",
@@ -1250,6 +1251,277 @@
       "authorization": true,
       "tags": [
         "webhook"
+      ]
+    },
+    "consumer.token.delete": {
+      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "token_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
+      ]
+    },
+    "consumer.token.update": {
+      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_TokenAccessToken"
+        }
+      },
+      "arguments": {
+        "token_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_TokenUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
+      ]
+    },
+    "consumer.token.get": {
+      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_Token"
+        }
+      },
+      "arguments": {
+        "token_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
+      ]
+    },
+    "consumer.token.create": {
+      "path": "/consumer/token",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Consumer_TokenAccessToken"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Consumer_TokenCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
+      ]
+    },
+    "consumer.token.getAll": {
+      "path": "/consumer/token",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Consumer_TokenCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "consumer.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
       ]
     },
     "consumer.scope.getAll": {
@@ -2973,6 +3245,150 @@
       "authorization": true,
       "tags": [
         "transaction"
+      ]
+    },
+    "backend.token.get": {
+      "path": "/backend/token/$token_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_Token"
+        }
+      },
+      "arguments": {
+        "token_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
+      ]
+    },
+    "backend.token.getAll": {
+      "path": "/backend/token",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_TokenCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "status": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "scope": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 1,
+      "security": [
+        "backend.token"
+      ],
+      "authorization": true,
+      "tags": [
+        "token"
       ]
     },
     "backend.tenant.remove": {
@@ -9417,150 +9833,6 @@
         "app"
       ]
     },
-    "backend.app.getToken": {
-      "path": "/backend/app/token/$token_id<[0-9]+>",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Backend_AppToken"
-        }
-      },
-      "arguments": {
-        "token_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.app"
-      ],
-      "authorization": true,
-      "tags": [
-        "app"
-      ]
-    },
-    "backend.app.getAllTokens": {
-      "path": "/backend/app/token",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "$ref": "Backend_AppTokenCollection"
-        }
-      },
-      "arguments": {
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "search": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "from": {
-          "in": "query",
-          "schema": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "to": {
-          "in": "query",
-          "schema": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "appId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "userId": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "status": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "scope": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "ip": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 401,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "$ref": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 1,
-      "security": [
-        "backend.app"
-      ],
-      "authorization": true,
-      "tags": [
-        "app"
-      ]
-    },
     "backend.action.delete": {
       "path": "/backend/action/$action_id<[0-9]+|^~>",
       "method": "DELETE",
@@ -10276,7 +10548,7 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "Backend_AppToken"
+            "$ref": "Backend_Token"
           }
         }
       }
@@ -10296,43 +10568,6 @@
         "url",
         "scopes"
       ]
-    },
-    "Backend_AppToken": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "token": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ip": {
-          "type": "string"
-        },
-        "expire": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_AppTokenCollection": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_AppToken"
-      }
     },
     "Backend_AppUpdate": {
       "$extends": "Backend_App",
@@ -11616,6 +11851,43 @@
         }
       }
     },
+    "Backend_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_TokenCollection": {
+      "$ref": "Common_Collection",
+      "$template": {
+        "T": "Backend_Token"
+      }
+    },
     "Backend_Transaction": {
       "type": "object",
       "properties": {
@@ -12360,6 +12632,100 @@
       "$template": {
         "T": "Consumer_Scope"
       }
+    },
+    "Consumer_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_TokenAccessToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "integer"
+        },
+        "refresh_token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_TokenCollection": {
+      "$ref": "Common_Collection",
+      "$template": {
+        "T": "Consumer_Token"
+      }
+    },
+    "Consumer_TokenCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "expire"
+      ]
+    },
+    "Consumer_TokenUpdate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expire"
+      ]
     },
     "Consumer_Transaction": {
       "type": "object",

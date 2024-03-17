@@ -18,41 +18,50 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\App;
+namespace Fusio\Impl\Consumer\Action\Token;
 
+use Fusio\Engine\Action\RuntimeInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service;
+use Fusio\Impl\Service\Consumer\App;
+use Fusio\Impl\Service\Consumer\Token;
+use Fusio\Model\Consumer\AppCreate;
+use Fusio\Model\Consumer\AppUpdate;
+use Fusio\Model\Consumer\TokenUpdate;
+use PSX\Http\Environment\HttpResponse;
 
 /**
- * DeleteToken
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DeleteToken implements ActionInterface
+class Update implements ActionInterface
 {
-    private Service\Token $tokenService;
+    private Token $tokenService;
 
-    public function __construct(Service\Token $tokenService)
+    public function __construct(Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->tokenService->remove(
-            (int) $request->get('token_id'),
+        $body = $request->getPayload();
+
+        assert($body instanceof TokenUpdate);
+
+        $token = $this->tokenService->update(
+            $request->get('token_id'),
+            $body,
             UserContext::newActionContext($context)
         );
 
-        return [
-            'success' => true,
-            'message' => 'Removed token successful',
-        ];
+        return new HttpResponse(201, [], $token);
     }
 }

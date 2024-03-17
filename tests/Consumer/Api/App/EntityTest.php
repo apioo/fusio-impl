@@ -76,6 +76,7 @@ class EntityTest extends ControllerDbTestCase
         "consumer.payment",
         "consumer.plan",
         "consumer.scope",
+        "consumer.token",
         "consumer.transaction",
         "consumer.webhook",
         "authorization",

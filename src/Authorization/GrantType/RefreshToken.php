@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
+use Fusio\Impl\Authorization\TokenNameBuilder;
 use Fusio\Impl\Service;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
@@ -46,10 +47,15 @@ class RefreshToken extends RefreshTokenAbstract
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
-        return $this->tokenService->refreshAccessToken(
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $name = 'OAuth2 Refresh Token by ' . $userAgent . ' (' . $ip . ')';
+
+        return $this->tokenService->refresh(
             $this->frameworkConfig->getTenantId(),
+            $name,
             $grant->getRefreshToken(),
-            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $ip,
             $this->frameworkConfig->getExpireTokenInterval(),
             $this->frameworkConfig->getExpireRefreshInterval()
         );

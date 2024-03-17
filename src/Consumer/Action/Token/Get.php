@@ -18,42 +18,42 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Authorization;
+namespace Fusio\Impl\Consumer\Action\Token;
 
-use Fusio\Impl\Authorization\TokenGenerator;
-use PHPUnit\Framework\TestCase;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Consumer\View;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * TokenGeneratorTest
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TokenGeneratorTest extends TestCase
+class Get implements ActionInterface
 {
-    public function testGenerateRefreshToken()
+    private View\Token $view;
+
+    public function __construct(View\Token $view)
     {
-        $this->assertEquals(80, strlen(TokenGenerator::generateRefreshToken()));
+        $this->view = $view;
     }
 
-    public function testGenerateCode()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertEquals(16, strlen(TokenGenerator::generateCode()));
-    }
+        $token = $this->view->getEntity(
+            (int) $request->get('token_id'),
+            $context
+        );
 
-    public function testGenerateAppKey()
-    {
-        $this->assertEquals(36, strlen(TokenGenerator::generateAppKey()));
-    }
+        if (empty($token)) {
+            throw new StatusCode\NotFoundException('Could not find token');
+        }
 
-    public function testGenerateAppSecret()
-    {
-        $this->assertEquals(64, strlen(TokenGenerator::generateAppSecret()));
-    }
-
-    public function testGenerateUserPassword()
-    {
-        $this->assertEquals(20, strlen(TokenGenerator::generateUserPassword()));
+        return $token;
     }
 }

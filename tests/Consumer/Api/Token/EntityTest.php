@@ -18,11 +18,15 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Webhook;
+namespace Fusio\Impl\Tests\Consumer\Api\Token;
 
+use Fusio\Impl\Table;
+use Fusio\Impl\Table\Token;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * EntityTest
@@ -40,7 +44,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/token/2', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -48,20 +52,21 @@ class EntityTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
+        $data = json_decode($body);
+        $sec  = $data->appSecret ?? null;
+        $body = str_replace(trim(json_encode($sec), '"'), '[app_secret]', $body);
+
         $expect = <<<'JSON'
 {
-    "id": 1,
+    "id": 2,
     "status": 1,
-    "event": "foo-event",
-    "endpoint": "http:\/\/www.fusio-project.org\/ping",
-    "responses": [
-        {
-            "status": 2,
-            "code": 200,
-            "attempts": 1,
-            "executeDate": "[datetime]"
-        }
-    ]
+    "scope": [
+        "consumer",
+        "authorization"
+    ],
+    "ip": "127.0.0.1",
+    "expire": "[datetime]",
+    "date": "[datetime]"
 }
 JSON;
 
@@ -71,7 +76,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/token/2', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -85,59 +90,68 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/token/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'event' => 'foo-event',
-            'name' => 'foofoo',
-            'endpoint' => 'http://127.0.0.1/changed-callback.php',
+            'name' => 'baz',
+            'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format(\DateTimeInterface::RFC3339),
+            'scopes' => ['foo', 'bar'], // scopes can not change on update
         ]));
 
         $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Webhook successfully updated"
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertNotEmpty($data->access_token);
+        $this->assertEquals('bearer', $data->token_type);
+        $this->assertEquals(345600, $data->expires_in);
+        $this->assertNotEmpty($data->refresh_token);
+        $this->assertEquals('consumer,authorization', $data->scope);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'event_id', 'user_id', 'status', 'name', 'endpoint')
-            ->from('fusio_webhook')
-            ->where('id = :id')
+            ->select('id', 'status', 'app_id', 'user_id', 'name', 'token', 'refresh', 'scope')
+            ->from('fusio_token')
+            ->where('id = 2')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(1, $row['id']);
-        $this->assertEquals(56, $row['event_id']);
+        // the original token gets deleted
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(Token::STATUS_DELETED, $row['status']);
+
+        // and we a new token was created
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'status', 'app_id', 'user_id', 'name', 'token', 'refresh', 'scope')
+            ->from('fusio_token')
+            ->where('token = :token')
+            ->getSQL();
+
+        $row = $this->connection->fetchAssociative($sql, ['token' => $data->access_token]);
+
+        $this->assertEquals(7, $row['id']);
+        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('foofoo', $row['name']);
-        $this->assertEquals('http://127.0.0.1/changed-callback.php', $row['endpoint']);
+        $this->assertEquals('baz', $row['name']);
+        $this->assertNotEmpty($row['token']);
+        $this->assertNotEmpty($row['refresh']);
+        $this->assertEquals('consumer,authorization', $row['scope']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/token/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
+        ));
 
-        $body = (string) $response->getBody();
-
+        $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully deleted"
+    "message": "Token successfully deleted"
 }
 JSON;
 
@@ -146,13 +160,14 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'event_id', 'user_id', 'status', 'endpoint')
-            ->from('fusio_webhook')
-            ->where('id = :id')
+            ->select('id', 'status')
+            ->from('fusio_token')
+            ->where('id = 2')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEmpty($row);
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(Table\Token::STATUS_DELETED, $row['status']);
     }
 }

@@ -65,7 +65,7 @@ class Revoke implements ActionInterface
 
         // the token must be assigned to the user
         if ($row instanceof Table\Generated\TokenRow && $row->getUserId() == $context->getUser()->getId()) {
-            $this->tokenService->removeToken($row->getId(), UserContext::newActionContext($context));
+            $this->tokenService->remove($row->getId(), UserContext::newActionContext($context));
 
             return [
                 'success' => true

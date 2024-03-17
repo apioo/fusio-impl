@@ -57,50 +57,50 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 47,
+    "id": 49,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
-            "id": 186,
-            "scopeId": 47,
-            "operationId": 192,
+            "id": 191,
+            "scopeId": 49,
+            "operationId": 197,
             "allow": true
         },
         {
-            "id": 185,
-            "scopeId": 47,
-            "operationId": 191,
+            "id": 190,
+            "scopeId": 49,
+            "operationId": 196,
+            "allow": true
+        },
+        {
+            "id": 189,
+            "scopeId": 49,
+            "operationId": 195,
+            "allow": true
+        },
+        {
+            "id": 188,
+            "scopeId": 49,
+            "operationId": 194,
+            "allow": true
+        },
+        {
+            "id": 186,
+            "scopeId": 49,
+            "operationId": 193,
             "allow": true
         },
         {
             "id": 184,
-            "scopeId": 47,
-            "operationId": 190,
+            "scopeId": 49,
+            "operationId": 192,
             "allow": true
         },
         {
             "id": 183,
-            "scopeId": 47,
-            "operationId": 189,
-            "allow": true
-        },
-        {
-            "id": 181,
-            "scopeId": 47,
-            "operationId": 188,
-            "allow": true
-        },
-        {
-            "id": 179,
-            "scopeId": 47,
-            "operationId": 187,
-            "allow": true
-        },
-        {
-            "id": 178,
-            "scopeId": 47,
-            "operationId": 186,
+            "scopeId": 49,
+            "operationId": 191,
             "allow": true
         }
     ]
@@ -121,50 +121,50 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 47,
+    "id": 49,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
-            "id": 186,
-            "scopeId": 47,
-            "operationId": 192,
+            "id": 191,
+            "scopeId": 49,
+            "operationId": 197,
             "allow": true
         },
         {
-            "id": 185,
-            "scopeId": 47,
-            "operationId": 191,
+            "id": 190,
+            "scopeId": 49,
+            "operationId": 196,
+            "allow": true
+        },
+        {
+            "id": 189,
+            "scopeId": 49,
+            "operationId": 195,
+            "allow": true
+        },
+        {
+            "id": 188,
+            "scopeId": 49,
+            "operationId": 194,
+            "allow": true
+        },
+        {
+            "id": 186,
+            "scopeId": 49,
+            "operationId": 193,
             "allow": true
         },
         {
             "id": 184,
-            "scopeId": 47,
-            "operationId": 190,
+            "scopeId": 49,
+            "operationId": 192,
             "allow": true
         },
         {
             "id": 183,
-            "scopeId": 47,
-            "operationId": 189,
-            "allow": true
-        },
-        {
-            "id": 181,
-            "scopeId": 47,
-            "operationId": 188,
-            "allow": true
-        },
-        {
-            "id": 179,
-            "scopeId": 47,
-            "operationId": 187,
-            "allow": true
-        },
-        {
-            "id": 178,
-            "scopeId": 47,
-            "operationId": 186,
+            "scopeId": 49,
+            "operationId": 191,
             "allow": true
         }
     ]

@@ -42,27 +42,25 @@ class App
     private Service\Config $configService;
     private Table\App $appTable;
     private Table\Scope $scopeTable;
-    private Table\User\Scope $userScopeTable;
 
-    public function __construct(Service\App $appService, Service\Config $configService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable)
+    public function __construct(Service\App $appService, Service\Config $configService, Table\App $appTable, Table\Scope $scopeTable)
     {
-        $this->appService     = $appService;
-        $this->configService  = $configService;
-        $this->appTable       = $appTable;
-        $this->scopeTable     = $scopeTable;
-        $this->userScopeTable = $userScopeTable;
+        $this->appService = $appService;
+        $this->configService = $configService;
+        $this->appTable = $appTable;
+        $this->scopeTable = $scopeTable;
     }
 
     public function create(AppCreate $app, UserContext $context): int
     {
+        $this->assertMaxAppCount($context);
         $this->assertName($app->getName());
         $this->assertUrl($app->getUrl());
-        $this->assertMaxAppCount($context->getUserId());
 
         $rawScopes = $app->getScopes() ?? [];
         $rawScopes[] = 'authorization'; // automatically add the authorization scope which a user can not select
 
-        $scopes = $this->getValidUserScopes($context->getTenantId(), $context->getUserId(), $rawScopes);
+        $scopes = $this->scopeTable->getValidUserScopes($context->getTenantId(), $context->getUserId(), $rawScopes);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
@@ -94,7 +92,7 @@ class App
         $this->assertName($app->getName());
         $this->assertUrl($app->getUrl());
 
-        $scopes = $this->getValidUserScopes($context->getTenantId(), $context->getUserId(), $app->getScopes());
+        $scopes = $this->scopeTable->getValidUserScopes($context->getTenantId(), $context->getUserId(), $app->getScopes());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
@@ -121,31 +119,6 @@ class App
         return $this->appService->delete((string) $existing->getId(), $context);
     }
 
-    protected function getValidUserScopes(?string $tenantId, int $userId, ?array $scopes): array
-    {
-        if (empty($scopes)) {
-            return [];
-        }
-
-        $userScopes = $this->userScopeTable->getAvailableScopes($tenantId, $userId);
-        $scopes     = $this->scopeTable->getValidScopes($tenantId, $scopes);
-
-        // check that the user can assign only the scopes which are also
-        // assigned to the user account
-        $scopes = array_filter($scopes, function (Table\Generated\ScopeRow $scope) use ($userScopes) {
-            foreach ($userScopes as $userScope) {
-                if ($userScope['id'] == $scope->getId()) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        return array_map(function (Table\Generated\ScopeRow $scope) {
-            return $scope->getName();
-        }, $scopes);
-    }
-
     private function assertName(?string $name): void
     {
         if (empty($name)) {
@@ -162,16 +135,11 @@ class App
         }
     }
 
-    private function assertMaxAppCount(int $userId): void
+    private function assertMaxAppCount(UserContext $context): void
     {
-        $appCount = $this->configService->getValue('app_consumer');
-
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
-        $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
-
-        if ($this->appTable->getCount($condition) > $appCount) {
-            throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to register a new one');
+        $count = $this->appTable->getCountForUser($context->getTenantId(), $context->getUserId());
+        if ($count > $this->configService->getValue('consumer_max_apps')) {
+            throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to create a new one');
         }
     }
 }

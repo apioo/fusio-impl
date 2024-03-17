@@ -34,7 +34,7 @@ class TokenGenerator
     /**
      * Generates the bearer authorization token
      */
-    public static function generateToken(): string
+    public static function generateRefreshToken(): string
     {
         return implode('-', [
             self::generateString(20),

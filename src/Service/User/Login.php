@@ -71,12 +71,17 @@ class Login
             $scopes = $this->authenticatorService->getValidScopes($context->getTenantId(), $userId, $scopes);
         }
 
-        return $this->tokenService->generateAccessToken(
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $name = 'Consumer Login by ' . $userAgent . ' (' . $ip . ')';
+
+        return $this->tokenService->generate(
             $context->getTenantId(),
             null,
             $userId,
+            $name,
             $scopes,
-            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $ip,
             $this->frameworkConfig->getExpireTokenInterval()
         );
     }
@@ -88,10 +93,15 @@ class Login
             throw new StatusCode\BadRequestException('No refresh token provided');
         }
 
-        return $this->tokenService->refreshAccessToken(
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $name = 'Consumer Refresh by ' . $userAgent . ' (' . $ip . ')';
+
+        return $this->tokenService->refresh(
             $context->getTenantId(),
+            $name,
             $refreshToken,
-            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $ip,
             $this->frameworkConfig->getExpireTokenInterval(),
             $this->frameworkConfig->getExpireRefreshInterval()
         );

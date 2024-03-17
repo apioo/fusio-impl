@@ -52,7 +52,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 53,
+            "id": 56,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",
@@ -106,7 +106,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(54, $row['id']);
+        $this->assertEquals(57, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);

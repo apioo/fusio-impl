@@ -62,14 +62,14 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 2,
-            "eventId": 53,
+            "eventId": 56,
             "userId": 2,
             "name": "pong",
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         },
         {
             "id": 1,
-            "eventId": 53,
+            "eventId": 56,
             "userId": 1,
             "name": "ping",
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
@@ -117,7 +117,7 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['id']);
-        $this->assertEquals(53, $row['event_id']);
+        $this->assertEquals(56, $row['event_id']);
         $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('foo', $row['name']);
         $this->assertEquals('http://localhost', $row['endpoint']);

@@ -53,11 +53,7 @@ class Webhook
 
     public function create(WebhookCreate $webhook, UserContext $context): int
     {
-        // check max webhook count
-        $count = $this->webhookTable->getWebhookCount($context->getTenantId(), $context->getUserId());
-        if ($count > $this->configService->getValue('consumer_subscription')) {
-            throw new StatusCode\BadRequestException('Max webhook count reached');
-        }
+        $this->assertMaxWebhookCount($context);
 
         // check whether the event exists
         $condition = Condition::withAnd();
@@ -108,5 +104,13 @@ class Webhook
         }
 
         return $this->webhookService->delete((string) $existing->getId(), $context);
+    }
+
+    private function assertMaxWebhookCount(UserContext $context): void
+    {
+        $count = $this->webhookTable->getCountForUser($context->getTenantId(), $context->getUserId());
+        if ($count > $this->configService->getValue('consumer_max_webhooks')) {
+            throw new StatusCode\BadRequestException('Maximal amount of tokens reached. Please delete another token in order to generate a new one');
+        }
     }
 }

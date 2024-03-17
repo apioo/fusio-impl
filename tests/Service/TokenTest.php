@@ -45,7 +45,7 @@ class TokenTest extends ControllerDbTestCase
     {
         /** @var Token $tokenService */
         $tokenService = Environment::getService(Token::class);
-        $token = $tokenService->generateAccessToken(null, 1, 1, ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
+        $token = $tokenService->generate(null, 1, 1, 'Test Token', ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
 
         $this->assertInstanceOf(AccessToken::class, $token);
         $this->assertEquals('bearer', $token->getTokenType());
