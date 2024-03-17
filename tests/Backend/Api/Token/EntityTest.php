@@ -51,19 +51,8 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 1,
-    "app": {
-        "id": 1,
-        "userId": 1,
-        "status": 1,
-        "name": "Backend"
-    },
-    "user": {
-        "id": 1,
-        "status": 1,
-        "name": "Administrator"
-    },
     "status": 1,
-    "token": "da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf",
+    "name": "Backend\/Administrator",
     "scope": [
         "backend",
         "authorization"

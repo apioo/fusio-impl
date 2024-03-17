@@ -51,24 +51,19 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 2,
-            "userId": 1,
+            "id": 3,
+            "userId": 2,
             "status": 1,
-            "name": "Developer",
+            "name": "Foo-App",
             "appKey": "[uuid]",
-            "date": "[datetime]"
-        },
-        {
-            "id": 1,
-            "userId": 1,
-            "status": 1,
-            "name": "Backend",
-            "appKey": "[uuid]",
+            "metadata": {
+                "foo": "bar"
+            },
             "date": "[datetime]"
         }
     ]
@@ -129,7 +124,7 @@ JSON;
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
     }

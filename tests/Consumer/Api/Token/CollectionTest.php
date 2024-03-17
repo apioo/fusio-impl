@@ -53,13 +53,14 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 6,
             "status": 1,
+            "name": "Backend\/Developer",
             "scope": [
                 "backend"
             ],
@@ -69,6 +70,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 5,
             "status": 1,
+            "name": "Developer\/Consumer",
             "scope": [
                 "consumer"
             ],
@@ -78,6 +80,17 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 4,
             "status": 1,
+            "name": "Foo-App\/Developer",
+            "scope": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "date": "[datetime]"
+        },
+        {
+            "id": 3,
+            "status": 1,
+            "name": "Foo-App\/Consumer",
             "scope": [
                 "bar"
             ],
@@ -87,6 +100,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 2,
             "status": 1,
+            "name": "Developer\/Consumer",
             "scope": [
                 "consumer",
                 "authorization"
@@ -97,6 +111,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "status": 1,
+            "name": "Backend\/Administrator",
             "scope": [
                 "backend",
                 "authorization"
@@ -157,10 +172,10 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(7, $row['id']);
+        $this->assertEquals(8, $row['id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals(null, $row['app_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertNotEmpty($row['token']);
         $this->assertNotEmpty($row['refresh']);

@@ -42,7 +42,7 @@ class WhoamiTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('/authorization/whoami', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
@@ -50,42 +50,14 @@ class WhoamiTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": 1,
-    "roleId": 1,
+    "id": 2,
+    "roleId": 3,
+    "planId": 1,
     "status": 1,
-    "name": "Administrator",
-    "email": "admin@localhost.com",
+    "name": "Consumer",
+    "email": "consumer@localhost.com",
+    "points": 100,
     "scopes": [
-        "backend",
-        "backend.account",
-        "backend.action",
-        "backend.app",
-        "backend.audit",
-        "backend.category",
-        "backend.config",
-        "backend.connection",
-        "backend.cronjob",
-        "backend.dashboard",
-        "backend.event",
-        "backend.generator",
-        "backend.identity",
-        "backend.log",
-        "backend.marketplace",
-        "backend.operation",
-        "backend.page",
-        "backend.plan",
-        "backend.rate",
-        "backend.role",
-        "backend.schema",
-        "backend.scope",
-        "backend.sdk",
-        "backend.statistic",
-        "backend.tenant",
-        "backend.token",
-        "backend.transaction",
-        "backend.trash",
-        "backend.user",
-        "backend.webhook",
         "consumer",
         "consumer.account",
         "consumer.app",
@@ -101,9 +73,9 @@ class WhoamiTest extends ControllerDbTestCase
         "consumer.transaction",
         "consumer.webhook",
         "authorization",
-        "default",
         "foo",
-        "bar"
+        "bar",
+        "plan_scope"
     ],
     "plans": [
         {
@@ -113,6 +85,9 @@ class WhoamiTest extends ControllerDbTestCase
             "points": 1000
         }
     ],
+    "metadata": {
+        "foo": "bar"
+    },
     "date": "[datetime]"
 }
 JSON;

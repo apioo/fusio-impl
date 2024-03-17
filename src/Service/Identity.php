@@ -265,19 +265,13 @@ class Identity
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId, $context);
 
-        $appId = $existing->getAppId();
-        if (empty($appId)) {
-            // if the identity is not assigned to a specific app we use by default the consumer app
-            $appId = 2;
-        }
-
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $name = 'Identity Provider ' . $existing->getName() . ' by ' . $userAgent . ' (' . $ip . ')';
 
         $accessToken = $this->tokenService->generate(
             $context->getTenantId(),
-            $appId,
+            null,
             $userId,
             $name,
             $scopes,

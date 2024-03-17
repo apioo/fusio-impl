@@ -53,10 +53,9 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
+            "id": 7,
             "status": 1,
+            "name": "Foo-App\/Expired",
             "scope": [
                 "bar"
             ],
@@ -87,10 +86,9 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
+            "id": 7,
             "status": 1,
+            "name": "Foo-App\/Expired",
             "scope": [
                 "bar"
             ],
@@ -121,10 +119,9 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 3,
-            "appId": 3,
-            "userId": 2,
+            "id": 7,
             "status": 1,
+            "name": "Foo-App\/Expired",
             "scope": [
                 "bar"
             ],

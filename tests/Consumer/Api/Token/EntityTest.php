@@ -60,6 +60,7 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 2,
     "status": 1,
+    "name": "Developer\/Consumer",
     "scope": [
         "consumer",
         "authorization"
@@ -90,9 +91,9 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/token/2', 'PUT', array(
+        $response = $this->sendRequest('/consumer/token/3', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'name' => 'baz',
             'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format(\DateTimeInterface::RFC3339),
@@ -102,23 +103,24 @@ JSON;
         $body = (string) $response->getBody();
         $data = \json_decode($body);
 
+        $this->assertObjectHasProperty('access_token', $data, $body);
         $this->assertNotEmpty($data->access_token);
         $this->assertEquals('bearer', $data->token_type);
-        $this->assertEquals(345600, $data->expires_in);
+        $this->assertNotEmpty($data->expires_in);
         $this->assertNotEmpty($data->refresh_token);
-        $this->assertEquals('consumer,authorization', $data->scope);
+        $this->assertEquals('bar', $data->scope);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'app_id', 'user_id', 'name', 'token', 'refresh', 'scope')
             ->from('fusio_token')
-            ->where('id = 2')
+            ->where('id = 3')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql);
 
         // the original token gets deleted
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(3, $row['id']);
         $this->assertEquals(Token::STATUS_DELETED, $row['status']);
 
         // and we a new token was created
@@ -130,14 +132,14 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->access_token]);
 
-        $this->assertEquals(7, $row['id']);
+        $this->assertEquals(8, $row['id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals(2, $row['app_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(3, $row['app_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals('baz', $row['name']);
         $this->assertNotEmpty($row['token']);
         $this->assertNotEmpty($row['refresh']);
-        $this->assertEquals('consumer,authorization', $row['scope']);
+        $this->assertEquals('bar', $row['scope']);
     }
 
     public function testDelete()

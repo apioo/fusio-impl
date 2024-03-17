@@ -57,9 +57,9 @@ class CollectionTest extends ControllerDbTestCase
             "allow": 1,
             "createDate": "2015-02-27T19:59:15Z",
             "app": {
-                "id": 1,
-                "name": "Backend",
-                "url": "http:\/\/127.0.0.1\/apps\/fusio"
+                "id": 3,
+                "name": "Foo-App",
+                "url": "http:\/\/google.com"
             }
         }
     ]

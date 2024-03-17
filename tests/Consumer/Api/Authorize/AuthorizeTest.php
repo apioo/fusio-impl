@@ -123,7 +123,7 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals($data['code'], $row['code']);
         $this->assertEquals('http://google.com', $row['redirect_uri']);
         // its important that we can not obtain a backend scope
@@ -166,7 +166,7 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals($data['code'], $row['code']);
         $this->assertNull($row['redirect_uri']);
         // its important that we can not obtain a backend scope

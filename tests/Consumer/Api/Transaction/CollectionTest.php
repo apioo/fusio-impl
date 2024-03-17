@@ -56,7 +56,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
-            "userId": 1,
+            "userId": 2,
             "planId": 2,
             "transactionId": 0,
             "amount": 3999,

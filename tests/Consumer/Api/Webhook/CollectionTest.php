@@ -53,7 +53,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 1,
+            "id": 2,
             "status": 1,
             "event": "foo-event",
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
@@ -102,7 +102,7 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(56, $row['event_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('http://127.0.0.1/new-callback.php', $row['endpoint']);

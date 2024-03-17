@@ -459,13 +459,14 @@ class DataBag
         ];
     }
 
-    public function addToken(string $app, string $user, string $token, string $refresh, string $scope, string $expire, ?string $date = null, ?string $tenantId = null): void
+    public function addToken(string $app, string $user, string $name, string $token, string $refresh, string $scope, string $expire, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_token'][] = [
             'tenant_id' => $tenantId,
             'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'status' => Table\Token::STATUS_ACTIVE,
+            'name' => $name,
             'token' => $token,
             'refresh' => $refresh,
             'scope' => $scope,

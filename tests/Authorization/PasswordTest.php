@@ -42,7 +42,7 @@ class PasswordTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $body     = 'grant_type=password&username=Developer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
+        $body     = 'grant_type=password&username=Consumer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
@@ -54,7 +54,7 @@ class PasswordTest extends ControllerDbTestCase
 
     public function testPostEmail()
     {
-        $body     = 'grant_type=password&username=developer@localhost.com&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
+        $body     = 'grant_type=password&username=consumer@localhost.com&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
@@ -136,7 +136,7 @@ JSON;
         $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(4, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);

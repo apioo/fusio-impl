@@ -37,11 +37,14 @@ class Token extends Generated\TokenTable
     const STATUS_ACTIVE  = 0x1;
     const STATUS_DELETED = 0x2;
 
-    public function findOneByTenantAndId(?string $tenantId, int $id): ?TokenRow
+    public function findOneByTenantAndId(?string $tenantId, int $id, ?int $userId = null): ?TokenRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_ID, $id);
+        if ($userId !== null) {
+            $condition->equals(self::COLUMN_USER_ID, $userId);
+        }
 
         return $this->findOneBy($condition);
     }

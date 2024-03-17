@@ -85,9 +85,8 @@ class App extends ViewAbstract
             'scopes' => $builder->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [$context->getTenantId(), new Reference('id')], 'name'),
             'tokens' => $builder->doCollection([$this->getTable(Table\Token::class), 'getTokensByApp'], [$context->getTenantId(), new Reference('id')], [
                 'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
-                'userId' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_USER_ID),
                 'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
-                'token' => Table\Generated\TokenTable::COLUMN_TOKEN,
+                'name' => Table\Generated\TokenTable::COLUMN_NAME,
                 'scope' => $builder->fieldCsv(Table\Generated\TokenTable::COLUMN_SCOPE),
                 'ip' => Table\Generated\TokenTable::COLUMN_IP,
                 'expire' => Table\Generated\TokenTable::COLUMN_EXPIRE,

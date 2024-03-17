@@ -77,10 +77,20 @@ class EntityTest extends ControllerDbTestCase
     ],
     "tokens": [
         {
-            "id": 4,
-            "userId": 4,
+            "id": 7,
             "status": 1,
-            "token": "e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f",
+            "name": "Foo-App\/Expired",
+            "scope": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "Foo-App\/Developer",
             "scope": [
                 "bar"
             ],
@@ -90,9 +100,8 @@ class EntityTest extends ControllerDbTestCase
         },
         {
             "id": 3,
-            "userId": 2,
             "status": 1,
-            "token": "b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873",
+            "name": "Foo-App\/Consumer",
             "scope": [
                 "bar"
             ],

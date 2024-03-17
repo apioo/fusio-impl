@@ -213,16 +213,16 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $scopeId = 49;
+        $scopeId = $row['id'];
         $operations = $this->connection->fetchAllAssociative($sql, ['scope_id' => $scopeId]);
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 188,
+            'operation_id' => 193,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 186,
+            'operation_id' => 191,
             'allow' => 1,
         ]], $operations);
     }

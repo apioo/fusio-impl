@@ -299,12 +299,12 @@ class ExchangeTest extends ControllerDbTestCase
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $jwt]);
 
-        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(null, $row['app_id']);
         $this->assertEquals(6, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('eb9a3e30-9c88-5525-b229-903113421324', $token->sub);
-        $this->assertEquals('consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.transaction,consumer.webhook,authorization,default', $row['scope']);
+        $this->assertEquals('consumer,consumer.account,consumer.app,consumer.event,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,default', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
 

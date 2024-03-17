@@ -54,15 +54,12 @@ class Identity extends ViewAbstract
         $sortBy = $filter->getSortBy(Table\Generated\IdentityTable::COLUMN_NAME);
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        if (empty($appId)) {
-            // by default we use the consumer app
-            $appId = 2;
-        }
-
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\IdentityTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
+        if (!empty($appId)) {
+            $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
+        }
 
         $builder = new Builder($this->connection);
 

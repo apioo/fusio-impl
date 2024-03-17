@@ -43,7 +43,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/app/2', 'GET', array(
+        $response = $this->sendRequest('/consumer/app/3', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -57,52 +57,50 @@ class EntityTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": 2,
-    "userId": 1,
+    "id": 3,
+    "userId": 2,
     "status": 1,
-    "name": "Developer",
-    "url": "http:\/\/127.0.0.1\/apps\/developer",
+    "name": "Foo-App",
+    "url": "http:\/\/google.com",
     "appKey": "[uuid]",
     "appSecret": "[app_secret]",
+    "metadata": {
+        "foo": "bar"
+    },
     "scopes": [
-        "consumer",
-        "consumer.account",
-        "consumer.app",
-        "consumer.event",
-        "consumer.grant",
-        "consumer.identity",
-        "consumer.log",
-        "consumer.page",
-        "consumer.payment",
-        "consumer.plan",
-        "consumer.scope",
-        "consumer.token",
-        "consumer.transaction",
-        "consumer.webhook",
         "authorization",
-        "default"
+        "foo",
+        "bar"
     ],
     "tokens": [
         {
-            "id": 5,
-            "userId": 2,
+            "id": 7,
             "status": 1,
-            "token": "1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b",
+            "name": "Foo-App\/Expired",
             "scope": [
-                "consumer"
+                "bar"
             ],
             "ip": "127.0.0.1",
             "expire": "[datetime]",
             "date": "[datetime]"
         },
         {
-            "id": 2,
-            "userId": 1,
+            "id": 4,
             "status": 1,
-            "token": "b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2",
+            "name": "Foo-App\/Developer",
             "scope": [
-                "consumer",
-                "authorization"
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 3,
+            "status": 1,
+            "name": "Foo-App\/Consumer",
+            "scope": [
+                "bar"
             ],
             "ip": "127.0.0.1",
             "expire": "[datetime]",
@@ -119,7 +117,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/app/2', 'POST', array(
+        $response = $this->sendRequest('/consumer/app/3', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -133,7 +131,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/app/2', 'PUT', array(
+        $response = $this->sendRequest('/consumer/app/3', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -166,18 +164,35 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals('Bar', $row['name']);
-        $this->assertEquals('http://microsoft.com', $row['url']);
+        $this->assertEquals('Developer', $row['name']);
+        $this->assertEquals('http://127.0.0.1/apps/developer', $row['url']);
 
         $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 2);
         $scopes = Table\Scope::getNames($scopes);
 
-        $this->assertEquals(['foo', 'bar'], $scopes);
+        $this->assertEquals([
+            'consumer',
+            'consumer.account',
+            'consumer.app',
+            'consumer.event',
+            'consumer.grant',
+            'consumer.identity',
+            'consumer.log',
+            'consumer.page',
+            'consumer.payment',
+            'consumer.plan',
+            'consumer.scope',
+            'consumer.token',
+            'consumer.transaction',
+            'consumer.webhook',
+            'authorization',
+            'default',
+        ], $scopes);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/app/2', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/app/3', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -197,12 +212,12 @@ JSON;
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_app')
-            ->where('id = 2')
+            ->where('id = 3')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(3, $row['id']);
         $this->assertEquals(Table\App::STATUS_DELETED, $row['status']);
     }
 }

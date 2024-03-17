@@ -357,12 +357,12 @@
         "tokens": {
           "type": "array",
           "items": {
-            "$ref": "Backend_AppToken"
+            "$ref": "Backend_Token"
           }
         }
       }
     },
-    "Backend_AppToken": {
+    "Backend_Token": {
       "type": "object",
       "properties": {
         "id": {
@@ -371,7 +371,7 @@
         "status": {
           "type": "integer"
         },
-        "token": {
+        "name": {
           "type": "string"
         },
         "scope": {

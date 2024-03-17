@@ -40,7 +40,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/webhook/2', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -50,15 +50,15 @@ class EntityTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": 1,
+    "id": 2,
     "status": 1,
     "event": "foo-event",
     "endpoint": "http:\/\/www.fusio-project.org\/ping",
     "responses": [
         {
             "status": 2,
-            "code": 200,
             "attempts": 1,
+            "code": 200,
             "executeDate": "[datetime]"
         }
     ]
@@ -71,7 +71,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/webhook/2', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -85,7 +85,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/webhook/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -113,11 +113,11 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
-        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(2, $row['id']);
         $this->assertEquals(56, $row['event_id']);
-        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('foofoo', $row['name']);
         $this->assertEquals('http://127.0.0.1/changed-callback.php', $row['endpoint']);
@@ -125,7 +125,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/webhook/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/webhook/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -151,7 +151,7 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
         $this->assertEmpty($row);
     }

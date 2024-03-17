@@ -94,7 +94,7 @@ class Fixture
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
-        $data->addAppCode('Foo-App', 'Developer', 'GHMbtJi0ZuAUnp80', 'authorization');
+        $data->addAppCode('Foo-App', 'Consumer', 'GHMbtJi0ZuAUnp80', 'authorization');
         $data->addAudit('Backend', 'Administrator', 1, 'app.update', 'Created schema foo', '2015-06-25 22:49:09');
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey), ['foo' => 'bar']);
         $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
@@ -104,6 +104,7 @@ class Fixture
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');
         $data->addWebhookResponse(1);
+        $data->addWebhookResponse(2);
         $data->addIdentity('Developer', 'Facebook', 'bi-facebook', Facebook::class, 'facebook-key', 'facebook-secret', 'https://www.facebook.com/v17.0/dialog/oauth', 'https://graph.facebook.com/v12.0/oauth/access_token', 'https://graph.facebook.com/v2.5/me', 'id', 'name', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'GitHub', 'bi-github', Github::class, 'github-key', 'github-secret', 'https://github.com/login/oauth/authorize', 'https://github.com/login/oauth/access_token', 'https://api.github.com/user', 'id', 'login', 'email', '2023-07-22 13:56:00');
         $data->addIdentity('Developer', 'Google', 'bi-google', Google::class, 'google-key', 'google-secret', 'https://accounts.google.com/o/oauth2/v2/auth', 'https://oauth2.googleapis.com/token', 'https://openidconnect.googleapis.com/v1/userinfo', 'id', 'name', 'email', '2023-07-22 13:56:00');
@@ -114,7 +115,7 @@ class Fixture
         $data->addIdentityRequest('OpenID', 'openid-state');
         $data->addRate('silver', 5, 8, 'P1M', ['foo' => 'bar']);
         $data->addRate('gold', 10, 16, 'P1M');
-        $data->addTransaction('Administrator', 'Plan B', 3999, 'last month', 'next month', '2018-10-05 18:18:00');
+        $data->addTransaction('Consumer', 'Plan B', 3999, 'last month', 'next month', '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource, null, ['foo' => 'bar']);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addScope('default', 'foo', 'Foo access', ['foo' => 'bar']);
@@ -123,12 +124,13 @@ class Fixture
         $data->addAppScope('Foo-App', 'authorization');
         $data->addAppScope('Foo-App', 'foo');
         $data->addAppScope('Foo-App', 'bar');
-        $data->addToken('Backend', 'Administrator', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'backend,authorization', '+1 month');
-        $data->addToken('Developer', 'Consumer', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'consumer,authorization', '+1 month');
-        $data->addToken('Foo-App', 'Consumer', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
-        $data->addToken('Foo-App', 'Developer', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'bar', '+1 month');
-        $data->addToken('Developer', 'Consumer', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'consumer', '+1 month');
-        $data->addToken('Backend', 'Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', '+1 month');
+        $data->addToken('Backend', 'Administrator', 'Backend/Administrator', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'backend,authorization', '+1 month');
+        $data->addToken('Developer', 'Consumer', 'Developer/Consumer', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'consumer,authorization', '+1 month');
+        $data->addToken('Foo-App', 'Consumer', 'Foo-App/Consumer', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month');
+        $data->addToken('Foo-App', 'Developer', 'Foo-App/Developer', 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'bar', '+1 month');
+        $data->addToken('Developer', 'Consumer', 'Developer/Consumer', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'consumer', '+1 month');
+        $data->addToken('Backend', 'Developer', 'Backend/Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', '+1 month');
+        $data->addToken('Foo-App', 'Consumer', 'Foo-App/Expired', 'b41344388feed85bc362e518387fdc9c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e5be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');
         $data->addPlanScope('Plan A', 'plan_scope');
@@ -144,7 +146,7 @@ class Fixture
         $data->addUserScope('Developer', 'authorization');
         $data->addUserScope('Developer', 'foo');
         $data->addUserScope('Developer', 'bar');
-        $data->addUserGrant('Administrator', 'Backend', true, '2015-02-27 19:59:15');
+        $data->addUserGrant('Consumer', 'Foo-App', true, '2015-02-27 19:59:15');
 
         $data->addOperations(null, 'default', [
             'test.listFoo' => new Operation(
