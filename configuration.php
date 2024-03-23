@@ -5,18 +5,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 return [
 
-    // This array contains a list of worker endpoints which can be used by Fusio to execute action code in different
-    // programming languages. For more information please take a look at our worker documentation:
-    // https://docs.fusio-project.org/docs/concepts/worker_api/
-    /*
-    'fusio_worker'             => [
-        'java'                 => 'localhost:9090',
-        'javascript'           => 'localhost:9091',
-        'php'                  => 'localhost:9092',
-        'python'               => 'localhost:9093',
-    ],
-    */
-
     // OAuth2 access token expiration settings. How long can you use an access token and the refresh token. After the
     // expiration a user either need to use a refresh token to extend the token or request a new token
     'fusio_expire_token'       => 'P2D',
