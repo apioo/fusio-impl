@@ -33,3 +33,4 @@ This overview shows all Fusio related composer dependencies and the build status
 | [fusio/adapter-sql](https://github.com/apioo/fusio-adapter-sql)                     | ![Status](https://github.com/apioo/fusio-adapter-sql/actions/workflows/ci.yml/badge.svg)           |
 | [fusio/adapter-stripe](https://github.com/apioo/fusio-adapter-stripe)               | ![Status](https://github.com/apioo/fusio-adapter-stripe/actions/workflows/ci.yml/badge.svg)        |
 | [fusio/adapter-util](https://github.com/apioo/fusio-adapter-util)                   | ![Status](https://github.com/apioo/fusio-adapter-util/actions/workflows/ci.yml/badge.svg)          |
+| [fusio/adapter-worker](https://github.com/apioo/fusio-adapter-worker)               | ![Status](https://github.com/apioo/fusio-adapter-worker/actions/workflows/ci.yml/badge.svg)        |
