@@ -166,19 +166,19 @@ class ListTest extends ControllerDbTestCase
         },
         {
             "name": "Worker-Java",
-            "class": "Fusio.Impl.Worker.Action.WorkerJava"
+            "class": "Fusio.Adapter.Worker.Action.WorkerJava"
         },
         {
             "name": "Worker-Javascript",
-            "class": "Fusio.Impl.Worker.Action.WorkerJavascript"
+            "class": "Fusio.Adapter.Worker.Action.WorkerJavascript"
         },
         {
             "name": "Worker-PHP",
-            "class": "Fusio.Impl.Worker.Action.WorkerPHP"
+            "class": "Fusio.Adapter.Worker.Action.WorkerPHP"
         },
         {
             "name": "Worker-Python",
-            "class": "Fusio.Impl.Worker.Action.WorkerPython"
+            "class": "Fusio.Adapter.Worker.Action.WorkerPython"
         }
     ]
 }

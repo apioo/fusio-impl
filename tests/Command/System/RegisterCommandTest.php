@@ -74,6 +74,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             \Fusio\Adapter\Soap\Adapter::class,
             \Fusio\Adapter\Sql\Adapter::class,
             \Fusio\Adapter\Util\Adapter::class,
+            \Fusio\Adapter\Worker\Adapter::class,
             \Fusio\Impl\Tests\Adapter\TestAdapter::class,
         ];
 
@@ -110,6 +111,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             \Fusio\Adapter\Soap\Adapter::class,
             \Fusio\Adapter\Sql\Adapter::class,
             \Fusio\Adapter\Util\Adapter::class,
+            \Fusio\Adapter\Worker\Adapter::class,
             \Fusio\Impl\Tests\Adapter\TestAdapter::class,
         ];
 

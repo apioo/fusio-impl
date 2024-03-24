@@ -83,6 +83,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "Void-Connection",
             "class": "Fusio.Impl.Tests.Adapter.Test.VoidConnection"
+        },
+        {
+            "name": "Worker",
+            "class": "Fusio.Adapter.Worker.Connection.Worker"
         }
     ]
 }
