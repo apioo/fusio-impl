@@ -80,7 +80,15 @@ class Context extends FrameworkContext
 
     public function getAppId(): ?int
     {
-        return $this->app?->getId();
+        if ($this->app === null) {
+            return null;
+        }
+
+        if ($this->app->isAnonymous()) {
+            return null;
+        }
+
+        return $this->app->getId();
     }
 
     public function setApp(AppInterface $app): void
