@@ -107,7 +107,15 @@ class Context extends FrameworkContext
 
     public function getUserId(): ?int
     {
-        return $this->user?->getId();
+        if ($this->user === null) {
+            return null;
+        }
+
+        if ($this->user->isAnonymous()) {
+            return null;
+        }
+
+        return $this->user->getId();
     }
 
     public function setUser(UserInterface $user): void
