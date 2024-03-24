@@ -67,39 +67,47 @@ class TokenValidator
                 'realm' => 'Fusio',
             ];
 
-            if ($type === 'Bearer' && !empty($accessToken)) {
-                try {
-                    $token = $this->getToken($accessToken, $context->getOperation()->getId());
-                } catch (\UnexpectedValueException $e) {
-                    throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
-                }
-
-                if ($token instanceof Model\Token) {
-                    $app = $this->appRepository->get($token->getAppId());
-                    if ($app !== null) {
-                        $context->setApp($app);
-                    }
-
-                    $user = $this->userRepository->get($token->getUserId());
-                    if ($user !== null) {
-                        $context->setUser($user);
-                    }
-
-                    $context->setToken($token);
-                } else {
-                    throw new UnauthorizedException('Invalid access token', 'Bearer', $params);
-                }
-            } else {
+            if (empty($type)) {
                 throw new UnauthorizedException('Missing authorization header', 'Bearer', $params);
             }
-        } else {
-            $app = new Model\App(true, 0, 0, 0, '', '', '', [], []);
-            $user = new Model\User(true, 0, 0, 0, 0, '', '', 0);
-            $token = new Model\Token(0, 0, 0, [], '', '');
 
-            $context->setApp($app);
-            $context->setUser($user);
+            if ($type !== 'Bearer') {
+                throw new UnauthorizedException('Invalid authorization type', 'Bearer', $params);
+            }
+
+            if (empty($accessToken)) {
+                throw new UnauthorizedException('No authorization token was provided', 'Bearer', $params);
+            }
+
+            try {
+                $token = $this->getToken($accessToken, $context->getOperation()->getId());
+            } catch (\UnexpectedValueException $e) {
+                throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
+            }
+
+            if (!$token instanceof Model\Token) {
+                throw new UnauthorizedException('Invalid access token', 'Bearer', $params);
+            }
+
+            $appId = $token->getAppId();
+            if ($appId !== null && $app = $this->appRepository->get($appId)) {
+                $context->setApp($app);
+            } else {
+                $context->setApp(new Model\AppAnonymous());
+            }
+
+            $user = $this->userRepository->get($token->getUserId());
+            if ($user !== null) {
+                $context->setUser($user);
+            } else {
+                $context->setUser(new Model\UserAnonymous());
+            }
+
             $context->setToken($token);
+        } else {
+            $context->setApp(new Model\AppAnonymous());
+            $context->setUser(new Model\UserAnonymous());
+            $context->setToken(new Model\TokenAnonymous());
         }
 
         return true;
