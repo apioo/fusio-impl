@@ -11863,7 +11863,7 @@
         "name": {
           "type": "string"
         },
-        "scope": {
+        "scopes": {
           "type": "array",
           "items": {
             "type": "string"
@@ -12645,7 +12645,7 @@
         "name": {
           "type": "string"
         },
-        "scope": {
+        "scopes": {
           "type": "array",
           "items": {
             "type": "string"

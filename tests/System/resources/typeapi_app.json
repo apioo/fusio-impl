@@ -374,7 +374,7 @@
         "name": {
           "type": "string"
         },
-        "scope": {
+        "scopes": {
           "type": "array",
           "items": {
             "type": "string"
