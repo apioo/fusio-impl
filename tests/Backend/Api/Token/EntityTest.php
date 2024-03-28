@@ -53,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 1,
     "status": 1,
     "name": "Backend\/Administrator",
-    "scope": [
+    "scopes": [
         "backend",
         "authorization"
     ],

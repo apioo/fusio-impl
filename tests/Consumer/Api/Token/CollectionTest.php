@@ -53,70 +53,53 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 6,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 6,
+            "id": 7,
             "status": 1,
-            "name": "Backend\/Developer",
-            "scope": [
-                "backend"
+            "name": "Foo-App\/Expired",
+            "scopes": [
+                "bar"
             ],
             "ip": "127.0.0.1",
+            "expire": "[datetime]",
             "date": "[datetime]"
         },
         {
             "id": 5,
             "status": 1,
             "name": "Developer\/Consumer",
-            "scope": [
+            "scopes": [
                 "consumer"
             ],
             "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "name": "Foo-App\/Developer",
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
+            "expire": "[datetime]",
             "date": "[datetime]"
         },
         {
             "id": 3,
             "status": 1,
             "name": "Foo-App\/Consumer",
-            "scope": [
+            "scopes": [
                 "bar"
             ],
             "ip": "127.0.0.1",
+            "expire": "[datetime]",
             "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Developer\/Consumer",
-            "scope": [
+            "scopes": [
                 "consumer",
                 "authorization"
             ],
             "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "name": "Backend\/Administrator",
-            "scope": [
-                "backend",
-                "authorization"
-            ],
-            "ip": "127.0.0.1",
+            "expire": "[datetime]",
             "date": "[datetime]"
         }
     ]

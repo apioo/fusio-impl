@@ -56,7 +56,7 @@ class CollectionTest extends ControllerDbTestCase
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
-            "scope": [
+            "scopes": [
                 "bar"
             ],
             "ip": "127.0.0.1",
@@ -89,7 +89,7 @@ JSON;
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
-            "scope": [
+            "scopes": [
                 "bar"
             ],
             "ip": "127.0.0.1",
@@ -122,7 +122,7 @@ JSON;
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
-            "scope": [
+            "scopes": [
                 "bar"
             ],
             "ip": "127.0.0.1",

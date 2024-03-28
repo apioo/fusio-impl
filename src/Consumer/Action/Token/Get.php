@@ -46,7 +46,7 @@ class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $token = $this->view->getEntity(
-            (int) $request->get('token_id'),
+            (int)$request->get('token_id'),
             $context
         );
 

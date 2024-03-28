@@ -25,7 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
-use Fusio\Impl\Backend\View;
+use Fusio\Impl\Consumer\View;
 
 /**
  * GetAll
