@@ -57,7 +57,7 @@ class Token
     {
         $this->assertMaxTokenCount($context);
 
-        $rawScopes = $token->getScope() ?? [];
+        $rawScopes = $token->getScopes() ?? [];
         $rawScopes[] = 'authorization'; // automatically add the authorization scope which a user can not select
 
         $scopes = $this->scopeTable->getValidUserScopes($context->getTenantId(), $context->getUserId(), $rawScopes);

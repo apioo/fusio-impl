@@ -132,7 +132,7 @@ JSON;
         ), json_encode([
             'name' => 'Foo',
             'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format(\DateTimeInterface::RFC3339),
-            'scope' => ['foo', 'bar']
+            'scopes' => ['foo', 'bar']
         ]));
 
         $body = (string) $response->getBody();

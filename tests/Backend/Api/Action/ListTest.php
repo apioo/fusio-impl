@@ -85,6 +85,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.Http.Action.HttpProcessor"
         },
         {
+            "name": "HTTP-Raw",
+            "class": "Fusio.Adapter.Http.Action.HttpRaw"
+        },
+        {
             "name": "Inspect-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
         },

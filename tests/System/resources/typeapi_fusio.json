@@ -12696,7 +12696,7 @@
         "name": {
           "type": "string"
         },
-        "scope": {
+        "scopes": {
           "type": "array",
           "items": {
             "type": "string"
@@ -12708,7 +12708,8 @@
         }
       },
       "required": [
-        "scope",
+        "name",
+        "scopes",
         "expire"
       ]
     },
@@ -12724,6 +12725,7 @@
         }
       },
       "required": [
+        "name",
         "expire"
       ]
     },
