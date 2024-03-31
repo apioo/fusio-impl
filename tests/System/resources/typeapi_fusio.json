@@ -12598,6 +12598,9 @@
         "points": {
           "type": "integer"
         },
+        "period": {
+          "type": "integer"
+        },
         "metadata": {
           "$ref": "Common_Metadata"
         }
