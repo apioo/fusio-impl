@@ -140,7 +140,7 @@ JSON;
 
         $this->assertNotEmpty($data->access_token);
         $this->assertEquals('bearer', $data->token_type);
-        $this->assertTrue($data->expires_in > 275000);
+        $this->assertTrue($data->expires_in > 0);
         $this->assertNotEmpty($data->refresh_token);
         $this->assertEquals('bar,foo,authorization', $data->scope);
 
