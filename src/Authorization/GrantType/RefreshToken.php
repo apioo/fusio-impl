@@ -49,7 +49,7 @@ class RefreshToken extends RefreshTokenAbstract
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        $name = 'OAuth2 Refresh Token by ' . $userAgent . ' (' . $ip . ')';
+        $name = $userAgent;
 
         return $this->tokenService->refresh(
             $this->frameworkConfig->getTenantId(),

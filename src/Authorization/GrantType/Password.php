@@ -82,7 +82,7 @@ class Password extends PasswordAbstract
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        $name = 'OAuth2 Resource Owner Password Credentials by ' . $userAgent . ' (' . $ip . ')';
+        $name = $userAgent;
 
         // generate access token
         return $this->tokenService->generate(

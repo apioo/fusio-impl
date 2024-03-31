@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\AuthorizationCodeAbstract;
+use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\InvalidClientException;
 use PSX\OAuth2\Exception\InvalidGrantException;
 use PSX\OAuth2\Exception\InvalidScopeException;
@@ -52,7 +53,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         $this->appCodeTable = $appCodeTable;
     }
 
-    protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)
+    protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant): AccessToken
     {
         $code = $this->appCodeTable->getCodeByRequest(
             $credentials->getClientId(),
@@ -66,7 +67,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             throw new InvalidClientException('Unknown credentials');
         }
 
-        // check whether the code is older then 30 minutes. After that we can not exchange it for an access token
+        // check whether the code is older than 30 minutes. After that we can not exchange it for an access token
         if (time() - strtotime($code['date']) > 60 * 30) {
             throw new InvalidGrantException('Code is expired');
         }
@@ -79,7 +80,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        $name = 'OAuth2 Authorization Code by ' . $userAgent . ' (' . $ip . ')';
+        $name = $userAgent;
 
         // generate access token
         return $this->tokenService->generate(
