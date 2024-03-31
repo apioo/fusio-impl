@@ -14,11 +14,6 @@
       <code><![CDATA[getHttpPath]]></code>
     </PossiblyNullReference>
   </file>
-  <file src="src/Framework/Filter/ActionExecutor.php">
-    <PossiblyNullArgument>
-      <code><![CDATA[$operation->getIncoming()]]></code>
-    </PossiblyNullArgument>
-  </file>
   <file src="src/Installation/NewInstallation.php">
     <PossiblyNullArgument>
       <code><![CDATA[Scheme::wrap(Backend\Action\Connection\RenewToken::class)]]></code>

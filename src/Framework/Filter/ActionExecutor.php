@@ -62,12 +62,12 @@ class ActionExecutor implements FilterInterface
 
         $requestContext = new Request\HttpRequestContext($request, $this->context->getParameters());
 
-        $operation = $this->context->getOperation();
-        if (!empty($operation->getIncoming()) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
-            if ($operation->getIncoming() === 'schema://Passthru') {
+        $incoming = $this->context->getOperation()->getIncoming();
+        if (!empty($incoming) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
+            if ($incoming === 'schema://Passthru') {
                 $payload = $this->requestReader->getBody($request);
             } else {
-                $schema  = $this->schemaManager->getSchema($operation->getIncoming());
+                $schema  = $this->schemaManager->getSchema($incoming);
                 $payload = $this->requestReader->getBodyAs($request, $schema);
             }
         } else {
