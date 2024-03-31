@@ -52,6 +52,7 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 2,
     "status": 1,
+    "name": "pong",
     "event": "foo-event",
     "endpoint": "http:\/\/www.fusio-project.org\/ping",
     "responses": [

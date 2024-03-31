@@ -52,8 +52,9 @@ class Webhook extends ViewAbstract
             ->select([
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ID,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_STATUS,
+                'webhook.' . Table\Generated\WebhookTable::COLUMN_NAME,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ENDPOINT,
-                'event.' . Table\Generated\EventTable::COLUMN_NAME,
+                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS eventName',
             ])
             ->from('fusio_webhook', 'webhook')
             ->innerJoin('webhook', 'fusio_event', 'event', 'webhook.' . Table\Generated\WebhookTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
@@ -79,7 +80,8 @@ class Webhook extends ViewAbstract
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
-                'event' => Table\Generated\EventTable::COLUMN_NAME,
+                'name' => Table\Generated\WebhookTable::COLUMN_NAME,
+                'event' => 'eventName',
                 'endpoint' => Table\Generated\WebhookTable::COLUMN_ENDPOINT,
             ]),
         ];
@@ -99,8 +101,9 @@ class Webhook extends ViewAbstract
             ->select([
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ID,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_STATUS,
+                'webhook.' . Table\Generated\WebhookTable::COLUMN_NAME,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ENDPOINT,
-                'event.' . Table\Generated\EventTable::COLUMN_NAME,
+                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS eventName',
             ])
             ->from('fusio_webhook', 'webhook')
             ->innerJoin('webhook', 'fusio_event', 'event', 'webhook.' . Table\Generated\WebhookTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
@@ -112,7 +115,8 @@ class Webhook extends ViewAbstract
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
             'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
-            'event' => Table\Generated\EventTable::COLUMN_NAME,
+            'name' => Table\Generated\WebhookTable::COLUMN_NAME,
+            'event' => 'eventName',
             'endpoint' => Table\Generated\WebhookTable::COLUMN_ENDPOINT,
             'responses' => $builder->doCollection([$this->getTable(Table\Webhook\Response::class), 'getAllByWebhook'], [new Reference(Table\Generated\WebhookTable::COLUMN_ID)], [
                 'status' => $builder->fieldInteger(Table\Generated\WebhookResponseTable::COLUMN_STATUS),
