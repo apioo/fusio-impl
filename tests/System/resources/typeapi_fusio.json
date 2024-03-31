@@ -12655,7 +12655,7 @@
           "type": "string"
         },
         "expire": {
-          "format": "date-time",
+          "format": "date",
           "type": "string"
         },
         "date": {
@@ -12703,7 +12703,7 @@
           }
         },
         "expire": {
-          "format": "date-time",
+          "format": "date",
           "type": "string"
         }
       },
@@ -12720,7 +12720,7 @@
           "type": "string"
         },
         "expire": {
-          "format": "date-time",
+          "format": "date",
           "type": "string"
         }
       },

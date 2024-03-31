@@ -96,7 +96,7 @@ JSON;
             'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'name' => 'baz',
-            'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format(\DateTimeInterface::RFC3339),
+            'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format('Y-m-d'),
             'scopes' => ['foo', 'bar'], // scopes can not change on update
         ]));
 
