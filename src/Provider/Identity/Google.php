@@ -61,7 +61,7 @@ class Google extends ProviderAbstract
         $uri = parent::getRedirectUri($configuration, $state, $redirectUri);
 
         $parameters = $uri->getParameters();
-        $parameters['scope'] = 'openid%20profile%20email';
+        $parameters['scope'] = 'openid profile email';
 
         return $uri->withParameters($parameters);
     }
