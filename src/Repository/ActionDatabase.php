@@ -60,6 +60,7 @@ class ActionDatabase implements Repository\ActionInterface
                 Table\Generated\ActionTable::COLUMN_ASYNC,
                 Table\Generated\ActionTable::COLUMN_CONFIG,
                 Table\Generated\ActionTable::COLUMN_DATE,
+                Table\Generated\ActionTable::COLUMN_METADATA,
             ])
             ->from('fusio_action', 'action')
             ->orderBy(Table\Generated\ActionTable::COLUMN_NAME, 'ASC')
@@ -100,6 +101,7 @@ class ActionDatabase implements Repository\ActionInterface
                 Table\Generated\ActionTable::COLUMN_ASYNC,
                 Table\Generated\ActionTable::COLUMN_CONFIG,
                 Table\Generated\ActionTable::COLUMN_DATE,
+                Table\Generated\ActionTable::COLUMN_METADATA,
             ])
             ->from('fusio_action', 'action')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
@@ -123,12 +125,21 @@ class ActionDatabase implements Repository\ActionInterface
     {
         $config = !empty($row[Table\Generated\ActionTable::COLUMN_CONFIG]) ? Service\Action::unserializeConfig($row[Table\Generated\ActionTable::COLUMN_CONFIG]) : [];
 
+        $metadata = null;
+        if (!empty($row[Table\Generated\ActionTable::COLUMN_METADATA])) {
+            $metadata = json_decode($row[Table\Generated\ActionTable::COLUMN_METADATA]);
+            if (!$metadata instanceof \stdClass) {
+                $metadata = null;
+            }
+        }
+
         return new Model\Action(
             $row[Table\Generated\ActionTable::COLUMN_ID],
             $row[Table\Generated\ActionTable::COLUMN_NAME],
             $row[Table\Generated\ActionTable::COLUMN_CLASS],
             $this->async ? (bool) $row[Table\Generated\ActionTable::COLUMN_ASYNC] : false,
-            $config ?? []
+            $config ?? [],
+            $metadata
         );
     }
 }

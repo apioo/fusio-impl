@@ -57,6 +57,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                 Table\Generated\ConnectionTable::COLUMN_ID,
                 Table\Generated\ConnectionTable::COLUMN_NAME,
                 Table\Generated\ConnectionTable::COLUMN_CLASS,
+                Table\Generated\ConnectionTable::COLUMN_METADATA,
             ])
             ->from('fusio_connection', 'connection')
             ->orderBy(Table\Generated\ConnectionTable::COLUMN_NAME, 'ASC')
@@ -91,6 +92,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                 Table\Generated\ConnectionTable::COLUMN_NAME,
                 Table\Generated\ConnectionTable::COLUMN_CLASS,
                 Table\Generated\ConnectionTable::COLUMN_CONFIG,
+                Table\Generated\ConnectionTable::COLUMN_METADATA,
             ])
             ->from('fusio_connection', 'connection')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
@@ -109,11 +111,20 @@ class ConnectionDatabase implements Repository\ConnectionInterface
     {
         $config = !empty($row[Table\Generated\ConnectionTable::COLUMN_CONFIG]) ? ConnectionService\Encrypter::decrypt($row[Table\Generated\ConnectionTable::COLUMN_CONFIG], $this->frameworkConfig->getProjectKey()) : [];
 
+        $metadata = null;
+        if (!empty($row[Table\Generated\ConnectionTable::COLUMN_METADATA])) {
+            $metadata = json_decode($row[Table\Generated\ConnectionTable::COLUMN_METADATA]);
+            if (!$metadata instanceof \stdClass) {
+                $metadata = null;
+            }
+        }
+
         return new Model\Connection(
             $row[Table\Generated\ConnectionTable::COLUMN_ID],
             $row[Table\Generated\ConnectionTable::COLUMN_NAME],
             $row[Table\Generated\ConnectionTable::COLUMN_CLASS],
-            $config
+            $config,
+            $metadata
         );
     }
 }

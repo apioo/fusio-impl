@@ -60,6 +60,7 @@ class AppDatabase implements Repository\AppInterface
                 Table\Generated\AppTable::COLUMN_URL,
                 Table\Generated\AppTable::COLUMN_PARAMETERS,
                 Table\Generated\AppTable::COLUMN_APP_KEY,
+                Table\Generated\AppTable::COLUMN_METADATA,
             ])
             ->from('fusio_app', 'app')
             ->orderBy(Table\Generated\AppTable::COLUMN_ID, 'DESC')
@@ -95,6 +96,7 @@ class AppDatabase implements Repository\AppInterface
                 Table\Generated\AppTable::COLUMN_URL,
                 Table\Generated\AppTable::COLUMN_PARAMETERS,
                 Table\Generated\AppTable::COLUMN_APP_KEY,
+                Table\Generated\AppTable::COLUMN_METADATA,
             ])
             ->from('fusio_app', 'app')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
@@ -141,6 +143,14 @@ class AppDatabase implements Repository\AppInterface
             parse_str($row[Table\Generated\AppTable::COLUMN_PARAMETERS], $parameters);
         }
 
+        $metadata = null;
+        if (!empty($row[Table\Generated\AppTable::COLUMN_METADATA])) {
+            $metadata = json_decode($row[Table\Generated\AppTable::COLUMN_METADATA]);
+            if (!$metadata instanceof \stdClass) {
+                $metadata = null;
+            }
+        }
+
         return new Model\App(
             false,
             $row[Table\Generated\AppTable::COLUMN_ID],
@@ -150,7 +160,8 @@ class AppDatabase implements Repository\AppInterface
             $row[Table\Generated\AppTable::COLUMN_URL],
             $row[Table\Generated\AppTable::COLUMN_APP_KEY],
             $parameters,
-            $scopes
+            $scopes,
+            $metadata
         );
     }
 }

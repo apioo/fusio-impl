@@ -61,6 +61,7 @@ class UserDatabase implements Repository\UserInterface
                 Table\Generated\UserTable::COLUMN_NAME,
                 Table\Generated\UserTable::COLUMN_EMAIL,
                 Table\Generated\UserTable::COLUMN_POINTS,
+                Table\Generated\UserTable::COLUMN_METADATA,
             ])
             ->from('fusio_user', 'usr')
             ->orderBy(Table\Generated\UserTable::COLUMN_ID, 'DESC')
@@ -97,6 +98,7 @@ class UserDatabase implements Repository\UserInterface
                 Table\Generated\UserTable::COLUMN_NAME,
                 Table\Generated\UserTable::COLUMN_EMAIL,
                 Table\Generated\UserTable::COLUMN_POINTS,
+                Table\Generated\UserTable::COLUMN_METADATA,
             ])
             ->from('fusio_user', 'usr')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
@@ -113,6 +115,14 @@ class UserDatabase implements Repository\UserInterface
 
     private function newUser(array $row): Model\UserInterface
     {
+        $metadata = null;
+        if (!empty($row[Table\Generated\UserTable::COLUMN_METADATA])) {
+            $metadata = json_decode($row[Table\Generated\UserTable::COLUMN_METADATA]);
+            if (!$metadata instanceof \stdClass) {
+                $metadata = null;
+            }
+        }
+
         return new Model\User(
             false,
             $row[Table\Generated\UserTable::COLUMN_ID],
@@ -123,7 +133,8 @@ class UserDatabase implements Repository\UserInterface
             $row[Table\Generated\UserTable::COLUMN_EMAIL] ?? '',
             $row[Table\Generated\UserTable::COLUMN_POINTS] ?? 0,
             $row[Table\Generated\UserTable::COLUMN_EXTERNAL_ID] ?? null,
-            $row[Table\Generated\UserTable::COLUMN_PLAN_ID] ?? null
+            $row[Table\Generated\UserTable::COLUMN_PLAN_ID] ?? null,
+            $metadata
         );
     }
 
