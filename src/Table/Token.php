@@ -150,6 +150,7 @@ class Token extends Generated\TokenTable
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_USER_ID, $userId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 
         return $this->getCount($condition);
     }
