@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\Token;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -37,17 +38,19 @@ use Fusio\Impl\Service\Consumer\Token;
 class Delete implements ActionInterface
 {
     private Token $tokenService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Token $tokenService)
+    public function __construct(Token $tokenService, ContextFactory $contextFactory)
     {
         $this->tokenService = $tokenService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->delete(
             $request->get('token_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

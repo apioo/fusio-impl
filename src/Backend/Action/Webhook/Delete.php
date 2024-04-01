@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -37,17 +38,19 @@ use Fusio\Impl\Service;
 class Delete implements ActionInterface
 {
     private Service\Webhook $webhookService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Webhook $webhookService)
+    public function __construct(Service\Webhook $webhookService, ContextFactory $contextFactory)
     {
         $this->webhookService = $webhookService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->webhookService->delete(
             $request->get('webhook_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

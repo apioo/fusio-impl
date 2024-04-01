@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model;
 use PSX\Framework\Http\Writer\Template;
 use PSX\Framework\Loader\ReverseRouter;
@@ -43,11 +44,13 @@ class Exchange implements ActionInterface
 {
     private Service\Identity $identity;
     private ReverseRouter $reverseRouter;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Identity $identity, ReverseRouter $reverseRouter)
+    public function __construct(Service\Identity $identity, ReverseRouter $reverseRouter, ContextFactory $contextFactory)
     {
         $this->identity = $identity;
         $this->reverseRouter = $reverseRouter;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -74,7 +77,7 @@ class Exchange implements ActionInterface
             $request->get('identity'),
             $code,
             $state,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         // normally the exchange method throws a redirect exception but in case we have no redirect we simply show the

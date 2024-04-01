@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\WebhookCreate;
 use PSX\Http\Environment\HttpResponse;
 
@@ -39,10 +40,12 @@ use PSX\Http\Environment\HttpResponse;
 class Create implements ActionInterface
 {
     private Service\Webhook $webhookService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Webhook $webhookService)
+    public function __construct(Service\Webhook $webhookService, ContextFactory $contextFactory)
     {
         $this->webhookService = $webhookService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -53,7 +56,7 @@ class Create implements ActionInterface
 
         $this->webhookService->create(
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], [

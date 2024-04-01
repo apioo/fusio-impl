@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\Webhook;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Consumer\WebhookUpdate;
 
 /**
@@ -38,10 +39,12 @@ use Fusio\Model\Consumer\WebhookUpdate;
 class Update implements ActionInterface
 {
     private Webhook $webhookService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Webhook $webhookService)
+    public function __construct(Webhook $webhookService, ContextFactory $contextFactory)
     {
         $this->webhookService = $webhookService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -53,7 +56,7 @@ class Update implements ActionInterface
         $this->webhookService->update(
             $request->get('webhook_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

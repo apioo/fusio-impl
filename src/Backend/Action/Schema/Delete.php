@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -39,17 +40,19 @@ use Fusio\Impl\Service\Schema;
 class Delete implements ActionInterface
 {
     private Schema $schemaService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Schema $schemaService)
+    public function __construct(Schema $schemaService, ContextFactory $contextFactory)
     {
         $this->schemaService = $schemaService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->schemaService->delete(
             $request->get('schema_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

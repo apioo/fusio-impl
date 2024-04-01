@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Identity;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\IdentityCreate;
 use PSX\Http\Environment\HttpResponse;
 
@@ -39,10 +40,12 @@ use PSX\Http\Environment\HttpResponse;
 class Create implements ActionInterface
 {
     private Identity $identityService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Identity $identityService)
+    public function __construct(Identity $identityService, ContextFactory $contextFactory)
     {
         $this->identityService = $identityService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -53,7 +56,7 @@ class Create implements ActionInterface
 
         $this->identityService->create(
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], [

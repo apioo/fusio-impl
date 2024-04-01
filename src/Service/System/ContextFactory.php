@@ -85,10 +85,6 @@ class ContextFactory
 
     public function newActionContext(ContextInterface $context): UserContext
     {
-        if ($context->getUser()->isAnonymous()) {
-            throw new BadRequestException('This action can only be invoked by authenticated users');
-        }
-
         $appId = null;
         if (!$context->getApp()->isAnonymous()) {
             $appId = $context->getApp()->getId();

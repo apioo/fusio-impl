@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Identity;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\IdentityUpdate;
 
 /**
@@ -38,10 +39,12 @@ use Fusio\Model\Backend\IdentityUpdate;
 class Update implements ActionInterface
 {
     private Identity $identityService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Identity $identityService)
+    public function __construct(Identity $identityService, ContextFactory $contextFactory)
     {
         $this->identityService = $identityService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -53,7 +56,7 @@ class Update implements ActionInterface
         $this->identityService->update(
             $request->get('identity_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

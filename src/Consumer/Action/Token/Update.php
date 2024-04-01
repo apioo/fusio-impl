@@ -29,6 +29,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\App;
 use Fusio\Impl\Service\Consumer\Token;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Consumer\AppCreate;
 use Fusio\Model\Consumer\AppUpdate;
 use Fusio\Model\Consumer\TokenUpdate;
@@ -44,10 +45,12 @@ use PSX\Http\Environment\HttpResponse;
 class Update implements ActionInterface
 {
     private Token $tokenService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Token $tokenService)
+    public function __construct(Token $tokenService, ContextFactory $contextFactory)
     {
         $this->tokenService = $tokenService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -59,7 +62,7 @@ class Update implements ActionInterface
         $token = $this->tokenService->update(
             $request->get('token_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], $token);

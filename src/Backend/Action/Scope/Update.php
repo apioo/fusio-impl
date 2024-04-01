@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Scope;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\ScopeUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\ScopeUpdate;
 class Update implements ActionInterface
 {
     private Scope $scopeService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Scope $scopeService)
+    public function __construct(Scope $scopeService, ContextFactory $contextFactory)
     {
         $this->scopeService = $scopeService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->scopeService->update(
             $request->get('scope_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

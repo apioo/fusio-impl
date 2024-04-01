@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Event;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\EventUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\EventUpdate;
 class Update implements ActionInterface
 {
     private Event $eventService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Event $eventService)
+    public function __construct(Event $eventService, ContextFactory $contextFactory)
     {
         $this->eventService = $eventService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->eventService->update(
             $request->get('event_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

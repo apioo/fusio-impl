@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 
@@ -39,10 +40,12 @@ use PSX\Http\Exception as StatusCode;
 class Redirect implements ActionInterface
 {
     private Service\Identity $identity;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Service\Identity $identity)
+    public function __construct(Service\Identity $identity, ContextFactory $contextFactory)
     {
         $this->identity = $identity;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -50,7 +53,7 @@ class Redirect implements ActionInterface
         $redirectUri = $this->identity->redirect(
             $request->get('identity'),
             $request->get('redirect_uri'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         throw new StatusCode\FoundException($redirectUri->toString());

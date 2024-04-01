@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Role;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\RoleUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\RoleUpdate;
 class Update implements ActionInterface
 {
     private Role $roleService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Role $roleService)
+    public function __construct(Role $roleService, ContextFactory $contextFactory)
     {
         $this->roleService = $roleService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->roleService->update(
             $request->get('role_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

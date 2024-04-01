@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Rate;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -39,17 +40,19 @@ use Fusio\Impl\Service\Rate;
 class Delete implements ActionInterface
 {
     private Rate $rateService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Rate $rateService)
+    public function __construct(Rate $rateService, ContextFactory $contextFactory)
     {
         $this->rateService = $rateService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->rateService->delete(
             $request->get('rate_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

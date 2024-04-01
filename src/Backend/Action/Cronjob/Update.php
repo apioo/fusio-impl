@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\CronjobUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\CronjobUpdate;
 class Update implements ActionInterface
 {
     private Cronjob $cronjobService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Cronjob $cronjobService)
+    public function __construct(Cronjob $cronjobService, ContextFactory $contextFactory)
     {
         $this->cronjobService = $cronjobService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->cronjobService->update(
             $request->get('cronjob_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

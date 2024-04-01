@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -39,17 +40,19 @@ use Fusio\Impl\Service\Cronjob;
 class Delete implements ActionInterface
 {
     private Cronjob $cronjobService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Cronjob $cronjobService)
+    public function __construct(Cronjob $cronjobService, ContextFactory $contextFactory)
     {
         $this->cronjobService = $cronjobService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->cronjobService->delete(
             $request->get('cronjob_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\SchemaUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\SchemaUpdate;
 class Update implements ActionInterface
 {
     private Schema $schemaService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Schema $schemaService)
+    public function __construct(Schema $schemaService, ContextFactory $contextFactory)
     {
         $this->schemaService = $schemaService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->schemaService->update(
             $request->get('schema_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

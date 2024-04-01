@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Http\Environment\HttpResponse;
@@ -42,11 +43,13 @@ class Install implements ActionInterface
 {
     private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig)
+    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
     {
         $this->installerService = $installerService;
         $this->frameworkConfig = $frameworkConfig;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -61,7 +64,7 @@ class Install implements ActionInterface
 
         $app = $this->installerService->install(
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], [

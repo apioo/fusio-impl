@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Event;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Delete
@@ -39,17 +40,19 @@ use Fusio\Impl\Service\Event;
 class Delete implements ActionInterface
 {
     private Event $eventService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Event $eventService)
+    public function __construct(Event $eventService, ContextFactory $contextFactory)
     {
         $this->eventService = $eventService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->eventService->delete(
             $request->get('event_id'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

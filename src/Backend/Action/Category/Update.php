@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Category;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\CategoryUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\CategoryUpdate;
 class Update implements ActionInterface
 {
     private Category $categoryService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Category $categoryService)
+    public function __construct(Category $categoryService, ContextFactory $contextFactory)
     {
         $this->categoryService = $categoryService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->categoryService->update(
             $request->get('category_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

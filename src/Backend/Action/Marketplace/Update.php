@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
@@ -40,11 +41,13 @@ class Update implements ActionInterface
 {
     private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig)
+    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
     {
         $this->installerService = $installerService;
         $this->frameworkConfig = $frameworkConfig;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
 
         $app = $this->installerService->update(
             $request->get('app_name'),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

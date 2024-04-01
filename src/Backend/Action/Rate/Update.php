@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Rate;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\RateUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\RateUpdate;
 class Update implements ActionInterface
 {
     private Rate $rateService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Rate $rateService)
+    public function __construct(Rate $rateService, ContextFactory $contextFactory)
     {
         $this->rateService = $rateService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->rateService->update(
             $request->get('rate_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

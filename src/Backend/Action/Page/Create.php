@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Page;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\PageCreate;
 use PSX\Http\Environment\HttpResponse;
 
@@ -41,10 +42,12 @@ use PSX\Http\Environment\HttpResponse;
 class Create implements ActionInterface
 {
     private Page $pageService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Page $pageService)
+    public function __construct(Page $pageService, ContextFactory $contextFactory)
     {
         $this->pageService = $pageService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Create implements ActionInterface
 
         $this->pageService->create(
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], [

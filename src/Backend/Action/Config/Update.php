@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Config;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\ConfigUpdate;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Backend\ConfigUpdate;
 class Update implements ActionInterface
 {
     private Config $configService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Config $configService)
+    public function __construct(Config $configService, ContextFactory $contextFactory)
     {
         $this->configService = $configService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,7 +58,7 @@ class Update implements ActionInterface
         $this->configService->update(
             $request->get('config_id'),
             $body,
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

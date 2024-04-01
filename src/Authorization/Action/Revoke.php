@@ -41,11 +41,13 @@ class Revoke implements ActionInterface
 {
     private Service\Token $tokenService;
     private Table\Token $table;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Token $tokenService, Table\Token $table)
+    public function __construct(Service\Token $tokenService, Table\Token $table, Service\System\ContextFactory $contextFactory)
     {
         $this->tokenService = $tokenService;
         $this->table = $table;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -65,7 +67,7 @@ class Revoke implements ActionInterface
 
         // the token must be assigned to the user
         if ($row instanceof Table\Generated\TokenRow && $row->getUserId() == $context->getUser()->getId()) {
-            $this->tokenService->remove($row->getId(), UserContext::newActionContext($context));
+            $this->tokenService->remove($row->getId(), $this->contextFactory->newActionContext($context));
 
             return [
                 'success' => true

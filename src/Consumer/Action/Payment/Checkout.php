@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Payment;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Consumer\PaymentCheckoutRequest;
 
 /**
@@ -40,10 +41,12 @@ use Fusio\Model\Consumer\PaymentCheckoutRequest;
 class Checkout implements ActionInterface
 {
     private Payment $paymentService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Payment $paymentService)
+    public function __construct(Payment $paymentService, ContextFactory $contextFactory)
     {
         $this->paymentService = $paymentService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -56,7 +59,7 @@ class Checkout implements ActionInterface
             $request->get('provider'),
             $body,
             $context->getUser(),
-            UserContext::newActionContext($context)
+            $this->contextFactory->newActionContext($context)
         );
 
         return [

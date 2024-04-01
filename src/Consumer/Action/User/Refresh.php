@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Login as UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Http\Exception as StatusCode;
@@ -40,10 +41,12 @@ use PSX\OAuth2\AccessToken;
 class Refresh implements ActionInterface
 {
     private UserLogin $loginService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(UserLogin $loginService)
+    public function __construct(UserLogin $loginService, ContextFactory $contextFactory)
     {
         $this->loginService = $loginService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,22 +55,22 @@ class Refresh implements ActionInterface
 
         assert($body instanceof UserRefresh);
 
-        $token = $this->loginService->refresh($body, UserContext::newActionContext($context));
+        $token = $this->loginService->refresh($body, $this->contextFactory->newActionContext($context));
 
         return $this->renderToken($token);
     }
 
-    private function renderToken(?AccessToken $token)
+    private function renderToken(?AccessToken $token): array
     {
-        if ($token instanceof AccessToken) {
-            return [
-                'token' => $token->getAccessToken(),
-                'expires_in' => $token->getExpiresIn(),
-                'refresh_token' => $token->getRefreshToken(),
-                'scope' => $token->getScope(),
-            ];
-        } else {
+        if (!$token instanceof AccessToken) {
             throw new StatusCode\BadRequestException('Invalid name or password');
         }
+
+        return [
+            'token' => $token->getAccessToken(),
+            'expires_in' => $token->getExpiresIn(),
+            'refresh_token' => $token->getRefreshToken(),
+            'scope' => $token->getScope(),
+        ];
     }
 }
