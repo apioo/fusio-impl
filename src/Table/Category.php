@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\ActionRow;
 use Fusio\Impl\Table\Generated\CategoryRow;
 use PSX\Sql\Condition;
 
@@ -35,6 +34,12 @@ class Category extends Generated\CategoryTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
+
+    public const TYPE_DEFAULT = 'default';
+    public const TYPE_BACKEND = 'backend';
+    public const TYPE_CONSUMER = 'consumer';
+    public const TYPE_SYSTEM = 'system';
+    public const TYPE_AUTHORIZATION = 'authorization';
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?CategoryRow
     {
@@ -61,5 +66,15 @@ class Category extends Generated\CategoryTable
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
+    }
+
+    public function getCategoryIdByType(?string $tenantId, string $type): int
+    {
+        $id = $this->findOneByTenantAndName($tenantId, $type)?->getId();
+        if ($id === null) {
+            throw new \RuntimeException('Provided type ' . $type . ' does not exist');
+        }
+
+        return $id;
     }
 }
