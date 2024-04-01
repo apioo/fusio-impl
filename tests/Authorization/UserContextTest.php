@@ -52,7 +52,7 @@ class UserContextTest extends TestCase
         $user = new User(false, 1, 0, 0, 0, '', '', 0);
 
         $context = new Context(1, '/', $app, $user);
-        $userContext = UserContext::newActionContext($context);
+        $userContext = Environment::getService(ContextFactory::class)->newActionContext($context);
 
         $this->assertInstanceOf(UserContext::class, $userContext);
         $this->assertEquals(1, $userContext->getUserId());
