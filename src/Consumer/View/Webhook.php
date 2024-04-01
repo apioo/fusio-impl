@@ -54,7 +54,7 @@ class Webhook extends ViewAbstract
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_STATUS,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_NAME,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ENDPOINT,
-                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS eventName',
+                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS event_name',
             ])
             ->from('fusio_webhook', 'webhook')
             ->innerJoin('webhook', 'fusio_event', 'event', 'webhook.' . Table\Generated\WebhookTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
@@ -81,7 +81,7 @@ class Webhook extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
                 'name' => Table\Generated\WebhookTable::COLUMN_NAME,
-                'event' => 'eventName',
+                'event' => 'event_name',
                 'endpoint' => Table\Generated\WebhookTable::COLUMN_ENDPOINT,
             ]),
         ];
@@ -103,7 +103,7 @@ class Webhook extends ViewAbstract
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_STATUS,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_NAME,
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ENDPOINT,
-                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS eventName',
+                'event.' . Table\Generated\EventTable::COLUMN_NAME . ' AS event_name',
             ])
             ->from('fusio_webhook', 'webhook')
             ->innerJoin('webhook', 'fusio_event', 'event', 'webhook.' . Table\Generated\WebhookTable::COLUMN_EVENT_ID . ' = event.' . Table\Generated\EventTable::COLUMN_ID)
@@ -116,7 +116,7 @@ class Webhook extends ViewAbstract
             'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
             'name' => Table\Generated\WebhookTable::COLUMN_NAME,
-            'event' => 'eventName',
+            'event' => 'event_name',
             'endpoint' => Table\Generated\WebhookTable::COLUMN_ENDPOINT,
             'responses' => $builder->doCollection([$this->getTable(Table\Webhook\Response::class), 'getAllByWebhook'], [new Reference(Table\Generated\WebhookTable::COLUMN_ID)], [
                 'status' => $builder->fieldInteger(Table\Generated\WebhookResponseTable::COLUMN_STATUS),
