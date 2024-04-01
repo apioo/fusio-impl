@@ -49,6 +49,7 @@ class Token extends ViewAbstract
 
         $condition = $filter->getCondition([]);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_STATUS, Table\Token::STATUS_ACTIVE);
 
@@ -77,6 +78,7 @@ class Token extends ViewAbstract
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TokenTable::COLUMN_ID, $tokenId);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\TokenTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 

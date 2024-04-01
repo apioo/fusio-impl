@@ -47,8 +47,8 @@ class Log extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogTable::COLUMN_PATH]);
         $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $context->getUser()->getId());
 
         $builder = new Builder($this->connection);
 
@@ -75,8 +75,8 @@ class Log extends ViewAbstract
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
         $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $context->getUser()->getId());
 
         $builder = new Builder($this->connection);
 
