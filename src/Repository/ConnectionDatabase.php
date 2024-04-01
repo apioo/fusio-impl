@@ -57,6 +57,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                 Table\Generated\ConnectionTable::COLUMN_ID,
                 Table\Generated\ConnectionTable::COLUMN_NAME,
                 Table\Generated\ConnectionTable::COLUMN_CLASS,
+                Table\Generated\ConnectionTable::COLUMN_CONFIG,
                 Table\Generated\ConnectionTable::COLUMN_METADATA,
             ])
             ->from('fusio_connection', 'connection')
