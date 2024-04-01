@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Action;
 use Fusio\Model\Backend\ActionExecuteRequest;
+use Fusio\Worker\MessageException;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
 
@@ -39,10 +40,12 @@ use PSX\Http\Environment\HttpResponseInterface;
 class Execute implements ActionInterface
 {
     private Action\Executor $actionExecutorService;
+    private Converter $exceptionConverter;
 
     public function __construct(Action\Executor $actionExecutorService)
     {
         $this->actionExecutorService = $actionExecutorService;
+        $this->exceptionConverter = new Converter(true);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -60,23 +63,27 @@ class Execute implements ActionInterface
             if ($response instanceof HttpResponseInterface) {
                 return [
                     'statusCode' => $response->getStatusCode(),
-                    'headers'    => $response->getHeaders() ?: new \stdClass(),
-                    'body'       => $response->getBody(),
+                    'headers' => $response->getHeaders() ?: new \stdClass(),
+                    'body' => $response->getBody(),
                 ];
             } else {
                 return [
                     'statusCode' => 200,
-                    'headers'    => new \stdClass(),
-                    'body'       => $response,
+                    'headers' => new \stdClass(),
+                    'body' => $response,
                 ];
             }
         } catch (\Throwable $e) {
-            $exceptionConverter = new Converter(true);
+            if ($e instanceof MessageException) {
+                $body = $e->getPayload();
+            } else {
+                $body = $this->exceptionConverter->convert($e);
+            }
 
             return [
                 'statusCode' => 500,
-                'headers'    => new \stdClass(),
-                'body'       => $exceptionConverter->convert($e),
+                'headers' => new \stdClass(),
+                'body' => $body,
             ];
         }
     }
