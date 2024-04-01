@@ -40,7 +40,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/log/3', 'GET', array(
+        $response = $this->sendRequest('/consumer/log/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -50,13 +50,14 @@ class EntityTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": 3,
-    "appId": 2,
+    "id": 1,
+    "appId": 3,
     "ip": "127.0.0.1",
-    "userAgent": "Fusio TestCase",
+    "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
     "method": "GET",
-    "path": "\/consumer\/log\/3",
-    "header": "User-Agent: Fusio TestCase\nAuthorization: Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2",
+    "path": "\/bar",
+    "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
+    "body": "foobar",
     "date": "[datetime]"
 }
 JSON;
@@ -67,7 +68,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/log/3', 'POST', array(
+        $response = $this->sendRequest('/consumer/log/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -81,7 +82,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/log/3', 'PUT', array(
+        $response = $this->sendRequest('/consumer/log/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -95,7 +96,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/log/3', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/log/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));

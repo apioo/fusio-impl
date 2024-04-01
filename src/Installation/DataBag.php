@@ -383,12 +383,13 @@ class DataBag
         ];
     }
 
-    public function addLog(string $category, string $app, string $operation, ?string $tenantId = null): void
+    public function addLog(string $category, ?string $app, string $user, string $operation, ?string $tenantId = null): void
     {
         $this->data['fusio_log'][] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
-            'app_id' => $this->getReference('fusio_app', $app, $tenantId),
+            'app_id' => $app !== null ? $this->getReference('fusio_app', $app, $tenantId) : null,
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'ip' => '127.0.0.1',
             'user_agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36',

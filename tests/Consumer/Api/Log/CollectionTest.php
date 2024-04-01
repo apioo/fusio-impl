@@ -55,12 +55,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
-            "appId": 2,
+            "id": 1,
+            "appId": 3,
             "ip": "127.0.0.1",
-            "userAgent": "Fusio TestCase",
+            "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
-            "path": "\/consumer\/log",
+            "path": "\/bar",
             "date": "[datetime]"
         }
     ]
