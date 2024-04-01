@@ -12,6 +12,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     public const COLUMN_APP_ID = 'app_id';
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_TENANT_ID = 'tenant_id';
+    public const COLUMN_CATEGORY_ID = 'category_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_NAME = 'name';
     public const COLUMN_TOKEN = 'token';
@@ -26,7 +27,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0x40a000ff, self::COLUMN_TOKEN => 0xa00200, self::COLUMN_REFRESH => 0x40a000ff, self::COLUMN_SCOPE => 0xa003ff, self::COLUMN_IP => 0xa00028, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0x40a000ff, self::COLUMN_TOKEN => 0xa00200, self::COLUMN_REFRESH => 0x40a000ff, self::COLUMN_SCOPE => 0xa003ff, self::COLUMN_IP => 0xa00028, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
@@ -206,6 +207,43 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('tenant_id', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\TokenRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByCategoryId(int $value) : ?\Fusio\Impl\Table\Generated\TokenRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByCategoryId(int $value, \Fusio\Impl\Table\Generated\TokenRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByCategoryId(int $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('category_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**
