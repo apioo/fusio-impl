@@ -397,6 +397,7 @@ final class Version20230508210151 extends AbstractMigration
             $tokenTable = $schema->createTable('fusio_token');
             $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $tokenTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $tokenTable->addColumn('category_id', 'integer', ['default' => 1]);
             $tokenTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $tokenTable->addColumn('user_id', 'integer');
             $tokenTable->addColumn('status', 'integer', ['default' => 1]);
