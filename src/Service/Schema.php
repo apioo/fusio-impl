@@ -57,7 +57,7 @@ class Schema
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, SchemaCreate $schema, UserContext $context): int
+    public function create(SchemaCreate $schema, UserContext $context): int
     {
         $this->validator->assert($schema, $context->getTenantId());
 
@@ -66,7 +66,7 @@ class Schema
 
             $row = new Table\Generated\SchemaRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Schema::STATUS_ACTIVE);
             $row->setName($schema->getName());
             $row->setSource($this->parseSource($schema->getSource()));

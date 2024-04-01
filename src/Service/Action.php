@@ -59,7 +59,7 @@ class Action
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, ActionCreate $action, UserContext $context): int
+    public function create(ActionCreate $action, UserContext $context): int
     {
         $this->validator->assert($action, $context->getTenantId());
 
@@ -82,7 +82,7 @@ class Action
 
             $row = new Table\Generated\ActionRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($name);
             $row->setClass(ClassName::serialize($class));

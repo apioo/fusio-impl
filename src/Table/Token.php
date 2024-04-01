@@ -145,10 +145,11 @@ class Token extends Generated\TokenTable
         $this->connection->executeStatement($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
-    public function getCountForUser(?string $tenantId, int $userId): int
+    public function getCountForUser(?string $tenantId, int $categoryId, int $userId): int
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_USER_ID, $userId);
         $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 

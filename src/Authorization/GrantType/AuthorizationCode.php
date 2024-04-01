@@ -85,6 +85,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         // generate access token
         return $this->tokenService->generate(
             $this->frameworkConfig->getTenantId(),
+            Table\Category::TYPE_AUTHORIZATION,
             $code['app_id'],
             $code['user_id'],
             $name,

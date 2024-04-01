@@ -63,7 +63,7 @@ class Operation
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, OperationCreate $operation, UserContext $context): int
+    public function create(OperationCreate $operation, UserContext $context): int
     {
         $this->validator->assert($operation, $context->getTenantId());
 
@@ -73,7 +73,7 @@ class Operation
 
             $row = new Table\Generated\OperationRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Operation::STATUS_ACTIVE);
             $row->setActive($operation->getActive() !== null ? (int) $operation->getActive() : 1);
             $row->setPublic($operation->getPublic() !== null ? (int) $operation->getPublic() : 0);
@@ -98,7 +98,7 @@ class Operation
             // assign scopes
             $scopes = $operation->getScopes();
             if (!empty($scopes)) {
-                $this->scopeService->createForOperation($categoryId, $operationId, $scopes, $context);
+                $this->scopeService->createForOperation($operationId, $scopes, $context);
             }
 
             $this->operationTable->commit();
@@ -171,7 +171,7 @@ class Operation
                 // assign scopes
                 $scopes = $operation->getScopes();
                 if (!empty($scopes)) {
-                    $this->scopeService->createForOperation($existing->getCategoryId(), $existing->getId(), $scopes, $context);
+                    $this->scopeService->createForOperation($existing->getId(), $scopes, $context);
                 }
             }
 

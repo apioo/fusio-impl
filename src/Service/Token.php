@@ -48,27 +48,30 @@ class Token
     private Table\App $appTable;
     private Table\User $userTable;
     private Table\Token $tokenTable;
+    private Table\Category $categoryTable;
     private FrameworkConfig $frameworkConfig;
     private JsonWebToken $jsonWebToken;
     private EventDispatcherInterface  $eventDispatcher;
 
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\Token $tokenTable, FrameworkConfig $frameworkConfig, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\User $userTable, Table\Token $tokenTable, Table\Category $categoryTable, FrameworkConfig $frameworkConfig, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable = $appTable;
         $this->userTable = $userTable;
         $this->tokenTable = $tokenTable;
+        $this->categoryTable = $categoryTable;
         $this->frameworkConfig = $frameworkConfig;
         $this->jsonWebToken = $jsonWebToken;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function generate(?string $tenantId, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken
+    public function generate(?string $tenantId, string $categoryType, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken
     {
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No scopes provided');
         }
 
         $now = new DateTime();
+        $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, $categoryType);
         $app = $appId !== null ? $this->getApp($tenantId, $appId, $userId) : null;
         $user = $this->getUser($tenantId, $userId);
         $expires = $this->getExpires($expire, $now);
@@ -84,6 +87,7 @@ class Token
 
         $row = new Table\Generated\TokenRow();
         $row->setTenantId($tenantId);
+        $row->setCategoryId($categoryId);
         $row->setAppId($app?->getId());
         $row->setUserId($user->getId());
         $row->setStatus(Table\Token::STATUS_ACTIVE);
@@ -105,7 +109,7 @@ class Token
             $scopes,
             $expires,
             $now,
-            new UserContext($userId, $appId, $ip, $tenantId)
+            new UserContext($categoryId, $userId, $appId, $ip, $tenantId)
         ));
 
         return new AccessToken(
@@ -118,7 +122,7 @@ class Token
         );
     }
 
-    public function refresh(?string $tenantId, string $name, string $refreshToken, string $ip, DateInterval|DateTimeInterface $expire, DateInterval $expireRefresh): AccessToken
+    public function refresh(?string $tenantId, string $categoryType, string $name, string $refreshToken, string $ip, DateInterval|DateTimeInterface $expire, DateInterval $expireRefresh): AccessToken
     {
         $existing = $this->tokenTable->findOneByTenantAndRefreshToken($tenantId, $refreshToken);
         if (empty($existing)) {
@@ -142,6 +146,7 @@ class Token
 
         return $this->generate(
             $tenantId,
+            $categoryType,
             $existing->getAppId(),
             $existing->getUserId(),
             $name,

@@ -20,13 +20,12 @@
 
 namespace Fusio\Impl\Backend\Action\Connection;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Connection\Token;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * RenewToken
@@ -38,15 +37,17 @@ use Fusio\Impl\Service\Connection\Token;
 class RenewToken implements ActionInterface
 {
     private Token $tokenService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Token $tokenService)
+    public function __construct(Token $tokenService, ContextFactory $contextFactory)
     {
         $this->tokenService = $tokenService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->tokenService->refreshAll();
+        $this->tokenService->refreshAll($this->contextFactory->newAnonymousContext());
 
         return [
             'success' => true,

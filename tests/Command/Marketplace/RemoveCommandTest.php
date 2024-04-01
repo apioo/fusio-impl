@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\RemoveCommand;
+use Fusio\Impl\Service\System\ContextFactory;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -39,7 +40,10 @@ class RemoveCommandTest extends MarketplaceTestCase
             $this->markTestSkipped('The fusio app is not installed');
         }
 
-        $command = new RemoveCommand($this->getInstaller());
+        $command = new RemoveCommand(
+            $this->getInstaller(),
+            Environment::getService(ContextFactory::class)
+        );
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

@@ -79,6 +79,7 @@ class Token
 
         return $this->tokenService->generate(
             $context->getTenantId(),
+            Table\Category::TYPE_DEFAULT,
             null,
             $context->getUserId(),
             $name,
@@ -113,6 +114,7 @@ class Token
 
         return $this->tokenService->refresh(
             $context->getTenantId(),
+            Table\Category::TYPE_DEFAULT,
             $name,
             $existing->getRefresh(),
             $ip,
@@ -137,7 +139,7 @@ class Token
 
     private function assertMaxTokenCount(UserContext $context): void
     {
-        $count = $this->tokenTable->getCountForUser($context->getTenantId(), $context->getUserId());
+        $count = $this->tokenTable->getCountForUser($context->getTenantId(), $context->getCategoryId(), $context->getUserId());
         if ($count > $this->configService->getValue('consumer_max_tokens')) {
             throw new StatusCode\BadRequestException('Maximal amount of tokens reached. Please delete another token in order to generate a new one');
         }

@@ -91,7 +91,7 @@ class Register
         $user->setEmail($email);
         $user->setPassword($password);
 
-        $userId = $this->userService->create($user, UserContext::newAnonymousContext());
+        $userId = $this->userService->create($user, $context);
 
         // send activation mail
         if ($approval) {

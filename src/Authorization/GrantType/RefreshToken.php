@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
-use Fusio\Impl\Authorization\TokenNameBuilder;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
 use PSX\OAuth2\AccessToken;
@@ -53,6 +53,7 @@ class RefreshToken extends RefreshTokenAbstract
 
         return $this->tokenService->refresh(
             $this->frameworkConfig->getTenantId(),
+            Table\Category::TYPE_AUTHORIZATION,
             $name,
             $grant->getRefreshToken(),
             $ip,

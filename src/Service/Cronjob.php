@@ -50,7 +50,7 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, CronjobCreate $cronjob, UserContext $context): int
+    public function create(CronjobCreate $cronjob, UserContext $context): int
     {
         $this->validator->assert($cronjob, $context->getTenantId());
 
@@ -60,7 +60,7 @@ class Cronjob
 
             $row = new Table\Generated\CronjobRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Cronjob::STATUS_ACTIVE);
             $row->setName($cronjob->getName());
             $row->setCron($cronjob->getCron());

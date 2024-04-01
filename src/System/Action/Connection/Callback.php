@@ -27,6 +27,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Connection;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
  * Callback
@@ -38,10 +39,12 @@ use Fusio\Impl\Service\Connection;
 class Callback implements ActionInterface
 {
     private Connection\Token $tokenService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Connection\Token $tokenService)
+    public function __construct(Connection\Token $tokenService, ContextFactory $contextFactory)
     {
         $this->tokenService = $tokenService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -49,7 +52,8 @@ class Callback implements ActionInterface
         $this->tokenService->fetchByCode(
             $request->get('name'),
             $request->get('code'),
-            $request->get('state')
+            $request->get('state'),
+            $this->contextFactory->newAnonymousContext()
         );
 
         return [

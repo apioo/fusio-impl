@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\UpdateCommand;
+use Fusio\Impl\Service\System\ContextFactory;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -46,7 +47,8 @@ class UpdateCommandTest extends MarketplaceTestCase
 
         $command = new UpdateCommand(
             $this->getInstaller(),
-            $this->getRemoteRepository()
+            $this->getRemoteRepository(),
+            Environment::getService(ContextFactory::class)
         );
 
         $commandTester = new CommandTester($command);

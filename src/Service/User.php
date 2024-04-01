@@ -268,14 +268,6 @@ class User
 
     public function changePassword(AccountChangePassword $changePassword, UserContext $context): bool
     {
-        $appId  = $context->getAppId();
-        $userId = $context->getUserId();
-
-        // we can only change the password through the backend app
-        if (!in_array($appId, [1, 2])) {
-            throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
-        }
-
         $newPassword = $changePassword->getNewPassword();
         if (empty($newPassword)) {
             throw new StatusCode\BadRequestException('New password must not be empty');
@@ -295,7 +287,7 @@ class User
         $this->validator->assertPassword($newPassword);
 
         // change password
-        $result = $this->userTable->changePassword($context->getTenantId(), $userId, $oldPassword, $newPassword);
+        $result = $this->userTable->changePassword($context->getTenantId(), $context->getUserId(), $oldPassword, $newPassword);
 
         if ($result) {
             $this->eventDispatcher->dispatch(new ChangedPasswordEvent($changePassword, $context));

@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Backend\Action\Event;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -54,7 +52,6 @@ class Create implements ActionInterface
         assert($body instanceof EventCreate);
 
         $this->eventService->create(
-            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

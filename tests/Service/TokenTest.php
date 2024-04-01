@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Service;
 
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\Token;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -45,7 +46,7 @@ class TokenTest extends ControllerDbTestCase
     {
         /** @var Token $tokenService */
         $tokenService = Environment::getService(Token::class);
-        $token = $tokenService->generate(null, 1, 1, 'Test Token', ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
+        $token = $tokenService->generate(null, Table\Category::TYPE_DEFAULT, 1, 1, 'Test Token', ['foo', 'bar'], '127.0.0.1', new \DateInterval('P1D'));
 
         $this->assertInstanceOf(AccessToken::class, $token);
         $this->assertEquals('bearer', $token->getTokenType());

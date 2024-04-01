@@ -24,7 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Login as UserLogin;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
@@ -40,10 +40,12 @@ use PSX\OAuth2\AccessToken;
 class Login implements ActionInterface
 {
     private UserLogin $loginService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(UserLogin $loginService)
+    public function __construct(UserLogin $loginService, ContextFactory $contextFactory)
     {
         $this->loginService = $loginService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,7 +54,7 @@ class Login implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserLogin);
 
-        $token = $this->loginService->login($body, UserContext::newActionContext($context));
+        $token = $this->loginService->login($body, $this->contextFactory->newAnonymousContext());
 
         return $this->renderToken($token);
     }

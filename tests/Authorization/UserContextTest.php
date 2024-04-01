@@ -24,7 +24,9 @@ use Fusio\Engine\Context;
 use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * UserContextTest
@@ -37,11 +39,11 @@ class UserContextTest extends TestCase
 {
     public function testAnonymousContext()
     {
-        $userContext = UserContext::newAnonymousContext();
+        $userContext = Environment::getService(ContextFactory::class)->newAnonymousContext();
 
         $this->assertInstanceOf(UserContext::class, $userContext);
         $this->assertEquals(1, $userContext->getUserId());
-        $this->assertEquals(1, $userContext->getAppId());
+        $this->assertEquals(null, $userContext->getAppId());
     }
 
     public function testActionContext()
@@ -59,18 +61,19 @@ class UserContextTest extends TestCase
 
     public function testCommandContext()
     {
-        $userContext = UserContext::newCommandContext();
+        $userContext = Environment::getService(ContextFactory::class)->newCommandContext();
 
         $this->assertInstanceOf(UserContext::class, $userContext);
         $this->assertEquals(1, $userContext->getUserId());
-        $this->assertEquals(1, $userContext->getAppId());
+        $this->assertEquals(null, $userContext->getAppId());
     }
 
     public function testContext()
     {
-        $userContext = UserContext::newContext(1, 1);
+        $userContext = UserContext::newContext(1, 1, 1);
 
         $this->assertInstanceOf(UserContext::class, $userContext);
+        $this->assertEquals(1, $userContext->getCategoryId());
         $this->assertEquals(1, $userContext->getUserId());
         $this->assertEquals(1, $userContext->getAppId());
     }

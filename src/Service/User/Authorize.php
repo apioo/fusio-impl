@@ -121,6 +121,7 @@ class Authorize
 
                 $accessToken = $this->tokenService->generate(
                     $app->getTenantId(),
+                    Table\Category::TYPE_CONSUMER,
                     $app->getId(),
                     $userId,
                     $name,

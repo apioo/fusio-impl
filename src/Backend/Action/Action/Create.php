@@ -54,7 +54,6 @@ class Create implements ActionInterface
         assert($body instanceof ActionCreate);
 
         $this->actionService->create(
-            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

@@ -20,13 +20,11 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Activate as UserActivate;
 use Fusio\Model;
 
@@ -40,10 +38,12 @@ use Fusio\Model;
 class Activate implements ActionInterface
 {
     private UserActivate $activateService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(UserActivate $activateService)
+    public function __construct(UserActivate $activateService, ContextFactory $contextFactory)
     {
         $this->activateService = $activateService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,7 +52,7 @@ class Activate implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserActivate);
 
-        $this->activateService->activate($body, UserContext::newActionContext($context));
+        $this->activateService->activate($body, $this->contextFactory->newAnonymousContext());
 
         return [
             'success' => true,

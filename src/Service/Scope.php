@@ -60,7 +60,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, ScopeCreate $scope, UserContext $context): int
+    public function create(ScopeCreate $scope, UserContext $context): int
     {
         $this->validator->assert($scope, $context->getTenantId());
 
@@ -69,7 +69,7 @@ class Scope
 
             $row = new Table\Generated\ScopeRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Scope::STATUS_ACTIVE);
             $row->setName($scope->getName());
             $row->setDescription($scope->getDescription() ?? '');
@@ -93,7 +93,7 @@ class Scope
         return $scopeId;
     }
 
-    public function createForOperation(int $categoryId, int $operationId, array $scopeNames, UserContext $context): void
+    public function createForOperation(int $operationId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
         $this->scopeOperationTable->deleteAllFromOperation($operationId);
@@ -117,7 +117,7 @@ class Scope
                 $scope = new ScopeCreate();
                 $scope->setName($scopeName);
                 $scope->setOperations([$operation]);
-                $this->create($categoryId, $scope, $context);
+                $this->create($scope, $context);
             }
         }
     }

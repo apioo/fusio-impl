@@ -31,17 +31,24 @@ use Fusio\Engine\ContextInterface;
  */
 class UserContext
 {
+    private int $categoryId;
     private int $userId;
     private ?int $appId;
     private string $ip;
     private ?string $tenantId;
 
-    public function __construct(int $userId, ?int $appId, string $ip, ?string $tenantId = null)
+    public function __construct(int $categoryId, int $userId, ?int $appId, string $ip, ?string $tenantId = null)
     {
+        $this->categoryId = $categoryId;
         $this->userId = $userId;
         $this->appId = $appId;
         $this->ip = $ip;
         $this->tenantId = $tenantId;
+    }
+
+    public function getCategoryId(): int
+    {
+        return $this->categoryId;
     }
 
     public function getUserId(): int
@@ -64,19 +71,9 @@ class UserContext
         return $this->tenantId;
     }
 
-    public static function newContext(int $userId, ?int $appId = null, ?string $tenantId = null): self
+    public static function newContext(int $categoryId, int $userId, ?int $appId = null, ?string $tenantId = null): self
     {
-        return new UserContext($userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
-    }
-
-    public static function newAnonymousContext(?string $tenantId = null): self
-    {
-        return self::newContext(1, 1, $tenantId);
-    }
-
-    public static function newCommandContext(?string $tenantId = null): self
-    {
-        return self::newContext(1, 1, $tenantId);
+        return new UserContext($categoryId, $userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
     }
 
     public static function newActionContext(ContextInterface $context): self
@@ -86,6 +83,6 @@ class UserContext
             $appId = $context->getApp()->getId();
         }
 
-        return self::newContext($context->getUser()->getId(), $appId, $context->getTenantId());
+        return self::newContext($context->getUser()->getCategoryId(), $context->getUser()->getId(), $appId, $context->getTenantId());
     }
 }

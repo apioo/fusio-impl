@@ -45,14 +45,16 @@ class UserAddCommand extends Command
     private Service\User $userService;
     private Service\Config $configService;
     private Service\User\Validator $validator;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator)
+    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator, Service\System\ContextFactory $contextFactory)
     {
         parent::__construct();
 
         $this->userService = $userService;
         $this->configService = $configService;
         $this->validator = $validator;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure(): void
@@ -162,7 +164,7 @@ class UserAddCommand extends Command
         $create->setEmail($email);
         $create->setPassword($password);
 
-        $this->userService->create($create, UserContext::newCommandContext());
+        $this->userService->create($create, $this->contextFactory->newCommandContext());
 
         $output->writeln('Created user ' . $name . ' successful');
 

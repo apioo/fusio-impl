@@ -52,7 +52,7 @@ class Event
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, EventCreate $event, UserContext $context): int
+    public function create(EventCreate $event, UserContext $context): int
     {
         $this->validator->assert($event, $context->getTenantId());
 
@@ -62,7 +62,7 @@ class Event
 
             $row = new Table\Generated\EventRow();
             $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($categoryId);
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Event::STATUS_ACTIVE);
             $row->setName($event->getName());
             $row->setDescription($event->getDescription());

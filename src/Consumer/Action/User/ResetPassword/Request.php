@@ -20,13 +20,11 @@
 
 namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
 use Fusio\Model\Consumer\UserEmail;
 
@@ -40,10 +38,12 @@ use Fusio\Model\Consumer\UserEmail;
 class Request implements ActionInterface
 {
     private UserResetPassword $resetService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(UserResetPassword $resetService)
+    public function __construct(UserResetPassword $resetService, ContextFactory $contextFactory)
     {
         $this->resetService = $resetService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,7 +52,7 @@ class Request implements ActionInterface
 
         assert($body instanceof UserEmail);
 
-        $this->resetService->resetPassword($body, UserContext::newActionContext($context));
+        $this->resetService->resetPassword($body, $this->contextFactory->newAnonymousContext());
 
         return [
             'success' => true,

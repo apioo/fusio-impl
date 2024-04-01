@@ -87,6 +87,7 @@ class Password extends PasswordAbstract
         // generate access token
         return $this->tokenService->generate(
             $this->frameworkConfig->getTenantId(),
+            Table\Category::TYPE_AUTHORIZATION,
             $app->getId(),
             $userId,
             $name,

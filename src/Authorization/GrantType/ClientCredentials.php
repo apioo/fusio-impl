@@ -90,6 +90,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         // generate access token
         return $this->tokenService->generate(
             $this->frameworkConfig->getTenantId(),
+            Table\Category::TYPE_AUTHORIZATION,
             $appId,
             $userId,
             $name,

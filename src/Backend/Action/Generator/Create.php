@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Backend\Action\Generator;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -55,7 +53,6 @@ class Create implements ActionInterface
 
         $this->generatorService->create(
             $request->get('provider'),
-            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

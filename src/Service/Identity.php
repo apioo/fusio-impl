@@ -260,7 +260,7 @@ class Identity
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
-        $userId = $this->userService->createRemote($existing, $user, UserContext::newAnonymousContext());
+        $userId = $this->userService->createRemote($existing, $user, $context);
 
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId, $context);
@@ -271,6 +271,7 @@ class Identity
 
         $accessToken = $this->tokenService->generate(
             $context->getTenantId(),
+            Table\Category::TYPE_CONSUMER,
             null,
             $userId,
             $name,

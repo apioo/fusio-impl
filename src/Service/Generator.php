@@ -55,7 +55,7 @@ class Generator
         $this->elementFactory = $elementFactory;
     }
 
-    public function create(string $providerName, int $categoryId, Backend\GeneratorProvider $config, UserContext $context): void
+    public function create(string $providerName, Backend\GeneratorProvider $config, UserContext $context): void
     {
         $setup = new Setup();
         $basePath = $config->getPath() ?? '';
@@ -70,9 +70,9 @@ class Generator
         $this->connection->beginTransaction();
 
         try {
-            $this->entityCreator->createSchemas($categoryId, $setup->getSchemas(), $prefix, $context);
-            $this->entityCreator->createActions($categoryId, $setup->getActions(), $prefix, $context);
-            $this->entityCreator->createOperations($categoryId, $setup->getOperations(), $scopes, $public, $basePath, $prefix, $context);
+            $this->entityCreator->createSchemas($setup->getSchemas(), $prefix, $context);
+            $this->entityCreator->createActions($setup->getActions(), $prefix, $context);
+            $this->entityCreator->createOperations($setup->getOperations(), $scopes, $public, $basePath, $prefix, $context);
 
             $this->connection->commit();
         } catch (\Throwable $e) {

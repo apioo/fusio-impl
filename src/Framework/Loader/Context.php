@@ -23,7 +23,6 @@ namespace Fusio\Impl\Framework\Loader;
 use Fusio\Engine\Model\AppInterface;
 use Fusio\Engine\Model\TokenInterface;
 use Fusio\Engine\Model\UserInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Framework\Loader\Context as FrameworkContext;
 
@@ -43,7 +42,6 @@ class Context extends FrameworkContext
     private ?TokenInterface $token = null;
     private ?int $logId = null;
     private ?OperationRow $operation = null;
-    private ?UserContext $userContext = null;
 
     public function getTenantId(): ?string
     {
@@ -163,20 +161,5 @@ class Context extends FrameworkContext
     public function setOperation(OperationRow $operation): void
     {
         $this->operation = $operation;
-    }
-
-    public function getUserContext(): UserContext
-    {
-        if ($this->userContext) {
-            return $this->userContext;
-        }
-
-        if ($this->user && $this->app) {
-            return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId(), $this->tenantId);
-        } elseif ($this->user) {
-            return $this->userContext = UserContext::newContext($this->user->getId(), null, $this->tenantId);
-        } else {
-            return $this->userContext = UserContext::newAnonymousContext();
-        }
     }
 }

@@ -20,13 +20,11 @@
 
 namespace Fusio\Impl\Consumer\Action\User;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register as UserRegister;
 use Fusio\Model;
 
@@ -40,10 +38,12 @@ use Fusio\Model;
 class Register implements ActionInterface
 {
     private UserRegister $registerService;
+    private ContextFactory $contextFactory;
 
-    public function __construct(UserRegister $registerService)
+    public function __construct(UserRegister $registerService, ContextFactory $contextFactory)
     {
         $this->registerService = $registerService;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,7 +52,7 @@ class Register implements ActionInterface
 
         assert($body instanceof Model\Consumer\UserRegister);
 
-        $this->registerService->register($body, UserContext::newActionContext($context));
+        $this->registerService->register($body, $this->contextFactory->newAnonymousContext());
 
         return [
             'success' => true,

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Service\User;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
@@ -63,7 +64,8 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user, UserContext::newAnonymousContext());
+        $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
+        $register->register($user, $context);
 
         // check user
         /** @var Connection $connection */
@@ -96,7 +98,8 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user, UserContext::newAnonymousContext());
+        $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
+        $register->register($user, $context);
 
         // check user
         /** @var Connection $connection */
@@ -129,7 +132,8 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user, UserContext::newAnonymousContext());
+        $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
+        $register->register($user, $context);
 
         // check user
         /** @var Connection $connection */
@@ -164,7 +168,8 @@ class RegisterTest extends ControllerDbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
-        $register->register($user, UserContext::newAnonymousContext());
+        $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
+        $register->register($user, $context);
     }
 
     private function newCaptchaService(bool $success): Service\User\Captcha
@@ -190,14 +195,15 @@ class RegisterTest extends ControllerDbTestCase
     {
         /** @var Service\Config $config */
         $config = Environment::getService(Service\Config::class);
+        $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
 
         $update = new ConfigUpdate();
         $update->setValue($reCaptchaSecret);
-        $config->update($this->getConfigId('recaptcha_secret'), $update, UserContext::newAnonymousContext());
+        $config->update($this->getConfigId('recaptcha_secret'), $update, $context);
 
         $update = new ConfigUpdate();
         $update->setValue($userApproval);
-        $config->update($this->getConfigId('user_approval'), $update, UserContext::newAnonymousContext()); 
+        $config->update($this->getConfigId('user_approval'), $update, $context);
 
         return $config;
     }

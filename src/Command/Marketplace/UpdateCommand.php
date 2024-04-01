@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Command\Marketplace;
 
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
@@ -43,13 +42,15 @@ class UpdateCommand extends Command
 
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository)
+    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository, Service\System\ContextFactory $contextFactory)
     {
         parent::__construct();
 
         $this->installer = $installer;
         $this->remoteRepository = $remoteRepository;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure(): void
@@ -70,7 +71,7 @@ class UpdateCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->update($name, UserContext::newAnonymousContext());
+            $app = $this->installer->update($name, $this->contextFactory->newCommandContext());
 
             $output->writeln('');
             $output->writeln('Updated app ' . $app->getName());

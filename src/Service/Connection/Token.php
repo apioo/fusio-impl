@@ -104,7 +104,7 @@ class Token
     /**
      * Obtains an access token by the provided code and persists the access token at the connection config
      */
-    public function fetchByCode(string $connectionId, string $code, string $state): void
+    public function fetchByCode(string $connectionId, string $code, string $state, UserContext $context): void
     {
         $connection = $this->getConnection($connectionId);
         $implementation = $this->getImplementation($connection);
@@ -121,13 +121,13 @@ class Token
 
         $accessToken = $this->request($implementation, $params);
 
-        $this->updateConnectionConfig($connection, $accessToken);
+        $this->updateConnectionConfig($connection, $accessToken, $context);
     }
 
     /**
      * Obtains an access token by a refresh token and persists the access token at the connection config
      */
-    public function fetchByRefreshToken(string $connectionId): void
+    public function fetchByRefreshToken(string $connectionId, UserContext $context): void
     {
         $connection = $this->getConnection($connectionId);
         $implementation = $this->getImplementation($connection);
@@ -140,10 +140,10 @@ class Token
 
         $accessToken = $this->request($implementation, $params);
 
-        $this->updateConnectionConfig($connection, $accessToken);
+        $this->updateConnectionConfig($connection, $accessToken, $context);
     }
 
-    public function refreshAll(): void
+    public function refreshAll(UserContext $context): void
     {
         $connections = $this->repository->getAll();
         foreach ($connections as $connection) {
@@ -165,11 +165,11 @@ class Token
                 continue;
             }
 
-            $this->fetchByRefreshToken($connection->getName());
+            $this->fetchByRefreshToken($connection->getName(), $context);
         }
     }
 
-    private function updateConnectionConfig(Model\ConnectionInterface $connection, AccessToken $token): void
+    private function updateConnectionConfig(Model\ConnectionInterface $connection, AccessToken $token, UserContext $context): void
     {
         $config = $connection->getConfig();
         $config[OAuth2Interface::CONFIG_ACCESS_TOKEN] = $token->getAccessToken();
@@ -186,7 +186,7 @@ class Token
 
         $update = new ConnectionUpdate();
         $update->setConfig(ConnectionConfig::fromArray($config));
-        $this->connectionService->update((string) $connection->getId(), $update, UserContext::newAnonymousContext());
+        $this->connectionService->update((string) $connection->getId(), $update, $context);
     }
 
     /**

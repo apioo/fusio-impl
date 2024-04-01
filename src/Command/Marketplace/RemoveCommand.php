@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Command\Marketplace;
 
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
@@ -41,12 +40,14 @@ class RemoveCommand extends Command
     use TypeSafeTrait;
 
     private Service\Marketplace\Installer $installer;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer)
+    public function __construct(Service\Marketplace\Installer $installer, Service\System\ContextFactory $contextFactory)
     {
         parent::__construct();
 
         $this->installer = $installer;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure(): void
@@ -62,7 +63,7 @@ class RemoveCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->remove($name, UserContext::newAnonymousContext());
+            $app = $this->installer->remove($name, $this->contextFactory->newCommandContext());
 
             $output->writeln('');
             $output->writeln('Removed app ' . $app->getName());

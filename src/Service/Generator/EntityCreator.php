@@ -56,7 +56,7 @@ class EntityCreator
     /**
      * @param Model\Backend\SchemaCreate[] $schemas
      */
-    public function createSchemas(int $categoryId, array $schemas, string $prefix, UserContext $context): void
+    public function createSchemas(array $schemas, string $prefix, UserContext $context): void
     {
         foreach ($schemas as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
@@ -77,7 +77,7 @@ class EntityCreator
 
             $existing = $this->schemaTable->findOneByName($record->getName() ?? '');
             if ($existing === null) {
-                $this->schemaService->create($categoryId, $record, $context);
+                $this->schemaService->create($record, $context);
             }
         }
     }
@@ -85,14 +85,14 @@ class EntityCreator
     /**
      * @param Model\Backend\ActionCreate[] $actions
      */
-    public function createActions(int $categoryId, array $actions, string $prefix, UserContext $context): void
+    public function createActions(array $actions, string $prefix, UserContext $context): void
     {
         foreach ($actions as $record) {
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $existing = $this->actionTable->findOneByName($record->getName() ?? '');
             if ($existing === null) {
-                $this->actionService->create($categoryId, $record, $context);
+                $this->actionService->create($record, $context);
             }
         }
     }
@@ -100,7 +100,7 @@ class EntityCreator
     /**
      * @param Model\Backend\OperationCreate[] $operations
      */
-    public function createOperations(int $categoryId, array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
+    public function createOperations(array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
     {
         $scopes = $scopes ?: [];
         $reservedSchemaNames = [SchemaName::PASSTHRU, SchemaName::MESSAGE];
@@ -142,7 +142,7 @@ class EntityCreator
 
             $existing = $this->operationTable->findOneByName($record->getName() ?? '');
             if ($existing === null) {
-                $this->operationService->create($categoryId, $record, $context);
+                $this->operationService->create($record, $context);
             }
         }
     }

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
 use PSX\Http\Exception as StatusCode;
@@ -77,6 +78,7 @@ class Login
 
         return $this->tokenService->generate(
             $context->getTenantId(),
+            Table\Category::TYPE_CONSUMER,
             null,
             $userId,
             $name,
@@ -99,6 +101,7 @@ class Login
 
         return $this->tokenService->refresh(
             $context->getTenantId(),
+            Table\Category::TYPE_CONSUMER,
             $name,
             $refreshToken,
             $ip,

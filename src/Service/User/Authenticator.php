@@ -40,13 +40,15 @@ class Authenticator
     private Table\User $userTable;
     private Table\User\Scope $userScopeTable;
     private Service\System\FrameworkConfig $frameworkConfig;
+    private Service\System\ContextFactory $contextFactory;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, Service\System\FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, Service\System\FrameworkConfig $frameworkConfig, Service\System\ContextFactory $contextFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable = $userTable;
         $this->userScopeTable = $userScopeTable;
         $this->frameworkConfig = $frameworkConfig;
+        $this->contextFactory = $contextFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -92,7 +94,7 @@ class Authenticator
         if (password_verify($password, $databasePassword)) {
             return $user->getId();
         } else {
-            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user->getId())));
+            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent($this->contextFactory->newUserContext($user)));
         }
 
         return null;

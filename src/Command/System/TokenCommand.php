@@ -76,7 +76,16 @@ class TokenCommand extends Command
         $ip = '127.0.0.1';
         $name = 'CLI';
 
-        $accessToken = $this->tokenService->generate($tenantId, $app->getId(), $user->getId(), $name, $scopes, $ip, $expire);
+        $accessToken = $this->tokenService->generate(
+            $tenantId,
+            Table\Category::TYPE_SYSTEM,
+            $app->getId(),
+            $user->getId(),
+            $name,
+            $scopes,
+            $ip,
+            $expire
+        );
 
         $response = [
             'App'   => $app->getName(),

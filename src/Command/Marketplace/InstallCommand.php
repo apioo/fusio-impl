@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Command\Marketplace;
 
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\MarketplaceInstall;
@@ -44,13 +43,15 @@ class InstallCommand extends Command
 
     private Service\Marketplace\Installer $installer;
     private Service\Marketplace\Repository\Remote $remoteRepository;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository)
+    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository, Service\System\ContextFactory $contextFactory)
     {
         parent::__construct();
 
         $this->installer = $installer;
         $this->remoteRepository = $remoteRepository;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure(): void
@@ -80,7 +81,7 @@ class InstallCommand extends Command
         $install->setName($name);
 
         try {
-            $app = $this->installer->install($install, UserContext::newAnonymousContext(), $replaceEnv);
+            $app = $this->installer->install($install, $this->contextFactory->newCommandContext(), $replaceEnv);
 
             $output->writeln('');
             $output->writeln('Installed app ' . $app->getName());
