@@ -62,7 +62,6 @@ class NewInstallation
         $bag->addCategory('consumer', tenantId: $tenantId);
         $bag->addCategory('system', tenantId: $tenantId);
         $bag->addCategory('authorization', tenantId: $tenantId);
-        $bag->addCategory('default', tenantId: $tenantId);
         $bag->addRole('default', 'Administrator', tenantId: $tenantId);
         $bag->addRole('default', 'Backend', tenantId: $tenantId);
         $bag->addRole('default', 'Consumer', tenantId: $tenantId);
