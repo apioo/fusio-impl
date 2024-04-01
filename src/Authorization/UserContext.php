@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Engine\ContextInterface;
-
 /**
  * UserContext
  *
@@ -73,16 +71,12 @@ class UserContext
 
     public static function newContext(int $categoryId, int $userId, ?int $appId = null, ?string $tenantId = null): self
     {
-        return new UserContext($categoryId, $userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', $tenantId);
-    }
-
-    public static function newActionContext(ContextInterface $context): self
-    {
-        $appId = null;
-        if (!$context->getApp()->isAnonymous()) {
-            $appId = $context->getApp()->getId();
-        }
-
-        return self::newContext($context->getUser()->getCategoryId(), $context->getUser()->getId(), $appId, $context->getTenantId());
+        return new UserContext(
+            $categoryId,
+            $userId,
+            $appId,
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            $tenantId
+        );
     }
 }
