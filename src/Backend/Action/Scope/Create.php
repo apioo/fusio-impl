@@ -24,7 +24,6 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Scope;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\ScopeCreate;

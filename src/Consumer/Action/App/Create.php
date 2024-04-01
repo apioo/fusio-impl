@@ -20,13 +20,10 @@
 
 namespace Fusio\Impl\Consumer\Action\App;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\App;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Consumer\AppCreate;

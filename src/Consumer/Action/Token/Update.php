@@ -20,18 +20,12 @@
 
 namespace Fusio\Impl\Consumer\Action\Token;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Consumer\App;
 use Fusio\Impl\Service\Consumer\Token;
 use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Model\Consumer\AppCreate;
-use Fusio\Model\Consumer\AppUpdate;
 use Fusio\Model\Consumer\TokenUpdate;
 use PSX\Http\Environment\HttpResponse;
 

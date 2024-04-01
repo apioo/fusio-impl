@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;

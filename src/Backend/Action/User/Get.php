@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Backend\Action\User;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -29,7 +27,6 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * Get

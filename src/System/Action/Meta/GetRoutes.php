@@ -20,14 +20,11 @@
 
 namespace Fusio\Impl\System\Action\Meta;
 
-use Fusio\Engine\Action\RuntimeInterface;
-use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetRoutes
