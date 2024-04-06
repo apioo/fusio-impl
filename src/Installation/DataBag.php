@@ -152,20 +152,20 @@ class DataBag
         }
     }
 
-    private function normalizeParameters(array $parameters): array
+    private function normalizeParameters(array $parameters): object
     {
-        $result = [];
+        $result = new \stdClass();
         foreach ($parameters as $name => $type) {
             /** @var TypeInterface $type */
-            $result[$name] = $type->toArray();
+            $result->{$name} = $type->toArray();
         }
 
         return $result;
     }
 
-    private function normalizeThrows(array $throws): array
+    private function normalizeThrows(array $throws): object
     {
-        $result = [];
+        $result = new \stdClass();
         foreach ($throws as $code => $class) {
             if (class_exists($class)) {
                 $throw = 'php+class://' . ClassName::serialize($class);
@@ -173,7 +173,7 @@ class DataBag
                 $throw = 'schema://' . $class;
             }
 
-            $result[$code] = $throw;
+            $result->{$code} = $throw;
         }
 
         return $result;
@@ -535,7 +535,7 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, array $parameters, ?string $incoming, ?string $outgoing, array $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'tenant_id' => $tenantId,
