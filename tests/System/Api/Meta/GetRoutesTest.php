@@ -24,13 +24,13 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * RouteTest
+ * GetRoutesTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RouteTest extends ControllerDbTestCase
+class GetRoutesTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {

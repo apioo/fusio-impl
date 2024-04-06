@@ -24,13 +24,13 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * SchemaTest
+ * GetSchemaTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SchemaTest extends ControllerDbTestCase
+class GetSchemaTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {

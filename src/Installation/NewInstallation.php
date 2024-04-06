@@ -1807,6 +1807,14 @@ class NewInstallation
                     outgoing: Model\System\HealthCheck::class,
                     public: true,
                 ),
+                'meta.getOAuth2Configuration' => new Operation(
+                    action: System\Action\Meta\GetOAuth2Configuration::class,
+                    httpMethod: 'GET',
+                    httpPath: '/oauth-authorization-server',
+                    httpCode: 200,
+                    outgoing: Model\System\OAuthConfiguration::class,
+                    public: true,
+                ),
                 'meta.getRoutes' => new Operation(
                     action: System\Action\Meta\GetRoutes::class,
                     httpMethod: 'GET',

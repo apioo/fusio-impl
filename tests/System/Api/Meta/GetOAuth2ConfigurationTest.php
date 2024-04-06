@@ -20,17 +20,18 @@
 
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * DebugTest
+ * GetOAuth2ConfigurationTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DebugTest extends ControllerDbTestCase
+class GetOAuth2ConfigurationTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -39,7 +40,42 @@ class DebugTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/system/debug', 'GET', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "issuer": "http:\/\/127.0.0.1",
+    "token_endpoint": "http:\/\/127.0.0.1\/authorization\/token",
+    "token_endpoint_auth_methods_supported": [
+        "client_secret_basic"
+    ],
+    "userinfo_endpoint": "http:\/\/127.0.0.1\/authorization\/whoami",
+    "scopes_supported": [
+        "bar",
+        "default",
+        "foo",
+        "plan_scope"
+    ],
+    "claims_supported": [
+        "iss",
+        "sub",
+        "iat",
+        "exp",
+        "name"
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPost()
+    {
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -50,34 +86,9 @@ class DebugTest extends ControllerDbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
-    {
-        $response = $this->sendRequest('/system/debug', 'POST', array(
-            'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
-
-        $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "class": "Fusio\\Engine\\Request",
-    "arguments": [],
-    "payload": {
-        "foo": "bar"
-    },
-    "context": "Fusio\\Engine\\Request\\HttpRequestContext"
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
     public function testPut()
     {
-        $response = $this->sendRequest('/system/debug', 'PUT', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -90,7 +101,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/debug', 'DELETE', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

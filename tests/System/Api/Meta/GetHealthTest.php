@@ -20,18 +20,17 @@
 
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
-use Fusio\Impl\Base;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * AboutTest
+ * GetHealthTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class AboutTest extends ControllerDbTestCase
+class GetHealthTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -40,67 +39,22 @@ class AboutTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/system/about', 'GET', array(
+        $response = $this->sendRequest('/system/health', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $version = Base::getVersion();
-        $body    = (string) $response->getBody();
-        $expect  = <<<JSON
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
 {
-    "apiVersion": "{$version}",
-    "title": "Fusio",
-    "categories": [
-        "authorization",
-        "system",
-        "consumer",
-        "backend",
-        "default"
-    ],
-    "paymentCurrency": "EUR",
-    "scopes": [
-        "bar",
-        "default",
-        "foo",
-        "plan_scope"
-    ],
-    "apps": {
-        "fusio": "http:\/\/127.0.0.1\/apps\/fusio"
-    },
-    "links": [
-        {
-            "rel": "root",
-            "href": "http:\/\/127.0.0.1\/"
+    "healthy": true,
+    "checks": {
+        "Test": {
+            "healthy": true
         },
-        {
-            "rel": "openapi",
-            "href": "http://127.0.0.1/system/generator/spec-openapi"
-        },
-        {
-            "rel": "typeapi",
-            "href": "http://127.0.0.1/system/generator/spec-typeapi"
-        },
-        {
-            "rel": "route",
-            "href": "http:\/\/127.0.0.1\/system\/route"
-        },
-        {
-            "rel": "health",
-            "href": "http:\/\/127.0.0.1\/system\/health"
-        },
-        {
-            "rel": "oauth2",
-            "href": "http:\/\/127.0.0.1\/authorization\/token"
-        },
-        {
-            "rel": "whoami",
-            "href": "http:\/\/127.0.0.1\/authorization\/whoami"
-        },
-        {
-            "rel": "about",
-            "href": "https:\/\/www.fusio-project.org"
+        "System": {
+            "healthy": true
         }
-    ]
+    }
 }
 JSON;
 
@@ -110,7 +64,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/system/about', 'POST', array(
+        $response = $this->sendRequest('/system/health', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -123,7 +77,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/system/about', 'PUT', array(
+        $response = $this->sendRequest('/system/health', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -136,7 +90,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/about', 'DELETE', array(
+        $response = $this->sendRequest('/system/health', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

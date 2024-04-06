@@ -24,13 +24,13 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * HealthTest
+ * GetDebugTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HealthTest extends ControllerDbTestCase
+class GetDebugTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -39,32 +39,7 @@ class HealthTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/system/health', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "healthy": true,
-    "checks": {
-        "Test": {
-            "healthy": true
-        },
-        "System": {
-            "healthy": true
-        }
-    }
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testPost()
-    {
-        $response = $this->sendRequest('/system/health', 'POST', array(
+        $response = $this->sendRequest('/system/debug', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -75,9 +50,34 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
+    public function testPost()
+    {
+        $response = $this->sendRequest('/system/debug', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+        ), json_encode([
+            'foo' => 'bar',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "class": "Fusio\\Engine\\Request",
+    "arguments": [],
+    "payload": {
+        "foo": "bar"
+    },
+    "context": "Fusio\\Engine\\Request\\HttpRequestContext"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPut()
     {
-        $response = $this->sendRequest('/system/health', 'PUT', array(
+        $response = $this->sendRequest('/system/debug', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -90,7 +90,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/health', 'DELETE', array(
+        $response = $this->sendRequest('/system/debug', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

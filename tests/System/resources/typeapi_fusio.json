@@ -190,6 +190,23 @@
       "authorization": true,
       "tags": []
     },
+    "system.meta.getOAuth2Configuration": {
+      "path": "/system/oauth-authorization-server",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "System_OAuthConfiguration"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 1,
+      "security": [],
+      "authorization": true,
+      "tags": []
+    },
     "system.meta.getHealth": {
       "path": "/system/health",
       "method": "GET",
@@ -13117,6 +13134,38 @@
         },
         "error": {
           "type": "string"
+        }
+      }
+    },
+    "System_OAuthConfiguration": {
+      "type": "object",
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "token_endpoint": {
+          "type": "string"
+        },
+        "token_endpoint_auth_methods_supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "userinfo_endpoint": {
+          "type": "string"
+        },
+        "scopes_supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "claims_supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
