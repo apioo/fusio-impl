@@ -591,6 +591,23 @@ class NewInstallation
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     eventName: 'fusio.event.delete',
                 ),
+                'backup.export' => new Operation(
+                    action: Backend\Action\Backup\Export::class,
+                    httpMethod: 'POST',
+                    httpPath: '/backup/export',
+                    httpCode: 200,
+                    outgoing: Model\Backend\BackupExport::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'backup.import' => new Operation(
+                    action: Backend\Action\Backup\Import::class,
+                    httpMethod: 'POST',
+                    httpPath: '/backup/import',
+                    httpCode: 200,
+                    outgoing: Model\Backend\BackupImportResult::class,
+                    incoming: Model\Backend\BackupImport::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
                 'generator.getClasses' => new Operation(
                     action: Backend\Action\Generator\GetIndex::class,
                     httpMethod: 'GET',

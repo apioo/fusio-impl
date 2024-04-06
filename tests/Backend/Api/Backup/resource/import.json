@@ -1,0 +1,17 @@
+{
+  "version": "dev-master",
+  "config": [
+    {
+      "type": 2,
+      "name": "app_approval",
+      "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
+      "value": false
+    },
+    {
+      "type": 3,
+      "name": "consumer_max_apps",
+      "description": "The max amount of apps a consumer can generate",
+      "value": 16
+    }
+  ]
+}
