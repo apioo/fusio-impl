@@ -53,7 +53,7 @@ class Import implements ActionInterface
         if ($requestContext instanceof HttpRequestContext) {
             $header = $requestContext->getRequest()->getHeader('Authorization');
             $parts = explode(' ', $header, 2);
-            $token = $parts[1];
+            $token = $parts[1] ?? '';
 
             $this->client->setAuthenticator(new Authenticator('', $token));
         }
@@ -64,9 +64,9 @@ class Import implements ActionInterface
 
         $generator = $this->import->import('' . $body->getImport());
 
+        /** @var array<string> $logs */
         $logs = [];
         foreach ($generator as $result) {
-            /** @var $result Service\Import\Result */
             $logs[] = $result->toString();
         }
 

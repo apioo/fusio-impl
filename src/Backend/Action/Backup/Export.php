@@ -53,7 +53,7 @@ class Export implements ActionInterface
         if ($requestContext instanceof HttpRequestContext) {
             $header = $requestContext->getRequest()->getHeader('Authorization');
             $parts = explode(' ', $header, 2);
-            $token = $parts[1];
+            $token = $parts[1] ?? '';
 
             $this->client->setAuthenticator(new Authenticator('', $token));
         }
