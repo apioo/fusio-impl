@@ -52,17 +52,17 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 50,
+            "id": 51,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 49,
+            "id": 50,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 48,
+            "id": 49,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -97,7 +97,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 48,
+            "id": 49,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -127,17 +127,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 50,
+            "id": 51,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 49,
+            "id": 50,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 48,
+            "id": 49,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -201,7 +201,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(51, $row['id']);
+        $this->assertEquals(52, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
@@ -218,11 +218,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 194,
+            'operation_id' => 196,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 192,
+            'operation_id' => 194,
             'allow' => 1,
         ]], $operations);
     }

@@ -59,7 +59,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 192,
+    "id": 194,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -72,9 +72,9 @@ class EntityTest extends ControllerDbTestCase
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
-    "parameters": [],
+    "parameters": {},
     "outgoing": "schema:\/\/Collection-Schema",
-    "throws": [],
+    "throws": {},
     "action": "action:\/\/Sql-Select-All",
     "costs": 0
 }
@@ -94,7 +94,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 192,
+    "id": 194,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -107,9 +107,9 @@ JSON;
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
-    "parameters": [],
+    "parameters": {},
     "outgoing": "schema:\/\/Collection-Schema",
-    "throws": [],
+    "throws": {},
     "action": "action:\/\/Sql-Select-All",
     "costs": 0
 }

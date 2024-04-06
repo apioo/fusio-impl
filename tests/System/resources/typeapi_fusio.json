@@ -9,6 +9,7 @@
       "backend.action": "",
       "backend.app": "",
       "backend.audit": "",
+      "backend.backup": "",
       "backend.category": "",
       "backend.config": "",
       "backend.connection": "",
@@ -7865,6 +7866,81 @@
         "generator"
       ]
     },
+    "backend.backup.import": {
+      "path": "/backend/backup/import",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_BackupImportResult"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Backend_BackupImport"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.backup"
+      ],
+      "authorization": true,
+      "tags": [
+        "backup"
+      ]
+    },
+    "backend.backup.export": {
+      "path": "/backend/backup/export",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_BackupExport"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.backup"
+      ],
+      "authorization": true,
+      "tags": [
+        "backup"
+      ]
+    },
     "backend.event.delete": {
       "path": "/backend/event/$event_id<[0-9]+|^~>",
       "method": "DELETE",
@@ -10631,6 +10707,39 @@
       "type": "object",
       "additionalProperties": {
         "type": "any"
+      }
+    },
+    "Backend_BackupExport": {
+      "type": "object",
+      "properties": {
+        "export": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_BackupImport": {
+      "type": "object",
+      "properties": {
+        "import": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_BackupImportResult": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "Backend_Category": {

@@ -62,6 +62,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.action",
         "backend.app",
         "backend.audit",
+        "backend.backup",
         "backend.category",
         "backend.config",
         "backend.connection",

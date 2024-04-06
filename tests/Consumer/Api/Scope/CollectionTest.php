@@ -53,7 +53,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 48,
+            "id": 49,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -61,7 +61,7 @@ class CollectionTest extends ControllerDbTestCase
             }
         },
         {
-            "id": 49,
+            "id": 50,
             "name": "bar",
             "description": "Bar access"
         }
