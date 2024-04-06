@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Operation;
 use Fusio\Impl\Table;
 use PSX\Api\Operation;
 use PSX\Api\Operation\ArgumentInterface;
+use PSX\Api\OperationInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Schema\DefinitionsInterface;
@@ -78,8 +79,21 @@ class SpecificationBuilder
 
         $operation->setTags($tags);
 
+        if ($row->getStability() === 0) {
+            $operation->setStability(OperationInterface::STABILITY_DEPRECATED);
+        } elseif ($row->getStability() === 1) {
+            $operation->setStability(OperationInterface::STABILITY_EXPERIMENTAL);
+        } elseif ($row->getStability() === 2) {
+            $operation->setStability(OperationInterface::STABILITY_STABLE);
+        } elseif ($row->getStability() === 3) {
+            $operation->setStability(OperationInterface::STABILITY_LEGACY);
+        }
+
         if (!$row->getPublic()) {
             $operation->setSecurity($scopes);
+            $operation->setAuthorization(true);
+        } else {
+            $operation->setAuthorization(false);
         }
 
         $specification->getOperations()->add($row->getName(), $operation);

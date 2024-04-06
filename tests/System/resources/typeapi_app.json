@@ -36,7 +36,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "bar"
       ],
@@ -70,7 +70,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "bar"
       ],
@@ -104,7 +104,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "bar"
       ],
@@ -138,7 +138,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "foo",
         "bar"
@@ -174,7 +174,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "foo",
         "bar"
@@ -204,7 +204,7 @@
       },
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "bar"
       ],
@@ -227,7 +227,7 @@
       "description": "",
       "stability": 1,
       "security": [],
-      "authorization": true,
+      "authorization": false,
       "tags": [
         "bar"
       ]
@@ -251,7 +251,7 @@
         }
       ],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "authorization"
       ],
@@ -285,7 +285,7 @@
         }
       ],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [
         "authorization"
       ],
@@ -306,9 +306,9 @@
       "arguments": [],
       "throws": [],
       "description": "",
-      "stability": 1,
+      "stability": 2,
       "security": [],
-      "authorization": true,
+      "authorization": false,
       "tags": []
     }
   },
