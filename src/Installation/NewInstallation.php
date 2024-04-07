@@ -622,7 +622,7 @@ class NewInstallation
                     httpPath: '/generator/:provider',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.executeProvider' => new Operation(
                     action: Backend\Action\Generator\Create::class,
@@ -631,7 +631,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\GeneratorProvider::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'generator.getChangelog' => new Operation(
                     action: Backend\Action\Generator\Changelog::class,
@@ -640,7 +640,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\GeneratorProviderChangelog::class,
                     incoming: Model\Backend\GeneratorProviderConfig::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'identity.getAll' => new Operation(
                     action: Backend\Action\Identity\GetAll::class,
