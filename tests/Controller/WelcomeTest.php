@@ -89,6 +89,10 @@ class WelcomeTest extends ControllerDbTestCase
             "href": "http:\/\/127.0.0.1\/system\/health"
         },
         {
+            "rel": "oauth-authorization-server",
+            "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
+        },
+        {
             "rel": "oauth2",
             "href": "http:\/\/127.0.0.1\/authorization\/token"
         },

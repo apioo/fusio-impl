@@ -145,6 +145,11 @@ class GetAbout implements ActionInterface
         ];
 
         $links[] = [
+            'rel' => 'oauth-authorization-server',
+            'href' => $baseUrl . 'system/oauth-authorization-server',
+        ];
+
+        $links[] = [
             'rel' => 'oauth2',
             'href' => $baseUrl . 'authorization/token',
         ];

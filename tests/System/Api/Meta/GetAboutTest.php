@@ -74,11 +74,11 @@ class GetAboutTest extends ControllerDbTestCase
         },
         {
             "rel": "openapi",
-            "href": "http://127.0.0.1/system/generator/spec-openapi"
+            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi"
         },
         {
             "rel": "typeapi",
-            "href": "http://127.0.0.1/system/generator/spec-typeapi"
+            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-typeapi"
         },
         {
             "rel": "route",
@@ -87,6 +87,10 @@ class GetAboutTest extends ControllerDbTestCase
         {
             "rel": "health",
             "href": "http:\/\/127.0.0.1\/system\/health"
+        },
+        {
+            "rel": "oauth-authorization-server",
+            "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
         },
         {
             "rel": "oauth2",
