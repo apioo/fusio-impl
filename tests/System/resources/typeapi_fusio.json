@@ -7722,6 +7722,12 @@
       },
       "throws": [
         {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
           "code": 401,
           "schema": {
             "$ref": "Common_Message"
@@ -7769,6 +7775,12 @@
       },
       "throws": [
         {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
           "code": 401,
           "schema": {
             "$ref": "Common_Message"
@@ -7809,6 +7821,12 @@
         }
       },
       "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
         {
           "code": 401,
           "schema": {
