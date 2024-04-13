@@ -492,6 +492,7 @@ class AuditListener implements EventSubscriberInterface
     private function log(UserContext $context, ?int $refId, string $event, string $message, ?object $content = null): void
     {
         $row = new Table\Generated\AuditRow();
+        $row->setTenantId($context->getTenantId());
         $row->setAppId($context->getAppId() ?? 0);
         $row->setUserId($context->getUserId());
         $row->setRefId($refId);
