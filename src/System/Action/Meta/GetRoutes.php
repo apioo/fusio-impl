@@ -44,11 +44,6 @@ class GetRoutes implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $categoryId = $context->getUser()->getCategoryId();
-        if (empty($categoryId)) {
-            $categoryId = 1;
-        }
-
-        return $this->table->getRoutes($categoryId);
+        return $this->table->getRoutes($context);
     }
 }

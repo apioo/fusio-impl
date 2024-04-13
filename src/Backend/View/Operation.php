@@ -102,14 +102,19 @@ class Operation extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getRoutes(int $categoryId)
+    public function getRoutes(ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
+
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select(['operation.http_method', 'operation.http_path', 'operation.name'])
             ->from('fusio_operation', 'operation')
-            ->where('(operation.category_id = :category_id)')
-            ->orderBy('operation.id', 'ASC')
-            ->setParameter('category_id', $categoryId);
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('operation.http_path', 'ASC')
+            ->setParameters($condition->getValues());
 
         $builder = new Builder($this->connection);
 
