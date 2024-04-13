@@ -68,8 +68,8 @@ class GetAbout implements ActionInterface
             'licenseName' => $this->configService->getValue('info_license_name') ?: null,
             'licenseUrl' => $this->configService->getValue('info_license_url') ?: null,
             'paymentCurrency' => $this->configService->getValue('payment_currency') ?: 'EUR',
-            'categories' => $this->getCategories(),
-            'scopes' => $this->getScopes(),
+            'categories' => $this->getCategories($context),
+            'scopes' => $this->getScopes($context),
             'apps' => $this->getApps(),
             'links' => $this->getLinks(),
         ]);
@@ -88,9 +88,11 @@ class GetAbout implements ActionInterface
         return $result;
     }
 
-    private function getCategories(): array
+    private function getCategories(ContextInterface $context): array
     {
-        $categories = $this->categoryTable->findAll(null, 0, 1024);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $categories = $this->categoryTable->findAll($condition, 0, 1024, Table\Generated\CategoryTable::COLUMN_NAME, OrderBy::ASC);
 
         $result = [];
         foreach ($categories as $row) {
@@ -100,14 +102,20 @@ class GetAbout implements ActionInterface
         return $result;
     }
 
-    private function getScopes(): array
+    private function getScopes(ContextInterface $context): array
     {
+        $defaultCategory = $this->categoryTable->findOneByTenantAndName($context->getTenantId(), 'default');
+        if (!$defaultCategory instanceof Table\Generated\CategoryRow) {
+            return [];
+        }
+
         $condition = Condition::withAnd();
-        $condition->equals('category_id', 1);
-        $categories = $this->scopeTable->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $defaultCategory->getId());
+        $scopes = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeTable::COLUMN_NAME, OrderBy::ASC);
 
         $result = [];
-        foreach ($categories as $row) {
+        foreach ($scopes as $row) {
             $result[] = $row->getName();
         }
 
