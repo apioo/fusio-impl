@@ -75,8 +75,8 @@ class Executor
             }
         }
 
-        $app = $this->appTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Backend');
-        $user = $this->userTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Administrator');
+        $app = $this->appTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Backend') ?? throw new \RuntimeException('Backend app not available');
+        $user = $this->userTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Administrator') ?? throw new \RuntimeException('Administrator user not available');
 
         $app  = $this->appRepository->get($app->getId()) ?? throw new \RuntimeException('Backend app not available');
         $user = $this->userRepository->get($user->getId()) ?? throw new \RuntimeException('Administrator user not available');
