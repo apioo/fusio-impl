@@ -89,7 +89,7 @@ class Schema extends ViewAbstract
             $value = (int) $name;
         } else {
             $method = 'findOneByTenantAndName';
-            $value = (string) $name;
+            $value = $name;
         }
 
         $builder = new Builder($this->connection);
