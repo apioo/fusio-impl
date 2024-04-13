@@ -46,8 +46,9 @@ class UserAddCommand extends Command
     private Service\Config $configService;
     private Service\User\Validator $validator;
     private Service\System\ContextFactory $contextFactory;
+    private Table\Role $roleTable;
 
-    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator, Service\System\ContextFactory $contextFactory)
+    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator, Service\System\ContextFactory $contextFactory, Table\Role $roleTable)
     {
         parent::__construct();
 
@@ -55,6 +56,7 @@ class UserAddCommand extends Command
         $this->configService = $configService;
         $this->validator = $validator;
         $this->contextFactory = $contextFactory;
+        $this->roleTable = $roleTable;
     }
 
     protected function configure(): void
@@ -156,9 +158,22 @@ class UserAddCommand extends Command
             $this->validator->assertPassword($password, $this->configService->getValue('user_pw_length'));
         }
 
+        // resolve role for tenant
+        $roleName = match ($role) {
+            1 => 'Administrator',
+            2 => 'Backend',
+            3 => 'Consumer',
+            default => throw new RuntimeException('Provided an invalid role'),
+        };
+
+        $existing = $this->roleTable->findOneByTenantAndName($tenantId, $roleName);
+        if (!$existing instanceof Table\Generated\RoleRow) {
+            throw new RuntimeException('Could not resolve role');
+        }
+
         // create user
         $create = new UserCreate();
-        $create->setRoleId($role);
+        $create->setRoleId($existing->getId());
         $create->setStatus(Table\User::STATUS_ACTIVE);
         $create->setName($name);
         $create->setEmail($email);
