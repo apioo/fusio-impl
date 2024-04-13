@@ -82,17 +82,19 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithForm($name)
+    public function getEntityWithForm(int|string $name, ContextInterface $context)
     {
         if (is_numeric($name)) {
-            $method = 'find';
+            $method = 'findOneByTenantAndId';
+            $value = (int) $name;
         } else {
-            $method = 'findOneByName';
+            $method = 'findOneByTenantAndName';
+            $value = (string) $name;
         }
 
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), $method], [$context->getTenantId(), $value], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,

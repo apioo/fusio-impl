@@ -86,12 +86,15 @@ class Scope extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getCategories()
+    public function getCategories(ContextInterface $context)
     {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
+
         $builder = new Builder($this->connection);
 
         $definition = [
-            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [null, 0, 1024, 'name', OrderBy::ASC], [
+            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, 0, 1024, 'name', OrderBy::ASC], [
                 'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,
                 'scopes' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', OrderBy::ASC], [

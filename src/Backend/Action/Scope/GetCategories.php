@@ -44,6 +44,6 @@ class GetCategories implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->view->getCategories();
+        return $this->view->getCategories($context);
     }
 }

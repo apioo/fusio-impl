@@ -52,7 +52,8 @@ class GetSchema implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $schema = $this->view->getEntityWithForm(
-            $request->get('name')
+            $request->get('name'),
+            $context
         );
 
         if (empty($schema)) {
