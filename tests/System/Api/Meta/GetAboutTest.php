@@ -52,10 +52,10 @@ class GetAboutTest extends ControllerDbTestCase
     "title": "Fusio",
     "categories": [
         "authorization",
-        "system",
-        "consumer",
         "backend",
-        "default"
+        "consumer",
+        "default",
+        "system"
     ],
     "paymentCurrency": "EUR",
     "scopes": [
