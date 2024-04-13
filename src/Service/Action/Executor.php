@@ -25,6 +25,8 @@ use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
 use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
@@ -42,12 +44,18 @@ class Executor
     private ProcessorInterface $processor;
     private Repository\AppInterface $appRepository;
     private Repository\UserInterface $userRepository;
+    private Table\App $appTable;
+    private Table\User $userTable;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository, Table\App $appTable, Table\User $userTable, FrameworkConfig $frameworkConfig)
     {
-        $this->processor      = $processor;
-        $this->appRepository  = $appRepository;
+        $this->processor = $processor;
+        $this->appRepository = $appRepository;
         $this->userRepository = $userRepository;
+        $this->appTable = $appTable;
+        $this->userTable = $userTable;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function execute(string|int $actionId, ActionExecuteRequest $request): mixed
@@ -67,8 +75,11 @@ class Executor
             }
         }
 
-        $app  = $this->appRepository->get(1) ?? throw new \RuntimeException('App 1 not available');
-        $user = $this->userRepository->get(1) ?? throw new \RuntimeException('User 1 not available');
+        $app = $this->appTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Backend');
+        $user = $this->userTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Administrator');
+
+        $app  = $this->appRepository->get($app->getId()) ?? throw new \RuntimeException('Backend app not available');
+        $user = $this->userRepository->get($user->getId()) ?? throw new \RuntimeException('Administrator user not available');
 
         $uriFragments = $this->parseQueryString($request->getUriFragments());
         $parameters   = $this->parseQueryString($request->getParameters());
