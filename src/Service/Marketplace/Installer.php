@@ -101,7 +101,7 @@ class Installer
 
         $this->moveToTrash($localApp);
 
-        $this->deploy($remoteApp);
+        $this->deploy($remoteApp, true, $context);
 
         return $remoteApp;
     }

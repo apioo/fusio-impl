@@ -76,7 +76,7 @@ class ContextFactory
         if (empty($category)) {
             $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, Table\Category::TYPE_SYSTEM);
         } elseif (is_numeric($category)) {
-            $categoryId = $this->categoryTable->findOneByTenantAndId($tenantId, $category)?->getId() ?? throw new \RuntimeException('Provided category does not exist');
+            $categoryId = $this->categoryTable->findOneByTenantAndId($tenantId, (int) $category)?->getId() ?? throw new \RuntimeException('Provided category does not exist');
         } else {
             $categoryId = $this->categoryTable->findOneByTenantAndName($tenantId, $category)?->getId() ?? throw new \RuntimeException('Provided category does not exist');
         }
@@ -85,7 +85,7 @@ class ContextFactory
         if (empty($user)) {
             $userId = $this->userTable->findOneByTenantAndName($tenantId, 'Administrator')?->getId() ?? throw new \RuntimeException('Default Administrator user is missing');
         } elseif (is_numeric($user)) {
-            $userId = $this->userTable->findOneByTenantAndId($tenantId, $user)?->getId() ?? throw new \RuntimeException('Provided user does not exist');
+            $userId = $this->userTable->findOneByTenantAndId($tenantId, (int) $user)?->getId() ?? throw new \RuntimeException('Provided user does not exist');
         } else {
             $userId = $this->userTable->findOneByTenantAndName($tenantId, $user)?->getId() ?? throw new \RuntimeException('Provided user does not exist');
         }
@@ -94,7 +94,7 @@ class ContextFactory
         if (empty($app)) {
             $appId = null;
         } elseif (is_numeric($user)) {
-            $appId = $this->appTable->findOneByTenantAndId($tenantId, $app)?->getId() ?? throw new \RuntimeException('Provided app does not exist');
+            $appId = $this->appTable->findOneByTenantAndId($tenantId, (int) $app)?->getId() ?? throw new \RuntimeException('Provided app does not exist');
         } else {
             $appId = $this->appTable->findOneByTenantAndName($tenantId, $app)?->getId() ?? throw new \RuntimeException('Provided app does not exist');
         }
