@@ -45,10 +45,10 @@ class EnvCommand extends Command
 
     public function __construct(Service\Marketplace\Installer $installer, Service\System\ContextFactory $contextFactory)
     {
-        parent::__construct();
-
         $this->installer = $installer;
         $this->contextFactory = $contextFactory;
+
+        parent::__construct();
     }
 
     protected function configure(): void

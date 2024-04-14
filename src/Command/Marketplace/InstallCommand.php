@@ -47,11 +47,11 @@ class InstallCommand extends Command
 
     public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository, Service\System\ContextFactory $contextFactory)
     {
-        parent::__construct();
-
         $this->installer = $installer;
         $this->remoteRepository = $remoteRepository;
         $this->contextFactory = $contextFactory;
+
+        parent::__construct();
     }
 
     protected function configure(): void

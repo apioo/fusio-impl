@@ -48,13 +48,13 @@ class UserAddCommand extends Command
 
     public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator, Service\System\ContextFactory $contextFactory, Table\Role $roleTable)
     {
-        parent::__construct();
-
         $this->userService = $userService;
         $this->configService = $configService;
         $this->validator = $validator;
         $this->contextFactory = $contextFactory;
         $this->roleTable = $roleTable;
+
+        parent::__construct();
     }
 
     protected function configure(): void
