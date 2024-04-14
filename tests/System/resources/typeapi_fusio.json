@@ -381,7 +381,14 @@
         "appId": {
           "in": "query",
           "schema": {
+            "deprecated": true,
             "type": "integer"
+          }
+        },
+        "appKey": {
+          "in": "query",
+          "schema": {
+            "type": "string"
           }
         }
       },
