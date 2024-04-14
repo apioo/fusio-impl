@@ -133,7 +133,7 @@ class Installer
         return $localApp;
     }
 
-    private function deploy(App $remoteApp, bool $replaceEnv = true, UserContext $context)
+    private function deploy(App $remoteApp, bool $replaceEnv, UserContext $context)
     {
         $zipFile = $this->downloadZip($remoteApp);
 
@@ -143,7 +143,7 @@ class Installer
         $this->writeMetaFile($appDir, $remoteApp);
 
         if ($replaceEnv) {
-            $this->replaceVariables($appDir, $remoteApp->getName());
+            $this->replaceVariables($appDir, $remoteApp->getName(), $context);
         }
 
         $this->moveToPublic($appDir, $remoteApp);
@@ -206,13 +206,13 @@ class Installer
         $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
-    private function replaceVariables(string $appDir, string $appName): void
+    private function replaceVariables(string $appDir, string $appName, UserContext $context): void
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();
         $url = $this->frameworkConfig->getAppsUrl();
         $basePath = parse_url($url, PHP_URL_PATH);
 
-        $app = $this->appTable->findOneByTenantAndName(null, $appName);
+        $app = $this->appTable->findOneByTenantAndName($context->getTenantId(), $appName);
         if ($app instanceof Table\Generated\AppRow) {
             $appKey = $app->getAppKey();
         } else {
