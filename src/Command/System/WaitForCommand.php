@@ -22,7 +22,6 @@ namespace Fusio\Impl\Command\System;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
-use Fusio\Impl\Worker\ClientFactory;
 use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
