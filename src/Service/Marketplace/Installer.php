@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
@@ -42,17 +43,19 @@ class Installer
     private Service\Config $configService;
     private Service\System\FrameworkConfig $frameworkConfig;
     private Filesystem $filesystem;
+    private Table\App $appTable;
 
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
         $this->configService = $configService;
         $this->frameworkConfig = $frameworkConfig;
         $this->filesystem = new Filesystem();
+        $this->appTable = $appTable;
     }
 
-    public function install(MarketplaceInstall $install, UserContext $context, bool $replaceEnv = true): App
+    public function install(MarketplaceInstall $install, bool $replaceEnv, UserContext $context): App
     {
         $name = $install->getName();
         if (empty($name)) {
@@ -70,7 +73,7 @@ class Installer
             throw new StatusCode\BadRequestException('App already installed');
         }
 
-        $this->deploy($remoteApp, $replaceEnv);
+        $this->deploy($remoteApp, $replaceEnv, $context);
 
         return $remoteApp;
     }
@@ -115,7 +118,7 @@ class Installer
         return $localApp;
     }
 
-    public function env(string $name): App
+    public function env(string $name, UserContext $context): App
     {
         $localApp = $this->localRepository->fetchByName($name);
         if (!$localApp instanceof App) {
@@ -125,12 +128,12 @@ class Installer
         $appsDir = $this->frameworkConfig->getAppsDir();
         $appsDir.= '/' . $localApp->getName();
 
-        $this->replaceVariables($appsDir);
+        $this->replaceVariables($appsDir, $localApp->getName(), $context);
 
         return $localApp;
     }
 
-    private function deploy(App $remoteApp, bool $replaceEnv = true)
+    private function deploy(App $remoteApp, bool $replaceEnv = true, UserContext $context)
     {
         $zipFile = $this->downloadZip($remoteApp);
 
@@ -140,7 +143,7 @@ class Installer
         $this->writeMetaFile($appDir, $remoteApp);
 
         if ($replaceEnv) {
-            $this->replaceVariables($appDir);
+            $this->replaceVariables($appDir, $remoteApp->getName());
         }
 
         $this->moveToPublic($appDir, $remoteApp);
@@ -203,16 +206,24 @@ class Installer
         $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
-    private function replaceVariables(string $appDir): void
+    private function replaceVariables(string $appDir, string $appName): void
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();
         $url = $this->frameworkConfig->getAppsUrl();
         $basePath = parse_url($url, PHP_URL_PATH);
 
+        $app = $this->appTable->findOneByTenantAndName(null, $appName);
+        if ($app instanceof Table\Generated\AppRow) {
+            $appKey = $app->getAppKey();
+        } else {
+            $appKey = '';
+        }
+
         $env = array_merge($_ENV, [
             'API_URL' => $apiUrl,
             'URL' => $url,
             'BASE_PATH' => $basePath,
+            'APP_KEY' => $appKey,
         ]);
 
         // set values from config

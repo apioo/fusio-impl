@@ -23,8 +23,10 @@ namespace Fusio\Impl\Service\System;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table;
-use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * ContextFactory
@@ -37,13 +39,15 @@ class ContextFactory
 {
     private Table\Category $categoryTable;
     private Table\User $userTable;
+    private Table\App $appTable;
     private Table\Role $roleTable;
     private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Table\Category $categoryTable, Table\User $userTable, Table\Role $roleTable, FrameworkConfig $frameworkConfig)
+    public function __construct(Table\Category $categoryTable, Table\User $userTable, Table\App $appTable, Table\Role $roleTable, FrameworkConfig $frameworkConfig)
     {
         $this->categoryTable = $categoryTable;
         $this->userTable = $userTable;
+        $this->appTable = $appTable;
         $this->roleTable = $roleTable;
         $this->frameworkConfig = $frameworkConfig;
     }
@@ -60,16 +64,50 @@ class ContextFactory
         return UserContext::newContext($categoryId, $userId, null, $tenantId);
     }
 
-    public function newCommandContext(): UserContext
+    public function newCommandContext(InputInterface $input): UserContext
     {
         $tenantId = $this->frameworkConfig->getTenantId();
-        $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, Table\Category::TYPE_SYSTEM);
-        $userId = $this->userTable->findOneByTenantAndName($tenantId, 'Administrator')?->getId();
-        if ($userId === null) {
-            throw new InternalServerErrorException('Default Administrator user is missing');
+        if (empty($tenantId)) {
+            // in case we are on the root tenant we have the option to select a tenant otherwise we use the configured tenant
+            $tenantId = $input->getOption('tenant');
         }
 
-        return UserContext::newContext($categoryId, $userId, null, $this->frameworkConfig->getTenantId());
+        $category = $input->getOption('category');
+        if (empty($category)) {
+            $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, Table\Category::TYPE_SYSTEM);
+        } elseif (is_numeric($category)) {
+            $categoryId = $this->categoryTable->findOneByTenantAndId($tenantId, $category)?->getId() ?? throw new \RuntimeException('Provided category does not exist');
+        } else {
+            $categoryId = $this->categoryTable->findOneByTenantAndName($tenantId, $category)?->getId() ?? throw new \RuntimeException('Provided category does not exist');
+        }
+
+        $user = $input->getOption('user');
+        if (empty($user)) {
+            $userId = $this->userTable->findOneByTenantAndName($tenantId, 'Administrator')?->getId() ?? throw new \RuntimeException('Default Administrator user is missing');
+        } elseif (is_numeric($user)) {
+            $userId = $this->userTable->findOneByTenantAndId($tenantId, $user)?->getId() ?? throw new \RuntimeException('Provided user does not exist');
+        } else {
+            $userId = $this->userTable->findOneByTenantAndName($tenantId, $user)?->getId() ?? throw new \RuntimeException('Provided user does not exist');
+        }
+
+        $app = $input->getOption('app');
+        if (empty($app)) {
+            $appId = null;
+        } elseif (is_numeric($user)) {
+            $appId = $this->appTable->findOneByTenantAndId($tenantId, $app)?->getId() ?? throw new \RuntimeException('Provided app does not exist');
+        } else {
+            $appId = $this->appTable->findOneByTenantAndName($tenantId, $app)?->getId() ?? throw new \RuntimeException('Provided app does not exist');
+        }
+
+        return UserContext::newContext($categoryId, $userId, $appId, $tenantId);
+    }
+
+    public function addContextOptions(Command $command): void
+    {
+        $command->addOption('tenant', 't', InputOption::VALUE_REQUIRED, 'Optional the tenant for this context');
+        $command->addOption('category', 'c', InputOption::VALUE_REQUIRED, 'Optional the category id or name for this context');
+        $command->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'Optional the user id or name for this context');
+        $command->addOption('app', 'a', InputOption::VALUE_REQUIRED, 'Optional the app id or name for this context');
     }
 
     public function newUserContext(Table\Generated\UserRow $user): UserContext

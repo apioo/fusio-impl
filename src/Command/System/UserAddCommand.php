@@ -20,13 +20,11 @@
 
 namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\UserCreate;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -68,13 +66,14 @@ class UserAddCommand extends Command
             ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Administrator, 2=Backend, 3=Consumer]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
-            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password')
-            ->addOption('tenant', 't', InputOption::VALUE_OPTIONAL, 'The tenant id');
+            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
+
+        $this->contextFactory->addContextOptions($this);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $tenantId = $input->getOption('tenant');
+        $context = $this->contextFactory->newCommandContext($input);
 
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
@@ -94,8 +93,8 @@ class UserAddCommand extends Command
         $name = $input->getOption('username');
         if ($name === null) {
             $question = new Question('Enter the username: ');
-            $question->setValidator(function ($value) use ($tenantId) {
-                $this->validator->assertName($value, $tenantId);
+            $question->setValidator(function ($value) use ($context) {
+                $this->validator->assertName($value, $context->getTenantId());
                 return $value;
             });
 
@@ -105,15 +104,15 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid name');
             }
 
-            $this->validator->assertName($name, $tenantId);
+            $this->validator->assertName($name, $context->getTenantId());
         }
 
         // email
         $email = $input->getOption('email');
         if ($email === null) {
             $question = new Question('Enter the email: ');
-            $question->setValidator(function ($value) use ($tenantId) {
-                $this->validator->assertEmail($value, $tenantId);
+            $question->setValidator(function ($value) use ($context) {
+                $this->validator->assertEmail($value, $context->getTenantId());
                 return $value;
             });
 
@@ -123,7 +122,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid email');
             }
 
-            $this->validator->assertEmail($email, $tenantId);
+            $this->validator->assertEmail($email, $context->getTenantId());
         }
 
         // password
@@ -166,7 +165,7 @@ class UserAddCommand extends Command
             default => throw new RuntimeException('Provided an invalid role'),
         };
 
-        $existing = $this->roleTable->findOneByTenantAndName($tenantId, $roleName);
+        $existing = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $roleName);
         if (!$existing instanceof Table\Generated\RoleRow) {
             throw new RuntimeException('Could not resolve role');
         }
@@ -179,7 +178,7 @@ class UserAddCommand extends Command
         $create->setEmail($email);
         $create->setPassword($password);
 
-        $this->userService->create($create, $this->contextFactory->newCommandContext());
+        $this->userService->create($create, $context);
 
         $output->writeln('Created user ' . $name . ' successful');
 

@@ -56,6 +56,8 @@ class RemoveCommand extends Command
             ->setName('marketplace:remove')
             ->setDescription('Removes an existing locally installed app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
+
+        $this->contextFactory->addContextOptions($this);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -63,7 +65,7 @@ class RemoveCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->remove($name, $this->contextFactory->newCommandContext());
+            $app = $this->installer->remove($name, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
             $output->writeln('Removed app ' . $app->getName());

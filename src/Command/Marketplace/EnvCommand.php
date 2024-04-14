@@ -26,6 +26,7 @@ use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,12 +41,14 @@ class EnvCommand extends Command
     use TypeSafeTrait;
 
     private Service\Marketplace\Installer $installer;
+    private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer)
+    public function __construct(Service\Marketplace\Installer $installer, Service\System\ContextFactory $contextFactory)
     {
         parent::__construct();
 
         $this->installer = $installer;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure(): void
@@ -54,6 +57,8 @@ class EnvCommand extends Command
             ->setName('marketplace:env')
             ->setDescription('Replaces env variables of an existing app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
+
+        $this->contextFactory->addContextOptions($this);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -61,7 +66,9 @@ class EnvCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->env($name);
+            $context = $this->contextFactory->newCommandContext($input);
+
+            $app = $this->installer->env($name, $context);
 
             $output->writeln('');
             $output->writeln('Replaced env ' . $app->getName());

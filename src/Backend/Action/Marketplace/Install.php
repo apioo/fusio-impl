@@ -64,6 +64,7 @@ class Install implements ActionInterface
 
         $app = $this->installerService->install(
             $body,
+            true,
             $this->contextFactory->newActionContext($context)
         );
 

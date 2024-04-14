@@ -60,6 +60,8 @@ class UpdateCommand extends Command
             ->setDescription('Updates an existing locally installed app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
+
+        $this->contextFactory->addContextOptions($this);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -71,7 +73,7 @@ class UpdateCommand extends Command
         $name = $this->getArgumentAsString($input, 'name');
 
         try {
-            $app = $this->installer->update($name, $this->contextFactory->newCommandContext());
+            $app = $this->installer->update($name, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
             $output->writeln('Updated app ' . $app->getName());

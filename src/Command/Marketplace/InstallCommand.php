@@ -62,6 +62,8 @@ class InstallCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification')
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
+
+        $this->contextFactory->addContextOptions($this);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,7 +83,7 @@ class InstallCommand extends Command
         $install->setName($name);
 
         try {
-            $app = $this->installer->install($install, $this->contextFactory->newCommandContext(), $replaceEnv);
+            $app = $this->installer->install($install, $replaceEnv, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
             $output->writeln('Installed app ' . $app->getName());
