@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Backup;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -63,7 +64,9 @@ class ExportTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
         $data = \json_decode(Normalizer::normalize($body));
 
-        $actual = $data->export;
+        $actual = \json_decode($data->export);
+        $actual->version = Base::getVersion();
+        $actual = \json_encode($actual);
         $expect = file_get_contents(__DIR__ . '/resource/export.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
