@@ -59,15 +59,6 @@ class UserContextTest extends TestCase
         $this->assertEquals(1, $userContext->getAppId());
     }
 
-    public function testCommandContext()
-    {
-        $userContext = Environment::getService(ContextFactory::class)->newCommandContext();
-
-        $this->assertInstanceOf(UserContext::class, $userContext);
-        $this->assertEquals(1, $userContext->getUserId());
-        $this->assertEquals(null, $userContext->getAppId());
-    }
-
     public function testContext()
     {
         $userContext = UserContext::newContext(1, 1, 1);

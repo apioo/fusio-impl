@@ -25,14 +25,15 @@ use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\Marketplace\Repository\Local;
 use Fusio\Impl\Service\Marketplace\Repository\Remote;
 use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * MarketplaceTestCase
@@ -61,7 +62,8 @@ class MarketplaceTestCase extends ControllerDbTestCase
             Environment::getService(Local::class),
             $this->getRemoteRepository(),
             Environment::getService(Config::class),
-            Environment::getService(FrameworkConfig::class)
+            Environment::getService(FrameworkConfig::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\App::class),
         );
     }
 
