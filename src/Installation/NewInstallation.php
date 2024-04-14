@@ -1767,7 +1767,7 @@ class NewInstallation
                     httpPath: '/identity',
                     httpCode: 200,
                     outgoing: Model\Consumer\IdentityCollection::class,
-                    parameters: ['appId' => TypeFactory::getInteger()],
+                    parameters: ['appId' => TypeFactory::getInteger()->setDeprecated(true), 'appKey' => TypeFactory::getString()],
                     throws: [400 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                     public: true,
                 ),

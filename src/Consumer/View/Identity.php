@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\TableManager;
@@ -47,7 +48,7 @@ class Identity extends ViewAbstract
         $this->frameworkConfig = $frameworkConfig;
     }
 
-    public function getCollection(?int $appId, QueryFilter $filter, ContextInterface $context)
+    public function getCollection(?int $appId, ?string $appKey, QueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -57,7 +58,17 @@ class Identity extends ViewAbstract
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\IdentityTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
+
         if (!empty($appId)) {
+            $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
+        }
+
+        if (!empty($appKey)) {
+            $appId = $this->getTable(Table\App::class)->findOneByTenantAndAppKey($context->getTenantId(), $appKey)?->getId();
+            if (empty($appId)) {
+                throw new StatusCode\BadRequestException('Provided app key does not exist');
+            }
+
             $condition->equals(Table\Generated\IdentityTable::COLUMN_APP_ID, $appId);
         }
 

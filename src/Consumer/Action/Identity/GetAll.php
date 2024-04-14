@@ -48,6 +48,7 @@ class GetAll implements ActionInterface
     {
         return $this->identity->getCollection(
             $request->get('appId'),
+            $request->get('appKey'),
             QueryFilter::from($request),
             $context,
         );

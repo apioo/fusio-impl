@@ -66,6 +66,15 @@ class App extends Generated\AppTable
         return $this->findOneBy($condition);
     }
 
+    public function findOneByTenantAndAppKey(?string $tenantId, string $appKey): ?AppRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_APP_KEY, $appKey);
+
+        return $this->findOneBy($condition);
+    }
+
     public function findOneByAppKeyAndSecret(?string $tenantId, string $appKey, string $appSecret): ?AppRow
     {
         $condition = Condition::withAnd();
