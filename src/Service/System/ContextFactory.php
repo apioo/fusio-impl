@@ -104,10 +104,10 @@ class ContextFactory
 
     public function addContextOptions(Command $command): void
     {
-        $command->addOption('tenant', 't', InputOption::VALUE_REQUIRED, 'Optional the tenant for this context');
-        $command->addOption('category', 'c', InputOption::VALUE_REQUIRED, 'Optional the category id or name for this context');
-        $command->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'Optional the user id or name for this context');
-        $command->addOption('app', 'a', InputOption::VALUE_REQUIRED, 'Optional the app id or name for this context');
+        $command->addOption('tenant', null, InputOption::VALUE_REQUIRED, 'Optional the tenant for this context');
+        $command->addOption('category', null, InputOption::VALUE_REQUIRED, 'Optional the category id or name for this context');
+        $command->addOption('user', null, InputOption::VALUE_REQUIRED, 'Optional the user id or name for this context');
+        $command->addOption('app', null, InputOption::VALUE_REQUIRED, 'Optional the app id or name for this context');
     }
 
     public function newUserContext(Table\Generated\UserRow $user): UserContext
