@@ -55,6 +55,7 @@ final class Version20240121100724 extends AbstractMigration
             $webhookTable->addColumn('name', 'string', ['length' => 32]);
             $webhookTable->addColumn('endpoint', 'string', ['length' => 255]);
             $webhookTable->setPrimaryKey(['id']);
+            $webhookTable->addIndex(['tenant_id']);
 
             $webhookTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'webhook_event_id');
             $webhookTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'webhook_user_id');
@@ -91,9 +92,6 @@ final class Version20240121100724 extends AbstractMigration
                 } elseif ($tableName === 'fusio_page') {
                     $this->dropIndexForColumn($table, ['slug']);
                     $table->addUniqueIndex(['tenant_id', 'slug']);
-                } elseif ($tableName === 'fusio_token') {
-                    $table->addUniqueIndex(['tenant_id', 'status', 'token']);
-                    $table->addUniqueIndex(['tenant_id', 'refresh']);
                 } elseif ($tableName === 'fusio_transaction') {
                     $this->dropIndexForColumn($table, ['transaction_id']);
                     $table->addUniqueIndex(['tenant_id', 'transaction_id']);
@@ -104,8 +102,10 @@ final class Version20240121100724 extends AbstractMigration
                     $table->addUniqueIndex(['tenant_id', 'identity_id', 'remote_id']);
                     $table->addUniqueIndex(['tenant_id', 'name']);
                     $table->addUniqueIndex(['tenant_id', 'email']);
-                } elseif (in_array($tableName, ['fusio_audit', 'fusio_log', 'fusio_webhook'])) {
+                } elseif (in_array($tableName, ['fusio_audit', 'fusio_log'])) {
                     $table->addIndex(['tenant_id']);
+                } elseif (in_array($tableName, ['fusio_token', 'fusio_webhook'])) {
+                    // noop
                 } else {
                     $this->dropIndexForColumn($table, ['name']);
                     $table->addUniqueIndex(['tenant_id', 'name']);
