@@ -8,7 +8,9 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Service\Tenant;
+use Fusio\Impl\Table\Operation;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -152,6 +154,22 @@ final class Version20240121100724 extends AbstractMigration
 
         if (in_array('fusio_event_subscription', $tableNames)) {
             $this->dropTable($schemaManager, 'fusio_event_subscription');
+        }
+
+        DataSyncronizer::sync($this->connection);
+
+        // deactivate legacy operations
+        $operations = [
+            '/backend/app/token',
+            '/backend/app/token/$token_id<[0-9]+>',
+            '/backend/event/subscription',
+            '/backend/event/subscription/$subscription_id<[0-9]+>',
+            '/consumer/subscription',
+            '/consumer/subscription/$subscription_id<[0-9]+>',
+        ];
+
+        foreach ($operations as $httpPath) {
+            $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
         }
     }
 
