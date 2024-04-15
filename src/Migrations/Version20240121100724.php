@@ -80,30 +80,41 @@ final class Version20240121100724 extends AbstractMigration
             $webhookResponseTable->addForeignKeyConstraint($schema->getTable('fusio_webhook'), ['webhook_id'], ['id'], [], 'webhook_response_webhook_id');
         }
 
+        $schemaManager = $this->connection->createSchemaManager();
+
         foreach (Tenant::TENANT_TABLES as $tableName) {
             $table = $schema->getTable($tableName);
             if (!$table->hasColumn('tenant_id')) {
                 $table->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
 
                 if ($tableName === 'fusio_app') {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['app_key']);
                     $table->addUniqueIndex(['tenant_id', 'app_key']);
                 } elseif ($tableName === 'fusio_operation') {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['name']);
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['http_method', 'http_path']);
                     $table->addUniqueIndex(['tenant_id', 'name']);
                     $table->addUniqueIndex(['tenant_id', 'http_method', 'http_path']);
                 } elseif ($tableName === 'fusio_page') {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['slug']);
                     $table->addUniqueIndex(['tenant_id', 'slug']);
                 } elseif ($tableName === 'fusio_token') {
                     $table->addUniqueIndex(['tenant_id', 'status', 'token']);
                     $table->addUniqueIndex(['tenant_id', 'refresh']);
                 } elseif ($tableName === 'fusio_transaction') {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['transaction_id']);
                     $table->addUniqueIndex(['tenant_id', 'transaction_id']);
                 } elseif ($tableName === 'fusio_user') {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['identity_id', 'remote_id']);
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['name']);
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['email']);
                     $table->addUniqueIndex(['tenant_id', 'identity_id', 'remote_id']);
                     $table->addUniqueIndex(['tenant_id', 'name']);
                     $table->addUniqueIndex(['tenant_id', 'email']);
                 } elseif (in_array($tableName, ['fusio_audit', 'fusio_log', 'fusio_webhook'])) {
                     $table->addIndex(['tenant_id']);
                 } else {
+                    $this->dropIndexForColumn($schemaManager, $tableName, ['name']);
                     $table->addUniqueIndex(['tenant_id', 'name']);
                 }
             }
@@ -159,5 +170,15 @@ final class Version20240121100724 extends AbstractMigration
         }
 
         $this->connection->createSchemaManager()->dropTable($tableName);
+    }
+
+    private function dropIndexForColumn(AbstractSchemaManager $schemaManager, string $tableName, array $columns): void
+    {
+        $indexes = $schemaManager->listTableIndexes($tableName);
+        foreach ($indexes as $index) {
+            if ($index->getColumns() === $columns) {
+                $schemaManager->dropIndex($index, $tableName);
+            }
+        }
     }
 }

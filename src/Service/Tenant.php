@@ -56,6 +56,7 @@ class Tenant
         'fusio_log',
         'fusio_user',
         'fusio_token',
+        'fusio_webhook',
     ];
 
     private Connection $connection;
