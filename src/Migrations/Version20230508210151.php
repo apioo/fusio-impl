@@ -482,6 +482,7 @@ final class Version20230508210151 extends AbstractMigration
             $webhookTable->addColumn('name', 'string', ['length' => 32]);
             $webhookTable->addColumn('endpoint', 'string', ['length' => 255]);
             $webhookTable->setPrimaryKey(['id']);
+            $webhookTable->addIndex(['tenant_id']);
         }
 
         if (!$schema->hasTable('fusio_webhook_response')) {

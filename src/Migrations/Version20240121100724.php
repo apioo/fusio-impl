@@ -84,7 +84,28 @@ final class Version20240121100724 extends AbstractMigration
             $table = $schema->getTable($tableName);
             if (!$table->hasColumn('tenant_id')) {
                 $table->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
-                $table->addIndex(['tenant_id']);
+
+                if ($tableName === 'fusio_app') {
+                    $table->addUniqueIndex(['tenant_id', 'app_key']);
+                } elseif ($tableName === 'fusio_operation') {
+                    $table->addUniqueIndex(['tenant_id', 'name']);
+                    $table->addUniqueIndex(['tenant_id', 'http_method', 'http_path']);
+                } elseif ($tableName === 'fusio_page') {
+                    $table->addUniqueIndex(['tenant_id', 'slug']);
+                } elseif ($tableName === 'fusio_token') {
+                    $table->addUniqueIndex(['tenant_id', 'status', 'token']);
+                    $table->addUniqueIndex(['tenant_id', 'refresh']);
+                } elseif ($tableName === 'fusio_transaction') {
+                    $table->addUniqueIndex(['tenant_id', 'transaction_id']);
+                } elseif ($tableName === 'fusio_user') {
+                    $table->addUniqueIndex(['tenant_id', 'identity_id', 'remote_id']);
+                    $table->addUniqueIndex(['tenant_id', 'name']);
+                    $table->addUniqueIndex(['tenant_id', 'email']);
+                } elseif (in_array($tableName, ['fusio_audit', 'fusio_log', 'fusio_webhook'])) {
+                    $table->addIndex(['tenant_id']);
+                } else {
+                    $table->addUniqueIndex(['tenant_id', 'name']);
+                }
             }
         }
     }
