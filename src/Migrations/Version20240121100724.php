@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fusio\Impl\Migrations;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Impl\Service\Tenant;
@@ -106,17 +107,27 @@ final class Version20240121100724 extends AbstractMigration
 
         if (in_array('fusio_app_token', $tableNames)) {
             $this->connection->executeQuery('INSERT INTO fusio_token SELECT id, app_id, user_id, null AS tenant_id, 2 AS category_id, status, null AS name, token, refresh, scope, ip, expire, date FROM fusio_app_token');
-            $this->connection->createSchemaManager()->dropTable('fusio_app_token');
+            $this->dropTable($schemaManager, 'fusio_app_token');
         }
 
         if (in_array('fusio_event_subscription', $tableNames)) {
             $this->connection->executeQuery('INSERT INTO fusio_webhook SELECT id, event_id, user_id, null AS tenant_id, status, \'Webhook\' AS name, endpoint FROM fusio_event_subscription');
-            $this->connection->createSchemaManager()->dropTable('fusio_event_subscription');
+            $this->dropTable($schemaManager, 'fusio_event_subscription');
         }
 
         if (in_array('fusio_event_response', $tableNames)) {
             $this->connection->executeQuery('INSERT INTO fusio_webhook_response SELECT id, subscription_id AS webhook_id, status, attempts, code, body, execute_date, insert_date FROM fusio_event_response');
-            $this->connection->createSchemaManager()->dropTable('fusio_event_response');
+            $this->dropTable($schemaManager, 'fusio_event_response');
         }
+    }
+
+    private function dropTable(AbstractSchemaManager $schemaManager, string $tableName): void
+    {
+        $foreignKeys = $schemaManager->listTableForeignKeys($tableName);
+        foreach ($foreignKeys as $foreignKey) {
+            $schemaManager->dropForeignKey($foreignKey, $tableName);
+        }
+
+        $this->connection->createSchemaManager()->dropTable($tableName);
     }
 }
