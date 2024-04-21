@@ -49,6 +49,14 @@ class ListTest extends ControllerDbTestCase
 {
     "connections": [
         {
+            "name": "AMQP",
+            "class": "Fusio.Adapter.Amqp.Connection.Amqp"
+        },
+        {
+            "name": "Beanstalk",
+            "class": "Fusio.Adapter.Beanstalk.Connection.Beanstalk"
+        },
+        {
             "name": "Filesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
@@ -65,6 +73,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "name": "Redis",
+            "class": "Fusio.Adapter.Redis.Connection.Redis"
+        },
+        {
             "name": "SMTP",
             "class": "Fusio.Adapter.Smtp.Connection.Smtp"
         },
@@ -79,6 +91,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "SQL-Advanced",
             "class": "Fusio.Adapter.Sql.Connection.SqlAdvanced"
+        },
+        {
+            "name": "Stripe",
+            "class": "Fusio.Adapter.Stripe.Connection.Stripe"
         },
         {
             "name": "Void-Connection",
