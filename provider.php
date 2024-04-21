@@ -13,6 +13,7 @@ return [
     \Fusio\Adapter\Smtp\Adapter::class,
     \Fusio\Adapter\Soap\Adapter::class,
     \Fusio\Adapter\Sql\Adapter::class,
+    \Fusio\Adapter\Stripe\Adapter::class,
     \Fusio\Adapter\Util\Adapter::class,
     \Fusio\Adapter\Worker\Adapter::class,
     \Fusio\Impl\Tests\Adapter\TestAdapter::class,
