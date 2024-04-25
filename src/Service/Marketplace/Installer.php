@@ -222,7 +222,7 @@ class Installer
         $env = array_merge($_ENV, [
             'API_URL' => $apiUrl,
             'URL' => $url,
-            'BASE_PATH' => $basePath,
+            'BASE_PATH' => rtrim($basePath, '/'),
             'APP_KEY' => $appKey,
         ]);
 
@@ -243,8 +243,17 @@ class Installer
             }
         }
 
-        $file = $appDir . '/index.html';
-        if (is_file($file)) {
+        $files = [
+            '.htaccess',
+            'index.html',
+        ];
+
+        foreach ($files as $fileName) {
+            $file = $appDir . '/' . $fileName;
+            if (!is_file($file)) {
+                continue;
+            }
+
             $content = file_get_contents($file);
 
             foreach ($env as $key => $value) {
