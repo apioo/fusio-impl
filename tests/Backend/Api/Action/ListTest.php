@@ -173,6 +173,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.Util.Action.UtilChain"
         },
         {
+            "name": "Util-Condition",
+            "class": "Fusio.Adapter.Util.Action.UtilCondition"
+        },
+        {
             "name": "Util-Dispatch-Event",
             "class": "Fusio.Adapter.Util.Action.UtilDispatchEvent"
         },
