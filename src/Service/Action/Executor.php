@@ -22,11 +22,11 @@ namespace Fusio\Impl\Service\Action;
 
 use Fusio\Engine\Context;
 use Fusio\Engine\Inflection\ClassName;
+use Fusio\Engine\Model\AppAnonymous;
+use Fusio\Engine\Model\UserAnonymous;
 use Fusio\Engine\ProcessorInterface;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Impl\Table;
 use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
@@ -42,19 +42,11 @@ use PSX\Uri\Uri;
 class Executor
 {
     private ProcessorInterface $processor;
-    private Repository\AppInterface $appRepository;
-    private Repository\UserInterface $userRepository;
-    private Table\App $appTable;
-    private Table\User $userTable;
     private FrameworkConfig $frameworkConfig;
 
-    public function __construct(ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository, Table\App $appTable, Table\User $userTable, FrameworkConfig $frameworkConfig)
+    public function __construct(ProcessorInterface $processor, FrameworkConfig $frameworkConfig)
     {
         $this->processor = $processor;
-        $this->appRepository = $appRepository;
-        $this->userRepository = $userRepository;
-        $this->appTable = $appTable;
-        $this->userTable = $userTable;
         $this->frameworkConfig = $frameworkConfig;
     }
 
@@ -75,12 +67,6 @@ class Executor
             }
         }
 
-        $app = $this->appTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Backend') ?? throw new \RuntimeException('Backend app not available');
-        $user = $this->userTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), 'Administrator') ?? throw new \RuntimeException('Administrator user not available');
-
-        $app = $this->appRepository->get($app->getId()) ?? throw new \RuntimeException('Backend app not available');
-        $user = $this->userRepository->get($user->getId()) ?? throw new \RuntimeException('Administrator user not available');
-
         $uriFragments = $this->parseQueryString($request->getUriFragments());
         $parameters = $this->parseQueryString($request->getParameters());
         $headers = $this->parseQueryString($request->getHeaders());
@@ -95,7 +81,7 @@ class Executor
         $arguments = array_merge($arguments, $uriFragments);
 
         $request = new Request($arguments, $body, new Request\HttpRequestContext($httpRequest, $uriFragments));
-        $context = new Context(0, '/', $app, $user);
+        $context = new Context(0, '/', new AppAnonymous(), new UserAnonymous(), $this->frameworkConfig->getTenantId());
 
         return $this->processor->execute($actionId, $request, $context);
     }
