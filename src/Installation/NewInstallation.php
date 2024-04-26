@@ -47,14 +47,7 @@ class NewInstallation
 {
     public static function getData(?string $tenantId = null): DataBag
     {
-        $backendAppKey     = TokenGenerator::generateAppKey();
-        $backendAppSecret  = TokenGenerator::generateAppSecret();
-        $consumerAppKey    = TokenGenerator::generateAppKey();
-        $consumerAppSecret = TokenGenerator::generateAppSecret();
-        $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
-
-        $config = self::getContainer()->get(ConfigInterface::class);
-        $appsUrl = $config->get('fusio_apps_url');
+        $password = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
         $bag = new DataBag();
         $bag->addCategory('default', tenantId: $tenantId);
@@ -66,18 +59,10 @@ class NewInstallation
         $bag->addRole('default', 'Backend', tenantId: $tenantId);
         $bag->addRole('default', 'Consumer', tenantId: $tenantId);
         $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password, tenantId: $tenantId);
-        $bag->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret, tenantId: $tenantId);
-        $bag->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret, tenantId: $tenantId);
         $bag->addScope('backend', 'backend', 'Global access to the backend API', tenantId: $tenantId);
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API', tenantId: $tenantId);
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint', tenantId: $tenantId);
         $bag->addScope('default', 'default', 'Default scope', tenantId: $tenantId);
-        $bag->addAppScope('Backend', 'backend', tenantId: $tenantId);
-        $bag->addAppScope('Backend', 'authorization', tenantId: $tenantId);
-        $bag->addAppScope('Backend', 'default', tenantId: $tenantId);
-        $bag->addAppScope('Developer', 'consumer', tenantId: $tenantId);
-        $bag->addAppScope('Developer', 'authorization', tenantId: $tenantId);
-        $bag->addAppScope('Developer', 'default', tenantId: $tenantId);
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', tenantId: $tenantId);
         $bag->addConfig('consumer_max_apps', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can generate', tenantId: $tenantId);
         $bag->addConfig('consumer_max_tokens', Table\Config::FORM_NUMBER, 16, 'The max amount of tokens a consumer can generate', tenantId: $tenantId);

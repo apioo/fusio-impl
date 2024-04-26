@@ -24,6 +24,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\AppCreate;
 use Fusio\Model\Backend\MarketplaceInstall;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
@@ -40,19 +41,23 @@ class Installer
 {
     private Repository\Local $localRepository;
     private Repository\Remote $remoteRepository;
+    private Service\App $appService;
     private Service\Config $configService;
     private Service\System\FrameworkConfig $frameworkConfig;
     private Filesystem $filesystem;
     private Table\App $appTable;
+    private Table\User $userTable;
 
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\App $appService, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable, Table\User $userTable)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
+        $this->appService = $appService;
         $this->configService = $configService;
         $this->frameworkConfig = $frameworkConfig;
         $this->filesystem = new Filesystem();
         $this->appTable = $appTable;
+        $this->userTable = $userTable;
     }
 
     public function install(MarketplaceInstall $install, bool $replaceEnv, UserContext $context): App
@@ -143,7 +148,7 @@ class Installer
         $this->writeMetaFile($appDir, $remoteApp);
 
         if ($replaceEnv) {
-            $this->replaceVariables($appDir, $remoteApp->getName(), $context);
+            $this->replaceVariables($appDir, $remoteApp, $context);
         }
 
         $this->moveToPublic($appDir, $remoteApp);
@@ -206,18 +211,65 @@ class Installer
         $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
-    private function replaceVariables(string $appDir, string $appName, UserContext $context): void
+    private function replaceVariables(string $appDir, App $app, UserContext $context): void
+    {
+        $appKey = $this->getOrCreateAppKey($app, $context);
+        $env = $this->getEnv($appKey);
+
+        $files = [
+            '.htaccess',
+            'index.html',
+        ];
+
+        foreach ($files as $fileName) {
+            $file = $appDir . '/' . $fileName;
+            if (!is_file($file)) {
+                continue;
+            }
+
+            $content = file_get_contents($file);
+
+            foreach ($env as $key => $value) {
+                $content = str_replace('${' . $key . '}', $value, $content);
+            }
+
+            file_put_contents($file, $content);
+        }
+    }
+
+    private function getOrCreateAppKey(App $app, UserContext $context): string
+    {
+        $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $app->getName());
+        if ($existing instanceof Table\Generated\AppRow) {
+            return $existing->getAppKey();
+        } else {
+            $user = $this->userTable->findOneByTenantAndName($context->getTenantId(), 'Administrator');
+            if (!$user instanceof Table\Generated\UserRow) {
+                throw new StatusCode\InternalServerErrorException('Could not find default admin user');
+            }
+
+            $appCreate = new AppCreate();
+            $appCreate->setUserId($user->getId());
+            $appCreate->setStatus(1);
+            $appCreate->setName($app->getName());
+            $appCreate->setUrl($this->frameworkConfig->getAppsUrl() . '/' . $app->getName());
+            $appCreate->setScopes($app->getScopes());
+            $appId = $this->appService->create($appCreate, $context);
+
+            $existing = $this->appTable->find($appId);
+            if (!$existing instanceof Table\Generated\AppRow) {
+                throw new StatusCode\InternalServerErrorException('Could not create app');
+            }
+
+            return $existing->getAppKey();
+        }
+    }
+
+    private function getEnv(string $appKey): array
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();
         $url = $this->frameworkConfig->getAppsUrl();
         $basePath = parse_url($url, PHP_URL_PATH);
-
-        $app = $this->appTable->findOneByTenantAndName($context->getTenantId(), $appName);
-        if ($app instanceof Table\Generated\AppRow) {
-            $appKey = $app->getAppKey();
-        } else {
-            $appKey = '';
-        }
 
         $env = array_merge($_ENV, [
             'API_URL' => $apiUrl,
@@ -243,24 +295,6 @@ class Installer
             }
         }
 
-        $files = [
-            '.htaccess',
-            'index.html',
-        ];
-
-        foreach ($files as $fileName) {
-            $file = $appDir . '/' . $fileName;
-            if (!is_file($file)) {
-                continue;
-            }
-
-            $content = file_get_contents($file);
-
-            foreach ($env as $key => $value) {
-                $content = str_replace('${' . $key . '}', $value, $content);
-            }
-
-            file_put_contents($file, $content);
-        }
+        return $env;
     }
 }

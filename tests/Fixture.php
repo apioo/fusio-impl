@@ -24,6 +24,7 @@ use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Model\ProductInterface;
+use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Installation\DataBag;
 use Fusio\Impl\Installation\NewInstallation;
@@ -39,6 +40,7 @@ use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
+use PSX\Framework\Test\Environment;
 
 /**
  * Fixture
@@ -75,12 +77,26 @@ class Fixture
 
     private static function appendTestInserts(DataBag $data): void
     {
+        $backendAppKey = TokenGenerator::generateAppKey();
+        $backendAppSecret = TokenGenerator::generateAppSecret();
+        $consumerAppKey = TokenGenerator::generateAppKey();
+        $consumerAppSecret = TokenGenerator::generateAppSecret();
+
         $schemaEntrySource = file_get_contents(__DIR__ . '/resources/entry_schema.json');
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
+        $appsUrl = Environment::getConfig('fusio_apps_url');
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
+        $data->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
+        $data->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
+        $data->addAppScope('Backend', 'backend');
+        $data->addAppScope('Backend', 'authorization');
+        $data->addAppScope('Backend', 'default');
+        $data->addAppScope('Developer', 'consumer');
+        $data->addAppScope('Developer', 'authorization');
+        $data->addAppScope('Developer', 'default');
         $data->addPlan('Plan A', 3999, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu', ['foo' => 'bar']);
         $data->addPlan('Plan B', 4999, 1000, null);
         $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, 'Plan A', ['foo' => 'bar']);

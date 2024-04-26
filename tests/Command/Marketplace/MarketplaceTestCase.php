@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
+use Fusio\Impl\Service\App;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\Marketplace\Repository\Local;
@@ -61,9 +62,11 @@ class MarketplaceTestCase extends ControllerDbTestCase
         return $this->installer = new Installer(
             Environment::getService(Local::class),
             $this->getRemoteRepository(),
+            Environment::getService(App::class),
             Environment::getService(Config::class),
             Environment::getService(FrameworkConfig::class),
             Environment::getService(TableManagerInterface::class)->getTable(Table\App::class),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\User::class),
         );
     }
 
@@ -85,7 +88,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
         return $this->remote = new Remote($httpClient, Environment::getService(FrameworkConfig::class));
     }
 
-    private function getMarketplaceYaml(string $sha1Hash)
+    private function getMarketplaceYaml(string $sha1Hash): string
     {
         return <<<YAML
 fusio:
@@ -98,7 +101,7 @@ fusio:
 YAML;
     }
 
-    private function createAppZip()
+    private function createAppZip(): string
     {
         $zipFile = __DIR__ . '/app.zip';
         if (is_file($zipFile)) {

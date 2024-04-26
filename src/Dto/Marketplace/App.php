@@ -36,6 +36,7 @@ class App
     private ?string $description = null;
     private ?string $screenshot = null;
     private ?string $website = null;
+    private ?array $scopes = null;
 
     public function __construct(string $name, string $version)
     {
@@ -113,6 +114,16 @@ class App
         $this->website = $website;
     }
 
+    public function getScopes(): ?array
+    {
+        return $this->scopes;
+    }
+
+    public function setScopes(array $scopes): void
+    {
+        $this->scopes = $scopes;
+    }
+
     public function toArray(): array
     {
         return [
@@ -120,6 +131,7 @@ class App
             'description' => $this->description,
             'screenshot' => $this->screenshot,
             'website' => $this->website,
+            'scopes' => $this->scopes,
             'downloadUrl' => $this->downloadUrl,
             'sha1Hash' => $this->sha1Hash,
         ];
@@ -152,6 +164,10 @@ class App
 
         if (isset($data['website']) && is_string($data['website'])) {
             $app->setWebsite($data['website']);
+        }
+
+        if (isset($data['scopes']) && is_array($data['scopes'])) {
+            $app->setScopes($data['scopes']);
         }
 
         return $app;
