@@ -55,7 +55,7 @@ class Validator
             $this->assertUser($userId, $tenantId);
         } else {
             if ($existing === null) {
-                throw new StatusCode\BadRequestException('App name must not be empty');
+                throw new StatusCode\BadRequestException('App user must not be empty');
             }
 
             $userId = $existing->getUserId();
