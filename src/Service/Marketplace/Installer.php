@@ -133,7 +133,7 @@ class Installer
         $appsDir = $this->frameworkConfig->getAppsDir();
         $appsDir.= '/' . $localApp->getName();
 
-        $this->replaceVariables($appsDir, $localApp->getName(), $context);
+        $this->replaceVariables($appsDir, $localApp, $context);
 
         return $localApp;
     }
