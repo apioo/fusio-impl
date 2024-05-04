@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof CategoryCreate);
 
-        $this->categoryService->create(
+        $id = $this->categoryService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Category successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

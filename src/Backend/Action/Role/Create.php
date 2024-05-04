@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof RoleCreate);
 
-        $this->roleService->create(
+        $id = $this->roleService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Role successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

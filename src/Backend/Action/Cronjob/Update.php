@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof CronjobUpdate);
 
-        $this->cronjobService->update(
+        $id = $this->cronjobService->update(
             $request->get('cronjob_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Cronjob successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

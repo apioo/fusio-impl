@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof ConfigUpdate);
 
-        $this->configService->update(
+        $id = $this->configService->update(
             $request->get('config_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Config successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

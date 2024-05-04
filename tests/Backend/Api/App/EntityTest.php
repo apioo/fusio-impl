@@ -170,7 +170,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "App successfully updated"
+    "message": "App successfully updated",
+    "id": "3"
 }
 JSON;
 
@@ -219,7 +220,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "App successfully updated"
+    "message": "App successfully updated",
+    "id": "3"
 }
 JSON;
 
@@ -260,7 +262,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "App successfully deleted"
+    "message": "App successfully deleted",
+    "id": "3"
 }
 JSON;
 

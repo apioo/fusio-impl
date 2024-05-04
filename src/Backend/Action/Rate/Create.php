@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof RateCreate);
 
-        $this->rateService->create(
+        $id = $this->rateService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Rate successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

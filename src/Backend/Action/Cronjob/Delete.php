@@ -47,7 +47,7 @@ class Delete implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->cronjobService->delete(
+        $id = $this->cronjobService->delete(
             $request->get('cronjob_id'),
             $this->contextFactory->newActionContext($context)
         );
@@ -55,6 +55,7 @@ class Delete implements ActionInterface
         return [
             'success' => true,
             'message' => 'Cronjob successfully deleted',
+            'id' => '' . $id,
         ];
     }
 }

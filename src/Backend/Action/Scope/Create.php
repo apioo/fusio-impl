@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof ScopeCreate);
 
-        $this->scopeService->create(
+        $id = $this->scopeService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Scope successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

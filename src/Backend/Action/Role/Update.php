@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof RoleUpdate);
 
-        $this->roleService->update(
+        $id = $this->roleService->update(
             $request->get('role_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Role successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

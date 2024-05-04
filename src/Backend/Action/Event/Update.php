@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof EventUpdate);
 
-        $this->eventService->update(
+        $id = $this->eventService->update(
             $request->get('event_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Event successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

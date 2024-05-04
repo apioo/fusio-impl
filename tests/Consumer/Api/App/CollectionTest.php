@@ -104,7 +104,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "App successfully created"
+    "message": "App successfully created",
+    "id": "6"
 }
 JSON;
 

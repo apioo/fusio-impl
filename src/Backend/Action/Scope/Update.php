@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof ScopeUpdate);
 
-        $this->scopeService->update(
+        $id = $this->scopeService->update(
             $request->get('scope_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Scope successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

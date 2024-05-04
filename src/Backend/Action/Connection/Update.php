@@ -55,7 +55,7 @@ class Update implements ActionInterface
 
         assert($body instanceof ConnectionUpdate);
 
-        $this->connectionService->update(
+        $id = $this->connectionService->update(
             $request->get('connection_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -64,6 +64,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Connection successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

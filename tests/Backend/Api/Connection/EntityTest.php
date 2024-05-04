@@ -137,7 +137,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Connection successfully updated"
+    "message": "Connection successfully updated",
+    "id": "1"
 }
 JSON;
 
@@ -181,7 +182,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Connection successfully deleted"
+    "message": "Connection successfully deleted",
+    "id": "1"
 }
 JSON;
 

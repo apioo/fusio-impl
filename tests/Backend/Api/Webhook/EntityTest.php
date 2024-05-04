@@ -123,7 +123,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully updated"
+    "message": "Webhook successfully updated",
+    "id": "1"
 }
 JSON;
 
@@ -157,7 +158,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully deleted"
+    "message": "Webhook successfully deleted",
+    "id": "1"
 }
 JSON;
 

@@ -159,7 +159,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Action successfully updated"
+    "message": "Action successfully updated",
+    "id": "3"
 }
 JSON;
 
@@ -181,7 +182,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Action successfully deleted"
+    "message": "Action successfully deleted",
+    "id": "3"
 }
 JSON;
 

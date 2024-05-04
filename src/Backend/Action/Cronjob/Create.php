@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof CronjobCreate);
 
-        $this->cronjobService->create(
+        $id = $this->cronjobService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Cronjob successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

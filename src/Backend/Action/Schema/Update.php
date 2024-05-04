@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof SchemaUpdate);
 
-        $this->schemaService->update(
+        $id = $this->schemaService->update(
             $request->get('schema_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Schema successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

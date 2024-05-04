@@ -47,7 +47,7 @@ class Delete implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->scopeService->delete(
+        $id = $this->scopeService->delete(
             $request->get('scope_id'),
             $this->contextFactory->newActionContext($context)
         );
@@ -55,6 +55,7 @@ class Delete implements ActionInterface
         return [
             'success' => true,
             'message' => 'Scope successfully deleted',
+            'id' => '' . $id,
         ];
     }
 }

@@ -50,7 +50,7 @@ class Delete implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->connectionService->delete(
+        $id = $this->connectionService->delete(
             $request->get('connection_id'),
             $this->contextFactory->newActionContext($context)
         );
@@ -58,6 +58,7 @@ class Delete implements ActionInterface
         return [
             'success' => true,
             'message' => 'Connection successfully deleted',
+            'id' => '' . $id,
         ];
     }
 }

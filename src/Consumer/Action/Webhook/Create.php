@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof WebhookCreate);
 
-        $this->webhookService->create(
+        $id = $this->webhookService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Webhook successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

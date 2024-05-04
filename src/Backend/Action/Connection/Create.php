@@ -56,7 +56,7 @@ class Create implements ActionInterface
 
         assert($body instanceof ConnectionCreate);
 
-        $this->connectionService->create(
+        $id = $this->connectionService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -64,6 +64,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Connection successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

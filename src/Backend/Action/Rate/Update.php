@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof RateUpdate);
 
-        $this->rateService->update(
+        $id = $this->rateService->update(
             $request->get('rate_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Rate successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

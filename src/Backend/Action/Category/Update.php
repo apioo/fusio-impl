@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof CategoryUpdate);
 
-        $this->categoryService->update(
+        $id = $this->categoryService->update(
             $request->get('category_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Category successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

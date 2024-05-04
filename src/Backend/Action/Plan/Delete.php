@@ -47,7 +47,7 @@ class Delete implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->planService->delete(
+        $id = $this->planService->delete(
             $request->get('plan_id'),
             $this->contextFactory->newActionContext($context)
         );
@@ -55,6 +55,7 @@ class Delete implements ActionInterface
         return [
             'success' => true,
             'message' => 'Plan successfully deleted',
+            'id' => '' . $id,
         ];
     }
 }

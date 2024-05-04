@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof SchemaCreate);
 
-        $this->schemaService->create(
+        $id = $this->schemaService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Schema successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

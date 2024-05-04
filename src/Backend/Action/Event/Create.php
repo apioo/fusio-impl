@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof EventCreate);
 
-        $this->eventService->create(
+        $id = $this->eventService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Event successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

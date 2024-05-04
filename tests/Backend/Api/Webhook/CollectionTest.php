@@ -98,7 +98,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully created"
+    "message": "Webhook successfully created",
+    "id": "3"
 }
 JSON;
 

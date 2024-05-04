@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof PlanCreate);
 
-        $this->planService->create(
+        $id = $this->planService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Plan successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

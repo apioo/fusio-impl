@@ -47,7 +47,7 @@ class Delete implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->webhookService->delete(
+        $id = $this->webhookService->delete(
             $request->get('webhook_id'),
             $this->contextFactory->newActionContext($context)
         );
@@ -55,6 +55,7 @@ class Delete implements ActionInterface
         return [
             'success' => true,
             'message' => 'Webhook successfully deleted',
+            'id' => '' . $id,
         ];
     }
 }

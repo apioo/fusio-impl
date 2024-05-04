@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof UserUpdate);
 
-        $this->userService->update(
+        $id = $this->userService->update(
             $request->get('user_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'User successfully updated',
+            'id' => '' . $id,
         ];
     }
 }

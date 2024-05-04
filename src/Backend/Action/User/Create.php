@@ -53,7 +53,7 @@ class Create implements ActionInterface
 
         assert($body instanceof UserCreate);
 
-        $this->userService->create(
+        $id = $this->userService->create(
             $body,
             $this->contextFactory->newActionContext($context)
         );
@@ -61,6 +61,7 @@ class Create implements ActionInterface
         return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'User successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

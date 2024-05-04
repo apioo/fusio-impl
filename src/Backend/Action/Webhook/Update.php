@@ -52,7 +52,7 @@ class Update implements ActionInterface
 
         assert($body instanceof WebhookUpdate);
 
-        $this->webhookService->update(
+        $id = $this->webhookService->update(
             $request->get('webhook_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -61,6 +61,7 @@ class Update implements ActionInterface
         return [
             'success' => true,
             'message' => 'Webhook successfully updated',
+            'id' => '' . $id,
         ];
     }
 }
