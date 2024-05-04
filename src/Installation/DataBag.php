@@ -221,7 +221,7 @@ class DataBag
 
     public function addAppCode(string $app, string $user, string $code, string $scope, ?string $date = null, ?string $tenantId = null): void
     {
-        $this->data['fusio_app_code'][] = [
+        $this->data['fusio_app_code'][$code] = [
             'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'code' => $code,
