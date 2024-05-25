@@ -456,7 +456,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/connection/$connection_id<[0-9]+|^~>/redirect',
                     httpCode: 200,
-                    outgoing: Model\Common\Message::class,
+                    outgoing: Model\Backend\ConnectionRedirectResponse::class,
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'connection.getIntrospection' => new Operation(

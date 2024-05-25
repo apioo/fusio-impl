@@ -47,7 +47,6 @@ class GetRedirect implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
-            'success' => true,
             'redirectUri' => $this->tokenService->buildRedirectUri($request->get('connection_id'))
         ];
     }
