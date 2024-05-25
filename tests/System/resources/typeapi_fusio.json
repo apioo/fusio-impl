@@ -10839,6 +10839,10 @@
         "class": {
           "type": "string"
         },
+        "oauth2": {
+          "description": "Indicates whether it is possible to start an OAuth2 authorization code flow on this connection",
+          "type": "boolean"
+        },
         "config": {
           "$ref": "Backend_ConnectionConfig"
         },
