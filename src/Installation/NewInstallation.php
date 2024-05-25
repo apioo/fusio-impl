@@ -33,7 +33,6 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Schema\TypeFactory;
 
 /**
