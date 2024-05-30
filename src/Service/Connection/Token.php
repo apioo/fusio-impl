@@ -108,7 +108,7 @@ class Token
 
         $this->assertState($state);
 
-        $redirectUri = $this->buildRedirectUri($connectionId);
+        $redirectUri = $this->newRedirectUri($connectionId);
 
         $tokenUrl = $implementation->getTokenUrl($config);
         $params = $implementation->getAuthorizationCodeParameters($code, $redirectUri, $config);
@@ -247,7 +247,7 @@ class Token
         $expiresIn = $data->expires_in ?? null;
         if (!empty($expiresIn)) {
             // expires in is only recommended but if available we validate the value
-            if (!is_int($expiresIn) || $expiresIn < time()) {
+            if (!is_int($expiresIn)) {
                 throw new StatusCode\BadRequestException('Provided an invalid expires in value');
             }
         }
