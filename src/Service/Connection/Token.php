@@ -182,6 +182,8 @@ class Token
     private function persistConfig(Model\ConnectionInterface $connection, array $config, UserContext $context): void
     {
         $update = new ConnectionUpdate();
+        $update->setName($connection->getName());
+        $update->setClass($connection->getClass());
         $update->setConfig(ConnectionConfig::fromArray($config));
         $this->connectionService->update((string) $connection->getId(), $update, $context);
     }
