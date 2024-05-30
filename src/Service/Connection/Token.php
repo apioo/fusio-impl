@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Connection;
 
 use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Connection\OAuth2Interface;
+use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Model;
 use Fusio\Engine\Parameters;
@@ -85,18 +86,13 @@ class Token
     {
         $connection = $this->getConnection($connectionId);
         $implementation = $this->getImplementation($connection);
-        $config = $connection->getConfig();
+        $config = new Parameters($connection->getConfig());
 
         $redirectUri = $this->newRedirectUri($connectionId);
         $state = $this->newState();
 
-        $url = Url::parse($implementation->getAuthorizationUrl());
-        $url = $url->withParameters(array_merge([
-            'response_type' => 'code',
-            'client_id' => $config['client_id'] ?? null,
-            'redirect_uri' => $redirectUri,
-            'state' => $state,
-        ], $url->getParameters()));
+        $url = Url::parse($implementation->getAuthorizationUrl($config));
+        $url = $url->withParameters($implementation->getRedirectUriParameters($redirectUri, $state, $config));
 
         return $url->toString();
     }
@@ -108,20 +104,18 @@ class Token
     {
         $connection = $this->getConnection($connectionId);
         $implementation = $this->getImplementation($connection);
-        $config = $connection->getConfig();
+        $config = new Parameters($connection->getConfig());
 
         $this->assertState($state);
 
-        $params = [
-            'client_id' => $config['client_id'] ?? null,
-            'client_secret' => $config['client_secret'] ?? null,
-            'code' => $code,
-            'redirect_uri' => $this->buildRedirectUri($connectionId),
-        ];
+        $redirectUri = $this->buildRedirectUri($connectionId);
 
-        $accessToken = $this->request($implementation, $params);
+        $tokenUrl = $implementation->getTokenUrl($config);
+        $params = $implementation->getAuthorizationCodeParameters($code, $redirectUri, $config);
 
-        $this->updateConnectionConfig($connection, $accessToken, $context);
+        $accessToken = $this->request($tokenUrl, $params);
+
+        $this->persistAccessTokenToConfig($connection, $accessToken, $context);
     }
 
     /**
@@ -131,16 +125,14 @@ class Token
     {
         $connection = $this->getConnection($connectionId);
         $implementation = $this->getImplementation($connection);
-        $config = $connection->getConfig();
+        $config = new Parameters($connection->getConfig());
 
-        $params = [
-            'grant_type' => 'refresh_token',
-            'refresh_token' => $config['refresh_token'] ?? null,
-        ];
+        $tokenUrl = $implementation->getTokenUrl($config);
+        $params = $implementation->getRefreshTokenParameters($config);
 
-        $accessToken = $this->request($implementation, $params);
+        $accessToken = $this->request($tokenUrl, $params);
 
-        $this->updateConnectionConfig($connection, $accessToken, $context);
+        $this->persistAccessTokenToConfig($connection, $accessToken, $context);
     }
 
     public function refreshAll(UserContext $context): void
@@ -148,14 +140,8 @@ class Token
         $connections = $this->repository->getAll();
         foreach ($connections as $connection) {
             $parameters = new Parameters($connection->getConfig());
-            $connection = $this->factory->factory($connection->getClass());
-            if (!$connection instanceof OAuth2Interface || !$connection instanceof ConfigurableInterface) {
-                continue;
-            }
-
-            $expiresIn = $parameters->get(OAuth2Interface::CONFIG_EXPIRES_IN);
-            if (empty($expiresIn) || $expiresIn <= time()) {
-                // we can only extend in case we have an expires in value which is in the future
+            $implementation = $this->factory->factory($connection->getClass());
+            if (!$implementation instanceof OAuth2Interface || !$implementation instanceof ConfigurableInterface) {
                 continue;
             }
 
@@ -165,11 +151,17 @@ class Token
                 continue;
             }
 
-            $this->fetchByRefreshToken($connection->getName(), $context);
+            try {
+                $this->fetchByRefreshToken($implementation->getName(), $context);
+            } catch (ConfigurationException|StatusCode\BadRequestException $e) {
+                // remove refresh token in case it fails
+                $parameters->set(OAuth2Interface::CONFIG_REFRESH_TOKEN, '');
+                $this->persistConfig($connection, $parameters->toArray(), $context);
+            }
         }
     }
 
-    private function updateConnectionConfig(Model\ConnectionInterface $connection, AccessToken $token, UserContext $context): void
+    private function persistAccessTokenToConfig(Model\ConnectionInterface $connection, AccessToken $token, UserContext $context): void
     {
         $config = $connection->getConfig();
         $config[OAuth2Interface::CONFIG_ACCESS_TOKEN] = $token->getAccessToken();
@@ -184,6 +176,11 @@ class Token
             $config[OAuth2Interface::CONFIG_REFRESH_TOKEN] = $refreshToken;
         }
 
+        $this->persistConfig($connection, $config, $context);
+    }
+
+    private function persistConfig(Model\ConnectionInterface $connection, array $config, UserContext $context): void
+    {
         $update = new ConnectionUpdate();
         $update->setConfig(ConnectionConfig::fromArray($config));
         $this->connectionService->update((string) $connection->getId(), $update, $context);
@@ -215,14 +212,14 @@ class Token
         return $implementation;
     }
 
-    private function request(OAuth2Interface $connection, array $body): AccessToken
+    private function request(string $tokenUrl, array $body): AccessToken
     {
         $headers = [
             'User-Agent' => Base::getUserAgent(),
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
 
-        $request  = new PostRequest($connection->getTokenUrl(), $headers, $body);
+        $request  = new PostRequest($tokenUrl, $headers, $body);
         $response = $this->httpClient->request($request);
 
         return $this->parseAccessToken($response);
