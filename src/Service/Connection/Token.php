@@ -81,6 +81,8 @@ class Token
     /**
      * Returns the redirect uri for a provided connection. This works only in case the connection implements the
      * OAuth2Interface
+     *
+     * @throws ConfigurationException
      */
     public function buildRedirectUri(string $connectionId): string
     {
@@ -99,6 +101,8 @@ class Token
 
     /**
      * Obtains an access token by the provided code and persists the access token at the connection config
+     *
+     * @throws ConfigurationException
      */
     public function fetchByCode(string $connectionId, string $code, string $state, UserContext $context): void
     {
@@ -120,6 +124,8 @@ class Token
 
     /**
      * Obtains an access token by a refresh token and persists the access token at the connection config
+     *
+     * @throws ConfigurationException
      */
     public function fetchByRefreshToken(string $connectionId, UserContext $context): void
     {
