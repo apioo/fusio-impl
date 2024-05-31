@@ -185,7 +185,7 @@ final class Version20240121100724 extends AbstractMigration
             if ($newAction === null) {
                 $this->connection->delete('fusio_cronjob', ['action' => $oldAction]);
             } else {
-                $this->connection->update('fusio_cronjob', ['action' => ClassName::serialize($newAction)], ['action' => $oldAction]);
+                $this->connection->update('fusio_cronjob', ['action' => 'php+class://' . ClassName::serialize($newAction)], ['action' => $oldAction]);
             }
         }
     }
