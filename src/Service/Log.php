@@ -133,13 +133,14 @@ class Log
             $message = substr($message, 0, 500);
         }
 
-        $this->connection->insert(Table\Generated\LogErrorTable::NAME, array(
+        $this->connection->insert(Table\Generated\LogErrorTable::NAME, [
             Table\Generated\LogErrorTable::COLUMN_LOG_ID => $logId,
             Table\Generated\LogErrorTable::COLUMN_MESSAGE => $message,
             Table\Generated\LogErrorTable::COLUMN_TRACE => $exception->getTraceAsString(),
             Table\Generated\LogErrorTable::COLUMN_FILE => $exception->getFile(),
             Table\Generated\LogErrorTable::COLUMN_LINE => $exception->getLine(),
-        ));
+            Table\Generated\LogErrorTable::COLUMN_INSERT_DATE => date('Y-m-d H:i:s'),
+        ]);
     }
 
     protected function getHeadersAsString(RequestInterface $request): string

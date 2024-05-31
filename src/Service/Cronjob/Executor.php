@@ -98,6 +98,7 @@ class Executor
             $row->setTrace($e->getTraceAsString());
             $row->setFile($e->getFile());
             $row->setLine($e->getLine());
+            $row->setInsertDate(LocalDateTime::now());
             $this->errorTable->create($row);
 
             $exitCode = Table\Cronjob::CODE_ERROR;

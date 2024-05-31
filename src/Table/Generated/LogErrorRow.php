@@ -10,6 +10,7 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $trace = null;
     private ?string $file = null;
     private ?int $line = null;
+    private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id) : void
     {
         $this->id = $id;
@@ -58,6 +59,14 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->line ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "line" was provided');
     }
+    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    {
+        $this->insertDate = $insertDate;
+    }
+    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    {
+        return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
+    }
     public function toRecord() : \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -68,6 +77,7 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('trace', $this->trace);
         $record->put('file', $this->file);
         $record->put('line', $this->line);
+        $record->put('insert_date', $this->insertDate);
         return $record;
     }
     public function jsonSerialize() : object
@@ -83,6 +93,7 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->trace = isset($data['trace']) && is_string($data['trace']) ? $data['trace'] : null;
         $row->file = isset($data['file']) && is_string($data['file']) ? $data['file'] : null;
         $row->line = isset($data['line']) && is_int($data['line']) ? $data['line'] : null;
+        $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;
     }
 }

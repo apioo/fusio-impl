@@ -80,6 +80,16 @@ final class Version20240121100724 extends AbstractMigration
             $webhookResponseTable->addForeignKeyConstraint($schema->getTable('fusio_webhook'), ['webhook_id'], ['id'], [], 'webhook_response_webhook_id');
         }
 
+        $cronjobErrorTable = $schema->getTable('fusio_cronjob_error');
+        if (!$cronjobErrorTable->hasColumn('insert_date')) {
+            $cronjobErrorTable->addColumn('insert_date', 'datetime');
+        }
+
+        $logErrorTable = $schema->getTable('fusio_log_error');
+        if (!$logErrorTable->hasColumn('insert_date')) {
+            $logErrorTable->addColumn('insert_date', 'datetime');
+        }
+
         foreach (Tenant::TENANT_TABLES as $tableName) {
             $table = $schema->getTable($tableName);
             if (!$table->hasColumn('tenant_id')) {

@@ -14,13 +14,14 @@ class CronjobErrorTable extends \PSX\Sql\TableAbstract
     public const COLUMN_TRACE = 'trace';
     public const COLUMN_FILE = 'file';
     public const COLUMN_LINE = 'line';
+    public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CRONJOB_ID => 0x20000a, self::COLUMN_MESSAGE => 0xa001f4, self::COLUMN_TRACE => 0xb00000, self::COLUMN_FILE => 0xa000ff, self::COLUMN_LINE => 0x20000a);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CRONJOB_ID => 0x20000a, self::COLUMN_MESSAGE => 0xa001f4, self::COLUMN_TRACE => 0xb00000, self::COLUMN_FILE => 0xa000ff, self::COLUMN_LINE => 0x20000a, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\CronjobErrorRow>
@@ -274,6 +275,43 @@ class CronjobErrorTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('line', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\CronjobErrorRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByInsertDate(\PSX\DateTime\LocalDateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByInsertDate(\PSX\DateTime\LocalDateTime $value) : ?\Fusio\Impl\Table\Generated\CronjobErrorRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByInsertDate(\PSX\DateTime\LocalDateTime $value, \Fusio\Impl\Table\Generated\CronjobErrorRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByInsertDate(\PSX\DateTime\LocalDateTime $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
     /**
