@@ -46,7 +46,9 @@ class LogRotator
         $schema = $schemaManager->introspectSchema();
 
         yield from $this->archiveAuditTable($schemaManager, $schema);
+        yield from $this->archiveLogErrorTable($schemaManager, $schema);
         yield from $this->archiveLogTable($schemaManager, $schema);
+        yield from $this->archiveCronjobErrorTable($schemaManager, $schema);
     }
 
     private function archiveAuditTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
@@ -125,9 +127,80 @@ class LogRotator
         yield 'Copied ' . count($result) . ' entries to log archive table';
 
         // truncate table
-        $this->connection->executeStatement('DELETE FROM fusio_log_error WHERE 1=1');
         $this->connection->executeStatement('DELETE FROM fusio_log WHERE 1=1');
 
         yield 'Truncated log table';
+    }
+
+    private function archiveLogErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    {
+        $tableName = 'fusio_log_error_' . date('Ymd');
+
+        // create archive table
+        if (!$schema->hasTable($tableName)) {
+            $logErrorTable = $schema->createTable('fusio_log_error');
+            $logErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $logErrorTable->addColumn('log_id', 'integer');
+            $logErrorTable->addColumn('message', 'string', ['length' => 500]);
+            $logErrorTable->addColumn('trace', 'text');
+            $logErrorTable->addColumn('file', 'string', ['length' => 255]);
+            $logErrorTable->addColumn('line', 'integer');
+            $logErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+            $logErrorTable->setPrimaryKey(['id']);
+            $logErrorTable->addOption('engine', 'MyISAM');
+
+            $schemaManager->createTable($logErrorTable);
+
+            yield 'Created log archive table ' . $tableName;
+        }
+
+        // copy all data to archive table
+        $result = $this->connection->fetchAllAssociative('SELECT log_id, message, trace, file, line, insert_date FROM fusio_log_error');
+        foreach ($result as $row) {
+            $this->connection->insert($tableName, $row);
+        }
+
+        yield 'Copied ' . count($result) . ' entries to log error archive table';
+
+        // truncate table
+        $this->connection->executeStatement('DELETE FROM fusio_log_error WHERE 1=1');
+
+        yield 'Truncated log error table';
+    }
+
+    private function archiveCronjobErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    {
+        $tableName = 'fusio_cronjob_error_' . date('Ymd');
+
+        // create archive table
+        if (!$schema->hasTable($tableName)) {
+            $cronjobErrorTable = $schema->createTable('fusio_cronjob_error');
+            $cronjobErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $cronjobErrorTable->addColumn('cronjob_id', 'integer');
+            $cronjobErrorTable->addColumn('message', 'string', ['length' => 500]);
+            $cronjobErrorTable->addColumn('trace', 'text');
+            $cronjobErrorTable->addColumn('file', 'string', ['length' => 255]);
+            $cronjobErrorTable->addColumn('line', 'integer');
+            $cronjobErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+            $cronjobErrorTable->setPrimaryKey(['id']);
+            $cronjobErrorTable->addOption('engine', 'MyISAM');
+
+            $schemaManager->createTable($cronjobErrorTable);
+
+            yield 'Created cronjob error archive table ' . $tableName;
+        }
+
+        // copy all data to archive table
+        $result = $this->connection->fetchAllAssociative('SELECT cronjob_id, message, trace, file, line, insert_date FROM fusio_cronjob_error');
+        foreach ($result as $row) {
+            $this->connection->insert($tableName, $row);
+        }
+
+        yield 'Copied ' . count($result) . ' entries to cronjob error archive table';
+
+        // truncate table
+        $this->connection->executeStatement('DELETE FROM fusio_cronjob_error WHERE 1=1');
+
+        yield 'Truncated cronjob error table';
     }
 }
