@@ -301,14 +301,15 @@ class DataBag
         ];
     }
 
-    public function addCronjobError(string $cronjob, string $message, ?string $tenantId = null): void
+    public function addCronjobError(string $cronjob, string $message, ?string $tenantId = null, ?string $insertDate = null): void
     {
         $this->data['fusio_cronjob_error'][] = [
             'cronjob_id' => $this->getReference('fusio_cronjob', $cronjob, $tenantId),
             'message' => $message,
             'trace' => '[trace]',
             'file' => '[file]',
-            'line' => 74
+            'line' => 74,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -402,14 +403,15 @@ class DataBag
         ];
     }
 
-    public function addLogError(int $log): void
+    public function addLogError(int $log, ?string $insertDate = null): void
     {
         $this->data['fusio_log_error'][] = [
             'log_id' => $log,
             'message' => 'Syntax error, malformed JSON',
             'trace' => '[trace]',
             'file' => '[file]',
-            'line' => 74
+            'line' => 74,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 

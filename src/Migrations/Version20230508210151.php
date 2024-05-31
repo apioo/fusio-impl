@@ -155,7 +155,7 @@ final class Version20230508210151 extends AbstractMigration
             $cronjobErrorTable->addColumn('trace', 'text');
             $cronjobErrorTable->addColumn('file', 'string', ['length' => 255]);
             $cronjobErrorTable->addColumn('line', 'integer');
-            $cronjobErrorTable->addColumn('insert_date', 'datetime');
+            $cronjobErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
             $cronjobErrorTable->setPrimaryKey(['id']);
         }
 
@@ -230,7 +230,7 @@ final class Version20230508210151 extends AbstractMigration
             $logErrorTable->addColumn('trace', 'text');
             $logErrorTable->addColumn('file', 'string', ['length' => 255]);
             $logErrorTable->addColumn('line', 'integer');
-            $logErrorTable->addColumn('insert_date', 'datetime');
+            $logErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
             $logErrorTable->setPrimaryKey(['id']);
         }
 

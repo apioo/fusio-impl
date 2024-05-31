@@ -82,12 +82,12 @@ final class Version20240121100724 extends AbstractMigration
 
         $cronjobErrorTable = $schema->getTable('fusio_cronjob_error');
         if (!$cronjobErrorTable->hasColumn('insert_date')) {
-            $cronjobErrorTable->addColumn('insert_date', 'datetime');
+            $cronjobErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
         }
 
         $logErrorTable = $schema->getTable('fusio_log_error');
         if (!$logErrorTable->hasColumn('insert_date')) {
-            $logErrorTable->addColumn('insert_date', 'datetime');
+            $logErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
         }
 
         foreach (Tenant::TENANT_TABLES as $tableName) {
