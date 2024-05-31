@@ -198,6 +198,23 @@ final class Version20240121100724 extends AbstractMigration
                 $this->connection->update('fusio_cronjob', ['action' => 'php+class://' . ClassName::serialize($newAction)], ['action' => $oldAction]);
             }
         }
+
+        // drop legacy tables
+        $legacyTableNames = [
+            'fusio_migration_versions',
+            'system_migration_versions',
+            'fusio_provider',
+            'fusio_scope_routes',
+            'fusio_routes_response',
+            'fusio_routes_method',
+            'fusio_routes',
+        ];
+
+        foreach ($legacyTableNames as $legacyTableName) {
+            if (in_array($legacyTableName, $tableNames)) {
+                $this->dropTable($schemaManager, $legacyTableName);
+            }
+        }
     }
 
     private function dropTable(AbstractSchemaManager $schemaManager, string $tableName): void
