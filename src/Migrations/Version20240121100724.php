@@ -221,6 +221,10 @@ final class Version20240121100724 extends AbstractMigration
                 $this->dropTable($schemaManager, $legacyTableName);
             }
         }
+
+        // set error insert date
+        $this->connection->executeQuery('UPDATE fusio_cronjob_error SET insert_date = ? WHERE insert_date IS NULL', [date('Y-m-d H:i:s')]);
+        $this->connection->executeQuery('UPDATE fusio_log_error SET insert_date = ? WHERE insert_date IS NULL', [date('Y-m-d H:i:s')]);
     }
 
     private function dropTable(AbstractSchemaManager $schemaManager, string $tableName): void
