@@ -126,6 +126,12 @@ final class Version20240121100724 extends AbstractMigration
                 }
             }
         }
+
+        // drop legacy foreign key
+        $rateAllocationTable = $schema->getTable('fusio_rate_allocation');
+        if ($rateAllocationTable->hasForeignKey('rate_allocation_route_id')) {
+            $rateAllocationTable->removeForeignKey('rate_allocation_route_id');
+        }
     }
 
     public function down(Schema $schema): void
