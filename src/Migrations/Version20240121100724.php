@@ -8,6 +8,8 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Engine\Inflection\ClassName;
+use Fusio\Impl\Backend\Action\Connection\RenewToken;
 use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Service\Tenant;
 use Fusio\Impl\Table\Operation;
@@ -170,6 +172,21 @@ final class Version20240121100724 extends AbstractMigration
 
         foreach ($operations as $httpPath) {
             $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
+        }
+
+        // migrate legacy cronjobs
+        $cronjobs = [
+            'Backend_Action_Action_Async' => null,
+            'Backend_Action_Event_Execute' => null,
+            'Backend_Action_Connection_RenewToken' => RenewToken::class,
+        ];
+
+        foreach ($cronjobs as $oldAction => $newAction) {
+            if ($newAction === null) {
+                $this->connection->delete('fusio_cronjob', ['action' => $oldAction]);
+            } else {
+                $this->connection->update('fusio_cronjob', ['action' => ClassName::serialize($newAction)], ['action' => $oldAction]);
+            }
         }
     }
 
