@@ -42,27 +42,43 @@ class Cleaner
     {
         $this->cleanUpExpiredTokens();
         $this->cleanUpIdentityRequests();
-        $this->cleanUpEventResponses();
+        $this->cleanUpWebhookResponses();
+        $this->cleanUpCronjobErrors();
+        $this->cleanUpLogErrors();
     }
 
     private function cleanUpExpiredTokens(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_token WHERE expire < :now', [
-            'now' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'now' => (new \DateTime('first day of last month'))->format('Y-m-d H:i:s'),
         ]);
     }
 
     private function cleanUpIdentityRequests(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_identity_request WHERE insert_date < :now', [
-            'now' => (new \DateTime('yesterday'))->format('Y-m-d H:i:s'),
+            'now' => (new \DateTime('first day of last month'))->format('Y-m-d H:i:s'),
         ]);
     }
 
-    private function cleanUpEventResponses(): void
+    private function cleanUpWebhookResponses(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_webhook_response WHERE insert_date < :now', [
-            'now' => (new \DateTime('last month'))->format('Y-m-d H:i:s'),
+            'now' => (new \DateTime('first day of last month'))->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpCronjobErrors(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_cronjob_error WHERE insert_date < :now', [
+            'now' => (new \DateTime('first day of -3 months'))->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpLogErrors(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_log_error WHERE insert_date < :now', [
+            'now' => (new \DateTime('first day of -3 months'))->format('Y-m-d H:i:s'),
         ]);
     }
 }
