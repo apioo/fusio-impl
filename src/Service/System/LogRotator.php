@@ -25,7 +25,9 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * LogRotator
+ * To keep the system fast we rotate specific tables which get otherwise really large over time. We simply copy all
+ * table data to an archive table and truncate the table. Through this a user can still investigate all logs. If
+ * the space is required a user can also simply drop those archive tables
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -76,18 +78,7 @@ class LogRotator
             yield 'Created audit archive table ' . $tableName;
         }
 
-        // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT tenant_id, app_id, user_id, ref_id, event, ip, message, content, date FROM fusio_audit');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
-
-        yield 'Copied ' . count($result) . ' entries to audit archive table';
-
-        // truncate table
-        $this->connection->executeStatement('DELETE FROM fusio_audit WHERE 1=1');
-
-        yield 'Truncated audit table';
+        yield from $this->copy('fusio_audit', $tableName, ['id', 'tenant_id', 'app_id', 'user_id', 'ref_id', 'event', 'ip', 'message', 'content', 'date']);
     }
 
     private function archiveLogTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
@@ -118,18 +109,7 @@ class LogRotator
             yield 'Created log archive table ' . $tableName;
         }
 
-        // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT tenant_id, operation_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
-
-        yield 'Copied ' . count($result) . ' entries to log archive table';
-
-        // truncate table
-        $this->connection->executeStatement('DELETE FROM fusio_log WHERE 1=1');
-
-        yield 'Truncated log table';
+        yield from $this->copy('fusio_log', $tableName, ['id', 'tenant_id', 'operation_id', 'app_id', 'user_id', 'ip', 'user_agent', 'method', 'path', 'header', 'body', 'execution_time', 'date']);
     }
 
     private function archiveLogErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
@@ -138,7 +118,7 @@ class LogRotator
 
         // create archive table
         if (!$schema->hasTable($tableName)) {
-            $logErrorTable = $schema->createTable('fusio_log_error');
+            $logErrorTable = $schema->createTable($tableName);
             $logErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $logErrorTable->addColumn('log_id', 'integer');
             $logErrorTable->addColumn('message', 'string', ['length' => 500]);
@@ -154,18 +134,7 @@ class LogRotator
             yield 'Created log archive table ' . $tableName;
         }
 
-        // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT log_id, message, trace, file, line, insert_date FROM fusio_log_error');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
-
-        yield 'Copied ' . count($result) . ' entries to log error archive table';
-
-        // truncate table
-        $this->connection->executeStatement('DELETE FROM fusio_log_error WHERE 1=1');
-
-        yield 'Truncated log error table';
+        yield from $this->copy('fusio_log_error', $tableName, ['id', 'log_id', 'message', 'trace', 'file', 'line', 'insert_date']);
     }
 
     private function archiveCronjobErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
@@ -174,7 +143,7 @@ class LogRotator
 
         // create archive table
         if (!$schema->hasTable($tableName)) {
-            $cronjobErrorTable = $schema->createTable('fusio_cronjob_error');
+            $cronjobErrorTable = $schema->createTable($tableName);
             $cronjobErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $cronjobErrorTable->addColumn('cronjob_id', 'integer');
             $cronjobErrorTable->addColumn('message', 'string', ['length' => 500]);
@@ -190,17 +159,16 @@ class LogRotator
             yield 'Created cronjob error archive table ' . $tableName;
         }
 
-        // copy all data to archive table
-        $result = $this->connection->fetchAllAssociative('SELECT cronjob_id, message, trace, file, line, insert_date FROM fusio_cronjob_error');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
+        yield from $this->copy('fusio_cronjob_error', $tableName, ['id', 'cronjob_id', 'message', 'trace', 'file', 'line', 'insert_date']);
+    }
 
-        yield 'Copied ' . count($result) . ' entries to cronjob error archive table';
+    private function copy(string $sourceTable, string $archiveTable, array $columns): \Generator
+    {
+        $count = $this->connection->executeStatement('INSERT INTO ' . $archiveTable . ' SELECT ' . implode(', ', $columns) . ' FROM ' . $sourceTable);
+        yield 'Copied ' . $count . ' entries to ' . $archiveTable . ' table';
 
         // truncate table
-        $this->connection->executeStatement('DELETE FROM fusio_cronjob_error WHERE 1=1');
-
-        yield 'Truncated cronjob error table';
+        $this->connection->executeStatement('DELETE FROM ' . $sourceTable . ' WHERE 1=1');
+        yield 'Truncated ' . $sourceTable . ' table';
     }
 }
