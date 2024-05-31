@@ -75,7 +75,7 @@ class LogRotator
 
             $schemaManager->createTable($auditTable);
 
-            yield 'Created audit archive table ' . $tableName;
+            yield 'Created archive table ' . $tableName;
         }
 
         yield from $this->copy('fusio_audit', $tableName, ['id', 'tenant_id', 'app_id', 'user_id', 'ref_id', 'event', 'ip', 'message', 'content', 'date']);
@@ -106,7 +106,7 @@ class LogRotator
 
             $schemaManager->createTable($logTable);
 
-            yield 'Created log archive table ' . $tableName;
+            yield 'Created archive table ' . $tableName;
         }
 
         yield from $this->copy('fusio_log', $tableName, ['id', 'tenant_id', 'operation_id', 'app_id', 'user_id', 'ip', 'user_agent', 'method', 'path', 'header', 'body', 'execution_time', 'date']);
@@ -131,7 +131,7 @@ class LogRotator
 
             $schemaManager->createTable($logErrorTable);
 
-            yield 'Created log archive table ' . $tableName;
+            yield 'Created archive table ' . $tableName;
         }
 
         yield from $this->copy('fusio_log_error', $tableName, ['id', 'log_id', 'message', 'trace', 'file', 'line', 'insert_date']);
@@ -156,7 +156,7 @@ class LogRotator
 
             $schemaManager->createTable($cronjobErrorTable);
 
-            yield 'Created cronjob error archive table ' . $tableName;
+            yield 'Created archive table ' . $tableName;
         }
 
         yield from $this->copy('fusio_cronjob_error', $tableName, ['id', 'cronjob_id', 'message', 'trace', 'file', 'line', 'insert_date']);

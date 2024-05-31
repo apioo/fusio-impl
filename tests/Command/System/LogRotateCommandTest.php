@@ -62,13 +62,15 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
         $this->assertAuditTable($display, $schemaManager, $schema);
         $this->assertLogTable($display, $schemaManager, $schema);
+        $this->assertLogErrorTable($display, $schemaManager, $schema);
+        $this->assertCronjobErrorTable($display, $schemaManager, $schema);
     }
 
-    private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
+    private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created audit archive table fusio_audit_/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 1 entries to audit archive table/', $display, $display);
-        $this->assertMatchesRegularExpression('/Truncated audit table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_audit_[0-9]{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_audit_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated fusio_audit table/', $display, $display);
 
         preg_match('/fusio_audit_(\d+)/', $display, $matches);
         $tableName = $matches[0];
@@ -81,11 +83,11 @@ class LogRotateCommandTest extends ControllerDbTestCase
         $schemaManager->dropTable($tableName);
     }
     
-    private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
+    private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created log archive table fusio_log_/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 2 entries to log archive table/', $display, $display);
-        $this->assertMatchesRegularExpression('/Truncated log table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_log_[0-9]{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 2 entries to fusio_log_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated fusio_log table/', $display, $display);
 
         preg_match('/fusio_log_(\d+)/', $display, $matches);
         $tableName = $matches[0];
@@ -96,6 +98,46 @@ class LogRotateCommandTest extends ControllerDbTestCase
         $this->assertEquals(2, $row['cnt']);
 
         $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM fusio_log');
+        $this->assertEquals(0, $row['cnt']);
+
+        $schemaManager->dropTable($tableName);
+    }
+
+    private function assertLogErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
+    {
+        $this->assertMatchesRegularExpression('/Created archive table fusio_log_error_[0-9]{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_log_error_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated fusio_log_error table/', $display, $display);
+
+        preg_match('/fusio_log_error_(\d+)/', $display, $matches);
+        $tableName = $matches[0];
+
+        $this->assertTrue($schema->hasTable($tableName));
+
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+        $this->assertEquals(1, $row['cnt']);
+
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM fusio_log_error');
+        $this->assertEquals(0, $row['cnt']);
+
+        $schemaManager->dropTable($tableName);
+    }
+
+    private function assertCronjobErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
+    {
+        $this->assertMatchesRegularExpression('/Created archive table fusio_cronjob_error_[0-9]{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_cronjob_error_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Truncated fusio_cronjob_error table/', $display, $display);
+
+        preg_match('/fusio_cronjob_error_(\d+)/', $display, $matches);
+        $tableName = $matches[0];
+
+        $this->assertTrue($schema->hasTable($tableName));
+
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+        $this->assertEquals(1, $row['cnt']);
+
+        $row = $this->connection->fetchAssociative('SELECT COUNT(*) AS cnt FROM fusio_cronjob_error');
         $this->assertEquals(0, $row['cnt']);
 
         $schemaManager->dropTable($tableName);
