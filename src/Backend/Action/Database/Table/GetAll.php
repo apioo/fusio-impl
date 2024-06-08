@@ -38,8 +38,12 @@ class GetAll extends TableAbstract
     {
         $connection = $this->getConnection($request);
 
+        $tableNames = $connection->createSchemaManager()->listTableNames();
+
+        sort($tableNames);
+
         return [
-            'tables' => $connection->createSchemaManager()->listTableNames(),
+            'tables' => $tableNames,
         ];
     }
 }
