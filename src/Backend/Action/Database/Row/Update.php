@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
+use Fusio\Model\Backend\DatabaseRow;
 
 /**
  * Update
@@ -39,18 +40,19 @@ class Update extends TableAbstract
         $connection = $this->getConnection($request);
         $table = $this->getTable($request, $connection->createSchemaManager());
 
-        $input = $request->getPayload();
-        $row = $this->getRow($input, $table);
+        $payload = $request->getPayload();
+
+        assert($payload instanceof DatabaseRow);
 
         $id = (int) $request->get('id');
         $primaryKeyColumn = $this->getPrimaryKeyColumn($table);
 
-        $connection->update($table->getName(), $row, [$primaryKeyColumn => $id]);
+        $connection->update($table->getName(), $this->getRow($payload, $table), [$primaryKeyColumn => $id]);
 
         return [
             'success' => true,
             'message' => 'Row successfully updated',
-            'id' => $id,
+            'id' => '' . $id,
         ];
     }
 }

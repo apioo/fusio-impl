@@ -18,8 +18,9 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Event;
+namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
+use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -39,7 +40,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/database/System', 'GET', array(
+        $response = $this->sendRequest('/backend/database/Test', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -47,7 +48,44 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "tables": []
+    "tables": [
+        "app_news",
+        "doctrine_migration_versions",
+        "fusio_action",
+        "fusio_app",
+        "fusio_app_code",
+        "fusio_app_scope",
+        "fusio_audit",
+        "fusio_category",
+        "fusio_config",
+        "fusio_connection",
+        "fusio_cronjob",
+        "fusio_cronjob_error",
+        "fusio_event",
+        "fusio_identity",
+        "fusio_identity_request",
+        "fusio_log",
+        "fusio_log_error",
+        "fusio_operation",
+        "fusio_page",
+        "fusio_plan",
+        "fusio_plan_scope",
+        "fusio_plan_usage",
+        "fusio_rate",
+        "fusio_rate_allocation",
+        "fusio_role",
+        "fusio_role_scope",
+        "fusio_schema",
+        "fusio_scope",
+        "fusio_scope_operation",
+        "fusio_token",
+        "fusio_transaction",
+        "fusio_user",
+        "fusio_user_grant",
+        "fusio_user_scope",
+        "fusio_webhook",
+        "fusio_webhook_response"
+    ]
 }
 JSON;
 
@@ -57,26 +95,29 @@ JSON;
 
     public function testPost()
     {
-        $metadata = [
-            'foo' => 'bar'
-        ];
-
-        $response = $this->sendRequest('/backend/database/System', 'POST', array(
+        $response = $this->sendRequest('/backend/database/Test', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'bar-event',
-            'description' => 'Test description',
-            'schema'      => 'Entry-Schema',
-            'metadata'    => $metadata,
+            'name'    => 'my_table',
+            'columns' => [
+                [
+                    'name' => 'id',
+                    'type' => 'integer',
+                    'autoIncrement' => true,
+                ],
+                [
+                    'name' => 'title',
+                    'type' => 'string',
+                ]
+            ],
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Event successfully created",
-    "id": "57"
+    "message": "Table successfully created"
 }
 JSON;
 
@@ -84,27 +125,23 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'event_schema', 'metadata')
-            ->from('fusio_event')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
+        $schemaManager = $this->connection->createSchemaManager();
+        $table = $schemaManager->introspectTable('my_table');
 
-        $row = $this->connection->fetchAssociative($sql);
+        $this->assertEquals('my_table', $table->getName());
 
-        $this->assertEquals(57, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('bar-event', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-        $this->assertEquals('schema://Entry-Schema', $row['event_schema']);
-        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
+        $columns = $table->getColumns();
+
+        $this->assertEquals(2, count($columns));
+        $this->assertEquals('id', $columns['id']->getName());
+        $this->assertEquals('integer', Type::lookupName($columns['id']->getType()));
+        $this->assertEquals('title', $columns['title']->getName());
+        $this->assertEquals('string', Type::lookupName($columns['title']->getType()));
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/database/System', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -118,7 +155,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/database/System', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

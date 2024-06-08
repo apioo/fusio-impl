@@ -20,10 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Table;
 
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
+use Fusio\Model\Backend\DatabaseTable;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -37,11 +42,17 @@ class Create extends TableAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $connection = $this->getConnection($request);
+        $schemaManager = $connection->createSchemaManager();
 
+        $body = $request->getPayload();
 
-        return [
+        assert($body instanceof DatabaseTable);
+
+        $schemaManager->createTable($this->createTable($body));
+
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Table successfully created',
-        ];
+        ]);
     }
 }

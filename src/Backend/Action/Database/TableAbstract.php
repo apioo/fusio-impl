@@ -22,15 +22,21 @@ namespace Fusio\Impl\Backend\Action\Database;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\RequestInterface;
+use Fusio\Model\Backend\DatabaseRow;
+use Fusio\Model\Backend\DatabaseTable;
+use PSX\DateTime\LocalDate;
+use PSX\DateTime\LocalDateTime;
+use PSX\DateTime\LocalTime;
 use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
-use PSX\Record\RecordInterface;
 
 /**
  * TableAbstract
@@ -101,15 +107,59 @@ abstract class TableAbstract implements ActionInterface
         return $primaryKey;
     }
 
-    protected function getRow(RecordInterface $input, Table $table): array
+    protected function getRow(DatabaseRow $payload, Table $table): array
     {
         $result = [];
         foreach ($table->getColumns() as $column) {
-            if ($input->containsKey($column->getName())) {
-                $result[$column->getName()] = $input->get($column->getName());
+            if ($payload->containsKey($column->getName())) {
+                $value = $payload->get($column->getName());
+                if ($value instanceof LocalDate) {
+                    $value = $value->toDateTime()->format('Y-m-d');
+                } elseif ($value instanceof LocalDateTime) {
+                    $value = $value->toDateTime()->format('Y-m-d H:i:s');
+                } elseif ($value instanceof LocalTime) {
+                    $value = $value->toDateTime()->format('H:i:s');
+                }
+
+                $result[$column->getName()] = $value;
             }
         }
 
         return $result;
+    }
+
+    protected function createTable(DatabaseTable $table): Table
+    {
+        $columns = [];
+        foreach ($table->getColumns() as $column) {
+            $options = [];
+            if ($column->getNotNull() !== null) {
+                $options['notnull'] = $column->getNotNull();
+            }
+
+            if ($column->getDefault() !== null) {
+                $options['default'] = $column->getDefault();
+            }
+
+            if ($column->getLength() !== null) {
+                $options['length'] = $column->getLength();
+            }
+
+            if ($column->getFixed() !== null) {
+                $options['fixed'] = $column->getFixed();
+            }
+
+            if ($column->getPrecision() !== null) {
+                $options['precision'] = $column->getPrecision();
+            }
+
+            if ($column->getScale() !== null) {
+                $options['scale'] = $column->getScale();
+            }
+
+            $columns[] = new Column($column->getName(), Type::getType($column->getType()), $options);
+        }
+
+        return new Table($table->getName(), $columns);
     }
 }

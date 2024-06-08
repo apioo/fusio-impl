@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
+use PSX\Http\Exception\NotFoundException;
 
 /**
  * Get
@@ -49,8 +50,11 @@ class Get extends TableAbstract
             ->from($table->getName(), 'my_table')
             ->where('my_table.' . $primaryKeyColumn . ' = :id');
 
-        return [
-            'row' => $connection->fetchAssociative($queryBuilder->getSQL(), ['id' => $id]),
-        ];
+        $row = $connection->fetchAssociative($queryBuilder->getSQL(), ['id' => $id]);
+        if (empty($row)) {
+            throw new NotFoundException('Row not found');
+        }
+
+        return $row;
     }
 }

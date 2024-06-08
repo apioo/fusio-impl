@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Event;
+namespace Fusio\Impl\Tests\Backend\Api\Database\Row;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -39,7 +39,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/event', 'GET', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -47,18 +47,21 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 56,
-            "status": 1,
-            "name": "foo-event",
-            "description": "Foo event description",
-            "metadata": {
-                "foo": "bar"
-            }
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27 19:59:15"
+        },
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27 19:59:15"
         }
     ]
 }
@@ -70,26 +73,21 @@ JSON;
 
     public function testPost()
     {
-        $metadata = [
-            'foo' => 'bar'
-        ];
-
-        $response = $this->sendRequest('/backend/event', 'POST', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'bar-event',
-            'description' => 'Test description',
-            'schema'      => 'Entry-Schema',
-            'metadata'    => $metadata,
+            'title'   => 'foo',
+            'content' => 'foo',
+            'date'    => '2024-06-08 21:07:15',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Event successfully created",
-    "id": "57"
+    "message": "Row successfully created",
+    "id": "3"
 }
 JSON;
 
@@ -98,8 +96,8 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'event_schema', 'metadata')
-            ->from('fusio_event')
+            ->select('id', 'title', 'content', 'date')
+            ->from('app_news')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -107,17 +105,15 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(57, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('bar-event', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-        $this->assertEquals('schema://Entry-Schema', $row['event_schema']);
-        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
+        $this->assertEquals(3, $row['id']);
+        $this->assertEquals('foo', $row['title']);
+        $this->assertEquals('foo', $row['content']);
+        $this->assertEquals('2024-06-08 21:07:15', $row['date']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/event', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -131,7 +127,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/event', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

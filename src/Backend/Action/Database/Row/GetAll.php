@@ -59,7 +59,10 @@ class GetAll extends TableAbstract
             ->setMaxResults($count);
 
         return [
-            'rows' => $connection->fetchAllAssociative($queryBuilder->getSQL()),
+            'totalResults' => (int) $connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $table->getName()),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => $count,
+            'entry' => $connection->fetchAllAssociative($queryBuilder->getSQL()),
         ];
     }
 }

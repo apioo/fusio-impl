@@ -24,6 +24,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
+use Fusio\Model\Backend\DatabaseRow;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -39,17 +41,18 @@ class Create extends TableAbstract
         $connection = $this->getConnection($request);
         $table = $this->getTable($request, $connection->createSchemaManager());
 
-        $input = $request->getPayload();
-        $row = $this->getRow($input, $table);
+        $payload = $request->getPayload();
 
-        $connection->insert($table->getName(), $row);
+        assert($payload instanceof DatabaseRow);
+
+        $connection->insert($table->getName(), $this->getRow($payload, $table));
 
         $id = (int) $connection->lastInsertId();
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Row successfully created',
-            'id' => $id,
-        ];
+            'id' => '' . $id,
+        ]);
     }
 }

@@ -47,7 +47,7 @@ class Delete extends TableAbstract
         return [
             'success' => true,
             'message' => 'Row successfully deleted',
-            'id' => $id,
+            'id' => '' . $id,
         ];
     }
 }

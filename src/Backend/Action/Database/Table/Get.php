@@ -20,13 +20,13 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Table;
 
-use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
-use PSX\Http\Exception\NotFoundException;
 
 /**
  * Get
@@ -54,7 +54,7 @@ class Get extends TableAbstract
         foreach ($table->getColumns() as $column) {
             $result[] = [
                 'name' => $column->getName(),
-                'type' => $column->getType(),
+                'type' => Type::getTypeRegistry()->lookupName($column->getType()),
                 'length' => $column->getLength(),
                 'precision' => $column->getPrecision(),
                 'scale' => $column->getScale(),
