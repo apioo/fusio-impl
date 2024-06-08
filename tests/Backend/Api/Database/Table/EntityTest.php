@@ -46,8 +46,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform && PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 2) {
-            $length = 'null';
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform && PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 3) {
+            $length = '0';
         } else {
             $length = 'null';
         }
