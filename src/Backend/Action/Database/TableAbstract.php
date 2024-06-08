@@ -130,8 +130,14 @@ abstract class TableAbstract implements ActionInterface
 
     protected function createTable(DatabaseTable $table): Table
     {
-        $columns = [];
-        foreach ($table->getColumns() as $column) {
+        $tableName = $table->getName() ?? throw new BadRequestException('Table name not set');
+        $columns = $table->getColumns() ?? throw new BadRequestException('Provided no columns');
+
+        $result = [];
+        foreach ($columns as $column) {
+            $columnName = $column->getName() ?? throw new BadRequestException('Column name not set');
+            $columnType = $column->getType() ?? throw new BadRequestException('Column type not set');
+
             $options = [];
             if ($column->getNotNull() !== null) {
                 $options['notnull'] = $column->getNotNull();
@@ -157,9 +163,9 @@ abstract class TableAbstract implements ActionInterface
                 $options['scale'] = $column->getScale();
             }
 
-            $columns[] = new Column($column->getName(), Type::getType($column->getType()), $options);
+            $result[] = new Column($columnName, Type::getType($columnType), $options);
         }
 
-        return new Table($table->getName(), $columns);
+        return new Table($tableName, $result);
     }
 }

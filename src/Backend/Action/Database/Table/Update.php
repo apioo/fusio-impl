@@ -20,17 +20,11 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Table;
 
-use Doctrine\DBAL\Schema\Comparator;
-use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
-use Fusio\Impl\Service\Event;
-use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\DatabaseTable;
-use Fusio\Model\Backend\EventUpdate;
-use PSX\Http\Exception\NotFoundException;
 
 /**
  * Update
@@ -51,9 +45,7 @@ class Update extends TableAbstract
 
         assert($body instanceof DatabaseTable);
 
-        $comparator = new Comparator($connection->getDatabasePlatform());
-
-        $schemaManager->alterTable($comparator->compareTables($table, $this->createTable($body)));
+        $schemaManager->alterTable($schemaManager->createComparator()->compareTables($table, $this->createTable($body)));
 
         return [
             'success' => true,

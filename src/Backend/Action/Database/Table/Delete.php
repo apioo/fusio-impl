@@ -20,14 +20,10 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Table;
 
-use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Action\Database\TableAbstract;
-use Fusio\Impl\Service\Event;
-use Fusio\Impl\Service\System\ContextFactory;
-use PSX\Http\Exception\NotFoundException;
 
 /**
  * Delete
