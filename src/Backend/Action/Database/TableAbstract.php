@@ -143,6 +143,10 @@ abstract class TableAbstract implements ActionInterface
                 $options['notnull'] = $column->getNotNull();
             }
 
+            if ($column->getAutoIncrement() !== null) {
+                $options['autoincrement'] = $column->getAutoIncrement();
+            }
+
             if ($column->getDefault() !== null) {
                 $options['default'] = $column->getDefault();
             }
