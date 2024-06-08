@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -44,6 +45,12 @@ class EntityTest extends ControllerDbTestCase
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
+
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $length = 0;
+        } else {
+            $length = 'null';
+        }
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -89,7 +96,7 @@ class EntityTest extends ControllerDbTestCase
         {
             "name": "date",
             "type": "datetime",
-            "length": null,
+            "length": {$length},
             "precision": 10,
             "scale": 0,
             "unsigned": false,
