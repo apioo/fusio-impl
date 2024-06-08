@@ -141,7 +141,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'    => 'my_table',
+            'name'    => 'my_table_put',
             'columns' => [
                 [
                     'name' => 'id',
@@ -155,7 +155,7 @@ JSON;
             ],
         ]));
 
-        $response = $this->sendRequest('/backend/database/Test/my_table', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test/my_table_put', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -190,9 +190,9 @@ JSON;
 
         // check database
         $schemaManager = $this->connection->createSchemaManager();
-        $table = $schemaManager->introspectTable('my_table');
+        $table = $schemaManager->introspectTable('my_table_put');
 
-        $this->assertEquals('my_table', $table->getName());
+        $this->assertEquals('my_table_put', $table->getName());
 
         $columns = $table->getColumns();
 
@@ -211,7 +211,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'    => 'my_table',
+            'name'    => 'my_table_delete',
             'columns' => [
                 [
                     'name' => 'id',
@@ -225,7 +225,7 @@ JSON;
             ],
         ]));
 
-        $response = $this->sendRequest('/backend/database/Test/my_table', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test/my_table_delete', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -244,6 +244,6 @@ JSON;
         // check database
         $schemaManager = $this->connection->createSchemaManager();
 
-        $this->assertFalse($schemaManager->tablesExist('my_table'));
+        $this->assertFalse($schemaManager->tablesExist('my_table_delete'));
     }
 }
