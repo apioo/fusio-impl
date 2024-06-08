@@ -57,50 +57,50 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 50,
+    "id": 51,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
-            "id": 193,
-            "scopeId": 50,
-            "operationId": 200,
+            "id": 204,
+            "scopeId": 51,
+            "operationId": 211,
             "allow": true
         },
         {
-            "id": 192,
-            "scopeId": 50,
-            "operationId": 199,
+            "id": 203,
+            "scopeId": 51,
+            "operationId": 210,
             "allow": true
         },
         {
-            "id": 191,
-            "scopeId": 50,
-            "operationId": 198,
+            "id": 202,
+            "scopeId": 51,
+            "operationId": 209,
             "allow": true
         },
         {
-            "id": 190,
-            "scopeId": 50,
-            "operationId": 197,
+            "id": 201,
+            "scopeId": 51,
+            "operationId": 208,
             "allow": true
         },
         {
-            "id": 188,
-            "scopeId": 50,
-            "operationId": 196,
+            "id": 199,
+            "scopeId": 51,
+            "operationId": 207,
             "allow": true
         },
         {
-            "id": 186,
-            "scopeId": 50,
-            "operationId": 195,
+            "id": 197,
+            "scopeId": 51,
+            "operationId": 206,
             "allow": true
         },
         {
-            "id": 185,
-            "scopeId": 50,
-            "operationId": 194,
+            "id": 196,
+            "scopeId": 51,
+            "operationId": 205,
             "allow": true
         }
     ]
@@ -121,50 +121,50 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 50,
+    "id": 51,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
-            "id": 193,
-            "scopeId": 50,
-            "operationId": 200,
+            "id": 204,
+            "scopeId": 51,
+            "operationId": 211,
             "allow": true
         },
         {
-            "id": 192,
-            "scopeId": 50,
-            "operationId": 199,
+            "id": 203,
+            "scopeId": 51,
+            "operationId": 210,
             "allow": true
         },
         {
-            "id": 191,
-            "scopeId": 50,
-            "operationId": 198,
+            "id": 202,
+            "scopeId": 51,
+            "operationId": 209,
             "allow": true
         },
         {
-            "id": 190,
-            "scopeId": 50,
-            "operationId": 197,
+            "id": 201,
+            "scopeId": 51,
+            "operationId": 208,
             "allow": true
         },
         {
-            "id": 188,
-            "scopeId": 50,
-            "operationId": 196,
+            "id": 199,
+            "scopeId": 51,
+            "operationId": 207,
             "allow": true
         },
         {
-            "id": 186,
-            "scopeId": 50,
-            "operationId": 195,
+            "id": 197,
+            "scopeId": 51,
+            "operationId": 206,
             "allow": true
         },
         {
-            "id": 185,
-            "scopeId": 50,
-            "operationId": 194,
+            "id": 196,
+            "scopeId": 51,
+            "operationId": 205,
             "allow": true
         }
     ]
@@ -223,7 +223,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully updated",
-    "id": "50"
+    "id": "51"
 }
 JSON;
 
@@ -260,7 +260,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully deleted",
-    "id": "50"
+    "id": "51"
 }
 JSON;
 

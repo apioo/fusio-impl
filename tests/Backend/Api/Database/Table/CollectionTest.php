@@ -84,7 +84,8 @@ class CollectionTest extends ControllerDbTestCase
         "fusio_user_grant",
         "fusio_user_scope",
         "fusio_webhook",
-        "fusio_webhook_response"
+        "fusio_webhook_response",
+        "messenger_messages"
     ]
 }
 JSON;

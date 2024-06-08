@@ -307,7 +307,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 195,
+          "operationId": 206,
           "authenticated": true
         }
       ]
@@ -324,7 +324,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 194
+          "operationId": 205
         }
       ]
     },
@@ -371,6 +371,7 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
+        "backend.database",
         "backend.event",
         "backend.generator",
         "backend.identity",
@@ -425,6 +426,7 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
+        "backend.database",
         "backend.event",
         "backend.generator",
         "backend.identity",
