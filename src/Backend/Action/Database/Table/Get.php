@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Table;
 
+use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Engine\ContextInterface;
@@ -41,10 +42,29 @@ class Get extends TableAbstract
         $connection = $this->getConnection($request);
         $table = $this->getTable($request, $connection->createSchemaManager());
 
-        return [
+        return $this->serializeTable($table);
+    }
+
+    private function serializeTable(Table $table): array
+    {
+        $return = [
             'name' => $table->getName(),
             'columns' => $this->serializeColumns($table),
         ];
+
+        $primaryKey = $table->getPrimaryKey();
+        if ($primaryKey instanceof Index) {
+            // we support only single primary keys
+            $firstPrimaryKeyColumn = $primaryKey->getColumns()[0] ?? null;
+            if (!empty($firstPrimaryKeyColumn)) {
+                $return['primaryKey'] = $firstPrimaryKeyColumn;
+            }
+        }
+
+        $return['indexes'] = $this->serializeIndexes($table);
+        $return['foreignKeys'] = $this->serializeForeignKeys($table);
+
+        return $return;
     }
 
     private function serializeColumns(Table $table): array
@@ -62,6 +82,41 @@ class Get extends TableAbstract
                 'notNull' => $column->getNotnull(),
                 'default' => $column->getDefault(),
                 'comment' => $column->getComment(),
+            ];
+        }
+
+        return $result;
+    }
+
+    private function serializeIndexes(Table $table): array
+    {
+        $result = [];
+
+        foreach ($table->getIndexes() as $index) {
+            if ($index->isPrimary()) {
+                continue;
+            }
+
+            $result[] = [
+                'name' => $index->getName(),
+                'unique' => $index->isUnique(),
+                'columns' => $index->getColumns(),
+            ];
+        }
+
+        return $result;
+    }
+
+    private function serializeForeignKeys(Table $table): array
+    {
+        $result = [];
+
+        foreach ($table->getForeignKeys() as $foreignKey) {
+            $result[] = [
+                'name' => $foreignKey->getName(),
+                'foreignTable' => $foreignKey->getForeignTableName(),
+                'localColumnNames' => $foreignKey->getLocalColumns(),
+                'foreignColumnNames' => $foreignKey->getForeignColumns(),
             ];
         }
 

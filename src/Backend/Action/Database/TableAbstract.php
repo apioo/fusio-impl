@@ -22,10 +22,8 @@ namespace Fusio\Impl\Backend\Action\Database;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Type;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\RequestInterface;
@@ -133,7 +131,7 @@ abstract class TableAbstract implements ActionInterface
         $tableName = $table->getName() ?? throw new BadRequestException('Table name not set');
         $columns = $table->getColumns() ?? throw new BadRequestException('Provided no columns');
 
-        $result = [];
+        $result = new Table($tableName);
         foreach ($columns as $column) {
             $columnName = $column->getName() ?? throw new BadRequestException('Column name not set');
             $columnType = $column->getType() ?? throw new BadRequestException('Column type not set');
@@ -167,9 +165,38 @@ abstract class TableAbstract implements ActionInterface
                 $options['scale'] = $column->getScale();
             }
 
-            $result[] = new Column($columnName, Type::getType($columnType), $options);
+            $result->addColumn($columnName, $columnType, $options);
         }
 
-        return new Table($tableName, $result);
+        $primaryKey = $table->getPrimaryKey();
+        if (!empty($primaryKey)) {
+            $result->setPrimaryKey([$primaryKey]);
+        }
+
+        $indexes = $table->getIndexes() ?? [];
+        foreach ($indexes as $index) {
+            $indexName = $index->getName();
+            if (empty($indexName)) {
+                $indexName = null;
+            }
+
+            if ($index->getUnique()) {
+                $result->addUniqueIndex($index->getColumns(), $indexName);
+            } else {
+                $result->addIndex($index->getColumns(), $indexName);
+            }
+        }
+
+        $foreignKeys = $table->getForeignKeys() ?? [];
+        foreach ($foreignKeys as $foreignKey) {
+            $constraintName = $foreignKey->getName();
+            if (empty($constraintName)) {
+                $constraintName = null;
+            }
+
+            $result->addForeignKeyConstraint($foreignKey->getForeignTable(), $foreignKey->getLocalColumnNames(), $foreignKey->getForeignColumnNames(), [], $constraintName);
+        }
+
+        return $result;
     }
 }

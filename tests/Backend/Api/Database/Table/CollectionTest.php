@@ -117,6 +117,7 @@ JSON;
                     'type' => 'string',
                 ]
             ],
+            'primaryKey' => 'id',
         ]));
 
         $body   = (string) $response->getBody();

@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
@@ -48,7 +47,7 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        if ($this->connection->getDatabasePlatform() instanceof MySQLPlatform && PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 3) {
+        if ($this->connection->getDatabasePlatform() instanceof MySQLPlatform) {
             $length = '0';
         } else {
             $length = 'null';
@@ -98,7 +97,7 @@ class EntityTest extends ControllerDbTestCase
         {
             "name": "date",
             "type": "datetime",
-            "length": {$length},
+            "length": null,
             "precision": 10,
             "scale": 0,
             "unsigned": false,
@@ -107,7 +106,10 @@ class EntityTest extends ControllerDbTestCase
             "default": null,
             "comment": null
         }
-    ]
+    ],
+    "primaryKey": "id",
+    "indexes": [],
+    "foreignKeys": []
 }
 JSON;
 
@@ -151,10 +153,11 @@ JSON;
             $schemaManager->dropTable('my_table');
         }
 
-        $schemaManager->createTable(new Table('my_table', [
-            new Column('id', Type::getType('integer'), ['autoincrement' => true]),
-            new Column('title', Type::getType('string'), []),
-        ]));
+        $table = new Table('my_table');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('title', 'string');
+        $table->setPrimaryKey(['id']);
+        $schemaManager->createTable($table);
 
         $response = $this->sendRequest('/backend/database/Test/my_table', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -176,6 +179,7 @@ JSON;
                     'type' => 'string',
                 ]
             ],
+            'primaryKey' => 'id',
         ]));
 
         $body   = (string) $response->getBody();
@@ -212,10 +216,11 @@ JSON;
             $schemaManager->dropTable('my_table');
         }
 
-        $schemaManager->createTable(new Table('my_table', [
-            new Column('id', Type::getType('integer'), ['autoincrement' => true]),
-            new Column('title', Type::getType('string'), []),
-        ]));
+        $table = new Table('my_table');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('title', 'string');
+        $table->setPrimaryKey(['id']);
+        $schemaManager->createTable($table);
 
         $response = $this->sendRequest('/backend/database/Test/my_table', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
