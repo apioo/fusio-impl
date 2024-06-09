@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
