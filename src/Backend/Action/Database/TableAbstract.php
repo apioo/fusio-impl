@@ -180,10 +180,12 @@ abstract class TableAbstract implements ActionInterface
                 $indexName = null;
             }
 
+            $columns = $index->getColumns() ?? throw new BadRequestException('Provided no columns');
+
             if ($index->getUnique()) {
-                $result->addUniqueIndex($index->getColumns(), $indexName);
+                $result->addUniqueIndex($columns, $indexName);
             } else {
-                $result->addIndex($index->getColumns(), $indexName);
+                $result->addIndex($columns, $indexName);
             }
         }
 
@@ -194,7 +196,11 @@ abstract class TableAbstract implements ActionInterface
                 $constraintName = null;
             }
 
-            $result->addForeignKeyConstraint($foreignKey->getForeignTable(), $foreignKey->getLocalColumnNames(), $foreignKey->getForeignColumnNames(), [], $constraintName);
+            $foreignTable = $foreignKey->getForeignTable() ?? throw new BadRequestException('Provided no foreign table');
+            $localColumnNames = $foreignKey->getLocalColumnNames() ?? throw new BadRequestException('Provided no local column names');
+            $foreignColumnNames = $foreignKey->getForeignColumnNames() ?? throw new BadRequestException('Provided no foreign column names');
+
+            $result->addForeignKeyConstraint($foreignTable, $localColumnNames, $foreignColumnNames, [], $constraintName);
         }
 
         return $result;
