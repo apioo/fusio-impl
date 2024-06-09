@@ -21,6 +21,8 @@
 namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -144,25 +146,17 @@ JSON;
 
     public function testPut()
     {
-        $this->sendRequest('/backend/database/Test', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'name'    => 'my_table_put',
-            'columns' => [
-                [
-                    'name' => 'id',
-                    'type' => 'integer',
-                    'autoIncrement' => true,
-                ],
-                [
-                    'name' => 'title',
-                    'type' => 'string',
-                ]
-            ],
+        $schemaManager = $this->connection->createSchemaManager();
+        if ($schemaManager->tablesExist('my_table')) {
+            $schemaManager->dropTable('my_table');
+        }
+
+        $schemaManager->createTable(new Table('my_table', [
+            new Column('id', Type::getType('integer'), ['autoincrement' => true]),
+            new Column('title', Type::getType('string'), []),
         ]));
 
-        $response = $this->sendRequest('/backend/database/Test/my_table_put', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test/my_table', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -196,10 +190,9 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $schemaManager = $this->connection->createSchemaManager();
-        $table = $schemaManager->introspectTable('my_table_put');
+        $table = $schemaManager->introspectTable('my_table');
 
-        $this->assertEquals('my_table_put', $table->getName());
+        $this->assertEquals('my_table', $table->getName());
 
         $columns = $table->getColumns();
 
@@ -214,25 +207,17 @@ JSON;
 
     public function testDelete()
     {
-        $this->sendRequest('/backend/database/Test', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'name'    => 'my_table_delete',
-            'columns' => [
-                [
-                    'name' => 'id',
-                    'type' => 'integer',
-                    'autoIncrement' => true,
-                ],
-                [
-                    'name' => 'title',
-                    'type' => 'string',
-                ]
-            ],
+        $schemaManager = $this->connection->createSchemaManager();
+        if ($schemaManager->tablesExist('my_table')) {
+            $schemaManager->dropTable('my_table');
+        }
+
+        $schemaManager->createTable(new Table('my_table', [
+            new Column('id', Type::getType('integer'), ['autoincrement' => true]),
+            new Column('title', Type::getType('string'), []),
         ]));
 
-        $response = $this->sendRequest('/backend/database/Test/my_table_delete', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test/my_table', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -249,8 +234,6 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $schemaManager = $this->connection->createSchemaManager();
-
         $this->assertFalse($schemaManager->tablesExist('my_table_delete'));
     }
 }

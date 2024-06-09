@@ -96,6 +96,11 @@ JSON;
 
     public function testPost()
     {
+        $schemaManager = $this->connection->createSchemaManager();
+        if ($schemaManager->tablesExist('my_table')) {
+            $schemaManager->dropTable('my_table');
+        }
+
         $response = $this->sendRequest('/backend/database/Test', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -126,7 +131,6 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $schemaManager = $this->connection->createSchemaManager();
         $table = $schemaManager->introspectTable('my_table');
 
         $this->assertEquals('my_table', $table->getName());
