@@ -47,7 +47,7 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform && PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 3) {
-            $length = '0';
+            $length = 'null';
         } else {
             $length = 'null';
         }
