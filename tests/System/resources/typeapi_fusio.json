@@ -11714,6 +11714,21 @@
           "items": {
             "$ref": "Backend_DatabaseTableColumn"
           }
+        },
+        "primaryKey": {
+          "type": "string"
+        },
+        "indexes": {
+          "type": "array",
+          "items": {
+            "$ref": "Backend_DatabaseTableIndex"
+          }
+        },
+        "foreignKeys": {
+          "type": "array",
+          "items": {
+            "$ref": "Backend_DatabaseTableForeignKeyConstraint"
+          }
         }
       }
     },
@@ -11752,6 +11767,46 @@
         },
         "comment": {
           "type": "string"
+        }
+      }
+    },
+    "Backend_DatabaseTableForeignKeyConstraint": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "foreignTable": {
+          "type": "string"
+        },
+        "localColumnNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "foreignColumnNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Backend_DatabaseTableIndex": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unique": {
+          "type": "boolean"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
