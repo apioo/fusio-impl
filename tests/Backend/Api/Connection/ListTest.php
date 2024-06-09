@@ -77,6 +77,26 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.Redis.Connection.Redis"
         },
         {
+            "name": "SDK-Airtable",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Airtable"
+        },
+        {
+            "name": "SDK-Discord",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Discord"
+        },
+        {
+            "name": "SDK-Notion",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Notion"
+        },
+        {
+            "name": "SDK-Starwars",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
+        },
+        {
+            "name": "SDK-Twitter",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Twitter"
+        },
+        {
             "name": "SMTP",
             "class": "Fusio.Adapter.Smtp.Connection.Smtp"
         },

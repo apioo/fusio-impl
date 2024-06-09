@@ -209,6 +209,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.Worker.Action.WorkerPHP"
         },
         {
+            "name": "Worker-PHP-Local",
+            "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal"
+        },
+        {
             "name": "Worker-Python",
             "class": "Fusio.Adapter.Worker.Action.WorkerPython"
         }

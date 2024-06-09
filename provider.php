@@ -10,6 +10,7 @@ return [
     \Fusio\Adapter\Http\Adapter::class,
     \Fusio\Adapter\Php\Adapter::class,
     \Fusio\Adapter\Redis\Adapter::class,
+    \Fusio\Adapter\SdkFabric\Adapter::class,
     \Fusio\Adapter\Smtp\Adapter::class,
     \Fusio\Adapter\Soap\Adapter::class,
     \Fusio\Adapter\Sql\Adapter::class,
@@ -18,4 +19,3 @@ return [
     \Fusio\Adapter\Worker\Adapter::class,
     \Fusio\Impl\Tests\Adapter\TestAdapter::class,
 ];
-
