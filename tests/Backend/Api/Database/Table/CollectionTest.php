@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Plan;
+namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
 
-use Fusio\Engine\Model\ProductInterface;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -40,7 +40,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/plan', 'GET', array(
+        $response = $this->sendRequest('/backend/database/Test', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -48,31 +48,44 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 1,
-            "status": 1,
-            "name": "Plan A",
-            "description": "",
-            "price": 39.99,
-            "points": 500,
-            "period": 1,
-            "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
-            "metadata": {
-                "foo": "bar"
-            }
-        },
-        {
-            "id": 2,
-            "status": 1,
-            "name": "Plan B",
-            "description": "",
-            "price": 49.99,
-            "points": 1000
-        }
+    "tables": [
+        "app_news",
+        "doctrine_migration_versions",
+        "fusio_action",
+        "fusio_app",
+        "fusio_app_code",
+        "fusio_app_scope",
+        "fusio_audit",
+        "fusio_category",
+        "fusio_config",
+        "fusio_connection",
+        "fusio_cronjob",
+        "fusio_cronjob_error",
+        "fusio_event",
+        "fusio_identity",
+        "fusio_identity_request",
+        "fusio_log",
+        "fusio_log_error",
+        "fusio_operation",
+        "fusio_page",
+        "fusio_plan",
+        "fusio_plan_scope",
+        "fusio_plan_usage",
+        "fusio_rate",
+        "fusio_rate_allocation",
+        "fusio_role",
+        "fusio_role_scope",
+        "fusio_schema",
+        "fusio_scope",
+        "fusio_scope_operation",
+        "fusio_token",
+        "fusio_transaction",
+        "fusio_user",
+        "fusio_user_grant",
+        "fusio_user_scope",
+        "fusio_webhook",
+        "fusio_webhook_response",
+        "messenger_messages"
     ]
 }
 JSON;
@@ -83,30 +96,35 @@ JSON;
 
     public function testPost()
     {
-        $metadata = [
-            'foo' => 'bar'
-        ];
+        $schemaManager = $this->connection->createSchemaManager();
+        if ($schemaManager->tablesExist('my_table')) {
+            $schemaManager->dropTable('my_table');
+        }
 
-        $response = $this->sendRequest('/backend/plan', 'POST', array(
+        $response = $this->sendRequest('/backend/database/Test', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'Plan D',
-            'description' => 'Test description',
-            'price'       => 59.99,
-            'points'      => 1000,
-            'period'      => ProductInterface::INTERVAL_SUBSCRIPTION,
-            'externalId'  => 'price_1L3dOA2Tb35ankTn36cCgliu',
-            'scopes'      => ['foo'],
-            'metadata'    => $metadata,
+            'name'    => 'my_table',
+            'columns' => [
+                [
+                    'name' => 'id',
+                    'type' => 'integer',
+                    'autoIncrement' => true,
+                ],
+                [
+                    'name' => 'title',
+                    'type' => 'string',
+                ]
+            ],
+            'primaryKey' => 'id',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Plan successfully created",
-    "id": "3"
+    "message": "Table successfully created"
 }
 JSON;
 
@@ -114,42 +132,22 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type', 'external_id', 'metadata')
-            ->from('fusio_plan')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
+        $table = $schemaManager->introspectTable('my_table');
 
-        $row = $this->connection->fetchAssociative($sql);
+        $this->assertEquals('my_table', $table->getName());
 
-        $this->assertEquals(3, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('Plan D', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-        $this->assertEquals(5999, $row['price']);
-        $this->assertEquals(1000, $row['points']);
-        $this->assertEquals(ProductInterface::INTERVAL_SUBSCRIPTION, $row['period_type']);
-        $this->assertEquals('price_1L3dOA2Tb35ankTn36cCgliu', $row['external_id']);
-        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
+        $columns = $table->getColumns();
 
-        // check scopes
-        $sql = $this->connection->createQueryBuilder()
-            ->select('plan_id', 'scope_id')
-            ->from('fusio_plan_scope')
-            ->where('plan_id = :plan_id')
-            ->getSQL();
-
-        $result = $this->connection->fetchAllAssociative($sql, ['plan_id' => $row['id']]);
-
-        $this->assertEquals(1, count($result));
-        $this->assertEquals(50, $result[0]['scope_id']);
+        $this->assertEquals(2, count($columns));
+        $this->assertEquals('id', $columns['id']->getName());
+        $this->assertEquals('integer', Type::lookupName($columns['id']->getType()));
+        $this->assertEquals('title', $columns['title']->getName());
+        $this->assertEquals('string', Type::lookupName($columns['title']->getType()));
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/plan', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -163,7 +161,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/plan', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

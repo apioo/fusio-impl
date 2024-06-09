@@ -69,7 +69,7 @@ class ExportTest extends ControllerDbTestCase
         $expect = file_get_contents(__DIR__ . '/resource/export.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $body);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testPut()

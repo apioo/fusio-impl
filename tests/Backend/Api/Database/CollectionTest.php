@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Scope;
+namespace Fusio\Impl\Tests\Backend\Api\Database;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -39,32 +39,16 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/scope', 'GET', array(
+        $response = $this->sendRequest('/backend/database', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body = (string) $response->getBody();
-
+        $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 50,
-            "name": "foo",
-            "description": "Foo access",
-            "metadata": {
-                "foo": "bar"
-            }
-        },
-        {
-            "id": 51,
-            "name": "bar",
-            "description": "Bar access"
-        }
+    "connections": [
+        "System"
     ]
 }
 JSON;
@@ -75,9 +59,9 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/scope', 'POST', array(
+        $response = $this->sendRequest('/backend/database', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -89,9 +73,9 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/scope', 'PUT', array(
+        $response = $this->sendRequest('/backend/database', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -103,9 +87,9 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/scope', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'foo' => 'bar',
         ]));

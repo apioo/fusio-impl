@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Scope;
+namespace Fusio\Impl\Tests\Backend\Api\Database\Row;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -39,13 +39,12 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/scope', 'GET', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body = (string) $response->getBody();
-
+        $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "totalResults": 2,
@@ -53,17 +52,16 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 50,
-            "name": "foo",
-            "description": "Foo access",
-            "metadata": {
-                "foo": "bar"
-            }
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27 19:59:15"
         },
         {
-            "id": 51,
-            "name": "bar",
-            "description": "Bar access"
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27 19:59:15"
         }
     ]
 }
@@ -75,23 +73,49 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/scope', 'POST', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'foo' => 'bar',
+            'title'   => 'foo',
+            'content' => 'foo',
+            'date'    => '2024-06-08 21:07:15',
         ]));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Row successfully created",
+    "id": "3"
+}
+JSON;
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'title', 'content', 'date')
+            ->from('app_news')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = $this->connection->fetchAssociative($sql);
+
+        $this->assertEquals(3, $row['id']);
+        $this->assertEquals('foo', $row['title']);
+        $this->assertEquals('foo', $row['content']);
+        $this->assertEquals('2024-06-08 21:07:15', $row['date']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/scope', 'PUT', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -103,9 +127,9 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/scope', 'DELETE', array(
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'foo' => 'bar',
         ]));
