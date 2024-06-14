@@ -63,6 +63,11 @@ class System implements ConnectionInterface, PingableInterface, IntrospectableIn
             if ($assetName instanceof AbstractAsset) {
                 $assetName = $assetName->getName();
             }
+
+            if (in_array($assetName, ['doctrine_migration_versions', 'messenger_messages'])) {
+                return false;
+            }
+
             return preg_match('~^(?!fusio_)~', $assetName);
         });
 
