@@ -71,6 +71,92 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetLimit()
+    {
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows?startsIndex=2&count=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "itemsPerPage": 1,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27 19:59:15"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetFilter()
+    {
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows?filterBy=title&filterOp=contains&filterValue=bar', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27 19:59:15"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetColumns()
+    {
+        $response = $this->sendRequest('/backend/database/Test/app_news/rows?columns=id,title', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar"
+        },
+        {
+            "id": 1,
+            "title": "foo"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/backend/database/Test/app_news/rows', 'POST', array(
