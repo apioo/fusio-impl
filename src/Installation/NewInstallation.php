@@ -585,6 +585,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name/rows',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseRows::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'filterBy' => TypeFactory::getString(), 'filterOp' => TypeFactory::getString(), 'filterValue' => TypeFactory::getString(), 'sortBy' => TypeFactory::getString(), 'sortOrder' => TypeFactory::getString(), 'columns' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.getRow' => new Operation(

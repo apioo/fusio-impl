@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\Action\Database\Row;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -39,30 +40,99 @@ class GetAll extends TableAbstract
         $connection = $this->getConnection($request);
         $table = $this->getTable($request, $connection->createSchemaManager());
 
-        $startIndex = (int) $request->get('startIndex');
-        $count = (int) $request->get('count');
+        $allColumns = array_keys($table->getColumns());
+        $primaryKey = $this->getPrimaryKeyColumn($table);
 
-        if ($startIndex <= 0) {
-            $startIndex = 0;
-        }
+        $qb = $connection->createQueryBuilder();
+        $qb->select($this->getColumns($request, $allColumns));
+        $qb->from($table->getName());
 
-        if ($count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $this->addFilter($request, $qb, $allColumns);
+        $this->addOrderBy($request, $qb, $primaryKey, $allColumns);
+        $this->addLimit($request, $qb);
 
-        $queryBuilder = $connection->createQueryBuilder()
-            ->select([
-                'my_table.*',
-            ])
-            ->from($table->getName(), 'my_table')
-            ->setFirstResult($startIndex)
-            ->setMaxResults($count);
+        $totalCount = (int) $connection->fetchOne('SELECT COUNT(*) FROM ' . $table->getName());
+        $result = $connection->fetchAllAssociative($qb->getSQL(), $qb->getParameters());
 
         return [
-            'totalResults' => (int) $connection->fetchOne('SELECT COUNT(*) AS cnt FROM ' . $table->getName()),
-            'startIndex' => $startIndex,
-            'itemsPerPage' => $count,
-            'entry' => $connection->fetchAllAssociative($queryBuilder->getSQL()),
+            'totalResults' => $totalCount,
+            'itemsPerPage' => $qb->getMaxResults(),
+            'startIndex' => $qb->getFirstResult(),
+            'entry' => $result,
         ];
+    }
+
+    private function getColumns(RequestInterface $request, array $allColumns): array
+    {
+        $columns = $request->get('columns');
+        if (empty($columns)) {
+            return $allColumns;
+        }
+
+        $selected = array_intersect(explode(',', $columns), $allColumns);
+        if (empty($selected)) {
+            return $allColumns;
+        }
+
+        return $selected;
+    }
+
+    private function addFilter(RequestInterface $request, QueryBuilder $qb, array $allColumns): void
+    {
+        $filterBy = $request->get('filterBy');
+        $filterOp = $request->get('filterOp');
+        $filterValue = $request->get('filterValue');
+
+        if (!empty($filterBy) && !empty($filterOp) && !empty($filterValue) && in_array($filterBy, $allColumns)) {
+            switch ($filterOp) {
+                case 'contains':
+                    $qb->where($filterBy . ' LIKE :filter');
+                    $qb->setParameter('filter', '%' . $filterValue . '%');
+                    break;
+
+                case 'equals':
+                    $qb->where($filterBy . ' = :filter');
+                    $qb->setParameter('filter', $filterValue);
+                    break;
+
+                case 'startsWith':
+                    $qb->where($filterBy . ' LIKE :filter');
+                    $qb->setParameter('filter', $filterValue . '%');
+                    break;
+
+                case 'present':
+                    $qb->where($filterBy . ' IS NOT NULL');
+                    break;
+            }
+        }
+    }
+
+    private function addOrderBy(RequestInterface $request, QueryBuilder $qb, ?string $primaryKey, array $allColumns): void
+    {
+        $sortBy = $request->get('sortBy');
+        $sortOrder = $request->get('sortOrder');
+
+        if (!empty($sortBy) && !empty($sortOrder) && in_array($sortBy, $allColumns)) {
+            $sortOrder = strtoupper($sortOrder);
+            $sortOrder = in_array($sortOrder, ['ASC', 'DESC']) ? $sortOrder : 'DESC';
+
+            $qb->orderBy($sortBy, $sortOrder);
+        } elseif (!empty($primaryKey)) {
+            $qb->orderBy($primaryKey, 'DESC');
+        }
+    }
+
+    private function addLimit(RequestInterface $request, QueryBuilder $qb): void
+    {
+        $startIndex = (int) $request->get('startIndex');
+        $count = (int) $request->get('count');
+        $limit = (int) $request->get('limit');
+
+        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $limit = $limit <= 0 ? 16 : $limit;
+        $count = $count >= 1 && $count <= $limit ? $count : $limit;
+
+        $qb->setFirstResult($startIndex);
+        $qb->setMaxResults($count);
     }
 }
