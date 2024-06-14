@@ -8477,6 +8477,54 @@
           "schema": {
             "type": "string"
           }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "filterBy": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "filterOp": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "filterValue": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "sortBy": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "sortOrder": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "columns": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
         }
       },
       "throws": [
