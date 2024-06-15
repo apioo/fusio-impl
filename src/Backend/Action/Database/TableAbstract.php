@@ -143,24 +143,14 @@ abstract class TableAbstract implements ActionInterface
                 $newColumn->setNotnull($notNull);
             }
 
-            $autoIncrement = $column->getAutoIncrement();
-            if ($autoIncrement !== null) {
-                $newColumn->setAutoincrement($autoIncrement);
-            }
-
-            $default = $column->getDefault();
-            if ($default !== null) {
-                $newColumn->setDefault($default);
-            }
-
             $length = $column->getLength();
             if ($length !== null) {
                 $newColumn->setLength($length);
             }
 
-            $fixed = $column->getFixed();
-            if ($fixed !== null) {
-                $newColumn->setFixed($fixed);
+            $autoIncrement = $column->getAutoIncrement();
+            if ($autoIncrement !== null) {
+                $newColumn->setAutoincrement($autoIncrement);
             }
 
             $precision = $column->getPrecision();
@@ -171,6 +161,26 @@ abstract class TableAbstract implements ActionInterface
             $scale = $column->getScale();
             if ($scale !== null) {
                 $newColumn->setScale($scale);
+            }
+
+            $unsigned = $column->getUnsigned();
+            if ($scale !== null) {
+                $newColumn->setUnsigned($unsigned);
+            }
+
+            $fixed = $column->getFixed();
+            if ($fixed !== null) {
+                $newColumn->setFixed($fixed);
+            }
+
+            $default = $column->getDefault();
+            if ($default !== null) {
+                $newColumn->setDefault($default);
+            }
+
+            $comment = $column->getComment();
+            if ($comment !== null) {
+                $newColumn->setComment($comment);
             }
         }
 

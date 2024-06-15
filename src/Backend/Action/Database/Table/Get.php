@@ -75,11 +75,12 @@ class Get extends TableAbstract
                 'name' => $column->getName(),
                 'type' => Type::getTypeRegistry()->lookupName($column->getType()),
                 'length' => $column->getLength(),
+                'notNull' => $column->getNotnull(),
+                'autoIncrement' => $column->getAutoincrement(),
                 'precision' => $column->getPrecision(),
                 'scale' => $column->getScale(),
                 'unsigned' => $column->getUnsigned(),
                 'fixed' => $column->getFixed(),
-                'notNull' => $column->getNotnull(),
                 'default' => $column->getDefault(),
                 'comment' => $column->getComment(),
             ];
