@@ -171,6 +171,8 @@ abstract class TableAbstract implements ActionInterface
         $primaryKey = $table->getPrimaryKey();
         if (!empty($primaryKey)) {
             $result->setPrimaryKey([$primaryKey]);
+        } else {
+            throw new BadRequestException('Primary key not set');
         }
 
         $indexes = $table->getIndexes() ?? [];
