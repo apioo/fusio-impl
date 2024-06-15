@@ -136,36 +136,42 @@ abstract class TableAbstract implements ActionInterface
             $columnName = $column->getName() ?? throw new BadRequestException('Column name not set');
             $columnType = $column->getType() ?? throw new BadRequestException('Column type not set');
 
-            $options = [];
-            if ($column->getNotNull() !== null) {
-                $options['notnull'] = $column->getNotNull();
+            $newColumn = $result->addColumn($columnName, $columnType);
+
+            $notNull = $column->getNotNull();
+            if ($notNull !== null) {
+                $newColumn->setNotnull($notNull);
             }
 
-            if ($column->getAutoIncrement() !== null) {
-                $options['autoincrement'] = $column->getAutoIncrement();
+            $autoIncrement = $column->getAutoIncrement();
+            if ($autoIncrement !== null) {
+                $newColumn->setAutoincrement($autoIncrement);
             }
 
-            if ($column->getDefault() !== null) {
-                $options['default'] = $column->getDefault();
+            $default = $column->getDefault();
+            if ($default !== null) {
+                $newColumn->setDefault($default);
             }
 
-            if ($column->getLength() !== null) {
-                $options['length'] = $column->getLength();
+            $length = $column->getLength();
+            if ($length !== null) {
+                $newColumn->setLength($length);
             }
 
-            if ($column->getFixed() !== null) {
-                $options['fixed'] = $column->getFixed();
+            $fixed = $column->getFixed();
+            if ($fixed !== null) {
+                $newColumn->setFixed($fixed);
             }
 
-            if ($column->getPrecision() !== null) {
-                $options['precision'] = $column->getPrecision();
+            $precision = $column->getPrecision();
+            if ($precision !== null) {
+                $newColumn->setPrecision($precision);
             }
 
-            if ($column->getScale() !== null) {
-                $options['scale'] = $column->getScale();
+            $scale = $column->getScale();
+            if ($scale !== null) {
+                $newColumn->setScale($scale);
             }
-
-            $result->addColumn($columnName, $columnType, $options);
         }
 
         $primaryKey = $table->getPrimaryKey();
