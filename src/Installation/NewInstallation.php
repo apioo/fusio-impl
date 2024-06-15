@@ -543,7 +543,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseTables::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.getTable' => new Operation(
                     action: Backend\Action\Database\Table\Get::class,
@@ -551,7 +551,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseTable::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.createTable' => new Operation(
                     action: Backend\Action\Database\Table\Create::class,
@@ -560,7 +560,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\DatabaseTable::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.updateTable' => new Operation(
                     action: Backend\Action\Database\Table\Update::class,
@@ -569,7 +569,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\DatabaseTable::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.deleteTable' => new Operation(
                     action: Backend\Action\Database\Table\Delete::class,
@@ -577,7 +577,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.getRows' => new Operation(
                     action: Backend\Action\Database\Row\GetAll::class,
@@ -586,7 +586,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseRows::class,
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'filterBy' => TypeFactory::getString(), 'filterOp' => TypeFactory::getString(), 'filterValue' => TypeFactory::getString(), 'sortBy' => TypeFactory::getString(), 'sortOrder' => TypeFactory::getString(), 'columns' => TypeFactory::getString()],
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.getRow' => new Operation(
                     action: Backend\Action\Database\Row\Get::class,
@@ -594,7 +594,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name/rows/:id',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseRow::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.createRow' => new Operation(
                     action: Backend\Action\Database\Row\Create::class,
@@ -603,7 +603,7 @@ class NewInstallation
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\DatabaseRow::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.updateRow' => new Operation(
                     action: Backend\Action\Database\Row\Update::class,
@@ -612,7 +612,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\DatabaseRow::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'database.deleteRow' => new Operation(
                     action: Backend\Action\Database\Row\Delete::class,
@@ -620,7 +620,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name/rows/:id',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'event.getAll' => new Operation(
                     action: Backend\Action\Event\GetAll::class,
