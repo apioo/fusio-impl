@@ -164,7 +164,7 @@ abstract class TableAbstract implements ActionInterface
             }
 
             $unsigned = $column->getUnsigned();
-            if ($scale !== null) {
+            if ($unsigned !== null) {
                 $newColumn->setUnsigned($unsigned);
             }
 
