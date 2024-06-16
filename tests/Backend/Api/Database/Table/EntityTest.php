@@ -100,7 +100,7 @@ class EntityTest extends ControllerDbTestCase
         {
             "name": "date",
             "type": "datetime",
-            "length": null,
+            "length": {$length},
             "notNull": true,
             "autoIncrement": false,
             "precision": 10,
