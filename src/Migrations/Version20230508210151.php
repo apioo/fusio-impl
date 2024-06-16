@@ -510,8 +510,8 @@ final class Version20230508210151 extends AbstractMigration
         }
 
         if (isset($tokenTable)) {
-            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_token_app_id');
-            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_token_user_id');
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'token_app_id');
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'token_user_id');
         }
 
         if (isset($identityRequestTable)) {
