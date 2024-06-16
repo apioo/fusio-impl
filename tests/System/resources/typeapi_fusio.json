@@ -4739,7 +4739,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Common_Message"
+          "$ref": "Backend_SdkMessage"
         }
       },
       "arguments": {
@@ -4751,6 +4751,12 @@
         }
       },
       "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
         {
           "code": 401,
           "schema": {
@@ -12771,6 +12777,20 @@
           "type": "string"
         },
         "config": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_SdkMessage": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "link": {
           "type": "string"
         }
       }

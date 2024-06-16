@@ -1217,9 +1217,9 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/sdk',
                     httpCode: 200,
-                    outgoing: Model\Common\Message::class,
+                    outgoing: Model\Backend\SdkMessage::class,
                     incoming: Model\Backend\SdkGenerate::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'statistic.getCountRequests' => new Operation(
                     action: Backend\Action\Statistic\GetCountRequests::class,
