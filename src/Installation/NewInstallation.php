@@ -819,7 +819,7 @@ class NewInstallation
                 'marketplace.getAll' => new Operation(
                     action: Backend\Action\Marketplace\GetAll::class,
                     httpMethod: 'GET',
-                    httpPath: '/marketplace',
+                    httpPath: '/marketplace/:type',
                     httpCode: 200,
                     outgoing: Model\Backend\MarketplaceCollection::class,
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
@@ -827,7 +827,7 @@ class NewInstallation
                 'marketplace.install' => new Operation(
                     action: Backend\Action\Marketplace\Install::class,
                     httpMethod: 'POST',
-                    httpPath: '/marketplace',
+                    httpPath: '/marketplace/:type',
                     httpCode: 201,
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\MarketplaceInstall::class,
@@ -836,26 +836,18 @@ class NewInstallation
                 'marketplace.get' => new Operation(
                     action: Backend\Action\Marketplace\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/marketplace/:app_name',
+                    httpPath: '/marketplace/:type/:name',
                     httpCode: 200,
                     outgoing: Model\Backend\MarketplaceLocalApp::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
-                'marketplace.update' => new Operation(
-                    action: Backend\Action\Marketplace\Update::class,
+                'marketplace.upgrade' => new Operation(
+                    action: Backend\Action\Marketplace\Upgrade::class,
                     httpMethod: 'PUT',
-                    httpPath: '/marketplace/:app_name',
+                    httpPath: '/marketplace/:type/:name',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
-                ),
-                'marketplace.remove' => new Operation(
-                    action: Backend\Action\Marketplace\Remove::class,
-                    httpMethod: 'DELETE',
-                    httpPath: '/marketplace/:app_name',
-                    httpCode: 200,
-                    outgoing: Model\Common\Message::class,
-                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,

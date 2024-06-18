@@ -20,25 +20,35 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
+use Fusio\Impl\Dto;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * RepositoryInterface
+ * Installer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface RepositoryInterface
+class Factory
 {
-    /**
-     * Returns all available objects from the marketplace repository
-     */
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection;
+    private Action\Factory $actionFactory;
+    private App\Factory $appFactory;
 
-    /**
-     * Returns a single object from the repository
-     */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    public function __construct(Action\Factory $actionFactory, App\Factory $appFactory)
+    {
+        $this->actionFactory = $actionFactory;
+        $this->appFactory = $appFactory;
+    }
+
+    public function factory(string $type): FactoryInterface
+    {
+        if ($type === 'action') {
+            return $this->actionFactory;
+        } elseif ($type === 'app') {
+            return $this->appFactory;
+        } else {
+            throw new StatusCode\BadRequestException('Provided an invalid type');
+        }
+    }
 }

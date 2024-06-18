@@ -20,25 +20,21 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 
 /**
- * RepositoryInterface
+ * InstallerInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface RepositoryInterface
+interface InstallerInterface
 {
-    /**
-     * Returns all available objects from the marketplace repository
-     */
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection;
+    public function install(ObjectAbstract $object, UserContext $context): void;
 
-    /**
-     * Returns a single object from the repository
-     */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    public function upgrade(ObjectAbstract $object, UserContext $context): void;
+
+    public function isInstalled(ObjectAbstract $object, UserContext $context): bool;
 }

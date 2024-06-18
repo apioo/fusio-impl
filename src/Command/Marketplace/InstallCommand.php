@@ -42,13 +42,13 @@ class InstallCommand extends Command
     use TypeSafeTrait;
 
     private Service\Marketplace\Installer $installer;
-    private Service\Marketplace\Repository\Remote $remoteRepository;
+    private Service\Marketplace\Factory $factory;
     private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository, Service\System\ContextFactory $contextFactory)
+    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Factory $factory, Service\System\ContextFactory $contextFactory)
     {
         $this->installer = $installer;
-        $this->remoteRepository = $remoteRepository;
+        $this->factory = $factory;
         $this->contextFactory = $contextFactory;
 
         parent::__construct();
@@ -59,6 +59,7 @@ class InstallCommand extends Command
         $this
             ->setName('marketplace:install')
             ->setDescription('Installs an app from the marketplace')
+            ->addArgument('type', InputArgument::REQUIRED, 'The type i.e. action or app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification')
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
@@ -68,25 +69,29 @@ class InstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('disable_ssl_verify')) {
-            $this->remoteRepository->setSslVerify(false);
-        }
-
-        $replaceEnv = true;
-        if ($input->getOption('disable_env')) {
-            $replaceEnv = false;
-        }
-
+        $type = $this->getArgumentAsString($input, 'type');
         $name = $this->getArgumentAsString($input, 'name');
+
+        $factory = $this->factory->factory($type);
+        if ($input->getOption('disable_ssl_verify')) {
+            $factory->getRepository()->setSslVerify(false);
+        }
+
+        if ($input->getOption('disable_env')) {
+            $installer = $factory->getInstaller();
+            if ($installer instanceof Service\Marketplace\App\Installer) {
+                $installer->setReplaceEnv(false);
+            }
+        }
 
         $install = new MarketplaceInstall();
         $install->setName($name);
 
         try {
-            $app = $this->installer->install($install, $replaceEnv, $this->contextFactory->newCommandContext($input));
+            $object = $this->installer->install($type, $install, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
-            $output->writeln('Installed app ' . $app->getName());
+            $output->writeln('Installed ' . $type . ' ' . $object->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

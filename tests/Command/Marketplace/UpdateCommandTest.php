@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
-use Fusio\Impl\Command\Marketplace\UpdateCommand;
+use Fusio\Impl\Command\Marketplace\UpgradeCommand;
 use Fusio\Impl\Service\System\ContextFactory;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -45,7 +45,7 @@ class UpdateCommandTest extends MarketplaceTestCase
         file_put_contents($appsDir . '/fusio/app.yaml', $this->getOldApp());
         file_put_contents($appsDir . '/fusio/index.html', 'old');
 
-        $command = new UpdateCommand(
+        $command = new UpgradeCommand(
             $this->getInstaller(),
             $this->getRemoteRepository(),
             Environment::getService(ContextFactory::class)

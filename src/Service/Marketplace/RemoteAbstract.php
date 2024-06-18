@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace\Repository;
+namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\App;
-use Fusio\Impl\Service\Marketplace\RepositoryInterface;
+use Fusio\Impl\Dto\Marketplace\Collection;
+use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
-use Symfony\Component\Yaml\Yaml;
+use PSX\Uri\Uri;
 
 /**
  * Remote
@@ -35,12 +35,11 @@ use Symfony\Component\Yaml\Yaml;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Remote implements RepositoryInterface
+abstract class RemoteAbstract implements RepositoryInterface
 {
     private ClientInterface $httpClient;
     private string $marketplaceUrl;
     private bool $sslVerify;
-    private ?array $apps = null;
 
     public function __construct(ClientInterface $httpClient, FrameworkConfig $frameworkConfig)
     {
@@ -54,72 +53,61 @@ class Remote implements RepositoryInterface
         $this->sslVerify = $sslVerify;
     }
 
-    public function fetchAll(): array
-    {
-        if (!$this->apps) {
-            $this->apps = $this->request();
-        }
-
-        return $this->apps;
-    }
-
-    public function fetchByName(string $name): ?App
-    {
-        $apps = $this->fetchAll();
-
-        return $apps[$name] ?? null;
-    }
-
-    /**
-     * Downloads the provided app to the app file
-     */
-    public function downloadZip(App $app, string $appFile): void
-    {
-        $downloadUrl = $app->getDownloadUrl();
-        if (empty($downloadUrl)) {
-            throw new \RuntimeException('Download url is not available for this app');
-        }
-
-        // increase timeout to handle download
-        set_time_limit(300);
-
-        $options = new Options();
-        $options->setVerify($this->sslVerify);
-        $options->setAllowRedirects(true);
-
-        $response = $this->httpClient->request(new GetRequest($downloadUrl), $options);
-
-        file_put_contents($appFile, $response->getBody()->getContents());
-    }
-
-    private function request(): array
+    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection
     {
         $options = new Options();
         $options->setVerify($this->sslVerify);
 
-        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl), $options);
+        $uri = Uri::parse($this->marketplaceUrl)->withPath($this->getPath())->withParameters(['startIndex' => $startIndex, 'query' => $query]);
+        $response = $this->httpClient->request(new GetRequest($uri), $options);
 
         if ($response->getStatusCode() > 300) {
             throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());
         }
 
         $body = (string) $response->getBody();
-        $data = Yaml::parse($body);
+        $data = \json_decode($body);
 
-        if (is_iterable($data)) {
-            return $this->parse($data);
-        } else {
-            throw new \RuntimeException('Could not parse repository response');
-        }
-    }
+        $totalResults = $data->totalResults ?? 0;
+        $startIndex = $data->startIndex ?? 0;
+        $itemsPerPage = $data->itemsPerPage ?? 0;
+        $entries = $data->entry ?? [];
 
-    private function parse(iterable $data): array
-    {
-        $result = [];
-        foreach ($data as $name => $meta) {
-            $result[$name] = App::fromArray($name, $meta);
+        $result = new Collection($totalResults, $startIndex, $itemsPerPage);
+        foreach ($entries as $entry) {
+            $result->addObject($this->parse($entry));
         }
 
         return $result;
     }
+
+    public function fetchByName(string $name): ?ObjectAbstract
+    {
+        $options = new Options();
+        $options->setVerify($this->sslVerify);
+
+        $uri = Uri::parse($this->marketplaceUrl)->withPath($this->getPath() . '/' . $name);
+        $response = $this->httpClient->request(new GetRequest($uri), $options);
+
+        if ($response->getStatusCode() === 404) {
+            return null;
+        }
+
+        if ($response->getStatusCode() > 300) {
+            throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());
+        }
+
+        $body = (string) $response->getBody();
+
+        $data = \json_decode($body);
+        if (!$data instanceof \stdClass) {
+            throw new \RuntimeException('The marketplace server returned an invalid payload');
+        }
+
+        return $this->parse($data);
+    }
+
+    abstract protected function getPath(): string;
+
+    abstract protected function parse(\stdClass $data): ObjectAbstract;
 }

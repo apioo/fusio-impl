@@ -24,9 +24,9 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Dto\Marketplace\App;
+use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 use Fusio\Impl\Service\Marketplace;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\System\ContextFactory;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -38,40 +38,32 @@ use PSX\Http\Exception as StatusCode;
  */
 class Get implements ActionInterface
 {
-    private Marketplace\Repository\Remote $remoteRepository;
-    private Marketplace\Repository\Local $localRepository;
-    private FrameworkConfig $frameworkConfig;
+    private Marketplace\Factory $factory;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, FrameworkConfig $frameworkConfig)
+    public function __construct(Marketplace\Factory $factory, ContextFactory $contextFactory)
     {
-        $this->remoteRepository = $remoteRepository;
-        $this->localRepository = $localRepository;
-        $this->frameworkConfig = $frameworkConfig;
+        $this->factory = $factory;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $localApp = $this->localRepository->fetchByName(
-            $request->get('app_name')
-        );
+        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
+        $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
 
-        if (empty($localApp)) {
-            throw new StatusCode\NotFoundException('Could not find local app');
+        $factory = $this->factory->factory($type);
+
+        $object = $factory->getRepository()->fetchByName($name);
+        if (!$object instanceof ObjectAbstract) {
+            throw new StatusCode\NotFoundException('Object does not exist');
         }
 
-        if ($this->frameworkConfig->isMarketplaceEnabled()) {
-            $remoteApp = $this->remoteRepository->fetchByName(
-                $request->get('app_name')
-            );
-        } else {
-            $remoteApp = null;
-        }
-
-        $app = $localApp->toArray();
-        if ($remoteApp instanceof App) {
-            $app['remote'] = $remoteApp->toArray();
-        }
-
-        return $app;
+        return [
+            'type' => $type,
+            'name' => $name,
+            'installed' => $factory->getInstaller()->isInstalled($object, $this->contextFactory->newActionContext($context)),
+            'object' => $object,
+        ];
     }
 }
