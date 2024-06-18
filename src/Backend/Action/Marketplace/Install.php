@@ -58,19 +58,20 @@ class Install implements ActionInterface
             throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
+        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
         $body = $request->getPayload();
 
         assert($body instanceof MarketplaceInstall);
 
-        $app = $this->installerService->install(
+        $object = $this->installerService->install(
+            $type,
             $body,
-            true,
             $this->contextFactory->newActionContext($context)
         );
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'App ' . $app->getName() . ' successful installed',
+            'message' => ucfirst($type) . ' ' . $object->getName() . ' successfully installed',
         ]);
     }
 }

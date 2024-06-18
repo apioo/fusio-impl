@@ -18,27 +18,28 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace;
+namespace Fusio\Impl\Service\Marketplace\App;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
+use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
+use Fusio\Impl\Service\Marketplace\RemoteAbstract;
 
 /**
- * RepositoryInterface
+ * Remote
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface RepositoryInterface
+class Repository extends RemoteAbstract
 {
-    /**
-     * Returns all available objects from the marketplace repository
-     */
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection;
+    protected function getPath(): string
+    {
+        return '/app';
+    }
 
-    /**
-     * Returns a single object from the repository
-     */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    protected function parse(\stdClass $data): ObjectAbstract
+    {
+        return App::fromObject($data);
+    }
 }

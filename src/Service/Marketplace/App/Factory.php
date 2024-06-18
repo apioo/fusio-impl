@@ -18,27 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace;
+namespace Fusio\Impl\Service\Marketplace\App;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
+use Fusio\Impl\Dto;
+use Fusio\Impl\Service\Marketplace\FactoryInterface;
+use Fusio\Impl\Service\Marketplace\InstallerInterface;
+use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 
 /**
- * RepositoryInterface
+ * Factory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface RepositoryInterface
+class Factory implements FactoryInterface
 {
-    /**
-     * Returns all available objects from the marketplace repository
-     */
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection;
+    private Repository $repository;
+    private Installer $installer;
 
-    /**
-     * Returns a single object from the repository
-     */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    public function __construct(Repository $repository, Installer $installer)
+    {
+        $this->repository = $repository;
+        $this->installer = $installer;
+    }
+
+    public function getRepository(): RepositoryInterface
+    {
+        return $this->repository;
+    }
+
+    public function getInstaller(): InstallerInterface
+    {
+        return $this->installer;
+    }
 }

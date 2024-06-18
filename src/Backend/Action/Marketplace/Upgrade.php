@@ -31,13 +31,13 @@ use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Update
+ * Upgrade
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+class Upgrade implements ActionInterface
 {
     private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
@@ -56,14 +56,18 @@ class Update implements ActionInterface
             throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
-        $app = $this->installerService->update(
-            $request->get('app_name'),
+        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
+        $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
+
+        $object = $this->installerService->upgrade(
+            $type,
+            $name,
             $this->contextFactory->newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'App ' . $app->getName() . ' successfully updated',
+            'message' => ucfirst($type) . ' ' . $object->getName() . ' successfully upgraded',
         ];
     }
 }

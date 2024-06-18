@@ -20,25 +20,16 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
-
 /**
- * RepositoryInterface
+ * FactoryInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface RepositoryInterface
+interface FactoryInterface
 {
-    /**
-     * Returns all available objects from the marketplace repository
-     */
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection;
+    public function getRepository(): RepositoryInterface;
 
-    /**
-     * Returns a single object from the repository
-     */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    public function getInstaller(): InstallerInterface;
 }

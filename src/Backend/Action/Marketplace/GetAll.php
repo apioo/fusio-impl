@@ -24,9 +24,8 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Dto\Marketplace\App;
 use Fusio\Impl\Service\Marketplace;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * GetAll
@@ -37,63 +36,21 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  */
 class GetAll implements ActionInterface
 {
-    private Marketplace\Repository\Remote $remoteRepository;
-    private Marketplace\Repository\Local $localRepository;
-    private FrameworkConfig $frameworkConfig;
+    private Marketplace\Factory $factory;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, FrameworkConfig $frameworkConfig)
+    public function __construct(Marketplace\Factory $factory)
     {
-        $this->remoteRepository = $remoteRepository;
-        $this->localRepository = $localRepository;
-        $this->frameworkConfig = $frameworkConfig;
+        $this->factory = $factory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if ($this->frameworkConfig->isMarketplaceEnabled()) {
-            $result = $this->fetchRemoteApps();
-        } else {
-            $result = $this->fetchLocalApps();
-        }
+        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
+        $startIndex = (int) $request->get('startIndex');
+        $query = $request->get('query');
 
-        return [
-            'apps' => $result
-        ];
-    }
+        $factory = $this->factory->factory($type);
 
-    private function fetchRemoteApps(): array
-    {
-        $apps = $this->remoteRepository->fetchAll();
-        $result = [];
-
-        foreach ($apps as $remoteApp) {
-            $app = $remoteApp->toArray();
-
-            $localApp = $this->localRepository->fetchByName($remoteApp->getName());
-            if ($localApp instanceof App) {
-                $app['local'] = $localApp->toArray();
-                $app['local']['startUrl'] = $this->frameworkConfig->getAppsUrl() . '/' . $localApp->getName();
-            }
-
-            $result[$remoteApp->getName()] = $app;
-        }
-
-        return $result;
-    }
-
-    private function fetchLocalApps(): array
-    {
-        $apps = $this->localRepository->fetchAll();
-        $result = [];
-
-        foreach ($apps as $localApp) {
-            $app = $localApp->toArray();
-            $app['local'] = $localApp->toArray();
-            $app['local']['startUrl'] = $this->frameworkConfig->getAppsUrl() . '/' . $localApp->getName();
-
-            $result[$localApp->getName()] = $app;
-        }
-
-        return $result;
+        return $factory->getRepository()->fetchAll($startIndex, $query);
     }
 }
