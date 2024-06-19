@@ -96,7 +96,7 @@ class App extends ObjectAbstract
         ]);
     }
 
-    public static function fromObject(\stdClass $data): static
+    public static function fromObject(object $data): static
     {
         $app = parent::fromObject($data);
 
@@ -120,6 +120,7 @@ class App extends ObjectAbstract
             $app->setSha1Hash($data->sha1Hash);
         }
 
+        /** @psalm-suppress LessSpecificReturnStatement */
         return $app;
     }
 }

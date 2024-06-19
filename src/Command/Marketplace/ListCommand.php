@@ -53,7 +53,7 @@ class ListCommand extends Command
     {
         $this
             ->setName('marketplace:list')
-            ->addArgument('type', InputArgument::REQUIRED, 'The type i.e. action or app')
+            ->addArgument('type', InputArgument::OPTIONAL, 'The type i.e. action or app')
             ->addArgument('query', InputArgument::OPTIONAL, 'To search a specific object on the marketplace')
             ->setDescription('Lists all available types on the marketplace')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
@@ -61,12 +61,16 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $type = $this->getArgumentAsString($input, 'type');
+        $rawType = $this->getArgumentAsString($input, 'type');
         $query = (string) $input->getArgument('query');
+
+        $type = Service\Marketplace\Type::tryFrom($rawType) ?? Service\Marketplace\Type::APP;
 
         $repository = $this->factory->factory($type)->getRepository();
         if ($input->getOption('disable_ssl_verify')) {
-            $repository->setSslVerify(false);
+            if ($repository instanceof Service\Marketplace\RemoteAbstract) {
+                $repository->setSslVerify(false);
+            }
         }
 
         $collection = $repository->fetchAll(0, $query);

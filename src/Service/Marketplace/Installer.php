@@ -47,7 +47,7 @@ class Installer
 
     public function install(string $type, MarketplaceInstall $install, UserContext $context): ObjectAbstract
     {
-        $factory = $this->factory->factory($type);
+        $factory = $this->factory->factory(Type::from($type));
 
         $name = $install->getName();
         if (empty($name)) {
@@ -71,7 +71,7 @@ class Installer
 
     public function upgrade(string $type, string $name, UserContext $context): ObjectAbstract
     {
-        $factory = $this->factory->factory($type);
+        $factory = $this->factory->factory(Type::from($type));
 
         $object = $factory->getRepository()->fetchByName($name);
         if (!$object instanceof ObjectAbstract) {

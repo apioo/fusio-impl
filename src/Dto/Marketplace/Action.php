@@ -60,7 +60,7 @@ class Action extends ObjectAbstract
         ]);
     }
 
-    public static function fromObject(\stdClass $data): static
+    public static function fromObject(object $data): static
     {
         $action = parent::fromObject($data);
 
@@ -72,6 +72,7 @@ class Action extends ObjectAbstract
             $action->setConfig($data->config);
         }
 
+        /** @psalm-suppress LessSpecificReturnStatement */
         return $action;
     }
 }

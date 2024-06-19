@@ -86,7 +86,7 @@ class Installer implements InstallerInterface
         $metadata->put('marketplace_version', $object->getVersion());
         $update->setMetadata($metadata);
 
-        $this->actionService->update($existing->getId(), $update, $context);
+        $this->actionService->update('' . $existing->getId(), $update, $context);
     }
 
     public function isInstalled(ObjectAbstract $object, UserContext $context): bool

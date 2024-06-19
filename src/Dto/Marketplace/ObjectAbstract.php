@@ -143,7 +143,10 @@ abstract class ObjectAbstract implements \JsonSerializable
         return $this->toArray();
     }
 
-    public static function fromObject(\stdClass $data): static
+    /**
+     * @return static
+     */
+    public static function fromObject(object $data): static
     {
         $name = $data->name ?? null;
         if (empty($name)) {

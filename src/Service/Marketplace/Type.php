@@ -20,32 +20,15 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto;
-use PSX\Http\Exception as StatusCode;
-
 /**
- * Installer
+ * Type
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Factory
+enum Type: string
 {
-    private Action\Factory $actionFactory;
-    private App\Factory $appFactory;
-
-    public function __construct(Action\Factory $actionFactory, App\Factory $appFactory)
-    {
-        $this->actionFactory = $actionFactory;
-        $this->appFactory = $appFactory;
-    }
-
-    public function factory(Type $type): FactoryInterface
-    {
-        return match ($type) {
-            Type::ACTION => $this->actionFactory,
-            Type::APP => $this->appFactory,
-        };
-    }
+    case ACTION = 'action';
+    case APP = 'app';
 }

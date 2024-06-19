@@ -59,7 +59,7 @@ class UpgradeCommand extends Command
             ->setName('marketplace:update')
             ->setDescription('Updates an existing locally installed app')
             ->addArgument('type', InputArgument::REQUIRED, 'The type i.e. action or app')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
+            ->addArgument('name', InputArgument::OPTIONAL, 'The name of the app')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
 
         $this->contextFactory->addContextOptions($this);
@@ -67,19 +67,28 @@ class UpgradeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $type = $this->getArgumentAsString($input, 'type');
+        $rawType = $this->getArgumentAsString($input, 'type');
         $name = $this->getArgumentAsString($input, 'name');
+
+        $type = Service\Marketplace\Type::tryFrom($rawType);
+        if ($type === null) {
+            $type = Service\Marketplace\Type::APP;
+            $name = $rawType;
+        }
 
         $factory = $this->factory->factory($type);
         if ($input->getOption('disable_ssl_verify')) {
-            $factory->getRepository()->setSslVerify(false);
+            $repository = $factory->getRepository();
+            if ($repository instanceof Service\Marketplace\RemoteAbstract) {
+                $repository->setSslVerify(false);
+            }
         }
 
         try {
-            $object = $this->installer->upgrade($type, $name, $this->contextFactory->newCommandContext($input));
+            $object = $this->installer->upgrade($type->value, $name, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
-            $output->writeln('Updated ' . $type . ' ' . $object->getName());
+            $output->writeln('Updated ' . $type->value . ' ' . $object->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');
