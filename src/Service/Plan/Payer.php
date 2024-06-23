@@ -25,6 +25,7 @@ use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\DateTime\LocalDateTime;
+use PSX\Http\Exception\PaymentRequiredException;
 
 /**
  * Payer
@@ -46,6 +47,15 @@ class Payer
         $this->usageTable = $usageTable;
         $this->configService = $configService;
         $this->mailer = $mailer;
+    }
+
+    /**
+     * Method to check whether a user has enough points to pay the provided points. If this is true you can safely
+     * call the pay method otherwise the points will go into the negative
+     */
+    public function canSpent(int $points, ContextInterface $context): bool
+    {
+        return $context->getUser()->getPoints() - $points >= 0;
     }
 
     /**

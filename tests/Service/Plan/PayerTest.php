@@ -39,9 +39,9 @@ use PHPUnit\Framework\TestCase;
 class PayerTest extends TestCase
 {
     /**
-     * @dataProvider thresholdProvider
+     * @dataProvider pointsProvider
      */
-    public function testHasCrossedThreshold(?int $threshold, int $points, int $cost, bool $sendMail)
+    public function testPay(?int $threshold, int $points, int $cost, bool $sendMail)
     {
         $userTable = $this->getMockBuilder(Table\User::class)
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class PayerTest extends TestCase
         $payer->pay($cost, $context);
     }
 
-    public function thresholdProvider()
+    public static function pointsProvider(): array
     {
         return [
             [100, 104, 1, false],
