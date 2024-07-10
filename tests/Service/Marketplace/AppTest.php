@@ -33,9 +33,10 @@ use Symfony\Component\Yaml\Yaml;
  */
 class AppTest extends TestCase
 {
-    public function testRemoteApp()
+    public function testApp()
     {
         $remote = <<<YAML
+name: swagger-ui
 version: 1.0.5
 downloadUrl: 'https://github.com/apioo/fusio-apps-swaggerui/archive/v1.0.5.zip'
 sha1Hash: 2107ad7121dfeaf4725cb64f84dc0630dad24ff0
@@ -44,31 +45,12 @@ screenshot: 'https://www.fusio-project.org/media/apps/swagger-ui.png'
 website: 'https://github.com/apioo/fusio-apps-swaggerui'
 YAML;
 
-        $app = App::fromArray('swagger-ui', Yaml::parse($remote));
+        $app = App::fromObject((object) Yaml::parse($remote));
 
         $this->assertSame('swagger-ui', $app->getName());
         $this->assertSame('1.0.5', $app->getVersion());
         $this->assertSame('https://github.com/apioo/fusio-apps-swaggerui/archive/v1.0.5.zip', $app->getDownloadUrl());
         $this->assertSame('2107ad7121dfeaf4725cb64f84dc0630dad24ff0', $app->getSha1Hash());
-        $this->assertSame('The Swagger UI app renders a documentation based on the OpenAPI specification.', $app->getDescription());
-        $this->assertSame('https://www.fusio-project.org/media/apps/swagger-ui.png', $app->getScreenshot());
-        $this->assertSame('https://github.com/apioo/fusio-apps-swaggerui', $app->getWebsite());
-    }
-
-    public function testLocalApp()
-    {
-        $local = <<<YAML
-description: 'The Swagger UI app renders a documentation based on the OpenAPI specification.'
-screenshot: 'https://www.fusio-project.org/media/apps/swagger-ui.png'
-website: 'https://github.com/apioo/fusio-apps-swaggerui'
-YAML;
-
-        $app = App::fromArray('swagger-ui', Yaml::parse($local));
-
-        $this->assertSame('swagger-ui', $app->getName());
-        $this->assertSame('0.0.0', $app->getVersion());
-        $this->assertSame(null, $app->getDownloadUrl());
-        $this->assertSame(null, $app->getSha1Hash());
         $this->assertSame('The Swagger UI app renders a documentation based on the OpenAPI specification.', $app->getDescription());
         $this->assertSame('https://www.fusio-project.org/media/apps/swagger-ui.png', $app->getScreenshot());
         $this->assertSame('https://github.com/apioo/fusio-apps-swaggerui', $app->getWebsite());

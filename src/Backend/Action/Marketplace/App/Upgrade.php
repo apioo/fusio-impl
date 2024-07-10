@@ -18,39 +18,22 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Marketplace;
+namespace Fusio\Impl\Backend\Action\Marketplace\App;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Action\Marketplace\UpgradeAbstract;
 use Fusio\Impl\Service\Marketplace;
-use PSX\Http\Exception as StatusCode;
 
 /**
- * GetAll
+ * Upgrade
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+class Upgrade extends UpgradeAbstract
 {
-    private Marketplace\Factory $factory;
-
-    public function __construct(Marketplace\Factory $factory)
+    protected function getType(): Marketplace\Type
     {
-        $this->factory = $factory;
-    }
-
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
-    {
-        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
-        $startIndex = (int) $request->get('startIndex');
-        $query = $request->get('query');
-
-        $factory = $this->factory->factory($type);
-
-        return $factory->getRepository()->fetchAll($startIndex, $query);
+        return Marketplace\Type::APP;
     }
 }

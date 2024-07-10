@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\Collection;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
+use Fusio\Marketplace\Collection;
+use Fusio\Marketplace\MarketplaceObject;
 
 /**
  * RepositoryInterface
@@ -40,5 +40,10 @@ interface RepositoryInterface
     /**
      * Returns a single object from the repository
      */
-    public function fetchByName(string $name): ?ObjectAbstract;
+    public function fetchByName(string $user, string $name): MarketplaceObject;
+
+    /**
+     * Returns a single object from the repository
+     */
+    public function install(string $user, string $name): MarketplaceObject;
 }

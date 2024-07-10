@@ -6857,17 +6857,17 @@
         "page"
       ]
     },
-    "backend.marketplace.remove": {
-      "path": "/backend/marketplace/:app_name",
-      "method": "DELETE",
+    "backend.marketplace.app.upgrade": {
+      "path": "/backend/marketplace/app/:name",
+      "method": "PUT",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Common_Message"
+          "$ref": "Message"
         }
       },
       "arguments": {
-        "app_name": {
+        "name": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -6878,19 +6878,31 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 401,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         }
       ],
@@ -6904,8 +6916,155 @@
         "marketplace"
       ]
     },
-    "backend.marketplace.update": {
-      "path": "/backend/marketplace/:app_name",
+    "backend.marketplace.app.get": {
+      "path": "/backend/marketplace/app/:name",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "MarketplaceApp"
+        }
+      },
+      "arguments": {
+        "name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.app.install": {
+      "path": "/backend/marketplace/app",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "$ref": "Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "MarketplaceInstall"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.app.getAll": {
+      "path": "/backend/marketplace/app",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "MarketplaceAppCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "query": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.action.upgrade": {
+      "path": "/backend/marketplace/action/:name",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6914,7 +7073,7 @@
         }
       },
       "arguments": {
-        "app_name": {
+        "name": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -6963,17 +7122,17 @@
         "marketplace"
       ]
     },
-    "backend.marketplace.get": {
-      "path": "/backend/marketplace/:app_name",
+    "backend.marketplace.action.get": {
+      "path": "/backend/marketplace/action/:name",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_MarketplaceLocalApp"
+          "$ref": "MarketplaceAction"
         }
       },
       "arguments": {
-        "app_name": {
+        "name": {
           "in": "path",
           "schema": {
             "type": "string"
@@ -6984,25 +7143,25 @@
         {
           "code": 401,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 404,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 410,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         }
       ],
@@ -7016,20 +7175,20 @@
         "marketplace"
       ]
     },
-    "backend.marketplace.install": {
-      "path": "/backend/marketplace",
+    "backend.marketplace.action.install": {
+      "path": "/backend/marketplace/action",
       "method": "POST",
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "Common_Message"
+          "$ref": "Message"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_MarketplaceInstall"
+            "$ref": "MarketplaceInstall"
           }
         }
       },
@@ -7037,19 +7196,19 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 401,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         }
       ],
@@ -7063,27 +7222,40 @@
         "marketplace"
       ]
     },
-    "backend.marketplace.getAll": {
-      "path": "/backend/marketplace",
+    "backend.marketplace.action.getAll": {
+      "path": "/backend/marketplace/action",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_MarketplaceCollection"
+          "$ref": "MarketplaceActionCollection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "query": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [
         {
           "code": 401,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "$ref": "Message"
           }
         }
       ],
@@ -11159,6 +11331,12 @@
     }
   },
   "definitions": {
+    "ActionConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
     "Backend_AccountChangePassword": {
       "type": "object",
       "properties": {
@@ -12227,72 +12405,6 @@
         "T": "Backend_LogError"
       }
     },
-    "Backend_MarketplaceApp": {
-      "type": "object",
-      "properties": {
-        "version": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "screenshot": {
-          "type": "string"
-        },
-        "website": {
-          "type": "string"
-        },
-        "downloadUrl": {
-          "type": "string"
-        },
-        "sha1Hash": {
-          "type": "string"
-        },
-        "startUrl": {
-          "type": "string"
-        }
-      }
-    },
-    "Backend_MarketplaceCollection": {
-      "type": "object",
-      "properties": {
-        "apps": {
-          "$ref": "Backend_MarketplaceCollectionApps"
-        }
-      }
-    },
-    "Backend_MarketplaceCollectionApps": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "Backend_MarketplaceRemoteApp"
-      }
-    },
-    "Backend_MarketplaceInstall": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "Backend_MarketplaceLocalApp": {
-      "$extends": "Backend_MarketplaceApp",
-      "type": "object",
-      "properties": {
-        "remote": {
-          "$ref": "Backend_MarketplaceApp"
-        }
-      }
-    },
-    "Backend_MarketplaceRemoteApp": {
-      "$extends": "Backend_MarketplaceApp",
-      "type": "object",
-      "properties": {
-        "local": {
-          "$ref": "Backend_MarketplaceApp"
-        }
-      }
-    },
     "Backend_Operation": {
       "type": "object",
       "properties": {
@@ -13112,6 +13224,26 @@
     "Backend_WebhookUpdate": {
       "$extends": "Backend_Webhook",
       "type": "object"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
     },
     "Common_Collection": {
       "type": "object",
@@ -14032,6 +14164,104 @@
         "endpoint"
       ]
     },
+    "MarketplaceAction": {
+      "$extends": "MarketplaceObject",
+      "type": "object",
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "ActionConfig"
+        }
+      }
+    },
+    "MarketplaceActionCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "MarketplaceAction"
+      }
+    },
+    "MarketplaceApp": {
+      "$extends": "MarketplaceObject",
+      "type": "object",
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "downloadUrl": {
+          "type": "string"
+        },
+        "hash": {
+          "type": "string"
+        }
+      }
+    },
+    "MarketplaceAppCollection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "MarketplaceApp"
+      }
+    },
+    "MarketplaceInstall": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "MarketplaceObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "User"
+        },
+        "version": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "integer"
+        },
+        "updateDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "insertDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
     "Passthru": {
       "description": "No schema information available",
       "type": "object",
@@ -14196,6 +14426,20 @@
       "type": "object",
       "additionalProperties": {
         "type": "any"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "boolean"
+        }
       }
     }
   }

@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Marketplace;
+namespace Fusio\Impl\Tests\Backend\Api\Marketplace\App;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * EntityTest
+ * CollectionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class CollectionTest extends ControllerDbTestCase
 {
     public function getDataSet(): array
     {
@@ -44,7 +44,7 @@ class EntityTest extends ControllerDbTestCase
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/fusio', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -53,29 +53,46 @@ class EntityTest extends ControllerDbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertNotEmpty($data['version']);
-        $this->assertSame(version_compare($data['version'], '0.0'), 1);
-        $this->assertNotEmpty($data['description']);
-        $this->assertNotEmpty($data['screenshot']);
-        $this->assertNotEmpty($data['website']);
-        $this->assertNotEmpty($data['downloadUrl']);
-        $this->assertNotEmpty($data['sha1Hash']);
-        $this->assertNotEmpty($data['remote']);
+        $this->assertArrayHasKey('fusio', $data['apps']);
+        $this->assertArrayHasKey('developer', $data['apps']);
+        $this->assertArrayHasKey('documentation', $data['apps']);
+        $this->assertArrayHasKey('swagger-ui', $data['apps']);
+        $this->assertArrayHasKey('vscode', $data['apps']);
+
+        foreach ($data['apps'] as $app) {
+            $this->assertNotEmpty($app['version']);
+            $this->assertSame(version_compare($app['version'], '0.0'), 1);
+            $this->assertNotEmpty($app['description']);
+            $this->assertNotEmpty($app['screenshot']);
+            $this->assertNotEmpty($app['website']);
+            $this->assertNotEmpty($app['downloadUrl']);
+            $this->assertNotEmpty($app['sha1Hash']);
+
+            // @TODO maybe check whether the download url actual exists
+        }
     }
 
-    public function testGetNotFound()
+    public function testGetLocal()
     {
-        $response = $this->sendRequest('/backend/marketplace/foobar', 'GET', array(
+        if (Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace enabled');
+        }
+
+        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
+            $this->markTestSkipped('The fusio app is already installed');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
-        $data = \json_decode($body);
+        $data = \json_decode($body, true);
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find local app', $data->message);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('apps', $data);
+        $this->assertEquals([], $data['apps']);
     }
 
     public function testPost()
@@ -84,7 +101,28 @@ class EntityTest extends ControllerDbTestCase
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/fusio', 'POST', array(
+        $response = $this->sendRequest('/backend/marketplace/app', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'name' => 'fusio',
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "App fusio successful installed"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPut()
+    {
+        $response = $this->sendRequest('/backend/marketplace/app', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -93,55 +131,20 @@ class EntityTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
-    }
-
-    public function testPut()
-    {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
-        $response = $this->sendRequest('/backend/marketplace/fusio', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "App is already up-to-date"
-}
-JSON;
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testDelete()
     {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
-        $response = $this->sendRequest('/backend/marketplace/fusio', 'DELETE', array(
+        $response = $this->sendRequest('/backend/marketplace/app', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ), json_encode([
+            'foo' => 'bar',
+        ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App fusio successful removed"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }

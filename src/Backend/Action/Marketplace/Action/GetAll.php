@@ -18,37 +18,22 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace\App;
+namespace Fusio\Impl\Backend\Action\Marketplace\Action;
 
-use Fusio\Impl\Service\Marketplace\RemoteAbstract;
-use Fusio\Marketplace\MarketplaceApp;
-use Fusio\Marketplace\MarketplaceAppCollection;
-use Fusio\Marketplace\MarketplaceInstall;
+use Fusio\Impl\Backend\Action\Marketplace\GetAllAbstract;
+use Fusio\Impl\Service\Marketplace;
 
 /**
- * Remote
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Repository extends RemoteAbstract
+class GetAll extends GetAllAbstract
 {
-    public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceAppCollection
+    protected function getType(): Marketplace\Type
     {
-        return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
-    }
-
-    public function fetchByName(string $user, string $name): MarketplaceApp
-    {
-        return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
-    }
-
-    public function install(string $user, string $name): MarketplaceApp
-    {
-        $install = new MarketplaceInstall();
-        $install->setName($user . '/' . $name);
-
-        return $this->getClient()->marketplace()->directory()->app()->install($install);
+        return Marketplace\Type::ACTION;
     }
 }

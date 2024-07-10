@@ -21,6 +21,11 @@
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\ListCommand;
+use Fusio\Impl\Service\Marketplace\Factory;
+use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -30,12 +35,17 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ListCommandTest extends MarketplaceTestCase
+class ListCommandTest extends ControllerDbTestCase
 {
-    public function testCommand()
+    public function getDataSet(): array
+    {
+        return Fixture::getDataSet();
+    }
+
+    public function testCommandApp()
     {
         $command = new ListCommand(
-            $this->getRemoteRepository()
+            Environment::getService(Factory::class)
         );
 
         $commandTester = new CommandTester($command);
@@ -46,6 +56,23 @@ class ListCommandTest extends MarketplaceTestCase
         $apps = ['fusio'];
         foreach ($apps as $appName) {
             $this->assertTrue(strpos($actual, $appName) !== false, $actual);
+        }
+    }
+
+    public function testCommandAction()
+    {
+        $command = new ListCommand(
+            Environment::getService(Factory::class)
+        );
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(['type' => 'action', 'query' => 'BulkInsert']);
+
+        $actual = $commandTester->getDisplay();
+
+        $actions = ['BulkInsert'];
+        foreach ($actions as $actionName) {
+            $this->assertTrue(strpos($actual, $actionName) !== false, $actual);
         }
     }
 }

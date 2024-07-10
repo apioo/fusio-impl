@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
+use Fusio\Marketplace\MarketplaceObject;
 
 /**
  * InstallerInterface
@@ -32,9 +32,9 @@ use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
  */
 interface InstallerInterface
 {
-    public function install(ObjectAbstract $object, UserContext $context): void;
+    public function install(MarketplaceObject $object, UserContext $context): void;
 
-    public function upgrade(ObjectAbstract $object, UserContext $context): void;
+    public function upgrade(MarketplaceObject $object, UserContext $context): void;
 
-    public function isInstalled(ObjectAbstract $object, UserContext $context): bool;
+    public function isInstalled(MarketplaceObject $object, UserContext $context): bool;
 }

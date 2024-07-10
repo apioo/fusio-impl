@@ -21,10 +21,8 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
-use Fusio\Impl\Service;
-use Fusio\Impl\Dto;
-use Fusio\Model\Backend\MarketplaceInstall;
+use Fusio\Marketplace\MarketplaceInstall;
+use Fusio\Marketplace\MarketplaceObject;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -37,31 +35,30 @@ use PSX\Http\Exception as StatusCode;
 class Installer
 {
     private Factory $factory;
-    private Service\System\FrameworkConfig $frameworkConfig;
 
-    public function __construct(Factory $factory, Service\System\FrameworkConfig $frameworkConfig)
+    public function __construct(Factory $factory)
     {
         $this->factory = $factory;
-        $this->frameworkConfig = $frameworkConfig;
     }
 
-    public function install(string $type, MarketplaceInstall $install, UserContext $context): ObjectAbstract
+    public function install(Type $type, MarketplaceInstall $install, UserContext $context): MarketplaceObject
     {
-        $factory = $this->factory->factory(Type::from($type));
+        $factory = $this->factory->factory($type);
 
-        $name = $install->getName();
-        if (empty($name)) {
+        $fullName = $install->getName();
+        if (empty($fullName)) {
             throw new StatusCode\BadRequestException('Name not provided');
         }
 
-        $object = $factory->getRepository()->fetchByName($name);
-        if (!$object instanceof ObjectAbstract) {
-            throw new StatusCode\BadRequestException(ucfirst($type) . ' not available');
-        }
+        $parts = explode('/', $fullName);
+        $user = $parts[0] ?? throw new StatusCode\BadRequestException('Name not provided');
+        $name = $parts[1] ?? throw new StatusCode\BadRequestException('User not provided');
+
+        $object = $factory->getRepository()->install($user, $name);
 
         $installer = $factory->getInstaller();
         if ($installer->isInstalled($object, $context)) {
-            throw new StatusCode\BadRequestException(ucfirst($type) . ' already installed');
+            throw new StatusCode\BadRequestException(ucfirst($type->value) . ' already installed');
         }
 
         $installer->install($object, $context);
@@ -69,18 +66,15 @@ class Installer
         return $object;
     }
 
-    public function upgrade(string $type, string $name, UserContext $context): ObjectAbstract
+    public function upgrade(Type $type, string $user, string $name, UserContext $context): MarketplaceObject
     {
-        $factory = $this->factory->factory(Type::from($type));
+        $factory = $this->factory->factory($type);
 
-        $object = $factory->getRepository()->fetchByName($name);
-        if (!$object instanceof ObjectAbstract) {
-            throw new StatusCode\BadRequestException(ucfirst($type) . ' not available');
-        }
+        $object = $factory->getRepository()->fetchByName($user, $name);
 
         $installer = $factory->getInstaller();
         if (!$installer->isInstalled($object, $context)) {
-            throw new StatusCode\BadRequestException(ucfirst($type) . ' is not installed');
+            throw new StatusCode\BadRequestException(ucfirst($type->value) . ' is not installed');
         }
 
         $installer->upgrade($object, $context);

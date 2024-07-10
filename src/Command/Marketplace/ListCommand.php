@@ -22,6 +22,8 @@ namespace Fusio\Impl\Command\Marketplace;
 
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
+use Fusio\Marketplace\MarketplaceActionCollection;
+use Fusio\Marketplace\MarketplaceAppCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -61,22 +63,23 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rawType = $this->getArgumentAsString($input, 'type');
-        $query = (string) $input->getArgument('query');
+        $rawType = $this->getOptionalArgumentAsString($input, 'type');
+        $query = (string) $this->getOptionalArgumentAsString($input, 'query');
 
-        $type = Service\Marketplace\Type::tryFrom($rawType) ?? Service\Marketplace\Type::APP;
+        $type = $rawType !== null ? (Service\Marketplace\Type::tryFrom($rawType) ?? Service\Marketplace\Type::APP) : Service\Marketplace\Type::APP;
 
         $repository = $this->factory->factory($type)->getRepository();
         if ($input->getOption('disable_ssl_verify')) {
             if ($repository instanceof Service\Marketplace\RemoteAbstract) {
-                $repository->setSslVerify(false);
+                //$repository->setSslVerify(false);
             }
         }
 
+        /** @var MarketplaceActionCollection|MarketplaceAppCollection $collection */
         $collection = $repository->fetchAll(0, $query);
 
         $rows = [];
-        foreach ($collection->getObjects() as $object) {
+        foreach ($collection->getEntry() as $object) {
             $rows[] = [$object->getName(), $object->getVersion()];
         }
 

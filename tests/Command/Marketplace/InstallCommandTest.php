@@ -21,7 +21,11 @@
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\InstallCommand;
+use Fusio\Impl\Service\Marketplace\Factory;
+use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -32,17 +36,22 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class InstallCommandTest extends MarketplaceTestCase
+class InstallCommandTest extends ControllerDbTestCase
 {
-    public function testCommand()
+    public function getDataSet(): array
+    {
+        return Fixture::getDataSet();
+    }
+
+    public function testCommandApp()
     {
         if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is already installed');
         }
 
         $command = new InstallCommand(
-            $this->getInstaller(),
-            $this->getRemoteRepository(),
+            Environment::getService(Installer::class),
+            Environment::getService(Factory::class),
             Environment::getService(ContextFactory::class)
         );
 
@@ -60,5 +69,31 @@ class InstallCommandTest extends MarketplaceTestCase
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
         $this->assertFileExists($appsDir . '/fusio/index.html');
         $this->assertEquals('foobar', file_get_contents($appsDir . '/fusio/index.html'));
+    }
+
+    public function testCommandAction()
+    {
+        $command = new InstallCommand(
+            Environment::getService(Installer::class),
+            Environment::getService(Factory::class),
+            Environment::getService(ContextFactory::class)
+        );
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'type' => 'action',
+            'name' => 'fusio/BulkInsert',
+        ]);
+
+        $actual = $commandTester->getDisplay();
+
+        $this->assertEquals('Installed action fusio/BulkInsert', trim($actual));
+
+        $row = $this->connection->fetchAssociative('SELECT id, class, config FROM fusio_action WHERE name = :name', [
+            'name' => 'fusio-BulkInsert',
+        ]);
+
+        $this->assertNotEmpty($row);
+        $this->assertEquals('Fusio.Adapter.Worker.Action.WorkerPHPLocal', $row['class']);
     }
 }

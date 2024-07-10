@@ -20,9 +20,10 @@
 
 namespace Fusio\Impl\Service\Marketplace\Action;
 
-use Fusio\Impl\Dto\Marketplace\Action;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 use Fusio\Impl\Service\Marketplace\RemoteAbstract;
+use Fusio\Marketplace\MarketplaceAction;
+use Fusio\Marketplace\MarketplaceActionCollection;
+use Fusio\Marketplace\MarketplaceInstall;
 
 /**
  * Repository
@@ -33,13 +34,21 @@ use Fusio\Impl\Service\Marketplace\RemoteAbstract;
  */
 class Repository extends RemoteAbstract
 {
-    protected function getPath(): string
+    public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceActionCollection
     {
-        return '/action';
+        return $this->getClient()->marketplace()->directory()->action()->getAll($startIndex, 16, $query);
     }
 
-    protected function parse(\stdClass $data): ObjectAbstract
+    public function fetchByName(string $user, string $name): MarketplaceAction
     {
-        return Action::fromObject($data);
+        return $this->getClient()->marketplace()->directory()->action()->get($user, $name);
+    }
+
+    public function install(string $user, string $name): MarketplaceAction
+    {
+        $install = new MarketplaceInstall();
+        $install->setName($user . '/' . $name);
+
+        return $this->getClient()->marketplace()->directory()->action()->install($install);
     }
 }

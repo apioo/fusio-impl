@@ -22,7 +22,7 @@ namespace Fusio\Impl\Command\Marketplace;
 
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\MarketplaceInstall;
+use Fusio\Marketplace\MarketplaceInstall;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -61,7 +61,6 @@ class InstallCommand extends Command
             ->setDescription('Installs an app from the marketplace')
             ->addArgument('type', InputArgument::REQUIRED, 'The type i.e. action or app')
             ->addArgument('name', InputArgument::OPTIONAL, 'The name of the app')
-            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification')
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
 
         $this->contextFactory->addContextOptions($this);
@@ -75,17 +74,10 @@ class InstallCommand extends Command
         $type = Service\Marketplace\Type::tryFrom($rawType);
         if ($type === null) {
             $type = Service\Marketplace\Type::APP;
-            $name = $rawType;
+            $name = 'fusio/' . $rawType;
         }
 
         $factory = $this->factory->factory($type);
-        if ($input->getOption('disable_ssl_verify')) {
-            $repository = $factory->getRepository();
-            if ($repository instanceof Service\Marketplace\RemoteAbstract) {
-                $repository->setSslVerify(false);
-            }
-        }
-
         if ($input->getOption('disable_env')) {
             $installer = $factory->getInstaller();
             if ($installer instanceof Service\Marketplace\App\Installer) {
@@ -97,10 +89,10 @@ class InstallCommand extends Command
         $install->setName($name);
 
         try {
-            $object = $this->installer->install($type->value, $install, $this->contextFactory->newCommandContext($input));
+            $object = $this->installer->install($type, $install, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
-            $output->writeln('Installed ' . $type->value . ' ' . $object->getName());
+            $output->writeln('Installed ' . $type->value . ' ' . $object->getAuthor()->getName() . '/' . $object->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

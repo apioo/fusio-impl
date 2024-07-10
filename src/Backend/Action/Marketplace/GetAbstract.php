@@ -24,54 +24,41 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\MarketplaceInstall;
-use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Install
+ * GetAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Install implements ActionInterface
+abstract class GetAbstract implements ActionInterface
 {
-    private Installer $installerService;
-    private FrameworkConfig $frameworkConfig;
+    private Marketplace\Factory $factory;
     private ContextFactory $contextFactory;
 
-    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
+    public function __construct(Marketplace\Factory $factory, ContextFactory $contextFactory)
     {
-        $this->installerService = $installerService;
-        $this->frameworkConfig = $frameworkConfig;
+        $this->factory = $factory;
         $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if (!$this->frameworkConfig->isMarketplaceEnabled()) {
-            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
-        }
+        $type = $this->getType();
+        $user = $request->get('user') ?? throw new StatusCode\BadRequestException('Provided no user');
+        $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
 
-        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
-        $body = $request->getPayload();
+        $factory = $this->factory->factory($type);
 
-        assert($body instanceof MarketplaceInstall);
+        $object = $factory->getRepository()->fetchByName($user, $name);
+        $isInstalled = $factory->getInstaller()->isInstalled($object, $this->contextFactory->newActionContext($context));
 
-        $object = $this->installerService->install(
-            $type,
-            $body,
-            $this->contextFactory->newActionContext($context)
-        );
-
-        return new HttpResponse(201, [], [
-            'success' => true,
-            'message' => ucfirst($type) . ' ' . $object->getName() . ' successfully installed',
-        ]);
+        return $object;
     }
+
+    abstract protected function getType(): Marketplace\Type;
 }

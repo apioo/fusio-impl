@@ -18,37 +18,41 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace\App;
+namespace Fusio\Impl\Backend\Action\Marketplace;
 
-use Fusio\Impl\Service\Marketplace\RemoteAbstract;
-use Fusio\Marketplace\MarketplaceApp;
-use Fusio\Marketplace\MarketplaceAppCollection;
-use Fusio\Marketplace\MarketplaceInstall;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Marketplace;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * Remote
+ * GetAllAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Repository extends RemoteAbstract
+abstract class GetAllAbstract implements ActionInterface
 {
-    public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceAppCollection
+    private Marketplace\Factory $factory;
+
+    public function __construct(Marketplace\Factory $factory)
     {
-        return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
+        $this->factory = $factory;
     }
 
-    public function fetchByName(string $user, string $name): MarketplaceApp
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
+        $type = $this->getType();
+        $startIndex = (int) $request->get('startIndex');
+        $query = $request->get('query');
+
+        $factory = $this->factory->factory($type);
+
+        return $factory->getRepository()->fetchAll($startIndex, $query);
     }
 
-    public function install(string $user, string $name): MarketplaceApp
-    {
-        $install = new MarketplaceInstall();
-        $install->setName($user . '/' . $name);
-
-        return $this->getClient()->marketplace()->directory()->app()->install($install);
-    }
+    abstract protected function getType(): Marketplace\Type;
 }

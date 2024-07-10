@@ -21,20 +21,21 @@
 namespace Fusio\Impl\Service\Marketplace\App;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Dto;
-use Fusio\Impl\Dto\Marketplace\App;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use Fusio\Marketplace\MarketplaceApp;
+use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\AppCreate;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\SchemaTraverser;
+use PSX\Schema\Visitor\TypeVisitor;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * App
@@ -65,9 +66,9 @@ class Installer implements InstallerInterface
         $this->filesystem = new Filesystem();
     }
 
-    public function install(ObjectAbstract $object, UserContext $context): void
+    public function install(MarketplaceObject $object, UserContext $context): void
     {
-        if (!$object instanceof Dto\Marketplace\App) {
+        if (!$object instanceof MarketplaceApp) {
             throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
@@ -85,9 +86,9 @@ class Installer implements InstallerInterface
         $this->moveToPublic($appDir, $object);
     }
 
-    public function upgrade(ObjectAbstract $object, UserContext $context): void
+    public function upgrade(MarketplaceObject $object, UserContext $context): void
     {
-        if (!$object instanceof Dto\Marketplace\App) {
+        if (!$object instanceof MarketplaceApp) {
             throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
@@ -96,9 +97,9 @@ class Installer implements InstallerInterface
         $this->install($object, $context);
     }
 
-    public function isInstalled(ObjectAbstract $object, UserContext $context): bool
+    public function isInstalled(MarketplaceObject $object, UserContext $context): bool
     {
-        if (!$object instanceof Dto\Marketplace\App) {
+        if (!$object instanceof MarketplaceApp) {
             throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
@@ -108,7 +109,7 @@ class Installer implements InstallerInterface
         return is_dir($appDir);
     }
 
-    public function env(string $name, UserContext $context): Dto\Marketplace\App
+    public function env(string $name, UserContext $context): MarketplaceApp
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
         $appDir = $appsDir . '/' . $name;
@@ -117,7 +118,7 @@ class Installer implements InstallerInterface
             throw new \InvalidArgumentException('Provided app does not exist');
         }
 
-        $localApp = $this->readMetaFile($appDir, $name);
+        $localApp = $this->readMetaFile($appDir);
 
         $this->replaceVariables($appDir, $localApp, $context);
 
@@ -129,7 +130,7 @@ class Installer implements InstallerInterface
         $this->replaceEnv = $replaceEnv;
     }
 
-    private function downloadZip(Dto\Marketplace\App $app): string
+    private function downloadZip(MarketplaceApp $app): string
     {
         $appFile = $this->frameworkConfig->getPathCache('app-' . $app->getName() . '_' . uniqid() . '.zip');
 
@@ -150,7 +151,7 @@ class Installer implements InstallerInterface
         file_put_contents($appFile, $response->getBody()->getContents());
 
         // check hash
-        if (sha1_file($appFile) !== $app->getSha1Hash()) {
+        if (sha1_file($appFile) !== $app->getHash()) {
             throw new StatusCode\InternalServerErrorException('Invalid hash of downloaded app');
         }
 
@@ -178,35 +179,42 @@ class Installer implements InstallerInterface
         }
     }
 
-    private function writeMetaFile(string $appDir, Dto\Marketplace\App $app): void
+    private function writeMetaFile(string $appDir, MarketplaceApp $app): void
     {
-        if (!file_put_contents($appDir . '/app.yaml', Yaml::dump($app->toArray()))) {
+        if (!file_put_contents($appDir . '/app.json', \json_encode($app))) {
             throw new StatusCode\InternalServerErrorException('Could not write app meta file');
         }
     }
 
-    private function readMetaFile(string $appDir, string $name): Dto\Marketplace\App
+    private function readMetaFile(string $appDir): MarketplaceApp
     {
-        if (!is_file($appDir . '/app.yaml')) {
-            throw new StatusCode\InternalServerErrorException('App meta files does not exist');
+        if (!is_file($appDir . '/app.json')) {
+            throw new StatusCode\InternalServerErrorException('App meta file does not exist');
         }
 
-        $data = Yaml::parseFile($appDir . '/app.yaml');
-        if (!isset($data['name'])) {
-            $data['name'] = $name;
+        $data = \json_decode($appDir . '/app.json');
+        if (!$data instanceof \stdClass) {
+            throw new StatusCode\InternalServerErrorException('App meta file is not valid');
         }
 
-        return Dto\Marketplace\App::fromObject((object) $data);
+        $schema = (new SchemaManager())->getSchema(MarketplaceApp::class);
+        $app = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
+
+        if (!$app instanceof MarketplaceApp) {
+            throw new StatusCode\InternalServerErrorException('Could not parse app meta file');
+        }
+
+        return $app;
     }
 
-    private function moveToPublic(string $appDir, Dto\Marketplace\App $app): void
+    private function moveToPublic(string $appDir, MarketplaceApp $app): void
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
 
         $this->filesystem->rename($appDir, $appsDir . '/' . $app->getName());
     }
 
-    private function moveToTrash(App $app): void
+    private function moveToTrash(MarketplaceApp $app): void
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
         $appDir = $appsDir . '/' . $app->getName();
@@ -214,7 +222,7 @@ class Installer implements InstallerInterface
         $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
-    private function replaceVariables(string $appDir, Dto\Marketplace\App $app, UserContext $context): void
+    private function replaceVariables(string $appDir, MarketplaceApp $app, UserContext $context): void
     {
         $appKey = $this->getOrCreateAppKey($app, $context);
         $env = $this->getEnv($appKey);
@@ -240,7 +248,7 @@ class Installer implements InstallerInterface
         }
     }
 
-    private function getOrCreateAppKey(Dto\Marketplace\App $app, UserContext $context): string
+    private function getOrCreateAppKey(MarketplaceApp $app, UserContext $context): string
     {
         $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $app->getName());
         if ($existing instanceof Table\Generated\AppRow) {

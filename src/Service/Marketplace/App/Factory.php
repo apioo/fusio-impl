@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Service\Marketplace\App;
 
-use Fusio\Impl\Dto;
 use Fusio\Impl\Service\Marketplace\FactoryInterface;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;

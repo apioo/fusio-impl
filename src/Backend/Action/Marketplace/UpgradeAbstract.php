@@ -24,20 +24,20 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace\Type;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Upgrade
+ * UpgradeAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Upgrade implements ActionInterface
+abstract class UpgradeAbstract implements ActionInterface
 {
     private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
@@ -56,18 +56,22 @@ class Upgrade implements ActionInterface
             throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
-        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
+        $type = $this->getType();
+        $user = $request->get('user') ?? throw new StatusCode\BadRequestException('Provided no user');
         $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
 
         $object = $this->installerService->upgrade(
             $type,
+            $user,
             $name,
             $this->contextFactory->newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => ucfirst($type) . ' ' . $object->getName() . ' successfully upgraded',
+            'message' => ucfirst($type->value) . ' ' . $object->getName() . ' successfully upgraded',
         ];
     }
+
+    abstract protected function getType(): Type;
 }

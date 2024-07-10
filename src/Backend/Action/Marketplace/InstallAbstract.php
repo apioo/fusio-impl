@@ -24,46 +24,56 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
-use Fusio\Impl\Service\Marketplace;
+use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace\Type;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Marketplace\MarketplaceInstall;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Get
+ * InstallAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+abstract class InstallAbstract implements ActionInterface
 {
-    private Marketplace\Factory $factory;
+    private Installer $installerService;
+    private FrameworkConfig $frameworkConfig;
     private ContextFactory $contextFactory;
 
-    public function __construct(Marketplace\Factory $factory, ContextFactory $contextFactory)
+    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
     {
-        $this->factory = $factory;
+        $this->installerService = $installerService;
+        $this->frameworkConfig = $frameworkConfig;
         $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $type = $request->get('type') ?? throw new StatusCode\BadRequestException('Provided no type');
-        $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
-
-        $factory = $this->factory->factory($type);
-
-        $object = $factory->getRepository()->fetchByName($name);
-        if (!$object instanceof ObjectAbstract) {
-            throw new StatusCode\NotFoundException('Object does not exist');
+        if (!$this->frameworkConfig->isMarketplaceEnabled()) {
+            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
-        return [
-            'type' => $type,
-            'name' => $name,
-            'installed' => $factory->getInstaller()->isInstalled($object, $this->contextFactory->newActionContext($context)),
-            'object' => $object,
-        ];
+        $type = $this->getType();
+        $body = $request->getPayload();
+
+        assert($body instanceof MarketplaceInstall);
+
+        $object = $this->installerService->install(
+            $type,
+            $body,
+            $this->contextFactory->newActionContext($context)
+        );
+
+        return new HttpResponse(201, [], [
+            'success' => true,
+            'message' => ucfirst($type->value) . ' ' . $object->getName() . ' successfully installed',
+        ]);
     }
+
+    abstract protected function getType(): Type;
 }

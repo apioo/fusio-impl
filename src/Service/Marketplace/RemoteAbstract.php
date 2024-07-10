@@ -22,11 +22,9 @@ namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Dto\Marketplace\Collection;
 use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\Options;
-use PSX\Uri\Uri;
+use Fusio\Impl\Service;
+use Fusio\Marketplace\Client;
+use Sdkgen\Client\Credentials\Anonymous;
 
 /**
  * Remote
@@ -37,77 +35,22 @@ use PSX\Uri\Uri;
  */
 abstract class RemoteAbstract implements RepositoryInterface
 {
-    private ClientInterface $httpClient;
-    private string $marketplaceUrl;
-    private bool $sslVerify;
+    private Service\Config $configService;
 
-    public function __construct(ClientInterface $httpClient, FrameworkConfig $frameworkConfig)
+    public function __construct(Service\Config $configService)
     {
-        $this->httpClient = $httpClient;
-        $this->marketplaceUrl = $frameworkConfig->getMarketplaceUrl();
-        $this->sslVerify = true;
+        $this->configService = $configService;
     }
 
-    public function setSslVerify(bool $sslVerify): void
+    protected function getClient(): Client
     {
-        $this->sslVerify = $sslVerify;
+        $clientId = $this->configService->getValue('marketplace_client_id');
+        $clientSecret = $this->configService->getValue('marketplace_client_secret');
+
+        if (!empty($clientId) && !empty($clientSecret)) {
+            return Client::build($clientId, $clientSecret);
+        } else {
+            return new Client('https://api.fusio-project.org', new Anonymous());
+        }
     }
-
-    public function fetchAll(int $startIndex = 0, ?string $query = null): Collection
-    {
-        $options = new Options();
-        $options->setVerify($this->sslVerify);
-
-        $uri = Uri::parse($this->marketplaceUrl)->withPath($this->getPath())->withParameters(['startIndex' => $startIndex, 'query' => $query]);
-        $response = $this->httpClient->request(new GetRequest($uri), $options);
-
-        if ($response->getStatusCode() > 300) {
-            throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());
-        }
-
-        $body = (string) $response->getBody();
-        $data = \json_decode($body);
-
-        $totalResults = $data->totalResults ?? 0;
-        $startIndex = $data->startIndex ?? 0;
-        $itemsPerPage = $data->itemsPerPage ?? 0;
-        $entries = $data->entry ?? [];
-
-        $result = new Collection($totalResults, $startIndex, $itemsPerPage);
-        foreach ($entries as $entry) {
-            $result->addObject($this->parse($entry));
-        }
-
-        return $result;
-    }
-
-    public function fetchByName(string $name): ?ObjectAbstract
-    {
-        $options = new Options();
-        $options->setVerify($this->sslVerify);
-
-        $uri = Uri::parse($this->marketplaceUrl)->withPath($this->getPath() . '/' . $name);
-        $response = $this->httpClient->request(new GetRequest($uri), $options);
-
-        if ($response->getStatusCode() === 404) {
-            return null;
-        }
-
-        if ($response->getStatusCode() > 300) {
-            throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());
-        }
-
-        $body = (string) $response->getBody();
-
-        $data = \json_decode($body);
-        if (!$data instanceof \stdClass) {
-            throw new \RuntimeException('The marketplace server returned an invalid payload');
-        }
-
-        return $this->parse($data);
-    }
-
-    abstract protected function getPath(): string;
-
-    abstract protected function parse(\stdClass $data): ObjectAbstract;
 }

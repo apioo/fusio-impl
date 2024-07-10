@@ -63,9 +63,8 @@ class Invoker
             }
 
             // in case the method has assigned costs check whether the user has enough points
-            $remaining = $context->getUser()->getPoints() - $costs;
-            if ($remaining < 0) {
-                throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
+            if (!$this->planPayerService->canSpent($costs, $context)) {
+                throw new StatusCode\PaymentRequiredException('Your account has not enough points to call this action. Please purchase new points in order to execute this action');
             }
 
             $this->planPayerService->pay($costs, $context);

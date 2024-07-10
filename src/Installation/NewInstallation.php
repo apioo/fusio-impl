@@ -30,6 +30,7 @@ use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\System;
 use Fusio\Impl\Table;
+use Fusio\Marketplace;
 use Fusio\Model;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
@@ -93,6 +94,8 @@ class NewInstallation
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request', tenantId: $tenantId);
         $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length', tenantId: $tenantId);
         $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email', tenantId: $tenantId);
+        $bag->addConfig('marketplace_client_id', Table\Config::FORM_STRING, '', 'The marketplace client id', tenantId: $tenantId);
+        $bag->addConfig('marketplace_client_secret', Table\Config::FORM_STRING, '', 'The marketplace client secret', tenantId: $tenantId);
         if ($tenantId === null) {
             // we add the system connection only at the root tenant
             $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class), tenantId: $tenantId);
@@ -816,38 +819,73 @@ class NewInstallation
                     outgoing: Model\Backend\Log::class,
                     throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
-                'marketplace.getAll' => new Operation(
-                    action: Backend\Action\Marketplace\GetAll::class,
+                'marketplace.action.getAll' => new Operation(
+                    action: Backend\Action\Marketplace\Action\GetAll::class,
                     httpMethod: 'GET',
-                    httpPath: '/marketplace/:type',
+                    httpPath: '/marketplace/action',
                     httpCode: 200,
-                    outgoing: Model\Backend\MarketplaceCollection::class,
-                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    outgoing: Marketplace\MarketplaceActionCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'query' => TypeFactory::getString()],
+                    throws: [401 => Marketplace\Message::class, 500 => Marketplace\Message::class],
                 ),
-                'marketplace.install' => new Operation(
-                    action: Backend\Action\Marketplace\Install::class,
+                'marketplace.action.install' => new Operation(
+                    action: Backend\Action\Marketplace\Action\Install::class,
                     httpMethod: 'POST',
-                    httpPath: '/marketplace/:type',
+                    httpPath: '/marketplace/action',
                     httpCode: 201,
-                    outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\MarketplaceInstall::class,
-                    throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    outgoing: Marketplace\Message::class,
+                    incoming: Marketplace\MarketplaceInstall::class,
+                    throws: [400 => Marketplace\Message::class, 401 => Marketplace\Message::class, 500 => Marketplace\Message::class],
                 ),
-                'marketplace.get' => new Operation(
-                    action: Backend\Action\Marketplace\Get::class,
+                'marketplace.action.get' => new Operation(
+                    action: Backend\Action\Marketplace\Action\Get::class,
                     httpMethod: 'GET',
-                    httpPath: '/marketplace/:type/:name',
+                    httpPath: '/marketplace/action/:user/:name',
                     httpCode: 200,
-                    outgoing: Model\Backend\MarketplaceLocalApp::class,
-                    throws: [401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                    outgoing: Marketplace\MarketplaceAction::class,
+                    throws: [401 => Marketplace\Message::class, 404 => Marketplace\Message::class, 410 => Marketplace\Message::class, 500 => Marketplace\Message::class],
                 ),
-                'marketplace.upgrade' => new Operation(
-                    action: Backend\Action\Marketplace\Upgrade::class,
+                'marketplace.action.upgrade' => new Operation(
+                    action: Backend\Action\Marketplace\Action\Upgrade::class,
                     httpMethod: 'PUT',
-                    httpPath: '/marketplace/:type/:name',
+                    httpPath: '/marketplace/action/:user/:name',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
+                'marketplace.app.getAll' => new Operation(
+                    action: Backend\Action\Marketplace\App\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/marketplace/app',
+                    httpCode: 200,
+                    outgoing: Marketplace\MarketplaceAppCollection::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'query' => TypeFactory::getString()],
+                    throws: [401 => Marketplace\Message::class, 500 => Marketplace\Message::class],
+                ),
+                'marketplace.app.install' => new Operation(
+                    action: Backend\Action\Marketplace\App\Install::class,
+                    httpMethod: 'POST',
+                    httpPath: '/marketplace/app',
+                    httpCode: 201,
+                    outgoing: Marketplace\Message::class,
+                    incoming: Marketplace\MarketplaceInstall::class,
+                    throws: [400 => Marketplace\Message::class, 401 => Marketplace\Message::class, 500 => Marketplace\Message::class],
+                ),
+                'marketplace.app.get' => new Operation(
+                    action: Backend\Action\Marketplace\App\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/marketplace/app/:user/:name',
+                    httpCode: 200,
+                    outgoing: Marketplace\MarketplaceApp::class,
+                    throws: [401 => Marketplace\Message::class, 404 => Marketplace\Message::class, 410 => Marketplace\Message::class, 500 => Marketplace\Message::class],
+                ),
+                'marketplace.app.upgrade' => new Operation(
+                    action: Backend\Action\Marketplace\App\Upgrade::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/marketplace/app/:user/:name',
+                    httpCode: 200,
+                    outgoing: Marketplace\Message::class,
+                    throws: [400 => Marketplace\Message::class, 401 => Marketplace\Message::class, 404 => Marketplace\Message::class, 410 => Marketplace\Message::class, 500 => Marketplace\Message::class],
                 ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,

@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Webhook;
+namespace Fusio\Impl\Tests\Backend\Api\Marketplace\App;
 
 use Fusio\Impl\Tests\Fixture;
-use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest
@@ -33,15 +33,6 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class EntityTest extends ControllerDbTestCase
 {
-    private int $eventId;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->eventId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
-    }
-
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
@@ -49,40 +40,36 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/webhook/1', 'GET', array(
+        if (!Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace/app/fusio', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalize($body);
-
-        $expect = <<<JSON
-{
-    "id": 1,
-    "eventId": 55,
-    "userId": 1,
-    "name": "ping",
-    "endpoint": "http:\/\/www.fusio-project.org\/ping",
-    "responses": [
-        {
-            "id": 1,
-            "status": 2,
-            "attempts": 1,
-            "code": 200,
-            "executeDate": "[datetime]"
-        }
-    ]
-}
-JSON;
+        $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertNotEmpty($data['version']);
+        $this->assertSame(version_compare($data['version'], '0.0'), 1);
+        $this->assertNotEmpty($data['description']);
+        $this->assertNotEmpty($data['screenshot']);
+        $this->assertNotEmpty($data['website']);
+        $this->assertNotEmpty($data['downloadUrl']);
+        $this->assertNotEmpty($data['sha1Hash']);
+        $this->assertNotEmpty($data['remote']);
     }
 
     public function testGetNotFound()
     {
-        $response = $this->sendRequest('/backend/webhook/10', 'GET', array(
+        if (!Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace/app/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -92,12 +79,16 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find webhook', $data->message);
+        $this->assertStringStartsWith('Could not find local app', $data->message);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/webhook/1', 'POST', array(
+        if (!Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace/app/fusio', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -106,50 +97,42 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/webhook/1', 'PUT', array(
+        if (!Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
+        Environment::getContainer()->get('config')->set('psx_debug', false);
+
+        $response = $this->sendRequest('/backend/marketplace/app/fusio', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'name' => 'baz',
-            'endpoint' => 'http://localhost',
-        ]));
+        ));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "success": true,
-    "message": "Webhook successfully updated",
-    "id": "1"
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "App is already up-to-date"
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'event_id', 'user_id', 'name', 'endpoint')
-            ->from('fusio_webhook')
-            ->where('id = :id')
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql, ['id' => 1]);
-
-        $this->assertEquals(1, $row['id']);
-        $this->assertEquals($this->eventId, $row['event_id']);
-        $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals('baz', $row['name']);
-        $this->assertEquals('http://localhost', $row['endpoint']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/webhook/1', 'DELETE', array(
+        if (!Environment::getConfig('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace/app/fusio', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -158,25 +141,11 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully deleted",
-    "id": "1"
+    "message": "App fusio successful removed"
 }
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id')
-            ->from('fusio_webhook')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql);
-
-        $this->assertEquals(2, $row['id']);
     }
 }

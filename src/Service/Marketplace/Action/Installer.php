@@ -21,11 +21,11 @@
 namespace Fusio\Impl\Service\Marketplace\Action;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Dto;
-use Fusio\Impl\Dto\Marketplace\ObjectAbstract;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Table;
+use Fusio\Marketplace\MarketplaceAction;
+use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
@@ -49,14 +49,16 @@ class Installer implements InstallerInterface
         $this->actionTable = $actionTable;
     }
 
-    public function install(ObjectAbstract $object, UserContext $context): void
+    public function install(MarketplaceObject $object, UserContext $context): void
     {
-        if (!$object instanceof Dto\Marketplace\Action) {
+        if (!$object instanceof MarketplaceAction) {
             throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
+        $actionName = $this->getActionName($object);
+
         $create = new ActionCreate();
-        $create->setName($object->getName());
+        $create->setName($actionName);
         $create->setClass($object->getClass());
         $create->setConfig(ActionConfig::from($object->getConfig()));
 
@@ -67,13 +69,15 @@ class Installer implements InstallerInterface
         $this->actionService->create($create, $context);
     }
 
-    public function upgrade(ObjectAbstract $object, UserContext $context): void
+    public function upgrade(MarketplaceObject $object, UserContext $context): void
     {
-        if (!$object instanceof Dto\Marketplace\Action) {
+        if (!$object instanceof MarketplaceAction) {
             throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
-        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $object->getName());
+        $actionName = $this->getActionName($object);
+
+        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $actionName);
         if (!$existing instanceof Table\Generated\ActionRow) {
             throw new \InvalidArgumentException('Provided an invalid action');
         }
@@ -89,9 +93,14 @@ class Installer implements InstallerInterface
         $this->actionService->update('' . $existing->getId(), $update, $context);
     }
 
-    public function isInstalled(ObjectAbstract $object, UserContext $context): bool
+    public function isInstalled(MarketplaceObject $object, UserContext $context): bool
     {
         $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $object->getName());
         return $existing instanceof Table\Generated\ActionRow;
+    }
+
+    private function getActionName(MarketplaceObject $object): string
+    {
+        return $object->getAuthor()->getName() . '-' . $object->getName();
     }
 }

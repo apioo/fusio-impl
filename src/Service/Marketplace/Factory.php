@@ -20,9 +20,6 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto;
-use PSX\Http\Exception as StatusCode;
-
 /**
  * Installer
  *

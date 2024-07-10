@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Marketplace;
+namespace Fusio\Impl\Tests\Backend\Api\Marketplace\Action;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -40,11 +40,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
-        $response = $this->sendRequest('/backend/marketplace', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/action', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -72,36 +68,13 @@ class CollectionTest extends ControllerDbTestCase
         }
     }
 
-    public function testGetLocal()
-    {
-        if (Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace enabled');
-        }
-
-        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is already installed');
-        }
-
-        $response = $this->sendRequest('/backend/marketplace', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-        $data = \json_decode($body, true);
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertArrayHasKey('apps', $data);
-        $this->assertEquals([], $data['apps']);
-    }
-
     public function testPost()
     {
         if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace', 'POST', array(
+        $response = $this->sendRequest('/backend/marketplace/action', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -122,7 +95,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/marketplace', 'PUT', array(
+        $response = $this->sendRequest('/backend/marketplace/action', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -136,7 +109,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/marketplace', 'DELETE', array(
+        $response = $this->sendRequest('/backend/marketplace/action', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
