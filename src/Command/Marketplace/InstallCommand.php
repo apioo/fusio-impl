@@ -61,6 +61,7 @@ class InstallCommand extends Command
             ->setDescription('Installs an app from the marketplace')
             ->addArgument('type', InputArgument::REQUIRED, 'The type i.e. action or app')
             ->addArgument('name', InputArgument::OPTIONAL, 'The name of the app')
+            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification')
             ->addOption('disable_env', 'x', InputOption::VALUE_NONE, 'Disable env replacement');
 
         $this->contextFactory->addContextOptions($this);
