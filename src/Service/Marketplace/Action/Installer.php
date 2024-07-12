@@ -32,7 +32,7 @@ use Fusio\Model\Backend\ActionUpdate;
 use Fusio\Model\Common\Metadata;
 
 /**
- * Action
+ * Installer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0

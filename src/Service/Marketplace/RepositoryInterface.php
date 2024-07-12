@@ -47,6 +47,8 @@ interface RepositoryInterface
 
     /**
      * Returns a single object from the repository
+     *
+     * @throws MessageException
      */
     public function install(string $user, string $name): MarketplaceObject;
 }
