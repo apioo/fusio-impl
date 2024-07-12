@@ -60,7 +60,7 @@ class UpdateCommandTest extends ControllerDbTestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'name' => 'fusio',
+            'type' => 'fusio',
         ]);
 
         $actual = $commandTester->getDisplay();

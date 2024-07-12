@@ -49,14 +49,9 @@ class EntityTest extends ControllerDbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertNotEmpty($data['version']);
-        $this->assertSame(version_compare($data['version'], '0.0'), 1);
-        $this->assertNotEmpty($data['description']);
-        $this->assertNotEmpty($data['screenshot']);
-        $this->assertNotEmpty($data['website']);
-        $this->assertNotEmpty($data['downloadUrl']);
-        $this->assertNotEmpty($data['sha1Hash']);
-        $this->assertNotEmpty($data['remote']);
+        $this->assertEquals('fusio', $data['name']);
+        $this->assertEquals('fusio', $data['author']['name']);
+        $this->assertEquals('The official Fusio backend app to develop, configure and maintain your API', $data['summary']);
     }
 
     public function testGetNotFound()
@@ -71,7 +66,7 @@ class EntityTest extends ControllerDbTestCase
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find local app', $data->message);
+        $this->assertStringStartsWith('Could not find app', $data->message);
     }
 
     public function testPost()
