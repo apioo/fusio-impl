@@ -38,12 +38,10 @@ use PSX\Http\Exception as StatusCode;
 abstract class GetAbstract implements ActionInterface
 {
     private Marketplace\Factory $factory;
-    private ContextFactory $contextFactory;
 
-    public function __construct(Marketplace\Factory $factory, ContextFactory $contextFactory)
+    public function __construct(Marketplace\Factory $factory)
     {
         $this->factory = $factory;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -52,12 +50,7 @@ abstract class GetAbstract implements ActionInterface
         $user = $request->get('user') ?? throw new StatusCode\BadRequestException('Provided no user');
         $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
 
-        $factory = $this->factory->factory($type);
-
-        $object = $factory->getRepository()->fetchByName($user, $name);
-        $isInstalled = $factory->getInstaller()->isInstalled($object, $this->contextFactory->newActionContext($context));
-
-        return $object;
+        return $this->factory->factory($type)->getRepository()->fetchByName($user, $name);
     }
 
     abstract protected function getType(): Marketplace\Type;

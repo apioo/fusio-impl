@@ -40,11 +40,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
-        $response = $this->sendRequest('/backend/marketplace/action/fusio', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/action/fusio/BulkInsert', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -53,14 +49,9 @@ class EntityTest extends ControllerDbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertNotEmpty($data['version']);
-        $this->assertSame(version_compare($data['version'], '0.0'), 1);
-        $this->assertNotEmpty($data['description']);
-        $this->assertNotEmpty($data['screenshot']);
-        $this->assertNotEmpty($data['website']);
-        $this->assertNotEmpty($data['downloadUrl']);
-        $this->assertNotEmpty($data['sha1Hash']);
-        $this->assertNotEmpty($data['remote']);
+        $this->assertEquals('BulkInsert', $data['name']);
+        $this->assertEquals('fusio', $data['author']['name']);
+        $this->assertEquals('This action inserts multiple rows', $data['summary']);
     }
 
     public function testGetNotFound()
@@ -69,7 +60,7 @@ class EntityTest extends ControllerDbTestCase
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/action/foobar', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/action/fusio/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -88,7 +79,7 @@ class EntityTest extends ControllerDbTestCase
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/action/fusio', 'POST', array(
+        $response = $this->sendRequest('/backend/marketplace/action/fusio/BulkInsert', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -108,7 +99,7 @@ class EntityTest extends ControllerDbTestCase
 
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/marketplace/action/fusio', 'PUT', array(
+        $response = $this->sendRequest('/backend/marketplace/action/fusio/BulkInsert', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -132,7 +123,7 @@ JSON;
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/action/fusio', 'DELETE', array(
+        $response = $this->sendRequest('/backend/marketplace/action/fusio/BulkInsert', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

@@ -49,23 +49,9 @@ class CollectionTest extends ControllerDbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertArrayHasKey('fusio', $data['apps']);
-        $this->assertArrayHasKey('developer', $data['apps']);
-        $this->assertArrayHasKey('documentation', $data['apps']);
-        $this->assertArrayHasKey('swagger-ui', $data['apps']);
-        $this->assertArrayHasKey('vscode', $data['apps']);
-
-        foreach ($data['apps'] as $app) {
-            $this->assertNotEmpty($app['version']);
-            $this->assertSame(version_compare($app['version'], '0.0'), 1);
-            $this->assertNotEmpty($app['description']);
-            $this->assertNotEmpty($app['screenshot']);
-            $this->assertNotEmpty($app['website']);
-            $this->assertNotEmpty($app['downloadUrl']);
-            $this->assertNotEmpty($app['sha1Hash']);
-
-            // @TODO maybe check whether the download url actual exists
-        }
+        $this->assertTrue($data['totalResults'] > 0);
+        $this->assertTrue(is_array($data['entry']));
+        $this->assertTrue(count($data['entry']) > 0);
     }
 
     public function testPost()

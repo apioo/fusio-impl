@@ -3,40 +3,40 @@
   "security": {
     "type": "oauth2",
     "tokenUrl": "http://127.0.0.1/authorization/token",
-    "scopes": {
-      "backend": "",
-      "backend.account": "",
-      "backend.action": "",
-      "backend.app": "",
-      "backend.audit": "",
-      "backend.backup": "",
-      "backend.category": "",
-      "backend.config": "",
-      "backend.connection": "",
-      "backend.cronjob": "",
-      "backend.dashboard": "",
-      "backend.database": "",
-      "backend.event": "",
-      "backend.generator": "",
-      "backend.identity": "",
-      "backend.log": "",
-      "backend.marketplace": "",
-      "backend.operation": "",
-      "backend.page": "",
-      "backend.plan": "",
-      "backend.rate": "",
-      "backend.role": "",
-      "backend.schema": "",
-      "backend.scope": "",
-      "backend.sdk": "",
-      "backend.statistic": "",
-      "backend.tenant": "",
-      "backend.token": "",
-      "backend.transaction": "",
-      "backend.trash": "",
-      "backend.user": "",
-      "backend.webhook": ""
-    }
+    "scopes": [
+      "backend",
+      "backend.account",
+      "backend.action",
+      "backend.app",
+      "backend.audit",
+      "backend.backup",
+      "backend.category",
+      "backend.config",
+      "backend.connection",
+      "backend.cronjob",
+      "backend.dashboard",
+      "backend.database",
+      "backend.event",
+      "backend.generator",
+      "backend.identity",
+      "backend.log",
+      "backend.marketplace",
+      "backend.operation",
+      "backend.page",
+      "backend.plan",
+      "backend.rate",
+      "backend.role",
+      "backend.schema",
+      "backend.scope",
+      "backend.sdk",
+      "backend.statistic",
+      "backend.tenant",
+      "backend.token",
+      "backend.transaction",
+      "backend.trash",
+      "backend.user",
+      "backend.webhook"
+    ]
   },
   "operations": {
     "authorization.getWhoami": {
@@ -6858,7 +6858,7 @@
       ]
     },
     "backend.marketplace.app.upgrade": {
-      "path": "/backend/marketplace/app/:name",
+      "path": "/backend/marketplace/app/:user/:name",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6867,6 +6867,12 @@
         }
       },
       "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
         "name": {
           "in": "path",
           "schema": {
@@ -6917,7 +6923,7 @@
       ]
     },
     "backend.marketplace.app.get": {
-      "path": "/backend/marketplace/app/:name",
+      "path": "/backend/marketplace/app/:user/:name",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6926,6 +6932,12 @@
         }
       },
       "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
         "name": {
           "in": "path",
           "schema": {
@@ -7064,7 +7076,7 @@
       ]
     },
     "backend.marketplace.action.upgrade": {
-      "path": "/backend/marketplace/action/:name",
+      "path": "/backend/marketplace/action/:user/:name",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -7073,6 +7085,12 @@
         }
       },
       "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
         "name": {
           "in": "path",
           "schema": {
@@ -7123,7 +7141,7 @@
       ]
     },
     "backend.marketplace.action.get": {
-      "path": "/backend/marketplace/action/:name",
+      "path": "/backend/marketplace/action/:user/:name",
       "method": "GET",
       "return": {
         "code": 200,
@@ -7132,6 +7150,12 @@
         }
       },
       "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
         "name": {
           "in": "path",
           "schema": {

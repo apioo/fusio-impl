@@ -49,9 +49,7 @@ abstract class GetAllAbstract implements ActionInterface
         $startIndex = (int) $request->get('startIndex');
         $query = $request->get('query');
 
-        $factory = $this->factory->factory($type);
-
-        return $factory->getRepository()->fetchAll($startIndex, $query);
+        return $this->factory->factory($type)->getRepository()->fetchAll($startIndex, $query);
     }
 
     abstract protected function getType(): Marketplace\Type;

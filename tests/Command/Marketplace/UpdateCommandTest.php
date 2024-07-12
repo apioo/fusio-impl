@@ -46,14 +46,11 @@ class UpdateCommandTest extends ControllerDbTestCase
 
     public function testCommandApp()
     {
-        if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
+        $appsDir = Environment::getConfig('fusio_apps_dir');
+
+        if (!is_dir($appsDir . '/fusio')) {
             $this->markTestSkipped('The fusio app is not installed');
         }
-
-        $appsDir = Environment::getConfig('fusio_apps_dir');
-        mkdir($appsDir . '/fusio');
-        file_put_contents($appsDir . '/fusio/app.yaml', $this->getOldApp());
-        file_put_contents($appsDir . '/fusio/index.html', 'old');
 
         $command = new UpgradeCommand(
             Environment::getService(Installer::class),
@@ -68,7 +65,7 @@ class UpdateCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Updated app fusio', trim($actual));
+        $this->assertEquals('Updated app fusio/fusio', trim($actual));
 
         $this->assertDirectoryExists($appsDir . '/fusio');
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
@@ -97,7 +94,7 @@ class UpdateCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Installed action fusio/BulkInsert', trim($actual));
+        $this->assertEquals('Updated action fusio/BulkInsert', trim($actual));
 
         $row = $this->connection->fetchAssociative('SELECT id, class, config FROM fusio_action WHERE name = :name', [
             'name' => 'fusio-BulkInsert',

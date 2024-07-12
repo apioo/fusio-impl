@@ -40,10 +40,6 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
         $response = $this->sendRequest('/backend/marketplace/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -53,46 +49,9 @@ class CollectionTest extends ControllerDbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertArrayHasKey('fusio', $data['apps']);
-        $this->assertArrayHasKey('developer', $data['apps']);
-        $this->assertArrayHasKey('documentation', $data['apps']);
-        $this->assertArrayHasKey('swagger-ui', $data['apps']);
-        $this->assertArrayHasKey('vscode', $data['apps']);
-
-        foreach ($data['apps'] as $app) {
-            $this->assertNotEmpty($app['version']);
-            $this->assertSame(version_compare($app['version'], '0.0'), 1);
-            $this->assertNotEmpty($app['description']);
-            $this->assertNotEmpty($app['screenshot']);
-            $this->assertNotEmpty($app['website']);
-            $this->assertNotEmpty($app['downloadUrl']);
-            $this->assertNotEmpty($app['sha1Hash']);
-
-            // @TODO maybe check whether the download url actual exists
-        }
-    }
-
-    public function testGetLocal()
-    {
-        if (Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace enabled');
-        }
-
-        if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is already installed');
-        }
-
-        $response = $this->sendRequest('/backend/marketplace/app', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-        $data = \json_decode($body, true);
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertArrayHasKey('apps', $data);
-        $this->assertEquals([], $data['apps']);
+        $this->assertTrue($data['totalResults'] > 0);
+        $this->assertTrue(is_array($data['entry']));
+        $this->assertTrue(count($data['entry']) > 0);
     }
 
     public function testPost()
