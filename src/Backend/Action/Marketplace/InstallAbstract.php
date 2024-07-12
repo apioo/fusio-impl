@@ -24,20 +24,22 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace\Type;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Marketplace\MarketplaceInstall;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Remove
+ * InstallAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Remove implements ActionInterface
+abstract class InstallAbstract implements ActionInterface
 {
     private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
@@ -56,14 +58,22 @@ class Remove implements ActionInterface
             throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
-        $app = $this->installerService->remove(
-            $request->get('app_name'),
+        $type = $this->getType();
+        $body = $request->getPayload();
+
+        assert($body instanceof MarketplaceInstall);
+
+        $object = $this->installerService->install(
+            $type,
+            $body,
             $this->contextFactory->newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'App ' . $app->getName() . ' successful removed',
-        ];
+            'message' => ucfirst($type->value) . ' ' . $object->getName() . ' successfully installed',
+        ]);
     }
+
+    abstract protected function getType(): Type;
 }

@@ -114,7 +114,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "205"
+    "id": "208"
 }
 JSON;
 
@@ -315,7 +315,7 @@ JSON;
                 $points = $this->connection->fetchOne('SELECT points FROM fusio_user WHERE id = 4');
                 $this->assertEquals(10 - ($i + 1), $points);
             } else {
-                $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals(402, $response->getStatusCode(), $body);
                 $this->assertEquals('16', $response->getHeader('RateLimit-Limit'), $body);
                 $this->assertEquals(16 - $i, $response->getHeader('RateLimit-Remaining'), $body);
                 $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);

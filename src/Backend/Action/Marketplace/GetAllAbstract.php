@@ -24,46 +24,32 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Marketplace\Installer;
-use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use PSX\Http\Exception as StatusCode;
+use Fusio\Impl\Service\Marketplace;
 
 /**
- * Update
+ * GetAllAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+abstract class GetAllAbstract implements ActionInterface
 {
-    private Installer $installerService;
-    private FrameworkConfig $frameworkConfig;
-    private ContextFactory $contextFactory;
+    private Marketplace\Factory $factory;
 
-    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
+    public function __construct(Marketplace\Factory $factory)
     {
-        $this->installerService = $installerService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->contextFactory = $contextFactory;
+        $this->factory = $factory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        if (!$this->frameworkConfig->isMarketplaceEnabled()) {
-            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
-        }
+        $type = $this->getType();
+        $startIndex = (int) $request->get('startIndex');
+        $query = $request->get('query');
 
-        $app = $this->installerService->update(
-            $request->get('app_name'),
-            $this->contextFactory->newActionContext($context)
-        );
-
-        return [
-            'success' => true,
-            'message' => 'App ' . $app->getName() . ' successfully updated',
-        ];
+        return $this->factory->factory($type)->getRepository()->fetchAll($startIndex, $query);
     }
+
+    abstract protected function getType(): Marketplace\Type;
 }

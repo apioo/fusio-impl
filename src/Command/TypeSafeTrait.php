@@ -48,4 +48,22 @@ trait TypeSafeTrait
 
         return $value;
     }
+
+    public function getOptionalArgumentAsString(InputInterface $input, string $name): ?string
+    {
+        $value = $input->getArgument($name);
+        if (empty($value)) {
+            return null;
+        }
+
+        if (is_int($value)) {
+            $value = (string) $value;
+        }
+
+        if (!is_string($value)) {
+            throw new \RuntimeException('Provided an invalid value for ' . $name);
+        }
+
+        return $value;
+    }
 }

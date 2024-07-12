@@ -225,6 +225,18 @@
       "name": "user_approval",
       "description": "Whether the user needs to activate the account through an email",
       "value": true
+    },
+    {
+      "type": 1,
+      "name": "marketplace_client_id",
+      "description": "The marketplace client id",
+      "value": ""
+    },
+    {
+      "type": 1,
+      "name": "marketplace_client_secret",
+      "description": "The marketplace client secret",
+      "value": ""
     }
   ],
   "connection": [
@@ -307,7 +319,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 206,
+          "operationId": 209,
           "authenticated": true
         }
       ]
@@ -324,7 +336,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 205
+          "operationId": 208
         }
       ]
     },

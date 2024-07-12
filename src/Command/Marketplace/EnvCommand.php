@@ -26,7 +26,6 @@ use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,12 +39,12 @@ class EnvCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Service\Marketplace\Installer $installer;
+    private Service\Marketplace\Factory $factory;
     private Service\System\ContextFactory $contextFactory;
 
-    public function __construct(Service\Marketplace\Installer $installer, Service\System\ContextFactory $contextFactory)
+    public function __construct(Service\Marketplace\Factory $factory, Service\System\ContextFactory $contextFactory)
     {
-        $this->installer = $installer;
+        $this->factory = $factory;
         $this->contextFactory = $contextFactory;
 
         parent::__construct();
@@ -68,7 +67,13 @@ class EnvCommand extends Command
         try {
             $context = $this->contextFactory->newCommandContext($input);
 
-            $app = $this->installer->env($name, $context);
+            $installer = $this->factory->factory(Service\Marketplace\Type::APP)->getInstaller();
+
+            if ($installer instanceof Service\Marketplace\App\Installer) {
+                $app = $installer->env($name, $context);
+            } else {
+                throw new \RuntimeException('Could not find app installer');
+            }
 
             $output->writeln('');
             $output->writeln('Replaced env ' . $app->getName());

@@ -62,6 +62,6 @@ class TypeAPI implements ConfiguratorInterface
         $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());
 
         $generator->setBaseUrl($baseUrl);
-        $generator->setSecurity(new OAuth2($tokenUrl, null, $scopes));
+        $generator->setSecurity(new OAuth2($tokenUrl, null, array_keys($scopes)));
     }
 }

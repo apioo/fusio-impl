@@ -47,7 +47,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 31,
+    "totalResults": 33,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -210,7 +210,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 31,
+    "totalResults": 33,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -346,6 +346,20 @@ JSON;
             "name": "mail_register_subject",
             "description": "Subject of the activation mail",
             "value": "Fusio registration"
+        },
+        {
+            "id": 32,
+            "type": 1,
+            "name": "marketplace_client_id",
+            "description": "The marketplace client id",
+            "value": ""
+        },
+        {
+            "id": 33,
+            "type": 1,
+            "name": "marketplace_client_secret",
+            "description": "The marketplace client secret",
+            "value": ""
         },
         {
             "id": 24,

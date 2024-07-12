@@ -20,9 +20,13 @@
 
 namespace Fusio\Impl\Command\Marketplace;
 
+use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
+use Fusio\Marketplace\MarketplaceActionCollection;
+use Fusio\Marketplace\MarketplaceAppCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,35 +40,42 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
-    private Service\Marketplace\Repository\Remote $remoteRepository;
+    use TypeSafeTrait;
 
-    public function __construct(Service\Marketplace\Repository\Remote $remoteRepository)
+    private Service\Marketplace\Factory $factory;
+
+    public function __construct(Service\Marketplace\Factory $factory)
     {
         parent::__construct();
 
-        $this->remoteRepository = $remoteRepository;
+        $this->factory = $factory;
     }
 
     protected function configure(): void
     {
         $this
             ->setName('marketplace:list')
-            ->setDescription('Lists all available apps on the marketplace')
+            ->addArgument('type', InputArgument::OPTIONAL, 'The type i.e. action or app')
+            ->addArgument('query', InputArgument::OPTIONAL, 'To search a specific object on the marketplace')
+            ->setDescription('Lists all available types on the marketplace')
             ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('disable_ssl_verify')) {
-            $this->remoteRepository->setSslVerify(false);
-        }
+        $rawType = $this->getOptionalArgumentAsString($input, 'type');
+        $query = (string) $this->getOptionalArgumentAsString($input, 'query');
 
-        $apps = $this->remoteRepository->fetchAll();
+        $type = $rawType !== null ? (Service\Marketplace\Type::tryFrom($rawType) ?? Service\Marketplace\Type::APP) : Service\Marketplace\Type::APP;
+
+        $repository = $this->factory->factory($type)->getRepository();
+
+        /** @var MarketplaceActionCollection|MarketplaceAppCollection $collection */
+        $collection = $repository->fetchAll(0, $query);
 
         $rows = [];
-        foreach ($apps as $name => $app) {
-            /** @var \Fusio\Impl\Dto\Marketplace\App $app */
-            $rows[] = [$name, $app->getVersion()];
+        foreach ($collection->getEntry() ?? [] as $object) {
+            $rows[] = [$object->getName(), $object->getVersion()];
         }
 
         $table = new Table($output);

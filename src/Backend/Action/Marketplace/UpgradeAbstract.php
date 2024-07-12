@@ -24,54 +24,54 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Dto\Marketplace\App;
-use Fusio\Impl\Service\Marketplace;
+use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Impl\Service\Marketplace\Type;
+use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * Get
+ * UpgradeAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+abstract class UpgradeAbstract implements ActionInterface
 {
-    private Marketplace\Repository\Remote $remoteRepository;
-    private Marketplace\Repository\Local $localRepository;
+    private Installer $installerService;
     private FrameworkConfig $frameworkConfig;
+    private ContextFactory $contextFactory;
 
-    public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, FrameworkConfig $frameworkConfig)
+    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
     {
-        $this->remoteRepository = $remoteRepository;
-        $this->localRepository = $localRepository;
+        $this->installerService = $installerService;
         $this->frameworkConfig = $frameworkConfig;
+        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $localApp = $this->localRepository->fetchByName(
-            $request->get('app_name')
+        if (!$this->frameworkConfig->isMarketplaceEnabled()) {
+            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
+        }
+
+        $type = $this->getType();
+        $user = $request->get('user') ?? throw new StatusCode\BadRequestException('Provided no user');
+        $name = $request->get('name') ?? throw new StatusCode\BadRequestException('Provided no name');
+
+        $object = $this->installerService->upgrade(
+            $type,
+            $user,
+            $name,
+            $this->contextFactory->newActionContext($context)
         );
 
-        if (empty($localApp)) {
-            throw new StatusCode\NotFoundException('Could not find local app');
-        }
-
-        if ($this->frameworkConfig->isMarketplaceEnabled()) {
-            $remoteApp = $this->remoteRepository->fetchByName(
-                $request->get('app_name')
-            );
-        } else {
-            $remoteApp = null;
-        }
-
-        $app = $localApp->toArray();
-        if ($remoteApp instanceof App) {
-            $app['remote'] = $remoteApp->toArray();
-        }
-
-        return $app;
+        return [
+            'success' => true,
+            'message' => ucfirst($type->value) . ' ' . $object->getName() . ' successfully upgraded',
+        ];
     }
+
+    abstract protected function getType(): Type;
 }

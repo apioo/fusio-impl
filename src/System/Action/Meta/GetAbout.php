@@ -26,7 +26,6 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
-use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -44,15 +43,13 @@ class GetAbout implements ActionInterface
     private Service\System\FrameworkConfig $frameworkConfig;
     private Table\Category $categoryTable;
     private Table\Scope $scopeTable;
-    private Marketplace\Repository\Local $localRepository;
 
-    public function __construct(Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Category $categoryTable, Table\Scope $scopeTable, Marketplace\Repository\Local $localRepository)
+    public function __construct(Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Category $categoryTable, Table\Scope $scopeTable)
     {
         $this->configService = $configService;
         $this->frameworkConfig = $frameworkConfig;
         $this->categoryTable = $categoryTable;
         $this->scopeTable = $scopeTable;
-        $this->localRepository = $localRepository;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -70,22 +67,8 @@ class GetAbout implements ActionInterface
             'paymentCurrency' => $this->configService->getValue('payment_currency') ?: 'EUR',
             'categories' => $this->getCategories($context),
             'scopes' => $this->getScopes($context),
-            'apps' => $this->getApps(),
             'links' => $this->getLinks(),
         ]);
-    }
-
-    private function getApps(): array
-    {
-        $appsUrl = $this->frameworkConfig->getAppsUrl();
-        $apps = $this->localRepository->fetchAll();
-
-        $result = [];
-        foreach ($apps as $app) {
-            $result[$app->getName()] = $appsUrl . '/' . $app->getName();
-        }
-
-        return $result;
     }
 
     private function getCategories(ContextInterface $context): array

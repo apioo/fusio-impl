@@ -18,40 +18,22 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Command\Marketplace;
+namespace Fusio\Impl\Backend\Action\Marketplace\App;
 
-use Fusio\Impl\Command\Marketplace\RemoveCommand;
-use Fusio\Impl\Service\System\ContextFactory;
-use PSX\Framework\Test\Environment;
-use Symfony\Component\Console\Tester\CommandTester;
+use Fusio\Impl\Backend\Action\Marketplace\UpgradeAbstract;
+use Fusio\Impl\Service\Marketplace;
 
 /**
- * RemoveCommandTest
+ * Upgrade
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RemoveCommandTest extends MarketplaceTestCase
+class Upgrade extends UpgradeAbstract
 {
-    public function testCommand()
+    protected function getType(): Marketplace\Type
     {
-        if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
-            $this->markTestSkipped('The fusio app is not installed');
-        }
-
-        $command = new RemoveCommand(
-            $this->getInstaller(),
-            Environment::getService(ContextFactory::class)
-        );
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'name' => 'fusio',
-        ]);
-
-        $actual = $commandTester->getDisplay();
-
-        $this->assertEquals('Removed app fusio', trim($actual));
+        return Marketplace\Type::APP;
     }
 }

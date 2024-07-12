@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
-use Fusio\Impl\Dto\Marketplace\App;
+use Fusio\Marketplace\MarketplaceCollection;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Marketplace\MarketplaceObject;
 
 /**
  * RepositoryInterface
@@ -32,14 +34,21 @@ use Fusio\Impl\Dto\Marketplace\App;
 interface RepositoryInterface
 {
     /**
-     * Returns all available apps from the marketplace repository
-     *
-     * @return App[]
+     * Returns all available objects from the marketplace repository
      */
-    public function fetchAll(): array;
+    public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceCollection;
 
     /**
-     * Returns a single app from the repository
+     * Returns a single object from the repository
+     *
+     * @throws MarketplaceMessageException
      */
-    public function fetchByName(string $name): ?App;
+    public function fetchByName(string $user, string $name): MarketplaceObject;
+
+    /**
+     * Returns a single object from the repository
+     *
+     * @throws MarketplaceMessageException
+     */
+    public function install(string $user, string $name): MarketplaceObject;
 }
