@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Marketplace\Collection;
 use Fusio\Marketplace\MarketplaceObject;
+use Fusio\Marketplace\MessageException;
 
 /**
  * RepositoryInterface
@@ -39,6 +40,8 @@ interface RepositoryInterface
 
     /**
      * Returns a single object from the repository
+     *
+     * @throws MessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceObject;
 

@@ -56,10 +56,6 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGetNotFound()
     {
-        if (!Environment::getConfig('fusio_marketplace')) {
-            $this->markTestSkipped('Marketplace not enabled');
-        }
-
         $response = $this->sendRequest('/backend/marketplace/action/fusio/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -70,7 +66,7 @@ class EntityTest extends ControllerDbTestCase
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find local app', $data->message);
+        $this->assertStringStartsWith('Could not find action', $data->message);
     }
 
     public function testPost()
