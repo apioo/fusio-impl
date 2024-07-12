@@ -6863,7 +6863,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Message"
+          "$ref": "MarketplaceMessage"
         }
       },
       "arguments": {
@@ -6884,31 +6884,31 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 404,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 410,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -6949,25 +6949,25 @@
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 404,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 410,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -6987,7 +6987,7 @@
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "Message"
+          "$ref": "MarketplaceMessage"
         }
       },
       "arguments": {
@@ -7002,19 +7002,19 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -7055,13 +7055,13 @@
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -7167,25 +7167,25 @@
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 404,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 410,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -7205,7 +7205,7 @@
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "Message"
+          "$ref": "MarketplaceMessage"
         }
       },
       "arguments": {
@@ -7220,19 +7220,19 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -7273,13 +7273,13 @@
         {
           "code": 401,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Message"
+            "$ref": "MarketplaceMessage"
           }
         }
       ],
@@ -11355,12 +11355,6 @@
     }
   },
   "definitions": {
-    "ActionConfig": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
     "Backend_AccountChangePassword": {
       "type": "object",
       "properties": {
@@ -13249,26 +13243,6 @@
       "$extends": "Backend_Webhook",
       "type": "object"
     },
-    "Collection": {
-      "type": "object",
-      "properties": {
-        "totalResults": {
-          "type": "integer"
-        },
-        "startIndex": {
-          "type": "integer"
-        },
-        "itemsPerPage": {
-          "type": "integer"
-        },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$generic": "T"
-          }
-        }
-      }
-    },
     "Common_Collection": {
       "type": "object",
       "properties": {
@@ -14196,14 +14170,20 @@
           "type": "string"
         },
         "config": {
-          "$ref": "ActionConfig"
+          "$ref": "MarketplaceActionConfig"
         }
       }
     },
     "MarketplaceActionCollection": {
-      "$ref": "Collection",
+      "$ref": "MarketplaceCollection",
       "$template": {
         "T": "MarketplaceAction"
+      }
+    },
+    "MarketplaceActionConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     },
     "MarketplaceApp": {
@@ -14225,15 +14205,46 @@
       }
     },
     "MarketplaceAppCollection": {
-      "$ref": "Collection",
+      "$ref": "MarketplaceCollection",
       "$template": {
         "T": "MarketplaceApp"
+      }
+    },
+    "MarketplaceCollection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
       }
     },
     "MarketplaceInstall": {
       "type": "object",
       "properties": {
         "name": {
+          "type": "string"
+        }
+      }
+    },
+    "MarketplaceMessage": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
           "type": "string"
         }
       }
@@ -14248,7 +14259,7 @@
           "type": "string"
         },
         "author": {
-          "$ref": "User"
+          "$ref": "MarketplaceUser"
         },
         "version": {
           "type": "string"
@@ -14275,14 +14286,17 @@
         }
       }
     },
-    "Message": {
+    "MarketplaceUser": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
+        "id": {
+          "type": "integer"
         },
-        "message": {
+        "name": {
           "type": "string"
+        },
+        "verified": {
+          "type": "boolean"
         }
       }
     },
@@ -14450,20 +14464,6 @@
       "type": "object",
       "additionalProperties": {
         "type": "any"
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "verified": {
-          "type": "boolean"
-        }
       }
     }
   }
