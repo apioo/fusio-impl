@@ -25,8 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Marketplace;
-use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Marketplace\MessageException;
+use Fusio\Marketplace\MarketplaceMessageException;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -53,7 +52,7 @@ abstract class GetAbstract implements ActionInterface
 
         try {
             return $this->factory->factory($type)->getRepository()->fetchByName($user, $name);
-        } catch (MessageException $e) {
+        } catch (MarketplaceMessageException $e) {
             throw new StatusCode\NotFoundException('Could not find ' . $type->value);
         }
     }

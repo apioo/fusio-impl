@@ -25,7 +25,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Marketplace;
-use PSX\Http\Exception as StatusCode;
 
 /**
  * GetAllAbstract
