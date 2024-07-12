@@ -70,7 +70,7 @@ class Installer
     {
         $factory = $this->factory->factory($type);
 
-        $object = $factory->getRepository()->fetchByName($user, $name);
+        $object = $factory->getRepository()->install($user, $name);
 
         $installer = $factory->getInstaller();
         if (!$installer->isInstalled($object, $context)) {

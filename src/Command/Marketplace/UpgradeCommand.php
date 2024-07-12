@@ -73,22 +73,18 @@ class UpgradeCommand extends Command
         $type = Service\Marketplace\Type::tryFrom($rawType);
         if ($type === null) {
             $type = Service\Marketplace\Type::APP;
-            $name = $rawType;
-        }
-
-        $factory = $this->factory->factory($type);
-        if ($input->getOption('disable_ssl_verify')) {
-            $repository = $factory->getRepository();
-            if ($repository instanceof Service\Marketplace\RemoteAbstract) {
-                $repository->setSslVerify(false);
-            }
+            $name = 'fusio/' . $rawType;
         }
 
         try {
-            $object = $this->installer->upgrade($type->value, $name, $this->contextFactory->newCommandContext($input));
+            $parts = explode('/', $name);
+            $user = $parts[0] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
+            $name = $parts[1] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
+
+            $object = $this->installer->upgrade($type, $user, $name, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
-            $output->writeln('Updated ' . $type->value . ' ' . $object->getName());
+            $output->writeln('Updated ' . $type->value . ' ' . $object->getAuthor()?->getName() . '/' . $object->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

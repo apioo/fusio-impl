@@ -250,7 +250,7 @@ class Installer implements InstallerInterface
 
     private function getOrCreateAppKey(MarketplaceApp $app, UserContext $context): string
     {
-        $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $app->getName());
+        $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $app->getName() ?? '');
         if ($existing instanceof Table\Generated\AppRow) {
             return $existing->getAppKey();
         } else {

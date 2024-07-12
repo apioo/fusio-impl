@@ -22,7 +22,6 @@ namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\ListCommand;
 use Fusio\Impl\Service\Marketplace\Factory;
-use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

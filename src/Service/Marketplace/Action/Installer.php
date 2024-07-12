@@ -60,10 +60,10 @@ class Installer implements InstallerInterface
         $create = new ActionCreate();
         $create->setName($actionName);
         $create->setClass($object->getClass());
-        $create->setConfig(ActionConfig::from($object->getConfig()));
+        $create->setConfig(ActionConfig::from($object->getConfig() ?? []));
 
         $metadata = new Metadata();
-        $metadata->put('marketplace_version', $object->getVersion());
+        $metadata->put('marketplace_version', $object->getVersion() ?? '0.0.0');
         $create->setMetadata($metadata);
 
         $this->actionService->create($create, $context);
@@ -84,10 +84,10 @@ class Installer implements InstallerInterface
 
         $update = new ActionUpdate();
         $update->setClass($object->getClass());
-        $update->setConfig(ActionConfig::from($object->getConfig()));
+        $update->setConfig(ActionConfig::from($object->getConfig() ?? []));
 
         $metadata = $update->getMetadata() ?? new Metadata();
-        $metadata->put('marketplace_version', $object->getVersion());
+        $metadata->put('marketplace_version', $object->getVersion() ?? '0.0.0');
         $update->setMetadata($metadata);
 
         $this->actionService->update('' . $existing->getId(), $update, $context);
@@ -95,12 +95,13 @@ class Installer implements InstallerInterface
 
     public function isInstalled(MarketplaceObject $object, UserContext $context): bool
     {
-        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $object->getName());
+        $name = $this->getActionName($object);
+        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $name);
         return $existing instanceof Table\Generated\ActionRow;
     }
 
     private function getActionName(MarketplaceObject $object): string
     {
-        return $object->getAuthor()->getName() . '-' . $object->getName();
+        return $object->getAuthor()?->getName() . '-' . $object->getName();
     }
 }

@@ -69,17 +69,12 @@ class ListCommand extends Command
         $type = $rawType !== null ? (Service\Marketplace\Type::tryFrom($rawType) ?? Service\Marketplace\Type::APP) : Service\Marketplace\Type::APP;
 
         $repository = $this->factory->factory($type)->getRepository();
-        if ($input->getOption('disable_ssl_verify')) {
-            if ($repository instanceof Service\Marketplace\RemoteAbstract) {
-                //$repository->setSslVerify(false);
-            }
-        }
 
         /** @var MarketplaceActionCollection|MarketplaceAppCollection $collection */
         $collection = $repository->fetchAll(0, $query);
 
         $rows = [];
-        foreach ($collection->getEntry() as $object) {
+        foreach ($collection->getEntry() ?? [] as $object) {
             $rows[] = [$object->getName(), $object->getVersion()];
         }
 

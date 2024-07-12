@@ -57,18 +57,21 @@ class InstallCommandTest extends ControllerDbTestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'name' => 'fusio',
+            'type' => 'fusio',
         ]);
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Installed app fusio', trim($actual));
+        $this->assertEquals('Installed app fusio/fusio', trim($actual));
 
         $appsDir = Environment::getConfig('fusio_apps_dir');
         $this->assertDirectoryExists($appsDir . '/fusio');
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
         $this->assertFileExists($appsDir . '/fusio/index.html');
-        $this->assertEquals('foobar', file_get_contents($appsDir . '/fusio/index.html'));
+
+        $content = file_get_contents($appsDir . '/fusio/index.html');
+        $this->assertStringContainsString('FUSIO_URL', $content);
+        $this->assertStringContainsString('FUSIO_APP_KEY', $content);
     }
 
     public function testCommandAction()

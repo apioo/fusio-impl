@@ -69,7 +69,7 @@ class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $rawType = $this->getArgumentAsString($input, 'type');
-        $name = $this->getArgumentAsString($input, 'name');
+        $name = $this->getOptionalArgumentAsString($input, 'name');
 
         $type = Service\Marketplace\Type::tryFrom($rawType);
         if ($type === null) {
@@ -92,7 +92,7 @@ class InstallCommand extends Command
             $object = $this->installer->install($type, $install, $this->contextFactory->newCommandContext($input));
 
             $output->writeln('');
-            $output->writeln('Installed ' . $type->value . ' ' . $object->getAuthor()->getName() . '/' . $object->getName());
+            $output->writeln('Installed ' . $type->value . ' ' . $object->getAuthor()?->getName() . '/' . $object->getName());
             $output->writeln('');
         } catch (BadRequestException $e) {
             $output->writeln('');

@@ -20,8 +20,13 @@
 
 namespace Fusio\Impl\Tests\Command\Marketplace;
 
+use Fusio\Impl\Command\Marketplace\InstallCommand;
 use Fusio\Impl\Command\Marketplace\UpgradeCommand;
+use Fusio\Impl\Service\Marketplace\Factory;
+use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -32,9 +37,14 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class UpdateCommandTest extends MarketplaceTestCase
+class UpdateCommandTest extends ControllerDbTestCase
 {
-    public function testCommand()
+    public function getDataSet(): array
+    {
+        return Fixture::getDataSet();
+    }
+
+    public function testCommandApp()
     {
         if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is not installed');
@@ -46,8 +56,8 @@ class UpdateCommandTest extends MarketplaceTestCase
         file_put_contents($appsDir . '/fusio/index.html', 'old');
 
         $command = new UpgradeCommand(
-            $this->getInstaller(),
-            $this->getRemoteRepository(),
+            Environment::getService(Installer::class),
+            Environment::getService(Factory::class),
             Environment::getService(ContextFactory::class)
         );
 
@@ -63,18 +73,52 @@ class UpdateCommandTest extends MarketplaceTestCase
         $this->assertDirectoryExists($appsDir . '/fusio');
         $this->assertFileExists($appsDir . '/fusio/app.yaml');
         $this->assertFileExists($appsDir . '/fusio/index.html');
-        $this->assertEquals('foobar', file_get_contents($appsDir . '/fusio/index.html'));
+
+        $content = file_get_contents($appsDir . '/fusio/index.html');
+        $this->assertStringContainsString('FUSIO_URL', $content);
+        $this->assertStringContainsString('FUSIO_APP_KEY', $content);
     }
 
-    private function getOldApp()
+    public function testCommandAction()
     {
-        return <<<YAML
-version: '0.6'
-description: 'The backend app is the official app to develop, configure and maintain your API.'
-screenshot: 'https://raw.githubusercontent.com/apioo/fusio/master/doc/_static/backend.png'
-website: 'https://github.com/apioo/fusio-backend'
-downloadUrl: 'https://www.fusio-project.org/files/fusio.zip'
-sha1Hash: 573cb65ec966ed13f23aaa1888066069c7fdb3ae
-YAML;
+        $this->install();
+
+        $command = new UpgradeCommand(
+            Environment::getService(Installer::class),
+            Environment::getService(Factory::class),
+            Environment::getService(ContextFactory::class)
+        );
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'type' => 'action',
+            'name' => 'fusio/BulkInsert',
+        ]);
+
+        $actual = $commandTester->getDisplay();
+
+        $this->assertEquals('Installed action fusio/BulkInsert', trim($actual));
+
+        $row = $this->connection->fetchAssociative('SELECT id, class, config FROM fusio_action WHERE name = :name', [
+            'name' => 'fusio-BulkInsert',
+        ]);
+
+        $this->assertNotEmpty($row);
+        $this->assertEquals('Fusio.Adapter.Worker.Action.WorkerPHPLocal', $row['class']);
+    }
+
+    private function install(): void
+    {
+        $command = new InstallCommand(
+            Environment::getService(Installer::class),
+            Environment::getService(Factory::class),
+            Environment::getService(ContextFactory::class)
+        );
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'type' => 'action',
+            'name' => 'fusio/BulkInsert',
+        ]);
     }
 }
