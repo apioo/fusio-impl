@@ -68,7 +68,7 @@ class UpgradeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $rawType = $this->getArgumentAsString($input, 'type');
-        $name = $this->getArgumentAsString($input, 'name');
+        $name = $this->getOptionalArgumentAsString($input, 'name');
 
         $type = Service\Marketplace\Type::tryFrom($rawType);
         if ($type === null) {
