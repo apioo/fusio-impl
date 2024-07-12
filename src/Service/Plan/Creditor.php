@@ -41,7 +41,6 @@ class Creditor
 
     public function credit(int $points, ContextInterface $context): void
     {
-        // decrease user points
         $this->userTable->creditPoints($context->getUser()->getId(), $points);
     }
 }
