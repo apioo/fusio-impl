@@ -3,12 +3,12 @@
   "security": {
     "type": "oauth2",
     "tokenUrl": "http://127.0.0.1/authorization/token",
-    "scopes": {
-      "bar": "Bar access",
-      "default": "",
-      "foo": "Foo access",
-      "plan_scope": "Plan scope access"
-    }
+    "scopes": [
+      "bar",
+      "default",
+      "foo",
+      "plan_scope"
+    ]
   },
   "operations": {
     "inspect.delete": {
