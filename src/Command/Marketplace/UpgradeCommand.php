@@ -77,7 +77,7 @@ class UpgradeCommand extends Command
         }
 
         try {
-            $parts = explode('/', $name);
+            $parts = explode('/', $name ?? '');
             $user = $parts[0] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
             $name = $parts[1] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
 
