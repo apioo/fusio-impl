@@ -49,5 +49,24 @@ final class Version20240712210005 extends AbstractMigration
         foreach ($operations as $httpPath) {
             $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
         }
+
+        // add scopes
+        $scopeId = $this->connection->fetchOne('SELECT id FROM fusio_scope WHERE name = :name', ['name' => 'backend.marketplace']);
+        if (empty($scopeId)) {
+            return;
+        }
+
+        $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE status = :status AND http_path LIKE :path', [
+            'status' => Operation::STATUS_ACTIVE,
+            'path' => '/backend/marketplace/%',
+        ]);
+
+        foreach ($operationIds as $operationId) {
+            $this->connection->insert('fusio_scope_operation', [
+                'scope_id' => $scopeId,
+                'operation_id' => $operationId,
+                'allow' => 1,
+            ]);
+        }
     }
 }
