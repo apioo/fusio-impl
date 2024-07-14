@@ -32,9 +32,6 @@ use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\SchemaTraverser;
-use PSX\Schema\Visitor\TypeVisitor;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -109,20 +106,18 @@ class Installer implements InstallerInterface
         return is_dir($appDir);
     }
 
-    public function env(string $name, UserContext $context): MarketplaceApp
+    public function env(MarketplaceApp $object, UserContext $context): MarketplaceApp
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
-        $appDir = $appsDir . '/' . $name;
+        $appDir = $appsDir . '/' . $object->getName();
 
         if (!is_dir($appDir)) {
             throw new \InvalidArgumentException('Provided app does not exist');
         }
 
-        $localApp = $this->readMetaFile($appDir);
+        $this->replaceVariables($appDir, $object, $context);
 
-        $this->replaceVariables($appDir, $localApp, $context);
-
-        return $localApp;
+        return $object;
     }
 
     public function setReplaceEnv(bool $replaceEnv): void
@@ -184,27 +179,6 @@ class Installer implements InstallerInterface
         if (!file_put_contents($appDir . '/app.json', \json_encode($app))) {
             throw new StatusCode\InternalServerErrorException('Could not write app meta file');
         }
-    }
-
-    private function readMetaFile(string $appDir): MarketplaceApp
-    {
-        if (!is_file($appDir . '/app.json')) {
-            throw new StatusCode\InternalServerErrorException('App meta file does not exist');
-        }
-
-        $data = \json_decode($appDir . '/app.json');
-        if (!$data instanceof \stdClass) {
-            throw new StatusCode\InternalServerErrorException('App meta file is not valid');
-        }
-
-        $schema = (new SchemaManager())->getSchema(MarketplaceApp::class);
-        $app = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
-
-        if (!$app instanceof MarketplaceApp) {
-            throw new StatusCode\InternalServerErrorException('Could not parse app meta file');
-        }
-
-        return $app;
     }
 
     private function moveToPublic(string $appDir, MarketplaceApp $app): void
