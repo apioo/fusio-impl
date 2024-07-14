@@ -79,6 +79,10 @@ class EnvCommand extends Command
                 $user = 'fusio';
             }
 
+            if (empty($user) || empty($name)) {
+                throw new \RuntimeException('Provided an invalid name');
+            }
+
             $app = $repository->fetchByName($user, $name);
             if (!$app instanceof MarketplaceApp) {
                 throw new \RuntimeException('Provided app does not exist');
