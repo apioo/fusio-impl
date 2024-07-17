@@ -51,7 +51,6 @@ class DataSyncronizer
         }
 
         $operations = $data->getData('fusio_operation');
-        $operationMap = [];
         foreach ($operations as $row) {
             $operationId = $connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $row['name']
@@ -60,10 +59,6 @@ class DataSyncronizer
             if (empty($operationId)) {
                 self::insert($connection, 'fusio_operation', $row);
             }
-
-            $id = $data->getReference('fusio_operation', $row['name'], null)->resolve($connection);
-
-            $operationMap[$id] = $operationId;
         }
 
         $actions = $data->getData('fusio_action');
@@ -111,7 +106,6 @@ class DataSyncronizer
         }
 
         $scopes = $data->getData('fusio_scope');
-        $scopeMap = [];
         foreach ($scopes as $scope) {
             $scopeId = $connection->fetchOne('SELECT id FROM fusio_scope WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $scope['name']
@@ -119,18 +113,13 @@ class DataSyncronizer
 
             if (empty($scopeId)) {
                 self::insert($connection, 'fusio_scope', $scope);
-                $scopeId = $connection->lastInsertId();
             }
-
-            $id = $data->getReference('fusio_scope', $scope['name'], null)->resolve($connection);
-
-            $scopeMap[$id] = $scopeId;
         }
 
         $scopeOperations = $data->getData('fusio_scope_operation');
         foreach ($scopeOperations as $scopeOperation) {
-            $scopeId = $scopeMap[$scopeOperation['scope_id']->resolve($connection)] ?? null;
-            $operationId = $operationMap[$scopeOperation['operation_id']->resolve($connection)] ?? null;
+            $scopeId = $scopeOperation['scope_id']->resolve($connection);
+            $operationId = $scopeOperation['operation_id']->resolve($connection);
 
             if (empty($scopeId) || empty($operationId)) {
                 continue;

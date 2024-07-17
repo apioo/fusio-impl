@@ -47,6 +47,7 @@ class DataSyncronizerTest extends DbTestCase
         $schema = $this->getSchema('Passthru');
         $event = $this->getEvent('fusio.app.create');
         $cronjob = $this->getCronjob('Renew_Token');
+        $scope = $this->getScope('backend.action');
 
         DataSyncronizer::sync($this->connection);
 
@@ -56,6 +57,7 @@ class DataSyncronizerTest extends DbTestCase
         $this->assertEquals($schema, $this->getSchema('Passthru'));
         $this->assertEquals($event, $this->getEvent('fusio.app.create'));
         $this->assertEquals($cronjob, $this->getCronjob('Renew_Token'));
+        $this->assertEquals($scope, $this->getScope('backend.action'));
     }
 
     private function getConfig(string $name): array
