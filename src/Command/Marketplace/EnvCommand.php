@@ -83,7 +83,7 @@ class EnvCommand extends Command
                 throw new \RuntimeException('Provided an invalid name');
             }
 
-            $app = $repository->fetchByName($user, $name);
+            $app = $repository->install($user, $name);
             if (!$app instanceof MarketplaceApp) {
                 throw new \RuntimeException('Provided app does not exist');
             }
