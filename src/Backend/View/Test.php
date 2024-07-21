@@ -75,6 +75,7 @@ class Test extends ViewAbstract
             'status' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_STATUS),
             'operationName' => $builder->doValue([$this->getTable(Table\Operation::class), 'find'], [new Reference(Table\Generated\TestTable::COLUMN_OPERATION_ID)], Table\Generated\OperationTable::COLUMN_NAME),
             'message' => Table\Generated\TestTable::COLUMN_MESSAGE,
+            'response' => Table\Generated\TestTable::COLUMN_RESPONSE,
             'config' => [
                 'uriFragments' => Table\Generated\TestTable::COLUMN_URI_FRAGMENTS,
                 'parameters' => Table\Generated\TestTable::COLUMN_PARAMETERS,
