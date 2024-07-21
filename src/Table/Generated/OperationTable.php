@@ -9,8 +9,8 @@ class OperationTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_operation';
     public const COLUMN_ID = 'id';
-    public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_CATEGORY_ID = 'category_id';
+    public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_ACTIVE = 'active';
     public const COLUMN_PUBLIC = 'public';
@@ -33,7 +33,7 @@ class OperationTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ACTIVE => 0x20000a, self::COLUMN_PUBLIC => 0x20000a, self::COLUMN_STABILITY => 0x20000a, self::COLUMN_DESCRIPTION => 0x40a001f4, self::COLUMN_HTTP_METHOD => 0xa00010, self::COLUMN_HTTP_PATH => 0xa000ff, self::COLUMN_HTTP_CODE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_PARAMETERS => 0x40b00000, self::COLUMN_INCOMING => 0x40a000ff, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_THROWS => 0x40b00000, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_COSTS => 0x4020000a, self::COLUMN_METADATA => 0x40b00000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ACTIVE => 0x20000a, self::COLUMN_PUBLIC => 0x20000a, self::COLUMN_STABILITY => 0x20000a, self::COLUMN_DESCRIPTION => 0x40a001f4, self::COLUMN_HTTP_METHOD => 0xa00010, self::COLUMN_HTTP_PATH => 0xa000ff, self::COLUMN_HTTP_CODE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_PARAMETERS => 0x40b00000, self::COLUMN_INCOMING => 0x40a000ff, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_THROWS => 0x40b00000, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_COSTS => 0x4020000a, self::COLUMN_METADATA => 0x40b00000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
@@ -108,43 +108,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByTenantId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('tenant_id', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByTenantId(string $value) : ?\Fusio\Impl\Table\Generated\OperationRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('tenant_id', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByTenantId(string $value, \Fusio\Impl\Table\Generated\OperationRow $record) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('tenant_id', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByTenantId(string $value) : int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('tenant_id', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\OperationRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
     public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
     {
         $condition = \PSX\Sql\Condition::withAnd();
@@ -176,6 +139,43 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('category_id', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\OperationRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByTenantId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null) : array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByTenantId(string $value) : ?\Fusio\Impl\Table\Generated\OperationRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByTenantId(string $value, \Fusio\Impl\Table\Generated\OperationRow $record) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByTenantId(string $value) : int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

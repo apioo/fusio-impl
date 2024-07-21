@@ -59,13 +59,13 @@ class CronjobErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     {
         return $this->line ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "line" was provided');
     }
-    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(?\PSX\DateTime\LocalDateTime $insertDate) : void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    public function getInsertDate() : ?\PSX\DateTime\LocalDateTime
     {
-        return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
+        return $this->insertDate;
     }
     public function toRecord() : \PSX\Record\RecordInterface
     {
