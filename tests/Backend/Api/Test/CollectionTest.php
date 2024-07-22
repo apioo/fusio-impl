@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Plan;
+namespace Fusio\Impl\Tests\Backend\Api\Test;
 
-use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Plan;
+namespace Fusio\Impl\Tests\Backend\Api\Test;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
