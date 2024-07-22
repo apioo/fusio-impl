@@ -66,43 +66,51 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 8,
-            "status": 1,
-            "operationName": "meta.getAbout"
+            "status": 4,
+            "operationName": "test.listFoo",
+            "message": "\/entry must be of type object"
         },
         {
             "id": 7,
-            "status": 1,
-            "operationName": "test.listFoo"
+            "status": 4,
+            "operationName": "test.createFoo",
+            "message": "Expected status code 201 got 400"
         },
         {
             "id": 6,
-            "status": 1,
-            "operationName": "test.createFoo"
+            "status": 2,
+            "operationName": "meta.getAbout",
+            "message": ""
         },
         {
             "id": 5,
-            "status": 1,
-            "operationName": "inspect.get"
+            "status": 4,
+            "operationName": "inspect.put",
+            "message": "Expected status code 200 got 400"
         },
         {
             "id": 4,
-            "status": 1,
-            "operationName": "inspect.post"
+            "status": 4,
+            "operationName": "inspect.post",
+            "message": "Expected status code 200 got 400"
         },
         {
             "id": 3,
-            "status": 1,
-            "operationName": "inspect.put"
+            "status": 4,
+            "operationName": "inspect.patch",
+            "message": "Expected status code 200 got 400"
         },
         {
             "id": 2,
-            "status": 1,
-            "operationName": "inspect.patch"
+            "status": 3,
+            "operationName": "inspect.get",
+            "message": "No outgoing schema defined"
         },
         {
             "id": 1,
-            "status": 1,
-            "operationName": "inspect.delete"
+            "status": 3,
+            "operationName": "inspect.delete",
+            "message": "No outgoing schema defined"
         }
     ]
 }

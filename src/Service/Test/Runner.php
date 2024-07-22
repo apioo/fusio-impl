@@ -20,11 +20,16 @@
 
 namespace Fusio\Impl\Service\Test;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service;
+use Fusio\Impl\Base;
 use Fusio\Impl\Table;
 use PSX\Engine\DispatchInterface;
 use PSX\Http\Request;
 use PSX\Http\Response;
+use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\Stream;
+use PSX\OAuth2\AccessToken;
 use PSX\Schema\Exception\ValidationException;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaTraverser;
@@ -42,20 +47,36 @@ class Runner
     private Table\Test $testTable;
     private DispatchInterface $dispatcher;
     private SchemaManagerInterface $schemaManager;
+    private Service\Token $tokenService;
+    private Service\User\Authenticator $authenticatorService;
 
-    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager)
+    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Service\User\Authenticator $authenticatorService)
     {
         $this->testTable = $testTable;
         $this->dispatcher = $dispatcher;
         $this->schemaManager = $schemaManager;
+        $this->tokenService = $tokenService;
+        $this->authenticatorService = $authenticatorService;
     }
 
-    public function run(Table\Generated\TestRow $test, Table\Generated\OperationRow $operation): void
+    public function authenticate(UserContext $context): AccessToken
+    {
+        $scopes = $this->authenticatorService->getAvailableScopes($context->getTenantId(), $context->getUserId());
+        $token = $this->tokenService->generate($context->getTenantId(), Table\Category::TYPE_DEFAULT, $context->getAppId(), $context->getUserId(), 'Fusio-Test', $scopes, '127.0.0.1', new \DateInterval('PT30M'));
+
+        return $token;
+    }
+
+    public function run(Table\Generated\TestRow $test, Table\Generated\OperationRow $operation, AccessToken $token): void
     {
         $headers = [];
-        $headers['Authorization'] = 'Bearer ';
+        $headers['User-Agent'] = Base::getUserAgent();
 
-        if ($operation->getHttpMethod() === 'POST' || $operation->getHttpMethod() === 'PUT') {
+        if (!$operation->getPublic()) {
+            $headers['Authorization'] = 'Bearer ' . $token->getAccessToken();
+        }
+
+        if (in_array($operation->getHttpMethod(), ['POST', 'PUT', 'PATCH'])) {
             $headers['Content-Type'] = 'application/json';
             $body = $test->getBody();
         } else {
@@ -142,7 +163,7 @@ class Runner
         }
     }
 
-    private function dispatch(string $uri, string $method, array $headers, ?string $body): Response
+    private function dispatch(string $uri, string $method, array $headers, ?string $body): ResponseInterface
     {
         $request  = new Request(Uri::parse($uri), $method, $headers, $body);
         $response = new Response();

@@ -28,6 +28,7 @@ use Fusio\Model\Backend\PageUpdate;
 use Fusio\Model\Backend\TestConfig;
 use PSX\Sql\Condition;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\OrderBy;
 
 /**
  * Test
@@ -52,10 +53,10 @@ class Test
     public function refresh(UserContext $context): void
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Operation::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Operation::COLUMN_CATEGORY_ID, $context->getCategoryId());
-        $condition->equals(Table\Operation::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
-        $operations = $this->operationTable->findAll($condition, 0, 1024);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getCategoryId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
+        $operations = $this->operationTable->findAll($condition, 0, 1024, Table\Generated\OperationTable::COLUMN_NAME, OrderBy::ASC);
 
         foreach ($operations as $operation) {
             $row = new Table\Generated\TestRow();
@@ -69,6 +70,8 @@ class Test
 
     public function run(UserContext $context): void
     {
+        $token = $this->runner->authenticate($context);
+
         $condition = Condition::withAnd();
         $condition->notEquals(Table\Test::COLUMN_STATUS, Table\Test::STATUS_DISABLED);
         $tests = $this->testTable->findAll($condition, 0, 1024);
@@ -78,21 +81,23 @@ class Test
                 continue;
             }
 
-            $this->runner->run($test, $operation);
+            $this->runner->run($test, $operation, $token);
         }
     }
 
     public function update(string $testId, TestConfig $config, UserContext $context): int
     {
-        $existing = $this->testTable->findOneByTenantAndId($context->getTenantId(), $testId);
+        $existing = $this->testTable->findOneByTenantAndId($context->getTenantId(), (int) $testId);
         if (!$existing instanceof Table\Generated\TestRow) {
             throw new StatusCode\NotFoundException('Could not find test');
         }
 
+        $body = $config->getBody();
+
         $existing->setUriFragments($config->getUriFragments());
         $existing->setParameters($config->getParameters());
         $existing->setHeaders($config->getHeaders());
-        $existing->setBody($config->getBody());
+        $existing->setBody(isset($body) ? \json_encode($body, JSON_PRETTY_PRINT) : '');
         $this->testTable->update($existing);
 
         return $existing->getId();
