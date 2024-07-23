@@ -63,6 +63,7 @@ class DataBag
             'fusio_app_code' => [],
             'fusio_app_scope' => [],
             'fusio_token' => [],
+            'fusio_test' => [],
             'fusio_cronjob_error' => [],
             'fusio_webhook' => [],
             'fusio_webhook_response' => [],
