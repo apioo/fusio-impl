@@ -42,7 +42,7 @@ class Test extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\TestTable::COLUMN_ID);
+        $sortBy = $filter->getSortBy(Table\Generated\TestTable::COLUMN_OPERATION_ID);
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TestTable::COLUMN_MESSAGE]);

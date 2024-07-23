@@ -594,6 +594,22 @@ class DataBag
         ];
     }
 
+    public function addTest(string $category, string $operation, ?string $tenantId = null): void
+    {
+        $this->data['fusio_test'][$category . $operation] = [
+            'tenant_id' => $tenantId,
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
+            'status' => Table\Schema::STATUS_ACTIVE,
+            'message' => 'message',
+            'response' => 'response',
+            'uri_fragments' => 'foo=bar',
+            'parameters' => 'foo=bar',
+            'headers' => 'foo=bar',
+            'body' => '{"foo": "bar"}',
+        ];
+    }
+
     public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_user'][$name] = [

@@ -52,17 +52,17 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 52,
+            "id": 53,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 51,
+            "id": 52,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 50,
+            "id": 51,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -97,7 +97,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 50,
+            "id": 51,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -127,17 +127,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 52,
+            "id": 53,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 51,
+            "id": 52,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 50,
+            "id": 51,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -184,7 +184,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully created",
-    "id": "53"
+    "id": "54"
 }
 JSON;
 
@@ -202,7 +202,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(53, $row['id']);
+        $this->assertEquals(54, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
@@ -219,11 +219,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 210,
+            'operation_id' => 215,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 208,
+            'operation_id' => 213,
             'allow' => 1,
         ]], $operations);
     }

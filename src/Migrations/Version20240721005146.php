@@ -34,6 +34,7 @@ final class Version20240721005146 extends AbstractMigration
             $testTable->addColumn('headers', 'string', ['length' => 512, 'notnull' => false]);
             $testTable->addColumn('body', 'text', ['notnull' => false]);
             $testTable->setPrimaryKey(['id']);
+            $testTable->addUniqueIndex(['operation_id']);
 
             $testTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'test_category_id');
             $testTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'test_operation_id');

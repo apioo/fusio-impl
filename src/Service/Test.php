@@ -58,13 +58,31 @@ class Test
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
         $operations = $this->operationTable->findAll($condition, 0, 1024, Table\Generated\OperationTable::COLUMN_NAME, OrderBy::ASC);
 
+        $ids = [];
         foreach ($operations as $operation) {
-            $row = new Table\Generated\TestRow();
-            $row->setTenantId($context->getTenantId());
-            $row->setCategoryId($context->getCategoryId());
-            $row->setOperationId($operation->getId());
-            $row->setStatus(Table\Test::STATUS_PENDING);
-            $this->testTable->create($row);
+            $existing = $this->testTable->findOneByOperationId($operation->getId());
+            if ($existing instanceof Table\Generated\TestRow) {
+                $existing->setStatus(Table\Test::STATUS_PENDING);
+                $this->testTable->update($existing);
+
+                $ids[] = $existing->getId();
+            } else {
+                $row = new Table\Generated\TestRow();
+                $row->setTenantId($context->getTenantId());
+                $row->setCategoryId($context->getCategoryId());
+                $row->setOperationId($operation->getId());
+                $row->setStatus(Table\Test::STATUS_PENDING);
+                $this->testTable->create($row);
+
+                $ids[] = $this->testTable->getLastInsertId();
+            }
+        }
+
+        $condition = Condition::withAnd();
+        $condition->notIn(Table\Generated\TestTable::COLUMN_ID, $ids);
+        $tests = $this->testTable->findAll($condition, startIndex: 0, count: 1024);
+        foreach ($tests as $test) {
+            $this->testTable->delete($test);
         }
     }
 

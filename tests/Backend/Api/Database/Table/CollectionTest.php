@@ -78,6 +78,7 @@ class CollectionTest extends ControllerDbTestCase
         "fusio_schema",
         "fusio_scope",
         "fusio_scope_operation",
+        "fusio_test",
         "fusio_token",
         "fusio_transaction",
         "fusio_user",

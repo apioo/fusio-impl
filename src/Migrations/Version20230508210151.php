@@ -409,6 +409,7 @@ final class Version20230508210151 extends AbstractMigration
             $testTable->addColumn('headers', 'string', ['length' => 512, 'notnull' => false]);
             $testTable->addColumn('body', 'text', ['notnull' => false]);
             $testTable->setPrimaryKey(['id']);
+            $testTable->addUniqueIndex(['operation_id']);
 
         }
 

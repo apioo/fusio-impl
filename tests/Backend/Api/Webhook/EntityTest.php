@@ -60,7 +60,7 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<JSON
 {
     "id": 1,
-    "eventId": 55,
+    "eventId": 56,
     "userId": 1,
     "name": "ping",
     "endpoint": "http:\/\/www.fusio-project.org\/ping",

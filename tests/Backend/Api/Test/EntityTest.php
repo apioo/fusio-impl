@@ -50,17 +50,17 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 1,
     "status": 1,
-    "name": "Plan A",
-    "description": "",
-    "price": 39.99,
-    "points": 500,
-    "period": 1,
-    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
-    "scopes": [
-        "foo",
-        "bar",
-        "plan_scope"
-    ]
+    "operationName": "test.listFoo",
+    "message": "message",
+    "response": "response",
+    "config": {
+        "uriFragments": "foo=bar",
+        "parameters": "foo=bar",
+        "headers": "foo=bar",
+        "body": {
+            "foo": "bar"
+        }
+    }
 }
 JSON;
 
@@ -80,7 +80,7 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find plan', $data->message);
+        $this->assertStringStartsWith('Could not find test', $data->message);
     }
 
     public function testPost()
@@ -99,7 +99,7 @@ JSON;
 
     public function testPut()
     {
-        $metadata = [
+        $payload = [
             'foo' => 'bar'
         ];
 
@@ -107,20 +107,17 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'New-Test',
-            'description' => 'Test new description',
-            'price'       => 49.99,
-            'points'      => 4000,
-            'externalId'  => 'foobar',
-            'scopes'      => ['bar'],
-            'metadata'    => $metadata,
+            'uriFragments' => 'bar=bar',
+            'parameters'   => 'bar=bar',
+            'headers'      => 'Content-Type=text/xml',
+            'body'         => $payload,
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Plan successfully updated",
+    "message": "Test successfully updated",
     "id": "1"
 }
 JSON;
@@ -130,33 +127,18 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'period_type', 'external_id', 'metadata')
-            ->from('fusio_plan')
+            ->select('id', 'uri_fragments', 'parameters', 'headers', 'body')
+            ->from('fusio_test')
             ->where('id = 1')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals('New-Test', $row['name']);
-        $this->assertEquals('Test new description', $row['description']);
-        $this->assertEquals(4999, $row['price']);
-        $this->assertEquals(4000, $row['points']);
-        $this->assertEquals(1, $row['period_type']);
-        $this->assertEquals('foobar', $row['external_id']);
-        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
-
-        // check scopes
-        $sql = $this->connection->createQueryBuilder()
-            ->select('plan_id', 'scope_id')
-            ->from('fusio_plan_scope')
-            ->where('plan_id = :plan_id')
-            ->getSQL();
-
-        $result = $this->connection->fetchAllAssociative($sql, ['plan_id' => 1]);
-
-        $this->assertEquals(1, count($result));
-        $this->assertEquals(51, $result[0]['scope_id']);
+        $this->assertEquals('bar=bar', $row['uri_fragments']);
+        $this->assertEquals('bar=bar', $row['parameters']);
+        $this->assertEquals('Content-Type=text/xml', $row['headers']);
+        $this->assertJsonStringEqualsJsonString(json_encode($payload), $row['body']);
     }
 
     public function testDelete()
@@ -164,30 +146,12 @@ JSON;
         $response = $this->sendRequest('/backend/test/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ), json_encode([
+            'foo' => 'bar',
+        ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Plan successfully deleted",
-    "id": "1"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status')
-            ->from('fusio_plan')
-            ->where('id = 1')
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql);
-
-        $this->assertEquals(1, $row['id']);
-        $this->assertEquals(Table\Plan::STATUS_DELETED, $row['status']);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 }
