@@ -65,33 +65,33 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 2,
-            "status": 3,
+            "status": 4,
             "operationName": "inspect.delete",
-            "message": "No outgoing schema defined"
+            "message": "Missing parameter \"foo\" in path"
         },
         {
             "id": 4,
             "status": 4,
             "operationName": "inspect.patch",
-            "message": "Expected status code 200 got 400"
+            "message": "Missing parameter \"foo\" in path"
         },
         {
             "id": 6,
             "status": 4,
             "operationName": "inspect.put",
-            "message": "Expected status code 200 got 400"
+            "message": "Missing parameter \"foo\" in path"
         },
         {
             "id": 5,
             "status": 4,
             "operationName": "inspect.post",
-            "message": "Expected status code 200 got 400"
+            "message": "Missing parameter \"foo\" in path"
         },
         {
             "id": 3,
-            "status": 3,
+            "status": 4,
             "operationName": "inspect.get",
-            "message": "No outgoing schema defined"
+            "message": "Missing parameter \"foo\" in path"
         },
         {
             "id": 8,
