@@ -41,6 +41,7 @@ use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\TypeFactory;
 
 /**
  * Fixture
@@ -190,6 +191,7 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
+                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.post' => new Operation(
@@ -198,6 +200,7 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
+                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.put' => new Operation(
@@ -206,6 +209,7 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
+                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.patch' => new Operation(
@@ -214,6 +218,7 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
+                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.delete' => new Operation(
@@ -222,6 +227,7 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
+                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
         ]);
