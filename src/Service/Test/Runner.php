@@ -21,6 +21,8 @@
 namespace Fusio\Impl\Service\Test;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Exception\Test\MissingParameterException;
+use Fusio\Impl\Exception\Test\ParameterNotDescribedException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Base;
 use Fusio\Impl\Table;
@@ -85,15 +87,21 @@ class Runner
 
         $this->testTable->beginTransaction();
 
+        $error = null;
         try {
-            $response = $this->dispatch($this->buildPath($operation->getHttpPath()), $operation->getHttpMethod(), $headers, $body);
-
-            $this->testTable->rollBack();
+            $response = $this->dispatch($this->buildPath($operation->getHttpPath(), $operation->getParameters(), $test->getParameters()), $operation->getHttpMethod(), $headers, $body);
+        } catch (MissingParameterException|ParameterNotDescribedException $e) {
+            $error = $e->getMessage();
         } catch (\Throwable $e) {
+            $error = $this->getErrorMessage($e);
+        } finally {
             $this->testTable->rollBack();
+        }
 
+        if ($error !== null) {
             $test->setStatus(Table\Test::STATUS_ERROR);
-            $test->setMessage($this->getErrorMessage($e));
+            $test->setMessage($error);
+            $test->setResponse($body);
             $this->testTable->update($test);
 
             return;
@@ -172,9 +180,62 @@ class Runner
         return $this->dispatcher->route($request, $response);
     }
 
-    private function buildPath(string $httpPath): string
+    private function buildPath(string $httpPath, ?string $operationSchema, ?string $testParameters): string
     {
-        return $httpPath;
+        $parameters = [];
+        if (!empty($testParameters)) {
+            parse_str($testParameters, $parameters);
+        }
+
+        $names = [];
+        $result = [];
+        $parts = explode('/', $httpPath);
+        foreach ($parts as $part) {
+            if (empty($part)) {
+                continue;
+            }
+
+            if (isset($part[0]) && $part[0] == ':') {
+                $name = substr($part, 1);
+
+                $names[] = $name;
+                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+            } elseif (isset($part[0]) && $part[0] == '$') {
+                $pos  = strpos($part, '<');
+                $name = substr($part, 1, $pos - 1);
+
+                $names[] = $name;
+                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+            } elseif (isset($part[0]) && $part[0] == '*') {
+                $name = substr($part, 1);
+
+                $names[] = $name;
+                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+            } else {
+                $result[] = $part;
+            }
+        }
+
+        if (!empty($operationSchema)) {
+            $schema = \json_decode($operationSchema, true);
+            if (!is_array($schema)) {
+                $schema = [];
+            }
+        } else {
+            $schema = [];
+        }
+
+        foreach ($names as $name) {
+            if (!isset($schema[$name])) {
+                throw new ParameterNotDescribedException('Parameter "' . $name . '" is not described at operation');
+            }
+        }
+
+        if (count($schema) !== count($names)) {
+            throw new ParameterNotDescribedException('The operation has ' . count($names) . ' dynamic parameters, only ' . count($schema) . ' parameters are described at the operation');
+        }
+
+        return '/' . implode('/', $result);
     }
 
     private function isValidSchema(?string $schema): bool
