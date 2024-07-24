@@ -42,6 +42,7 @@ class Tenant
         'fusio_connection',
         'fusio_cronjob',
         'fusio_action',
+        'fusio_test',
         'fusio_operation',
         'fusio_page',
         'fusio_schema',
@@ -57,7 +58,6 @@ class Tenant
         'fusio_user',
         'fusio_token',
         'fusio_webhook',
-        'fusio_test',
     ];
 
     private Connection $connection;
