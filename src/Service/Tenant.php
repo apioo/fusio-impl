@@ -37,7 +37,6 @@ class Tenant
 {
     public const TENANT_TABLES = [
         'fusio_role',
-        'fusio_category',
         'fusio_config',
         'fusio_connection',
         'fusio_cronjob',
@@ -58,6 +57,7 @@ class Tenant
         'fusio_user',
         'fusio_token',
         'fusio_webhook',
+        'fusio_category',
     ];
 
     private Connection $connection;
