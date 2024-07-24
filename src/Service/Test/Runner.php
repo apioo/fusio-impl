@@ -88,6 +88,7 @@ class Runner
         $this->testTable->beginTransaction();
 
         $error = null;
+        $response = null;
         try {
             $response = $this->dispatch($this->buildPath($operation->getHttpPath(), $operation->getParameters(), $test->getParameters()), $operation->getHttpMethod(), $headers, $body);
         } catch (MissingParameterException|ParameterNotDescribedException $e) {
@@ -98,7 +99,7 @@ class Runner
             $this->testTable->rollBack();
         }
 
-        if ($error !== null) {
+        if ($error !== null || $response === null) {
             $test->setStatus(Table\Test::STATUS_ERROR);
             $test->setMessage($error);
             $test->setResponse($body);
@@ -201,8 +202,12 @@ class Runner
                 $names[] = $name;
                 $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
             } elseif (isset($part[0]) && $part[0] == '$') {
-                $pos  = strpos($part, '<');
-                $name = substr($part, 1, $pos - 1);
+                $pos = strpos($part, '<');
+                if ($pos !== false) {
+                    $name = substr($part, 1, $pos - 1);
+                } else {
+                    $name = substr($part, 1);
+                }
 
                 $names[] = $name;
                 $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
