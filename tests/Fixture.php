@@ -191,7 +191,6 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
-                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.post' => new Operation(
@@ -200,7 +199,6 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
-                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.put' => new Operation(
@@ -209,7 +207,6 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
-                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.patch' => new Operation(
@@ -218,7 +215,6 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
-                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
             'inspect.delete' => new Operation(
@@ -227,7 +223,6 @@ class Fixture
                 httpPath: '/inspect/:foo',
                 httpCode: 200,
                 outgoing: Passthru::class,
-                parameters: ['foo' => TypeFactory::getString()],
                 incoming: Passthru::class,
             ),
         ]);

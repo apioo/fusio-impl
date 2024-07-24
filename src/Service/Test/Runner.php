@@ -90,7 +90,7 @@ class Runner
         $error = null;
         $response = null;
         try {
-            $response = $this->dispatch($this->buildPath($operation->getHttpPath(), $operation->getParameters(), $test->getParameters()), $operation->getHttpMethod(), $headers, $body);
+            $response = $this->dispatch($this->buildPath($test, $operation), $operation->getHttpMethod(), $headers, $body);
         } catch (MissingParameterException|ParameterNotDescribedException $e) {
             $error = $e->getMessage();
         } catch (\Throwable $e) {
@@ -181,16 +181,13 @@ class Runner
         return $this->dispatcher->route($request, $response);
     }
 
-    private function buildPath(string $httpPath, ?string $operationSchema, ?string $testParameters): string
+    private function buildPath(Table\Generated\TestRow $test, Table\Generated\OperationRow $operation): string
     {
-        $parameters = [];
-        if (!empty($testParameters)) {
-            parse_str($testParameters, $parameters);
-        }
+        $uriFragments = $this->getUriFragments($test);
+        $queryParameters = $this->getQueryParameters($test);
 
-        $names = [];
         $result = [];
-        $parts = explode('/', $httpPath);
+        $parts = explode('/', $operation->getHttpPath());
         foreach ($parts as $part) {
             if (empty($part)) {
                 continue;
@@ -199,8 +196,7 @@ class Runner
             if (isset($part[0]) && $part[0] == ':') {
                 $name = substr($part, 1);
 
-                $names[] = $name;
-                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+                $result[] = $uriFragments[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
             } elseif (isset($part[0]) && $part[0] == '$') {
                 $pos = strpos($part, '<');
                 if ($pos !== false) {
@@ -209,38 +205,23 @@ class Runner
                     $name = substr($part, 1);
                 }
 
-                $names[] = $name;
-                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+                $result[] = $uriFragments[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
             } elseif (isset($part[0]) && $part[0] == '*') {
                 $name = substr($part, 1);
 
-                $names[] = $name;
-                $result[] = $parameters[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
+                $result[] = $uriFragments[$name] ?? throw new MissingParameterException('Missing parameter "' . $name . '" in path');
             } else {
                 $result[] = $part;
             }
         }
 
-        if (!empty($operationSchema)) {
-            $schema = \json_decode($operationSchema, true);
-            if (!is_array($schema)) {
-                $schema = [];
-            }
+        $path = '/' . implode('/', $result);
+
+        if (!empty($queryParameters)) {
+            return $path . '?' . http_build_query($queryParameters);
         } else {
-            $schema = [];
+            return $path;
         }
-
-        foreach ($names as $name) {
-            if (!isset($schema[$name])) {
-                throw new ParameterNotDescribedException('Parameter "' . $name . '" is not described at operation');
-            }
-        }
-
-        if (count($schema) !== count($names)) {
-            throw new ParameterNotDescribedException('The operation has ' . count($names) . ' dynamic parameters, only ' . count($schema) . ' parameters are described at the operation');
-        }
-
-        return '/' . implode('/', $result);
     }
 
     private function isValidSchema(?string $schema): bool
@@ -254,5 +235,27 @@ class Runner
         $message.= $e->getTraceAsString();
 
         return $message;
+    }
+
+    private function getUriFragments(Table\Generated\TestRow $test): array
+    {
+        $result = [];
+        $uriFragments = $test->getUriFragments();
+        if (!empty($uriFragments)) {
+            parse_str($uriFragments, $result);
+        }
+
+        return $result;
+    }
+
+    private function getQueryParameters(Table\Generated\TestRow $test): array
+    {
+        $result = [];
+        $parameters = $test->getParameters();
+        if (!empty($parameters)) {
+            parse_str($parameters, $result);
+        }
+
+        return $result;
     }
 }
