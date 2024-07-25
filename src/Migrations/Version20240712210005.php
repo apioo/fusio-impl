@@ -48,7 +48,7 @@ final class Version20240712210005 extends AbstractMigration
 
         $count = 0;
         foreach ($operations as $httpPath) {
-            $count += $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
+            $count += (int) $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
         }
 
         // add scopes
