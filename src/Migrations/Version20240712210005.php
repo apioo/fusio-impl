@@ -46,8 +46,9 @@ final class Version20240712210005 extends AbstractMigration
             '/backend/marketplace/:app_name',
         ];
 
+        $count = 0;
         foreach ($operations as $httpPath) {
-            $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
+            $count += $this->connection->update('fusio_operation', ['status' => Operation::STATUS_DELETED], ['http_path' => $httpPath]);
         }
 
         // add scopes
@@ -56,17 +57,26 @@ final class Version20240712210005 extends AbstractMigration
             return;
         }
 
-        $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE status = :status AND http_path LIKE :path', [
-            'status' => Operation::STATUS_ACTIVE,
-            'path' => '/backend/marketplace/%',
-        ]);
-
-        foreach ($operationIds as $operationId) {
-            $this->connection->insert('fusio_scope_operation', [
-                'scope_id' => $scopeId,
-                'operation_id' => $operationId,
-                'allow' => 1,
+        if ($count > 0) {
+            $operationIds = $this->connection->fetchFirstColumn('SELECT id FROM fusio_operation WHERE status = :status AND http_path LIKE :path', [
+                'status' => Operation::STATUS_ACTIVE,
+                'path' => '/backend/marketplace/%',
             ]);
+
+            foreach ($operationIds as $operationId) {
+                $id = $this->connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope_id AND operation_id LIKE :operation_id', [
+                    'scope_id' => $scopeId,
+                    'operation_id' => $operationId,
+                ]);
+
+                if (empty($id)) {
+                    $this->connection->insert('fusio_scope_operation', [
+                        'scope_id' => $scopeId,
+                        'operation_id' => $operationId,
+                        'allow' => 1,
+                    ]);
+                }
+            }
         }
     }
 }
