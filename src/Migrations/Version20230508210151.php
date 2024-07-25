@@ -393,6 +393,7 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->addColumn('operation_id', 'integer');
             $scopeOperationTable->addColumn('allow', 'smallint');
             $scopeOperationTable->setPrimaryKey(['id']);
+            $scopeOperationTable->addUniqueIndex(['scope_id', 'operation_id']);
         }
 
         if (!$schema->hasTable('fusio_test')) {
