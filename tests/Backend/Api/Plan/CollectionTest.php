@@ -144,7 +144,7 @@ JSON;
         $result = $this->connection->fetchAllAssociative($sql, ['plan_id' => $row['id']]);
 
         $this->assertEquals(1, count($result));
-        $this->assertEquals(50, $result[0]['scope_id']);
+        $this->assertEquals(51, $result[0]['scope_id']);
     }
 
     public function testPut()

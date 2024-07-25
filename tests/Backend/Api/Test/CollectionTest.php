@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Webhook;
+namespace Fusio\Impl\Tests\Backend\Api\Test;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -32,15 +32,6 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class CollectionTest extends ControllerDbTestCase
 {
-    private ?int $eventId = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->eventId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
-    }
-
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
@@ -48,31 +39,77 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/webhook', 'GET', array(
+        $this->sendRequest('/backend/test', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+        ]));
+
+        $this->sendRequest('/backend/test', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+        ]));
+
+        $response = $this->sendRequest('/backend/test', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 2,
-            "eventId": 56,
-            "userId": 2,
-            "name": "pong",
-            "endpoint": "http:\/\/www.fusio-project.org\/ping"
+            "status": 4,
+            "operationName": "inspect.delete",
+            "message": "Missing parameter \"foo\" in path"
+        },
+        {
+            "id": 4,
+            "status": 4,
+            "operationName": "inspect.patch",
+            "message": "Missing parameter \"foo\" in path"
+        },
+        {
+            "id": 6,
+            "status": 4,
+            "operationName": "inspect.put",
+            "message": "Missing parameter \"foo\" in path"
+        },
+        {
+            "id": 5,
+            "status": 4,
+            "operationName": "inspect.post",
+            "message": "Missing parameter \"foo\" in path"
+        },
+        {
+            "id": 3,
+            "status": 4,
+            "operationName": "inspect.get",
+            "message": "Missing parameter \"foo\" in path"
+        },
+        {
+            "id": 8,
+            "status": 4,
+            "operationName": "test.createFoo",
+            "message": "Expected status code 201 got 400"
         },
         {
             "id": 1,
-            "eventId": 56,
-            "userId": 1,
-            "name": "ping",
-            "endpoint": "http:\/\/www.fusio-project.org\/ping"
+            "status": 4,
+            "operationName": "test.listFoo",
+            "message": "\/entry must be of type object"
+        },
+        {
+            "id": 7,
+            "status": 2,
+            "operationName": "meta.getAbout",
+            "message": ""
         }
     ]
 }
@@ -84,63 +121,47 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/webhook', 'POST', array(
+        $response = $this->sendRequest('/backend/test', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'eventId'  => $this->eventId,
-            'userId'   => 1,
-            'name'     => 'foo',
-            'endpoint' => 'http://localhost',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Webhook successfully created",
-    "id": "3"
+    "message": "Tests successfully executed"
 }
 JSON;
 
-        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'event_id', 'user_id', 'name', 'endpoint')
-            ->from('fusio_webhook')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql);
-
-        $this->assertEquals(3, $row['id']);
-        $this->assertEquals(56, $row['event_id']);
-        $this->assertEquals(1, $row['user_id']);
-        $this->assertEquals('foo', $row['name']);
-        $this->assertEquals('http://localhost', $row['endpoint']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/webhook', 'PUT', array(
+        $response = $this->sendRequest('/backend/test', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'foo' => 'bar',
         ]));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Tests successfully refreshed"
+}
+JSON;
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/webhook', 'DELETE', array(
+        $response = $this->sendRequest('/backend/test', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

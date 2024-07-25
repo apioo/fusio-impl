@@ -5,10 +5,10 @@ namespace Fusio\Impl\Table\Generated;
 class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    private ?int $categoryId = null;
     private ?int $appId = null;
     private ?int $userId = null;
     private ?string $tenantId = null;
-    private ?int $categoryId = null;
     private ?int $status = null;
     private ?string $name = null;
     private ?string $token = null;
@@ -24,6 +24,14 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getId() : int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
+    }
+    public function setCategoryId(int $categoryId) : void
+    {
+        $this->categoryId = $categoryId;
+    }
+    public function getCategoryId() : int
+    {
+        return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
     public function setAppId(?int $appId) : void
     {
@@ -48,14 +56,6 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getTenantId() : ?string
     {
         return $this->tenantId;
-    }
-    public function setCategoryId(int $categoryId) : void
-    {
-        $this->categoryId = $categoryId;
-    }
-    public function getCategoryId() : int
-    {
-        return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
     public function setStatus(int $status) : void
     {
@@ -126,10 +126,10 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
+        $record->put('category_id', $this->categoryId);
         $record->put('app_id', $this->appId);
         $record->put('user_id', $this->userId);
         $record->put('tenant_id', $this->tenantId);
-        $record->put('category_id', $this->categoryId);
         $record->put('status', $this->status);
         $record->put('name', $this->name);
         $record->put('token', $this->token);
@@ -148,10 +148,10 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
+        $row->categoryId = isset($data['category_id']) && is_int($data['category_id']) ? $data['category_id'] : null;
         $row->appId = isset($data['app_id']) && is_int($data['app_id']) ? $data['app_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
-        $row->categoryId = isset($data['category_id']) && is_int($data['category_id']) ? $data['category_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->token = isset($data['token']) && is_string($data['token']) ? $data['token'] : null;

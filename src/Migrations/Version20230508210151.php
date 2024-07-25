@@ -395,6 +395,24 @@ final class Version20230508210151 extends AbstractMigration
             $scopeOperationTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_test')) {
+            $testTable = $schema->createTable('fusio_test');
+            $testTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $testTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $testTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $testTable->addColumn('operation_id', 'integer', ['notnull' => false]);
+            $testTable->addColumn('status', 'integer', ['default' => 1]);
+            $testTable->addColumn('message', 'text', ['notnull' => false]);
+            $testTable->addColumn('response', 'text', ['notnull' => false]);
+            $testTable->addColumn('uri_fragments', 'string', ['length' => 512, 'notnull' => false]);
+            $testTable->addColumn('parameters', 'string', ['length' => 512, 'notnull' => false]);
+            $testTable->addColumn('headers', 'string', ['length' => 512, 'notnull' => false]);
+            $testTable->addColumn('body', 'text', ['notnull' => false]);
+            $testTable->setPrimaryKey(['id']);
+            $testTable->addUniqueIndex(['operation_id']);
+
+        }
+
         if (!$schema->hasTable('fusio_token')) {
             $tokenTable = $schema->createTable('fusio_token');
             $tokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -500,6 +518,10 @@ final class Version20230508210151 extends AbstractMigration
             $webhookResponseTable->setPrimaryKey(['id']);
         }
 
+        if (isset($actionTable)) {
+            $actionTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'action_category_id');
+        }
+
         if (isset($appTable)) {
             $appTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_user_id');
         }
@@ -509,13 +531,25 @@ final class Version20230508210151 extends AbstractMigration
             $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'app_scope_scope_id');
         }
 
-        if (isset($tokenTable)) {
-            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'token_app_id');
-            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'token_user_id');
+        if (isset($cronjobTable)) {
+            $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'cronjob_category_id');
+        }
+
+        if (isset($eventTable)) {
+            $eventTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'event_category_id');
         }
 
         if (isset($identityRequestTable)) {
             $identityRequestTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'identity_request_identity_id');
+        }
+
+        if (isset($operationTable)) {
+            $operationTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'operation_category_id');
+        }
+
+        if (isset($tokenTable)) {
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'token_app_id');
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'token_user_id');
         }
 
         if (isset($planScopeTable)) {
@@ -538,9 +572,26 @@ final class Version20230508210151 extends AbstractMigration
             $roleScopeTable->addForeignKeyConstraint($schema->getTable('fusio_role'), ['role_id'], ['id'], [], 'role_scope_role_id');
         }
 
+        if (isset($schemaTable)) {
+            $schemaTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'schema_category_id');
+        }
+
+        if (isset($scopeTable)) {
+            $scopeTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'scope_category_id');
+        }
+
         if (isset($scopeOperationTable)) {
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'scope_operation_scope_id');
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'scope_operation_operation_id');
+        }
+
+        if (isset($testTable)) {
+            $testTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'test_category_id');
+            $testTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'test_operation_id');
+        }
+
+        if (isset($tokenTable)) {
+            $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'token_category_id');
         }
 
         if (isset($userTable)) {

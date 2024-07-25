@@ -84,6 +84,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.sdk",
         "backend.statistic",
         "backend.tenant",
+        "backend.test",
         "backend.token",
         "backend.transaction",
         "backend.trash",

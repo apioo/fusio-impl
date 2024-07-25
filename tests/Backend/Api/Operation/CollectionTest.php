@@ -54,7 +54,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 214,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -66,7 +66,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 213,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -78,7 +78,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 212,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -90,7 +90,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 211,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -102,7 +102,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 210,
+            "id": 215,
             "status": 1,
             "active": true,
             "public": false,
@@ -114,7 +114,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 209,
+            "id": 214,
             "status": 1,
             "active": true,
             "public": false,
@@ -126,7 +126,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 208,
+            "id": 213,
             "status": 1,
             "active": true,
             "public": true,
@@ -172,7 +172,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 214,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -184,7 +184,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 213,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -196,7 +196,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 212,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -208,7 +208,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 211,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -220,7 +220,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 210,
+            "id": 215,
             "status": 1,
             "active": true,
             "public": false,
@@ -254,7 +254,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 214,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -266,7 +266,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 213,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -278,7 +278,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 212,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -290,7 +290,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 211,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -302,7 +302,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 210,
+            "id": 215,
             "status": 1,
             "active": true,
             "public": false,
@@ -314,7 +314,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 209,
+            "id": 214,
             "status": 1,
             "active": true,
             "public": false,
@@ -326,7 +326,7 @@ JSON;
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 208,
+            "id": 213,
             "status": 1,
             "active": true,
             "public": true,
@@ -395,7 +395,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "215"
+    "id": "220"
 }
 JSON;
 

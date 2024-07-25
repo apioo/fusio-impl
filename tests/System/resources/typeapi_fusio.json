@@ -31,6 +31,7 @@
       "backend.sdk",
       "backend.statistic",
       "backend.tenant",
+      "backend.test",
       "backend.token",
       "backend.transaction",
       "backend.trash",
@@ -3415,6 +3416,281 @@
       "authorization": true,
       "tags": [
         "token"
+      ]
+    },
+    "backend.test.update": {
+      "path": "/backend/test/$test_id<[0-9]+>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": {
+        "test_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "$ref": "Backend_TestConfig"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.test"
+      ],
+      "authorization": true,
+      "tags": [
+        "test"
+      ]
+    },
+    "backend.test.run": {
+      "path": "/backend/test",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.test"
+      ],
+      "authorization": true,
+      "tags": [
+        "test"
+      ]
+    },
+    "backend.test.refresh": {
+      "path": "/backend/test",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Common_Message"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.test"
+      ],
+      "authorization": true,
+      "tags": [
+        "test"
+      ]
+    },
+    "backend.test.get": {
+      "path": "/backend/test/$test_id<[0-9]+>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_Test"
+        }
+      },
+      "arguments": {
+        "test_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.test"
+      ],
+      "authorization": true,
+      "tags": [
+        "test"
+      ]
+    },
+    "backend.test.getAll": {
+      "path": "/backend/test",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_TestCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 404,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 410,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.test"
+      ],
+      "authorization": true,
+      "tags": [
+        "test"
       ]
     },
     "backend.tenant.remove": {
@@ -12983,6 +13259,39 @@
           "type": "string"
         }
       }
+    },
+    "Backend_Test": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "operationName": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Backend_TestConfig"
+        }
+      }
+    },
+    "Backend_TestCollection": {
+      "$ref": "Common_Collection",
+      "$template": {
+        "T": "Backend_Test"
+      }
+    },
+    "Backend_TestConfig": {
+      "$extends": "Backend_ActionExecuteRequest",
+      "type": "object"
     },
     "Backend_Token": {
       "type": "object",

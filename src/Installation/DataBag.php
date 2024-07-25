@@ -63,6 +63,7 @@ class DataBag
             'fusio_app_code' => [],
             'fusio_app_scope' => [],
             'fusio_token' => [],
+            'fusio_test' => [],
             'fusio_cronjob_error' => [],
             'fusio_webhook' => [],
             'fusio_webhook_response' => [],
@@ -591,6 +592,22 @@ class DataBag
             'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
             'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'allow' => 1
+        ];
+    }
+
+    public function addTest(string $category, string $operation, ?string $tenantId = null): void
+    {
+        $this->data['fusio_test'][$category . $operation] = [
+            'tenant_id' => $tenantId,
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
+            'status' => Table\Schema::STATUS_ACTIVE,
+            'message' => 'message',
+            'response' => 'response',
+            'uri_fragments' => 'foo=bar',
+            'parameters' => 'foo=bar',
+            'headers' => 'foo=bar',
+            'body' => '{"foo": "bar"}',
         ];
     }
 

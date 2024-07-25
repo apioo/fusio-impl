@@ -41,6 +41,7 @@ use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\TypeFactory;
 
 /**
  * Fixture
@@ -147,6 +148,7 @@ class Fixture
         $data->addToken('Developer', 'Consumer', 'Developer/Consumer', '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'consumer', '+1 month');
         $data->addToken('Backend', 'Developer', 'Backend/Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', '+1 month');
         $data->addToken('Foo-App', 'Consumer', 'Foo-App/Expired', 'b41344388feed85bc362e518387fdc9c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e5be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
+        $data->addTest('default', 'test.listFoo');
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');
         $data->addPlanScope('Plan A', 'plan_scope');
