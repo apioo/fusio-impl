@@ -20,11 +20,12 @@
 
 namespace Fusio\Impl\Service\Test;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Base;
 use Fusio\Impl\Exception\Test\MissingParameterException;
 use Fusio\Impl\Exception\Test\ParameterNotDescribedException;
 use Fusio\Impl\Service;
-use Fusio\Impl\Base;
 use Fusio\Impl\Table;
 use PSX\Engine\DispatchInterface;
 use PSX\Http\Request;
@@ -50,20 +51,20 @@ class Runner
     private DispatchInterface $dispatcher;
     private SchemaManagerInterface $schemaManager;
     private Service\Token $tokenService;
-    private Service\User\Authenticator $authenticatorService;
+    private Connection $connection;
 
-    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Service\User\Authenticator $authenticatorService)
+    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Connection $connection)
     {
         $this->testTable = $testTable;
         $this->dispatcher = $dispatcher;
         $this->schemaManager = $schemaManager;
         $this->tokenService = $tokenService;
-        $this->authenticatorService = $authenticatorService;
+        $this->connection = $connection;
     }
 
     public function authenticate(UserContext $context): AccessToken
     {
-        $scopes = $this->authenticatorService->getAvailableScopes($context->getTenantId(), $context->getUserId());
+        $scopes = $this->connection->fetchFirstColumn('SELECT name FROM fusio_scope ORDER BY name ASC');
         $token = $this->tokenService->generate($context->getTenantId(), Table\Category::TYPE_DEFAULT, $context->getAppId(), $context->getUserId(), 'Fusio-Test', $scopes, '127.0.0.1', new \DateInterval('PT30M'));
 
         return $token;
