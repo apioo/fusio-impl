@@ -24,7 +24,6 @@ use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Base;
 use Fusio\Impl\Exception\Test\MissingParameterException;
-use Fusio\Impl\Exception\Test\ParameterNotDescribedException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Engine\DispatchInterface;
@@ -52,14 +51,16 @@ class Runner
     private SchemaManagerInterface $schemaManager;
     private Service\Token $tokenService;
     private Connection $connection;
+    private ConnectionTransaction $connectionTransaction;
 
-    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Connection $connection)
+    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Connection $connection, ConnectionTransaction $connectionTransaction)
     {
         $this->testTable = $testTable;
         $this->dispatcher = $dispatcher;
         $this->schemaManager = $schemaManager;
         $this->tokenService = $tokenService;
         $this->connection = $connection;
+        $this->connectionTransaction = $connectionTransaction;
     }
 
     public function authenticate(UserContext $context): AccessToken
@@ -86,67 +87,47 @@ class Runner
             $body = null;
         }
 
-        $this->testTable->beginTransaction();
+        $this->connectionTransaction->beginTransaction();
 
         $error = null;
         $response = null;
         try {
             $response = $this->dispatch($this->buildPath($test, $operation), $operation->getHttpMethod(), $headers, $body);
-        } catch (MissingParameterException|ParameterNotDescribedException $e) {
+        } catch (MissingParameterException $e) {
             $error = $e->getMessage();
         } catch (\Throwable $e) {
             $error = $this->getErrorMessage($e);
         } finally {
-            $this->testTable->rollBack();
+            $this->connectionTransaction->rollBack();
         }
 
         if ($error !== null || $response === null) {
-            $test->setStatus(Table\Test::STATUS_ERROR);
-            $test->setMessage($error);
-            $test->setResponse($body);
-            $this->testTable->update($test);
-
+            $this->set($test, Table\Test::STATUS_ERROR, $error, $body);
             return;
         }
 
         $body = (string) $response->getBody();
 
         if ($response->getStatusCode() !== $operation->getHttpCode()) {
-            $test->setStatus(Table\Test::STATUS_ERROR);
-            $test->setMessage('Expected status code ' . $operation->getHttpCode() . ' got ' . $response->getStatusCode());
-            $test->setResponse($body);
-            $this->testTable->update($test);
-
+            $this->set($test, Table\Test::STATUS_ERROR, 'Expected status code ' . $operation->getHttpCode() . ' got ' . $response->getStatusCode(), $body);
             return;
         }
 
         if (in_array($operation->getHttpMethod(), ['POST', 'PUT', 'PATCH'])) {
             if (!$this->isValidSchema($operation->getIncoming())) {
-                $test->setStatus(Table\Test::STATUS_WARNING);
-                $test->setMessage('No incoming schema defined');
-                $test->setResponse($body);
-                $this->testTable->update($test);
-
+                $this->set($test, Table\Test::STATUS_WARNING, 'No incoming schema defined', $body);
                 return;
             }
         }
 
         $outgoing = $operation->getOutgoing();
         if (!$this->isValidSchema($outgoing)) {
-            $test->setStatus(Table\Test::STATUS_WARNING);
-            $test->setMessage('No outgoing schema defined');
-            $test->setResponse($body);
-            $this->testTable->update($test);
-
+            $this->set($test, Table\Test::STATUS_WARNING, 'No outgoing schema defined', $body);
             return;
         }
 
         if ($response->getStatusCode() === 204) {
-            $test->setStatus(Table\Test::STATUS_SUCCESS);
-            $test->setMessage('');
-            $test->setResponse($body);
-            $this->testTable->update($test);
-
+            $this->set($test, Table\Test::STATUS_SUCCESS, '', $body);
             return;
         }
 
@@ -156,20 +137,11 @@ class Runner
 
             (new SchemaTraverser(ignoreUnknown: false))->traverse($data, $schema);
 
-            $test->setStatus(Table\Test::STATUS_SUCCESS);
-            $test->setMessage('');
-            $test->setResponse($body);
-            $this->testTable->update($test);
+            $this->set($test, Table\Test::STATUS_SUCCESS, '', $body);
         } catch (ValidationException $e) {
-            $test->setStatus(Table\Test::STATUS_ERROR);
-            $test->setMessage($e->getMessage());
-            $test->setResponse($body);
-            $this->testTable->update($test);
+            $this->set($test, Table\Test::STATUS_ERROR, $e->getMessage(), $body);
         } catch (\Throwable $e) {
-            $test->setStatus(Table\Test::STATUS_ERROR);
-            $test->setMessage($this->getErrorMessage($e));
-            $test->setResponse($body);
-            $this->testTable->update($test);
+            $this->set($test, Table\Test::STATUS_ERROR, $this->getErrorMessage($e), $body);
         }
     }
 
@@ -180,6 +152,14 @@ class Runner
         $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
         return $this->dispatcher->route($request, $response);
+    }
+
+    private function set(Table\Generated\TestRow $test, int $status, ?string $message, ?string $response): void
+    {
+        $test->setStatus($status);
+        $test->setMessage($message);
+        $test->setResponse($response);
+        $this->testTable->update($test);
     }
 
     private function buildPath(Table\Generated\TestRow $test, Table\Generated\OperationRow $operation): string
