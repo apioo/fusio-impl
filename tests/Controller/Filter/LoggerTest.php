@@ -274,4 +274,9 @@ class LoggerTest extends DbTestCase
 
         return $context;
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

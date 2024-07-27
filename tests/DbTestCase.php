@@ -34,7 +34,6 @@ use PSX\Framework\Test\Environment;
 class DbTestCase extends ControllerDbTestCase
 {
     private static bool $initialized = false;
-    private static array $tableNames = [];
 
     public function getDataSet(): array
     {
@@ -43,24 +42,27 @@ class DbTestCase extends ControllerDbTestCase
 
     protected function setUp(): void
     {
-        if (!self::$initialized) {
+        if (!self::$initialized || !$this->isTransactional()) {
             parent::setup();
 
-            self::$tableNames = $this->connection->createSchemaManager()->listTableNames();
             self::$initialized = true;
         } else {
             $this->connection = $this->getConnection();
         }
 
-        $this->connection->beginTransaction();
+        if ($this->isTransactional()) {
+            $this->connection->beginTransaction();
+        }
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
 
-        while ($this->connection->isTransactionActive()) {
-            $this->connection->rollBack();
+        if ($this->isTransactional()) {
+            while ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
+            }
         }
 
         $this->clearState();
@@ -72,5 +74,10 @@ class DbTestCase extends ControllerDbTestCase
         if ($connector instanceof Connector) {
             $connector->clear();
         }
+    }
+
+    protected function isTransactional(): bool
+    {
+        return true;
     }
 }
