@@ -21,8 +21,8 @@
 namespace Fusio\Impl\Tests\Backend\Api\Scope;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * EntityTest
@@ -31,7 +31,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
     private int $id;
 
@@ -40,11 +40,6 @@ class EntityTest extends ControllerDbTestCase
         parent::setUp();
 
         $this->id = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
-    }
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
     }
 
     public function testGet()
@@ -61,6 +56,12 @@ class EntityTest extends ControllerDbTestCase
     "name": "bar",
     "description": "Bar access",
     "operations": [
+        {
+            "id": 213,
+            "scopeId": 52,
+            "operationId": 220,
+            "allow": true
+        },
         {
             "id": 212,
             "scopeId": 52,
@@ -80,13 +81,13 @@ class EntityTest extends ControllerDbTestCase
             "allow": true
         },
         {
-            "id": 209,
+            "id": 208,
             "scopeId": 52,
             "operationId": 216,
             "allow": true
         },
         {
-            "id": 207,
+            "id": 206,
             "scopeId": 52,
             "operationId": 215,
             "allow": true
@@ -95,12 +96,6 @@ class EntityTest extends ControllerDbTestCase
             "id": 205,
             "scopeId": 52,
             "operationId": 214,
-            "allow": true
-        },
-        {
-            "id": 204,
-            "scopeId": 52,
-            "operationId": 213,
             "allow": true
         }
     ]
@@ -126,6 +121,12 @@ JSON;
     "description": "Bar access",
     "operations": [
         {
+            "id": 213,
+            "scopeId": 52,
+            "operationId": 220,
+            "allow": true
+        },
+        {
             "id": 212,
             "scopeId": 52,
             "operationId": 219,
@@ -144,13 +145,13 @@ JSON;
             "allow": true
         },
         {
-            "id": 209,
+            "id": 208,
             "scopeId": 52,
             "operationId": 216,
             "allow": true
         },
         {
-            "id": 207,
+            "id": 206,
             "scopeId": 52,
             "operationId": 215,
             "allow": true
@@ -159,12 +160,6 @@ JSON;
             "id": 205,
             "scopeId": 52,
             "operationId": 214,
-            "allow": true
-        },
-        {
-            "id": 204,
-            "scopeId": 52,
-            "operationId": 213,
             "allow": true
         }
     ]

@@ -22,8 +22,7 @@ namespace Fusio\Impl\Tests\Command\Marketplace;
 
 use Fusio\Impl\Command\Marketplace\ListCommand;
 use Fusio\Impl\Service\Marketplace\Factory;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -34,13 +33,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ListCommandTest extends ControllerDbTestCase
+class ListCommandTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommandApp()
     {
         $command = new ListCommand(

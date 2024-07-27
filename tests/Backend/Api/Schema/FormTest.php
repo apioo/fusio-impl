@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * FormTest
@@ -30,13 +29,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FormTest extends ControllerDbTestCase
+class FormTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/schema/form/2', 'GET', array(

@@ -20,9 +20,7 @@
 
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
-use Fusio\Impl\Base;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * GetOAuth2ConfigurationTest
@@ -31,13 +29,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetOAuth2ConfigurationTest extends ControllerDbTestCase
+class GetOAuth2ConfigurationTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/system/oauth-authorization-server', 'GET', array(

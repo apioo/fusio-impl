@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * UsedPointsTest
@@ -30,13 +29,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class UsedPointsTest extends ControllerDbTestCase
+class UsedPointsTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/statistic/used_points?from=2018-10-01T00:00:00&to=2018-10-31T23:59:59', 'GET', array(

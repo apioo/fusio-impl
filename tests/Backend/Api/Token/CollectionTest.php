@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Token;
 
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -30,13 +31,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class CollectionTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(

@@ -22,8 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
 use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Engine\Inflection\ClassName;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -33,13 +32,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class CollectionTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/connection', 'GET', array(

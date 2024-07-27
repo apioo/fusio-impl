@@ -20,6 +20,9 @@
 
 namespace Fusio\Impl\Tests;
 
+use PSX\Framework\Test\ArrayDataSet;
+use PSX\Framework\Test\ControllerDbTestCase;
+
 /**
  * DbTestCase
  *
@@ -27,10 +30,31 @@ namespace Fusio\Impl\Tests;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DbTestCase extends \PSX\Framework\Test\DbTestCase
+class DbTestCase extends ControllerDbTestCase
 {
+    private static bool $initialized = false;
+
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
+    }
+
+    protected function setUp(): void
+    {
+        if (!self::$initialized) {
+            parent::setup();
+            self::$initialized = true;
+        } else {
+            $this->connection = $this->getConnection();
+        }
+
+        $this->connection->beginTransaction();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->connection->rollBack();
     }
 }

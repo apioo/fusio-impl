@@ -21,10 +21,7 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * SqlEntityTest
@@ -33,18 +30,13 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SqlEntityTest extends ControllerDbTestCase
+class SqlEntityTest extends DbTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
 
         self::dropAppTables($this->connection);
-    }
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
     }
 
     public function testExecuteProviderAndCallRoutes()
@@ -78,8 +70,7 @@ class SqlEntityTest extends ControllerDbTestCase
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 
@@ -106,8 +97,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 
@@ -137,8 +127,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 
@@ -200,15 +189,16 @@ JSON;
             'app_category_0',
         ];
 
+        $schemaManager = $connection->createSchemaManager();
         foreach ($tableNames as $tableName) {
-            if ($connection->createSchemaManager()->tablesExist($tableName)) {
+            if ($schemaManager->tablesExist($tableName)) {
                 $connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
             }
         }
 
         foreach ($tableNames as $tableName) {
-            if ($connection->createSchemaManager()->tablesExist($tableName)) {
-                $connection->executeQuery('DROP TABLE ' . $tableName);
+            if ($schemaManager->tablesExist($tableName)) {
+                $schemaManager->dropTable($tableName);
             }
         }
     }

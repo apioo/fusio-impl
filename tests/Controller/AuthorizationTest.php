@@ -20,9 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * AuthorizationTest
@@ -31,13 +29,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class AuthorizationTest extends ControllerDbTestCase
+class AuthorizationTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testPublic()
     {
         $response = $this->sendRequest('/foo', 'GET', [
@@ -229,8 +222,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 3,
-    "affected": 1
+    "id": "3"
 }
 JSON;
 

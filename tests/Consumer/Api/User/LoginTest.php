@@ -21,8 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Fusio\Impl\Service\Security\JsonWebToken;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -32,13 +31,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LoginTest extends ControllerDbTestCase
+class LoginTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/login', 'GET', array(

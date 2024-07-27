@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Marketplace\App;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -31,13 +30,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/marketplace/app/fusio/fusio', 'GET', array(

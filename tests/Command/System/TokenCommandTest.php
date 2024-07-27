@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Command\System;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -34,13 +33,8 @@ use Symfony\Component\Yaml\Yaml;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TokenCommandTest extends ControllerDbTestCase
+class TokenCommandTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommand()
     {
         $command = Environment::getService(Application::class)->find('system:token');

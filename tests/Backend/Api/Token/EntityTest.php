@@ -20,9 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Token;
 
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * EntityTest
@@ -31,13 +30,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/token/1', 'GET', array(

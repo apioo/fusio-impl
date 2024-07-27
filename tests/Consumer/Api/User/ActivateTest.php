@@ -20,14 +20,11 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
-use Firebase\JWT\JWT;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Model\Consumer\UserRegister;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -37,13 +34,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActivateTest extends ControllerDbTestCase
+class ActivateTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/activate', 'GET', array(

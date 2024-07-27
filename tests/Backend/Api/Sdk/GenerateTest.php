@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Sdk;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -31,13 +30,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GenerateTest extends ControllerDbTestCase
+class GenerateTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $sdkDir = Environment::getConfig('psx_path_public') . '/sdk';

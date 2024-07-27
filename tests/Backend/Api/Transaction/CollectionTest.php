@@ -20,9 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Transaction;
 
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * CollectionTest
@@ -31,13 +30,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class CollectionTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/transaction?from=2018-10-01T00:00:00&to=2018-10-20T23:59:59', 'GET', array(

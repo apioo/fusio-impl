@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Identity;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Uri\Url;
 
 /**
@@ -31,13 +30,8 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RedirectTest extends ControllerDbTestCase
+class RedirectTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/identity/1/redirect', 'GET', array(

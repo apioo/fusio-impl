@@ -20,12 +20,8 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Api\OperationInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
-use PSX\Json\Parser;
 
 /**
  * InspectTest
@@ -34,13 +30,8 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class InspectTest extends ControllerDbTestCase
+class InspectTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'GET', [

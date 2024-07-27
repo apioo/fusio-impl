@@ -22,9 +22,9 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\OperationInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * EntityTest
@@ -33,7 +33,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
     private int $id;
 
@@ -42,11 +42,6 @@ class EntityTest extends ControllerDbTestCase
         parent::setUp();
 
         $this->id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
-    }
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
     }
 
     public function testGet()
@@ -59,7 +54,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 213,
+    "id": 214,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -94,7 +89,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 213,
+    "id": 214,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -186,7 +181,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "213"
+    "id": "214"
 }
 JSON;
 
@@ -234,7 +229,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "214"
+    "id": "215"
 }
 JSON;
 
@@ -257,7 +252,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "213"
+    "id": "214"
 }
 JSON;
 

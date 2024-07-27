@@ -22,9 +22,8 @@ namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Adapter;
 use Fusio\Impl\Tests\Adapter\TestAdapter;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Config\ConfigInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -36,13 +35,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RegisterCommandTest extends ControllerDbTestCase
+class RegisterCommandTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommand()
     {
         $command = Environment::getService(Application::class)->find('system:register');

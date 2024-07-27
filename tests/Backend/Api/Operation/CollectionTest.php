@@ -21,9 +21,8 @@
 namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Api\OperationInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * CollectionTest
@@ -32,13 +31,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class CollectionTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/operation', 'GET', array(
@@ -54,7 +48,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 219,
+            "id": 220,
             "status": 1,
             "active": true,
             "public": false,
@@ -66,7 +60,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 218,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -78,7 +72,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 217,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -90,7 +84,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 216,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -102,7 +96,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 215,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -114,7 +108,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 214,
+            "id": 215,
             "status": 1,
             "active": true,
             "public": false,
@@ -126,7 +120,7 @@ class CollectionTest extends ControllerDbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 213,
+            "id": 214,
             "status": 1,
             "active": true,
             "public": true,
@@ -172,7 +166,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 219,
+            "id": 220,
             "status": 1,
             "active": true,
             "public": false,
@@ -184,7 +178,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 218,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -196,7 +190,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 217,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -208,7 +202,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 216,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -220,7 +214,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 215,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -254,7 +248,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 219,
+            "id": 220,
             "status": 1,
             "active": true,
             "public": false,
@@ -266,7 +260,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 218,
+            "id": 219,
             "status": 1,
             "active": true,
             "public": false,
@@ -278,7 +272,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 217,
+            "id": 218,
             "status": 1,
             "active": true,
             "public": false,
@@ -290,7 +284,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 216,
+            "id": 217,
             "status": 1,
             "active": true,
             "public": false,
@@ -302,7 +296,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 215,
+            "id": 216,
             "status": 1,
             "active": true,
             "public": false,
@@ -314,7 +308,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 214,
+            "id": 215,
             "status": 1,
             "active": true,
             "public": false,
@@ -326,7 +320,7 @@ JSON;
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 213,
+            "id": 214,
             "status": 1,
             "active": true,
             "public": true,
@@ -395,7 +389,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "220"
+    "id": "221"
 }
 JSON;
 

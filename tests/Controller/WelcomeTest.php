@@ -21,8 +21,7 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Base;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * WelcomeTest
@@ -31,13 +30,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class WelcomeTest extends ControllerDbTestCase
+class WelcomeTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/', 'GET', array(

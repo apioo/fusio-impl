@@ -22,8 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Tenant;
 
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * EntityTest
@@ -32,14 +31,9 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
     private const TENANT_ID = 'customer_a';
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
 
     public function testGet()
     {

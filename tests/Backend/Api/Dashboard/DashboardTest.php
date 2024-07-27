@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Dashboard;
 
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -31,13 +32,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DashboardTest extends ControllerDbTestCase
+class DashboardTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(

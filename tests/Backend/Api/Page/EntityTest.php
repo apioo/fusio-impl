@@ -20,9 +20,9 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Page;
 
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * EntityTest
@@ -31,7 +31,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
     private int $id;
 
@@ -40,11 +40,6 @@ class EntityTest extends ControllerDbTestCase
         parent::setUp();
 
         $this->id = Fixture::getReference('fusio_page', 'getting-started')->resolve($this->connection);
-    }
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
     }
 
     public function testGet()

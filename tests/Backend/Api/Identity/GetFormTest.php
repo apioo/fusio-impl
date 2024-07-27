@@ -20,11 +20,9 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
-use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Provider\Identity\Github;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * GetFormTest
@@ -33,13 +31,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetFormTest extends ControllerDbTestCase
+class GetFormTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/identity/form?class=' . ClassName::serialize(Github::class), 'GET', array(

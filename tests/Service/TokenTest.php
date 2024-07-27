@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Service;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\Token;
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -35,13 +36,8 @@ use PSX\Oauth2\AccessToken;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TokenTest extends ControllerDbTestCase
+class TokenTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGenerateAccessToken()
     {
         /** @var Token $tokenService */

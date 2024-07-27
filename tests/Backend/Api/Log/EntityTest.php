@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Log;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * EntityTest
@@ -30,13 +29,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class EntityTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/log/1', 'GET', array(
@@ -50,7 +44,7 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 1,
     "appId": 3,
-    "operationId": 213,
+    "operationId": 214,
     "ip": "127.0.0.1",
     "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
     "method": "GET",

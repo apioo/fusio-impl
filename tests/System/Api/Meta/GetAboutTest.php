@@ -21,8 +21,7 @@
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Base;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * GetAboutTest
@@ -31,13 +30,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAboutTest extends ControllerDbTestCase
+class GetAboutTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/system/about', 'GET', array(

@@ -48,7 +48,6 @@ class ConnectionTransaction
         foreach ($connections as $connection) {
             $instance = $this->connector->getConnection($connection->getId());
             if ($instance instanceof Connection) {
-                $instance->setNestTransactionsWithSavepoints(true);
                 $instance->beginTransaction();
             }
         }
@@ -61,7 +60,6 @@ class ConnectionTransaction
             $instance = $this->connector->getConnection($connection->getId());
             if ($instance instanceof Connection) {
                 $instance->rollBack();
-                $instance->setNestTransactionsWithSavepoints(false);
             }
         }
     }

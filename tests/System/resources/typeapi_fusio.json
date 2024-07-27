@@ -4162,6 +4162,40 @@
         "statistic"
       ]
     },
+    "backend.statistic.getTestCoverage": {
+      "path": "/backend/statistic/test_coverage",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_StatisticChart"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
     "backend.statistic.getMostUsedOperations": {
       "path": "/backend/statistic/most_used_operations",
       "method": "GET",
@@ -12189,6 +12223,9 @@
         "timePerOperation": {
           "$ref": "Backend_StatisticChart"
         },
+        "testCoverage": {
+          "$ref": "Backend_StatisticChart"
+        },
         "latestApps": {
           "$ref": "Backend_DashboardApps"
         },
@@ -12197,9 +12234,6 @@
         },
         "latestUsers": {
           "$ref": "Backend_DashboardUsers"
-        },
-        "latestTransactions": {
-          "$ref": "Backend_DashboardTransactions"
         }
       }
     },
@@ -12246,36 +12280,6 @@
       "$ref": "Common_Collection",
       "$template": {
         "T": "Backend_DashboardRequest"
-      }
-    },
-    "Backend_DashboardTransaction": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "string"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "transactionId": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "number"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_DashboardTransactions": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_DashboardTransaction"
       }
     },
     "Backend_DashboardUser": {

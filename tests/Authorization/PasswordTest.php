@@ -21,8 +21,7 @@
 namespace Fusio\Impl\Tests\Authorization;
 
 use Fusio\Impl\Table\Token;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Http\ResponseInterface;
 use PSX\Json\Parser;
 
@@ -33,13 +32,8 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class PasswordTest extends ControllerDbTestCase
+class PasswordTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testPost()
     {
         $body     = 'grant_type=password&username=Consumer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';

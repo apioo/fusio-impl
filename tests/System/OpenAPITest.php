@@ -20,8 +20,7 @@
 
 namespace Fusio\Impl\Tests\System;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * OpenAPITest
@@ -30,13 +29,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class OpenAPITest extends ControllerDbTestCase
+class OpenAPITest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGenerate()
     {
         $response = $this->sendRequest('/system/generator/openapi', 'GET', [

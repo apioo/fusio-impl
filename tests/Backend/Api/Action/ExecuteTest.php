@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\System\Action\Meta\GetDebug;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -32,13 +33,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ExecuteTest extends ControllerDbTestCase
+class ExecuteTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/action/execute/3', 'GET', array(

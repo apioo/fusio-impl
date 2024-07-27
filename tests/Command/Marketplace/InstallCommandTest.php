@@ -24,8 +24,7 @@ use Fusio\Impl\Command\Marketplace\InstallCommand;
 use Fusio\Impl\Service\Marketplace\Factory;
 use Fusio\Impl\Service\Marketplace\Installer;
 use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -36,13 +35,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class InstallCommandTest extends ControllerDbTestCase
+class InstallCommandTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommandApp()
     {
         if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {

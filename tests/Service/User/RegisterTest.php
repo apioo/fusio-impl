@@ -21,15 +21,13 @@
 namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Model\Backend\ConfigUpdate;
 use Fusio\Model\Consumer\UserRegister;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
 use PSX\Sql\TableManagerInterface;
@@ -41,13 +39,8 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RegisterTest extends ControllerDbTestCase
+class RegisterTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testRegister()
     {
         $register = new Register(

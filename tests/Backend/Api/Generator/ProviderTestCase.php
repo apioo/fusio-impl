@@ -22,10 +22,8 @@ namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Controller\SqlEntityTest;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Api\OperationInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * ProviderTestCase
@@ -34,13 +32,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-abstract class ProviderTestCase extends ControllerDbTestCase
+abstract class ProviderTestCase extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet(): void
     {
         $class = ClassName::serialize($this->getProviderClass());

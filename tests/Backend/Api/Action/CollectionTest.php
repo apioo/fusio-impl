@@ -23,9 +23,8 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * CollectionTest
@@ -34,13 +33,8 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class CollectionTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGet()
     {
         $response = $this->sendRequest('/backend/action', 'GET', array(

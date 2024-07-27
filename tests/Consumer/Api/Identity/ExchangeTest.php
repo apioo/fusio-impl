@@ -26,12 +26,11 @@ use Fusio\Impl\Provider\Identity\Google;
 use Fusio\Impl\Provider\Identity\OpenIDConnect;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table\User;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\DbTestCase;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
 use PSX\Uri\Url;
@@ -43,13 +42,8 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ExchangeTest extends ControllerDbTestCase
+class ExchangeTest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testGetFacebook()
     {
         $mock = new MockHandler([

@@ -20,10 +20,7 @@
 
 namespace Fusio\Impl\Tests\System;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Config\ConfigInterface;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * TypeAPITest
@@ -32,13 +29,8 @@ use PSX\Framework\Test\Environment;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TypeAPITest extends ControllerDbTestCase
+class TypeAPITest extends DbTestCase
 {
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
-    }
-
     /**
      * @dataProvider providerFilter
      */

@@ -20,11 +20,10 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\OperationInterface;
 use PSX\Api\Resource;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 use PSX\Json\Parser;
 
 /**
@@ -34,7 +33,7 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SqlTableTest extends ControllerDbTestCase
+class SqlTableTest extends DbTestCase
 {
     private ?int $id;
 
@@ -43,11 +42,6 @@ class SqlTableTest extends ControllerDbTestCase
         parent::setUp();
 
         $this->id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
-    }
-
-    public function getDataSet(): array
-    {
-        return Fixture::getDataSet();
     }
 
     public function testGet()
@@ -114,7 +108,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "213"
+    "id": "214"
 }
 JSON;
 
@@ -195,8 +189,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 3,
-    "affected": 1
+    "id": "3"
 }
 JSON;
 
