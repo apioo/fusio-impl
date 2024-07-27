@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Adapter\Sql\Generator\SqlEntity;
 
 /**
@@ -31,6 +32,13 @@ use Fusio\Adapter\Sql\Generator\SqlEntity;
  */
 class SqlEntityTest extends ProviderTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::dropAppTables($this->connection);
+    }
+
     protected function getProviderClass(): string
     {
         return SqlEntity::class;
@@ -93,5 +101,29 @@ class SqlEntityTest extends ProviderTestCase
     ]
 }
 JSON;
+    }
+
+    public static function dropAppTables(Connection $connection): void
+    {
+        $tableNames = [
+            'app_human_0_location',
+            'app_human_0_category',
+            'app_human_0',
+            'app_location_0',
+            'app_category_0',
+        ];
+
+        $schemaManager = $connection->createSchemaManager();
+        foreach ($tableNames as $tableName) {
+            if ($schemaManager->tablesExist($tableName)) {
+                $connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
+            }
+        }
+
+        foreach ($tableNames as $tableName) {
+            if ($schemaManager->tablesExist($tableName)) {
+                $schemaManager->dropTable($tableName);
+            }
+        }
     }
 }

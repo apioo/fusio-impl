@@ -61,17 +61,7 @@ class DbTestCase extends ControllerDbTestCase
 
         $this->connection->rollBack();
 
-        $this->dropTables();
         $this->clearState();
-    }
-
-    private function dropTables(): void
-    {
-        $schemaManager = $this->connection->createSchemaManager();
-        $newTables = array_diff($schemaManager->listTableNames(), self::$tableNames);
-        foreach ($newTables as $tableName) {
-            $schemaManager->dropTable($tableName);
-        }
     }
 
     private function clearState(): void
