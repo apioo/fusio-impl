@@ -1314,6 +1314,14 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
+                'statistic.getTestCoverage' => new Operation(
+                    action: Backend\Action\Statistic\GetTestCoverage::class,
+                    httpMethod: 'GET',
+                    httpPath: '/statistic/test_coverage',
+                    httpCode: 200,
+                    outgoing: Model\Backend\StatisticChart::class,
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
                 'statistic.getTimeAverage' => new Operation(
                     action: Backend\Action\Statistic\GetTimeAverage::class,
                     httpMethod: 'GET',

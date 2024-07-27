@@ -354,6 +354,22 @@
       "test.listFoo (ms)"
     ]
   },
+  "testCoverage": {
+    "labels": [
+      "Pending",
+      "Success",
+      "Warning",
+      "Error"
+    ],
+    "data": [
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
   "latestApps": {
     "entry": [
       {
@@ -407,18 +423,6 @@
         "id": 1,
         "status": 1,
         "name": "Administrator",
-        "date": "[datetime]"
-      }
-    ]
-  },
-  "latestTransactions": {
-    "entry": [
-      {
-        "id": 1,
-        "user_id": 2,
-        "plan_id": 2,
-        "transactionId": "[transaction_id]",
-        "amount": 39.99,
         "date": "[datetime]"
       }
     ]
