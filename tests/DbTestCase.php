@@ -59,7 +59,9 @@ class DbTestCase extends ControllerDbTestCase
     {
         parent::tearDown();
 
-        $this->connection->rollBack();
+        if ($this->connection->isTransactionActive()) {
+            $this->connection->rollBack();
+        }
 
         $this->clearState();
     }
