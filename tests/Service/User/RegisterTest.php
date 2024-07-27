@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Tests\Service\User;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register;
@@ -61,10 +60,7 @@ class RegisterTest extends DbTestCase
         $register->register($user, $context);
 
         // check user
-        /** @var Connection $connection */
-        $connection = Environment::getService(Connection::class);
-
-        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
@@ -95,10 +91,7 @@ class RegisterTest extends DbTestCase
         $register->register($user, $context);
 
         // check user
-        /** @var Connection $connection */
-        $connection = Environment::getService(Connection::class);
-
-        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
@@ -129,10 +122,7 @@ class RegisterTest extends DbTestCase
         $register->register($user, $context);
 
         // check user
-        /** @var Connection $connection */
-        $connection = Environment::getService(Connection::class);
-
-        $user = $connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
@@ -221,10 +211,6 @@ class RegisterTest extends DbTestCase
 
     private function getConfigId(string $name): int
     {
-        /** @var Connection $connection */
-        $connection = Environment::getService(Connection::class);
-        $configId   = $connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
-
-        return $configId;
+        return $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
     }
 }
