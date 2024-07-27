@@ -57,12 +57,12 @@ class RegisterTest extends DbTestCase
         $user->setPassword('test1234');
         $user->setCaptcha('result');
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
-        $register->register($user, $context);
+        $userId = $register->register($user, $context);
 
         // check user
-        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
-        $this->assertEquals(6, $user['id']);
+        $this->assertEquals($userId, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
         $this->assertEquals('', $user['remote_id']);
@@ -88,12 +88,12 @@ class RegisterTest extends DbTestCase
         $user->setPassword('test1234');
         $user->setCaptcha('result');
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
-        $register->register($user, $context);
+        $userId = $register->register($user, $context);
 
         // check user
-        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
-        $this->assertEquals(6, $user['id']);
+        $this->assertEquals($userId, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_ACTIVE, $user['status']);
         $this->assertEquals('', $user['remote_id']);
@@ -119,12 +119,12 @@ class RegisterTest extends DbTestCase
         $user->setPassword('test1234');
         $user->setCaptcha('result');
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
-        $register->register($user, $context);
+        $userId = $register->register($user, $context);
 
         // check user
-        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $user = $this->connection->fetchAssociative('SELECT * FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
-        $this->assertEquals(6, $user['id']);
+        $this->assertEquals($userId, $user['id']);
         $this->assertEquals(null, $user['identity_id']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
         $this->assertEquals('', $user['remote_id']);

@@ -239,4 +239,9 @@ JSON;
         // check database
         $this->assertFalse($schemaManager->tablesExist('my_table_delete'));
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

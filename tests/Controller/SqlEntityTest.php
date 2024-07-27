@@ -171,4 +171,9 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

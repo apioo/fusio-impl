@@ -124,7 +124,6 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql, ['token' => $data->access_token]);
 
-        $this->assertEquals(8, $row['id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals(3, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);

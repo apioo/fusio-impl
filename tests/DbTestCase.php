@@ -76,6 +76,10 @@ class DbTestCase extends ControllerDbTestCase
         }
     }
 
+    /**
+     * Test-Case transactions can be deactivated in case your test case depends on a specific auto-increment id, since
+     * on rollback the id auto-increment is not rested but for sqlite this is the case
+     */
     protected function isTransactional(): bool
     {
         return true;

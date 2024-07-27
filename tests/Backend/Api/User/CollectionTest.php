@@ -209,30 +209,24 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "User successfully created",
-    "id": "6"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('User successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'plan_id', 'status', 'name', 'email', 'password', 'metadata')
             ->from('fusio_user')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(1, $row['plan_id']);
         $this->assertEquals(0, $row['status']);
         $this->assertEquals('test', $row['name']);
@@ -247,7 +241,7 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $userScopes = $this->connection->fetchAllAssociative($sql, ['user_id' => 6]);
+        $userScopes = $this->connection->fetchAllAssociative($sql, ['user_id' => $data->id]);
 
         $this->assertEquals(49, count($userScopes));
     }

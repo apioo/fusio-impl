@@ -196,30 +196,25 @@ JSON;
             'metadata'  => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Rate successfully created",
-    "id": "5"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('Rate successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan', 'metadata')
             ->from('fusio_rate')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
@@ -267,30 +262,25 @@ JSON;
             ]],
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Rate successfully created",
-    "id": "5"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('Rate successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan')
             ->from('fusio_rate')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
@@ -302,15 +292,13 @@ JSON;
             ->from('fusio_rate_allocation')
             ->where('rate_id = :rate_id')
             ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
             ->getSQL();
 
         $result = $this->connection->fetchAllAssociative($sql, ['rate_id' => $row['id']]);
 
         $this->assertNotEmpty($result);
-        $this->assertEquals(5, $result[0]['id']);
-        $this->assertEquals(5, $result[0]['rate_id']);
+        $this->assertCount(1, $result);
+        $this->assertEquals($data->id, $result[0]['rate_id']);
         $this->assertEquals(1, $result[0]['operation_id']);
         $this->assertEquals(1, $result[0]['user_id']);
         $this->assertEquals(1, $result[0]['plan_id']);

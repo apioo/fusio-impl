@@ -119,4 +119,9 @@ JSON;
     {
         return $this->getExpectChangelog();
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

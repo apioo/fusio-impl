@@ -204,30 +204,25 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successfully created",
-    "id": "6"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('App successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters', 'metadata')
             ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(0, $row['status']);
         $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
@@ -235,7 +230,7 @@ JSON;
         $this->assertEquals('', $row['parameters']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
-        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, $data->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -255,37 +250,32 @@ JSON;
             'scopes'     => ['foo', 'bar']
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successfully created",
-    "id": "6"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('App successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(0, $row['status']);
         $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('foo=bar&bar=1', $row['parameters']);
 
-        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, 6);
+        $scopes = Environment::getService(TableManagerInterface::class)->getTable(Table\App\Scope::class)->getAvailableScopes(null, $data->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);

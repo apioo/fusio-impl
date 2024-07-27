@@ -54,25 +54,23 @@ class ActivateTest extends DbTestCase
         $register->setEmail('baz@localhost.com');
         $register->setPassword('test1234!');
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
-        Environment::getService(Register::class)->register($register, $context);
+        $userId = Environment::getService(Register::class)->register($register, $context);
 
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $userId]);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals($userId, $row['id']);
         $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
 
-        $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => 6]);
+        $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
         $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -92,10 +90,8 @@ class ActivateTest extends DbTestCase
             ->select('identity_id', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
             ->getSQL();
-        $row = $this->connection->fetchAssociative($sql, ['id' => 6]);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $userId]);
 
         $this->assertEquals(null, $row['identity_id']);
         $this->assertEquals(1, $row['status']);

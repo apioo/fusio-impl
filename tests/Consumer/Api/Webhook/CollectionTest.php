@@ -73,30 +73,24 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Webhook successfully created",
-    "id": "3"
-}
-JSON;
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('Webhook successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'event_id', 'user_id', 'status', 'name', 'endpoint')
             ->from('fusio_webhook')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals(56, $row['event_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);

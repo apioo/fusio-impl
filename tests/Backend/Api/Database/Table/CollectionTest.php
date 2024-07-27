@@ -167,4 +167,9 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

@@ -174,30 +174,25 @@ JSON;
             'metadata'    => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Scope successfully created",
-    "id": "54"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertInstanceOf(\stdClass::class, $data, $body);
+        $this->assertTrue($data->success, $body);
+        $this->assertEquals('Scope successfully created', $data->success, $body);
+        $this->assertNotEmpty($data->id, $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'name', 'description', 'metadata')
             ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $data->id]);
 
-        $this->assertEquals(54, $row['id']);
+        $this->assertEquals($data->id, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);

@@ -136,4 +136,9 @@ class LogRotateCommandTest extends DbTestCase
 
         $schemaManager->dropTable($tableName);
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }

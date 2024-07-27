@@ -318,4 +318,11 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals('octocat@github.com', $row['email']);
         $this->assertEquals(null, $row['password']);
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
+
+
 }
