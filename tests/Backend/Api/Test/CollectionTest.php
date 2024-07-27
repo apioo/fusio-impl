@@ -33,8 +33,6 @@ class CollectionTest extends DbTestCase
 {
     public function testGet()
     {
-        $this->markTestSkipped();
-
         $this->sendRequest('/backend/test', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -117,8 +115,6 @@ JSON;
 
     public function testPost()
     {
-        $this->markTestSkipped();
-
         $response = $this->sendRequest('/backend/test', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -169,5 +165,10 @@ JSON;
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
+    }
+
+    protected function isTransactional(): bool
+    {
+        return false;
     }
 }
