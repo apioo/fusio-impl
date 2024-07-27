@@ -425,4 +425,9 @@ JSON;
         $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
         $this->assertEmpty($body);
     }
+
+    protected function isTransactional(): bool
+    {
+        return false;
+    }
 }
