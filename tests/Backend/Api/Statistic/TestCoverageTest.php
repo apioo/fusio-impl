@@ -50,7 +50,7 @@ class TestCoverageTest extends DbTestCase
     ],
     "data": [
         [
-            0,
+            1,
             0,
             0,
             0
