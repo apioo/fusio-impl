@@ -32,13 +32,6 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class SqlEntityTest extends DbTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::dropAppTables($this->connection);
-    }
-
     public function testExecuteProviderAndCallRoutes()
     {
         $this->executeProvider();
@@ -177,29 +170,5 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public static function dropAppTables(Connection $connection): void
-    {
-        $tableNames = [
-            'app_human_0_location',
-            'app_human_0_category',
-            'app_human_0',
-            'app_location_0',
-            'app_category_0',
-        ];
-
-        $schemaManager = $connection->createSchemaManager();
-        foreach ($tableNames as $tableName) {
-            if ($schemaManager->tablesExist($tableName)) {
-                $connection->executeQuery('DELETE FROM ' . $tableName . ' WHERE 1=1');
-            }
-        }
-
-        foreach ($tableNames as $tableName) {
-            if ($schemaManager->tablesExist($tableName)) {
-                $schemaManager->dropTable($tableName);
-            }
-        }
     }
 }

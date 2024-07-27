@@ -3,6 +3,7 @@
 use Fusio\Cli;
 use Fusio\Engine\Action;
 use Fusio\Engine\Adapter\ServiceBuilder;
+use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Cli\Config;
@@ -58,6 +59,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Dispatcher::class);
     $services->alias(DispatcherInterface::class, Dispatcher::class);
+
+    $services->alias('test_connector', ConnectorInterface::class)
+        ->public();
 
     // impl
     $services->load('Fusio\\Impl\\Authorization\\Action\\', __DIR__ . '/../src/Authorization/Action');

@@ -31,13 +31,6 @@ use Fusio\Adapter\Sql\Generator\SqlEntity;
  */
 class SqlEntityTest extends ProviderTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        \Fusio\Impl\Tests\Controller\SqlEntityTest::dropAppTables($this->connection);
-    }
-
     protected function getProviderClass(): string
     {
         return SqlEntity::class;

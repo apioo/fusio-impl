@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Tests;
 
+use Fusio\Engine\Connector;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * DbTestCase
@@ -32,6 +34,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
 class DbTestCase extends ControllerDbTestCase
 {
     private static bool $initialized = false;
+    private static array $tableNames = [];
 
     public function getDataSet(): array
     {
@@ -42,6 +45,8 @@ class DbTestCase extends ControllerDbTestCase
     {
         if (!self::$initialized) {
             parent::setup();
+
+            self::$tableNames = $this->connection->createSchemaManager()->listTableNames();
             self::$initialized = true;
         } else {
             $this->connection = $this->getConnection();
@@ -55,5 +60,25 @@ class DbTestCase extends ControllerDbTestCase
         parent::tearDown();
 
         $this->connection->rollBack();
+
+        $this->dropTables();
+        $this->clearState();
+    }
+
+    private function dropTables(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+        $newTables = array_diff($schemaManager->listTableNames(), self::$tableNames);
+        foreach ($newTables as $tableName) {
+            $schemaManager->dropTable($tableName);
+        }
+    }
+
+    private function clearState(): void
+    {
+        $connector = Environment::getService('test_connector');
+        if ($connector instanceof Connector) {
+            $connector->clear();
+        }
     }
 }
