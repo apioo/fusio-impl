@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -46,11 +47,14 @@ class TestCoverage extends ViewAbstract
         $labels = [];
 
         foreach ($status as $key => $label) {
-            $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_test WHERE tenant_id = :tenant AND category_id = :category AND status = :status', [
-                'tenant' => $context->getTenantId(),
-                'category' => $context->getUser()->getCategoryId(),
-                'status' => $key,
-            ]);
+            $condition = Condition::withAnd();
+            $condition->equals(Table\Test::COLUMN_TENANT_ID, $context->getTenantId());
+            $condition->equals(Table\Test::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+            $condition->equals(Table\Test::COLUMN_STATUS, $key);
+
+            $expression = $condition->getExpression($this->connection->getDatabasePlatform());
+
+            $count = (int) $this->connection->fetchOne('SELECT COUNT(*) AS cnt FROM fusio_test WHERE ' . $expression, $condition->getValues());
 
             $data[] = $count;
             $labels[] = $label;
