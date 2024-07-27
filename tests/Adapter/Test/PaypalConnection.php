@@ -21,9 +21,6 @@
 namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\ConnectionAbstract;
-use Fusio\Engine\ConnectionInterface;
-use Fusio\Engine\Form\BuilderInterface;
-use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 
 /**

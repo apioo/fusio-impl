@@ -31,7 +31,6 @@ use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\FilterChain;

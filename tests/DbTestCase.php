@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Tests;
 
-use PSX\Framework\Test\ArrayDataSet;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**

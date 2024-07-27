@@ -41,7 +41,6 @@ use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Test\Environment;
-use PSX\Schema\TypeFactory;
 
 /**
  * Fixture

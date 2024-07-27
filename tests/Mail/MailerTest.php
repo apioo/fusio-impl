@@ -26,7 +26,6 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Service\Connection\Resolver;
 use Fusio\Impl\Service\Mail\SenderFactory;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Config\ConfigInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Mailer\Mailer;

@@ -24,8 +24,6 @@ use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\Token;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Oauth2\AccessToken;
 

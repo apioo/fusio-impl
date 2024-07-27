@@ -21,8 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * GetEntityTest

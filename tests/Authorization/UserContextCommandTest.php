@@ -20,9 +20,6 @@
 
 namespace Fusio\Impl\Tests\Authorization;
 
-use Fusio\Engine\Context;
-use Fusio\Engine\Model\App;
-use Fusio\Engine\Model\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Tests\DbTestCase;

@@ -23,8 +23,6 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\System\Action\Meta\GetDebug;
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * ExecuteTest

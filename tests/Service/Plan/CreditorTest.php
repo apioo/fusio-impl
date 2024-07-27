@@ -23,10 +23,7 @@ namespace Fusio\Impl\Tests\Service\Plan;
 use Fusio\Engine\Context;
 use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
-use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Plan\Creditor;
-use Fusio\Impl\Service\Plan\Payer;
-use Fusio\Impl\Service\User\Mailer;
 use Fusio\Impl\Table;
 use PHPUnit\Framework\TestCase;
 

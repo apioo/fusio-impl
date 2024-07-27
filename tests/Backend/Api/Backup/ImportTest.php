@@ -21,9 +21,6 @@
 namespace Fusio\Impl\Tests\Backend\Api\Backup;
 
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
-use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * ImportTest

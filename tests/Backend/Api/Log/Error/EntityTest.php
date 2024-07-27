@@ -21,9 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Log\Error;
 
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * EntityTest

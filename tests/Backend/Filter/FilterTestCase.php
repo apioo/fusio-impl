@@ -24,7 +24,6 @@ use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use PHPUnit\Framework\TestCase;
-use PSX\Http\Environment\HttpContext;
 use PSX\Http\Request;
 use PSX\Record\Record;
 use PSX\Uri\Uri;

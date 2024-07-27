@@ -28,12 +28,9 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
-use Fusio\Model\Backend\Operation;
 use Fusio\Model\Backend\OperationCreate;
-use Fusio\Model\Backend\Schema;
 use Fusio\Model\Backend\SchemaCreate;
 use Fusio\Model\Backend\SchemaSource;
 
