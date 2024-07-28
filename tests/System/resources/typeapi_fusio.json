@@ -4438,6 +4438,127 @@
         "statistic"
       ]
     },
+    "backend.statistic.getMostUsedActivities": {
+      "path": "/backend/statistic/most_used_activities",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_StatisticChart"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "operationId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
     "backend.statistic.getIssuedTokens": {
       "path": "/backend/statistic/issued_tokens",
       "method": "GET",
@@ -4924,6 +5045,127 @@
     },
     "backend.statistic.getCountRequests": {
       "path": "/backend/statistic/count_requests",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "$ref": "Backend_StatisticCount"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "operationId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 401,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "$ref": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
+    "backend.statistic.getActivitiesPerUser": {
+      "path": "/backend/statistic/activities_per_user",
       "method": "GET",
       "return": {
         "code": 200,
