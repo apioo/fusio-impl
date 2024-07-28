@@ -5291,7 +5291,7 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_StatisticCount"
+          "$ref": "Backend_StatisticChart"
         }
       },
       "arguments": {
