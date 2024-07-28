@@ -1367,6 +1367,15 @@ class NewInstallation
                     parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
                     throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
+                'statistic.getUserRegistrations' => new Operation(
+                    action: Backend\Action\Statistic\GetUserRegistrations::class,
+                    httpMethod: 'GET',
+                    httpPath: '/statistic/user_registrations',
+                    httpCode: 200,
+                    outgoing: Model\Backend\StatisticChart::class,
+                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    throws: [401 => Model\Common\Message::class, 500 => Model\Common\Message::class],
+                ),
                 'tenant.setup' => new Operation(
                     action: Backend\Action\Tenant\Setup::class,
                     httpMethod: 'PUT',

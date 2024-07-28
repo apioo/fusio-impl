@@ -43,9 +43,9 @@ class GetAll implements ActionInterface
     private View\Statistic\MostUsedOperations $mostUsedOperations;
     private View\Statistic\TimePerOperation $timePerOperation;
     private View\Statistic\TestCoverage $testCoverage;
-    private View\Dashboard\LatestApps $latestApps;
-    private View\Dashboard\LatestRequests $latestRequests;
-    private View\Dashboard\LatestUsers $latestUsers;
+    private View\Statistic\MostUsedActivities $mostUsedActivities;
+    private View\Statistic\ActivitiesPerUser $activitiesPerUser;
+    private View\Statistic\UserRegistrations $userRegistrations;
 
     public function __construct(TableManagerInterface $tableManager)
     {
@@ -55,15 +55,17 @@ class GetAll implements ActionInterface
         $this->mostUsedOperations = $tableManager->getTable(View\Statistic\MostUsedOperations::class);
         $this->timePerOperation = $tableManager->getTable(View\Statistic\TimePerOperation::class);
         $this->testCoverage = $tableManager->getTable(View\Statistic\TestCoverage::class);
-        $this->latestApps = $tableManager->getTable(View\Dashboard\LatestApps::class);
-        $this->latestRequests = $tableManager->getTable(View\Dashboard\LatestRequests::class);
-        $this->latestUsers = $tableManager->getTable(View\Dashboard\LatestUsers::class);
+        $this->mostUsedActivities = $tableManager->getTable(View\Statistic\MostUsedActivities::class);
+        $this->activitiesPerUser = $tableManager->getTable(View\Statistic\ActivitiesPerUser::class);
+        $this->userRegistrations = $tableManager->getTable(View\Statistic\UserRegistrations::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $filter = Filter\DateQueryFilter::from($request);
         $logFilter = Filter\Log\LogQueryFilter::from($request);
         $transactionFilter = Filter\Transaction\TransactionQueryFilter::from($request);
+        $auditFilter = Filter\Audit\AuditQueryFilter::from($request);
 
         return [
             'errorsPerOperation' => $this->errorsPerOperation->getView($logFilter, $context),
@@ -72,9 +74,9 @@ class GetAll implements ActionInterface
             'mostUsedOperations' => $this->mostUsedOperations->getView($logFilter, $context),
             'timePerOperation' => $this->timePerOperation->getView($logFilter, $context),
             'testCoverage' => $this->testCoverage->getView($context),
-            'latestApps' => $this->latestApps->getView($context),
-            'latestRequests' => $this->latestRequests->getView($context),
-            'latestUsers' => $this->latestUsers->getView($context),
+            'mostUsedActivities' => $this->mostUsedActivities->getView($auditFilter, $context),
+            'activitiesPerUser' => $this->activitiesPerUser->getView($auditFilter, $context),
+            'userRegistrations' => $this->userRegistrations->getView($filter, $context),
         ];
     }
 }
