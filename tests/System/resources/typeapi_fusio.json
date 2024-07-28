@@ -12589,84 +12589,15 @@
         "testCoverage": {
           "$ref": "Backend_StatisticChart"
         },
-        "latestApps": {
-          "$ref": "Backend_DashboardApps"
+        "mostUsedActivities": {
+          "$ref": "Backend_StatisticChart"
         },
-        "latestRequests": {
-          "$ref": "Backend_DashboardRequests"
+        "activitiesPerUser": {
+          "$ref": "Backend_StatisticChart"
         },
-        "latestUsers": {
-          "$ref": "Backend_DashboardUsers"
+        "userRegistrations": {
+          "$ref": "Backend_StatisticChart"
         }
-      }
-    },
-    "Backend_DashboardApp": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_DashboardApps": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_DashboardApp"
-      }
-    },
-    "Backend_DashboardRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "path": {
-          "type": "string"
-        },
-        "ip": {
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_DashboardRequests": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_DashboardRequest"
-      }
-    },
-    "Backend_DashboardUser": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Backend_DashboardUsers": {
-      "$ref": "Common_Collection",
-      "$template": {
-        "T": "Backend_DashboardUser"
       }
     },
     "Backend_DatabaseConnections": {
