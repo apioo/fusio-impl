@@ -74,6 +74,11 @@ final class Version20240721005146 extends AbstractMigration
         if (!$tokenTable->hasForeignKey('token_category_id')) {
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'token_category_id');
         }
+
+        $scopeOperationTable = $schema->getTable('fusio_scope_operation');
+        if (!$scopeOperationTable->hasIndex('IDX_SCOPE_OPERATION_SO')) {
+            $scopeOperationTable->addUniqueIndex(['scope_id', 'operation_id'], 'IDX_SCOPE_OPERATION_SO');
+        }
     }
 
     public function down(Schema $schema): void
