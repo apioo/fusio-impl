@@ -215,7 +215,11 @@ class Installer implements InstallerInterface
             $content = file_get_contents($file);
 
             foreach ($env as $key => $value) {
-                $content = str_replace('${' . $key . '}', $value, $content);
+                if (is_scalar($value)) {
+                    $content = str_replace('${' . $key . '}', (string) $value, $content);
+                } else {
+                    $content = str_replace('${' . $key . '}', '', $content);
+                }
             }
 
             file_put_contents($file, $content);
