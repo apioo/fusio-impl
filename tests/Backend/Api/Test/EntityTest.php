@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Test;
 
+use Fusio\Impl\Table\Generated\TestTable;
+use Fusio\Impl\Table\Test;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -100,10 +102,13 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'uriFragments' => 'bar=bar',
-            'parameters'   => 'bar=bar',
-            'headers'      => 'Content-Type=text/xml',
-            'body'         => $payload,
+            'status' => Test::STATUS_DISABLED,
+            'config' => [
+                'uriFragments' => 'bar=bar',
+                'parameters' => 'bar=bar',
+                'headers' => 'Content-Type=text/xml',
+                'body' => $payload,
+            ],
         ]));
 
         $body   = (string) $response->getBody();
@@ -120,7 +125,7 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'uri_fragments', 'parameters', 'headers', 'body')
+            ->select('id', 'status', 'uri_fragments', 'parameters', 'headers', 'body')
             ->from('fusio_test')
             ->where('id = 1')
             ->getSQL();
@@ -128,6 +133,7 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['id']);
+        $this->assertEquals(Test::STATUS_DISABLED, $row['status']);
         $this->assertEquals('bar=bar', $row['uri_fragments']);
         $this->assertEquals('bar=bar', $row['parameters']);
         $this->assertEquals('Content-Type=text/xml', $row['headers']);

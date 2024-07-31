@@ -3437,7 +3437,7 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Backend_TestConfig"
+            "$ref": "Backend_Test"
           }
         }
       },

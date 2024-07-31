@@ -1431,7 +1431,7 @@ class NewInstallation
                     httpPath: '/test/$test_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\TestConfig::class,
+                    incoming: Model\Backend\Test::class,
                     throws: [400 => Model\Common\Message::class, 401 => Model\Common\Message::class, 404 => Model\Common\Message::class, 410 => Model\Common\Message::class, 500 => Model\Common\Message::class],
                 ),
                 'token.getAll' => new Operation(

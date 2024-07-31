@@ -24,7 +24,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Page\UpdatedEvent;
 use Fusio\Impl\Service\Page\SlugBuilder;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\PageUpdate;
+use Fusio\Model;
 use Fusio\Model\Backend\TestConfig;
 use PSX\Sql\Condition;
 use PSX\Http\Exception as StatusCode;
@@ -103,18 +103,20 @@ class Test
         }
     }
 
-    public function update(string $testId, TestConfig $config, UserContext $context): int
+    public function update(string $testId, Model\Backend\Test $test, UserContext $context): int
     {
         $existing = $this->testTable->findOneByTenantAndId($context->getTenantId(), (int) $testId);
         if (!$existing instanceof Table\Generated\TestRow) {
             throw new StatusCode\NotFoundException('Could not find test');
         }
 
-        $body = $config->getBody();
+        $config = $test->getConfig();
+        $body = $config?->getBody();
 
-        $existing->setUriFragments($config->getUriFragments());
-        $existing->setParameters($config->getParameters());
-        $existing->setHeaders($config->getHeaders());
+        $existing->setStatus($test->getStatus());
+        $existing->setUriFragments($config?->getUriFragments());
+        $existing->setParameters($config?->getParameters());
+        $existing->setHeaders($config?->getHeaders());
         $existing->setBody(isset($body) ? \json_encode($body, JSON_PRETTY_PRINT) : '');
         $this->testTable->update($existing);
 
