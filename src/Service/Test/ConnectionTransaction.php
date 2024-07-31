@@ -35,15 +35,19 @@ class ConnectionTransaction
 {
     private ConnectionInterface $connectionRepository;
     private Connector $connector;
+    private Connection $connection;
 
-    public function __construct(ConnectionInterface $connectionRepository, Connector $connector)
+    public function __construct(ConnectionInterface $connectionRepository, Connector $connector, Connection $connection)
     {
         $this->connectionRepository = $connectionRepository;
         $this->connector = $connector;
+        $this->connection = $connection;
     }
 
     public function beginTransaction(): void
     {
+        $this->connection->beginTransaction();
+
         $connections = $this->connectionRepository->getAll();
         foreach ($connections as $connection) {
             $instance = $this->connector->getConnection($connection->getId());
@@ -55,6 +59,8 @@ class ConnectionTransaction
 
     public function rollBack(): void
     {
+        $this->connection->rollBack();
+
         $connections = $this->connectionRepository->getAll();
         foreach ($connections as $connection) {
             $instance = $this->connector->getConnection($connection->getId());
