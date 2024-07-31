@@ -146,6 +146,7 @@ class Operation
                 $existing->setDescription($operation->getDescription() ?? $existing->getDescription());
                 $existing->setHttpMethod($operation->getHttpMethod() ?? $existing->getHttpMethod());
                 $existing->setHttpPath($operation->getHttpPath() ?? $existing->getHttpPath());
+                $existing->setHttpCode($operation->getHttpCode() ?? $existing->getHttpCode());
                 $existing->setName($operation->getName() ?? $existing->getName());
                 $parameters = $operation->getParameters();
                 if ($parameters !== null) {

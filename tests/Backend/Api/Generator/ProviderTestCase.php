@@ -90,7 +90,7 @@ JSON;
         // check operations
         foreach ($data->operations as $operation) {
             $path = rtrim('/provider' . $operation->httpPath, '/');
-            Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'provider.' . $operation->name, $operation->httpMethod, $path, ['provider']);
+            Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'provider.' . $operation->name, $operation->httpMethod, $path, null, ['provider']);
         }
     }
 

@@ -84,10 +84,10 @@ class Assert extends \PHPUnit\Framework\Assert
         }
     }
 
-    public static function assertOperation(Connection $connection, int $expectStability, string $expectName, string $expectHttpMethod, string $expectHttpPath, array $expectScopes, ?array $expectMetadata = null): void
+    public static function assertOperation(Connection $connection, int $expectStability, string $expectName, string $expectHttpMethod, string $expectHttpPath, ?int $expectHttpCode, array $expectScopes, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'stability', 'name', 'http_method', 'http_path', 'metadata')
+            ->select('id', 'stability', 'name', 'http_method', 'http_path', 'http_code', 'metadata')
             ->from('fusio_operation')
             ->where('name = :name')
             ->getSQL();
@@ -102,6 +102,9 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertEquals($expectName, $operation['name']);
         self::assertEquals($expectHttpMethod, $operation['http_method']);
         self::assertEquals($expectHttpPath, $operation['http_path']);
+        if ($expectHttpCode !== null) {
+            self::assertEquals($expectHttpCode, $operation['http_code']);
+        }
 
         if ($expectMetadata !== null) {
             self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $operation['metadata'], $operation['metadata']);

@@ -158,7 +158,7 @@ JSON;
             'stability'  => OperationInterface::STABILITY_STABLE,
             'httpMethod' => 'GET',
             'httpPath'   => '/foo',
-            'httpCode'   => 200,
+            'httpCode'   => 201,
             'name'       => 'test.baz',
             'parameters' => [
                 'foo' => [
@@ -189,7 +189,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertOperation($this->connection, OperationInterface::STABILITY_STABLE, 'test.baz', 'GET', '/foo', ['foo', 'baz'], $metadata);
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_STABLE, 'test.baz', 'GET', '/foo', 201, ['foo', 'baz'], $metadata);
     }
 
     /**
@@ -237,7 +237,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertOperation($this->connection, OperationInterface::STABILITY_DEPRECATED, 'test.createFoo', 'POST', '/foo', ['bar']);
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_DEPRECATED, 'test.createFoo', 'POST', '/foo', 201, ['bar']);
     }
 
     public function testDelete()
