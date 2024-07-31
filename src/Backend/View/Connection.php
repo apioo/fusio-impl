@@ -27,7 +27,6 @@ use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
-use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 

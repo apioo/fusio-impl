@@ -27,7 +27,6 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Cli\Authenticator;
-use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
  * Export

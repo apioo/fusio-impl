@@ -22,8 +22,8 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
-use PSX\Sql\ViewAbstract;
 use Fusio\Impl\Table;
+use PSX\Sql\ViewAbstract;
 
 /**
  * UsedPoints

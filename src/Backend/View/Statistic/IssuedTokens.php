@@ -23,7 +23,6 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App;
 use PSX\Sql\ViewAbstract;
-use Fusio\Impl\Table;
 
 /**
  * IssuedTokens

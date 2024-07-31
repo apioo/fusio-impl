@@ -27,7 +27,6 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Model\Backend\Test;
-use Fusio\Model\Backend\TestConfig;
 
 /**
  * Update

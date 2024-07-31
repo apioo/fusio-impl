@@ -25,7 +25,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
-use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
 use Fusio\Impl\Backend\View;
 
 /**
