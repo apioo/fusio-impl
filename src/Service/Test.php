@@ -110,7 +110,7 @@ class Test
         $config = $test->getConfig();
         $body = $config?->getBody();
 
-        $existing->setStatus($test->getStatus());
+        $existing->setStatus($test->getStatus() ?? $existing->getStatus());
         $existing->setUriFragments($config?->getUriFragments());
         $existing->setParameters($config?->getParameters());
         $existing->setHeaders($config?->getHeaders());
