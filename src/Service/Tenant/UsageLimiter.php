@@ -22,7 +22,6 @@ namespace Fusio\Impl\Service\Tenant;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Exception\UsageLimitExceededException;
-use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 
 /**

@@ -36,7 +36,6 @@ use Fusio\Model\Backend\UserUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * User

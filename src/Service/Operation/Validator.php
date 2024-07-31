@@ -22,7 +22,6 @@ namespace Fusio\Impl\Service\Operation;
 
 use Fusio\Engine\Exception\ActionNotFoundException;
 use Fusio\Engine\Exception\FactoryResolveException;
-use Fusio\Engine\Factory;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;

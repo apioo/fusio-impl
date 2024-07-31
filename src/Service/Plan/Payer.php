@@ -21,11 +21,9 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\DateTime\LocalDateTime;
-use PSX\Http\Exception\PaymentRequiredException;
 
 /**
  * Payer

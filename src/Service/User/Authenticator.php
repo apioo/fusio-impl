@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;

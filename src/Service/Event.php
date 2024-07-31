@@ -30,7 +30,6 @@ use Fusio\Model\Backend\EventCreate;
 use Fusio\Model\Backend\EventUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Event

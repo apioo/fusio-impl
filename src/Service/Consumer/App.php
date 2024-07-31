@@ -27,7 +27,6 @@ use Fusio\Model;
 use Fusio\Model\Consumer\AppCreate;
 use Fusio\Model\Consumer\AppUpdate;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * App

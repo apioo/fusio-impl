@@ -20,11 +20,9 @@
 
 namespace Fusio\Impl\Service\Event;
 
-use Cron\CronExpression;
 use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\Cronjob;
 use Fusio\Model\Backend\Event;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Exception\InvalidSchemaException;

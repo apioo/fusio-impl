@@ -29,7 +29,6 @@ use Fusio\Model\Backend\CategoryCreate;
 use Fusio\Model\Backend\CategoryUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Category

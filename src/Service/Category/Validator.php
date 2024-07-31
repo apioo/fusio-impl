@@ -24,7 +24,6 @@ use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Category;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Validator

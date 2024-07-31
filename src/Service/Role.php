@@ -29,7 +29,6 @@ use Fusio\Model\Backend\RoleCreate;
 use Fusio\Model\Backend\RoleUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Role

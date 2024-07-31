@@ -21,13 +21,10 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Page\UpdatedEvent;
-use Fusio\Impl\Service\Page\SlugBuilder;
 use Fusio\Impl\Table;
 use Fusio\Model;
-use Fusio\Model\Backend\TestConfig;
-use PSX\Sql\Condition;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
 /**
