@@ -120,7 +120,7 @@ class Connection
 
     public function update(string $connectionId, ConnectionUpdate $connection, UserContext $context): int
     {
-        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -159,7 +159,7 @@ class Connection
 
     public function delete(string $connectionId, UserContext $context): int
     {
-        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -195,7 +195,7 @@ class Connection
 
     public function getIntrospection(string $connectionId, UserContext $context): IntrospectorInterface
     {
-        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $connectionId);
+        $existing = $this->connectionTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }

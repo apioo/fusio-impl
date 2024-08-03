@@ -72,7 +72,7 @@ class Validator
 
     private function assertEvent(int $eventId, ?string $tenantId): void
     {
-        $event = $this->eventTable->findOneByTenantAndId($tenantId, $eventId);
+        $event = $this->eventTable->findOneByTenantAndId($tenantId, null, $eventId);
         if (empty($event)) {
             throw new StatusCode\BadRequestException('Webhook event does not exist');
         }

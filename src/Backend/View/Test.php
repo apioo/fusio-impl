@@ -46,7 +46,7 @@ class Test extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TestTable::COLUMN_MESSAGE]);
         $condition->equals(Table\Generated\TestTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\TestTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\TestTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $builder = new Builder($this->connection);
 
@@ -69,7 +69,7 @@ class Test extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Test::class), 'findOneByTenantAndId'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Test::class), 'findOneByTenantAndId'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_STATUS),
             'operationName' => $builder->doValue([$this->getTable(Table\Operation::class), 'find'], [new Reference(Table\Generated\TestTable::COLUMN_OPERATION_ID)], Table\Generated\OperationTable::COLUMN_NAME),

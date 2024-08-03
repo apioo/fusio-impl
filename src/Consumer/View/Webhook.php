@@ -46,7 +46,7 @@ class Webhook extends ViewAbstract
         $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->in('webhook.' . Table\Generated\WebhookTable::COLUMN_STATUS, [Table\Webhook::STATUS_ACTIVE]);
         $condition->equals('event.' . Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
@@ -95,7 +95,7 @@ class Webhook extends ViewAbstract
         $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_ID, $webhookId);
         $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals('event.' . Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([

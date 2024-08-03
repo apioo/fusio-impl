@@ -72,7 +72,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid event name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->eventTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->eventTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Event already exists');
         }
     }

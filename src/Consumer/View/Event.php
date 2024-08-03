@@ -45,7 +45,7 @@ class Event extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);

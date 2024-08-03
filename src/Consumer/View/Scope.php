@@ -44,7 +44,7 @@ class Scope extends ViewAbstract
         $condition = Condition::withAnd();
         $condition->equals('user_scope.' . Table\Generated\UserScopeTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([

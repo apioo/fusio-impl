@@ -46,7 +46,7 @@ class Action extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ActionTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\ActionTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\ActionTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -71,7 +71,7 @@ class Action extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Action::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Action::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
             'name' => Table\Generated\ActionTable::COLUMN_NAME,

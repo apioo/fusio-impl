@@ -33,15 +33,16 @@ use PSX\Sql\Condition;
  */
 class Log extends Generated\LogTable
 {
-    public function findOneByIdentifier(?string $tenantId, string $id): ?LogRow
+    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?LogRow
     {
-        return $this->findOneByTenantAndId($tenantId, (int) $id);
+        return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $id): ?LogRow
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?LogRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);

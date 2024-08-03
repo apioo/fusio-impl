@@ -66,7 +66,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
     }

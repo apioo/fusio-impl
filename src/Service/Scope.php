@@ -79,7 +79,7 @@ class Scope
             $scopeId = $this->scopeTable->getLastInsertId();
             $scope->setId($scopeId);
 
-            $this->insertOperations($context->getTenantId(), $scopeId, $scope->getOperations() ?? []);
+            $this->insertOperations($scopeId, $scope->getOperations() ?? [], $context);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -100,7 +100,7 @@ class Scope
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
-            $scope = $this->scopeTable->findOneByTenantAndName($context->getTenantId(), $scopeName);
+            $scope = $this->scopeTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $scopeName);
             if ($scope instanceof Table\Generated\ScopeRow) {
                 // assign scope to operation
                 $row = new Table\Generated\ScopeOperationRow();
@@ -124,7 +124,7 @@ class Scope
 
     public function update(string $scopeId, ScopeUpdate $scope, UserContext $context): int
     {
-        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -145,7 +145,7 @@ class Scope
 
             $this->scopeOperationTable->deleteAllFromScope($existing->getId());
 
-            $this->insertOperations($context->getTenantId(), $existing->getId(), $scope->getOperations() ?? []);
+            $this->insertOperations($existing->getId(), $scope->getOperations() ?? [], $context);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -161,7 +161,7 @@ class Scope
 
     public function delete(string $scopeId, UserContext $context): int
     {
-        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $scopeId);
+        $existing = $this->scopeTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -230,12 +230,12 @@ class Scope
     /**
      * @param ScopeOperation[] $operations
      */
-    protected function insertOperations(?string $tenantId, int $scopeId, ?array $operations): void
+    protected function insertOperations(int $scopeId, ?array $operations, UserContext $context): void
     {
         if (!empty($operations)) {
             foreach ($operations as $scopeOperation) {
                 if ($scopeOperation->getAllow()) {
-                    $operation = $this->operationTable->findOneByTenantAndId($tenantId, $scopeOperation->getOperationId());
+                    $operation = $this->operationTable->findOneByTenantAndId($context->getTenantId(), $context->getCategoryId(), $scopeOperation->getOperationId());
                     if (!$operation instanceof Table\Generated\OperationRow) {
                         throw new StatusCode\BadRequestException('Could not find provided operation id: ' . $scopeOperation->getOperationId());
                     }

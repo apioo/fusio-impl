@@ -70,7 +70,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid scope name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->scopeTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->scopeTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }
     }

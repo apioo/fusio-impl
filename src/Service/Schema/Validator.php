@@ -61,7 +61,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->schemaTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->schemaTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Schema already exists');
         }
     }

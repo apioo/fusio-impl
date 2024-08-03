@@ -39,28 +39,32 @@ class Cronjob extends Generated\CronjobTable
     public const CODE_SUCCESS = 0;
     public const CODE_ERROR = 1;
 
-    public function findOneByIdentifier(?string $tenantId, string $id): ?CronjobRow
+    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?CronjobRow
     {
         if (str_starts_with($id, '~')) {
-            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
         } else {
-            return $this->findOneByTenantAndId($tenantId, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
         }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $id): ?CronjobRow
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?CronjobRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }
 
-    public function findOneByTenantAndName(?string $tenantId, string $name): ?CronjobRow
+    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name): ?CronjobRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        if ($categoryId !== null) {
+            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        }
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);

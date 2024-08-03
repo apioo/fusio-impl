@@ -43,7 +43,7 @@ class Error extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogErrorTable::COLUMN_MESSAGE], 'error');
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
@@ -89,7 +89,7 @@ class Error extends ViewAbstract
         $condition = Condition::withAnd();
         $condition->equals('error.' . Table\Generated\LogErrorTable::COLUMN_ID, $id);
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([

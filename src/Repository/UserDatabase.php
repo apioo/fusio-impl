@@ -154,7 +154,7 @@ class UserDatabase implements Repository\UserInterface
 
         $categoryId = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($categoryId)) {
-            return 0;
+            return 1;
         }
 
         return (int) $categoryId;

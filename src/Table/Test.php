@@ -39,10 +39,11 @@ class Test extends Generated\TestTable
     const STATUS_SKIPPED  = 0x5;
     const STATUS_DISABLED = 0x6;
 
-    public function findOneByTenantAndId(?string $tenantId, int $id): ?TestRow
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?TestRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);

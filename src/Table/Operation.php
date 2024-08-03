@@ -37,28 +37,32 @@ class Operation extends Generated\OperationTable
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(?string $tenantId, string $id): ?OperationRow
+    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?OperationRow
     {
         if (str_starts_with($id, '~')) {
-            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
         } else {
-            return $this->findOneByTenantAndId($tenantId, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
         }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $id): ?OperationRow
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?OperationRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }
 
-    public function findOneByTenantAndName(?string $tenantId, string $name): ?OperationRow
+    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name): ?OperationRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        if ($categoryId !== null) {
+            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        }
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);

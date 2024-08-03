@@ -91,7 +91,7 @@ class Test
         $condition->notEquals(Table\Test::COLUMN_STATUS, Table\Test::STATUS_DISABLED);
         $tests = $this->testTable->findAll($condition, 0, 1024);
         foreach ($tests as $test) {
-            $operation = $this->operationTable->findOneByIdentifier($context->getTenantId(), '' . $test->getOperationId());
+            $operation = $this->operationTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), '' . $test->getOperationId());
             if (!$operation instanceof Table\Generated\OperationRow) {
                 continue;
             }
@@ -102,7 +102,7 @@ class Test
 
     public function update(string $testId, Model\Backend\Test $test, UserContext $context): int
     {
-        $existing = $this->testTable->findOneByTenantAndId($context->getTenantId(), (int) $testId);
+        $existing = $this->testTable->findOneByTenantAndId($context->getTenantId(), $context->getCategoryId(), (int) $testId);
         if (!$existing instanceof Table\Generated\TestRow) {
             throw new StatusCode\NotFoundException('Could not find test');
         }

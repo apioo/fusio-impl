@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
 use Fusio\Impl\Table;
+use PSX\Api\Scanner\FilterInterface;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -47,7 +49,7 @@ class Operation extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\OperationTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -78,7 +80,7 @@ class Operation extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Operation::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Operation::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
             'name' => Table\Generated\OperationTable::COLUMN_NAME,
@@ -102,11 +104,17 @@ class Operation extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getRoutes(ContextInterface $context)
+    public function getRoutes(?FilterInterface $filter, ContextInterface $context)
     {
+        if ($filter instanceof CategoryFilter) {
+            $categoryId = $filter->getId();
+        } else {
+            $categoryId = 1;
+        }
+
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
 
         $queryBuilder = $this->connection->createQueryBuilder()

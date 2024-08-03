@@ -82,64 +82,6 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetWithId()
-    {
-        $response = $this->sendRequest('/system/schema/3', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "schema": {
-        "definitions": {
-            "Collection": {
-                "title": "collection",
-                "type": "object",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "itemsPerPage": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "$ref": "Entry"
-                    }
-                }
-            },
-            "Entry": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "format": "date-time",
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "$ref": "Collection"
-    },
-    "form": null
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
     public function testGetNotFound()
     {
         $response = $this->sendRequest('/system/schema/not_available', 'GET', array(

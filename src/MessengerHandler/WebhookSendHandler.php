@@ -52,7 +52,7 @@ class WebhookSendHandler
 
     public function __invoke(TriggerEvent $event): void
     {
-        $existing = $this->eventTable->findOneByTenantAndName($event->getTenantId(), $event->getEventName());
+        $existing = $this->eventTable->findOneByTenantAndName($event->getTenantId(), null, $event->getEventName());
         if (!$existing instanceof Table\Generated\EventRow) {
             return;
         }

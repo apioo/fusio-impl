@@ -78,7 +78,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid action name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->actionTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->actionTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
     }

@@ -45,7 +45,7 @@ class Schema extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\SchemaTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -69,7 +69,7 @@ class Schema extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,
@@ -81,19 +81,11 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithForm(int|string $name, ContextInterface $context)
+    public function getEntityWithForm(string $name, ContextInterface $context)
     {
-        if (is_numeric($name)) {
-            $method = 'findOneByTenantAndId';
-            $value = (int) $name;
-        } else {
-            $method = 'findOneByTenantAndName';
-            $value = $name;
-        }
-
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), $method], [$context->getTenantId(), $value], [
+        $definition = $builder->doEntity([$this->getTable(Table\Schema::class), 'findOneByTenantAndName'], [$context->getTenantId(), null, $name], [
             'id' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\SchemaTable::COLUMN_STATUS),
             'name' => Table\Generated\SchemaTable::COLUMN_NAME,

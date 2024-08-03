@@ -47,7 +47,7 @@ class Scope extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ScopeTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId() ?: 1);
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $builder = new Builder($this->connection);
 
@@ -70,7 +70,7 @@ class Scope extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Scope::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Scope::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,

@@ -6,6 +6,7 @@ class ConnectionRow implements \JsonSerializable, \PSX\Record\RecordableInterfac
 {
     private ?int $id = null;
     private ?string $tenantId = null;
+    private ?int $categoryId = null;
     private ?int $status = null;
     private ?string $name = null;
     private ?string $class = null;
@@ -26,6 +27,14 @@ class ConnectionRow implements \JsonSerializable, \PSX\Record\RecordableInterfac
     public function getTenantId() : ?string
     {
         return $this->tenantId;
+    }
+    public function setCategoryId(int $categoryId) : void
+    {
+        $this->categoryId = $categoryId;
+    }
+    public function getCategoryId() : int
+    {
+        return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
     public function setStatus(int $status) : void
     {
@@ -73,6 +82,7 @@ class ConnectionRow implements \JsonSerializable, \PSX\Record\RecordableInterfac
         $record = new \PSX\Record\Record();
         $record->put('id', $this->id);
         $record->put('tenant_id', $this->tenantId);
+        $record->put('category_id', $this->categoryId);
         $record->put('status', $this->status);
         $record->put('name', $this->name);
         $record->put('class', $this->class);
@@ -89,6 +99,7 @@ class ConnectionRow implements \JsonSerializable, \PSX\Record\RecordableInterfac
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
+        $row->categoryId = isset($data['category_id']) && is_int($data['category_id']) ? $data['category_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->class = isset($data['class']) && is_string($data['class']) ? $data['class'] : null;

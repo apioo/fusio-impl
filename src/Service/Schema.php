@@ -94,7 +94,7 @@ class Schema
 
     public function update(string $schemaId, SchemaUpdate $schema, UserContext $context): int
     {
-        $existing = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -133,7 +133,7 @@ class Schema
 
     public function delete(string $schemaId, UserContext $context): int
     {
-        $existing = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $schemaId);
+        $existing = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -152,7 +152,7 @@ class Schema
 
     public function updateForm(string $schemaId, SchemaForm $form, UserContext $context): void
     {
-        $schema = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $schemaId);
+        $schema = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $schemaId);
         if (empty($schema)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }

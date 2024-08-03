@@ -73,7 +73,7 @@ class Validator
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
-        if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByTenantAndName($tenantId, $name)) {
+        if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
     }

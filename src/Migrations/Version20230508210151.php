@@ -122,6 +122,7 @@ final class Version20230508210151 extends AbstractMigration
             $connectionTable = $schema->createTable('fusio_connection');
             $connectionTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $connectionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $connectionTable->addColumn('category_id', 'integer', ['default' => 1]);
             $connectionTable->addColumn('status', 'integer', ['default' => Table\Connection::STATUS_ACTIVE]);
             $connectionTable->addColumn('name', 'string', ['length' => 255]);
             $connectionTable->addColumn('class', 'string', ['length' => 255]);

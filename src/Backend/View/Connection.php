@@ -48,6 +48,7 @@ class Connection extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
@@ -71,7 +72,7 @@ class Connection extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -86,7 +87,7 @@ class Connection extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

@@ -119,7 +119,7 @@ class Operation
 
     public function update(string $operationId, OperationUpdate $operation, UserContext $context): int
     {
-        $existing = $this->operationTable->findOneByIdentifier($context->getTenantId(), $operationId);
+        $existing = $this->operationTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $operationId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find operation');
         }
@@ -190,7 +190,7 @@ class Operation
 
     public function delete(string $operationId, UserContext $context): int
     {
-        $existing = $this->operationTable->findOneByIdentifier($context->getTenantId(), $operationId);
+        $existing = $this->operationTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $operationId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find operation');
         }

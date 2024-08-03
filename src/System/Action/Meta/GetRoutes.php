@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use PSX\Api\Scanner\FilterFactoryInterface;
 
 /**
  * GetRoutes
@@ -36,14 +37,24 @@ use Fusio\Impl\Backend\View;
 class GetRoutes implements ActionInterface
 {
     private View\Operation $table;
+    private FilterFactoryInterface $filterFactory;
 
-    public function __construct(View\Operation $table)
+    public function __construct(View\Operation $table, FilterFactoryInterface $filterFactory)
     {
         $this->table = $table;
+        $this->filterFactory = $filterFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getRoutes($context);
+        $filterName = $request->get('filter');
+        if (empty($filterName)) {
+            $filterName = $this->filterFactory->getDefault();
+        }
+
+        return $this->table->getRoutes(
+            $this->filterFactory->getFilter($filterName),
+            $context
+        );
     }
 }

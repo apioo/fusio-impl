@@ -77,7 +77,7 @@ class Installer implements InstallerInterface
 
         $actionName = $this->getActionName($object);
 
-        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $actionName);
+        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), null, $actionName);
         if (!$existing instanceof Table\Generated\ActionRow) {
             throw new \InvalidArgumentException('Provided an invalid action');
         }
@@ -96,7 +96,7 @@ class Installer implements InstallerInterface
     public function isInstalled(MarketplaceObject $object, UserContext $context): bool
     {
         $name = $this->getActionName($object);
-        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $name);
+        $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), null, $name);
         return $existing instanceof Table\Generated\ActionRow;
     }
 
