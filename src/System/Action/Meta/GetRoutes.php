@@ -53,7 +53,7 @@ class GetRoutes implements ActionInterface
         }
 
         return $this->table->getRoutes(
-            $this->filterFactory->getFilter($filterName),
+            $this->filterFactory->getFilter((string) $filterName),
             $context
         );
     }
