@@ -75,6 +75,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.GraphQL.Action.GraphQLProcessor"
         },
         {
+            "name": "GraphQL-Query",
+            "class": "Fusio.Adapter.GraphQL.Action.GraphQLQuery"
+        },
+        {
             "name": "HTTP-Composition",
             "class": "Fusio.Adapter.Http.Action.HttpComposition"
         },
