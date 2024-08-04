@@ -96,6 +96,7 @@ class Connection
 
             $row = new Table\Generated\ConnectionRow();
             $row->setTenantId($context->getTenantId());
+            $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Connection::STATUS_ACTIVE);
             $row->setName($name);
             $row->setClass(ClassName::serialize($class));
