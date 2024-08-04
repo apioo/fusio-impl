@@ -59,7 +59,7 @@ class Test
         foreach ($operations as $operation) {
             $existing = $this->testTable->findOneByOperationId($operation->getId());
             if ($existing instanceof Table\Generated\TestRow) {
-                $existing->setStatus(Table\Test::STATUS_PENDING);
+                $existing->setStatus($existing->getStatus() === Table\Test::STATUS_DISABLED ? Table\Test::STATUS_DISABLED : Table\Test::STATUS_PENDING);
                 $this->testTable->update($existing);
 
                 $ids[] = $existing->getId();
