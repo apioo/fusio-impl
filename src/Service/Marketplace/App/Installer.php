@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Marketplace\App;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Service\System\FrameworkConfig;
@@ -31,7 +32,6 @@ use Fusio\Model\Backend\AppCreate;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
-use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -66,7 +66,7 @@ class Installer implements InstallerInterface
     public function install(MarketplaceObject $object, UserContext $context): void
     {
         if (!$object instanceof MarketplaceApp) {
-            throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
+            throw new MarketplaceException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
         $zipFile = $this->downloadZip($object);
@@ -86,7 +86,7 @@ class Installer implements InstallerInterface
     public function upgrade(MarketplaceObject $object, UserContext $context): void
     {
         if (!$object instanceof MarketplaceApp) {
-            throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
+            throw new MarketplaceException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
         $this->moveToTrash($object);
@@ -97,7 +97,7 @@ class Installer implements InstallerInterface
     public function isInstalled(MarketplaceObject $object, UserContext $context): bool
     {
         if (!$object instanceof MarketplaceApp) {
-            throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
+            throw new MarketplaceException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
         $appsDir = $this->frameworkConfig->getAppsDir();
@@ -112,7 +112,7 @@ class Installer implements InstallerInterface
         $appDir = $appsDir . '/' . $object->getName();
 
         if (!is_dir($appDir)) {
-            throw new \InvalidArgumentException('Provided app does not exist');
+            throw new MarketplaceException('Provided app does not exist');
         }
 
         $this->replaceVariables($appDir, $object, $context);
@@ -131,7 +131,7 @@ class Installer implements InstallerInterface
 
         $downloadUrl = $app->getDownloadUrl();
         if (empty($downloadUrl)) {
-            throw new \RuntimeException('Download url is not available for this app');
+            throw new MarketplaceException('Download url is not available for this app');
         }
 
         // increase timeout to handle download
@@ -147,7 +147,7 @@ class Installer implements InstallerInterface
 
         // check hash
         if (sha1_file($appFile) !== $app->getHash()) {
-            throw new StatusCode\InternalServerErrorException('Invalid hash of downloaded app');
+            throw new MarketplaceException('Invalid hash of downloaded app');
         }
 
         return $appFile;
@@ -159,7 +159,7 @@ class Installer implements InstallerInterface
         $handle = $zip->open($zipFile);
 
         if (!$handle) {
-            throw new StatusCode\InternalServerErrorException('Could not open zip file');
+            throw new MarketplaceException('Could not open zip file');
         }
 
         $zip->extractTo($appDir);
@@ -177,7 +177,7 @@ class Installer implements InstallerInterface
     private function writeMetaFile(string $appDir, MarketplaceApp $app): void
     {
         if (!file_put_contents($appDir . '/app.json', \json_encode($app))) {
-            throw new StatusCode\InternalServerErrorException('Could not write app meta file');
+            throw new MarketplaceException('Could not write app meta file');
         }
     }
 
@@ -234,7 +234,7 @@ class Installer implements InstallerInterface
         } else {
             $user = $this->userTable->findOneByTenantAndName($context->getTenantId(), 'Administrator');
             if (!$user instanceof Table\Generated\UserRow) {
-                throw new StatusCode\InternalServerErrorException('Could not find default admin user');
+                throw new MarketplaceException('Could not find default admin user');
             }
 
             $appCreate = new AppCreate();
@@ -247,7 +247,7 @@ class Installer implements InstallerInterface
 
             $existing = $this->appTable->find($appId);
             if (!$existing instanceof Table\Generated\AppRow) {
-                throw new StatusCode\InternalServerErrorException('Could not create app');
+                throw new MarketplaceException('Could not create app');
             }
 
             return $existing->getAppKey();

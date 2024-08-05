@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Marketplace\Action;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Table;
@@ -42,25 +43,30 @@ class Installer implements InstallerInterface
 {
     private Service\Action $actionService;
     private Table\Action $actionTable;
+    private Table\Connection $connectionTable;
 
-    public function __construct(Service\Action $actionService, Table\Action $actionTable)
+    public function __construct(Service\Action $actionService, Table\Action $actionTable, Table\Connection $connectionTable)
     {
         $this->actionService = $actionService;
         $this->actionTable = $actionTable;
+        $this->connectionTable = $connectionTable;
     }
 
     public function install(MarketplaceObject $object, UserContext $context): void
     {
         if (!$object instanceof MarketplaceAction) {
-            throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
+            throw new MarketplaceException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
         $actionName = $this->getActionName($object);
 
+        $config = ActionConfig::from($object->getConfig() ?? []);
+        $config->put('worker', $this->getWorkerByClass($object->getClass()));
+
         $create = new ActionCreate();
         $create->setName($actionName);
         $create->setClass($object->getClass());
-        $create->setConfig(ActionConfig::from($object->getConfig() ?? []));
+        $create->setConfig($config);
 
         $metadata = new Metadata();
         $metadata->put('marketplace_version', $object->getVersion() ?? '0.0.0');
@@ -72,19 +78,22 @@ class Installer implements InstallerInterface
     public function upgrade(MarketplaceObject $object, UserContext $context): void
     {
         if (!$object instanceof MarketplaceAction) {
-            throw new \InvalidArgumentException('Provided an invalid object, got: ' . get_debug_type($object));
+            throw new MarketplaceException('Provided an invalid object, got: ' . get_debug_type($object));
         }
 
         $actionName = $this->getActionName($object);
 
         $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), null, $actionName);
         if (!$existing instanceof Table\Generated\ActionRow) {
-            throw new \InvalidArgumentException('Provided an invalid action');
+            throw new MarketplaceException('Provided an invalid action');
         }
+
+        $config = ActionConfig::from($object->getConfig() ?? []);
+        $config->put('worker', $this->getWorkerByClass($object->getClass()));
 
         $update = new ActionUpdate();
         $update->setClass($object->getClass());
-        $update->setConfig(ActionConfig::from($object->getConfig() ?? []));
+        $update->setConfig($config);
 
         $metadata = $update->getMetadata() ?? new Metadata();
         $metadata->put('marketplace_version', $object->getVersion() ?? '0.0.0');
@@ -103,5 +112,19 @@ class Installer implements InstallerInterface
     private function getActionName(MarketplaceObject $object): string
     {
         return $object->getAuthor()?->getName() . '-' . $object->getName();
+    }
+
+    private function getWorkerByClass(?string $workerClass): Table\Generated\ConnectionRow
+    {
+        if (empty($workerClass)) {
+            throw new MarketplaceException('Provided no worker class');
+        }
+
+        $connection = $this->connectionTable->findOneByClass($workerClass);
+        if (!$connection instanceof Table\Generated\ConnectionRow) {
+            throw new MarketplaceException('Could not find needed worker connection "' . $workerClass . '", create a connection of this type to use it');
+        }
+
+        return $connection;
     }
 }
