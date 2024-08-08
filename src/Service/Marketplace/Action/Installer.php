@@ -121,7 +121,7 @@ class Installer implements InstallerInterface
     {
         $config = ActionConfig::from($object->getConfig() ?? []);
 
-        if (in_array($object->getClass(), [
+        if (in_array(ClassName::serialize($object->getClass() ?? ''), [
             ClassName::serialize(WorkerJava::class),
             ClassName::serialize(WorkerJavascript::class),
             ClassName::serialize(WorkerPHP::class),
