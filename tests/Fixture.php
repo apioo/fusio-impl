@@ -23,6 +23,8 @@ namespace Fusio\Impl\Tests;
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Adapter\Worker\Connection\Worker;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Connection\Native;
@@ -114,6 +116,7 @@ class Fixture
         $data->addAudit('Backend', 'Administrator', 1, 'app.update', 'Created schema foo', '2015-06-25 22:49:09');
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey), ['foo' => 'bar']);
         $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
+        $data->addConnection('Worker', Worker::class, Service\Connection\Encrypter::encrypt(['url' => 'http://127.0.0.1'], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);

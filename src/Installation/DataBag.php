@@ -197,7 +197,7 @@ class DataBag
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
-            'class' => $class,
+            'class' => ClassName::serialize($class),
             'config' => $config,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
@@ -281,7 +281,7 @@ class DataBag
             'tenant_id' => $tenantId,
             'status' => Table\Connection::STATUS_ACTIVE,
             'name' => $name,
-            'class' => $class,
+            'class' => ClassName::serialize($class),
             'config' => $config,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];

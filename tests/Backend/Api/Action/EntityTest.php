@@ -59,7 +59,7 @@ class EntityTest extends DbTestCase
     "id": {$this->id},
     "status": 1,
     "name": "Sql-Insert",
-    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
+    "class": "Fusio.Adapter.Sql.Action.SqlInsert",
     "async": false,
     "config": {
         "connection": 2,
@@ -88,7 +88,7 @@ JSON;
     "id": {$this->id},
     "status": 1,
     "name": "Sql-Insert",
-    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
+    "class": "Fusio.Adapter.Sql.Action.SqlInsert",
     "async": false,
     "config": {
         "connection": 2,

@@ -20,6 +20,12 @@
 
 namespace Fusio\Impl\Service\Marketplace\Action;
 
+use Fusio\Adapter\Worker\Action\WorkerJava;
+use Fusio\Adapter\Worker\Action\WorkerJavascript;
+use Fusio\Adapter\Worker\Action\WorkerPHP;
+use Fusio\Adapter\Worker\Action\WorkerPython;
+use Fusio\Adapter\Worker\Connection\Worker;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Impl\Service;
@@ -61,7 +67,14 @@ class Installer implements InstallerInterface
         $actionName = $this->getActionName($object);
 
         $config = ActionConfig::from($object->getConfig() ?? []);
-        $config->put('worker', $this->getWorkerByClass($object->getClass()));
+        if (in_array($object->getClass(), [
+            ClassName::serialize(WorkerJava::class),
+            ClassName::serialize(WorkerJavascript::class),
+            ClassName::serialize(WorkerPHP::class),
+            ClassName::serialize(WorkerPython::class),
+        ])) {
+            $config->put('worker', $this->getWorkerConnection());
+        }
 
         $create = new ActionCreate();
         $create->setName($actionName);
@@ -89,7 +102,7 @@ class Installer implements InstallerInterface
         }
 
         $config = ActionConfig::from($object->getConfig() ?? []);
-        $config->put('worker', $this->getWorkerByClass($object->getClass()));
+        $config->put('worker', $this->getWorkerConnection()->getId());
 
         $update = new ActionUpdate();
         $update->setClass($object->getClass());
@@ -114,11 +127,9 @@ class Installer implements InstallerInterface
         return $object->getAuthor()?->getName() . '-' . $object->getName();
     }
 
-    private function getWorkerByClass(?string $workerClass): Table\Generated\ConnectionRow
+    private function getWorkerConnection(): Table\Generated\ConnectionRow
     {
-        if (empty($workerClass)) {
-            throw new MarketplaceException('Provided no worker class');
-        }
+        $workerClass = ClassName::serialize(Worker::class);
 
         $connection = $this->connectionTable->findOneByClass($workerClass);
         if (!$connection instanceof Table\Generated\ConnectionRow) {

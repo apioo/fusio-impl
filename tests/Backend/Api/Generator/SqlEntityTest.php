@@ -89,6 +89,10 @@ class SqlEntityTest extends ProviderTestCase
                 {
                     "key": "2",
                     "value": "Test"
+                },
+                {
+                    "key": "4",
+                    "value": "Worker"
                 }
             ]
         },

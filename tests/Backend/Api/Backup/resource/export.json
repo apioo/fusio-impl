@@ -2,13 +2,13 @@
   "action": [
     {
       "name": "Inspect-Action",
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
+      "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
       "async": false,
       "date": "[datetime]"
     },
     {
       "name": "Sql-Insert",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "class": "Fusio.Adapter.Sql.Action.SqlInsert",
       "async": false,
       "config": {
         "connection": 2,
@@ -18,7 +18,7 @@
     },
     {
       "name": "Sql-Select-All",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
       "async": false,
       "config": {
         "connection": 2,
@@ -28,7 +28,7 @@
     },
     {
       "name": "Util-Static-Response",
-      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "class": "Fusio.Adapter.Util.Action.UtilStaticResponse",
       "async": false,
       "config": {
         "response": "{\"foo\": \"bar\"}"
@@ -242,8 +242,16 @@
   "connection": [
     {
       "status": 1,
+      "name": "Worker",
+      "class": "Fusio.Adapter.Worker.Connection.Worker",
+      "config": {
+        "url": "http:\/\/127.0.0.1"
+      }
+    },
+    {
+      "status": 1,
       "name": "Paypal",
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
+      "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection",
       "config": {
         "foo": "bar"
       }
@@ -251,7 +259,7 @@
     {
       "status": 1,
       "name": "Test",
-      "class": "Fusio\\Impl\\Connection\\Native",
+      "class": "Fusio.Impl.Connection.Native",
       "config": {
         "foo": "bar"
       },

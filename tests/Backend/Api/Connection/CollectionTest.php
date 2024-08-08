@@ -44,10 +44,15 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 4,
+            "status": 1,
+            "name": "Worker"
+        },
         {
             "id": 3,
             "status": 1,
@@ -111,10 +116,15 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 4,
+            "status": 1,
+            "name": "Worker"
+        },
         {
             "id": 3,
             "status": 1,
@@ -166,7 +176,7 @@ JSON;
 {
     "success": true,
     "message": "Connection successfully created",
-    "id": "4"
+    "id": "5"
 }
 JSON;
 
@@ -184,7 +194,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(5, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals(ClassName::serialize(SqlAdvanced::class), $row['class']);
         $this->assertNotEmpty($row['config']);
