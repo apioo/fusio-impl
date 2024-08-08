@@ -65,16 +65,7 @@ class Installer implements InstallerInterface
         }
 
         $actionName = $this->getActionName($object);
-
-        $config = ActionConfig::from($object->getConfig() ?? []);
-        if (in_array($object->getClass(), [
-            ClassName::serialize(WorkerJava::class),
-            ClassName::serialize(WorkerJavascript::class),
-            ClassName::serialize(WorkerPHP::class),
-            ClassName::serialize(WorkerPython::class),
-        ])) {
-            $config->put('worker', $this->getWorkerConnection());
-        }
+        $config = $this->buildConfigForAction($object);
 
         $create = new ActionCreate();
         $create->setName($actionName);
@@ -101,8 +92,7 @@ class Installer implements InstallerInterface
             throw new MarketplaceException('Provided an invalid action');
         }
 
-        $config = ActionConfig::from($object->getConfig() ?? []);
-        $config->put('worker', $this->getWorkerConnection()->getId());
+        $config = $this->buildConfigForAction($object);
 
         $update = new ActionUpdate();
         $update->setClass($object->getClass());
@@ -125,6 +115,22 @@ class Installer implements InstallerInterface
     private function getActionName(MarketplaceObject $object): string
     {
         return $object->getAuthor()?->getName() . '-' . $object->getName();
+    }
+
+    private function buildConfigForAction(MarketplaceAction $object): ActionConfig
+    {
+        $config = ActionConfig::from($object->getConfig() ?? []);
+
+        if (in_array($object->getClass(), [
+            ClassName::serialize(WorkerJava::class),
+            ClassName::serialize(WorkerJavascript::class),
+            ClassName::serialize(WorkerPHP::class),
+            ClassName::serialize(WorkerPython::class),
+        ])) {
+            $config->put('worker', $this->getWorkerConnection());
+        }
+
+        return $config;
     }
 
     private function getWorkerConnection(): Table\Generated\ConnectionRow
