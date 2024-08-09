@@ -110,11 +110,11 @@ JSON;
     public static function dropAppTables(Connection $connection): void
     {
         $tableNames = [
-            'app_human_0_location',
-            'app_human_0_category',
-            'app_human_0',
-            'app_location_0',
-            'app_category_0',
+            'app_human_location',
+            'app_human_category',
+            'app_human',
+            'app_location',
+            'app_category',
         ];
 
         $schemaManager = $connection->createSchemaManager();
