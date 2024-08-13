@@ -191,6 +191,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Util.Action.UtilStaticResponse"
         },
         {
+            "name": "Util-Template",
+            "class": "Fusio.Adapter.Util.Action.UtilTemplate"
+        },
+        {
             "name": "Void-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.VoidAction"
         },
