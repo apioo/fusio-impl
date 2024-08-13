@@ -92,11 +92,6 @@ class FrameworkConfig
         return !!$this->config->get('fusio_marketplace');
     }
 
-    public function getMarketplaceUrl(): string
-    {
-        return $this->config->get('fusio_marketplace_url');
-    }
-
     public function getAppsUrl(): string
     {
         return $this->config->get('fusio_apps_url');
