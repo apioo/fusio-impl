@@ -38,6 +38,8 @@ class Create extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $this->assertDatabaseEnabled();
+
         $connection = $this->getConnection($request);
         $table = $this->getTable($request, $connection->createSchemaManager());
 

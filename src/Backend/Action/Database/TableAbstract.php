@@ -27,11 +27,13 @@ use Doctrine\DBAL\Schema\Table;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Backend\DatabaseRow;
 use Fusio\Model\Backend\DatabaseTable;
 use PSX\DateTime\LocalDate;
 use PSX\DateTime\LocalDateTime;
 use PSX\DateTime\LocalTime;
+use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
@@ -46,10 +48,12 @@ use PSX\Http\Exception\NotFoundException;
 abstract class TableAbstract implements ActionInterface
 {
     private Connector $connector;
+    private FrameworkConfig $frameworkConfig;
 
-    public function __construct(Connector $connector)
+    public function __construct(Connector $connector, FrameworkConfig $frameworkConfig)
     {
         $this->connector = $connector;
+        $this->frameworkConfig = $frameworkConfig;
     }
 
     protected function getConnection(RequestInterface $request): Connection
@@ -222,5 +226,12 @@ abstract class TableAbstract implements ActionInterface
         }
 
         return $result;
+    }
+
+    protected function assertDatabaseEnabled(): void
+    {
+        if (!$this->frameworkConfig->isDatabaseEnabled()) {
+            throw new StatusCode\InternalServerErrorException('Database is not enabled, please change the setting "fusio_database" at the configuration.php to "true" in order to activate the database');
+        }
     }
 }

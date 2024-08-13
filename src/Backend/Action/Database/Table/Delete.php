@@ -36,6 +36,8 @@ class Delete extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $this->assertDatabaseEnabled();
+
         $connection = $this->getConnection($request);
         $schemaManager = $connection->createSchemaManager();
         $table = $this->getTable($request, $schemaManager);

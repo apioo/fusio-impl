@@ -87,6 +87,11 @@ class FrameworkConfig
         return $this->config->get('fusio_mail_sender');
     }
 
+    public function isDatabaseEnabled(): bool
+    {
+        return !!$this->config->get('fusio_database');
+    }
+
     public function isMarketplaceEnabled(): bool
     {
         return !!$this->config->get('fusio_marketplace');
