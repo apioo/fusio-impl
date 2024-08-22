@@ -51,6 +51,8 @@ class GenerateTest extends DbTestCase
     "types": {
         "client-php": null,
         "client-typescript": null,
+        "server-php": null,
+        "server-typescript": null,
         "markup-client": null,
         "markup-html": null,
         "markup-markdown": null,
