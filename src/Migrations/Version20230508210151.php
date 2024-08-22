@@ -219,8 +219,8 @@ final class Version20230508210151 extends AbstractMigration
             $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
-            $logTable->addIndex(['tenant_id']);
-            $logTable->addIndex(['category_id', 'ip', 'date'], 'IDX_LOG_CID');
+            $logTable->addIndex(['tenant_id', 'ip', 'date'], 'IDX_LOG_TID');
+            $logTable->addIndex(['tenant_id', 'user_id', 'date'], 'IDX_LOG_TUD');
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
