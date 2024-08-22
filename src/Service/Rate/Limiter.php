@@ -54,7 +54,7 @@ class Limiter
             return false;
         }
 
-        $count     = $this->getRequestCount($ip, $rate['timespan'], $app, $user);
+        $count     = $this->getRequestCount($ip, $rate['timespan'], $user);
         $rateLimit = (int) $rate['rate_limit'];
 
         if ($response !== null) {
@@ -69,7 +69,7 @@ class Limiter
         return true;
     }
 
-    private function getRequestCount(string $ip, string $timespan, Model\AppInterface $app, Model\UserInterface $user): int
+    private function getRequestCount(string $ip, string $timespan, Model\UserInterface $user): int
     {
         if (empty($timespan)) {
             return 0;
@@ -82,18 +82,9 @@ class Limiter
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
-        $isAnonymous = true;
         if (!$user->isAnonymous()) {
             $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $user->getId());
-            $isAnonymous = false;
-        }
-
-        if (!$app->isAnonymous()) {
-            $condition->equals(Table\Generated\LogTable::COLUMN_APP_ID, $app->getId());
-            $isAnonymous = false;
-        }
-
-        if ($isAnonymous) {
+        } else {
             // in case we have no way to identify the user we need to use the IP
             $condition->equals(Table\Generated\LogTable::COLUMN_IP, $ip);
         }
