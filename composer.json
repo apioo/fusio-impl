@@ -40,9 +40,9 @@
     "fusio/adapter-worker": "^0.2",
     "fusio/marketplace": "^0.1",
     "firebase/php-jwt": "^6.0",
-    "symfony/filesystem": "^6.0",
-    "symfony/mailer": "^6.0",
-    "symfony/doctrine-messenger": "^6.0, !=6.4.7",
+    "symfony/filesystem": "^6.0|^7.0",
+    "symfony/mailer": "^6.0|^7.0",
+    "symfony/doctrine-messenger": "^6.0|^7.0",
     "dragonmantank/cron-expression": "^3.3"
   },
   "require-dev": {
