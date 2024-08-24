@@ -181,11 +181,6 @@
       <code><![CDATA[$user->getName()]]></code>
     </PossiblyNullArgument>
   </file>
-  <file src="src/Service/User/Mailer.php">
-    <PossiblyInvalidArgument>
-      <code><![CDATA[$body]]></code>
-    </PossiblyInvalidArgument>
-  </file>
   <file src="src/Service/Webhook.php">
     <PossiblyNullArgument>
       <code><![CDATA[$webhook->getEndpoint()]]></code>
