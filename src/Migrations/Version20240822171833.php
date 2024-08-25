@@ -31,6 +31,13 @@ final class Version20240822171833 extends AbstractMigration
         if (!$logTable->hasIndex('IDX_LOG_TUD')) {
             $logTable->addIndex(['tenant_id', 'user_id', 'date'], 'IDX_LOG_TUD');
         }
+
+        $indexes = $logTable->getIndexes();
+        foreach ($indexes as $index) {
+            if ($index->getColumns() === ['tenant_id']) {
+                $logTable->dropIndex($index->getName());
+            }
+        }
     }
 
     public function down(Schema $schema): void
