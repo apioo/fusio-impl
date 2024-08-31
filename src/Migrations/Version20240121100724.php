@@ -91,6 +91,10 @@ final class Version20240121100724 extends AbstractMigration
         }
 
         foreach (Tenant::TENANT_TABLES as $tableName) {
+            if (!$schema->hasTable($tableName)) {
+                continue;
+            }
+
             $table = $schema->getTable($tableName);
             if (!$table->hasColumn('tenant_id')) {
                 $table->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
