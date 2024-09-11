@@ -48,6 +48,7 @@ class Scope extends ViewAbstract
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ScopeTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_STATUS, Table\Scope::STATUS_ACTIVE);
 
         $builder = new Builder($this->connection);
 
