@@ -78,8 +78,7 @@ class SqlEntityTest extends ControllerDbTestCase
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 
@@ -106,8 +105,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 
@@ -137,8 +135,7 @@ JSON;
 {
     "success": true,
     "message": "Entry successfully created",
-    "id": 1,
-    "affected": 1
+    "id": "1"
 }
 JSON;
 

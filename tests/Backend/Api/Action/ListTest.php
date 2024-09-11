@@ -73,6 +73,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.GraphQL.Action.GraphQLProcessor"
         },
         {
+            "name": "GraphQL-Query",
+            "class": "Fusio.Adapter.GraphQL.Action.GraphQLQuery"
+        },
+        {
             "name": "HTTP-Composition",
             "class": "Fusio.Adapter.Http.Action.HttpComposition"
         },
@@ -83,6 +87,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "HTTP-Processor",
             "class": "Fusio.Adapter.Http.Action.HttpProcessor"
+        },
+        {
+            "name": "HTTP-Raw",
+            "class": "Fusio.Adapter.Http.Action.HttpRaw"
         },
         {
             "name": "Inspect-Action",
@@ -145,6 +153,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio.Adapter.Util.Action.UtilChain"
         },
         {
+            "name": "Util-Condition",
+            "class": "Fusio.Adapter.Util.Action.UtilCondition"
+        },
+        {
             "name": "Util-Dispatch-Event",
             "class": "Fusio.Adapter.Util.Action.UtilDispatchEvent"
         },
@@ -159,6 +171,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "Util-Static-Response",
             "class": "Fusio.Adapter.Util.Action.UtilStaticResponse"
+        },
+        {
+            "name": "Util-Template",
+            "class": "Fusio.Adapter.Util.Action.UtilTemplate"
         },
         {
             "name": "Void-Action",

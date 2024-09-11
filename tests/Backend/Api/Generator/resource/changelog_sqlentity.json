@@ -1,13 +1,13 @@
 {
   "schemas": [
     {
-      "name": "Human_0_SQL_GetAll",
+      "name": "Human_SQL_GetAll",
       "source": {
         "$import": {
-          "Entity": "schema:\/\/Human_0_SQL_Get"
+          "Entity": "schema:\/\/Human_SQL_Get"
         },
         "definitions": {
-          "Human_0_SQL_GetAll": {
+          "Human_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -22,24 +22,24 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "Entity:Human_0_SQL_Get"
+                  "$ref": "Entity:Human_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Human_0_SQL_GetAll"
+        "$ref": "Human_SQL_GetAll"
       }
     },
     {
-      "name": "Human_0_SQL_Get",
+      "name": "Human_SQL_Get",
       "source": {
         "$import": {
-          "Location": "schema:\/\/Location_0_SQL_Get",
-          "Category": "schema:\/\/Category_0_SQL_Get"
+          "Location": "schema:\/\/Location_SQL_Get",
+          "Category": "schema:\/\/Category_SQL_Get"
         },
         "definitions": {
-          "Human_0_SQL_Get": {
+          "Human_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -55,7 +55,7 @@
                 "type": "string"
               },
               "location": {
-                "$ref": "Location:Location_0_SQL_Get"
+                "$ref": "Location:Location_SQL_Get"
               },
               "tags": {
                 "description": "",
@@ -66,48 +66,48 @@
               },
               "categories": {
                 "items": {
-                  "$ref": "Category:Category_0_SQL_Get"
+                  "$ref": "Category:Category_SQL_Get"
                 }
               },
               "map": {
                 "additionalProperties": {
-                  "$ref": "Location:Location_0_SQL_Get"
+                  "$ref": "Location:Location_SQL_Get"
                 }
               },
               "union": {
                 "oneOf": [
                   {
-                    "$ref": "Location:Location_0_SQL_Get"
+                    "$ref": "Location:Location_SQL_Get"
                   },
                   {
-                    "$ref": "Category:Category_0_SQL_Get"
+                    "$ref": "Category:Category_SQL_Get"
                   }
                 ]
               },
               "intersection": {
                 "allOf": [
                   {
-                    "$ref": "Human_0_SQL_Get"
+                    "$ref": "Human_SQL_Get"
                   },
                   {
-                    "$ref": "Location:Location_0_SQL_Get"
+                    "$ref": "Location:Location_SQL_Get"
                   }
                 ]
               }
             }
           }
         },
-        "$ref": "Human_0_SQL_Get"
+        "$ref": "Human_SQL_Get"
       }
     },
     {
-      "name": "Location_0_SQL_GetAll",
+      "name": "Location_SQL_GetAll",
       "source": {
         "$import": {
-          "Entity": "schema:\/\/Location_0_SQL_Get"
+          "Entity": "schema:\/\/Location_SQL_Get"
         },
         "definitions": {
-          "Location_0_SQL_GetAll": {
+          "Location_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -122,20 +122,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "Entity:Location_0_SQL_Get"
+                  "$ref": "Entity:Location_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Location_0_SQL_GetAll"
+        "$ref": "Location_SQL_GetAll"
       }
     },
     {
-      "name": "Location_0_SQL_Get",
+      "name": "Location_SQL_Get",
       "source": {
         "definitions": {
-          "Location_0_SQL_Get": {
+          "Location_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -157,17 +157,17 @@
             }
           }
         },
-        "$ref": "Location_0_SQL_Get"
+        "$ref": "Location_SQL_Get"
       }
     },
     {
-      "name": "Category_0_SQL_GetAll",
+      "name": "Category_SQL_GetAll",
       "source": {
         "$import": {
-          "Entity": "schema:\/\/Category_0_SQL_Get"
+          "Entity": "schema:\/\/Category_SQL_Get"
         },
         "definitions": {
-          "Category_0_SQL_GetAll": {
+          "Category_SQL_GetAll": {
             "type": "object",
             "properties": {
               "totalResults": {
@@ -182,20 +182,20 @@
               "entry": {
                 "type": "array",
                 "items": {
-                  "$ref": "Entity:Category_0_SQL_Get"
+                  "$ref": "Entity:Category_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Category_0_SQL_GetAll"
+        "$ref": "Category_SQL_GetAll"
       }
     },
     {
-      "name": "Category_0_SQL_Get",
+      "name": "Category_SQL_Get",
       "source": {
         "definitions": {
-          "Category_0_SQL_Get": {
+          "Category_SQL_Get": {
             "description": "",
             "type": "object",
             "properties": {
@@ -209,97 +209,97 @@
             }
           }
         },
-        "$ref": "Category_0_SQL_Get"
+        "$ref": "Category_SQL_Get"
       }
     }
   ],
   "actions": [
     {
-      "name": "Human_0_SQL_GetAll",
+      "name": "Human_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_human_0\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, first_name, last_name, location_id, tags FROM app_human_0 ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"firstName\": {\n                \"$key\": \"first_name\",\n                \"$field\": \"string\"\n            },\n            \"lastName\": {\n                \"$key\": \"last_name\",\n                \"$field\": \"string\"\n            },\n            \"location\": {\n                \"$entity\": \"SELECT entity.id, entity.name, entity.latitude, entity.longitude FROM app_location_0 entity WHERE entity.id = :id\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"location_id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    },\n                    \"latitude\": {\n                        \"$key\": \"latitude\",\n                        \"$field\": \"string\"\n                    },\n                    \"longitude\": {\n                        \"$key\": \"longitude\",\n                        \"$field\": \"string\"\n                    }\n                }\n            },\n            \"tags\": {\n                \"$field\": \"json\"\n            },\n            \"categories\": {\n                \"$collection\": \"SELECT entity.id, entity.name FROM app_human_0_category rel INNER JOIN app_category_0 entity ON entity.id = rel.category_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    }\n                }\n            },\n            \"map\": {\n                \"$collection\": \"SELECT rel.name AS hash_key, entity.id, entity.name, entity.latitude, entity.longitude FROM app_human_0_location rel INNER JOIN app_location_0 entity ON entity.id = rel.location_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    },\n                    \"latitude\": {\n                        \"$key\": \"latitude\",\n                        \"$field\": \"string\"\n                    },\n                    \"longitude\": {\n                        \"$key\": \"longitude\",\n                        \"$field\": \"string\"\n                    }\n                },\n                \"$key\": \"hash_key\"\n            }\n        }\n    }\n}"
+        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_human\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, first_name, last_name, location_id, tags FROM app_human ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"firstName\": {\n                \"$key\": \"first_name\",\n                \"$field\": \"string\"\n            },\n            \"lastName\": {\n                \"$key\": \"last_name\",\n                \"$field\": \"string\"\n            },\n            \"location\": {\n                \"$entity\": \"SELECT entity.id, entity.name, entity.latitude, entity.longitude FROM app_location entity WHERE entity.id = :id\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"location_id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    },\n                    \"latitude\": {\n                        \"$key\": \"latitude\",\n                        \"$field\": \"string\"\n                    },\n                    \"longitude\": {\n                        \"$key\": \"longitude\",\n                        \"$field\": \"string\"\n                    }\n                }\n            },\n            \"tags\": {\n                \"$field\": \"json\"\n            },\n            \"categories\": {\n                \"$collection\": \"SELECT entity.id, entity.name FROM app_human_category rel INNER JOIN app_category entity ON entity.id = rel.category_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    }\n                }\n            },\n            \"map\": {\n                \"$collection\": \"SELECT rel.name AS hash_key, entity.id, entity.name, entity.latitude, entity.longitude FROM app_human_location rel INNER JOIN app_location entity ON entity.id = rel.location_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n                \"$params\": {\n                    \"id\": {\n                        \"$ref\": \"id\"\n                    }\n                },\n                \"$definition\": {\n                    \"id\": {\n                        \"$field\": \"integer\"\n                    },\n                    \"name\": {\n                        \"$key\": \"name\",\n                        \"$field\": \"string\"\n                    },\n                    \"latitude\": {\n                        \"$key\": \"latitude\",\n                        \"$field\": \"string\"\n                    },\n                    \"longitude\": {\n                        \"$key\": \"longitude\",\n                        \"$field\": \"string\"\n                    }\n                },\n                \"$key\": \"hash_key\"\n            }\n        }\n    }\n}"
       }
     },
     {
-      "name": "Human_0_SQL_Get",
+      "name": "Human_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"$entity\": \"SELECT id, first_name, last_name, location_id, tags FROM app_human_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"firstName\": {\n            \"$key\": \"first_name\",\n            \"$field\": \"string\"\n        },\n        \"lastName\": {\n            \"$key\": \"last_name\",\n            \"$field\": \"string\"\n        },\n        \"location\": {\n            \"$entity\": \"SELECT entity.id, entity.name, entity.latitude, entity.longitude FROM app_location_0 entity WHERE entity.id = :id\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"location_id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"tags\": {\n            \"$field\": \"json\"\n        },\n        \"categories\": {\n            \"$collection\": \"SELECT entity.id, entity.name FROM app_human_0_category rel INNER JOIN app_category_0 entity ON entity.id = rel.category_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"map\": {\n            \"$collection\": \"SELECT rel.name AS hash_key, entity.id, entity.name, entity.latitude, entity.longitude FROM app_human_0_location rel INNER JOIN app_location_0 entity ON entity.id = rel.location_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            },\n            \"$key\": \"hash_key\"\n        }\n    }\n}"
+        "jql": "{\n    \"$entity\": \"SELECT id, first_name, last_name, location_id, tags FROM app_human WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"firstName\": {\n            \"$key\": \"first_name\",\n            \"$field\": \"string\"\n        },\n        \"lastName\": {\n            \"$key\": \"last_name\",\n            \"$field\": \"string\"\n        },\n        \"location\": {\n            \"$entity\": \"SELECT entity.id, entity.name, entity.latitude, entity.longitude FROM app_location entity WHERE entity.id = :id\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"location_id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"tags\": {\n            \"$field\": \"json\"\n        },\n        \"categories\": {\n            \"$collection\": \"SELECT entity.id, entity.name FROM app_human_category rel INNER JOIN app_category entity ON entity.id = rel.category_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                }\n            }\n        },\n        \"map\": {\n            \"$collection\": \"SELECT rel.name AS hash_key, entity.id, entity.name, entity.latitude, entity.longitude FROM app_human_location rel INNER JOIN app_location entity ON entity.id = rel.location_id WHERE rel.human_id = :id ORDER BY entity.id DESC LIMIT 16\",\n            \"$params\": {\n                \"id\": {\n                    \"$ref\": \"id\"\n                }\n            },\n            \"$definition\": {\n                \"id\": {\n                    \"$field\": \"integer\"\n                },\n                \"name\": {\n                    \"$key\": \"name\",\n                    \"$field\": \"string\"\n                },\n                \"latitude\": {\n                    \"$key\": \"latitude\",\n                    \"$field\": \"string\"\n                },\n                \"longitude\": {\n                    \"$key\": \"longitude\",\n                    \"$field\": \"string\"\n                }\n            },\n            \"$key\": \"hash_key\"\n        }\n    }\n}"
       }
     },
     {
-      "name": "Human_0_SQL_Insert",
+      "name": "Human_SQL_Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
       "config": {
         "connection": 1,
-        "table": "app_human_0",
+        "table": "app_human",
         "mapping": {
           "first_name": "firstName",
           "last_name": "lastName",
           "location_id": "location:object",
           "tags": "tags",
-          "categories": "categories:array:app_human_0_category:human_id:category_id",
-          "map": "map:map:app_human_0_location:human_id:location_id"
+          "categories": "categories:array:app_human_category:human_id:category_id",
+          "map": "map:map:app_human_location:human_id:location_id"
         }
       }
     },
     {
-      "name": "Human_0_SQL_Update",
+      "name": "Human_SQL_Update",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
       "config": {
         "connection": 1,
-        "table": "app_human_0",
+        "table": "app_human",
         "mapping": {
           "first_name": "firstName",
           "last_name": "lastName",
           "location_id": "location:object",
           "tags": "tags",
-          "categories": "categories:array:app_human_0_category:human_id:category_id",
-          "map": "map:map:app_human_0_location:human_id:location_id"
+          "categories": "categories:array:app_human_category:human_id:category_id",
+          "map": "map:map:app_human_location:human_id:location_id"
         }
       }
     },
     {
-      "name": "Human_0_SQL_Delete",
+      "name": "Human_SQL_Delete",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
-        "table": "app_human_0",
+        "table": "app_human",
         "mapping": {
           "first_name": "firstName",
           "last_name": "lastName",
           "location_id": "location:object",
           "tags": "tags",
-          "categories": "categories:array:app_human_0_category:human_id:category_id",
-          "map": "map:map:app_human_0_location:human_id:location_id"
+          "categories": "categories:array:app_human_category:human_id:category_id",
+          "map": "map:map:app_human_location:human_id:location_id"
         }
       }
     },
     {
-      "name": "Location_0_SQL_GetAll",
+      "name": "Location_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_location_0\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, name, latitude, longitude FROM app_location_0 ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"name\": {\n                \"$key\": \"name\",\n                \"$field\": \"string\"\n            },\n            \"latitude\": {\n                \"$key\": \"latitude\",\n                \"$field\": \"string\"\n            },\n            \"longitude\": {\n                \"$key\": \"longitude\",\n                \"$field\": \"string\"\n            }\n        }\n    }\n}"
+        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_location\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, name, latitude, longitude FROM app_location ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"name\": {\n                \"$key\": \"name\",\n                \"$field\": \"string\"\n            },\n            \"latitude\": {\n                \"$key\": \"latitude\",\n                \"$field\": \"string\"\n            },\n            \"longitude\": {\n                \"$key\": \"longitude\",\n                \"$field\": \"string\"\n            }\n        }\n    }\n}"
       }
     },
     {
-      "name": "Location_0_SQL_Get",
+      "name": "Location_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"$entity\": \"SELECT id, name, latitude, longitude FROM app_location_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        },\n        \"latitude\": {\n            \"$key\": \"latitude\",\n            \"$field\": \"string\"\n        },\n        \"longitude\": {\n            \"$key\": \"longitude\",\n            \"$field\": \"string\"\n        }\n    }\n}"
+        "jql": "{\n    \"$entity\": \"SELECT id, name, latitude, longitude FROM app_location WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        },\n        \"latitude\": {\n            \"$key\": \"latitude\",\n            \"$field\": \"string\"\n        },\n        \"longitude\": {\n            \"$key\": \"longitude\",\n            \"$field\": \"string\"\n        }\n    }\n}"
       }
     },
     {
-      "name": "Location_0_SQL_Insert",
+      "name": "Location_SQL_Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
       "config": {
         "connection": 1,
-        "table": "app_location_0",
+        "table": "app_location",
         "mapping": {
           "name": "name",
           "latitude": "latitude",
@@ -308,11 +308,11 @@
       }
     },
     {
-      "name": "Location_0_SQL_Update",
+      "name": "Location_SQL_Update",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
       "config": {
         "connection": 1,
-        "table": "app_location_0",
+        "table": "app_location",
         "mapping": {
           "name": "name",
           "latitude": "latitude",
@@ -321,11 +321,11 @@
       }
     },
     {
-      "name": "Location_0_SQL_Delete",
+      "name": "Location_SQL_Delete",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
-        "table": "app_location_0",
+        "table": "app_location",
         "mapping": {
           "name": "name",
           "latitude": "latitude",
@@ -334,49 +334,49 @@
       }
     },
     {
-      "name": "Category_0_SQL_GetAll",
+      "name": "Category_SQL_GetAll",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_category_0\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, name FROM app_category_0 ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"name\": {\n                \"$key\": \"name\",\n                \"$field\": \"string\"\n            }\n        }\n    }\n}"
+        "jql": "{\n    \"totalResults\": {\n        \"$value\": \"SELECT COUNT(*) AS cnt FROM app_category\",\n        \"$definition\": {\n            \"$key\": \"cnt\",\n            \"$field\": \"integer\"\n        }\n    },\n    \"startIndex\": {\n        \"$context\": \"startIndex\",\n        \"$default\": 0\n    },\n    \"itemsPerPage\": 16,\n    \"entry\": {\n        \"$collection\": \"SELECT id, name FROM app_category ORDER BY id DESC\",\n        \"$offset\": {\n            \"$context\": \"startIndex\",\n            \"$default\": 0\n        },\n        \"$limit\": 16,\n        \"$definition\": {\n            \"id\": {\n                \"$field\": \"integer\"\n            },\n            \"name\": {\n                \"$key\": \"name\",\n                \"$field\": \"string\"\n            }\n        }\n    }\n}"
       }
     },
     {
-      "name": "Category_0_SQL_Get",
+      "name": "Category_SQL_Get",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
       "config": {
         "connection": 1,
-        "jql": "{\n    \"$entity\": \"SELECT id, name FROM app_category_0 WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        }\n    }\n}"
+        "jql": "{\n    \"$entity\": \"SELECT id, name FROM app_category WHERE id = :id\",\n    \"$params\": {\n        \"id\": {\n            \"$context\": \"id\"\n        }\n    },\n    \"$definition\": {\n        \"id\": {\n            \"$field\": \"integer\"\n        },\n        \"name\": {\n            \"$key\": \"name\",\n            \"$field\": \"string\"\n        }\n    }\n}"
       }
     },
     {
-      "name": "Category_0_SQL_Insert",
+      "name": "Category_SQL_Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
       "config": {
         "connection": 1,
-        "table": "app_category_0",
+        "table": "app_category",
         "mapping": {
           "name": "name"
         }
       }
     },
     {
-      "name": "Category_0_SQL_Update",
+      "name": "Category_SQL_Update",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate",
       "config": {
         "connection": 1,
-        "table": "app_category_0",
+        "table": "app_category",
         "mapping": {
           "name": "name"
         }
       }
     },
     {
-      "name": "Category_0_SQL_Delete",
+      "name": "Category_SQL_Delete",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete",
       "config": {
         "connection": 1,
-        "table": "app_category_0",
+        "table": "app_category",
         "mapping": {
           "name": "name"
         }
@@ -389,141 +389,141 @@
       "httpMethod": "GET",
       "httpPath": "\/human\/",
       "httpCode": 200,
-      "name": "human_0.getAll",
-      "outgoing": "Human_0_SQL_GetAll",
-      "action": "Human_0_SQL_GetAll"
+      "name": "human.getAll",
+      "outgoing": "Human_SQL_GetAll",
+      "action": "Human_SQL_GetAll"
     },
     {
       "description": "Returns a single Human",
       "httpMethod": "GET",
       "httpPath": "\/human\/:id",
       "httpCode": 200,
-      "name": "human_0.get",
-      "outgoing": "Human_0_SQL_Get",
-      "action": "Human_0_SQL_Get"
+      "name": "human.get",
+      "outgoing": "Human_SQL_Get",
+      "action": "Human_SQL_Get"
     },
     {
       "description": "Creates a new Human",
       "httpMethod": "POST",
       "httpPath": "\/human\/",
       "httpCode": 200,
-      "name": "human_0.create",
-      "incoming": "Human_0_SQL_Get",
+      "name": "human.create",
+      "incoming": "Human_SQL_Get",
       "outgoing": "Message",
-      "action": "Human_0_SQL_Insert"
+      "action": "Human_SQL_Insert"
     },
     {
       "description": "Updates an existing Human",
       "httpMethod": "PUT",
       "httpPath": "\/human\/:id",
       "httpCode": 200,
-      "name": "human_0.update",
-      "incoming": "Human_0_SQL_Get",
+      "name": "human.update",
+      "incoming": "Human_SQL_Get",
       "outgoing": "Message",
-      "action": "Human_0_SQL_Update"
+      "action": "Human_SQL_Update"
     },
     {
       "description": "Deletes an existing Human",
       "httpMethod": "DELETE",
       "httpPath": "\/human\/:id",
       "httpCode": 200,
-      "name": "human_0.delete",
+      "name": "human.delete",
       "outgoing": "Message",
-      "action": "Human_0_SQL_Delete"
+      "action": "Human_SQL_Delete"
     },
     {
       "description": "Returns a collection of Location",
       "httpMethod": "GET",
       "httpPath": "\/location\/",
       "httpCode": 200,
-      "name": "location_0.getAll",
-      "outgoing": "Location_0_SQL_GetAll",
-      "action": "Location_0_SQL_GetAll"
+      "name": "location.getAll",
+      "outgoing": "Location_SQL_GetAll",
+      "action": "Location_SQL_GetAll"
     },
     {
       "description": "Returns a single Location",
       "httpMethod": "GET",
       "httpPath": "\/location\/:id",
       "httpCode": 200,
-      "name": "location_0.get",
-      "outgoing": "Location_0_SQL_Get",
-      "action": "Location_0_SQL_Get"
+      "name": "location.get",
+      "outgoing": "Location_SQL_Get",
+      "action": "Location_SQL_Get"
     },
     {
       "description": "Creates a new Location",
       "httpMethod": "POST",
       "httpPath": "\/location\/",
       "httpCode": 200,
-      "name": "location_0.create",
-      "incoming": "Location_0_SQL_Get",
+      "name": "location.create",
+      "incoming": "Location_SQL_Get",
       "outgoing": "Message",
-      "action": "Location_0_SQL_Insert"
+      "action": "Location_SQL_Insert"
     },
     {
       "description": "Updates an existing Location",
       "httpMethod": "PUT",
       "httpPath": "\/location\/:id",
       "httpCode": 200,
-      "name": "location_0.update",
-      "incoming": "Location_0_SQL_Get",
+      "name": "location.update",
+      "incoming": "Location_SQL_Get",
       "outgoing": "Message",
-      "action": "Location_0_SQL_Update"
+      "action": "Location_SQL_Update"
     },
     {
       "description": "Deletes an existing Location",
       "httpMethod": "DELETE",
       "httpPath": "\/location\/:id",
       "httpCode": 200,
-      "name": "location_0.delete",
+      "name": "location.delete",
       "outgoing": "Message",
-      "action": "Location_0_SQL_Delete"
+      "action": "Location_SQL_Delete"
     },
     {
       "description": "Returns a collection of Category",
       "httpMethod": "GET",
       "httpPath": "\/category\/",
       "httpCode": 200,
-      "name": "category_0.getAll",
-      "outgoing": "Category_0_SQL_GetAll",
-      "action": "Category_0_SQL_GetAll"
+      "name": "category.getAll",
+      "outgoing": "Category_SQL_GetAll",
+      "action": "Category_SQL_GetAll"
     },
     {
       "description": "Returns a single Category",
       "httpMethod": "GET",
       "httpPath": "\/category\/:id",
       "httpCode": 200,
-      "name": "category_0.get",
-      "outgoing": "Category_0_SQL_Get",
-      "action": "Category_0_SQL_Get"
+      "name": "category.get",
+      "outgoing": "Category_SQL_Get",
+      "action": "Category_SQL_Get"
     },
     {
       "description": "Creates a new Category",
       "httpMethod": "POST",
       "httpPath": "\/category\/",
       "httpCode": 200,
-      "name": "category_0.create",
-      "incoming": "Category_0_SQL_Get",
+      "name": "category.create",
+      "incoming": "Category_SQL_Get",
       "outgoing": "Message",
-      "action": "Category_0_SQL_Insert"
+      "action": "Category_SQL_Insert"
     },
     {
       "description": "Updates an existing Category",
       "httpMethod": "PUT",
       "httpPath": "\/category\/:id",
       "httpCode": 200,
-      "name": "category_0.update",
-      "incoming": "Category_0_SQL_Get",
+      "name": "category.update",
+      "incoming": "Category_SQL_Get",
       "outgoing": "Message",
-      "action": "Category_0_SQL_Update"
+      "action": "Category_SQL_Update"
     },
     {
       "description": "Deletes an existing Category",
       "httpMethod": "DELETE",
       "httpPath": "\/category\/:id",
       "httpCode": 200,
-      "name": "category_0.delete",
+      "name": "category.delete",
       "outgoing": "Message",
-      "action": "Category_0_SQL_Delete"
+      "action": "Category_SQL_Delete"
     }
   ]
 }
