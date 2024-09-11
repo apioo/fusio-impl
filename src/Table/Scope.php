@@ -115,6 +115,7 @@ class Scope extends Generated\ScopeTable
             $condition = Condition::withAnd();
             $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
             $condition->in(self::COLUMN_NAME, $names);
+            $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
             return $this->findAll($condition, 0, 1024);
         } else {
             return [];
@@ -126,6 +127,7 @@ class Scope extends Generated\ScopeTable
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 
         $result = $this->findAll($condition, 0, 1024, self::COLUMN_NAME, OrderBy::ASC);
         $scopes = [];
