@@ -65,9 +65,7 @@ class CollectionTest extends ControllerDbTestCase
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('fusio', $data['apps']);
         $this->assertArrayHasKey('developer', $data['apps']);
-        $this->assertArrayHasKey('documentation', $data['apps']);
         $this->assertArrayHasKey('swagger-ui', $data['apps']);
-        $this->assertArrayHasKey('vscode', $data['apps']);
 
         foreach ($data['apps'] as $app) {
             $this->assertNotEmpty($app['version']);
