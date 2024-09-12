@@ -420,7 +420,7 @@ JSON;
         $this->assertEquals('OPTIONS, HEAD, GET, POST', $response->getHeader('Allow'), $body);
         $this->assertEquals('*', $response->getHeader('Access-Control-Allow-Origin'), $body);
         $this->assertEquals('OPTIONS, HEAD, GET, POST, PUT, DELETE, PATCH', $response->getHeader('Access-Control-Allow-Methods'), $body);
-        $this->assertEquals('Accept, Accept-Language, Authorization, Content-Language, Content-Type', $response->getHeader('Access-Control-Allow-Headers'), $body);
+        $this->assertEquals('Accept, Accept-Language, Authorization, Content-Language, Content-Type, User-Agent', $response->getHeader('Access-Control-Allow-Headers'), $body);
         $this->assertEquals('*', $response->getHeader('Access-Control-Expose-Headers'), $body);
         $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
         $this->assertEmpty($body);
