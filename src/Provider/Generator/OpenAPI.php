@@ -40,6 +40,7 @@ use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\OperationInterface;
 use PSX\Api\Parser;
 use PSX\Api\SpecificationInterface;
+use PSX\Schema\ContentType;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\Schema;
@@ -191,7 +192,12 @@ class OpenAPI implements ProviderInterface
                 continue;
             }
 
-            $data = $argument->getSchema()->toArray();
+            $type = $argument->getSchema();
+            if ($type instanceof ContentType) {
+                continue;
+            }
+
+            $data = $type->toArray();
 
             $schema = new OperationSchema();
             $schema->setType($data['type'] ?? Type::STRING);
@@ -243,11 +249,13 @@ class OpenAPI implements ProviderInterface
         return null;
     }
 
-    private function getRef(TypeInterface $schema): string
+    private function getRef(TypeInterface|ContentType $schema): string
     {
         if ($schema instanceof Type\ReferenceType) {
             return $schema->getRef() ?? throw new \RuntimeException('No ref provided');
         } elseif ($schema instanceof Type\AnyType) {
+            return SchemaName::PASSTHRU;
+        } elseif ($schema instanceof ContentType) {
             return SchemaName::PASSTHRU;
         } else {
             throw new \RuntimeException('Could not resolve return type');
