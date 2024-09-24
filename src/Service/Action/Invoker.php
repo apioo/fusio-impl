@@ -53,6 +53,10 @@ class Invoker
         $action = $operation->getAction();
         $costs = $operation->getCosts();
 
+        if ($operation->getActive() === 0) {
+            throw new StatusCode\GoneException('This action is not longer available');
+        }
+
         $baseUrl = $this->frameworkConfig->getDispatchUrl();
         $context = new EngineContext($operation->getId(), $baseUrl, $context->getApp(), $context->getUser(), $this->frameworkConfig->getTenantId());
 
