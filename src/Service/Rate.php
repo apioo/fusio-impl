@@ -106,7 +106,7 @@ class Rate
             $existing->setPriority($rate->getPriority() ?? $existing->getPriority());
             $existing->setName($rate->getName() ?? $existing->getName());
             $existing->setRateLimit($rate->getRateLimit() ?? $existing->getRateLimit());
-            $existing->setTimespan((string) ($rate->getTimespan() ?? $existing->getTimespan()));
+            $existing->setTimespan($rate->getTimespan() ?? $existing->getTimespan());
             $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : $existing->getMetadata());
             $this->rateTable->update($existing);
 

@@ -31,8 +31,7 @@ use PSX\Schema\Parser\Context\NamespaceContext;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
-use PSX\Schema\Type\ReferenceType;
-use PSX\Schema\TypeFactory;
+use PSX\Schema\Type\Factory\PropertyTypeFactory;
 
 /**
  * Service which builds a specification based on the schemas defined at the database
@@ -113,7 +112,7 @@ class SpecificationBuilder
 
         $definitions->addSchema($name, $schema);
 
-        return new Operation\Response($row->getHttpCode(), TypeFactory::getReference($name));
+        return new Operation\Response($row->getHttpCode(), PropertyTypeFactory::getReference($name));
     }
 
     private function getArguments(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Arguments
@@ -129,7 +128,7 @@ class SpecificationBuilder
 
             $definitions->addSchema($name, $schema);
 
-            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, TypeFactory::getReference($name)));
+            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, PropertyTypeFactory::getReference($name)));
         }
 
         $rawParameters = $row->getParameters();
@@ -157,7 +156,7 @@ class SpecificationBuilder
 
             $definitions->addSchema($name, $schema);
 
-            $result[] = new Operation\Response($httpCode, TypeFactory::getReference($name));
+            $result[] = new Operation\Response($httpCode, PropertyTypeFactory::getReference($name));
         }
 
         return $result;
@@ -183,7 +182,7 @@ class SpecificationBuilder
                 }
 
                 if ($name !== null) {
-                    $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_PATH, TypeFactory::getString()));
+                    $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_PATH, PropertyTypeFactory::getString()));
                 }
             }
         }
@@ -196,15 +195,15 @@ class SpecificationBuilder
                 continue;
             }
 
-            $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_QUERY, $this->schemaParser->parseType($schema)));
+            $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_QUERY, $this->schemaParser->parsePropertyType($schema)));
         }
     }
 
     private function getNameForSchema(string $source, SchemaInterface $schema): string
     {
-        $root = $schema->getType();
-        if ($root instanceof ReferenceType) {
-            return $root->getRef() ?? throw new \RuntimeException('Provided an invalid ref');
+        $root = $schema->getRoot();
+        if (!empty($root)) {
+            return $root;
         }
 
         $pos = strpos($source, '://');

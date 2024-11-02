@@ -43,7 +43,7 @@ class GetSchemaTest extends DbTestCase
     "schema": {
         "definitions": {
             "Entry": {
-                "type": "object",
+                "type": "struct",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -61,7 +61,7 @@ class GetSchemaTest extends DbTestCase
                 }
             }
         },
-        "$ref": "Entry"
+        "root": "Entry"
     },
     "form": {
         "title": {

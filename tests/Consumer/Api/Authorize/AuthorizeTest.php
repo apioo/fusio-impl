@@ -77,7 +77,7 @@ JSON;
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('/ the following properties are required: responseType, clientId, scope, allow', substr($data['message'], 0, 77), $body);
+        $this->assertStringStartsWith('Invalid response type', $data['message'], $body);
     }
 
     public function testPostCode()

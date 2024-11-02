@@ -92,7 +92,7 @@ JSON;
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('/ the following properties are required: email', substr($data['message'], 0, 46), $body);
+        $this->assertStringStartsWith('No email was provided', $data['message'], $body);
     }
 
     public function testPut()

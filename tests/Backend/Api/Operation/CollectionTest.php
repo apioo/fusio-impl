@@ -547,7 +547,7 @@ JSON;
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('/name does not match pattern [^[a-zA-Z0-9\_\.]{3,64}$]', $data->message);
+        $this->assertStringStartsWith('Invalid operation name', $data->message);
     }
 
     public function testPostParametersInvalidName()

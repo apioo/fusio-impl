@@ -111,7 +111,7 @@ JSON;
         $body = (string) $response->getBody();
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertStringContainsString('/ the following properties are required: name', $body, $body);
+        $this->assertStringContainsString('Webhook endpoint must contain a value', $body, $body);
     }
 
     public function testPostInvalidEndpoint()
@@ -127,7 +127,7 @@ JSON;
         $body = (string) $response->getBody();
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertStringContainsString('/ the following properties are required: name', $body, $body);
+        $this->assertStringContainsString('Webhook endpoint must be a valid url', $body, $body);
     }
 
     public function testPut()
