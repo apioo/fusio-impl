@@ -62,7 +62,7 @@ class EntityCreator
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $source = $record->getSource();
-            $import = $source?->get('$import');
+            $import = $source?->get('import');
             if (is_iterable($import) || $import instanceof \stdClass) {
                 $result = [];
                 foreach ($import as $name => $schema) {
@@ -72,7 +72,7 @@ class EntityCreator
                         $result[$name] = $schema;
                     }
                 }
-                $source->put('$import', $result);
+                $source->put('import', $result);
             }
 
             $existing = $this->schemaTable->findOneByName($record->getName() ?? '');

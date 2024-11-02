@@ -20,51 +20,25 @@
           "name": "location",
           "description": "",
           "type": "object",
-          "refs": [
-            "Location"
-          ]
+          "reference": "Location"
         },
         {
           "name": "tags",
           "description": "",
           "type": "array",
-          "refs": [
-            "string"
-          ]
+          "reference": "string"
         },
         {
           "name": "categories",
           "description": "",
           "type": "array",
-          "refs": [
-            "Category"
-          ]
+          "reference": "Category"
         },
         {
           "name": "map",
           "description": "",
           "type": "map",
-          "refs": [
-            "Location"
-          ]
-        },
-        {
-          "name": "union",
-          "description": "",
-          "type": "union",
-          "refs": [
-            "Location",
-            "Category"
-          ]
-        },
-        {
-          "name": "intersection",
-          "description": "",
-          "type": "intersection",
-          "refs": [
-            "Human",
-            "Location"
-          ]
+          "reference": "Location"
         }
       ]
     },

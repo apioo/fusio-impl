@@ -3,12 +3,12 @@
     {
       "name": "News_SQL_GetAll",
       "source": {
-        "$import": {
+        "import": {
           "entity": "schema:\/\/News_SQL_Get"
         },
         "definitions": {
           "App_News_Collection": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "totalResults": {
                 "type": "integer"
@@ -21,14 +21,15 @@
               },
               "entry": {
                 "type": "array",
-                "items": {
-                  "$ref": "entity:App_News"
+                "schema": {
+                  "type": "reference",
+                  "target": "entity:App_News"
                 }
               }
             }
           }
         },
-        "$ref": "App_News_Collection"
+        "root": "App_News_Collection"
       }
     },
     {
@@ -36,18 +37,16 @@
       "source": {
         "definitions": {
           "App_News": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "id": {
                 "type": "integer"
               },
               "title": {
-                "type": "string",
-                "maxLength": 64
+                "type": "string"
               },
               "content": {
-                "type": "string",
-                "maxLength": 255
+                "type": "string"
               },
               "date": {
                 "type": "string",
@@ -56,7 +55,7 @@
             }
           }
         },
-        "$ref": "App_News"
+        "root": "App_News"
       }
     }
   ],

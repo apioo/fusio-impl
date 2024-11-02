@@ -82,8 +82,8 @@ class OpenAPI implements ProviderInterface
         $generator   = new Generator\TypeSchema();
         $definitions = $specification->getDefinitions();
 
-        foreach ($definitions->getTypes(DefinitionsInterface::SELF_NAMESPACE) as $name => $type) {
-            $schema = new Schema(TypeFactory::getReference($name), clone $definitions);
+        foreach ($definitions->getTypes() as $name => $type) {
+            $schema = new Schema(clone $definitions, $name);
             (new SchemaResolver())->resolve($schema);
 
             $result = (string) $generator->generate($schema);
@@ -251,9 +251,9 @@ class OpenAPI implements ProviderInterface
 
     private function getRef(TypeInterface|ContentType $schema): string
     {
-        if ($schema instanceof Type\ReferenceType) {
-            return $schema->getRef() ?? throw new \RuntimeException('No ref provided');
-        } elseif ($schema instanceof Type\AnyType) {
+        if ($schema instanceof Type\ReferencePropertyType) {
+            return $schema->getTarget() ?? throw new \RuntimeException('No ref provided');
+        } elseif ($schema instanceof Type\AnyPropertyType) {
             return SchemaName::PASSTHRU;
         } elseif ($schema instanceof ContentType) {
             return SchemaName::PASSTHRU;

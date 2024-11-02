@@ -3,12 +3,12 @@
     {
       "name": "Human_SQL_GetAll",
       "source": {
-        "$import": {
+        "import": {
           "Entity": "schema:\/\/Human_SQL_Get"
         },
         "definitions": {
           "Human_SQL_GetAll": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "totalResults": {
                 "type": "integer"
@@ -21,27 +21,28 @@
               },
               "entry": {
                 "type": "array",
-                "items": {
-                  "$ref": "Entity:Human_SQL_Get"
+                "schema": {
+                  "type": "reference",
+                  "target": "Entity:Human_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Human_SQL_GetAll"
+        "root": "Human_SQL_GetAll"
       }
     },
     {
       "name": "Human_SQL_Get",
       "source": {
-        "$import": {
+        "import": {
           "Location": "schema:\/\/Location_SQL_Get",
           "Category": "schema:\/\/Category_SQL_Get"
         },
         "definitions": {
           "Human_SQL_Get": {
             "description": "",
-            "type": "object",
+            "type": "struct",
             "properties": {
               "id": {
                 "type": "integer"
@@ -55,60 +56,48 @@
                 "type": "string"
               },
               "location": {
-                "$ref": "Location:Location_SQL_Get"
+                "description": "",
+                "type": "reference",
+                "target": "Location:Location_SQL_Get"
               },
               "tags": {
                 "description": "",
                 "type": "array",
-                "items": {
+                "schema": {
                   "type": "string"
                 }
               },
               "categories": {
-                "items": {
-                  "$ref": "Category:Category_SQL_Get"
+                "description": "",
+                "type": "array",
+                "schema": {
+                  "type": "reference",
+                  "target": "Category:Category_SQL_Get"
                 }
               },
               "map": {
-                "additionalProperties": {
-                  "$ref": "Location:Location_SQL_Get"
+                "description": "",
+                "type": "map",
+                "schema": {
+                  "type": "reference",
+                  "target": "Location:Location_SQL_Get"
                 }
-              },
-              "union": {
-                "oneOf": [
-                  {
-                    "$ref": "Location:Location_SQL_Get"
-                  },
-                  {
-                    "$ref": "Category:Category_SQL_Get"
-                  }
-                ]
-              },
-              "intersection": {
-                "allOf": [
-                  {
-                    "$ref": "Human_SQL_Get"
-                  },
-                  {
-                    "$ref": "Location:Location_SQL_Get"
-                  }
-                ]
               }
             }
           }
         },
-        "$ref": "Human_SQL_Get"
+        "root": "Human_SQL_Get"
       }
     },
     {
       "name": "Location_SQL_GetAll",
       "source": {
-        "$import": {
+        "import": {
           "Entity": "schema:\/\/Location_SQL_Get"
         },
         "definitions": {
           "Location_SQL_GetAll": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "totalResults": {
                 "type": "integer"
@@ -121,14 +110,15 @@
               },
               "entry": {
                 "type": "array",
-                "items": {
-                  "$ref": "Entity:Location_SQL_Get"
+                "schema": {
+                  "type": "reference",
+                  "target": "Entity:Location_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Location_SQL_GetAll"
+        "root": "Location_SQL_GetAll"
       }
     },
     {
@@ -137,7 +127,7 @@
         "definitions": {
           "Location_SQL_Get": {
             "description": "",
-            "type": "object",
+            "type": "struct",
             "properties": {
               "id": {
                 "type": "integer"
@@ -157,18 +147,18 @@
             }
           }
         },
-        "$ref": "Location_SQL_Get"
+        "root": "Location_SQL_Get"
       }
     },
     {
       "name": "Category_SQL_GetAll",
       "source": {
-        "$import": {
+        "import": {
           "Entity": "schema:\/\/Category_SQL_Get"
         },
         "definitions": {
           "Category_SQL_GetAll": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "totalResults": {
                 "type": "integer"
@@ -181,14 +171,15 @@
               },
               "entry": {
                 "type": "array",
-                "items": {
-                  "$ref": "Entity:Category_SQL_Get"
+                "schema": {
+                  "type": "reference",
+                  "target": "Entity:Category_SQL_Get"
                 }
               }
             }
           }
         },
-        "$ref": "Category_SQL_GetAll"
+        "root": "Category_SQL_GetAll"
       }
     },
     {
@@ -197,7 +188,7 @@
         "definitions": {
           "Category_SQL_Get": {
             "description": "",
-            "type": "object",
+            "type": "struct",
             "properties": {
               "id": {
                 "type": "integer"
@@ -209,7 +200,7 @@
             }
           }
         },
-        "$ref": "Category_SQL_Get"
+        "root": "Category_SQL_Get"
       }
     }
   ],

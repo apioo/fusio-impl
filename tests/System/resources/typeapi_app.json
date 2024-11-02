@@ -17,7 +17,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
@@ -30,7 +31,8 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Passthru"
+            "type": "reference",
+            "target": "Passthru"
           }
         }
       },
@@ -51,7 +53,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
@@ -64,7 +67,8 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Passthru"
+            "type": "reference",
+            "target": "Passthru"
           }
         }
       },
@@ -85,7 +89,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
@@ -98,7 +103,8 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Passthru"
+            "type": "reference",
+            "target": "Passthru"
           }
         }
       },
@@ -119,7 +125,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
@@ -132,7 +139,8 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Passthru"
+            "type": "reference",
+            "target": "Passthru"
           }
         }
       },
@@ -155,7 +163,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
@@ -168,7 +177,8 @@
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Passthru"
+            "type": "reference",
+            "target": "Passthru"
           }
         }
       },
@@ -191,14 +201,16 @@
       "return": {
         "code": 201,
         "schema": {
-          "$ref": "Passthru"
+          "type": "reference",
+          "target": "Passthru"
         }
       },
       "arguments": {
         "payload": {
           "in": "body",
           "schema": {
-            "$ref": "Entry"
+            "type": "reference",
+            "target": "Entry"
           }
         }
       },
@@ -219,7 +231,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Collection"
+          "type": "reference",
+          "target": "Collection"
         }
       },
       "arguments": [],
@@ -238,7 +251,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Backend_User"
+          "type": "reference",
+          "target": "Backend_User"
         }
       },
       "arguments": [],
@@ -246,7 +260,8 @@
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "type": "reference",
+            "target": "Common_Message"
           }
         }
       ],
@@ -266,7 +281,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "Common_Message"
+          "type": "reference",
+          "target": "Common_Message"
         }
       },
       "arguments": [],
@@ -274,13 +290,15 @@
         {
           "code": 400,
           "schema": {
-            "$ref": "Common_Message"
+            "type": "reference",
+            "target": "Common_Message"
           }
         },
         {
           "code": 500,
           "schema": {
-            "$ref": "Common_Message"
+            "type": "reference",
+            "target": "Common_Message"
           }
         }
       ],
@@ -300,7 +318,8 @@
       "return": {
         "code": 200,
         "schema": {
-          "$ref": "System_About"
+          "type": "reference",
+          "target": "System_About"
         }
       },
       "arguments": [],
@@ -314,7 +333,7 @@
   },
   "definitions": {
     "Backend_App": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "id": {
           "type": "integer"
@@ -326,8 +345,7 @@
           "type": "integer"
         },
         "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          "type": "string"
         },
         "url": {
           "type": "string"
@@ -342,28 +360,30 @@
           "type": "string"
         },
         "metadata": {
-          "$ref": "Common_Metadata"
+          "type": "reference",
+          "target": "Common_Metadata"
         },
         "date": {
-          "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         },
         "scopes": {
           "type": "array",
-          "items": {
+          "schema": {
             "type": "string"
           }
         },
         "tokens": {
           "type": "array",
-          "items": {
-            "$ref": "Backend_Token"
+          "schema": {
+            "type": "reference",
+            "target": "Backend_Token"
           }
         }
       }
     },
     "Backend_Token": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "id": {
           "type": "integer"
@@ -376,7 +396,7 @@
         },
         "scopes": {
           "type": "array",
-          "items": {
+          "schema": {
             "type": "string"
           }
         },
@@ -384,17 +404,17 @@
           "type": "string"
         },
         "expire": {
-          "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         },
         "date": {
-          "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
     "Backend_User": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "id": {
           "type": "integer"
@@ -409,8 +429,7 @@
           "type": "integer"
         },
         "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          "type": "string"
         },
         "email": {
           "type": "string"
@@ -420,28 +439,29 @@
         },
         "scopes": {
           "type": "array",
-          "items": {
+          "schema": {
             "type": "string"
           }
         },
         "apps": {
           "type": "array",
-          "items": {
-            "$ref": "Backend_App"
+          "schema": {
+            "type": "reference",
+            "target": "Backend_App"
           }
         },
         "metadata": {
-          "$ref": "Common_Metadata"
+          "type": "reference",
+          "target": "Common_Metadata"
         },
         "date": {
-          "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
     "Collection": {
-      "title": "collection",
-      "type": "object",
+      "type": "struct",
       "properties": {
         "totalResults": {
           "type": "integer"
@@ -453,12 +473,13 @@
           "type": "integer"
         },
         "entry": {
-          "$ref": "Entry"
+          "type": "reference",
+          "target": "Entry"
         }
       }
     },
     "Common_Message": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "success": {
           "type": "boolean"
@@ -472,13 +493,13 @@
       }
     },
     "Common_Metadata": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "map",
+      "schema": {
         "type": "string"
       }
     },
     "Entry": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "id": {
           "type": "integer"
@@ -490,20 +511,20 @@
           "type": "string"
         },
         "date": {
-          "format": "date-time",
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
     "Passthru": {
       "description": "No schema information available",
-      "type": "object",
-      "additionalProperties": {
+      "type": "map",
+      "schema": {
         "type": "any"
       }
     },
     "System_About": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "apiVersion": {
           "type": "string"
@@ -537,35 +558,37 @@
         },
         "categories": {
           "type": "array",
-          "items": {
+          "schema": {
             "type": "string"
           }
         },
         "scopes": {
           "type": "array",
-          "items": {
+          "schema": {
             "type": "string"
           }
         },
         "apps": {
-          "$ref": "System_AboutApps"
+          "type": "reference",
+          "target": "System_AboutApps"
         },
         "links": {
           "type": "array",
-          "items": {
-            "$ref": "System_AboutLink"
+          "schema": {
+            "type": "reference",
+            "target": "System_AboutLink"
           }
         }
       }
     },
     "System_AboutApps": {
-      "type": "object",
-      "additionalProperties": {
+      "type": "map",
+      "schema": {
         "type": "string"
       }
     },
     "System_AboutLink": {
-      "type": "object",
+      "type": "struct",
       "properties": {
         "rel": {
           "type": "string"

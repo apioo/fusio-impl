@@ -55,7 +55,7 @@ class ResetPassword
 
         $email = $reset->getEmail();
         if (empty($email)) {
-            throw new StatusCode\NotFoundException('No email was provided');
+            throw new StatusCode\BadRequestException('No email was provided');
         }
 
         $user = $this->userTable->findOneByTenantAndEmail($context->getTenantId(), $email);
