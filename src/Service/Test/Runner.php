@@ -32,7 +32,7 @@ use PSX\Http\Response;
 use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\Stream;
 use PSX\OAuth2\AccessToken;
-use PSX\Schema\Exception\ValidationException;
+use PSX\Schema\Exception\TraverserException;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaTraverser;
 use PSX\Uri\Uri;
@@ -138,7 +138,7 @@ class Runner
             (new SchemaTraverser(ignoreUnknown: false))->traverse($data, $schema);
 
             $this->set($test, Table\Test::STATUS_SUCCESS, '', $body);
-        } catch (ValidationException $e) {
+        } catch (TraverserException $e) {
             $this->set($test, Table\Test::STATUS_ERROR, $e->getMessage(), $body);
         } catch (\Throwable $e) {
             $this->set($test, Table\Test::STATUS_ERROR, $this->getErrorMessage($e), $body);
