@@ -283,6 +283,7 @@ class User
         }
 
         // assert password complexity
+        $this->validator->assertPassword($oldPassword);
         $this->validator->assertPassword($newPassword);
 
         // change password
