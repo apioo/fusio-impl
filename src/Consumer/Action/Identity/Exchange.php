@@ -84,7 +84,7 @@ class Exchange implements ActionInterface
         return $this->renderToken($token);
     }
 
-    private function renderToken(?AccessToken $token): Template
+    private function renderToken(AccessToken $token): Template
     {
         $data = [
             'access_token' => $token->getAccessToken(),

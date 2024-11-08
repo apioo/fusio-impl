@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
-  <file src="src/Consumer/Action/Identity/Exchange.php">
-    <PossiblyNullReference>
-      <code><![CDATA[getAccessToken]]></code>
-    </PossiblyNullReference>
-  </file>
   <file src="src/Controller/Filter/Operation.php">
     <PossiblyNullArgument>
       <code><![CDATA[$operation]]></code>
