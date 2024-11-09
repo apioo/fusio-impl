@@ -10,17 +10,6 @@
       <code><![CDATA[$url]]></code>
     </PossiblyInvalidArgument>
   </file>
-  <file src="src/Service/Action.php">
-    <PossiblyNullArgument>
-      <code><![CDATA[$class]]></code>
-      <code><![CDATA[$config]]></code>
-      <code><![CDATA[$name]]></code>
-      <code><![CDATA[$name]]></code>
-    </PossiblyNullArgument>
-    <PossiblyNullReference>
-      <code><![CDATA[getAll]]></code>
-    </PossiblyNullReference>
-  </file>
   <file src="src/Service/App.php">
     <PossiblyNullArgument>
       <code><![CDATA[$app->getName()]]></code>

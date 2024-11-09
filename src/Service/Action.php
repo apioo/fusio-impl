@@ -63,11 +63,11 @@ class Action
     {
         $this->validator->assert($action, $context->getTenantId());
 
-        $name = $action->getName();
-        $class = $action->getClass();
+        $name = $action->getName() ?? throw new StatusCode\BadRequestException('Provided no action name');
+        $class = $action->getClass() ?? throw new StatusCode\BadRequestException('Provided no action class');
 
         // check source
-        $config     = $action->getConfig() ? $action->getConfig()->getAll() : [];
+        $config     = $action->getConfig()?->getAll() ?? [];
         $parameters = new Parameters($config);
         $handler    = $this->newAction($class);
 
@@ -125,7 +125,7 @@ class Action
 
         // check source
         $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
-        $parameters = new Parameters($config);
+        $parameters = new Parameters($config ?? []);
         $handler    = $this->newAction($class);
 
         // call lifecycle
