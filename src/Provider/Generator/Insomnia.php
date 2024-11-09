@@ -80,7 +80,7 @@ class Insomnia implements ProviderInterface
         return $data;
     }
 
-    private function buildOperation(\stdClass $resource, array $env, Setup $setup, string $index): void
+    private function buildOperation(\stdClass $resource, array $env, SetupInterface $setup, string $index): void
     {
         $name = $resource->name ?? null;
         if (empty($name)) {
@@ -158,11 +158,9 @@ class Insomnia implements ProviderInterface
         return Inflection::convertPlaceholderToColon($path);
     }
 
-    private function convertPlaceholderToColon(string $path)
+    private function convertPlaceholderToColon(string $path): string
     {
-        $path = preg_replace('/(\{\{ (\w+) \}\})/i', ':$2', $path);
-
-        return $path;
+        return (string) preg_replace('/(\{\{ (\w+) \}\})/i', ':$2', $path);
     }
 
     private function getOperationMethodName(string $method): string

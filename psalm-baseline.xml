@@ -6,9 +6,6 @@
     </PossiblyNullArgument>
   </file>
   <file src="src/Provider/Generator/Insomnia.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$setup]]></code>
-    </ArgumentTypeCoercion>
     <PossiblyInvalidArgument>
       <code><![CDATA[$url]]></code>
     </PossiblyInvalidArgument>
