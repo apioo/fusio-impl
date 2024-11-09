@@ -68,7 +68,7 @@ class DatabaseParser implements RoutingParserInterface
                 Table\Generated\OperationTable::COLUMN_HTTP_PATH,
             ])
             ->from('fusio_operation', 'operation')
-            ->orderBy(Table\Generated\OperationTable::COLUMN_ID, 'DESC')
+            ->orderBy(Table\Generated\OperationTable::COLUMN_NAME, 'ASC')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 

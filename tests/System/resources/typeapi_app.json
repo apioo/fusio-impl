@@ -11,6 +11,73 @@
     ]
   },
   "operations": {
+    "authorization.getWhoami": {
+      "path": "/authorization/whoami",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_User"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 500,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "authorization"
+      ],
+      "authorization": true,
+      "tags": [
+        "authorization"
+      ]
+    },
+    "authorization.revoke": {
+      "path": "/authorization/revoke",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 400,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        },
+        {
+          "code": 500,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "authorization"
+      ],
+      "authorization": true,
+      "tags": [
+        "authorization"
+      ]
+    },
     "inspect.delete": {
       "path": "/inspect/:foo",
       "method": "DELETE",
@@ -47,9 +114,9 @@
         "bar"
       ]
     },
-    "inspect.patch": {
+    "inspect.get": {
       "path": "/inspect/:foo",
-      "method": "PATCH",
+      "method": "GET",
       "return": {
         "code": 200,
         "schema": {
@@ -76,16 +143,18 @@
       "description": "",
       "stability": 2,
       "security": [
+        "foo",
         "bar"
       ],
       "authorization": true,
       "tags": [
+        "foo",
         "bar"
       ]
     },
-    "inspect.put": {
+    "inspect.patch": {
       "path": "/inspect/:foo",
-      "method": "PUT",
+      "method": "PATCH",
       "return": {
         "code": 200,
         "schema": {
@@ -157,9 +226,9 @@
         "bar"
       ]
     },
-    "inspect.get": {
+    "inspect.put": {
       "path": "/inspect/:foo",
-      "method": "GET",
+      "method": "PUT",
       "return": {
         "code": 200,
         "schema": {
@@ -186,14 +255,30 @@
       "description": "",
       "stability": 2,
       "security": [
-        "foo",
         "bar"
       ],
       "authorization": true,
       "tags": [
-        "foo",
         "bar"
       ]
+    },
+    "meta.getAbout": {
+      "path": "/",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "System_About"
+        }
+      },
+      "arguments": [],
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": []
     },
     "test.createFoo": {
       "path": "/foo",
@@ -244,91 +329,6 @@
       "tags": [
         "bar"
       ]
-    },
-    "authorization.getWhoami": {
-      "path": "/authorization/whoami",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_User"
-        }
-      },
-      "arguments": [],
-      "throws": [
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 2,
-      "security": [
-        "authorization"
-      ],
-      "authorization": true,
-      "tags": [
-        "authorization"
-      ]
-    },
-    "authorization.revoke": {
-      "path": "/authorization/revoke",
-      "method": "POST",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": [],
-      "throws": [
-        {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
-      "stability": 2,
-      "security": [
-        "authorization"
-      ],
-      "authorization": true,
-      "tags": [
-        "authorization"
-      ]
-    },
-    "meta.getAbout": {
-      "path": "/",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "System_About"
-        }
-      },
-      "arguments": [],
-      "throws": [],
-      "description": "",
-      "stability": 2,
-      "security": [],
-      "authorization": false,
-      "tags": []
     }
   },
   "definitions": {
