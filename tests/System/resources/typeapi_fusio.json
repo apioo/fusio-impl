@@ -14957,6 +14957,7 @@
       }
     },
     "Common_Collection": {
+      "description": "Base collection",
       "type": "struct",
       "properties": {
         "totalResults": {
@@ -15071,6 +15072,7 @@
       }
     },
     "Common_Message": {
+      "description": "Common error message",
       "type": "struct",
       "properties": {
         "success": {
