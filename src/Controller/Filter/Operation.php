@@ -24,6 +24,7 @@ use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Table;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Util\Uuid;
+use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -53,7 +54,10 @@ class Operation implements FilterInterface
         $operationId = $context->getSource()[1] ?? null;
         $methodName  = $request->getMethod();
 
-        $operation = $this->operationTable->find($operationId);
+        $operation = $this->operationTable->find($operationId ?? 0);
+        if (!$operation instanceof Table\Generated\OperationRow) {
+            throw new InternalServerErrorException('Operation not found');
+        }
 
         if ($methodName === 'OPTIONS') {
             // for OPTIONS requests we only set the available request methods and directly return so the request is very
