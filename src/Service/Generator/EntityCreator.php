@@ -165,8 +165,12 @@ class EntityCreator
         return $parts;
     }
 
-    private function getImport(RecordInterface $source): iterable|\stdClass|null
+    private function getImport(?RecordInterface $source): iterable|\stdClass|null
     {
+        if ($source === null) {
+            return null;
+        }
+
         foreach (['import', '$import'] as $key) {
             $import = $source->get($key);
             if (is_iterable($import) || $import instanceof \stdClass) {
