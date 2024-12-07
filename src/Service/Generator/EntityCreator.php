@@ -64,7 +64,7 @@ class EntityCreator
 
             $source = $record->getSource();
             $import = $this->getImport($source);
-            if (is_iterable($import)) {
+            if (is_iterable($import) || $import instanceof \stdClass) {
                 $result = [];
                 foreach ($import as $name => $schema) {
                     if (str_starts_with($schema, 'schema://')) {
