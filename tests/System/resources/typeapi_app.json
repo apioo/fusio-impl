@@ -24,7 +24,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -54,14 +54,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -273,7 +266,15 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],

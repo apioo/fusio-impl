@@ -775,7 +775,9 @@
       "httpCode": 200,
       "parameters": {},
       "outgoing": "php+class:\/\/Fusio.Model.System.About",
-      "throws": {},
+      "throws": {
+        "999": "php+class:\/\/Fusio.Model.Common.Message"
+      },
       "action": "php+class:\/\/Fusio.Impl.System.Action.Meta.GetAbout",
       "costs": 0
     }

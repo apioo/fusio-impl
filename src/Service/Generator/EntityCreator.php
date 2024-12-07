@@ -26,6 +26,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use PSX\Api\OperationInterface;
+use PSX\Record\RecordInterface;
 
 /**
  * EntityCreator
@@ -62,8 +63,8 @@ class EntityCreator
             $record->setName($this->buildName($prefix, $record->getName() ?? ''));
 
             $source = $record->getSource();
-            $import = $source?->get('import');
-            if (is_iterable($import) || $import instanceof \stdClass) {
+            $import = $this->getImport($source);
+            if (is_iterable($import)) {
                 $result = [];
                 foreach ($import as $name => $schema) {
                     if (str_starts_with($schema, 'schema://')) {
@@ -72,6 +73,7 @@ class EntityCreator
                         $result[$name] = $schema;
                     }
                 }
+
                 $source->put('import', $result);
             }
 
@@ -161,5 +163,17 @@ class EntityCreator
         }
         $parts = implode($separator, $parts);
         return $parts;
+    }
+
+    private function getImport(RecordInterface $source): iterable|\stdClass|null
+    {
+        foreach (['import', '$import'] as $key) {
+            $import = $source->get($key);
+            if (is_iterable($import) || $import instanceof \stdClass) {
+                return $import;
+            }
+        }
+
+        return null;
     }
 }

@@ -53,7 +53,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -83,14 +83,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -128,21 +121,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -172,14 +151,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -217,21 +189,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -269,21 +227,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -320,28 +264,7 @@
       },
       "throws": [
         {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -385,14 +308,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -429,28 +345,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -499,14 +394,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -536,14 +424,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -580,14 +461,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -631,35 +505,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -697,21 +543,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -748,28 +580,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -812,28 +623,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -870,28 +660,7 @@
       },
       "throws": [
         {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -940,14 +709,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -991,35 +753,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1056,28 +790,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1170,14 +883,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1207,14 +913,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1252,14 +951,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1297,21 +989,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1348,28 +1026,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1406,28 +1063,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1476,14 +1112,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1527,35 +1156,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1592,28 +1193,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1662,14 +1242,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1713,35 +1286,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1779,21 +1324,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1830,28 +1361,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1888,28 +1398,7 @@
       },
       "throws": [
         {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1958,14 +1447,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -1995,14 +1477,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2039,14 +1514,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2083,21 +1551,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2140,21 +1594,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2191,14 +1631,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2242,35 +1675,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2308,21 +1713,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2359,28 +1750,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2417,28 +1787,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2487,14 +1836,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2538,35 +1880,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2596,14 +1910,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2653,28 +1960,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2718,28 +2004,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2788,28 +2053,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2852,28 +2096,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2903,14 +2126,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -2959,21 +2175,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3064,21 +2266,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3121,21 +2309,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3172,21 +2346,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3242,28 +2402,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3313,28 +2452,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3372,21 +2490,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3423,28 +2527,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3481,28 +2564,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3551,14 +2613,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3602,35 +2657,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3674,21 +2701,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3732,21 +2745,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3776,14 +2775,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3820,21 +2812,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3872,21 +2850,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3923,28 +2887,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -3981,28 +2924,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4051,14 +2973,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4088,14 +3003,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4132,14 +3040,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4183,35 +3084,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4248,28 +3121,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4386,14 +3238,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4442,14 +3287,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4486,14 +3324,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4536,31 +3367,10 @@
       },
       "throws": [
         {
-          "code": 401,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4600,17 +3410,10 @@
       },
       "throws": [
         {
-          "code": 401,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4645,24 +3448,10 @@
       },
       "throws": [
         {
-          "code": 400,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4702,35 +3491,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -4773,31 +3534,10 @@
       },
       "throws": [
         {
-          "code": 401,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4837,17 +3577,10 @@
       },
       "throws": [
         {
-          "code": 401,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4882,24 +3615,10 @@
       },
       "throws": [
         {
-          "code": 400,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -4939,38 +3658,10 @@
       },
       "throws": [
         {
-          "code": 400,
+          "code": 999,
           "schema": {
             "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
-          }
-        },
-        {
-          "code": 500,
-          "schema": {
-            "type": "reference",
-            "target": "MarketplaceMessage"
+            "target": "Common_Message"
           }
         }
       ],
@@ -5005,21 +3696,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5056,28 +3733,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5114,28 +3770,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5184,14 +3819,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5235,35 +3863,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5301,21 +3901,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5352,28 +3938,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5410,28 +3975,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5480,14 +4024,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5531,35 +4068,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5597,21 +4106,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5648,28 +4143,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5706,28 +4180,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5776,14 +4229,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5827,35 +4273,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5893,21 +4311,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -5944,28 +4348,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6002,28 +4385,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6072,14 +4434,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6123,35 +4478,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6189,21 +4516,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6240,28 +4553,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6298,28 +4590,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6368,14 +4639,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6419,35 +4683,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6485,21 +4721,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6536,28 +4758,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6594,28 +4795,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6664,14 +4844,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6708,14 +4881,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6759,35 +4925,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6831,35 +4969,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6897,21 +5007,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -6948,35 +5044,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7013,28 +5081,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7083,14 +5130,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7120,14 +5160,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7171,35 +5204,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7237,21 +5242,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7281,14 +5272,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7405,14 +5389,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7529,14 +5506,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7653,14 +5623,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7777,14 +5740,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -7901,14 +5857,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8025,14 +5974,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8149,14 +6091,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8273,14 +6208,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8397,14 +6325,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8434,14 +6355,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8558,14 +6472,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8682,14 +6589,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8806,14 +6706,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8930,14 +6823,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -8974,28 +6860,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9032,28 +6897,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9090,28 +6934,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9160,28 +6983,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9211,28 +7013,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9262,28 +7043,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9327,35 +7087,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9392,21 +7124,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9499,14 +7217,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9543,28 +7254,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9657,14 +7347,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9719,14 +7402,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9756,14 +7432,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9807,21 +7476,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9859,21 +7514,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9910,28 +7551,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -9968,28 +7588,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10038,14 +7637,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10089,35 +7681,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10155,21 +7719,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10206,28 +7756,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10264,21 +7793,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10327,14 +7842,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10378,35 +7886,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10444,14 +7924,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10487,21 +7960,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10537,21 +7996,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10589,21 +8034,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10631,28 +8062,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10682,21 +8092,7 @@
       "arguments": [],
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10732,21 +8128,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10782,14 +8164,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10825,14 +8200,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10868,21 +8236,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10918,35 +8272,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -10984,21 +8310,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11035,28 +8347,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11093,28 +8384,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11163,14 +8433,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11214,35 +8477,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11291,14 +8526,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11335,28 +8563,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11405,14 +8612,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11449,14 +8649,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11498,14 +8691,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11540,14 +8726,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11582,28 +8761,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11652,14 +8810,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11696,28 +8847,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11764,14 +8894,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11813,14 +8936,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11864,14 +8980,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11908,28 +9017,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -11978,14 +9066,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12034,14 +9115,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12079,21 +9153,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12130,28 +9190,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12188,28 +9227,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12258,14 +9276,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12309,35 +9320,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12374,28 +9357,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12444,14 +9406,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12489,21 +9444,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12540,28 +9481,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12598,28 +9518,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12668,14 +9567,7 @@
       },
       "throws": [
         {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12719,35 +9611,7 @@
       },
       "throws": [
         {
-          "code": 400,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 401,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12782,7 +9646,15 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12800,7 +9672,15 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12826,7 +9706,15 @@
           }
         }
       },
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12844,7 +9732,15 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12862,7 +9758,15 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12880,7 +9784,15 @@
         }
       },
       "arguments": [],
-      "throws": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
       "description": "",
       "stability": 2,
       "security": [],
@@ -12907,21 +9819,7 @@
       },
       "throws": [
         {
-          "code": 404,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 410,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        },
-        {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"
@@ -12954,7 +9852,7 @@
       },
       "throws": [
         {
-          "code": 500,
+          "code": 999,
           "schema": {
             "type": "reference",
             "target": "Common_Message"

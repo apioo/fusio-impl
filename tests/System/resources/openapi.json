@@ -10,6 +10,102 @@
     }
   ],
   "paths": {
+    "/authorization/whoami": {
+      "get": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "authorization.getWhoami",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Backend_User"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/authorization/revoke": {
+      "post": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "authorization.revoke",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "/inspect/{foo}": {
       "get": {
         "tags": [
@@ -196,6 +292,44 @@
         }
       ]
     },
+    "/": {
+      "get": {
+        "operationId": "meta.getAbout",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/System_About"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Common_Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "/foo": {
       "get": {
         "tags": [
@@ -248,110 +382,6 @@
             ]
           }
         ]
-      },
-      "parameters": []
-    },
-    "/authorization/whoami": {
-      "get": {
-        "tags": [
-          "authorization"
-        ],
-        "operationId": "authorization.getWhoami",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Backend_User"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Common_Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "authorization"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "/authorization/revoke": {
-      "post": {
-        "tags": [
-          "authorization"
-        ],
-        "operationId": "authorization.revoke",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Common_Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Common_Message"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Common_Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "authorization"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "/": {
-      "get": {
-        "operationId": "meta.getAbout",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/System_About"
-                }
-              }
-            }
-          }
-        }
       },
       "parameters": []
     }
