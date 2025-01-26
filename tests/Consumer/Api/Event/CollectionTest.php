@@ -59,6 +59,34 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/consumer/event?search=foo', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 56,
+            "name": "foo-event",
+            "description": "Foo event description"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/consumer/event', 'POST', array(

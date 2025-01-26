@@ -52,7 +52,42 @@ class CollectionTest extends DbTestCase
             "id": 1,
             "userId": 2,
             "planId": 2,
-            "transactionId": 0,
+            "transactionId": "[transaction_id]",
+            "amount": 3999,
+            "points": 1000,
+            "periodStart": "[datetime]",
+            "periodEnd": "[datetime]",
+            "insertDate": "[datetime]"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/consumer/transaction?search=trans', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ));
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 1,
+            "userId": 2,
+            "planId": 2,
+            "transactionId": "[transaction_id]",
             "amount": 3999,
             "points": 1000,
             "periodStart": "[datetime]",

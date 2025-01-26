@@ -82,6 +82,41 @@ JSON;
         $this->assertStringStartsWith('Missing authorization header', $data->message);
     }
 
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/consumer/app?search=foo', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ));
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 3,
+            "userId": 2,
+            "status": 1,
+            "name": "Foo-App",
+            "appKey": "[uuid]",
+            "metadata": {
+                "foo": "bar"
+            },
+            "date": "[datetime]"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/consumer/app', 'POST', array(

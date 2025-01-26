@@ -70,7 +70,7 @@ class DateQueryFilter extends QueryFilter
 
     protected static function toInt(mixed $value): ?int
     {
-        return !empty($value) ? (int) $value : null;
+        return $value !== null && $value !== '' ? (int) $value : null;
     }
 
     protected static function getConstructorArguments(RequestInterface $request): array

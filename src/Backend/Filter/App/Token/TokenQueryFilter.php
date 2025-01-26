@@ -113,21 +113,6 @@ class TokenQueryFilter extends DateQueryFilter
         $scope = $request->get('scope');
         $ip = $request->get('ip');
 
-        $search = $arguments['search'] ?? null;
-        if (!empty($search)) {
-            $parts = explode(',', $search);
-            foreach ($parts as $part) {
-                $part = trim($part);
-                if (filter_var($part, FILTER_VALIDATE_IP) !== false) {
-                    $ip = $part;
-                } else {
-                    $scope = $part;
-                }
-            }
-
-            $arguments['search'] = null;
-        }
-
         $arguments['appId'] = $appId;
         $arguments['userId'] = $userId;
         $arguments['status'] = $status;

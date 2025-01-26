@@ -102,6 +102,52 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/consumer/token?search=foo', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ));
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 7,
+            "status": 1,
+            "name": "Foo-App\/Expired",
+            "scopes": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 3,
+            "status": 1,
+            "name": "Foo-App\/Consumer",
+            "scopes": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetUnauthorized()
     {
         $response = $this->sendRequest('/consumer/token', 'GET', array(
