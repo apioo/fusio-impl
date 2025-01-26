@@ -48,6 +48,11 @@ class Webhook extends ViewAbstract
         $condition->equals('event.' . Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals('event.' . Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
+        $search = $filter->getSearch();
+        if (!empty($search)) {
+            $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_NAME, '%' . $search . '%');
+        }
+
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
                 'webhook.' . Table\Generated\WebhookTable::COLUMN_ID,

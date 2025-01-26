@@ -22,6 +22,7 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
@@ -44,7 +45,7 @@ class Token extends ViewAbstract
         $sortBy = $filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID);
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());

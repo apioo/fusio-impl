@@ -47,6 +47,11 @@ class Scope extends ViewAbstract
         $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_STATUS, Table\Scope::STATUS_ACTIVE);
 
+        $search = $filter->getSearch();
+        if (!empty($search)) {
+            $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_NAME, '%' . $search . '%');
+        }
+
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
                 'scope.' . Table\Generated\ScopeTable::COLUMN_ID,
