@@ -63,7 +63,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/consumer/webhook?search=foo', 'GET', array(
+        $response = $this->sendRequest('/consumer/webhook?search=on', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));

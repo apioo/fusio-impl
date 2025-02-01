@@ -50,7 +50,7 @@ class Webhook extends ViewAbstract
 
         $search = $filter->getSearch();
         if (!empty($search)) {
-            $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_NAME, '%' . $search . '%');
+            $condition->like('webhook.' . Table\Generated\WebhookTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $queryBuilder = $this->connection->createQueryBuilder()
