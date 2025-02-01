@@ -56,10 +56,26 @@ class Event extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
             ]),
         ];
+
+        return $builder->build($definition);
+    }
+
+    public function getEntity(string $id, ContextInterface $context)
+    {
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
+            'name' => Table\Generated\EventTable::COLUMN_NAME,
+            'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
+            'schema' => Table\Generated\EventTable::COLUMN_EVENT_SCHEMA,
+        ]);
 
         return $builder->build($definition);
     }

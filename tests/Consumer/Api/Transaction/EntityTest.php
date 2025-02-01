@@ -55,7 +55,7 @@ class EntityTest extends DbTestCase
         "points": 500,
         "period": 1
     },
-    "transactionId": 0,
+    "transactionId": "[transaction_id]",
     "amount": 3999,
     "points": 1000,
     "periodStart": "[datetime]",

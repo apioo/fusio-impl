@@ -48,6 +48,7 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "id": 56,
+            "status": 1,
             "name": "foo-event",
             "description": "Foo event description"
         }
@@ -76,6 +77,7 @@ JSON;
     "entry": [
         {
             "id": 56,
+            "status": 1,
             "name": "foo-event",
             "description": "Foo event description"
         }

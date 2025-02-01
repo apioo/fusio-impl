@@ -8494,6 +8494,43 @@
         "app"
       ]
     },
+    "consumer.event.get": {
+      "path": "/consumer/event/$event_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_Event"
+        }
+      },
+      "arguments": {
+        "event_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "consumer.event"
+      ],
+      "authorization": true,
+      "tags": [
+        "event"
+      ]
+    },
     "consumer.event.getAll": {
       "path": "/consumer/event",
       "method": "GET",

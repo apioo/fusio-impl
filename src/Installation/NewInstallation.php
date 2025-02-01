@@ -34,7 +34,7 @@ use Fusio\Marketplace;
 use Fusio\Model;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
-use PSX\Schema\TypeFactory;
+use PSX\Schema\Type\Factory\PropertyTypeFactory;
 
 /**
  * NewInstallation
@@ -182,7 +182,7 @@ class NewInstallation
                     httpPath: '/action',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'action.create' => new Operation(
@@ -209,7 +209,7 @@ class NewInstallation
                     httpPath: '/action/form',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
-                    parameters: ['class' => TypeFactory::getString()],
+                    parameters: ['class' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'action.execute' => new Operation(
@@ -254,7 +254,7 @@ class NewInstallation
                     httpPath: '/app',
                     httpCode: 200,
                     outgoing: Model\Backend\AppCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'app.create' => new Operation(
@@ -308,7 +308,7 @@ class NewInstallation
                     httpPath: '/audit',
                     httpCode: 200,
                     outgoing: Model\Backend\AuditCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'event' => TypeFactory::getString(), 'ip' => TypeFactory::getString(), 'message' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'event' => PropertyTypeFactory::getString(), 'ip' => PropertyTypeFactory::getString(), 'message' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'audit.get' => new Operation(
@@ -325,7 +325,7 @@ class NewInstallation
                     httpPath: '/category',
                     httpCode: 200,
                     outgoing: Model\Backend\CategoryCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'category.create' => new Operation(
@@ -371,7 +371,7 @@ class NewInstallation
                     httpPath: '/config',
                     httpCode: 200,
                     outgoing: Model\Backend\ConfigCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'config.get' => new Operation(
@@ -398,7 +398,7 @@ class NewInstallation
                     httpPath: '/connection',
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'connection.create' => new Operation(
@@ -425,7 +425,7 @@ class NewInstallation
                     httpPath: '/connection/form',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
-                    parameters: ['class' => TypeFactory::getString()],
+                    parameters: ['class' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'connection.get' => new Operation(
@@ -485,7 +485,7 @@ class NewInstallation
                     httpPath: '/cronjob',
                     httpCode: 200,
                     outgoing: Model\Backend\CronjobCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'cronjob.create' => new Operation(
@@ -589,7 +589,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id/:table_name/rows',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseRows::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'filterBy' => TypeFactory::getString(), 'filterOp' => TypeFactory::getString(), 'filterValue' => TypeFactory::getString(), 'sortBy' => TypeFactory::getString(), 'sortOrder' => TypeFactory::getString(), 'columns' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'filterBy' => PropertyTypeFactory::getString(), 'filterOp' => PropertyTypeFactory::getString(), 'filterValue' => PropertyTypeFactory::getString(), 'sortBy' => PropertyTypeFactory::getString(), 'sortOrder' => PropertyTypeFactory::getString(), 'columns' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'database.getRow' => new Operation(
@@ -632,7 +632,7 @@ class NewInstallation
                     httpPath: '/event',
                     httpCode: 200,
                     outgoing: Model\Backend\EventCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'event.create' => new Operation(
@@ -729,7 +729,7 @@ class NewInstallation
                     httpPath: '/identity',
                     httpCode: 200,
                     outgoing: Model\Backend\IdentityCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'identity.create' => new Operation(
@@ -756,7 +756,7 @@ class NewInstallation
                     httpPath: '/identity/form',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
-                    parameters: ['class' => TypeFactory::getString()],
+                    parameters: ['class' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'identity.get' => new Operation(
@@ -792,7 +792,7 @@ class NewInstallation
                     httpPath: '/log/error',
                     httpCode: 200,
                     outgoing: Model\Backend\LogErrorCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'log.getError' => new Operation(
@@ -809,7 +809,7 @@ class NewInstallation
                     httpPath: '/log',
                     httpCode: 200,
                     outgoing: Model\Backend\LogCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'routeId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'routeId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'log.get' => new Operation(
@@ -826,7 +826,7 @@ class NewInstallation
                     httpPath: '/marketplace/action',
                     httpCode: 200,
                     outgoing: Marketplace\MarketplaceActionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'query' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'query' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'marketplace.action.install' => new Operation(
@@ -860,7 +860,7 @@ class NewInstallation
                     httpPath: '/marketplace/app',
                     httpCode: 200,
                     outgoing: Marketplace\MarketplaceAppCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'query' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'query' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'marketplace.app.install' => new Operation(
@@ -894,7 +894,7 @@ class NewInstallation
                     httpPath: '/page',
                     httpCode: 200,
                     outgoing: Model\Backend\PageCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'page.create' => new Operation(
@@ -940,7 +940,7 @@ class NewInstallation
                     httpPath: '/plan',
                     httpCode: 200,
                     outgoing: Model\Backend\PlanCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'plan.create' => new Operation(
@@ -986,7 +986,7 @@ class NewInstallation
                     httpPath: '/rate',
                     httpCode: 200,
                     outgoing: Model\Backend\RateCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'rate.create' => new Operation(
@@ -1032,7 +1032,7 @@ class NewInstallation
                     httpPath: '/role',
                     httpCode: 200,
                     outgoing: Model\Backend\RoleCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'role.create' => new Operation(
@@ -1078,7 +1078,7 @@ class NewInstallation
                     httpPath: '/operation',
                     httpCode: 200,
                     outgoing: Model\Backend\OperationCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'operation.create' => new Operation(
@@ -1124,7 +1124,7 @@ class NewInstallation
                     httpPath: '/schema',
                     httpCode: 200,
                     outgoing: Model\Backend\SchemaCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'schema.create' => new Operation(
@@ -1187,7 +1187,7 @@ class NewInstallation
                     httpPath: '/scope',
                     httpCode: 200,
                     outgoing: Model\Backend\ScopeCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'scope.create' => new Operation(
@@ -1258,7 +1258,7 @@ class NewInstallation
                     httpPath: '/statistic/activities_per_user',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getCountRequests' => new Operation(
@@ -1267,7 +1267,7 @@ class NewInstallation
                     httpPath: '/statistic/count_requests',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticCount::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getErrorsPerOperation' => new Operation(
@@ -1276,7 +1276,7 @@ class NewInstallation
                     httpPath: '/statistic/errors_per_operation',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getIncomingRequests' => new Operation(
@@ -1285,7 +1285,7 @@ class NewInstallation
                     httpPath: '/statistic/incoming_requests',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getIncomingTransactions' => new Operation(
@@ -1294,7 +1294,7 @@ class NewInstallation
                     httpPath: '/statistic/incoming_transactions',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getIssuedTokens' => new Operation(
@@ -1303,7 +1303,7 @@ class NewInstallation
                     httpPath: '/statistic/issued_tokens',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getMostUsedActivities' => new Operation(
@@ -1312,7 +1312,7 @@ class NewInstallation
                     httpPath: '/statistic/most_used_activities',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getMostUsedApps' => new Operation(
@@ -1321,7 +1321,7 @@ class NewInstallation
                     httpPath: '/statistic/most_used_apps',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getMostUsedOperations' => new Operation(
@@ -1330,7 +1330,7 @@ class NewInstallation
                     httpPath: '/statistic/most_used_operations',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getTestCoverage' => new Operation(
@@ -1347,7 +1347,7 @@ class NewInstallation
                     httpPath: '/statistic/time_average',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getTimePerOperation' => new Operation(
@@ -1356,7 +1356,7 @@ class NewInstallation
                     httpPath: '/statistic/time_per_operation',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getUsedPoints' => new Operation(
@@ -1365,7 +1365,7 @@ class NewInstallation
                     httpPath: '/statistic/used_points',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'statistic.getUserRegistrations' => new Operation(
@@ -1374,7 +1374,7 @@ class NewInstallation
                     httpPath: '/statistic/user_registrations',
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'operationId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'ip' => TypeFactory::getString(), 'userAgent' => TypeFactory::getString(), 'method' => TypeFactory::getString(), 'path' => TypeFactory::getString(), 'header' => TypeFactory::getString(), 'body' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'tenant.setup' => new Operation(
@@ -1399,7 +1399,7 @@ class NewInstallation
                     httpPath: '/test',
                     httpCode: 200,
                     outgoing: Model\Backend\TestCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'test.get' => new Operation(
@@ -1441,7 +1441,7 @@ class NewInstallation
                     httpPath: '/token',
                     httpCode: 200,
                     outgoing: Model\Backend\TokenCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'appId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'status' => TypeFactory::getInteger(), 'scope' => TypeFactory::getString(), 'ip' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'status' => PropertyTypeFactory::getInteger(), 'scope' => PropertyTypeFactory::getString(), 'ip' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'token.get' => new Operation(
@@ -1458,7 +1458,7 @@ class NewInstallation
                     httpPath: '/transaction',
                     httpCode: 200,
                     outgoing: Model\Backend\TransactionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString(), 'from' => TypeFactory::getDateTime(), 'to' => TypeFactory::getDateTime(), 'planId' => TypeFactory::getInteger(), 'userId' => TypeFactory::getInteger(), 'appId' => TypeFactory::getInteger(), 'status' => TypeFactory::getString(), 'provider' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'planId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'status' => PropertyTypeFactory::getString(), 'provider' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'transaction.get' => new Operation(
@@ -1483,7 +1483,7 @@ class NewInstallation
                     httpPath: '/trash/:type',
                     httpCode: 200,
                     outgoing: Model\Backend\TrashDataCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'trash.restore' => new Operation(
@@ -1501,7 +1501,7 @@ class NewInstallation
                     httpPath: '/user',
                     httpCode: 200,
                     outgoing: Model\Backend\UserCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'user.create' => new Operation(
@@ -1547,7 +1547,7 @@ class NewInstallation
                     httpPath: '/webhook',
                     httpCode: 200,
                     outgoing: Model\Backend\WebhookCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'webhook.create' => new Operation(
@@ -1595,7 +1595,7 @@ class NewInstallation
                     httpPath: '/app',
                     httpCode: 200,
                     outgoing: Model\Consumer\AppCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'app.create' => new Operation(
@@ -1638,7 +1638,15 @@ class NewInstallation
                     httpPath: '/event',
                     httpCode: 200,
                     outgoing: Model\Consumer\EventCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                ),
+                'event.get' => new Operation(
+                    action: Consumer\Action\Event\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/event/$event_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\Event::class,
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'grant.getAll' => new Operation(
@@ -1647,7 +1655,7 @@ class NewInstallation
                     httpPath: '/grant',
                     httpCode: 200,
                     outgoing: Model\Consumer\GrantCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'grant.delete' => new Operation(
@@ -1664,7 +1672,7 @@ class NewInstallation
                     httpPath: '/log',
                     httpCode: 200,
                     outgoing: Model\Consumer\LogCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'log.get' => new Operation(
@@ -1681,7 +1689,7 @@ class NewInstallation
                     httpPath: '/page',
                     httpCode: 200,
                     outgoing: Model\Consumer\PageCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                 ),
@@ -1718,7 +1726,7 @@ class NewInstallation
                     httpPath: '/plan',
                     httpCode: 200,
                     outgoing: Model\Consumer\PlanCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'plan.get' => new Operation(
@@ -1735,7 +1743,7 @@ class NewInstallation
                     httpPath: '/scope',
                     httpCode: 200,
                     outgoing: Model\Consumer\ScopeCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'token.getAll' => new Operation(
@@ -1744,7 +1752,7 @@ class NewInstallation
                     httpPath: '/token',
                     httpCode: 200,
                     outgoing: Model\Consumer\TokenCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'token.create' => new Operation(
@@ -1787,7 +1795,7 @@ class NewInstallation
                     httpPath: '/webhook',
                     httpCode: 200,
                     outgoing: Model\Consumer\WebhookCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'webhook.create' => new Operation(
@@ -1830,7 +1838,7 @@ class NewInstallation
                     httpPath: '/transaction',
                     httpCode: 200,
                     outgoing: Model\Consumer\TransactionCollection::class,
-                    parameters: ['startIndex' => TypeFactory::getInteger(), 'count' => TypeFactory::getInteger(), 'search' => TypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'transaction.get' => new Operation(
@@ -1952,7 +1960,7 @@ class NewInstallation
                     httpPath: '/identity',
                     httpCode: 200,
                     outgoing: Model\Consumer\IdentityCollection::class,
-                    parameters: ['appId' => TypeFactory::getInteger()->setDeprecated(true), 'appKey' => TypeFactory::getString()],
+                    parameters: ['appId' => PropertyTypeFactory::getInteger()->setDeprecated(true), 'appKey' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                 ),

@@ -45,7 +45,7 @@ class Token extends ViewAbstract
         $sortBy = $filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID);
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_IP, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_NAME, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE]);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $builder = new Builder($this->connection);

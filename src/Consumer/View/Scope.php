@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
+use PSX\Nested\Reference;
 use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
@@ -87,6 +88,26 @@ class Scope extends ViewAbstract
                 'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
             ]),
         ];
+
+        return $builder->build($definition);
+    }
+
+    public function getEntity(string $id, ContextInterface $context)
+    {
+        $builder = new Builder($this->connection);
+
+        $definition = $builder->doEntity([$this->getTable(Table\Scope::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+            'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+            'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+            'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
+            'operations' => $builder->doCollection([$this->getTable(Table\Scope\Operation::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
+                'id' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ID),
+                'scopeId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_SCOPE_ID),
+                'operationId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_OPERATION_ID),
+                'allow' => $builder->fieldBoolean(Table\Generated\ScopeOperationTable::COLUMN_ALLOW),
+            ]),
+        ]);
 
         return $builder->build($definition);
     }

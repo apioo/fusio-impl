@@ -88,22 +88,4 @@ class TokenQueryFilterTest extends FilterTestCase
         $this->assertEquals('2014-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2014-10-20', $filter->getTo()->format('Y-m-d'));
     }
-
-    public function testCreateSearchIp()
-    {
-        $filter = TokenQueryFilter::from($this->createRequest([
-            'search' => '93.223.172.206'
-        ]));
-
-        $this->assertEquals('93.223.172.206', $filter->getIp());
-    }
-
-    public function testCreateSearchScope()
-    {
-        $filter = TokenQueryFilter::from($this->createRequest([
-            'search' => 'foo'
-        ]));
-
-        $this->assertEquals('foo', $filter->getScope());
-    }
 }
