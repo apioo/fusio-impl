@@ -59,6 +59,7 @@ class Event extends ViewAbstract
                 'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
                 'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
+                'metadata' => $builder->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
             ]),
         ];
 
@@ -75,6 +76,7 @@ class Event extends ViewAbstract
             'name' => Table\Generated\EventTable::COLUMN_NAME,
             'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
             'schema' => Table\Generated\EventTable::COLUMN_EVENT_SCHEMA,
+            'metadata' => $builder->fieldJson(Table\Generated\EventTable::COLUMN_METADATA),
         ]);
 
         return $builder->build($definition);

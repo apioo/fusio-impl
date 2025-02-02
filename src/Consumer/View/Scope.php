@@ -101,12 +101,6 @@ class Scope extends ViewAbstract
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
-            'operations' => $builder->doCollection([$this->getTable(Table\Scope\Operation::class), 'findByScopeId'], [new Reference('id'), 0, 1024], [
-                'id' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_ID),
-                'scopeId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_SCOPE_ID),
-                'operationId' => $builder->fieldInteger(Table\Generated\ScopeOperationTable::COLUMN_OPERATION_ID),
-                'allow' => $builder->fieldBoolean(Table\Generated\ScopeOperationTable::COLUMN_ALLOW),
-            ]),
         ]);
 
         return $builder->build($definition);

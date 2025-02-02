@@ -50,7 +50,10 @@ class CollectionTest extends DbTestCase
             "id": 56,
             "status": 1,
             "name": "foo-event",
-            "description": "Foo event description"
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -79,7 +82,10 @@ JSON;
             "id": 56,
             "status": 1,
             "name": "foo-event",
-            "description": "Foo event description"
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
