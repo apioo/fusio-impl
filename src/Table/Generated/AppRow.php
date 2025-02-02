@@ -15,95 +15,95 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $appSecret = null;
     private ?string $metadata = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setUserId(int $userId) : void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : int
+    public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setUrl(string $url) : void
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
-    public function getUrl() : string
+    public function getUrl(): string
     {
         return $this->url ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "url" was provided');
     }
-    public function setParameters(?string $parameters) : void
+    public function setParameters(?string $parameters): void
     {
         $this->parameters = $parameters;
     }
-    public function getParameters() : ?string
+    public function getParameters(): ?string
     {
         return $this->parameters;
     }
-    public function setAppKey(string $appKey) : void
+    public function setAppKey(string $appKey): void
     {
         $this->appKey = $appKey;
     }
-    public function getAppKey() : string
+    public function getAppKey(): string
     {
         return $this->appKey ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_key" was provided');
     }
-    public function setAppSecret(string $appSecret) : void
+    public function setAppSecret(string $appSecret): void
     {
         $this->appSecret = $appSecret;
     }
-    public function getAppSecret() : string
+    public function getAppSecret(): string
     {
         return $this->appSecret ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_secret" was provided');
     }
-    public function setMetadata(?string $metadata) : void
+    public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    public function getMetadata() : ?string
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    public function setDate(\PSX\DateTime\LocalDateTime $date) : void
+    public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    public function getDate() : \PSX\DateTime\LocalDateTime
+    public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -120,11 +120,11 @@ class AppRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

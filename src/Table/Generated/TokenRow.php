@@ -17,111 +17,111 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $ip = null;
     private ?\PSX\DateTime\LocalDateTime $expire = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setCategoryId(int $categoryId) : void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
-    public function getCategoryId() : int
+    public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setAppId(?int $appId) : void
+    public function setAppId(?int $appId): void
     {
         $this->appId = $appId;
     }
-    public function getAppId() : ?int
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
-    public function setUserId(int $userId) : void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : int
+    public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setName(?string $name) : void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    public function setToken(string $token) : void
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
-    public function getToken() : string
+    public function getToken(): string
     {
         return $this->token ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "token" was provided');
     }
-    public function setRefresh(?string $refresh) : void
+    public function setRefresh(?string $refresh): void
     {
         $this->refresh = $refresh;
     }
-    public function getRefresh() : ?string
+    public function getRefresh(): ?string
     {
         return $this->refresh;
     }
-    public function setScope(string $scope) : void
+    public function setScope(string $scope): void
     {
         $this->scope = $scope;
     }
-    public function getScope() : string
+    public function getScope(): string
     {
         return $this->scope ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope" was provided');
     }
-    public function setIp(string $ip) : void
+    public function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
-    public function getIp() : string
+    public function getIp(): string
     {
         return $this->ip ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ip" was provided');
     }
-    public function setExpire(?\PSX\DateTime\LocalDateTime $expire) : void
+    public function setExpire(?\PSX\DateTime\LocalDateTime $expire): void
     {
         $this->expire = $expire;
     }
-    public function getExpire() : ?\PSX\DateTime\LocalDateTime
+    public function getExpire(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->expire;
     }
-    public function setDate(\PSX\DateTime\LocalDateTime $date) : void
+    public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    public function getDate() : \PSX\DateTime\LocalDateTime
+    public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -140,11 +140,11 @@ class TokenRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

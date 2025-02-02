@@ -7,31 +7,31 @@ class RoleScopeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $id = null;
     private ?int $roleId = null;
     private ?int $scopeId = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setRoleId(int $roleId) : void
+    public function setRoleId(int $roleId): void
     {
         $this->roleId = $roleId;
     }
-    public function getRoleId() : int
+    public function getRoleId(): int
     {
         return $this->roleId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "role_id" was provided');
     }
-    public function setScopeId(int $scopeId) : void
+    public function setScopeId(int $scopeId): void
     {
         $this->scopeId = $scopeId;
     }
-    public function getScopeId() : int
+    public function getScopeId(): int
     {
         return $this->scopeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope_id" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -40,11 +40,11 @@ class RoleScopeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('scope_id', $this->scopeId);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

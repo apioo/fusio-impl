@@ -14,87 +14,87 @@ class AuditRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $message = null;
     private ?string $content = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setAppId(int $appId) : void
+    public function setAppId(int $appId): void
     {
         $this->appId = $appId;
     }
-    public function getAppId() : int
+    public function getAppId(): int
     {
         return $this->appId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_id" was provided');
     }
-    public function setUserId(int $userId) : void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : int
+    public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    public function setRefId(?int $refId) : void
+    public function setRefId(?int $refId): void
     {
         $this->refId = $refId;
     }
-    public function getRefId() : ?int
+    public function getRefId(): ?int
     {
         return $this->refId;
     }
-    public function setEvent(string $event) : void
+    public function setEvent(string $event): void
     {
         $this->event = $event;
     }
-    public function getEvent() : string
+    public function getEvent(): string
     {
         return $this->event ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "event" was provided');
     }
-    public function setIp(string $ip) : void
+    public function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
-    public function getIp() : string
+    public function getIp(): string
     {
         return $this->ip ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ip" was provided');
     }
-    public function setMessage(string $message) : void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->message ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "message" was provided');
     }
-    public function setContent(?string $content) : void
+    public function setContent(?string $content): void
     {
         $this->content = $content;
     }
-    public function getContent() : ?string
+    public function getContent(): ?string
     {
         return $this->content;
     }
-    public function setDate(\PSX\DateTime\LocalDateTime $date) : void
+    public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    public function getDate() : \PSX\DateTime\LocalDateTime
+    public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -110,11 +110,11 @@ class AuditRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

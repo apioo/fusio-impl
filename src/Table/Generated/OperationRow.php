@@ -23,159 +23,159 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $action = null;
     private ?int $costs = null;
     private ?string $metadata = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setCategoryId(int $categoryId) : void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
-    public function getCategoryId() : int
+    public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setActive(int $active) : void
+    public function setActive(int $active): void
     {
         $this->active = $active;
     }
-    public function getActive() : int
+    public function getActive(): int
     {
         return $this->active ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "active" was provided');
     }
-    public function setPublic(int $public) : void
+    public function setPublic(int $public): void
     {
         $this->public = $public;
     }
-    public function getPublic() : int
+    public function getPublic(): int
     {
         return $this->public ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "public" was provided');
     }
-    public function setStability(int $stability) : void
+    public function setStability(int $stability): void
     {
         $this->stability = $stability;
     }
-    public function getStability() : int
+    public function getStability(): int
     {
         return $this->stability ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "stability" was provided');
     }
-    public function setDescription(?string $description) : void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
-    public function setHttpMethod(string $httpMethod) : void
+    public function setHttpMethod(string $httpMethod): void
     {
         $this->httpMethod = $httpMethod;
     }
-    public function getHttpMethod() : string
+    public function getHttpMethod(): string
     {
         return $this->httpMethod ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "http_method" was provided');
     }
-    public function setHttpPath(string $httpPath) : void
+    public function setHttpPath(string $httpPath): void
     {
         $this->httpPath = $httpPath;
     }
-    public function getHttpPath() : string
+    public function getHttpPath(): string
     {
         return $this->httpPath ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "http_path" was provided');
     }
-    public function setHttpCode(int $httpCode) : void
+    public function setHttpCode(int $httpCode): void
     {
         $this->httpCode = $httpCode;
     }
-    public function getHttpCode() : int
+    public function getHttpCode(): int
     {
         return $this->httpCode ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "http_code" was provided');
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setParameters(?string $parameters) : void
+    public function setParameters(?string $parameters): void
     {
         $this->parameters = $parameters;
     }
-    public function getParameters() : ?string
+    public function getParameters(): ?string
     {
         return $this->parameters;
     }
-    public function setIncoming(?string $incoming) : void
+    public function setIncoming(?string $incoming): void
     {
         $this->incoming = $incoming;
     }
-    public function getIncoming() : ?string
+    public function getIncoming(): ?string
     {
         return $this->incoming;
     }
-    public function setOutgoing(string $outgoing) : void
+    public function setOutgoing(string $outgoing): void
     {
         $this->outgoing = $outgoing;
     }
-    public function getOutgoing() : string
+    public function getOutgoing(): string
     {
         return $this->outgoing ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "outgoing" was provided');
     }
-    public function setThrows(?string $throws) : void
+    public function setThrows(?string $throws): void
     {
         $this->throws = $throws;
     }
-    public function getThrows() : ?string
+    public function getThrows(): ?string
     {
         return $this->throws;
     }
-    public function setAction(string $action) : void
+    public function setAction(string $action): void
     {
         $this->action = $action;
     }
-    public function getAction() : string
+    public function getAction(): string
     {
         return $this->action ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "action" was provided');
     }
-    public function setCosts(?int $costs) : void
+    public function setCosts(?int $costs): void
     {
         $this->costs = $costs;
     }
-    public function getCosts() : ?int
+    public function getCosts(): ?int
     {
         return $this->costs;
     }
-    public function setMetadata(?string $metadata) : void
+    public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    public function getMetadata() : ?string
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -200,11 +200,11 @@ class OperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

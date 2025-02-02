@@ -9,47 +9,47 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
     private ?string $state = null;
     private ?string $redirectUri = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setIdentityId(int $identityId) : void
+    public function setIdentityId(int $identityId): void
     {
         $this->identityId = $identityId;
     }
-    public function getIdentityId() : int
+    public function getIdentityId(): int
     {
         return $this->identityId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "identity_id" was provided');
     }
-    public function setState(string $state) : void
+    public function setState(string $state): void
     {
         $this->state = $state;
     }
-    public function getState() : string
+    public function getState(): string
     {
         return $this->state ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "state" was provided');
     }
-    public function setRedirectUri(?string $redirectUri) : void
+    public function setRedirectUri(?string $redirectUri): void
     {
         $this->redirectUri = $redirectUri;
     }
-    public function getRedirectUri() : ?string
+    public function getRedirectUri(): ?string
     {
         return $this->redirectUri;
     }
-    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -60,11 +60,11 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

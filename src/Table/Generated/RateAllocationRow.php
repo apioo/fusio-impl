@@ -11,63 +11,63 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
     private ?int $userId = null;
     private ?int $planId = null;
     private ?int $authenticated = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setRateId(int $rateId) : void
+    public function setRateId(int $rateId): void
     {
         $this->rateId = $rateId;
     }
-    public function getRateId() : int
+    public function getRateId(): int
     {
         return $this->rateId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "rate_id" was provided');
     }
-    public function setOperationId(?int $operationId) : void
+    public function setOperationId(?int $operationId): void
     {
         $this->operationId = $operationId;
     }
-    public function getOperationId() : ?int
+    public function getOperationId(): ?int
     {
         return $this->operationId;
     }
-    public function setAppId(?int $appId) : void
+    public function setAppId(?int $appId): void
     {
         $this->appId = $appId;
     }
-    public function getAppId() : ?int
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
-    public function setUserId(?int $userId) : void
+    public function setUserId(?int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : ?int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
-    public function setPlanId(?int $planId) : void
+    public function setPlanId(?int $planId): void
     {
         $this->planId = $planId;
     }
-    public function getPlanId() : ?int
+    public function getPlanId(): ?int
     {
         return $this->planId;
     }
-    public function setAuthenticated(?int $authenticated) : void
+    public function setAuthenticated(?int $authenticated): void
     {
         $this->authenticated = $authenticated;
     }
-    public function getAuthenticated() : ?int
+    public function getAuthenticated(): ?int
     {
         return $this->authenticated;
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -80,11 +80,11 @@ class RateAllocationRow implements \JsonSerializable, \PSX\Record\RecordableInte
         $record->put('authenticated', $this->authenticated);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

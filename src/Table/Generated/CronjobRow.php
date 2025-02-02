@@ -14,87 +14,87 @@ class CronjobRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?\PSX\DateTime\LocalDateTime $executeDate = null;
     private ?int $exitCode = null;
     private ?string $metadata = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setCategoryId(int $categoryId) : void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
-    public function getCategoryId() : int
+    public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setCron(string $cron) : void
+    public function setCron(string $cron): void
     {
         $this->cron = $cron;
     }
-    public function getCron() : string
+    public function getCron(): string
     {
         return $this->cron ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "cron" was provided');
     }
-    public function setAction(?string $action) : void
+    public function setAction(?string $action): void
     {
         $this->action = $action;
     }
-    public function getAction() : ?string
+    public function getAction(): ?string
     {
         return $this->action;
     }
-    public function setExecuteDate(?\PSX\DateTime\LocalDateTime $executeDate) : void
+    public function setExecuteDate(?\PSX\DateTime\LocalDateTime $executeDate): void
     {
         $this->executeDate = $executeDate;
     }
-    public function getExecuteDate() : ?\PSX\DateTime\LocalDateTime
+    public function getExecuteDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->executeDate;
     }
-    public function setExitCode(?int $exitCode) : void
+    public function setExitCode(?int $exitCode): void
     {
         $this->exitCode = $exitCode;
     }
-    public function getExitCode() : ?int
+    public function getExitCode(): ?int
     {
         return $this->exitCode;
     }
-    public function setMetadata(?string $metadata) : void
+    public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    public function getMetadata() : ?string
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -110,11 +110,11 @@ class CronjobRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

@@ -14,87 +14,87 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $config = null;
     private ?string $metadata = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setCategoryId(int $categoryId) : void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
-    public function getCategoryId() : int
+    public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setClass(string $class) : void
+    public function setClass(string $class): void
     {
         $this->class = $class;
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "class" was provided');
     }
-    public function setAsync(bool $async) : void
+    public function setAsync(bool $async): void
     {
         $this->async = $async;
     }
-    public function getAsync() : bool
+    public function getAsync(): bool
     {
         return $this->async ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "async" was provided');
     }
-    public function setConfig(?string $config) : void
+    public function setConfig(?string $config): void
     {
         $this->config = $config;
     }
-    public function getConfig() : ?string
+    public function getConfig(): ?string
     {
         return $this->config;
     }
-    public function setMetadata(?string $metadata) : void
+    public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    public function getMetadata() : ?string
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    public function setDate(\PSX\DateTime\LocalDateTime $date) : void
+    public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    public function getDate() : \PSX\DateTime\LocalDateTime
+    public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -110,11 +110,11 @@ class ActionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

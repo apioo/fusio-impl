@@ -18,119 +18,119 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $body = null;
     private ?int $executionTime = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setCategoryId(int $categoryId) : void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
-    public function getCategoryId() : int
+    public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setOperationId(?int $operationId) : void
+    public function setOperationId(?int $operationId): void
     {
         $this->operationId = $operationId;
     }
-    public function getOperationId() : ?int
+    public function getOperationId(): ?int
     {
         return $this->operationId;
     }
-    public function setAppId(?int $appId) : void
+    public function setAppId(?int $appId): void
     {
         $this->appId = $appId;
     }
-    public function getAppId() : ?int
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
-    public function setUserId(?int $userId) : void
+    public function setUserId(?int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : ?int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
-    public function setIp(string $ip) : void
+    public function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
-    public function getIp() : string
+    public function getIp(): string
     {
         return $this->ip ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ip" was provided');
     }
-    public function setUserAgent(string $userAgent) : void
+    public function setUserAgent(string $userAgent): void
     {
         $this->userAgent = $userAgent;
     }
-    public function getUserAgent() : string
+    public function getUserAgent(): string
     {
         return $this->userAgent ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_agent" was provided');
     }
-    public function setMethod(string $method) : void
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "method" was provided');
     }
-    public function setPath(string $path) : void
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
-    public function getPath() : string
+    public function getPath(): string
     {
         return $this->path ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "path" was provided');
     }
-    public function setHeader(string $header) : void
+    public function setHeader(string $header): void
     {
         $this->header = $header;
     }
-    public function getHeader() : string
+    public function getHeader(): string
     {
         return $this->header ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "header" was provided');
     }
-    public function setBody(?string $body) : void
+    public function setBody(?string $body): void
     {
         $this->body = $body;
     }
-    public function getBody() : ?string
+    public function getBody(): ?string
     {
         return $this->body;
     }
-    public function setExecutionTime(?int $executionTime) : void
+    public function setExecutionTime(?int $executionTime): void
     {
         $this->executionTime = $executionTime;
     }
-    public function getExecutionTime() : ?int
+    public function getExecutionTime(): ?int
     {
         return $this->executionTime;
     }
-    public function setDate(\PSX\DateTime\LocalDateTime $date) : void
+    public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    public function getDate() : \PSX\DateTime\LocalDateTime
+    public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -150,11 +150,11 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

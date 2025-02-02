@@ -11,63 +11,63 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $file = null;
     private ?int $line = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setLogId(int $logId) : void
+    public function setLogId(int $logId): void
     {
         $this->logId = $logId;
     }
-    public function getLogId() : int
+    public function getLogId(): int
     {
         return $this->logId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "log_id" was provided');
     }
-    public function setMessage(string $message) : void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->message ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "message" was provided');
     }
-    public function setTrace(string $trace) : void
+    public function setTrace(string $trace): void
     {
         $this->trace = $trace;
     }
-    public function getTrace() : string
+    public function getTrace(): string
     {
         return $this->trace ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "trace" was provided');
     }
-    public function setFile(string $file) : void
+    public function setFile(string $file): void
     {
         $this->file = $file;
     }
-    public function getFile() : string
+    public function getFile(): string
     {
         return $this->file ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "file" was provided');
     }
-    public function setLine(int $line) : void
+    public function setLine(int $line): void
     {
         $this->line = $line;
     }
-    public function getLine() : int
+    public function getLine(): int
     {
         return $this->line ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "line" was provided');
     }
-    public function setInsertDate(?\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(?\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : ?\PSX\DateTime\LocalDateTime
+    public function getInsertDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->insertDate;
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -80,11 +80,11 @@ class LogErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

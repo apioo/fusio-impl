@@ -12,71 +12,71 @@ class WebhookResponseRow implements \JsonSerializable, \PSX\Record\RecordableInt
     private ?string $body = null;
     private ?\PSX\DateTime\LocalDateTime $executeDate = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setWebhookId(int $webhookId) : void
+    public function setWebhookId(int $webhookId): void
     {
         $this->webhookId = $webhookId;
     }
-    public function getWebhookId() : int
+    public function getWebhookId(): int
     {
         return $this->webhookId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "webhook_id" was provided');
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setAttempts(int $attempts) : void
+    public function setAttempts(int $attempts): void
     {
         $this->attempts = $attempts;
     }
-    public function getAttempts() : int
+    public function getAttempts(): int
     {
         return $this->attempts ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "attempts" was provided');
     }
-    public function setCode(?int $code) : void
+    public function setCode(?int $code): void
     {
         $this->code = $code;
     }
-    public function getCode() : ?int
+    public function getCode(): ?int
     {
         return $this->code;
     }
-    public function setBody(?string $body) : void
+    public function setBody(?string $body): void
     {
         $this->body = $body;
     }
-    public function getBody() : ?string
+    public function getBody(): ?string
     {
         return $this->body;
     }
-    public function setExecuteDate(?\PSX\DateTime\LocalDateTime $executeDate) : void
+    public function setExecuteDate(?\PSX\DateTime\LocalDateTime $executeDate): void
     {
         $this->executeDate = $executeDate;
     }
-    public function getExecuteDate() : ?\PSX\DateTime\LocalDateTime
+    public function getExecuteDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->executeDate;
     }
-    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -90,11 +90,11 @@ class WebhookResponseRow implements \JsonSerializable, \PSX\Record\RecordableInt
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

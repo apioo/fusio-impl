@@ -15,95 +15,95 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $config = null;
     private ?bool $allowCreate = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setAppId(int $appId) : void
+    public function setAppId(int $appId): void
     {
         $this->appId = $appId;
     }
-    public function getAppId() : int
+    public function getAppId(): int
     {
         return $this->appId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_id" was provided');
     }
-    public function setRoleId(?int $roleId) : void
+    public function setRoleId(?int $roleId): void
     {
         $this->roleId = $roleId;
     }
-    public function getRoleId() : ?int
+    public function getRoleId(): ?int
     {
         return $this->roleId;
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setIcon(string $icon) : void
+    public function setIcon(string $icon): void
     {
         $this->icon = $icon;
     }
-    public function getIcon() : string
+    public function getIcon(): string
     {
         return $this->icon ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "icon" was provided');
     }
-    public function setClass(string $class) : void
+    public function setClass(string $class): void
     {
         $this->class = $class;
     }
-    public function getClass() : string
+    public function getClass(): string
     {
         return $this->class ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "class" was provided');
     }
-    public function setConfig(?string $config) : void
+    public function setConfig(?string $config): void
     {
         $this->config = $config;
     }
-    public function getConfig() : ?string
+    public function getConfig(): ?string
     {
         return $this->config;
     }
-    public function setAllowCreate(bool $allowCreate) : void
+    public function setAllowCreate(bool $allowCreate): void
     {
         $this->allowCreate = $allowCreate;
     }
-    public function getAllowCreate() : bool
+    public function getAllowCreate(): bool
     {
         return $this->allowCreate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "allow_create" was provided');
     }
-    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -120,11 +120,11 @@ class IdentityRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

@@ -14,87 +14,87 @@ class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
     private ?\PSX\DateTime\LocalDateTime $periodStart = null;
     private ?\PSX\DateTime\LocalDateTime $periodEnd = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setUserId(int $userId) : void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : int
+    public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    public function setPlanId(int $planId) : void
+    public function setPlanId(int $planId): void
     {
         $this->planId = $planId;
     }
-    public function getPlanId() : int
+    public function getPlanId(): int
     {
         return $this->planId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "plan_id" was provided');
     }
-    public function setTransactionId(string $transactionId) : void
+    public function setTransactionId(string $transactionId): void
     {
         $this->transactionId = $transactionId;
     }
-    public function getTransactionId() : string
+    public function getTransactionId(): string
     {
         return $this->transactionId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "transaction_id" was provided');
     }
-    public function setAmount(int $amount) : void
+    public function setAmount(int $amount): void
     {
         $this->amount = $amount;
     }
-    public function getAmount() : int
+    public function getAmount(): int
     {
         return $this->amount ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "amount" was provided');
     }
-    public function setPoints(int $points) : void
+    public function setPoints(int $points): void
     {
         $this->points = $points;
     }
-    public function getPoints() : int
+    public function getPoints(): int
     {
         return $this->points ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "points" was provided');
     }
-    public function setPeriodStart(?\PSX\DateTime\LocalDateTime $periodStart) : void
+    public function setPeriodStart(?\PSX\DateTime\LocalDateTime $periodStart): void
     {
         $this->periodStart = $periodStart;
     }
-    public function getPeriodStart() : ?\PSX\DateTime\LocalDateTime
+    public function getPeriodStart(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->periodStart;
     }
-    public function setPeriodEnd(?\PSX\DateTime\LocalDateTime $periodEnd) : void
+    public function setPeriodEnd(?\PSX\DateTime\LocalDateTime $periodEnd): void
     {
         $this->periodEnd = $periodEnd;
     }
-    public function getPeriodEnd() : ?\PSX\DateTime\LocalDateTime
+    public function getPeriodEnd(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->periodEnd;
     }
-    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate) : void
+    public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    public function getInsertDate() : \PSX\DateTime\LocalDateTime
+    public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -110,11 +110,11 @@ class TransactionRow implements \JsonSerializable, \PSX\Record\RecordableInterfa
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;

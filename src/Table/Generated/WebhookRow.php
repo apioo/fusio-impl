@@ -11,63 +11,63 @@ class WebhookRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $status = null;
     private ?string $name = null;
     private ?string $endpoint = null;
-    public function setId(int $id) : void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    public function setEventId(int $eventId) : void
+    public function setEventId(int $eventId): void
     {
         $this->eventId = $eventId;
     }
-    public function getEventId() : int
+    public function getEventId(): int
     {
         return $this->eventId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "event_id" was provided');
     }
-    public function setUserId(int $userId) : void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    public function getUserId() : int
+    public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    public function setTenantId(?string $tenantId) : void
+    public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    public function getTenantId() : ?string
+    public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    public function setEndpoint(string $endpoint) : void
+    public function setEndpoint(string $endpoint): void
     {
         $this->endpoint = $endpoint;
     }
-    public function getEndpoint() : string
+    public function getEndpoint(): string
     {
         return $this->endpoint ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "endpoint" was provided');
     }
-    public function toRecord() : \PSX\Record\RecordInterface
+    public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
         $record = new \PSX\Record\Record();
@@ -80,11 +80,11 @@ class WebhookRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('endpoint', $this->endpoint);
         return $record;
     }
-    public function jsonSerialize() : object
+    public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    public static function from(array|\ArrayAccess $data) : self
+    public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
