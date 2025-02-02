@@ -41,7 +41,7 @@ class Plan extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\PlanTable::COLUMN_PRICE);
+        $sortBy = Table\Generated\PlanColumn::tryFrom($filter->getSortBy(Table\Generated\PlanTable::COLUMN_PRICE) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PlanTable::COLUMN_NAME]);

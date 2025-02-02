@@ -75,7 +75,7 @@ class GetAbout implements ActionInterface
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $categories = $this->categoryTable->findAll($condition, 0, 1024, Table\Generated\CategoryTable::COLUMN_NAME, OrderBy::ASC);
+        $categories = $this->categoryTable->findAll($condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC);
 
         $result = [];
         foreach ($categories as $row) {
@@ -95,7 +95,7 @@ class GetAbout implements ActionInterface
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $defaultCategory->getId());
-        $scopes = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeTable::COLUMN_NAME, OrderBy::ASC);
+        $scopes = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC);
 
         $result = [];
         foreach ($scopes as $row) {

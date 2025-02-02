@@ -72,7 +72,7 @@ class Get implements ActionInterface
         ];
 
         foreach ($env as $key => $value) {
-            $content = str_replace(['{' . $key . '}'], [$value], $content);
+            $content = str_replace(['{' . $key . '}'], [(string) $value], $content);
         }
 
         return $content;

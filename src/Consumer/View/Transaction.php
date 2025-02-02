@@ -42,7 +42,7 @@ class Transaction extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\TransactionTable::COLUMN_ID);
+        $sortBy = Table\Generated\TransactionColumn::tryFrom($filter->getSortBy(Table\Generated\TransactionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID]);

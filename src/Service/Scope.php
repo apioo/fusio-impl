@@ -30,6 +30,7 @@ use Fusio\Model\Backend\ScopeOperation;
 use Fusio\Model\Backend\ScopeUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 use PSX\Sql\Condition;
 
 /**
@@ -73,7 +74,7 @@ class Scope
             $row->setStatus(Table\Scope::STATUS_ACTIVE);
             $row->setName($scope->getName());
             $row->setDescription($scope->getDescription() ?? '');
-            $row->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
+            $row->setMetadata($scope->getMetadata() !== null ? Parser::encode($scope->getMetadata()) : null);
             $this->scopeTable->create($row);
 
             $scopeId = $this->scopeTable->getLastInsertId();
@@ -140,7 +141,7 @@ class Scope
 
             $existing->setName($scope->getName());
             $existing->setDescription($scope->getDescription() ?? '');
-            $existing->setMetadata($scope->getMetadata() !== null ? json_encode($scope->getMetadata()) : null);
+            $existing->setMetadata($scope->getMetadata() !== null ? Parser::encode($scope->getMetadata()) : null);
             $this->scopeTable->update($existing);
 
             $this->scopeOperationTable->deleteAllFromScope($existing->getId());

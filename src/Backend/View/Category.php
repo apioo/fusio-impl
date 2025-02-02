@@ -40,7 +40,7 @@ class Category extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\CategoryTable::COLUMN_NAME);
+        $sortBy = Table\Generated\CategoryColumn::tryFrom($filter->getSortBy(Table\Generated\CategoryTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\CategoryTable::COLUMN_NAME]);

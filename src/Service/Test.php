@@ -24,6 +24,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -53,7 +54,7 @@ class Test
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getCategoryId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);
-        $operations = $this->operationTable->findAll($condition, 0, 1024, Table\Generated\OperationTable::COLUMN_NAME, OrderBy::ASC);
+        $operations = $this->operationTable->findAll($condition, 0, 1024, Table\Generated\OperationColumn::NAME, OrderBy::ASC);
 
         $ids = [];
         foreach ($operations as $operation) {
@@ -114,7 +115,7 @@ class Test
         $existing->setUriFragments($config?->getUriFragments());
         $existing->setParameters($config?->getParameters());
         $existing->setHeaders($config?->getHeaders());
-        $existing->setBody(isset($body) ? \json_encode($body, JSON_PRETTY_PRINT) : '');
+        $existing->setBody(isset($body) ? Parser::encode($body, JSON_PRETTY_PRINT) : '');
         $this->testTable->update($existing);
 
         return $existing->getId();

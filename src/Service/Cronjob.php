@@ -29,6 +29,7 @@ use Fusio\Model\Backend\CronjobCreate;
 use Fusio\Model\Backend\CronjobUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Cronjob
@@ -65,7 +66,7 @@ class Cronjob
             $row->setName($cronjob->getName());
             $row->setCron($cronjob->getCron());
             $row->setAction($cronjob->getAction());
-            $row->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : null);
+            $row->setMetadata($cronjob->getMetadata() !== null ? Parser::encode($cronjob->getMetadata()) : null);
             $this->cronjobTable->create($row);
 
             $cronjobId = $this->cronjobTable->getLastInsertId();
@@ -99,7 +100,7 @@ class Cronjob
         $existing->setName($cronjob->getName() ?? $existing->getName());
         $existing->setCron($cronjob->getCron() ?? $existing->getCron());
         $existing->setAction($cronjob->getAction() ?? $existing->getAction());
-        $existing->setMetadata($cronjob->getMetadata() !== null ? json_encode($cronjob->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($cronjob->getMetadata() !== null ? Parser::encode($cronjob->getMetadata()) : $existing->getMetadata());
         $this->cronjobTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));

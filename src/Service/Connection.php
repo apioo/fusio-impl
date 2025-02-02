@@ -39,6 +39,7 @@ use Fusio\Model\Backend\ConnectionCreate;
 use Fusio\Model\Backend\ConnectionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Connection
@@ -101,7 +102,7 @@ class Connection
             $row->setName($name);
             $row->setClass(ClassName::serialize($class));
             $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
-            $row->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : null);
+            $row->setMetadata($connection->getMetadata() !== null ? Parser::encode($connection->getMetadata()) : null);
             $this->connectionTable->create($row);
 
             $connectionId = $this->connectionTable->getLastInsertId();
@@ -150,7 +151,7 @@ class Connection
 
         // update connection
         $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
-        $existing->setMetadata($connection->getMetadata() !== null ? json_encode($connection->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($connection->getMetadata() !== null ? Parser::encode($connection->getMetadata()) : $existing->getMetadata());
         $this->connectionTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));

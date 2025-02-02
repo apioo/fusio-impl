@@ -43,7 +43,7 @@ class Audit extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\AuditTable::COLUMN_ID);
+        $sortBy = Table\Generated\AuditColumn::tryFrom($filter->getSortBy(Table\Generated\AuditTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AuditTable::COLUMN_MESSAGE, DateQueryFilter::COLUMN_DATE => Table\Generated\AuditTable::COLUMN_DATE]);

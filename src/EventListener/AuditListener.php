@@ -25,6 +25,7 @@ use Fusio\Impl\Event;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\UserCreate;
 use PSX\DateTime\LocalDateTime;
+use PSX\Json\Parser;
 use PSX\Record\Record;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -510,7 +511,7 @@ class AuditListener implements EventSubscriberInterface
             $content->setPassword('******');
         }
 
-        return json_encode($content);
+        return Parser::encode($content);
     }
 
     public static function getSubscribedEvents(): array

@@ -40,7 +40,7 @@ class Schema extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\SchemaTable::COLUMN_ID);
+        $sortBy = Table\Generated\SchemaColumn::tryFrom($filter->getSortBy(Table\Generated\SchemaTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\SchemaTable::COLUMN_NAME]);

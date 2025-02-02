@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\SchemaRow;
+use Fusio\Impl\Table\Generated\ScopeColumn;
 use Fusio\Impl\Table\Generated\ScopeRow;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -129,7 +130,7 @@ class Scope extends Generated\ScopeTable
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
 
-        $result = $this->findAll($condition, 0, 1024, self::COLUMN_NAME, OrderBy::ASC);
+        $result = $this->findAll($condition, 0, 1024, ScopeColumn::NAME, OrderBy::ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row->getName()] = $row->getDescription();

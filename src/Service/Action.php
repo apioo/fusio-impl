@@ -36,6 +36,7 @@ use Fusio\Model\Backend\ActionUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Action
@@ -88,7 +89,7 @@ class Action
             $row->setClass(ClassName::serialize($class));
             $row->setAsync($action->getAsync() ?? false);
             $row->setConfig(self::serializeConfig($config));
-            $row->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : null);
+            $row->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
             $this->actionTable->create($row);
 
@@ -138,7 +139,7 @@ class Action
         $existing->setClass(ClassName::serialize($class));
         $existing->setAsync($action->getAsync() ?? $existing->getAsync());
         $existing->setConfig(self::serializeConfig($config));
-        $existing->setMetadata($action->getMetadata() !== null ? json_encode($action->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : $existing->getMetadata());
         $existing->setDate(LocalDateTime::now());
         $this->actionTable->update($existing);
 
@@ -193,7 +194,7 @@ class Action
             return null;
         }
 
-        return \json_encode($config);
+        return Parser::encode($config);
     }
 
     public static function unserializeConfig(?string $data): ?array
@@ -202,6 +203,6 @@ class Action
             return null;
         }
 
-        return \json_decode($data, true);
+        return Parser::decode($data, true);
     }
 }

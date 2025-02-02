@@ -41,7 +41,7 @@ class User extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\UserTable::COLUMN_ID);
+        $sortBy = Table\Generated\UserColumn::tryFrom($filter->getSortBy(Table\Generated\UserTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\UserTable::COLUMN_NAME]);

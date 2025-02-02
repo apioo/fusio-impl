@@ -42,7 +42,7 @@ class Log extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\LogTable::COLUMN_ID);
+        $sortBy = Table\Generated\LogColumn::tryFrom($filter->getSortBy(Table\Generated\LogTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogTable::COLUMN_PATH]);

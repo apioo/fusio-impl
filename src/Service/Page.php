@@ -31,6 +31,7 @@ use Fusio\Model\Backend\PageUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Page
@@ -69,7 +70,7 @@ class Page
             $row->setTitle($title);
             $row->setSlug($slug);
             $row->setContent($page->getContent());
-            $row->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : null);
+            $row->setMetadata($page->getMetadata() !== null ? Parser::encode($page->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
             $this->pageTable->create($row);
 
@@ -109,7 +110,7 @@ class Page
         $existing->setTitle($title ?? $existing->getTitle());
         $existing->setSlug($slug ?? $existing->getSlug());
         $existing->setContent($page->getContent() ?? $existing->getContent());
-        $existing->setMetadata($page->getMetadata() !== null ? json_encode($page->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($page->getMetadata() !== null ? Parser::encode($page->getMetadata()) : $existing->getMetadata());
         $this->pageTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($page, $existing, $context));

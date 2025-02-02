@@ -40,6 +40,7 @@ use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\OperationInterface;
 use PSX\Api\Parser;
 use PSX\Api\SpecificationInterface;
+use PSX\Json\Parser as JsonParser;
 use PSX\Schema\ContentType;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
@@ -112,14 +113,14 @@ class OpenAPI implements ProviderInterface
         if (!json_decode($schema)) {
             try {
                 $data   = Yaml::parse($schema);
-                $schema = json_encode($data);
+                $schema = JsonParser::encode($data);
             } catch (ParseException $e) {
                 // invalid YAML syntax
             }
         }
 
         // get base url
-        $data = \json_decode($schema);
+        $data = JsonParser::decode($schema);
         $baseUrl = $data->servers[0]->url ?? '';
 
         $parser = new Parser\OpenAPI($this->schemaManager);
@@ -175,7 +176,7 @@ class OpenAPI implements ProviderInterface
     private function normalizePath($path): string
     {
         $path = '/' . implode('/', array_filter(explode('/', $path)));
-        $path = preg_replace('/(\{(\w+)\})/i', ':$2', $path);
+        $path = (string) preg_replace('/(\{(\w+)\})/i', ':$2', $path);
         return $path;
     }
 

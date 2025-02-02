@@ -62,7 +62,7 @@ class Encrypter
             $data = stream_get_contents($data, -1, 0);
         }
 
-        $parts = explode('.', $data, 2);
+        $parts = explode('.', (string) $data, 2);
         if (count($parts) !== 2) {
             return [];
         }

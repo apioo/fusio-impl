@@ -41,7 +41,7 @@ class Role extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\RateTable::COLUMN_NAME);
+        $sortBy = Table\Generated\RoleColumn::tryFrom($filter->getSortBy(Table\Generated\RateTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\RoleTable::COLUMN_NAME]);

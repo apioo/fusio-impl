@@ -41,7 +41,7 @@ class Cronjob extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\CronjobTable::COLUMN_ID);
+        $sortBy = Table\Generated\CronjobColumn::tryFrom($filter->getSortBy(Table\Generated\CronjobTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\CronjobTable::COLUMN_NAME]);

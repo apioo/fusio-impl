@@ -41,7 +41,7 @@ class Action extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\ActionTable::COLUMN_ID);
+        $sortBy = Table\Generated\ActionColumn::tryFrom($filter->getSortBy(Table\Generated\ActionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ActionTable::COLUMN_NAME]);

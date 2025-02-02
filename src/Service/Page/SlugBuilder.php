@@ -36,10 +36,10 @@ class SlugBuilder
      */
     public static function build(string $title): string
     {
-        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $title);
-        $slug = preg_replace('/[^a-zA-Z0-9\/_|+ -]/', '', $slug);
+        $slug = (string) iconv('UTF-8', 'ASCII//TRANSLIT', $title);
+        $slug = (string) preg_replace('/[^a-zA-Z0-9\/_|+ -]/', '', $slug);
         $slug = strtolower(trim($slug, '-'));
-        $slug = preg_replace('/[\/_|+ -]+/', '-', $slug);
+        $slug = (string) preg_replace('/[\/_|+ -]+/', '-', $slug);
         return $slug;
     }
 }

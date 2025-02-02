@@ -42,7 +42,7 @@ class Token extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID);
+        $sortBy = Table\Generated\TokenColumn::tryFrom($filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_NAME, DateQueryFilter::COLUMN_DATE => Table\Generated\TokenTable::COLUMN_DATE]);

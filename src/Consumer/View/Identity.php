@@ -52,7 +52,7 @@ class Identity extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\IdentityTable::COLUMN_NAME);
+        $sortBy = Table\Generated\IdentityColumn::tryFrom($filter->getSortBy(Table\Generated\IdentityTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityTable::COLUMN_NAME]);

@@ -63,7 +63,7 @@ class GetOAuth2Configuration implements ActionInterface
     {
         $condition = Condition::withAnd();
         $condition->equals('category_id', 1);
-        $categories = $this->scopeTable->findAll($condition, 0, 1024, 'name', OrderBy::ASC);
+        $categories = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC);
 
         $result = [];
         foreach ($categories as $row) {

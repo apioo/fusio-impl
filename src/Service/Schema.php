@@ -31,6 +31,7 @@ use Fusio\Model\Backend\SchemaForm;
 use Fusio\Model\Backend\SchemaUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaManagerInterface;
@@ -71,7 +72,7 @@ class Schema
             $row->setName($schema->getName());
             $row->setSource($this->parseSource($schema->getSource()));
             $row->setForm($this->parseForm($schema->getForm()));
-            $row->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : null);
+            $row->setMetadata($schema->getMetadata() !== null ? Parser::encode($schema->getMetadata()) : null);
             $this->schemaTable->create($row);
 
             $schemaId = $this->schemaTable->getLastInsertId();
@@ -111,7 +112,7 @@ class Schema
             $existing->setName($schema->getName() ?? $existing->getName());
             $existing->setSource($this->parseSource($schema->getSource()) ?? $existing->getSource());
             $existing->setForm($this->parseForm($schema->getForm()) ?? $existing->getForm());
-            $existing->setMetadata($schema->getMetadata() !== null ? json_encode($schema->getMetadata()) : $existing->getMetadata());
+            $existing->setMetadata($schema->getMetadata() !== null ? Parser::encode($schema->getMetadata()) : $existing->getMetadata());
             $this->schemaTable->update($existing);
 
             // check whether we can load the schema
@@ -178,7 +179,7 @@ class Schema
             if (is_string($class)) {
                 return $class;
             } else {
-                return \json_encode($source, JSON_PRETTY_PRINT);
+                return Parser::encode($source, JSON_PRETTY_PRINT);
             }
         } else {
             return null;
@@ -188,7 +189,7 @@ class Schema
     private function parseForm(?RecordInterface $source): ?string
     {
         if ($source instanceof RecordInterface) {
-            return \json_encode($source, JSON_PRETTY_PRINT);
+            return Parser::encode($source, JSON_PRETTY_PRINT);
         } else {
             return null;
         }

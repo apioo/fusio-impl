@@ -36,6 +36,7 @@ use Fusio\Model;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 use PSX\OAuth2\AccessToken;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -309,7 +310,7 @@ class Identity
             return null;
         }
 
-        return \json_encode($config);
+        return Parser::encode($config);
     }
 
     public static function unserializeConfig(?string $data): ?array
@@ -318,6 +319,6 @@ class Identity
             return null;
         }
 
-        return \json_decode($data, true);
+        return Parser::decode($data, true);
     }
 }

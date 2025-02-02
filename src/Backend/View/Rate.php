@@ -41,7 +41,7 @@ class Rate extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\RateTable::COLUMN_PRIORITY);
+        $sortBy = Table\Generated\RateColumn::tryFrom($filter->getSortBy(Table\Generated\RateTable::COLUMN_PRIORITY) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\RateTable::COLUMN_NAME]);

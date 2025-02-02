@@ -40,7 +40,7 @@ class Page extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\PageTable::COLUMN_SLUG);
+        $sortBy = Table\Generated\PageColumn::tryFrom($filter->getSortBy(Table\Generated\PageTable::COLUMN_SLUG) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PageTable::COLUMN_TITLE]);

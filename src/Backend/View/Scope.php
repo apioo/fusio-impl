@@ -42,7 +42,7 @@ class Scope extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\ScopeTable::COLUMN_ID);
+        $sortBy = Table\Generated\ScopeColumn::tryFrom($filter->getSortBy(Table\Generated\ScopeTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ScopeTable::COLUMN_NAME]);
@@ -95,10 +95,10 @@ class Scope extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, 0, 1024, 'name', OrderBy::ASC], [
+            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC], [
                 'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,
-                'scopes' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', OrderBy::ASC], [
+                'scopes' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC], [
                     'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                     'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                     'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,

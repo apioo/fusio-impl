@@ -31,6 +31,7 @@ use Fusio\Model\Backend\AppUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * App
@@ -82,7 +83,7 @@ class App
             $row->setParameters($parameters);
             $row->setAppKey($appKey);
             $row->setAppSecret($appSecret);
-            $row->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : null);
+            $row->setMetadata($app->getMetadata() !== null ? Parser::encode($app->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
             $this->appTable->create($row);
 
@@ -134,7 +135,7 @@ class App
             $existing->setName($app->getName() ?? $existing->getName());
             $existing->setUrl($app->getUrl() ?? $existing->getUrl());
             $existing->setParameters($parameters);
-            $existing->setMetadata($app->getMetadata() !== null ? json_encode($app->getMetadata()) : $existing->getParameters());
+            $existing->setMetadata($app->getMetadata() !== null ? Parser::encode($app->getMetadata()) : $existing->getParameters());
             $this->appTable->update($existing);
 
             $scopes = $app->getScopes();

@@ -30,6 +30,7 @@ use Fusio\Model\Backend\EventCreate;
 use Fusio\Model\Backend\EventUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Event
@@ -66,7 +67,7 @@ class Event
             $row->setName($event->getName());
             $row->setDescription($event->getDescription());
             $row->setEventSchema(Scheme::wrap($event->getSchema()));
-            $row->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : null);
+            $row->setMetadata($event->getMetadata() !== null ? Parser::encode($event->getMetadata()) : null);
             $this->eventTable->create($row);
 
             $eventId = $this->eventTable->getLastInsertId();
@@ -101,7 +102,7 @@ class Event
         $existing->setName($event->getName() ?? $existing->getName());
         $existing->setDescription($event->getDescription() ?? $existing->getDescription());
         $existing->setEventSchema($event->getSchema() ?? $existing->getEventSchema());
-        $existing->setMetadata($event->getMetadata() !== null ? json_encode($event->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($event->getMetadata() !== null ? Parser::encode($event->getMetadata()) : $existing->getMetadata());
         $this->eventTable->update($existing);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));

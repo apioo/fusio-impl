@@ -2085,6 +2085,10 @@ class NewInstallation
     private static function readFile(string $file): string
     {
         $lines = file(__DIR__ . '/resources/' . $file);
+        if ($lines === false) {
+            throw new \RuntimeException('Could not read file: ' . $file);
+        }
+
         $lines = array_map('rtrim', $lines);
         return implode("\n", $lines);
     }

@@ -68,7 +68,12 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         }
 
         // check whether the code is older than 30 minutes. After that we can not exchange it for an access token
-        if (time() - strtotime($code['date']) > 60 * 30) {
+        $timestamp = strtotime($code['date']);
+        if ($timestamp === false) {
+            throw new InvalidGrantException('Provided an invalid date');
+        }
+
+        if (time() - $timestamp > 60 * 30) {
             throw new InvalidGrantException('Code is expired');
         }
 

@@ -38,6 +38,7 @@ use PSX\Api\OperationInterface;
 use PSX\Framework\Loader\RoutingParser\InvalidateableInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Operation
@@ -89,7 +90,7 @@ class Operation
             $row->setThrows($this->wrapThrows($operation->getThrows()));
             $row->setAction(ActionScheme::wrap($operation->getAction()));
             $row->setCosts($operation->getCosts());
-            $row->setMetadata($operation->getMetadata() !== null ? json_encode($operation->getMetadata()) : null);
+            $row->setMetadata($operation->getMetadata() !== null ? Parser::encode($operation->getMetadata()) : null);
             $this->operationTable->create($row);
 
             $operationId = $this->operationTable->getLastInsertId();
@@ -162,7 +163,7 @@ class Operation
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
                 $metadata = $operation->getMetadata();
                 if ($metadata !== null) {
-                    $existing->setMetadata(json_encode($metadata));
+                    $existing->setMetadata(Parser::encode($metadata));
                 }
             }
 
@@ -219,7 +220,7 @@ class Operation
             return null;
         }
 
-        return \json_encode($parameters);
+        return Parser::encode($parameters);
     }
 
     private function wrapThrows(?OperationThrows $throws): ?string
@@ -232,6 +233,6 @@ class Operation
             $throws->put($code, SchemaScheme::wrap($schema));
         }
 
-        return \json_encode($throws);
+        return Parser::encode($throws);
     }
 }

@@ -30,6 +30,7 @@ use Fusio\Model\Backend\RateCreate;
 use Fusio\Model\Backend\RateUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Rate
@@ -67,7 +68,7 @@ class Rate
             $row->setName($rate->getName());
             $row->setRateLimit($rate->getRateLimit());
             $row->setTimespan((string) $rate->getTimespan());
-            $row->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : null);
+            $row->setMetadata($rate->getMetadata() !== null ? Parser::encode($rate->getMetadata()) : null);
             $this->rateTable->create($row);
 
             $rateId = $this->rateTable->getLastInsertId();
@@ -107,7 +108,7 @@ class Rate
             $existing->setName($rate->getName() ?? $existing->getName());
             $existing->setRateLimit($rate->getRateLimit() ?? $existing->getRateLimit());
             $existing->setTimespan($rate->getTimespan() ?? $existing->getTimespan());
-            $existing->setMetadata($rate->getMetadata() !== null ? json_encode($rate->getMetadata()) : $existing->getMetadata());
+            $existing->setMetadata($rate->getMetadata() !== null ? Parser::encode($rate->getMetadata()) : $existing->getMetadata());
             $this->rateTable->update($existing);
 
             $this->handleAllocations($existing->getId(), $rate->getAllocation());

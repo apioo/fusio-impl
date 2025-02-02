@@ -32,6 +32,7 @@ use Fusio\Model\Backend\AppCreate;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
+use PSX\Json\Parser;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -166,7 +167,7 @@ class Installer implements InstallerInterface
         $zip->close();
 
         // check whether there is only a single folder inside the zip
-        $files = scandir($appDir);
+        $files = (array) scandir($appDir);
         if (count($files) === 3 && is_dir($appDir . '/' . $files[2])) {
             return $appDir . '/' . $files[2];
         } else {
@@ -176,7 +177,7 @@ class Installer implements InstallerInterface
 
     private function writeMetaFile(string $appDir, MarketplaceApp $app): void
     {
-        if (!file_put_contents($appDir . '/app.json', \json_encode($app))) {
+        if (!file_put_contents($appDir . '/app.json', Parser::encode($app))) {
             throw new MarketplaceException('Could not write app meta file');
         }
     }
@@ -212,7 +213,7 @@ class Installer implements InstallerInterface
                 continue;
             }
 
-            $content = file_get_contents($file);
+            $content = (string) file_get_contents($file);
 
             foreach ($env as $key => $value) {
                 if (is_scalar($value)) {
@@ -258,7 +259,7 @@ class Installer implements InstallerInterface
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();
         $url = $this->frameworkConfig->getAppsUrl();
-        $basePath = parse_url($url, PHP_URL_PATH);
+        $basePath = (string) parse_url($url, PHP_URL_PATH);
 
         $env = array_merge($_ENV, [
             'API_URL' => $apiUrl,

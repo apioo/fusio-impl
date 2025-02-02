@@ -41,7 +41,7 @@ class Config extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\ConfigTable::COLUMN_NAME);
+        $sortBy = Table\Generated\ConfigColumn::tryFrom($filter->getSortBy(Table\Generated\ConfigTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConfigTable::COLUMN_NAME]);

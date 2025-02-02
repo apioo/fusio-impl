@@ -29,6 +29,7 @@ use Fusio\Model\Backend\PlanCreate;
 use Fusio\Model\Backend\PlanUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Plan
@@ -75,7 +76,7 @@ class Plan
             $row->setPoints($plan->getPoints());
             $row->setPeriodType($plan->getPeriod());
             $row->setExternalId($plan->getExternalId());
-            $row->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : null);
+            $row->setMetadata($plan->getMetadata() !== null ? Parser::encode($plan->getMetadata()) : null);
             $this->planTable->create($row);
 
             $planId = $this->planTable->getLastInsertId();
@@ -123,7 +124,7 @@ class Plan
         $existing->setPoints($plan->getPoints() ?? $existing->getPoints());
         $existing->setPeriodType($plan->getPeriod() ?? $existing->getPeriodType());
         $existing->setExternalId($plan->getExternalId() ?? $existing->getExternalId());
-        $existing->setMetadata($plan->getMetadata() !== null ? json_encode($plan->getMetadata()) : $existing->getMetadata());
+        $existing->setMetadata($plan->getMetadata() !== null ? Parser::encode($plan->getMetadata()) : $existing->getMetadata());
         $this->planTable->update($existing);
 
         $scopes = $plan->getScopes();

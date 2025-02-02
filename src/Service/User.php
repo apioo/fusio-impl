@@ -36,6 +36,7 @@ use Fusio\Model\Backend\UserUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * User
@@ -88,7 +89,7 @@ class User
             $row->setEmail($user->getEmail());
             $row->setPassword($password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null);
             $row->setPoints($this->configService->getValue('points_default') ?: null);
-            $row->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $row->setMetadata($user->getMetadata() !== null ? Parser::encode($user->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
             $this->userTable->create($row);
 
@@ -207,7 +208,7 @@ class User
             $existing->setStatus($user->getStatus() ?? $existing->getStatus());
             $existing->setName($user->getName() ?? $existing->getName());
             $existing->setEmail($user->getEmail() ?? $existing->getEmail());
-            $existing->setMetadata($user->getMetadata() !== null ? json_encode($user->getMetadata()) : null);
+            $existing->setMetadata($user->getMetadata() !== null ? Parser::encode($user->getMetadata()) : null);
             $this->userTable->update($existing);
 
             $scopes = $user->getScopes();

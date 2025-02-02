@@ -43,7 +43,7 @@ class Connection extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = $filter->getSortBy(Table\Generated\ConnectionTable::COLUMN_ID);
+        $sortBy = Table\Generated\ConnectionColumn::tryFrom($filter->getSortBy(Table\Generated\ConnectionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME]);
