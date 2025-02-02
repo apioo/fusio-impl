@@ -55,7 +55,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -90,7 +89,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -125,7 +123,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -161,7 +158,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -196,7 +192,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -232,7 +227,6 @@ class LoggerTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())

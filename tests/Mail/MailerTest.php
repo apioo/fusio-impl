@@ -48,7 +48,6 @@ class MailerTest extends ControllerDbTestCase
     public function testMail()
     {
         $sender = $this->getMockBuilder(SenderInterface::class)
-            ->setMethods(['accept', 'send'])
             ->getMock();
 
         $sender->expects($this->once())

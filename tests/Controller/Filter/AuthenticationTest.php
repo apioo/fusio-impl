@@ -57,7 +57,6 @@ class AuthenticationTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->once())
@@ -90,7 +89,6 @@ class AuthenticationTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->never())
@@ -114,7 +112,6 @@ class AuthenticationTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->never())
@@ -138,7 +135,6 @@ class AuthenticationTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->never())
@@ -162,7 +158,6 @@ class AuthenticationTest extends DbTestCase
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setMethods(['handle'])
             ->getMock();
 
         $filterChain->expects($this->never())

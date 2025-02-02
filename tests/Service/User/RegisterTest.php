@@ -159,7 +159,6 @@ class RegisterTest extends DbTestCase
     {
         $captcha = $this->getMockBuilder(Service\User\Captcha::class)
             ->disableOriginalConstructor()
-            ->setMethods(['assertCaptcha'])
             ->getMock();
 
         if ($success) {
@@ -195,7 +194,6 @@ class RegisterTest extends DbTestCase
     {
         $mailer = $this->getMockBuilder(Service\User\Mailer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['sendActivationMail'])
             ->getMock();
 
         if ($send) {
