@@ -35,17 +35,13 @@ use PSX\Sql\OrderBy;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Test
+readonly class Test
 {
-    private Test\Runner $runner;
-    private Table\Operation $operationTable;
-    private Table\Test $testTable;
-
-    public function __construct(Test\Runner $runner, Table\Operation $operationTable, Table\Test $testTable)
-    {
-        $this->runner = $runner;
-        $this->operationTable = $operationTable;
-        $this->testTable = $testTable;
+    public function __construct(
+        private Test\Runner $runner,
+        private Table\Operation $operationTable,
+        private Table\Test $testTable
+    ) {
     }
 
     public function refresh(UserContext $context): void

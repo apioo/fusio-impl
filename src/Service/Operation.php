@@ -47,21 +47,15 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Operation
+readonly class Operation
 {
-    private Table\Operation $operationTable;
-    private Operation\Validator $validator;
-    private Service\Scope $scopeService;
-    private RoutingParserInterface $routingParser;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Operation $operationTable, Service\Operation\Validator $validator, Service\Scope $scopeService, RoutingParserInterface $routingParser, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->operationTable = $operationTable;
-        $this->validator = $validator;
-        $this->scopeService = $scopeService;
-        $this->routingParser = $routingParser;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Operation $operationTable,
+        private Service\Operation\Validator $validator,
+        private Service\Scope $scopeService,
+        private RoutingParserInterface $routingParser,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(OperationCreate $operation, UserContext $context): int

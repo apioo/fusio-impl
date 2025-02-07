@@ -37,19 +37,14 @@ use Symfony\Component\Console\Output\NullOutput;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Sdk
+readonly class Sdk
 {
-    private Application $console;
-    private GeneratorFactory $factory;
-    private FrameworkConfig $frameworkConfig;
-    private FilterFactoryInterface $filterFactory;
-
-    public function __construct(Application $console, GeneratorFactory $factory, FrameworkConfig $frameworkConfig, FilterFactoryInterface $filterFactory)
-    {
-        $this->console = $console;
-        $this->factory = $factory;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->filterFactory = $filterFactory;
+    public function __construct(
+        private Application $console,
+        private GeneratorFactory $factory,
+        private FrameworkConfig $frameworkConfig,
+        private FilterFactoryInterface $filterFactory
+    ) {
     }
 
     public function generate(SdkGenerate $record): string

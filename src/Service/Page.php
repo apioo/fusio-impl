@@ -40,17 +40,13 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Page
+readonly class Page
 {
-    private Table\Page $pageTable;
-    private Page\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Page $pageTable, Page\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->pageTable = $pageTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Page $pageTable,
+        private Page\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(PageCreate $page, UserContext $context): int

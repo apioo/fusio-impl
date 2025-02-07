@@ -39,17 +39,13 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Event
+readonly class Event
 {
-    private Table\Event $eventTable;
-    private Event\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Event $eventTable, Event\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventTable = $eventTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Event $eventTable,
+        private Event\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(EventCreate $event, UserContext $context): int

@@ -38,17 +38,13 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Cronjob
+readonly class Cronjob
 {
-    private Table\Cronjob $cronjobTable;
-    private Cronjob\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Cronjob $cronjobTable, Cronjob\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->cronjobTable = $cronjobTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Cronjob $cronjobTable,
+        private Cronjob\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(CronjobCreate $cronjob, UserContext $context): int

@@ -37,17 +37,13 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Webhook
+readonly class Webhook
 {
-    private Table\Webhook $webhookTable;
-    private Webhook\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Webhook $webhookTable, Webhook\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->webhookTable = $webhookTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Webhook $webhookTable,
+        private Webhook\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(WebhookCreate $webhook, UserContext $context): int

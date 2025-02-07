@@ -37,17 +37,13 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Category
+readonly class Category
 {
-    private Table\Category $categoryTable;
-    private Category\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Category $categoryTable, Category\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->categoryTable = $categoryTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Category $categoryTable,
+        private Category\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(CategoryCreate $category, UserContext $context): int

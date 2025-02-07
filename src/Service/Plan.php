@@ -38,21 +38,15 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Plan
+readonly class Plan
 {
-    private Table\Plan $planTable;
-    private Table\Scope $scopeTable;
-    private Table\Plan\Scope $planScopeTable;
-    private Plan\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Plan $planTable, Table\Scope $scopeTable, Table\Plan\Scope $planScopeTable, Plan\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->planTable = $planTable;
-        $this->scopeTable = $scopeTable;
-        $this->planScopeTable = $planScopeTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Plan $planTable,
+        private Table\Scope $scopeTable,
+        private Table\Plan\Scope $planScopeTable,
+        private Plan\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(PlanCreate $plan, UserContext $context): int

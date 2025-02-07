@@ -40,19 +40,14 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Generator
+readonly class Generator
 {
-    private Connection $connection;
-    private GeneratorProvider $generatorProvider;
-    private EntityCreator $entityCreator;
-    private ElementFactoryInterface $elementFactory;
-
-    public function __construct(Connection $connection, GeneratorProvider $generatorProvider, EntityCreator $entityCreator, ElementFactoryInterface $elementFactory)
-    {
-        $this->connection = $connection;
-        $this->generatorProvider = $generatorProvider;
-        $this->entityCreator = $entityCreator;
-        $this->elementFactory = $elementFactory;
+    public function __construct(
+        private Connection $connection,
+        private GeneratorProvider $generatorProvider,
+        private EntityCreator $entityCreator,
+        private ElementFactoryInterface $elementFactory
+    ) {
     }
 
     public function create(string $providerName, Backend\GeneratorProvider $config, UserContext $context): void

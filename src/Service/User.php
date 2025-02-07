@@ -45,27 +45,18 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class User
+readonly class User
 {
-    private Table\User $userTable;
-    private Table\Scope $scopeTable;
-    private Table\User\Scope $userScopeTable;
-    private Table\Role\Scope $roleScopeTable;
-    private Table\Role $roleTable;
-    private Service\Config $configService;
-    private User\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Service\Config $configService, User\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->userTable = $userTable;
-        $this->scopeTable = $scopeTable;
-        $this->userScopeTable = $userScopeTable;
-        $this->roleScopeTable = $roleScopeTable;
-        $this->roleTable = $roleTable;
-        $this->configService = $configService;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\User $userTable,
+        private Table\Scope $scopeTable,
+        private Table\User\Scope $userScopeTable,
+        private Table\Role\Scope $roleScopeTable,
+        private Table\Role $roleTable,
+        private Service\Config $configService,
+        private User\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(UserCreate $user, UserContext $context): int

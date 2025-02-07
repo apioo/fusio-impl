@@ -43,19 +43,14 @@ use PSX\Schema\SchemaManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Schema
+readonly class Schema
 {
-    private Table\Schema $schemaTable;
-    private Schema\Validator $validator;
-    private SchemaManagerInterface $schemaManager;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Schema $schemaTable, Schema\Validator $validator, SchemaManagerInterface $schemaManager, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->schemaTable = $schemaTable;
-        $this->validator = $validator;
-        $this->schemaManager = $schemaManager;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Schema $schemaTable,
+        private Schema\Validator $validator,
+        private SchemaManagerInterface $schemaManager,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(SchemaCreate $schema, UserContext $context): int

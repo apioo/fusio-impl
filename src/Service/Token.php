@@ -43,25 +43,17 @@ use PSX\OAuth2\AccessToken;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Token
+readonly class Token
 {
-    private Table\App $appTable;
-    private Table\User $userTable;
-    private Table\Token $tokenTable;
-    private Table\Category $categoryTable;
-    private FrameworkConfig $frameworkConfig;
-    private JsonWebToken $jsonWebToken;
-    private EventDispatcherInterface  $eventDispatcher;
-
-    public function __construct(Table\App $appTable, Table\User $userTable, Table\Token $tokenTable, Table\Category $categoryTable, FrameworkConfig $frameworkConfig, JsonWebToken $jsonWebToken, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->appTable = $appTable;
-        $this->userTable = $userTable;
-        $this->tokenTable = $tokenTable;
-        $this->categoryTable = $categoryTable;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->jsonWebToken = $jsonWebToken;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\App $appTable,
+        private Table\User $userTable,
+        private Table\Token $tokenTable,
+        private Table\Category $categoryTable,
+        private FrameworkConfig $frameworkConfig,
+        private JsonWebToken $jsonWebToken,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function generate(?string $tenantId, string $categoryType, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken

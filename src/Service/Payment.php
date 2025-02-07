@@ -43,25 +43,16 @@ use PSX\Http\RequestInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Payment
+readonly class Payment
 {
-    private ConnectorInterface $connector;
-    private PaymentProvider $paymentProvider;
-    private Webhook $webhook;
-    private Service\Config $configService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private Table\Plan $planTable;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(ConnectorInterface $connector, PaymentProvider $paymentProvider, Webhook $webhook, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->connector = $connector;
-        $this->paymentProvider = $paymentProvider;
-        $this->webhook = $webhook;
-        $this->configService = $configService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->planTable = $planTable;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private ConnectorInterface $connector,
+        private PaymentProvider $paymentProvider,
+        private Webhook $webhook,
+        private Service\Config $configService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private Table\Plan $planTable
+    ) {
     }
 
     public function checkout(string $name, PaymentCheckoutRequest $checkout, UserInterface $user, UserContext $context): string

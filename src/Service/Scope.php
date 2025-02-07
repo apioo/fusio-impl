@@ -40,25 +40,17 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Scope
+readonly class Scope
 {
-    private Table\Scope $scopeTable;
-    private Table\Scope\Operation $scopeOperationTable;
-    private Table\App\Scope $appScopeTable;
-    private Table\User\Scope $userScopeTable;
-    private Table\Operation $operationTable;
-    private Scope\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Scope $scopeTable, Table\Scope\Operation $scopeOperationTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, Table\Operation $operationTable, Scope\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->scopeTable = $scopeTable;
-        $this->scopeOperationTable = $scopeOperationTable;
-        $this->appScopeTable = $appScopeTable;
-        $this->userScopeTable = $userScopeTable;
-        $this->operationTable = $operationTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Scope $scopeTable,
+        private Table\Scope\Operation $scopeOperationTable,
+        private Table\App\Scope $appScopeTable,
+        private Table\User\Scope $userScopeTable,
+        private Table\Operation $operationTable,
+        private Scope\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(ScopeCreate $scope, UserContext $context): int

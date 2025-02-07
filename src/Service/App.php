@@ -40,21 +40,15 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class App
+readonly class App
 {
-    private Table\App $appTable;
-    private Table\Scope $scopeTable;
-    private Table\App\Scope $appScopeTable;
-    private App\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, App\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->appTable = $appTable;
-        $this->scopeTable = $scopeTable;
-        $this->appScopeTable = $appScopeTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\App $appTable,
+        private Table\Scope $scopeTable,
+        private Table\App\Scope $appScopeTable,
+        private App\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(AppCreate $app, UserContext $context): int

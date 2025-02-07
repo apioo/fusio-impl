@@ -48,21 +48,15 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Connection
+readonly class Connection
 {
-    private Table\Connection $connectionTable;
-    private Connection\Validator $validator;
-    private Factory\Connection $connectionFactory;
-    private string $secretKey;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Connection $connectionTable, Connection\Validator $validator, Factory\Connection $connectionFactory, FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->connectionTable = $connectionTable;
-        $this->validator = $validator;
-        $this->connectionFactory = $connectionFactory;
-        $this->secretKey = $frameworkConfig->getProjectKey();
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Connection $connectionTable,
+        private Connection\Validator $validator,
+        private Factory\Connection $connectionFactory,
+        private FrameworkConfig $frameworkConfig,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(ConnectionCreate $connection, UserContext $context): int
@@ -101,7 +95,7 @@ class Connection
             $row->setStatus(Table\Connection::STATUS_ACTIVE);
             $row->setName($name);
             $row->setClass(ClassName::serialize($class));
-            $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+            $row->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->frameworkConfig->getProjectKey()));
             $row->setMetadata($connection->getMetadata() !== null ? Parser::encode($connection->getMetadata()) : null);
             $this->connectionTable->create($row);
 
@@ -135,7 +129,7 @@ class Connection
 
         $class = $connection->getClass();
 
-        $config     = $connection->getConfig()?->getAll() ?? Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $config     = $connection->getConfig()?->getAll() ?? Connection\Encrypter::decrypt($existing->getConfig(), $this->frameworkConfig->getProjectKey());
         $parameters = new Parameters($config);
         $factory    = $this->connectionFactory->factory($class);
 
@@ -150,7 +144,7 @@ class Connection
         }
 
         // update connection
-        $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey));
+        $existing->setConfig(Connection\Encrypter::encrypt($parameters->toArray(), $this->frameworkConfig->getProjectKey()));
         $existing->setMetadata($connection->getMetadata() !== null ? Parser::encode($connection->getMetadata()) : $existing->getMetadata());
         $this->connectionTable->update($existing);
 
@@ -170,7 +164,7 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->frameworkConfig->getProjectKey());
 
         $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($existing->getClass());
@@ -207,7 +201,7 @@ class Connection
             throw new StatusCode\InternalServerErrorException('Provided connection is not introspectable');
         }
 
-        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
+        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->frameworkConfig->getProjectKey());
         $parameters = new Parameters($config ?: []);
 
         $connection = $factory->getConnection($parameters);

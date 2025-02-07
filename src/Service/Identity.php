@@ -49,29 +49,19 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Identity
+readonly class Identity
 {
-    private Table\Identity $identityTable;
-    private Table\Generated\IdentityRequestTable $identityRequestTable;
-    private Table\App $appTable;
-    private Identity\Validator $validator;
-    private IdentityProvider $identityProvider;
-    private Service\User $userService;
-    private Service\Token $tokenService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Identity $identityTable, Table\Generated\IdentityRequestTable $identityRequestTable, Table\App $appTable, Identity\Validator $validator, IdentityProvider $identityProvider, Service\User $userService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->identityTable = $identityTable;
-        $this->identityRequestTable = $identityRequestTable;
-        $this->appTable = $appTable;
-        $this->validator = $validator;
-        $this->identityProvider = $identityProvider;
-        $this->userService = $userService;
-        $this->tokenService = $tokenService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Identity $identityTable,
+        private Table\Generated\IdentityRequestTable $identityRequestTable,
+        private Table\App $appTable,
+        private Identity\Validator $validator,
+        private IdentityProvider $identityProvider,
+        private Service\User $userService,
+        private Service\Token $tokenService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(Model\Backend\IdentityCreate $identity, UserContext $context): int
