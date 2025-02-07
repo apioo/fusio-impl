@@ -37,21 +37,17 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Role
+readonly class Role
 {
-    private Table\Role $roleTable;
-    private Table\Role\Scope $roleScopeTable;
-    private Table\Scope $scopeTable;
-    private Role\Validator $validator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\Role $roleTable, Table\Role\Scope $roleScopeTable, Table\Scope $scopeTable, Role\Validator $validator, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->roleTable = $roleTable;
-        $this->roleScopeTable = $roleScopeTable;
-        $this->scopeTable = $scopeTable;
-        $this->validator = $validator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\Role $roleTable,
+        private Table\Role\Scope $roleScopeTable,
+        private Table\Scope $scopeTable,
+        private Table\User $userTable,
+        private Table\User\Scope $userScopeTable,
+        private Role\Validator $validator,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function create(RoleCreate $role, UserContext $context): int
@@ -148,7 +144,7 @@ class Role
         return $existing->getId();
     }
 
-    protected function insertScopes(?string $tenantId, int $roleId, ?array $scopes): void
+    private function insertScopes(?string $tenantId, int $roleId, ?array $scopes): void
     {
         if (!empty($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);
@@ -158,6 +154,25 @@ class Role
                 $row->setRoleId($roleId);
                 $row->setScopeId($scope->getId());
                 $this->roleScopeTable->create($row);
+            }
+
+            $this->addScopesToUsers($roleId, $scopes);
+        }
+    }
+
+    private function addScopesToUsers(int $roleId, array $scopes): void
+    {
+        $users = $this->userTable->findByRoleId($roleId);
+        foreach ($users as $user) {
+            foreach ($scopes as $scope) {
+                if ($this->userScopeTable->hasUserScope($user->getId(), $scope->getId())) {
+                    continue;
+                }
+
+                $row = new Table\Generated\UserScopeRow();
+                $row->setUserId($user->getId());
+                $row->setScopeId($scope->getId());
+                $this->userScopeTable->create($row);
             }
         }
     }

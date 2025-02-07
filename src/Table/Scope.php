@@ -108,6 +108,9 @@ class Scope extends Generated\ScopeTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return array<ScopeRow>
+     */
     public function getValidScopes(?string $tenantId, array $names): array
     {
         $names = array_filter($names);

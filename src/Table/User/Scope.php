@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table\User;
 
 use Fusio\Impl\Table\Generated;
+use PSX\Sql\Condition;
 
 /**
  * Scope
@@ -88,6 +89,14 @@ class Scope extends Generated\UserScopeTable
         }
 
         return array_values($scopes);
+    }
+
+    public function hasUserScope(int $userId, int $scopeId): bool
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_USER_ID, $userId);
+        $condition->equals(self::COLUMN_SCOPE_ID, $scopeId);
+        return $this->getCount($condition) > 0;
     }
 
     private function getScopesForUser(?string $tenantId, int $userId): array
