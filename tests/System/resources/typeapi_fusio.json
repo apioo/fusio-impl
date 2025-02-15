@@ -11328,6 +11328,9 @@
           "type": "reference",
           "target": "Backend_SchemaForm"
         },
+        "readonly": {
+          "type": "boolean"
+        },
         "metadata": {
           "type": "reference",
           "target": "Common_Metadata"
@@ -11536,8 +11539,10 @@
         "data": {
           "type": "array",
           "schema": {
-            "type": "reference",
-            "target": "Backend_StatisticChartData"
+            "type": "array",
+            "schema": {
+              "type": "number"
+            }
           }
         },
         "series": {
@@ -11546,12 +11551,6 @@
             "type": "string"
           }
         }
-      }
-    },
-    "Backend_StatisticChartData": {
-      "type": "map",
-      "schema": {
-        "type": "any"
       }
     },
     "Backend_StatisticCount": {
