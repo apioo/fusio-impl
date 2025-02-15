@@ -86,7 +86,8 @@ readonly class Test
 
         $condition = Condition::withAnd();
         $condition->notEquals(Table\Test::COLUMN_STATUS, Table\Test::STATUS_DISABLED);
-        $tests = $this->testTable->findAll($condition, 0, 1024);
+        $condition->notEquals(Table\Test::COLUMN_STATUS, Table\Test::STATUS_SUCCESS);
+        $tests = $this->testTable->findAll($condition, 0, 16);
         foreach ($tests as $test) {
             $operation = $this->operationTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), '' . $test->getOperationId());
             if (!$operation instanceof Table\Generated\OperationRow) {

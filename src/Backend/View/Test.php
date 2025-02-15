@@ -47,6 +47,7 @@ class Test extends ViewAbstract
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TestTable::COLUMN_MESSAGE]);
         $condition->equals(Table\Generated\TestTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TestTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->notEquals(Table\Generated\TestTable::COLUMN_STATUS, Table\Test::STATUS_SUCCESS);
 
         $builder = new Builder($this->connection);
 
