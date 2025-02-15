@@ -65,7 +65,7 @@ readonly class Schema
             $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Schema::STATUS_ACTIVE);
             $row->setName($schema->getName());
-            $row->setSource($this->parseSource($schema->getSource()));
+            $row->setSource($this->parseSource($schema->getSource()) ?? throw new StatusCode\BadRequestException('Schema source must not be empty'));
             $row->setForm($this->parseForm($schema->getForm()));
             $row->setMetadata($schema->getMetadata() !== null ? Parser::encode($schema->getMetadata()) : null);
             $this->schemaTable->create($row);
