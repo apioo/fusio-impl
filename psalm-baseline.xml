@@ -136,7 +136,6 @@
     <PossiblyNullArgument>
       <code><![CDATA[$schema->getName()]]></code>
       <code><![CDATA[$source]]></code>
-      <code><![CDATA[$this->parseSource($schema->getSource())]]></code>
       <code><![CDATA[Scheme::wrap($schemaId)]]></code>
     </PossiblyNullArgument>
   </file>
