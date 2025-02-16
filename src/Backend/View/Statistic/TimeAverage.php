@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Table;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * TimeAverage
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TimeAverage extends ViewAbstract
+class TimeAverage extends ChartViewAbstract
 {
-    public function getView(Log\LogQueryFilter $filter, ContextInterface $context)
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition = $filter->getCondition([], 'log');
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
@@ -71,10 +71,6 @@ class TimeAverage extends ViewAbstract
             }
         }
 
-        return [
-            'labels' => $labels,
-            'data'   => [array_values($data)],
-            'series' => ['Execution time (ms)'],
-        ];
+        return $this->build([$data], ['Execution time (ms)'], $labels);
     }
 }

@@ -11536,19 +11536,25 @@
             "type": "string"
           }
         },
-        "data": {
-          "type": "array",
-          "schema": {
-            "type": "array",
-            "schema": {
-              "type": "number"
-            }
-          }
-        },
         "series": {
           "type": "array",
           "schema": {
-            "type": "string"
+            "type": "reference",
+            "target": "Backend_StatisticChartSeries"
+          }
+        }
+      }
+    },
+    "Backend_StatisticChartSeries": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "schema": {
+            "type": "number"
           }
         }
       }

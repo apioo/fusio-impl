@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * UsedPoints
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class UsedPoints extends ViewAbstract
+class UsedPoints extends ChartViewAbstract
 {
-    public function getView(UsageQueryFilter $filter, ContextInterface $context)
+    public function getView(UsageQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition = $filter->getCondition([], 'usag');
         $condition->equals('oper.' . Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
@@ -73,10 +73,6 @@ class UsedPoints extends ViewAbstract
             }
         }
 
-        return [
-            'labels' => $labels,
-            'data'   => [array_values($data)],
-            'series' => ['Points'],
-        ];
+        return $this->build([$data], ['Points'], $labels);
     }
 }

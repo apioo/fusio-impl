@@ -22,7 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * IssuedTokens
@@ -31,9 +31,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class IssuedTokens extends ViewAbstract
+class IssuedTokens extends ChartViewAbstract
 {
-    public function getView(App\Token\TokenQueryFilter $filter, ContextInterface $context)
+    public function getView(App\Token\TokenQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition = $filter->getCondition([], 'token');
         $condition->equals('usr.tenant_id', $context->getTenantId());
@@ -71,10 +71,6 @@ class IssuedTokens extends ViewAbstract
             }
         }
 
-        return [
-            'labels' => $labels,
-            'data'   => [array_values($data)],
-            'series' => ['Tokens'],
-        ];
+        return $this->build([$data], ['Tokens'], $labels);
     }
 }

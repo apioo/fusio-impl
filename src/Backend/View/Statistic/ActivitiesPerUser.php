@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * ActivitiesPerUser
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActivitiesPerUser extends ViewAbstract
+class ActivitiesPerUser extends ChartViewAbstract
 {
-    public function getView(AuditQueryFilter $filter, ContextInterface $context)
+    public function getView(AuditQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition = $filter->getCondition([], 'audit');
         $condition->equals('audit.' . Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
@@ -107,16 +107,6 @@ class ActivitiesPerUser extends ViewAbstract
             $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
-        // clean data structure
-        $values = [];
-        foreach ($data as $row) {
-            $values[] = array_values($row);
-        }
-
-        return [
-            'labels' => $labels,
-            'data'   => $values,
-            'series' => array_values($series),
-        ];
+        return $this->build($data, $series, $labels);
     }
 }

@@ -22,8 +22,8 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\StatisticChart;
 use PSX\Sql\Condition;
-use PSX\Sql\ViewAbstract;
 
 /**
  * TestCoverage
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TestCoverage extends ViewAbstract
+class TestCoverage extends ChartViewAbstract
 {
-    public function getView(ContextInterface $context)
+    public function getView(ContextInterface $context): StatisticChart
     {
         $status = [
             Table\Test::STATUS_PENDING => 'Pending',
@@ -60,9 +60,6 @@ class TestCoverage extends ViewAbstract
             $labels[] = $label;
         }
 
-        return [
-            'labels' => $labels,
-            'data' => [$data],
-        ];
+        return $this->build([$data], ['Tests'], $labels);
     }
 }

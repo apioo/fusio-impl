@@ -18,51 +18,34 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Statistic;
+namespace Fusio\Impl\Backend\View\Statistic;
 
-use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Model\Backend\StatisticChart;
+use Fusio\Model\Backend\StatisticChartSeries;
+use PSX\Sql\ViewAbstract;
 
 /**
- * TestCoverageTest
+ * ChartViewAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TestCoverageTest extends DbTestCase
+abstract class ChartViewAbstract extends ViewAbstract
 {
-    public function testGet()
+    protected function build(array $data, array $seriesNames, array $labels): StatisticChart
     {
-        $response = $this->sendRequest('/backend/statistic/test_coverage?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body = (string) $response->getBody();
-
-        $expect = <<<JSON
-{
-    "labels": [
-        "Pending",
-        "Success",
-        "Warning",
-        "Error"
-    ],
-    "series": [
-        {
-            "name": "Tests",
-            "data": [
-                1,
-                0,
-                0,
-                0
-            ]
+        $allSeries = [];
+        foreach ($seriesNames as $key => $name) {
+            $series = new StatisticChartSeries();
+            $series->setName($name);
+            $series->setData(array_values($data[$key] ?? []));
+            $allSeries[] = $series;
         }
-    ]
-}
-JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $chart = new StatisticChart();
+        $chart->setLabels($labels);
+        $chart->setSeries($allSeries);
+        return $chart;
     }
 }

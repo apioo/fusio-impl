@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Transaction;
 use Fusio\Impl\Table;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * IncomingTransactions
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class IncomingTransactions extends ViewAbstract
+class IncomingTransactions extends ChartViewAbstract
 {
-    public function getView(Transaction\TransactionQueryFilter $filter, ContextInterface $context)
+    public function getView(Transaction\TransactionQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition  = $filter->getCondition([], 'trans');
         $condition->equals('trans.' . Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
@@ -70,10 +70,6 @@ class IncomingTransactions extends ViewAbstract
             }
         }
 
-        return [
-            'labels' => $labels,
-            'data'   => [array_values($data)],
-            'series' => ['Amount'],
-        ];
+        return $this->build([$data], ['Amount'], $labels);
     }
 }

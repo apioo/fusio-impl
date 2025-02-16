@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Table;
-use PSX\Sql\ViewAbstract;
+use Fusio\Model\Backend\StatisticChart;
 
 /**
  * MostUsedOperations
@@ -32,9 +32,9 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class MostUsedOperations extends ViewAbstract
+class MostUsedOperations extends ChartViewAbstract
 {
-    public function getView(Log\LogQueryFilter $filter, ContextInterface $context)
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): StatisticChart
     {
         $condition = $filter->getCondition([], 'log');
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
@@ -108,16 +108,6 @@ class MostUsedOperations extends ViewAbstract
             $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
-        // clean data structure
-        $values = [];
-        foreach ($data as $row) {
-            $values[] = array_values($row);
-        }
-
-        return [
-            'labels' => $labels,
-            'data'   => $values,
-            'series' => array_values($series),
-        ];
+        return $this->build($data, $series, $labels);
     }
 }
