@@ -17,6 +17,8 @@
     </projectFiles>
     <issueHandlers>
         <MissingOverrideAttribute errorLevel="suppress" />
+        <InvalidOperand errorLevel="suppress" />
+        <PossiblyInvalidOperand errorLevel="suppress" />
     </issueHandlers>
     <stubs>
         <file name="tests/stubs.php" />
