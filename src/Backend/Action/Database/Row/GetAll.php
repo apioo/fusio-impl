@@ -126,11 +126,10 @@ class GetAll extends TableAbstract
     {
         $startIndex = (int) $request->get('startIndex');
         $count = (int) $request->get('count');
-        $limit = (int) $request->get('limit');
+        $limit = 1024;
 
         $startIndex = $startIndex < 0 ? 0 : $startIndex;
-        $limit = $limit <= 0 ? 16 : $limit;
-        $count = $count >= 1 && $count <= $limit ? $count : $limit;
+        $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $qb->setFirstResult($startIndex);
         $qb->setMaxResults($count);

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form;
+use Fusio\Impl\Backend\Filter\ClassQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
@@ -39,14 +40,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Connection extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(ClassQueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
         $sortBy = Table\Generated\ConnectionColumn::tryFrom($filter->getSortBy(Table\Generated\ConnectionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME, ClassQueryFilter::COLUMN_CLASS => Table\Generated\ConnectionTable::COLUMN_CLASS]);
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);

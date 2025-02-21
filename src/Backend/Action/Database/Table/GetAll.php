@@ -37,13 +37,31 @@ class GetAll extends TableAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $connection = $this->getConnection($request);
+        $startIndex = (int) $request->get('startIndex');
+        $count = (int) $request->get('count');
+        $limit = 1024;
+
+        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $tableNames = $connection->createSchemaManager()->listTableNames();
 
+        $totalResults = count($tableNames);
         sort($tableNames);
+        $tableNames = array_slice($tableNames, $startIndex, $count);
+
+        $result = [];
+        foreach ($tableNames as $tableName) {
+            $result[] = [
+                'name' => $tableName,
+            ];
+        }
 
         return [
-            'tables' => $tableNames,
+            'totalResults' => $totalResults,
+            'itemsPerPage' => $count,
+            'startIndex' => $startIndex,
+            'entry' => $result,
         ];
     }
 }

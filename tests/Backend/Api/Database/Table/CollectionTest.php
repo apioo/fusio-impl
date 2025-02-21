@@ -42,45 +42,58 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "tables": [
-        "app_news",
-        "doctrine_migration_versions",
-        "fusio_action",
-        "fusio_app",
-        "fusio_app_code",
-        "fusio_app_scope",
-        "fusio_audit",
-        "fusio_category",
-        "fusio_config",
-        "fusio_connection",
-        "fusio_cronjob",
-        "fusio_cronjob_error",
-        "fusio_event",
-        "fusio_identity",
-        "fusio_identity_request",
-        "fusio_log",
-        "fusio_log_error",
-        "fusio_operation",
-        "fusio_page",
-        "fusio_plan",
-        "fusio_plan_scope",
-        "fusio_plan_usage",
-        "fusio_rate",
-        "fusio_rate_allocation",
-        "fusio_role",
-        "fusio_role_scope",
-        "fusio_schema",
-        "fusio_scope",
-        "fusio_scope_operation",
-        "fusio_test",
-        "fusio_token",
-        "fusio_transaction",
-        "fusio_user",
-        "fusio_user_grant",
-        "fusio_user_scope",
-        "fusio_webhook",
-        "fusio_webhook_response",
-        "messenger_messages"
+    "totalResults": 38,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "name": "app_news"
+        },
+        {
+            "name": "doctrine_migration_versions"
+        },
+        {
+            "name": "fusio_action"
+        },
+        {
+            "name": "fusio_app"
+        },
+        {
+            "name": "fusio_app_code"
+        },
+        {
+            "name": "fusio_app_scope"
+        },
+        {
+            "name": "fusio_audit"
+        },
+        {
+            "name": "fusio_category"
+        },
+        {
+            "name": "fusio_config"
+        },
+        {
+            "name": "fusio_connection"
+        },
+        {
+            "name": "fusio_cronjob"
+        },
+        {
+            "name": "fusio_cronjob_error"
+        },
+        {
+            "name": "fusio_event"
+        },
+        {
+            "name": "fusio_identity"
+        },
+        {
+            "name": "fusio_identity_request"
+        },
+        {
+            "name": "fusio_log"
+        }
     ]
 }
 JSON;
