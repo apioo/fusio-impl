@@ -30,29 +30,22 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DateQueryFilter extends QueryFilter
+class ClassQueryFilter extends QueryFilter
 {
-    public const COLUMN_DATE = 'date';
+    public const COLUMN_CLASS = 'class';
 
-    private \DateTimeImmutable $from;
-    private \DateTimeImmutable $to;
+    private array $class;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function __construct(array $class, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         parent::__construct($startIndex, $count, $search, $sortBy, $sortOrder);
 
-        $this->from = $from;
-        $this->to = $to;
+        $this->class = $class;
     }
 
-    public function getFrom(): \DateTimeImmutable
+    public function getClass(): array
     {
-        return $this->from;
-    }
-
-    public function getTo(): \DateTimeImmutable
-    {
-        return $this->to;
+        return $this->class;
     }
 
     public function getCondition(array $columnMapping, ?string $alias = null): Condition
@@ -60,40 +53,25 @@ class DateQueryFilter extends QueryFilter
         $condition = parent::getCondition($columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
-        if (isset($columnMapping[self::COLUMN_DATE])) {
-            $condition->greaterThan($alias . $columnMapping[self::COLUMN_DATE], $this->from->format('Y-m-d 00:00:00'));
-            $condition->lessThan($alias . $columnMapping[self::COLUMN_DATE], $this->to->format('Y-m-d 23:59:59'));
+        if (isset($columnMapping[self::COLUMN_CLASS]) && count($this->class) > 0) {
+            $condition->in($alias . $columnMapping[self::COLUMN_CLASS], $this->class);
         }
 
         return $condition;
-    }
-
-    protected static function toInt(mixed $value): ?int
-    {
-        return $value !== null && $value !== '' ? (int) $value : null;
     }
 
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         $arguments = parent::getConstructorArguments($request);
 
-        $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
-        $to = new \DateTimeImmutable($request->get('to') ?? 'now');
-
-        // from date is large then to date
-        if ($from->getTimestamp() > $to->getTimestamp()) {
-            $tmp = clone $from;
-            $from = $to;
-            $to = $tmp;
+        $rawClass = $request->get('class');
+        if (!empty($rawClass)) {
+            $class = array_filter(explode(',', $rawClass));
+        } else {
+            $class = [];
         }
 
-        // check if diff between from and to is larger than ca 2 months
-        if (($to->getTimestamp() - $from->getTimestamp()) > 4838400) {
-            $to = $from->add(new \DateInterval('P2M'));
-        }
-
-        $arguments['from'] = $from;
-        $arguments['to'] = $to;
+        $arguments['class'] = $class;
 
         return $arguments;
     }
