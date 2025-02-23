@@ -36,9 +36,13 @@ final class Version20250223070312 extends AbstractMigration
 
     public function postUp(Schema $schema): void
     {
-        DataSyncronizer::sync($this->connection);
+        // update outgoing database schemas
+        $this->connection->update('fusio_operation', [
+            'status' => 0,
+        ], [
+            'name' => 'backend.database.getConnections',
+        ]);
 
-        // migrate outgoing schemas
         $map = [
             'backend.database.getTables' => DatabaseTableCollection::class,
             'backend.database.getRows' => DatabaseRowCollection::class,
