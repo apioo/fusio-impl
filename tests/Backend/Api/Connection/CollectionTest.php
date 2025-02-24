@@ -51,17 +51,20 @@ class CollectionTest extends DbTestCase
         {
             "id": 4,
             "status": 1,
-            "name": "Worker"
+            "name": "Worker",
+            "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
             "id": 3,
             "status": 1,
-            "name": "Paypal"
+            "name": "Paypal",
+            "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Test",
+            "class": "Fusio.Impl.Connection.Native",
             "metadata": {
                 "foo": "bar"
             }
@@ -69,7 +72,8 @@ class CollectionTest extends DbTestCase
         {
             "id": 1,
             "status": 1,
-            "name": "System"
+            "name": "System",
+            "class": "Fusio.Impl.Connection.System"
         }
     ]
 }
@@ -96,7 +100,8 @@ JSON;
         {
             "id": 1,
             "status": 1,
-            "name": "System"
+            "name": "System",
+            "class": "Fusio.Impl.Connection.System"
         }
     ]
 }
@@ -123,7 +128,8 @@ JSON;
         {
             "id": 3,
             "status": 1,
-            "name": "Paypal"
+            "name": "Paypal",
+            "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         }
     ]
 }
@@ -150,12 +156,14 @@ JSON;
         {
             "id": 3,
             "status": 1,
-            "name": "Paypal"
+            "name": "Paypal",
+            "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
             "id": 1,
             "status": 1,
-            "name": "System"
+            "name": "System",
+            "class": "Fusio.Impl.Connection.System"
         }
     ]
 }
@@ -182,17 +190,20 @@ JSON;
         {
             "id": 4,
             "status": 1,
-            "name": "Worker"
+            "name": "Worker",
+            "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
             "id": 3,
             "status": 1,
-            "name": "Paypal"
+            "name": "Paypal",
+            "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Test",
+            "class": "Fusio.Impl.Connection.Native",
             "metadata": {
                 "foo": "bar"
             }
@@ -200,7 +211,8 @@ JSON;
         {
             "id": 1,
             "status": 1,
-            "name": "System"
+            "name": "System",
+            "class": "Fusio.Impl.Connection.System"
         }
     ]
 }

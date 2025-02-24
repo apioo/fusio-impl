@@ -55,24 +55,28 @@ class CollectionTest extends DbTestCase
             "id": 4,
             "status": 1,
             "name": "Inspect-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
             "date": "[datetime]"
         },
         {
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
+            "class": "Fusio.Adapter.Sql.Action.SqlInsert",
             "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
+            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
             "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 1,
             "name": "Util-Static-Response",
+            "class": "Fusio.Adapter.Util.Action.UtilStaticResponse",
             "metadata": {
                 "foo": "bar"
             },
@@ -106,12 +110,14 @@ JSON;
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
+            "class": "Fusio.Adapter.Sql.Action.SqlInsert",
             "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
+            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
             "date": "[datetime]"
         }
     ]
@@ -142,24 +148,28 @@ JSON;
             "id": 4,
             "status": 1,
             "name": "Inspect-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
             "date": "[datetime]"
         },
         {
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
+            "class": "Fusio.Adapter.Sql.Action.SqlInsert",
             "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
+            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
             "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 1,
             "name": "Util-Static-Response",
+            "class": "Fusio.Adapter.Util.Action.UtilStaticResponse",
             "metadata": {
                 "foo": "bar"
             },
