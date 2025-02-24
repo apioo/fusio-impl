@@ -59,6 +59,7 @@ class Action extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ActionTable::COLUMN_NAME,
+                'class' => Table\Generated\ActionTable::COLUMN_CLASS,
                 'metadata' => $builder->fieldJson(Table\Generated\ActionTable::COLUMN_METADATA),
                 'date' => $builder->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
             ]),

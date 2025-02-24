@@ -62,6 +62,7 @@ class Connection extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
+                'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
                 'metadata' => $builder->fieldJson(Table\Generated\ConnectionTable::COLUMN_METADATA),
             ]),
         ];
