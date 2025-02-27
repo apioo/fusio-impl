@@ -68,7 +68,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context)
     {
         $builder = new Builder($this->connection);
 
