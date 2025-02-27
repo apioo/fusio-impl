@@ -29,6 +29,8 @@ use Fusio\Model\Backend\ActionExecuteRequest;
 use Fusio\Worker\MessageException;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Response;
+use PSX\Http\Writer\WriterInterface;
 
 /**
  * Execute
@@ -61,10 +63,21 @@ class Execute implements ActionInterface
             );
 
             if ($response instanceof HttpResponseInterface) {
+                $headers = (object) $response->getHeaders();
+                $body = $response->getBody();
+
+                if ($body instanceof WriterInterface) {
+                    $tempResponse = new Response();
+                    $body->writeTo($tempResponse);
+
+                    $headers = (object) $tempResponse->getHeaders();
+                    $body = (string) $tempResponse->getBody();
+                }
+
                 return [
                     'statusCode' => $response->getStatusCode(),
-                    'headers' => $response->getHeaders() ?: new \stdClass(),
-                    'body' => $response->getBody(),
+                    'headers' => $headers,
+                    'body' => $body,
                 ];
             } else {
                 return [
