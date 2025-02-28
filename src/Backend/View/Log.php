@@ -86,6 +86,7 @@ class Log extends ViewAbstract
             'header' => Table\Generated\LogTable::COLUMN_HEADER,
             'body' => Table\Generated\LogTable::COLUMN_BODY,
             'errors' => $builder->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
+                'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
                 'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
                 'file' => Table\Generated\LogErrorTable::COLUMN_FILE,

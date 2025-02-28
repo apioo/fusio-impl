@@ -50,9 +50,11 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "id": 1,
+            "logId": 1,
             "message": "Syntax error, malformed JSON",
-            "path": "\/bar",
-            "date": "[datetime]"
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -80,9 +82,11 @@ JSON;
     "entry": [
         {
             "id": 1,
+            "logId": 1,
             "message": "Syntax error, malformed JSON",
-            "path": "\/bar",
-            "date": "[datetime]"
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -110,9 +114,11 @@ JSON;
     "entry": [
         {
             "id": 1,
+            "logId": 1,
             "message": "Syntax error, malformed JSON",
-            "path": "\/bar",
-            "date": "[datetime]"
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
     ]
 }

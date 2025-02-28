@@ -49,7 +49,8 @@ class EntityTest extends DbTestCase
     "message": "Syntax error, malformed JSON",
     "trace": "[trace]",
     "file": "[file]",
-    "line": 74
+    "line": 74,
+    "insertDate": "[datetime]"
 }
 JSON;
 

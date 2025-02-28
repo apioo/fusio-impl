@@ -48,9 +48,11 @@ class Error extends ViewAbstract
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
                 'error.' . Table\Generated\LogErrorTable::COLUMN_ID,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID,
                 'error.' . Table\Generated\LogErrorTable::COLUMN_MESSAGE,
-                'log.' . Table\Generated\LogTable::COLUMN_PATH,
-                'log.' . Table\Generated\LogTable::COLUMN_DATE
+                'error.' . Table\Generated\LogErrorTable::COLUMN_FILE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_LINE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_INSERT_DATE,
             ])
             ->from('fusio_log_error', 'error')
             ->innerJoin('error', 'fusio_log', 'log', 'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID . ' = log.' . Table\Generated\LogTable::COLUMN_ID)
@@ -75,9 +77,11 @@ class Error extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
+                'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
-                'path' => Table\Generated\LogTable::COLUMN_PATH,
-                'date' => $builder->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
+                'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
+                'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
+                'insertDate' => $builder->fieldDateTime(Table\Generated\LogErrorTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -99,6 +103,7 @@ class Error extends ViewAbstract
                 'error.' . Table\Generated\LogErrorTable::COLUMN_TRACE,
                 'error.' . Table\Generated\LogErrorTable::COLUMN_FILE,
                 'error.' . Table\Generated\LogErrorTable::COLUMN_LINE,
+                'error.' . Table\Generated\LogErrorTable::COLUMN_INSERT_DATE,
             ])
             ->from('fusio_log_error', 'error')
             ->innerJoin('error', 'fusio_log', 'log', 'error.' . Table\Generated\LogErrorTable::COLUMN_LOG_ID . ' = log.' . Table\Generated\LogTable::COLUMN_ID)
@@ -108,12 +113,13 @@ class Error extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-            'id' => Table\Generated\LogErrorTable::COLUMN_ID,
-            'logId' => Table\Generated\LogErrorTable::COLUMN_LOG_ID,
+            'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
+            'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
             'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
             'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
             'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
             'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
+            'insertDate' => $builder->fieldDateTime(Table\Generated\LogErrorTable::COLUMN_INSERT_DATE),
         ]);
 
         return $builder->build($definition);

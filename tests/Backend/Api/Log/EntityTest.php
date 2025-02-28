@@ -53,6 +53,7 @@ class EntityTest extends DbTestCase
     "body": "foobar",
     "errors": [
         {
+            "id": 1,
             "message": "Syntax error, malformed JSON",
             "trace": "[trace]",
             "file": "[file]",
