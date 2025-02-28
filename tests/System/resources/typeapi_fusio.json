@@ -10776,8 +10776,11 @@
         "id": {
           "type": "integer"
         },
-        "message": {
+        "logId": {
           "type": "integer"
+        },
+        "message": {
+          "type": "string"
         },
         "trace": {
           "type": "string"
@@ -10787,6 +10790,10 @@
         },
         "line": {
           "type": "integer"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
