@@ -30,8 +30,7 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\ConnectionConfig;
-use Fusio\Model\Backend\ConnectionUpdate;
+use Fusio\Impl\Table;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
@@ -46,23 +45,16 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Token
+readonly class Token
 {
-    private Factory\ConnectionInterface $factory;
-    private Repository\ConnectionInterface $repository;
-    private ClientInterface $httpClient;
-    private Service\Connection $connectionService;
-    private Service\Security\JsonWebToken $jsonWebToken;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Service\Security\JsonWebToken $jsonWebToken, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->factory = $factory;
-        $this->repository = $repository;
-        $this->httpClient = $httpClient;
-        $this->connectionService = $connectionService;
-        $this->jsonWebToken = $jsonWebToken;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Factory\ConnectionInterface $factory,
+        private Repository\ConnectionInterface $repository,
+        private ClientInterface $httpClient,
+        private Table\Connection $connectionTable,
+        private Service\Security\JsonWebToken $jsonWebToken,
+        private Service\System\FrameworkConfig $frameworkConfig
+    ) {
     }
 
     /**
@@ -187,11 +179,9 @@ class Token
 
     private function persistConfig(Model\ConnectionInterface $connection, array $config, UserContext $context): void
     {
-        $update = new ConnectionUpdate();
-        $update->setName($connection->getName());
-        $update->setClass($connection->getClass());
-        $update->setConfig(ConnectionConfig::fromArray($config));
-        $this->connectionService->update((string) $connection->getId(), $update, $context);
+        $row = $this->connectionTable->find($connection->getId());
+        $row->setConfig(Encrypter::encrypt($config, $this->frameworkConfig->getProjectKey()));
+        $this->connectionTable->update($row);
     }
 
     /**
