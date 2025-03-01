@@ -785,7 +785,7 @@ class NewInstallation
                     httpPath: '/log',
                     httpCode: 200,
                     outgoing: Model\Backend\LogCollection::class,
-                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'routeId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'log.get' => new Operation(
