@@ -179,7 +179,7 @@ readonly class Token
 
     private function persistConfig(Model\ConnectionInterface $connection, array $config, UserContext $context): void
     {
-        $row = $this->connectionTable->findOneByTenantAndId($context->getTenantId(), null, $connection->getId());
+        $row = $this->connectionTable->findOneByTenantAndId($context->getTenantId(), null, $connection->getId()) ?? throw new StatusCode\NotFoundException('Could not find connection');
         $row->setConfig(Encrypter::encrypt($config, $this->frameworkConfig->getProjectKey()));
         $this->connectionTable->update($row);
     }
