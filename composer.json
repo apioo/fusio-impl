@@ -31,7 +31,7 @@
     "fusio/adapter-http": "^6.0",
     "fusio/adapter-php": "^6.0",
     "fusio/adapter-redis": "^6.0",
-    "fusio/adapter-sdkfabric": "^0.1",
+    "fusio/adapter-sdkfabric": "^0.2",
     "fusio/adapter-smtp": "^6.0",
     "fusio/adapter-soap": "^6.0",
     "fusio/adapter-sql": "^6.0",
