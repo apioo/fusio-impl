@@ -77,8 +77,10 @@ class DateQueryFilter extends QueryFilter
     {
         $arguments = parent::getConstructorArguments($request);
 
-        $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
-        $to = new \DateTimeImmutable($request->get('to') ?? 'now');
+        $rawFrom = $request->get('from');
+        $rawTo = $request->get('to');
+        $from = new \DateTimeImmutable(!empty($rawFrom) ? $rawFrom : '-1 month');
+        $to = new \DateTimeImmutable(!empty($rawTo) ? $rawTo : 'now');
 
         // from date is large then to date
         if ($from->getTimestamp() > $to->getTimestamp()) {
