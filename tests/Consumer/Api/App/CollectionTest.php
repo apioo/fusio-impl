@@ -54,6 +54,7 @@ class CollectionTest extends DbTestCase
             "userId": 2,
             "status": 1,
             "name": "Foo-App",
+            "url": "http:\/\/google.com",
             "appKey": "[uuid]",
             "metadata": {
                 "foo": "bar"
@@ -103,6 +104,7 @@ JSON;
             "userId": 2,
             "status": 1,
             "name": "Foo-App",
+            "url": "http:\/\/google.com",
             "appKey": "[uuid]",
             "metadata": {
                 "foo": "bar"

@@ -61,6 +61,7 @@ class App extends ViewAbstract
                 'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
                 'name' => Table\Generated\AppTable::COLUMN_NAME,
+                'url' => Table\Generated\AppTable::COLUMN_URL,
                 'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
                 'metadata' => $builder->fieldJson(Table\Generated\AppTable::COLUMN_METADATA),
                 'date' => $builder->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
