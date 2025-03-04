@@ -9065,6 +9065,36 @@
         "scope"
       ]
     },
+    "consumer.scope.getCategories": {
+      "path": "/consumer/scope/categories",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_ScopeCategories"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "consumer.scope"
+      ],
+      "authorization": true,
+      "tags": [
+        "scope"
+      ]
+    },
     "consumer.token.create": {
       "path": "/consumer/token",
       "method": "POST",
@@ -12281,6 +12311,50 @@
         "metadata": {
           "type": "reference",
           "target": "Common_Metadata"
+        }
+      }
+    },
+    "Consumer_ScopeCategories": {
+      "type": "struct",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Consumer_ScopeCategory"
+          }
+        }
+      }
+    },
+    "Consumer_ScopeCategory": {
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Consumer_ScopeCategoryScope"
+          }
+        }
+      }
+    },
+    "Consumer_ScopeCategoryScope": {
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
         }
       }
     },
