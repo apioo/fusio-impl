@@ -1722,6 +1722,14 @@ class NewInstallation
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                 ),
+                'scope.getCategories' => new Operation(
+                    action: Consumer\Action\Scope\GetCategories::class,
+                    httpMethod: 'GET',
+                    httpPath: '/scope/categories',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\ScopeCategories::class,
+                    throws: [999 => Model\Common\Message::class],
+                ),
                 'token.getAll' => new Operation(
                     action: Consumer\Action\Token\GetAll::class,
                     httpMethod: 'GET',

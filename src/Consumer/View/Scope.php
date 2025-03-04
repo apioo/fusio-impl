@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -62,7 +63,7 @@ class Scope extends ViewAbstract
             ])
             ->from('fusio_user_scope', 'user_scope')
             ->innerJoin('user_scope', 'fusio_scope', 'scope', 'user_scope.' . Table\Generated\UserScopeTable::COLUMN_SCOPE_ID . ' = scope.' . Table\Generated\ScopeTable::COLUMN_ID)
-            ->orderBy('scope.' . Table\Generated\ScopeTable::COLUMN_ID, 'ASC')
+            ->orderBy('scope.' . Table\Generated\ScopeTable::COLUMN_NAME, 'ASC')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues())
             ->setFirstResult($startIndex)
@@ -102,6 +103,49 @@ class Scope extends ViewAbstract
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             'metadata' => $builder->fieldJson(Table\Generated\ScopeTable::COLUMN_METADATA),
         ]);
+
+        return $builder->build($definition);
+    }
+
+    public function getCategories(ContextInterface $context)
+    {
+        $condition = Condition::withAnd();
+        $condition->equals('user_scope.' . Table\Generated\UserScopeTable::COLUMN_USER_ID, $context->getUser()->getId());
+        $condition->equals('scope.' . Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                'scope.' . Table\Generated\ScopeTable::COLUMN_ID,
+                'scope.' . Table\Generated\ScopeTable::COLUMN_NAME,
+                'scope.' . Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+            ])
+            ->from('fusio_user_scope', 'user_scope')
+            ->innerJoin('user_scope', 'fusio_scope', 'scope', 'user_scope.' . Table\Generated\UserScopeTable::COLUMN_SCOPE_ID . ' = scope.' . Table\Generated\ScopeTable::COLUMN_ID)
+            ->orderBy('scope.' . Table\Generated\ScopeTable::COLUMN_NAME, 'ASC')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->andWhere('scope.' . Table\Generated\ScopeTable::COLUMN_CATEGORY_ID . ' = ?')
+            ->setParameters($condition->getValues());
+
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
+
+        $builder = new Builder($this->connection);
+
+        $definition = [
+            'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC], [
+                'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+                'name' => Table\Generated\CategoryTable::COLUMN_NAME,
+                'scopes' => $builder->doCollection($queryBuilder->getSQL(), array_merge($queryBuilder->getParameters(), [new Reference(Table\Generated\CategoryTable::COLUMN_ID)]), [
+                    'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+                    'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+                    'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
+                ])
+            ], filter: function (array $result) {
+                return array_values(array_filter($result, function ($row) {
+                    return isset($row['scopes']) && is_array($row['scopes']) && count($row['scopes']) > 0;
+                }));
+            }),
+        ];
 
         return $builder->build($definition);
     }
