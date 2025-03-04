@@ -36,6 +36,8 @@ final class Version20250223070312 extends AbstractMigration
 
     public function postUp(Schema $schema): void
     {
+        DataSyncronizer::sync($this->connection);
+
         // update outgoing database schemas
         $this->connection->update('fusio_operation', [
             'status' => 0,
