@@ -264,7 +264,11 @@ class Validator
         }
 
         foreach ($throws as $statusCode => $throwName) {
-            $this->assertHttpCode((int) $statusCode, 400, 599, 'Throw');
+            $code = (int) $statusCode;
+            if ($code !== 999) { // 999 is a special wildcard code witch represents any error
+                $this->assertHttpCode($code, 400, 599, 'Throw');
+            }
+
             $this->assertSchema($throwName, 'throw ' . $statusCode);
         }
     }
