@@ -23,6 +23,8 @@ namespace Fusio\Impl\Framework\Filter;
 use Fusio\Engine\Request;
 use Fusio\Impl\Controller\ActionController;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Schema\Scheme;
+use PSX\Data\ReaderInterface;
 use PSX\Framework\Http\RequestReader;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Http\FilterChainInterface;
@@ -66,6 +68,18 @@ class ActionExecutor implements FilterInterface
         if (!empty($incoming) && in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
             if ($incoming === 'schema://Passthru') {
                 $payload = $this->requestReader->getBody($request);
+            } elseif ($incoming === 'mime://application/octet-stream') {
+                $payload = $request->getBody();
+            } elseif ($incoming === 'mime://application/x-www-form-urlencoded') {
+                $payload = $this->requestReader->getBody($request, ReaderInterface::FORM);
+            } elseif ($incoming === 'mime://application/json') {
+                $payload = $this->requestReader->getBody($request, ReaderInterface::JSON);
+            } elseif ($incoming === 'mime://multipart/form-data') {
+                $payload = $this->requestReader->getBody($request, ReaderInterface::MULTIPART);
+            } elseif ($incoming === 'mime://text/plain') {
+                $payload = (string) $request->getBody();
+            } elseif ($incoming === 'mime://application/xml') {
+                $payload = $this->requestReader->getBody($request, ReaderInterface::XML);
             } else {
                 $schema  = $this->schemaManager->getSchema($incoming);
                 $payload = $this->requestReader->getBodyAs($request, $schema);

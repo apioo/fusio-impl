@@ -39,10 +39,12 @@ use Fusio\Impl\Provider\Identity\OpenIDConnect;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
+use Fusio\Impl\Tests\Adapter\Test\MimeAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\ContentType;
 
 /**
  * Fixture
@@ -109,6 +111,7 @@ class Fixture
         $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
+        $data->addAction('default', 'MIME-Action', MimeAction::class);
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
@@ -227,6 +230,54 @@ class Fixture
                 outgoing: Passthru::class,
                 incoming: Passthru::class,
             ),
+            'mime.binary' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/binary',
+                httpCode: 200,
+                outgoing: ContentType::BINARY,
+                incoming: ContentType::BINARY,
+            ),
+            'mime.form' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/form',
+                httpCode: 200,
+                outgoing: ContentType::FORM,
+                incoming: ContentType::FORM,
+            ),
+            'mime.json' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/json',
+                httpCode: 200,
+                outgoing: ContentType::JSON,
+                incoming: ContentType::JSON,
+            ),
+            'mime.multipart' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/multipart',
+                httpCode: 200,
+                outgoing: ContentType::MULTIPART,
+                incoming: ContentType::MULTIPART,
+            ),
+            'mime.text' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/text',
+                httpCode: 200,
+                outgoing: ContentType::TEXT,
+                incoming: ContentType::TEXT,
+            ),
+            'mime.xml' => new Operation(
+                action: 'MIME-Action',
+                httpMethod: 'POST',
+                httpPath: '/mime/xml',
+                httpCode: 200,
+                outgoing: ContentType::XML,
+                incoming: ContentType::XML,
+            ),
         ]);
 
         $data->addLog('default', 'Foo-App', 'Consumer', 'test.listFoo');
@@ -244,6 +295,12 @@ class Fixture
         $data->addScopeOperation('bar', 'inspect.put');
         $data->addScopeOperation('bar', 'inspect.patch');
         $data->addScopeOperation('bar', 'inspect.delete');
+        $data->addScopeOperation('bar', 'mime.binary');
+        $data->addScopeOperation('bar', 'mime.form');
+        $data->addScopeOperation('bar', 'mime.json');
+        $data->addScopeOperation('bar', 'mime.multipart');
+        $data->addScopeOperation('bar', 'mime.text');
+        $data->addScopeOperation('bar', 'mime.xml');
 
         $data->addTable('app_news', [
             ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],
