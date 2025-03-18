@@ -144,12 +144,7 @@ class SpecificationBuilder
 
         $result = [];
         foreach ($throws as $httpCode => $throw) {
-            $schema = $this->getSchema($throw);
-            $name = $this->getNameForSchema($throw, $schema);
-
-            $definitions->addSchema($name, $schema);
-
-            $result[] = new Operation\Response($httpCode, PropertyTypeFactory::getReference($name));
+            $result[] = new Operation\Response($httpCode, $this->buildSchema($throw, $definitions));
         }
 
         return $result;
