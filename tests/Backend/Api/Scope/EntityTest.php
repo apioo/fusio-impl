@@ -57,6 +57,42 @@ class EntityTest extends DbTestCase
     "description": "Bar access",
     "operations": [
         {
+            "id": 221,
+            "scopeId": 52,
+            "operationId": 228,
+            "allow": true
+        },
+        {
+            "id": 220,
+            "scopeId": 52,
+            "operationId": 227,
+            "allow": true
+        },
+        {
+            "id": 219,
+            "scopeId": 52,
+            "operationId": 226,
+            "allow": true
+        },
+        {
+            "id": 218,
+            "scopeId": 52,
+            "operationId": 225,
+            "allow": true
+        },
+        {
+            "id": 217,
+            "scopeId": 52,
+            "operationId": 224,
+            "allow": true
+        },
+        {
+            "id": 216,
+            "scopeId": 52,
+            "operationId": 223,
+            "allow": true
+        },
+        {
             "id": 215,
             "scopeId": 52,
             "operationId": 222,
@@ -120,6 +156,42 @@ JSON;
     "name": "bar",
     "description": "Bar access",
     "operations": [
+        {
+            "id": 221,
+            "scopeId": 52,
+            "operationId": 228,
+            "allow": true
+        },
+        {
+            "id": 220,
+            "scopeId": 52,
+            "operationId": 227,
+            "allow": true
+        },
+        {
+            "id": 219,
+            "scopeId": 52,
+            "operationId": 226,
+            "allow": true
+        },
+        {
+            "id": 218,
+            "scopeId": 52,
+            "operationId": 225,
+            "allow": true
+        },
+        {
+            "id": 217,
+            "scopeId": 52,
+            "operationId": 224,
+            "allow": true
+        },
+        {
+            "id": 216,
+            "scopeId": 52,
+            "operationId": 223,
+            "allow": true
+        },
         {
             "id": 215,
             "scopeId": 52,
