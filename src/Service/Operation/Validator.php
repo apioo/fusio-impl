@@ -284,6 +284,10 @@ class Validator
 
     private function assertSchema(string $schema, string $type): void
     {
+        if (str_starts_with($schema, 'mime://')) {
+            return;
+        }
+
         try {
             $this->schemaManager->getSchema(SchemaScheme::wrap($schema));
         } catch (InvalidSchemaException|ParserException $e) {
