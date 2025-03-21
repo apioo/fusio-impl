@@ -43,10 +43,82 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 8,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 228,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/xml",
+            "httpCode": 200,
+            "name": "mime.xml",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 227,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/text",
+            "httpCode": 200,
+            "name": "mime.text",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 226,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/multipart",
+            "httpCode": 200,
+            "name": "mime.multipart",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 225,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/json",
+            "httpCode": 200,
+            "name": "mime.json",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 224,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/form",
+            "httpCode": 200,
+            "name": "mime.form",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 223,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/binary",
+            "httpCode": 200,
+            "name": "mime.binary",
+            "action": "action:\/\/MIME-Action"
+        },
         {
             "id": 222,
             "status": 1,
@@ -243,10 +315,82 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 8,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 228,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/xml",
+            "httpCode": 200,
+            "name": "mime.xml",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 227,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/text",
+            "httpCode": 200,
+            "name": "mime.text",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 226,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/multipart",
+            "httpCode": 200,
+            "name": "mime.multipart",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 225,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/json",
+            "httpCode": 200,
+            "name": "mime.json",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 224,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/form",
+            "httpCode": 200,
+            "name": "mime.form",
+            "action": "action:\/\/MIME-Action"
+        },
+        {
+            "id": 223,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/mime\/binary",
+            "httpCode": 200,
+            "name": "mime.binary",
+            "action": "action:\/\/MIME-Action"
+        },
         {
             "id": 222,
             "status": 1,
@@ -389,7 +533,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "223"
+    "id": "229"
 }
 JSON;
 

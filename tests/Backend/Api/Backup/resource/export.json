@@ -1,6 +1,12 @@
 {
   "action": [
     {
+      "name": "MIME-Action",
+      "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction",
+      "async": false,
+      "date": "[datetime]"
+    },
+    {
       "name": "Inspect-Action",
       "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
       "async": false,
@@ -622,6 +628,126 @@
     }
   ],
   "operation": [
+    {
+      "status": 1,
+      "name": "mime.xml",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/xml",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/application\/xml",
+      "outgoing": "mime:\/\/application\/xml",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
+    {
+      "status": 1,
+      "name": "mime.text",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/text",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/text\/plain",
+      "outgoing": "mime:\/\/text\/plain",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
+    {
+      "status": 1,
+      "name": "mime.multipart",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/multipart",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/multipart\/form-data",
+      "outgoing": "mime:\/\/multipart\/form-data",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
+    {
+      "status": 1,
+      "name": "mime.json",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/json",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/application\/json",
+      "outgoing": "mime:\/\/application\/json",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
+    {
+      "status": 1,
+      "name": "mime.form",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/form",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/application\/x-www-form-urlencoded",
+      "outgoing": "mime:\/\/application\/x-www-form-urlencoded",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
+    {
+      "status": 1,
+      "name": "mime.binary",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/mime\/binary",
+      "httpCode": 200,
+      "parameters": {},
+      "incoming": "mime:\/\/application\/octet-stream",
+      "outgoing": "mime:\/\/application\/octet-stream",
+      "throws": {},
+      "action": "action:\/\/MIME-Action",
+      "costs": 0
+    },
     {
       "status": 1,
       "name": "inspect.delete",

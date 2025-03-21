@@ -47,10 +47,17 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 5,
+            "status": 1,
+            "name": "MIME-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction",
+            "date": "[datetime]"
+        },
         {
             "id": 4,
             "status": 1,
@@ -140,10 +147,17 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 5,
+            "status": 1,
+            "name": "MIME-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction",
+            "date": "[datetime]"
+        },
         {
             "id": 4,
             "status": 1,
@@ -227,7 +241,7 @@ JSON;
 {
     "success": true,
     "message": "Action successfully created",
-    "id": "5"
+    "id": "6"
 }
 JSON;
 

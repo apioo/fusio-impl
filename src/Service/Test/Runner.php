@@ -131,6 +131,11 @@ class Runner
             return;
         }
 
+        if (str_starts_with($outgoing, 'mime://')) {
+            $this->set($test, Table\Test::STATUS_SUCCESS, '', $body);
+            return;
+        }
+
         try {
             $schema = $this->schemaManager->getSchema($outgoing);
             $data = \json_decode((string) $response->getBody());
@@ -207,7 +212,9 @@ class Runner
 
     private function isValidSchema(?string $schema): bool
     {
-        return !empty($schema) && $schema !== 'schema://Passthru' && $schema !== 'php+class://PSX.Api.Model.Passthru';
+        return !empty($schema) &&
+            $schema !== 'schema://Passthru' &&
+            $schema !== 'php+class://PSX.Api.Model.Passthru';
     }
 
     private function getErrorMessage(\Throwable $e): string

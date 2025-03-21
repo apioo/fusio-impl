@@ -330,6 +330,232 @@
       },
       "parameters": []
     },
+    "/mime/binary": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.binary",
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/mime/form": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.form",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/mime/json": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.json",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/mime/multipart": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.multipart",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/mime/text": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.text",
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/mime/xml": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "mime.xml",
+        "requestBody": {
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "/foo": {
       "get": {
         "tags": [

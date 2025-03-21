@@ -281,6 +281,150 @@
       "authorization": false,
       "tags": []
     },
+    "mime.binary": {
+      "path": "/mime/binary",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "application/octet-stream"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "application/octet-stream"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "mime.form": {
+      "path": "/mime/form",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "application/x-www-form-urlencoded"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "application/x-www-form-urlencoded"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "mime.json": {
+      "path": "/mime/json",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "application/json"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "application/json"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "mime.multipart": {
+      "path": "/mime/multipart",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "multipart/form-data"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "multipart/form-data"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "mime.text": {
+      "path": "/mime/text",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "text/plain"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "text/plain"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
+    "mime.xml": {
+      "path": "/mime/xml",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "contentType": "application/xml"
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "contentType": "application/xml"
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
     "test.createFoo": {
       "path": "/foo",
       "method": "POST",

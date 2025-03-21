@@ -42,6 +42,6 @@ class Operation implements ParserInterface
 
     public function parse(string $schema): SpecificationInterface
     {
-        return $this->builder->build((int)$schema);
+        return $this->builder->build((int) $schema);
     }
 }

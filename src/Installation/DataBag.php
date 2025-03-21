@@ -25,6 +25,7 @@ use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Table;
+use PSX\Schema\ContentType;
 use PSX\Schema\TypeInterface;
 
 /**
@@ -101,18 +102,10 @@ class DataBag
 
             $incoming = null;
             if (isset($operation->incoming)) {
-                if (class_exists($operation->incoming)) {
-                    $incoming = 'php+class://' . ClassName::serialize($operation->incoming);
-                } else {
-                    $incoming = 'schema://' . $operation->incoming;
-                }
+                $incoming = $this->normalizeSchema($operation->incoming);
             }
 
-            if (class_exists($operation->outgoing)) {
-                $outgoing = 'php+class://' . ClassName::serialize($operation->outgoing);
-            } else {
-                $outgoing = 'schema://' . $operation->outgoing;
-            }
+            $outgoing = $this->normalizeSchema($operation->outgoing);
 
             $this->addOperation(
                 $category,
@@ -150,6 +143,17 @@ class DataBag
             if (!empty($operation->eventName)) {
                 $this->addEvent($category, $operation->eventName, tenantId: $tenantId);
             }
+        }
+    }
+
+    private function normalizeSchema(string $schema): string
+    {
+        if (class_exists($schema)) {
+            return 'php+class://' . ClassName::serialize($schema);
+        } elseif (in_array($schema, [ContentType::BINARY, ContentType::FORM, ContentType::JSON, ContentType::MULTIPART, ContentType::TEXT, ContentType::XML])) {
+            return 'mime://' . $schema;
+        } else {
+            return 'schema://' . $schema;
         }
     }
 

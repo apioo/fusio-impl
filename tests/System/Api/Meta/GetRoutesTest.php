@@ -54,6 +54,24 @@ class GetRoutesTest extends DbTestCase
             "PUT": "inspect.put",
             "PATCH": "inspect.patch",
             "DELETE": "inspect.delete"
+        },
+        "\/mime\/binary": {
+            "POST": "mime.binary"
+        },
+        "\/mime\/form": {
+            "POST": "mime.form"
+        },
+        "\/mime\/json": {
+            "POST": "mime.json"
+        },
+        "\/mime\/multipart": {
+            "POST": "mime.multipart"
+        },
+        "\/mime\/text": {
+            "POST": "mime.text"
+        },
+        "\/mime\/xml": {
+            "POST": "mime.xml"
         }
     }
 }

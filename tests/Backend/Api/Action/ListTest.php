@@ -99,6 +99,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
         },
         {
+            "name": "MIME-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
+        },
+        {
             "name": "PHP-Processor",
             "class": "Fusio.Adapter.Php.Action.PhpProcessor"
         },

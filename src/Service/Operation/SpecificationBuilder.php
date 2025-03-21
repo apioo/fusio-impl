@@ -20,18 +20,21 @@
 
 namespace Fusio\Impl\Service\Operation;
 
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use PSX\Api\Operation;
 use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\OperationInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
+use PSX\Schema\ContentType;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Parser\Context\NamespaceContext;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
+use PSX\Schema\Type\ReferencePropertyType;
 
 /**
  * Service which builds a specification based on the schemas defined at the database
@@ -66,11 +69,11 @@ class SpecificationBuilder
         $scopes = $this->scopeTable->getScopesForOperation($operationId);
         $tags = $this->getTagsFromScopes($scopes);
 
-        $return = $this->getReturn($row, $specification->getDefinitions());
+        $return = $this->buildReturn($row, $specification->getDefinitions());
 
         $operation = new Operation($row->getHttpMethod(), $row->getHttpPath(), $return);
-        $operation->setArguments($this->getArguments($row, $specification->getDefinitions()));
-        $operation->setThrows($this->getThrows($row, $specification->getDefinitions()));
+        $operation->setArguments($this->buildArguments($row, $specification->getDefinitions()));
+        $operation->setThrows($this->buildThrows($row, $specification->getDefinitions()));
 
         if (!empty($row->getDescription())) {
             $operation->setDescription($row->getDescription());
@@ -100,22 +103,17 @@ class SpecificationBuilder
         return $specification;
     }
 
-    private function getReturn(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Response
+    private function buildReturn(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Response
     {
         $outgoing = $row->getOutgoing();
         if (empty($outgoing)) {
             throw new \RuntimeException('Provided no outgoing schema');
         }
 
-        $schema = $this->getSchema($outgoing);
-        $name = $this->getNameForSchema($outgoing, $schema);
-
-        $definitions->addSchema($name, $schema);
-
-        return new Operation\Response($row->getHttpCode(), PropertyTypeFactory::getReference($name));
+        return new Operation\Response($row->getHttpCode(), $this->buildSchema($outgoing, $definitions));
     }
 
-    private function getArguments(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Arguments
+    private function buildArguments(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): Operation\Arguments
     {
         $arguments = new Operation\Arguments();
 
@@ -123,12 +121,7 @@ class SpecificationBuilder
 
         $incoming = $row->getIncoming();
         if (!empty($incoming)) {
-            $schema = $this->getSchema($incoming);
-            $name = $this->getNameForSchema($incoming, $schema);
-
-            $definitions->addSchema($name, $schema);
-
-            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, PropertyTypeFactory::getReference($name)));
+            $arguments->add('payload', new Operation\Argument(ArgumentInterface::IN_BODY, $this->buildSchema($incoming, $definitions)));
         }
 
         $rawParameters = $row->getParameters();
@@ -142,7 +135,7 @@ class SpecificationBuilder
         return $arguments;
     }
 
-    private function getThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
+    private function buildThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
     {
         $throws = \json_decode($row->getThrows() ?? '');
         if (!$throws instanceof \stdClass) {
@@ -151,12 +144,7 @@ class SpecificationBuilder
 
         $result = [];
         foreach ($throws as $httpCode => $throw) {
-            $schema = $this->getSchema($throw);
-            $name = $this->getNameForSchema($throw, $schema);
-
-            $definitions->addSchema($name, $schema);
-
-            $result[] = new Operation\Response($httpCode, PropertyTypeFactory::getReference($name));
+            $result[] = new Operation\Response($httpCode, $this->buildSchema($throw, $definitions));
         }
 
         return $result;
@@ -196,6 +184,22 @@ class SpecificationBuilder
             }
 
             $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_QUERY, $this->schemaParser->parsePropertyType($schema)));
+        }
+    }
+
+    private function buildSchema(string $source, DefinitionsInterface $definitions): ContentType|ReferencePropertyType
+    {
+        [$scheme, $value] = Scheme::split($source);
+
+        if ($scheme === Scheme::MIME) {
+            return ContentType::from($value);
+        } else {
+            $schema = $this->getSchema($source);
+            $name = $this->getNameForSchema($source, $schema);
+
+            $definitions->addSchema($name, $schema);
+
+            return PropertyTypeFactory::getReference($name);
         }
     }
 

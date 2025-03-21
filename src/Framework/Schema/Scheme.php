@@ -34,6 +34,7 @@ enum Scheme: string
     case HTTP = 'http';
     case HTTPS = 'https';
     case FILE = 'file';
+    case MIME = 'mime';
     case TYPEHUB = 'typehub';
 
     public static function wrap(?string $schemaName): ?string
