@@ -53,10 +53,22 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 7,
+    "totalResults": 9,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 10,
+            "status": 4,
+            "operationName": "mime.json",
+            "message": "Expected status code 200 got 500"
+        },
+        {
+            "id": 9,
+            "status": 4,
+            "operationName": "mime.form",
+            "message": "Expected status code 200 got 500"
+        },
         {
             "id": 2,
             "status": 4,

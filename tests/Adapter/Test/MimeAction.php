@@ -24,13 +24,11 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequestContext;
-use Fusio\Engine\Request\RpcRequestContext;
 use Fusio\Engine\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+use PSX\Data\Body\Form;
+use PSX\Data\Body\Json;
 use PSX\Data\Body\Multipart;
-use PSX\Http\Exception as StatusCode;
-use PSX\Record\RecordInterface;
 
 /**
  * MimeAction
@@ -55,7 +53,10 @@ class MimeAction extends ActionAbstract
         } elseif ($payload instanceof \DOMDocument) {
             $class = ClassName::serialize($payload::class);
             $raw = $payload->saveXML();
-        } elseif ($payload instanceof \stdClass) {
+        } elseif ($payload instanceof Form) {
+            $class = ClassName::serialize($payload::class);
+            $raw = $payload;
+        } elseif ($payload instanceof Json) {
             $class = ClassName::serialize($payload::class);
             $raw = $payload;
         } elseif ($payload instanceof Multipart) {
