@@ -68,7 +68,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "class": "stdClass",
+    "class": "PSX.Data.Body.Form",
     "raw": {
         "foo": "bar"
     }
@@ -92,7 +92,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "class": "stdClass",
+    "class": "PSX.Data.Body.Json",
     "raw": {
         "foo": "bar"
     }
@@ -178,10 +178,8 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "class": "stdClass",
-    "raw": {
-        "foo": "bar"
-    }
+    "class": "DOMDocument",
+    "raw": "<?xml version=\"1.0\"?>\n<root><foo>bar<\/foo><\/root>\n"
 }
 JSON;
 
