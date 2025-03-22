@@ -28,6 +28,7 @@ This overview shows all Fusio related composer dependencies and the build status
 | [fusio/adapter-mongodb](https://github.com/apioo/fusio-adapter-mongodb)             | ![Status](https://github.com/apioo/fusio-adapter-mongodb/actions/workflows/ci.yml/badge.svg)       |
 | [fusio/adapter-php](https://github.com/apioo/fusio-adapter-php)                     | ![Status](https://github.com/apioo/fusio-adapter-php/actions/workflows/ci.yml/badge.svg)           |
 | [fusio/adapter-redis](https://github.com/apioo/fusio-adapter-redis)                 | ![Status](https://github.com/apioo/fusio-adapter-redis/actions/workflows/ci.yml/badge.svg)         |
+| [fusio/adapter-sdkfabric](https://github.com/apioo/fusio-adapter-sdkfabric)         | ![Status](https://github.com/apioo/fusio-adapter-redis/actions/workflows/ci.yml/badge.svg)         |
 | [fusio/adapter-smtp](https://github.com/apioo/fusio-adapter-smtp)                   | ![Status](https://github.com/apioo/fusio-adapter-smtp/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-soap](https://github.com/apioo/fusio-adapter-soap)                   | ![Status](https://github.com/apioo/fusio-adapter-soap/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-sql](https://github.com/apioo/fusio-adapter-sql)                     | ![Status](https://github.com/apioo/fusio-adapter-sql/actions/workflows/ci.yml/badge.svg)           |
