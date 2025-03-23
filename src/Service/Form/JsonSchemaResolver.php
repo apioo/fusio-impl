@@ -20,6 +20,10 @@
 
 namespace Fusio\Impl\Service\Form;
 
+use Fusio\Impl\Table;
+use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\SchemaManagerInterface;
+
 /**
  * JsonSchemaResolver
  *
@@ -29,9 +33,25 @@ namespace Fusio\Impl\Service\Form;
  */
 class JsonSchemaResolver
 {
-    public function resolve(int $operationId): array
+    public function __construct(private Table\Operation $operationTable, private SchemaManagerInterface $schemaManager)
     {
+    }
 
-        return ['json' => 'schema'];
+    public function resolve(int $operationId): ?object
+    {
+        $operation = $this->operationTable->find($operationId);
+        if (!$operation instanceof Table\Generated\OperationRow) {
+            return new \stdClass();
+        }
+
+        $incoming = $operation->getIncoming();
+        if (empty($incoming)) {
+            return new \stdClass();
+        }
+
+        $schema = $this->schemaManager->getSchema($incoming);
+        $jsonSchema = (new JsonSchema())->toArray($schema->getDefinitions(), $schema->getRoot());
+
+        return (object) $jsonSchema;
     }
 }

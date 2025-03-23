@@ -48,7 +48,22 @@ class EntityTest extends DbTestCase
     "action": "http:\/\/127.0.0.1\/foo",
     "method": "POST",
     "jsonSchema": {
-        "json": "schema"
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "integer"
+            },
+            "title": {
+                "type": "string"
+            },
+            "content": {
+                "type": "string"
+            },
+            "date": {
+                "type": "string",
+                "format": "date-time"
+            }
+        }
     },
     "uiSchema": {
         "foo": "bar"
