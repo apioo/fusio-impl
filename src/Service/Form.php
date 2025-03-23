@@ -57,8 +57,8 @@ readonly class Form
             $row = new Table\Generated\FormRow();
             $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Form::STATUS_ACTIVE);
-            $row->setName($form->getName());
-            $row->setOperationId($form->getOperationId());
+            $row->setName($form->getName() ?? throw new StatusCode\BadRequestException('Provided no name'));
+            $row->setOperationId($form->getOperationId() ?? throw new StatusCode\BadRequestException('Provided no operation id'));
             $row->setUiSchema(Parser::encode($form->getUiSchema()));
             $row->setMetadata($form->getMetadata() !== null ? Parser::encode($form->getMetadata()) : null);
             $this->formTable->create($row);
@@ -94,7 +94,7 @@ readonly class Form
         try {
             $this->formTable->beginTransaction();
 
-            $existing->setName($form->getName());
+            $existing->setName($form->getName() ?? $existing->getName());
             $existing->setOperationId($form->getOperationId() ?? $existing->getOperationId());
             $existing->setUiSchema($form->getUiSchema() !== null ? Parser::encode($form->getUiSchema()) : $existing->getUiSchema());
             $existing->setMetadata($form->getMetadata() !== null ? Parser::encode($form->getMetadata()) : $existing->getMetadata());

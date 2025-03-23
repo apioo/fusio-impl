@@ -87,12 +87,20 @@ class Form extends ViewAbstract
             'status' => $builder->fieldInteger(Table\Generated\FormTable::COLUMN_STATUS),
             'name' => Table\Generated\FormTable::COLUMN_NAME,
             'action' => $builder->fieldCallback(Table\Generated\FormTable::COLUMN_OPERATION_ID, function ($operationId) {
-                $table = $this->getTable(Table\Generated\OperationTable::class)->find($operationId);
-                return $this->config->getUrl(ltrim($table->getHttpPath(), '/'));
+                $operation = $this->getTable(Table\Generated\OperationTable::class)->find($operationId);
+                if (!$operation instanceof Table\Generated\OperationRow) {
+                    return null;
+                }
+
+                return $this->config->getUrl(ltrim($operation->getHttpPath(), '/'));
             }),
             'method' => $builder->fieldCallback(Table\Generated\FormTable::COLUMN_OPERATION_ID, function ($operationId) {
-                $table = $this->getTable(Table\Generated\OperationTable::class)->find($operationId);
-                return $table->getHttpMethod();
+                $operation = $this->getTable(Table\Generated\OperationTable::class)->find($operationId);
+                if (!$operation instanceof Table\Generated\OperationRow) {
+                    return null;
+                }
+
+                return $operation->getHttpMethod();
             }),
             'jsonSchema' => $builder->fieldCallback(Table\Generated\FormTable::COLUMN_OPERATION_ID, function ($operationId) {
                 return $this->jsonSchemaResolver->resolve($operationId);
