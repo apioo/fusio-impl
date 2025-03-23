@@ -166,7 +166,7 @@ class UpgradeCommand extends Command
 
         if (isset($data['throws']) && is_array($data['throws'])) {
             foreach ($data['throws'] as $httpCode => $schema) {
-                $lines[] = '$operation->addThrow(' . $httpCode . ', ' . substr($data['outgoing'], 4) . '::class);';
+                $lines[] = '$operation->addThrow(' . $httpCode . ', ' . substr($schema, 4) . '::class);';
             }
         }
 
