@@ -68,6 +68,10 @@ class UpgradeCommand extends Command
     private function recursiveMigrate(string $baseDir, OutputInterface $output): void
     {
         $files = scandir($baseDir);
+        if ($files === false) {
+            throw new \RuntimeException('Unable to read directory ' . $baseDir);
+        }
+
         foreach ($files as $file) {
             if ($file[0] === '.') {
                 continue;
