@@ -33,7 +33,7 @@ class EntityTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/event/56', 'GET', array(
+        $response = $this->sendRequest('/consumer/event/59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -42,7 +42,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": 56,
+    "id": 59,
     "status": 1,
     "name": "foo-event",
     "description": "Foo event description",
@@ -67,7 +67,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "id": 56,
+    "id": 59,
     "status": 1,
     "name": "foo-event",
     "description": "Foo event description",

@@ -17,6 +17,7 @@
       "backend.dashboard",
       "backend.database",
       "backend.event",
+      "backend.form",
       "backend.generator",
       "backend.identity",
       "backend.log",
@@ -2568,6 +2569,211 @@
       "authorization": true,
       "tags": [
         "event"
+      ]
+    },
+    "backend.form.create": {
+      "path": "/backend/form",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_FormCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.form"
+      ],
+      "authorization": true,
+      "tags": [
+        "form"
+      ]
+    },
+    "backend.form.delete": {
+      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "form_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.form"
+      ],
+      "authorization": true,
+      "tags": [
+        "form"
+      ]
+    },
+    "backend.form.get": {
+      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Form"
+        }
+      },
+      "arguments": {
+        "form_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.form"
+      ],
+      "authorization": true,
+      "tags": [
+        "form"
+      ]
+    },
+    "backend.form.getAll": {
+      "path": "/backend/form",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_FormCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.form"
+      ],
+      "authorization": true,
+      "tags": [
+        "form"
+      ]
+    },
+    "backend.form.update": {
+      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "form_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_FormUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.form"
+      ],
+      "authorization": true,
+      "tags": [
+        "form"
       ]
     },
     "backend.generator.executeProvider": {
@@ -8476,6 +8682,88 @@
         "event"
       ]
     },
+    "consumer.form.get": {
+      "path": "/consumer/form/:form_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_Form"
+        }
+      },
+      "arguments": {
+        "form_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": [
+        "form"
+      ]
+    },
+    "consumer.form.getAll": {
+      "path": "/consumer/form",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_FormCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": [
+        "form"
+      ]
+    },
     "consumer.grant.delete": {
       "path": "/consumer/grant/$grant_id<[0-9]+>",
       "method": "DELETE",
@@ -10594,6 +10882,54 @@
         "target": "Backend_Event"
       }
     },
+    "Backend_Form": {
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "operationId": {
+          "type": "integer"
+        },
+        "uiSchema": {
+          "type": "any"
+        },
+        "metadata": {
+          "type": "reference",
+          "target": "Common_Metadata"
+        }
+      }
+    },
+    "Backend_FormCollection": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Form"
+        }
+      }
+    },
+    "Backend_FormCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Form"
+      }
+    },
+    "Backend_FormUpdate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Form"
+      }
+    },
     "Backend_GeneratorIndexProvider": {
       "type": "struct",
       "properties": {
@@ -12094,6 +12430,43 @@
         "target": "Common_Collection",
         "template": {
           "T": "Consumer_Event"
+        }
+      }
+    },
+    "Consumer_Form": {
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "jsonSchema": {
+          "type": "any"
+        },
+        "uiSchema": {
+          "type": "any"
+        },
+        "metadata": {
+          "type": "reference",
+          "target": "Common_Metadata"
+        }
+      }
+    },
+    "Consumer_FormCollection": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_Form"
         }
       }
     },

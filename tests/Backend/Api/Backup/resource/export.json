@@ -333,7 +333,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 217,
+          "operationId": 224,
           "authenticated": true
         }
       ]
@@ -350,7 +350,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 216
+          "operationId": 223
         }
       ]
     },
@@ -523,6 +523,7 @@
         "backend.dashboard",
         "backend.database",
         "backend.event",
+        "backend.form",
         "backend.generator",
         "backend.identity",
         "backend.log",
@@ -547,6 +548,7 @@
         "consumer.account",
         "consumer.app",
         "consumer.event",
+        "consumer.form",
         "consumer.grant",
         "consumer.identity",
         "consumer.log",
@@ -579,6 +581,7 @@
         "backend.dashboard",
         "backend.database",
         "backend.event",
+        "backend.form",
         "backend.generator",
         "backend.identity",
         "backend.log",
@@ -612,6 +615,7 @@
         "consumer.account",
         "consumer.app",
         "consumer.event",
+        "consumer.form",
         "consumer.grant",
         "consumer.identity",
         "consumer.log",
