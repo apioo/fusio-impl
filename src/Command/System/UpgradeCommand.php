@@ -20,10 +20,11 @@
 
 namespace Fusio\Impl\Command\System;
 
-use Doctrine\DBAL\Connection;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * UpgradeCommand
@@ -34,13 +35,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpgradeCommand extends Command
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private FrameworkConfig $config)
     {
         parent::__construct();
-
-        $this->connection = $connection;
     }
 
     protected function configure(): void
@@ -48,22 +45,153 @@ class UpgradeCommand extends Command
         $this
             ->setName('system:upgrade')
             ->setAliases(['upgrade'])
-            ->setDescription('Upgrades an existing 4.x database structure to 5.x');
+            ->setDescription('Converts all YAML operation definitions to PHP');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Starting upgrade ...');
 
-        $this->runFusio4xMigration($output);
+        $baseDir = __DIR__ . '/../../../resources/operations';
+        if (!is_dir($baseDir)) {
+            $output->writeln('Folder resources/operations does not exist');
+            return self::FAILURE;
+        }
+
+        $this->recursiveMigrate($baseDir, $output);
 
         $output->writeln('Upgrade completed');
 
         return self::SUCCESS;
     }
 
-    private function runFusio4xMigration(OutputInterface $output): void
+    private function recursiveMigrate(string $baseDir, OutputInterface $output): void
     {
-        // @TODO add upgrade if needed
+        $files = scandir($baseDir);
+        foreach ($files as $file) {
+            if ($file[0] === '.') {
+                continue;
+            }
+
+            $path = $baseDir . '/' . $file;
+            if (is_dir($path)) {
+                $this->recursiveMigrate($path, $output);
+            } elseif (is_file($path)) {
+                $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
+                if ($fileExtension !== 'yaml') {
+                    continue;
+                }
+
+                $phpFile = pathinfo($path, PATHINFO_FILENAME) . '.php';
+                $targetFile = $baseDir . '/' . $phpFile;
+
+                $this->migrate($path, $targetFile);
+
+                $output->writeln('* ' . $targetFile);
+            }
+        }
+    }
+
+    private function migrate(string $sourceFile, string $targetFile): void
+    {
+        $content = file_get_contents($sourceFile);
+        if ($content === false) {
+            throw new \RuntimeException('Could not read file ' . $sourceFile);
+        }
+
+        $data = Yaml::parse($sourceFile);
+        $lines = [];
+
+        if (isset($data['scopes'])) {
+            $lines[] = '$operation->setScopes(' . \json_encode($data['scopes']) . ');';
+        }
+
+        if (isset($data['stability'])) {
+            if ($data['stability'] === 0) {
+                $lines[] = '$operation->setScopes(Stability::DEPRECATED);';
+            } elseif ($data['stability'] === 1) {
+                $lines[] = '$operation->setScopes(Stability::EXPERIMENTAL);';
+            } elseif ($data['stability'] === 2) {
+                $lines[] = '$operation->setScopes(Stability::STABLE);';
+            } elseif ($data['stability'] === 3) {
+                $lines[] = '$operation->setScopes(Stability::LEGACY);';
+            }
+        }
+
+        if (isset($data['public'])) {
+            if ($data['public'] === true) {
+                $lines[] = '$operation->setPublic(true);';
+            } elseif ($data['public'] === false) {
+                $lines[] = '$operation->setPublic(false);';
+            }
+        }
+
+        if (isset($data['description'])) {
+            $lines[] = '$operation->setDescription(\'' . $data['description'] . '\');';
+        }
+
+        if (isset($data['httpMethod'])) {
+            $lines[] = '$operation->setHttpMethod(HttpMethod::' . $data['httpMethod'] . ');';
+        }
+
+        if (isset($data['httpPath'])) {
+            $lines[] = '$operation->setHttpPath(\'' . $data['httpPath'] . '\');';
+        }
+
+        if (isset($data['httpCode'])) {
+            $lines[] = '$operation->setHttpCode(' . $data['httpCode'] . ');';
+        }
+
+        if (isset($data['parameters']) && is_array($data['parameters'])) {
+            foreach ($data['parameters'] as $name => $parameter) {
+                if ($parameter['type'] === 'integer') {
+                    $lines[] = '$operation->addParameter(\'' . $name . '\', PropertyTypeFactory::getInteger());';
+                } elseif ($parameter['type'] === 'number') {
+                    $lines[] = '$operation->addParameter(\'' . $name . '\', PropertyTypeFactory::getNumber());';
+                } elseif ($parameter['type'] === 'string') {
+                    $lines[] = '$operation->addParameter(\'' . $name . '\', PropertyTypeFactory::getString());';
+                } elseif ($parameter['type'] === 'boolean') {
+                    $lines[] = '$operation->addParameter(\'' . $name . '\', PropertyTypeFactory::getBoolean());';
+                }
+            }
+        }
+
+        if (isset($data['incoming'])) {
+            $lines[] = '$operation->setIncoming(' . substr($data['incoming'], 4) . '::class);';
+        }
+
+        if (isset($data['outgoing'])) {
+            $lines[] = '$operation->setOutgoing(' . substr($data['outgoing'], 4) . '::class);';
+        }
+
+        if (isset($data['throws']) && is_array($data['throws'])) {
+            foreach ($data['throws'] as $httpCode => $schema) {
+                $lines[] = '$operation->addThrow(' . $httpCode . ', ' . substr($data['outgoing'], 4) . '::class);';
+            }
+        }
+
+        if (isset($data['action'])) {
+            $lines[] = '$operation->setAction(' . substr($data['action'], 4) . '::class);';
+        }
+
+        $content = implode("\n    ", $lines);
+
+        $code = <<<PHP
+<?php
+
+use App\Action;
+use App\Model;
+use Fusio\Cli\Builder\Operation;
+use Fusio\Cli\Builder\Operation\HttpMethod;
+use Fusio\Cli\Builder\Operation\Stability;
+use PSX\Schema\Type\Factory\PropertyTypeFactory;
+
+return function (Operation \$operation) {
+    {$content}
+};
+
+PHP;
+
+        file_put_contents($targetFile, $code);
     }
 }
