@@ -18,32 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Tenant;
+namespace Fusio\Impl\Event\Form;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\FormRow;
 
 /**
- * LimiterInterface
+ * DeletedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface LimiterInterface
+class DeletedEvent extends EventAbstract
 {
-    public function getActionCount(): int;
-    public function getAppCount(): int;
-    public function getCategoryCount(): int;
-    public function getConnectionCount(): int;
-    public function getCronjobCount(): int;
-    public function getEventCount(): int;
-    public function getFormCount(): int;
-    public function getIdentityCount(): int;
-    public function getOperationCount(): int;
-    public function getPageCount(): int;
-    public function getPlanCount(): int;
-    public function getRateCount(): int;
-    public function getRoleCount(): int;
-    public function getSchemaCount(): int;
-    public function getScopeCount(): int;
-    public function getUserCount(): int;
-    public function getWebhookCount(): int;
+    private FormRow $existing;
+
+    public function __construct(FormRow $existing, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->existing = $existing;
+    }
+
+    public function getExisting(): FormRow
+    {
+        return $this->existing;
+    }
 }

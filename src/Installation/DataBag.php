@@ -330,6 +330,18 @@ class DataBag
         ];
     }
 
+    public function addForm(string $name, string $operation, array $uiSchema, ?array $metadata = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_form'][$name] = [
+            'tenant_id' => $tenantId,
+            'status' => Table\Event::STATUS_ACTIVE,
+            'name' => $name,
+            'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
+            'ui_schema' => json_encode($uiSchema),
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+        ];
+    }
+
     public function addIdentity(string $app, string $name, string $icon, string $class, string $clientId, string $clientSecret, string $authorizationUri, string $tokenUri, string $userInfoUri, string $idProperty = 'id', string $nameProperty = 'name', string $emailProperty = 'email', ?string $insertDate = null, ?string $tenantId = null): void
     {
         $this->data['fusio_identity'][$name] = [

@@ -20,64 +20,45 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\CronjobRow;
-use Fusio\Impl\Table\Generated\IdentityRow;
-use Fusio\Impl\Table\Generated\OperationRow;
+use Fusio\Impl\Table\Generated\FormRow;
 use PSX\Sql\Condition;
 
 /**
- * Operation
+ * Form
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Operation extends Generated\OperationTable
+class Form extends Generated\FormTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
 
-    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?OperationRow
+    public function findOneByIdentifier(?string $tenantId, string $id): ?FormRow
     {
         if (str_starts_with($id, '~')) {
-            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
         } else {
-            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
         }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, ?int $categoryId, int $id): ?OperationRow
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?FormRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        if ($categoryId !== null) {
-            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
-        }
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }
 
-    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name): ?OperationRow
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?FormRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        if ($categoryId !== null) {
-            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
-        }
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
-    }
-
-    public function getAvailableMethods(string $httPath): array
-    {
-        $result = $this->findByHttpPath($httPath);
-        $methods = [];
-        foreach ($result as $operation) {
-            $methods[] = $operation->getHttpMethod();
-        }
-        sort($methods);
-        return $methods;
     }
 }

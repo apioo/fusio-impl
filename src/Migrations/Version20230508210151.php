@@ -6,11 +6,9 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Installation\NewInstallation;
 use Fusio\Impl\Installation\Reference;
 use Fusio\Impl\Table;
-use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 
 /**
@@ -172,6 +170,19 @@ final class Version20230508210151 extends AbstractMigration
             $eventTable->addColumn('metadata', 'text', ['notnull' => false]);
             $eventTable->setPrimaryKey(['id']);
             $eventTable->addUniqueIndex(['tenant_id', 'name']);
+        }
+
+        if (!$schema->hasTable('fusio_form')) {
+            $formTable = $schema->createTable('fusio_form');
+            $formTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $formTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $formTable->addColumn('status', 'integer');
+            $formTable->addColumn('name', 'string', ['length' => 64]);
+            $formTable->addColumn('operation_id', 'integer');
+            $formTable->addColumn('ui_schema', 'text');
+            $formTable->addColumn('metadata', 'text', ['notnull' => false]);
+            $formTable->setPrimaryKey(['id']);
+            $formTable->addUniqueIndex(['tenant_id', 'name']);
         }
 
         if (!$schema->hasTable('fusio_identity')) {
@@ -541,6 +552,10 @@ final class Version20230508210151 extends AbstractMigration
             $eventTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'event_category_id');
         }
 
+        if (isset($formTable)) {
+            $formTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'form_operation_id');
+        }
+
         if (isset($identityRequestTable)) {
             $identityRequestTable->addForeignKeyConstraint($schema->getTable('fusio_identity'), ['identity_id'], ['id'], [], 'identity_request_identity_id');
         }
@@ -632,6 +647,7 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_cronjob');
         $schema->dropTable('fusio_cronjob_error');
         $schema->dropTable('fusio_event');
+        $schema->dropTable('fusio_form');
         $schema->dropTable('fusio_identity');
         $schema->dropTable('fusio_identity_request');
         $schema->dropTable('fusio_log');
