@@ -56,7 +56,7 @@ class Get implements ActionInterface
         }
 
         if ($form['status'] == Table\Event::STATUS_DELETED) {
-            throw new StatusCode\GoneException('FOrm was deleted');
+            throw new StatusCode\GoneException('Form was deleted');
         }
 
         return $form;
