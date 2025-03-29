@@ -61,6 +61,11 @@ class UnlimitedLimiter implements LimiterInterface
         return PHP_INT_MAX;
     }
 
+    public function getFormCount(): int
+    {
+        return PHP_INT_MAX;
+    }
+
     public function getIdentityCount(): int
     {
         return PHP_INT_MAX;

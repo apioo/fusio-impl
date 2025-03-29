@@ -35,6 +35,7 @@ interface LimiterInterface
     public function getConnectionCount(): int;
     public function getCronjobCount(): int;
     public function getEventCount(): int;
+    public function getFormCount(): int;
     public function getIdentityCount(): int;
     public function getOperationCount(): int;
     public function getPageCount(): int;

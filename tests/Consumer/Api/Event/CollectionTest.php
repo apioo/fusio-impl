@@ -47,7 +47,7 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 56,
+            "id": 59,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",
@@ -79,7 +79,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 56,
+            "id": 59,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",

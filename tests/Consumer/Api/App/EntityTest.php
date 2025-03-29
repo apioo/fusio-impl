@@ -170,6 +170,7 @@ JSON;
             'consumer.account',
             'consumer.app',
             'consumer.event',
+            'consumer.form',
             'consumer.grant',
             'consumer.identity',
             'consumer.log',

@@ -96,6 +96,15 @@ class UsageLimiter
         );
     }
 
+    public function assertFormCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\FormTable::NAME, $tenantId),
+            $this->limiter->getFormCount(),
+            'form'
+        );
+    }
+
     public function assertIdentityCount(?string $tenantId): void
     {
         $this->assert(

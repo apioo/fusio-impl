@@ -47,12 +47,12 @@ class AuthorizeTest extends DbTestCase
     "url": "http:\/\/google.com",
     "scopes": [
         {
-            "id": 51,
+            "id": 53,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 52,
+            "id": 54,
             "name": "bar",
             "description": "Bar access"
         }
