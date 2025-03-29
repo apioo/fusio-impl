@@ -83,6 +83,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.SdkFabric.Connection.Notion"
         },
         {
+            "name": "SDK-OpenAI",
+            "class": "Fusio.Adapter.SdkFabric.Connection.OpenAI"
+        },
+        {
             "name": "SDK-Starwars",
             "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
         },
