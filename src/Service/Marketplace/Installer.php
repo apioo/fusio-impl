@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Marketplace\MarketplaceInstall;
+use Fusio\Marketplace\MarketplaceMessageException;
 use Fusio\Marketplace\MarketplaceObject;
 use PSX\Http\Exception as StatusCode;
 
@@ -54,7 +55,11 @@ class Installer
         $user = $parts[0] ?? throw new StatusCode\BadRequestException('Name not provided');
         $name = $parts[1] ?? throw new StatusCode\BadRequestException('User not provided');
 
-        $object = $factory->getRepository()->install($user, $name);
+        try {
+            $object = $factory->getRepository()->install($user, $name);
+        } catch (MarketplaceMessageException $e) {
+            throw new StatusCode\BadRequestException('Could not install action: ' . $e->getPayload()->getMessage());
+        }
 
         $installer = $factory->getInstaller();
         if ($installer->isInstalled($object, $context)) {
@@ -70,7 +75,11 @@ class Installer
     {
         $factory = $this->factory->factory($type);
 
-        $object = $factory->getRepository()->install($user, $name);
+        try {
+            $object = $factory->getRepository()->install($user, $name);
+        } catch (MarketplaceMessageException $e) {
+            throw new StatusCode\BadRequestException('Could not install action: ' . $e->getPayload()->getMessage());
+        }
 
         $installer = $factory->getInstaller();
         if (!$installer->isInstalled($object, $context)) {
