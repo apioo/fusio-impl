@@ -51,7 +51,7 @@ class Captcha
         }
     }
 
-    protected function verifyCaptcha(?string $captcha, string $secret): true
+    protected function verifyCaptcha(?string $captcha, string $secret): bool
     {
         if (empty($captcha)) {
             throw new StatusCode\BadRequestException('Invalid captcha');
