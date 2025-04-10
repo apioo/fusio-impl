@@ -36,13 +36,10 @@ use PSX\Http\ResponseInterface;
  */
 class Tenant implements FilterInterface
 {
-    private FrameworkConfig $frameworkConfig;
-    private ContextFactory $contextFactory;
-
-    public function __construct(FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
-    {
-        $this->frameworkConfig = $frameworkConfig;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private FrameworkConfig $frameworkConfig,
+        private ContextFactory $contextFactory,
+    ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void

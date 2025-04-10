@@ -39,13 +39,10 @@ use PSX\Http\ResponseInterface;
  */
 class Operation implements FilterInterface
 {
-    private Table\Operation $operationTable;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Table\Operation $operationTable, ContextFactory $contextFactory)
-    {
-        $this->operationTable = $operationTable;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private Table\Operation $operationTable,
+        private ContextFactory $contextFactory,
+    ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void

@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Framework\Loader\ContextPropertyNotSetException;
 use Fusio\Impl\Service;
 use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;

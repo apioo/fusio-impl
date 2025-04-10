@@ -37,13 +37,10 @@ use PSX\Http\ResponseInterface;
  */
 class Authentication implements FilterInterface
 {
-    private TokenValidator $tokenValidator;
-    private ContextFactory $contextFactory;
-
-    public function __construct(TokenValidator $tokenValidator, ContextFactory $contextFactory)
-    {
-        $this->tokenValidator = $tokenValidator;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private TokenValidator $tokenValidator,
+        private ContextFactory $contextFactory,
+    ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
