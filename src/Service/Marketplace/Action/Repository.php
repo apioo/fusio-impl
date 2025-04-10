@@ -24,6 +24,8 @@ use Fusio\Impl\Service\Marketplace\RemoteAbstract;
 use Fusio\Marketplace\MarketplaceAction;
 use Fusio\Marketplace\MarketplaceActionCollection;
 use Fusio\Marketplace\MarketplaceInstall;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Sdkgen\Client\Exception\ClientException;
 
 /**
  * Repository
@@ -34,16 +36,28 @@ use Fusio\Marketplace\MarketplaceInstall;
  */
 class Repository extends RemoteAbstract
 {
+    /**
+     * @throws ClientException
+     * @throws MarketplaceMessageException
+     */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceActionCollection
     {
         return $this->getClient()->marketplace()->directory()->action()->getAll($startIndex, 16, $query);
     }
 
+    /**
+     * @throws ClientException
+     * @throws MarketplaceMessageException
+     */
     public function fetchByName(string $user, string $name): MarketplaceAction
     {
         return $this->getClient()->marketplace()->directory()->action()->get($user, $name);
     }
 
+    /**
+     * @throws ClientException
+     * @throws MarketplaceMessageException
+     */
     public function install(string $user, string $name): MarketplaceAction
     {
         $install = new MarketplaceInstall();

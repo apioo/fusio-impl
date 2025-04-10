@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Marketplace;
 use Fusio\Marketplace\MarketplaceCollection;
 use Fusio\Marketplace\MarketplaceMessageException;
 use Fusio\Marketplace\MarketplaceObject;
+use Sdkgen\Client\Exception\ClientException;
 
 /**
  * RepositoryInterface
@@ -35,12 +36,16 @@ interface RepositoryInterface
 {
     /**
      * Returns all available objects from the marketplace repository
+     *
+     * @throws ClientException
+     * @throws MarketplaceMessageException
      */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceCollection;
 
     /**
      * Returns a single object from the repository
      *
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceObject;
@@ -48,6 +53,7 @@ interface RepositoryInterface
     /**
      * Returns a single object from the repository
      *
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function install(string $user, string $name): MarketplaceObject;
