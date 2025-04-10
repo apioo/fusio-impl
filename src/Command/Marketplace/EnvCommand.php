@@ -23,7 +23,6 @@ namespace Fusio\Impl\Command\Marketplace;
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
 use Fusio\Marketplace\MarketplaceApp;
-use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -97,7 +96,7 @@ class EnvCommand extends Command
             $output->writeln('');
             $output->writeln('Replaced env ' . $app->getAuthor()?->getName() . '/' . $app->getName());
             $output->writeln('');
-        } catch (BadRequestException $e) {
+        } catch (\Throwable $e) {
             $output->writeln('');
             $output->writeln($e->getMessage());
             $output->writeln('');
