@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\UserLogin;
 use Fusio\Model\Consumer\UserRefresh;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
@@ -37,15 +38,12 @@ use PSX\OAuth2\AccessToken;
  */
 class Login
 {
-    private Authenticator $authenticatorService;
-    private Service\Token $tokenService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->authenticatorService = $authenticatorService;
-        $this->tokenService = $tokenService;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Service\User\Authenticator $authenticatorService,
+        private Service\Token $tokenService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function login(UserLogin $login, UserContext $context): ?AccessToken
@@ -73,7 +71,7 @@ class Login
         }
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = 'Consumer Login by ' . $userAgent . ' (' . $ip . ')';
 
         return $this->tokenService->generate(
@@ -96,7 +94,7 @@ class Login
         }
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = 'Consumer Refresh by ' . $userAgent . ' (' . $ip . ')';
 
         return $this->tokenService->refresh(

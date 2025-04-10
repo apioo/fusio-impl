@@ -23,6 +23,7 @@ namespace Fusio\Impl\Authorization\GrantType;
 use Fusio\Impl\Authorization\TokenNameBuilder;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\PasswordAbstract;
 use PSX\OAuth2\AccessToken;
@@ -40,19 +41,14 @@ use PSX\OAuth2\Grant;
  */
 class Password extends PasswordAbstract
 {
-    private Service\User\Authenticator $authenticatorService;
-    private Service\Token $tokenService;
-    private Service\Scope $scopeService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private Table\App $appTable;
-
-    public function __construct(Service\User\Authenticator $authenticatorService, Service\Token $tokenService, Service\Scope $scopeService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable)
-    {
-        $this->authenticatorService = $authenticatorService;
-        $this->tokenService = $tokenService;
-        $this->scopeService = $scopeService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->appTable = $appTable;
+    public function __construct(
+        private Service\User\Authenticator $authenticatorService,
+        private Service\Token $tokenService,
+        private Service\Scope $scopeService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private Table\App $appTable,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
@@ -81,7 +77,7 @@ class Password extends PasswordAbstract
         }
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = $userAgent;
 
         // generate access token

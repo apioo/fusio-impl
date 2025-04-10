@@ -35,6 +35,7 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 use PSX\OAuth2\AccessToken;
@@ -60,7 +61,8 @@ readonly class Identity
         private Service\User $userService,
         private Service\Token $tokenService,
         private Service\System\FrameworkConfig $frameworkConfig,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
+        private IPResolver $ipResolver,
     ) {
     }
 
@@ -257,7 +259,7 @@ readonly class Identity
         $scopes = $this->userService->getAvailableScopes($userId, $context);
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = 'Identity Provider ' . $existing->getName() . ' by ' . $userAgent . ' (' . $ip . ')';
 
         $accessToken = $this->tokenService->generate(

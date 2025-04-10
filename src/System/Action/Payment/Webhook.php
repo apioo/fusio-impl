@@ -27,6 +27,7 @@ use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
+use PSX\Framework\Environment\IPResolver;
 
 /**
  * Webhook
@@ -37,15 +38,12 @@ use Fusio\Impl\Service;
  */
 class Webhook implements ActionInterface
 {
-    private Service\Log $logService;
-    private Service\Payment $paymentService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Log $logService, Service\Payment $paymentService, ContextFactory $contextFactory)
-    {
-        $this->logService = $logService;
-        $this->paymentService = $paymentService;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private Service\Log $logService,
+        private Service\Payment $paymentService,
+        private ContextFactory $contextFactory,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -58,7 +56,7 @@ class Webhook implements ActionInterface
         $httpRequest = $requestContext->getRequest();
 
         $this->logService->log(
-            $httpRequest->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $this->ipResolver->resolveByRequest($httpRequest),
             $httpRequest->getMethod(),
             $httpRequest->getRequestTarget(),
             $httpRequest->getHeader('User-Agent'),

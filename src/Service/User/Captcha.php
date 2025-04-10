@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
@@ -35,13 +36,11 @@ use PSX\Json\Parser;
  */
 class Captcha
 {
-    private Service\Config $configService;
-    private ClientInterface $httpClient;
-
-    public function __construct(Service\Config $configService, ClientInterface $httpClient)
-    {
-        $this->configService = $configService;
-        $this->httpClient = $httpClient;
+    public function __construct(
+        private Service\Config $configService,
+        private ClientInterface $httpClient,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function assertCaptcha(?string $captcha): void
@@ -52,7 +51,7 @@ class Captcha
         }
     }
 
-    protected function verifyCaptcha(?string $captcha, string $secret)
+    protected function verifyCaptcha(?string $captcha, string $secret): true
     {
         if (empty($captcha)) {
             throw new StatusCode\BadRequestException('Invalid captcha');
@@ -61,7 +60,7 @@ class Captcha
         $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
             'secret'   => $secret,
             'response' => $captcha,
-            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            'remoteip' => $this->ipResolver->resolveByEnvironment(),
         ]);
 
         $response = $this->httpClient->request($request);

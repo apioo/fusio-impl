@@ -22,6 +22,7 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -36,19 +37,17 @@ use PSX\Http\ResponseInterface;
  */
 class Logger implements FilterInterface
 {
-    private Service\Log $logService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Log $logService, ContextFactory $contextFactory)
-    {
-        $this->logService = $logService;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private Service\Log $logService,
+        private ContextFactory $contextFactory,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $this->logService->log(
-            $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $this->ipResolver->resolveByEnvironment(),
             $request->getMethod(),
             $request->getRequestTarget(),
             $request->getHeader('User-Agent'),

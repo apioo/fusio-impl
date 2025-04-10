@@ -24,6 +24,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
 use PSX\DateTime\LocalDateTime;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Uri\Uri;
@@ -38,21 +39,15 @@ use PSX\Uri\Url;
  */
 class Authorize
 {
-    private Service\Token $tokenService;
-    private Service\Scope $scopeService;
-    private Service\App\Code $appCodeService;
-    private Table\App $appTable;
-    private Table\User\Grant $userGrantTable;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->tokenService = $tokenService;
-        $this->scopeService = $scopeService;
-        $this->appCodeService = $appCodeService;
-        $this->appTable = $appTable;
-        $this->userGrantTable = $userGrantTable;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Service\Token $tokenService,
+        private Service\Scope $scopeService,
+        private Service\App\Code $appCodeService,
+        private Table\App $appTable,
+        private Table\User\Grant $userGrantTable,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function authorize(int $userId, AuthorizeRequest $request): array
@@ -116,7 +111,7 @@ class Authorize
 
                 // generate access token
                 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-                $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+                $ip = $this->ipResolver->resolveByEnvironment();
                 $name = 'OAuth2 Authorization Code by ' . $userAgent . ' (' . $ip . ')';
 
                 $accessToken = $this->tokenService->generate(
@@ -126,7 +121,7 @@ class Authorize
                     $userId,
                     $name,
                     $scopes,
-                    $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+                    $ip,
                     $this->frameworkConfig->getExpireTokenInterval(),
                     $state
                 );

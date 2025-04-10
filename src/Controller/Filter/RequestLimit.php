@@ -23,6 +23,7 @@ namespace Fusio\Impl\Controller\Filter;
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Framework\Loader\ContextPropertyNotSetException;
 use Fusio\Impl\Service;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -38,13 +39,11 @@ use PSX\Http\ResponseInterface;
  */
 class RequestLimit implements FilterInterface
 {
-    private Service\Rate\Limiter $limiterService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Rate\Limiter $limiterService, ContextFactory $contextFactory)
-    {
-        $this->limiterService = $limiterService;
-        $this->contextFactory = $contextFactory;
+    public function __construct(
+        private Service\Rate\Limiter $limiterService,
+        private ContextFactory $contextFactory,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
@@ -52,7 +51,7 @@ class RequestLimit implements FilterInterface
         $context = $this->contextFactory->getActive();
 
         $success = $this->limiterService->assertLimit(
-            $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $this->ipResolver->resolveByRequest($request),
             $context->getOperation(),
             $context->getApp(),
             $context->getUser(),

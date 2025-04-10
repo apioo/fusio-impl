@@ -22,6 +22,7 @@ namespace Fusio\Impl\Authorization\GrantType;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
 use PSX\OAuth2\AccessToken;
@@ -36,19 +37,17 @@ use PSX\OAuth2\Grant;
  */
 class RefreshToken extends RefreshTokenAbstract
 {
-    private Service\Token $tokenService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Service\Token $tokenService, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->tokenService = $tokenService;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Service\Token $tokenService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     protected function generate(Credentials $credentials, Grant\RefreshToken $grant): AccessToken
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = $userAgent;
 
         return $this->tokenService->refresh(

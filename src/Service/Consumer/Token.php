@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use Fusio\Model;
 use Fusio\Model\Consumer\TokenCreate;
 use Fusio\Model\Consumer\TokenUpdate;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
 
@@ -38,19 +39,13 @@ use PSX\OAuth2\AccessToken;
  */
 class Token
 {
-    private Service\Token $tokenService;
-    private Service\Config $configService;
-    private Table\Token $tokenTable;
-    private Table\App $appTable;
-    private Table\Scope $scopeTable;
-
-    public function __construct(Service\Token $tokenService, Service\Config $configService, Table\Token $tokenTable, Table\App $appTable, Table\Scope $scopeTable)
-    {
-        $this->tokenService = $tokenService;
-        $this->configService = $configService;
-        $this->tokenTable = $tokenTable;
-        $this->appTable = $appTable;
-        $this->scopeTable = $scopeTable;
+    public function __construct(
+        private Service\Token $tokenService,
+        private Service\Config $configService,
+        private Table\Token $tokenTable,
+        private Table\Scope $scopeTable,
+        private IPResolver $ipResolver,
+    ) {
     }
 
     public function create(TokenCreate $token, UserContext $context): AccessToken
@@ -71,7 +66,7 @@ class Token
         }
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = $token->getName();
         if (empty($name)) {
             $name = 'Personal-Access-Token by ' . $userAgent . ' (' . $ip . ')';;
@@ -106,7 +101,7 @@ class Token
         }
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $ip = $this->ipResolver->resolveByEnvironment();
         $name = $token->getName();
         if (empty($name)) {
             $name = 'Personal-Access-Token by ' . $userAgent . ' (' . $ip . ')';;
