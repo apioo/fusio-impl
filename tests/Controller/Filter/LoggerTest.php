@@ -29,6 +29,8 @@ use Fusio\Impl\Service\Log;
 use Fusio\Impl\Table\Operation;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Config\Config;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
@@ -63,7 +65,7 @@ class LoggerTest extends DbTestCase
 
         $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $contextFactory);
+        $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -97,7 +99,7 @@ class LoggerTest extends DbTestCase
 
         $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $contextFactory);
+        $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -131,7 +133,7 @@ class LoggerTest extends DbTestCase
 
         $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $contextFactory);
+        $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -166,7 +168,7 @@ class LoggerTest extends DbTestCase
 
         $logService = Environment::getService(Log::class);
 
-        $logger = new Logger($logService, $contextFactory);
+        $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -204,7 +206,7 @@ class LoggerTest extends DbTestCase
         try {
             $logService = Environment::getService(Log::class);
 
-            $logger = new Logger($logService, $contextFactory);
+            $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
             $logger->handle($request, $response, $filterChain);
             
             $this->fail('Should throw an exception');
@@ -239,7 +241,7 @@ class LoggerTest extends DbTestCase
         try {
             $logService = Environment::getService(Log::class);
 
-            $logger = new Logger($logService, $contextFactory);
+            $logger = new Logger($logService, $contextFactory, new IPResolver(new Config()));
             $logger->handle($request, $response, $filterChain);
 
             $this->fail('Should throw an exception');
