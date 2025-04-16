@@ -99,6 +99,9 @@ class EnvCommand extends Command
         } catch (\Throwable $e) {
             $output->writeln('');
             $output->writeln($e->getMessage());
+            if ($output->isVerbose()) {
+                $output->writeln($e->getTraceAsString());
+            }
             $output->writeln('');
         }
 
