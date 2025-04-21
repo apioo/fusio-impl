@@ -34,7 +34,7 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Captcha
+class Captcha
 {
     public function __construct(
         private Service\Config $configService,
