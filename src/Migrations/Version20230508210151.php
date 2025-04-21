@@ -172,6 +172,22 @@ final class Version20230508210151 extends AbstractMigration
             $eventTable->addUniqueIndex(['tenant_id', 'name']);
         }
 
+        if (!$schema->hasTable('fusio_firewall')) {
+            $firewallTable = $schema->createTable('fusio_firewall');
+            $firewallTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $firewallTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $firewallTable->addColumn('status', 'integer');
+            $firewallTable->addColumn('name', 'string', ['length' => 64]);
+            $firewallTable->addColumn('type', 'integer'); // allow/deny
+            $firewallTable->addColumn('ip', 'binary', ['length' => 16]);
+            $firewallTable->addColumn('mask', 'integer');
+            $firewallTable->addColumn('expire', 'datetime', ['notnull' => false]);
+            $firewallTable->addColumn('metadata', 'text', ['notnull' => false]);
+            $firewallTable->setPrimaryKey(['id']);
+            $firewallTable->addUniqueIndex(['tenant_id', 'name']);
+            $firewallTable->addIndex(['tenant_id', 'ip', 'expire']);
+        }
+
         if (!$schema->hasTable('fusio_form')) {
             $formTable = $schema->createTable('fusio_form');
             $formTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -227,11 +243,13 @@ final class Version20230508210151 extends AbstractMigration
             $logTable->addColumn('path', 'string', ['length' => 1023]);
             $logTable->addColumn('header', 'text');
             $logTable->addColumn('body', 'text', ['notnull' => false]);
+            $logTable->addColumn('response_code', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
             $logTable->addIndex(['tenant_id', 'ip', 'date'], 'IDX_LOG_TID');
             $logTable->addIndex(['tenant_id', 'user_id', 'date'], 'IDX_LOG_TUD');
+            $logTable->addIndex(['tenant_id', 'ip', 'response_code', 'date'], 'IDX_LOG_TIRD');
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
@@ -647,6 +665,7 @@ final class Version20230508210151 extends AbstractMigration
         $schema->dropTable('fusio_cronjob');
         $schema->dropTable('fusio_cronjob_error');
         $schema->dropTable('fusio_event');
+        $schema->dropTable('fusio_firewall');
         $schema->dropTable('fusio_form');
         $schema->dropTable('fusio_identity');
         $schema->dropTable('fusio_identity_request');

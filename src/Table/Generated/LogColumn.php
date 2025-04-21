@@ -16,6 +16,7 @@ enum LogColumn : string implements \PSX\Sql\ColumnInterface
     case PATH = \Fusio\Impl\Table\Generated\LogTable::COLUMN_PATH;
     case HEADER = \Fusio\Impl\Table\Generated\LogTable::COLUMN_HEADER;
     case BODY = \Fusio\Impl\Table\Generated\LogTable::COLUMN_BODY;
+    case RESPONSE_CODE = \Fusio\Impl\Table\Generated\LogTable::COLUMN_RESPONSE_CODE;
     case EXECUTION_TIME = \Fusio\Impl\Table\Generated\LogTable::COLUMN_EXECUTION_TIME;
     case DATE = \Fusio\Impl\Table\Generated\LogTable::COLUMN_DATE;
 }

@@ -21,36 +21,54 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
+use PSX\Framework\Environment\IPResolver;
+use PSX\Http\Exception\TooManyRequestsException;
+use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * Tenant
+ * Firewall
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Tenant implements FilterInterface
+readonly class Firewall implements FilterInterface
 {
     public function __construct(
-        private FrameworkConfig $frameworkConfig,
+        private Service\Firewall $firewallService,
+        private Table\Log $logTable,
         private ContextFactory $contextFactory,
+        private IPResolver $ipResolver,
     ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $context = $this->contextFactory->getActive();
+        $ip = $this->ipResolver->resolveByRequest($request);
 
-        $tenantId = $this->frameworkConfig->getTenantId();
-        if (!empty($tenantId)) {
-            $context->setTenantId($tenantId);
+        if (!$this->firewallService->isAllowed($ip, $context)) {
+            throw new TooManyRequestsException('Your IP has send to many requests please try again later', 60 * 10);
         }
 
-        $filterChain->handle($request, $response);
+        try {
+            $filterChain->handle($request, $response);
+        } catch (UnauthorizedException|TooManyRequestsException $e) {
+            // fail2ban logic, in case a user has triggered too many 401 or 429 responses in the last 10 minutes, we insert a ban for this IP
+            // for 10 minutes, this protects us from bruteforce attacks and other malicious requests
+
+            $count = $this->logTable->getResponseCodeCount($context->getTenantId(), $ip, [401, 429], new \DateInterval('PT10M'));
+            if ($count > 10) {
+                $this->firewallService->createTemporaryBanForIP($context->getTenantId(), $ip, new \DateInterval('PT10M'));
+            }
+
+            throw $e;
+        }
     }
 }

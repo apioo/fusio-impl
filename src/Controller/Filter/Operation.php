@@ -37,7 +37,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Operation implements FilterInterface
+readonly class Operation implements FilterInterface
 {
     public function __construct(
         private Table\Operation $operationTable,

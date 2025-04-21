@@ -20,47 +20,48 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\IdentityRow;
-use Fusio\Impl\Table\Generated\LogRow;
-use PSX\DateTime\LocalDateTime;
+use Fusio\Impl\Table\Generated\FirewallRow;
 use PSX\Sql\Condition;
 
 /**
- * Log
+ * Firewall
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Log extends Generated\LogTable
+class Firewall extends Generated\FirewallTable
 {
-    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?LogRow
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
+
+    public const TYPE_DENY = 0;
+    public const TYPE_ALLOW = 1;
+
+    public function findOneByIdentifier(?string $tenantId, string $id): ?FirewallRow
     {
-        return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
+        }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?LogRow
+    public function findOneByTenantAndId(?string $tenantId, int $id): ?FirewallRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);
     }
 
-    public function getResponseCodeCount(?string $tenantId, string $ip, array $statusCodes, \DateInterval $timeWindow): int
+    public function findOneByTenantAndName(?string $tenantId, string $name): ?FirewallRow
     {
-        $now = new \DateTime();
-        $now->sub($timeWindow);
-
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(self::COLUMN_IP, $ip);
-        $condition->in(self::COLUMN_RESPONSE_CODE, $statusCodes);
-        $condition->greaterThan(self::COLUMN_DATE, $now->format('Y-m-d H:i:s'));
+        $condition->equals(self::COLUMN_NAME, $name);
 
-        return $this->getCount($condition);
+        return $this->findOneBy($condition);
     }
-
 }

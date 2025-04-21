@@ -119,14 +119,14 @@ readonly class Form
             throw new StatusCode\NotFoundException('Could not find form');
         }
 
-        if ($existing->getStatus() == Table\Scope::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Form::STATUS_DELETED) {
             throw new StatusCode\GoneException('Form was deleted');
         }
 
         try {
             $this->formTable->beginTransaction();
 
-            $existing->setStatus(Table\Scope::STATUS_DELETED);
+            $existing->setStatus(Table\Form::STATUS_DELETED);
             $this->formTable->update($existing);
 
             $this->formTable->commit();

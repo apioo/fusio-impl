@@ -18,17 +18,40 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Event\User;
+namespace Fusio\Impl\Event\Firewall;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\FirewallRow;
+use Fusio\Model\Backend\FirewallUpdate;
 
 /**
- * FailedAuthenticationEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FailedAuthenticationEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
+    private FirewallUpdate $firewall;
+    private FirewallRow $existing;
+
+    public function __construct(FirewallUpdate $firewall, FirewallRow $existing, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->firewall = $firewall;
+        $this->existing = $existing;
+    }
+
+    public function getFirewall(): FirewallUpdate
+    {
+        return $this->firewall;
+    }
+
+    public function getExisting(): FirewallRow
+    {
+        return $this->existing;
+    }
 }
