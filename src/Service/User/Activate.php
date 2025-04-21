@@ -33,15 +33,12 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Activate
+readonly class Activate
 {
-    private Service\User $userService;
-    private Service\User\Token $tokenService;
-
-    public function __construct(Service\User $userService, Service\User\Token $tokenService)
-    {
-        $this->userService  = $userService;
-        $this->tokenService = $tokenService;
+    public function __construct(
+        private Service\User $userService,
+        private Service\User\Token $tokenService,
+    ) {
     }
 
     public function activate(UserActivate $activate, UserContext $context): void

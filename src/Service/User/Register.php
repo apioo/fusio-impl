@@ -34,23 +34,16 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Register
+readonly class Register
 {
-    private Service\User $userService;
-    private Service\User\Captcha $captchaService;
-    private Service\User\Token $tokenService;
-    private Service\User\Mailer $mailerService;
-    private Service\Config $configService;
-    private Table\Role $roleTable;
-
-    public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Service\Config $configService, Table\Role $roleTable)
-    {
-        $this->userService    = $userService;
-        $this->captchaService = $captchaService;
-        $this->tokenService   = $tokenService;
-        $this->mailerService  = $mailerService;
-        $this->configService  = $configService;
-        $this->roleTable      = $roleTable;
+    public function __construct(
+        private Service\User $userService,
+        private Captcha $captchaService,
+        private Token $tokenService,
+        private Mailer $mailerService,
+        private Service\Config $configService,
+        private Table\Role $roleTable,
+    ) {
     }
 
     public function register(UserRegister $register, UserContext $context): int

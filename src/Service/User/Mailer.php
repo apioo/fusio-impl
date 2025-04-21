@@ -30,17 +30,13 @@ use Fusio\Impl\Service\Mail\MailerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Mailer
+readonly class Mailer
 {
-    private Service\Config $configService;
-    private MailerInterface $mailer;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Service\Config $configService, MailerInterface $mailer, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->configService = $configService;
-        $this->mailer = $mailer;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Service\Config $configService,
+        private MailerInterface $mailer,
+        private Service\System\FrameworkConfig $frameworkConfig,
+    ) {
     }
 
     public function sendActivationMail(string $name, string $email, string $token)

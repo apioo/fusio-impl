@@ -20,11 +20,8 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -34,21 +31,13 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Authenticator
+readonly class Authenticator
 {
-    private Table\User $userTable;
-    private Table\User\Scope $userScopeTable;
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private Service\System\ContextFactory $contextFactory;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(Table\User $userTable, Table\User\Scope $userScopeTable, Service\System\FrameworkConfig $frameworkConfig, Service\System\ContextFactory $contextFactory, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->userTable = $userTable;
-        $this->userScopeTable = $userScopeTable;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->contextFactory = $contextFactory;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private Table\User $userTable,
+        private Table\User\Scope $userScopeTable,
+        private Service\System\FrameworkConfig $frameworkConfig,
+    ) {
     }
 
     /**
@@ -92,8 +81,6 @@ class Authenticator
 
         if (password_verify($password, $databasePassword)) {
             return $user->getId();
-        } else {
-            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent($this->contextFactory->newUserContext($user)));
         }
 
         return null;
