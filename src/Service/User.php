@@ -45,7 +45,7 @@ use PSX\Json\Parser;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class User
+class User
 {
     public function __construct(
         private Table\User $userTable,

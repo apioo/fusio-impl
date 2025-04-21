@@ -30,7 +30,7 @@ use Fusio\Impl\Service\Mail\MailerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Mailer
+class Mailer
 {
     public function __construct(
         private Service\Config $configService,

@@ -17,6 +17,7 @@
       "backend.dashboard",
       "backend.database",
       "backend.event",
+      "backend.firewall",
       "backend.form",
       "backend.generator",
       "backend.identity",
@@ -2569,6 +2570,211 @@
       "authorization": true,
       "tags": [
         "event"
+      ]
+    },
+    "backend.firewall.create": {
+      "path": "/backend/firewall",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_FirewallCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.firewall"
+      ],
+      "authorization": true,
+      "tags": [
+        "firewall"
+      ]
+    },
+    "backend.firewall.delete": {
+      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "firewall_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.firewall"
+      ],
+      "authorization": true,
+      "tags": [
+        "firewall"
+      ]
+    },
+    "backend.firewall.get": {
+      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Firewall"
+        }
+      },
+      "arguments": {
+        "firewall_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.firewall"
+      ],
+      "authorization": true,
+      "tags": [
+        "firewall"
+      ]
+    },
+    "backend.firewall.getAll": {
+      "path": "/backend/firewall",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_FirewallCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.firewall"
+      ],
+      "authorization": true,
+      "tags": [
+        "firewall"
+      ]
+    },
+    "backend.firewall.update": {
+      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "firewall_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_FirewallUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "backend.firewall"
+      ],
+      "authorization": true,
+      "tags": [
+        "firewall"
       ]
     },
     "backend.form.create": {
@@ -10880,6 +11086,58 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Event"
+      }
+    },
+    "Backend_Firewall": {
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "mask": {
+          "type": "integer"
+        },
+        "expire": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "metadata": {
+          "type": "reference",
+          "target": "Common_Metadata"
+        }
+      }
+    },
+    "Backend_FirewallCollection": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Firewall"
+        }
+      }
+    },
+    "Backend_FirewallCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Firewall"
+      }
+    },
+    "Backend_FirewallUpdate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Firewall"
       }
     },
     "Backend_Form": {

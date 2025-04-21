@@ -64,6 +64,7 @@ class AccountTest extends DbTestCase
         "backend.dashboard",
         "backend.database",
         "backend.event",
+        "backend.firewall",
         "backend.form",
         "backend.generator",
         "backend.identity",

@@ -76,7 +76,7 @@ class Webhook implements ActionInterface
 
             throw $e;
         } finally {
-            $this->logService->finish();
+            $this->logService->finish(200);
         }
 
         return [

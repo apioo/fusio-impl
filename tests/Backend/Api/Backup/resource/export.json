@@ -333,7 +333,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 224,
+          "operationId": 229,
           "authenticated": true
         }
       ]
@@ -350,7 +350,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 223
+          "operationId": 228
         }
       ]
     },
@@ -523,6 +523,7 @@
         "backend.dashboard",
         "backend.database",
         "backend.event",
+        "backend.firewall",
         "backend.form",
         "backend.generator",
         "backend.identity",
@@ -581,6 +582,7 @@
         "backend.dashboard",
         "backend.database",
         "backend.event",
+        "backend.firewall",
         "backend.form",
         "backend.generator",
         "backend.identity",
