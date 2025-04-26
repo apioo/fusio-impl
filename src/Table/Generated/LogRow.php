@@ -115,13 +115,13 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->body;
     }
-    public function setResponseCode(int $responseCode): void
+    public function setResponseCode(?int $responseCode): void
     {
         $this->responseCode = $responseCode;
     }
-    public function getResponseCode(): int
+    public function getResponseCode(): ?int
     {
-        return $this->responseCode ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "response_code" was provided');
+        return $this->responseCode;
     }
     public function setExecutionTime(?int $executionTime): void
     {

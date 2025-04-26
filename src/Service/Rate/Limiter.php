@@ -63,7 +63,7 @@ class Limiter
         }
 
         if ($count >= $rateLimit) {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
+            throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60 * 15);
         }
 
         return true;

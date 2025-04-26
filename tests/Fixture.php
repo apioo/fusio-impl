@@ -123,6 +123,8 @@ class Fixture
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);
+        $data->addFirewall('my_v4_rule', '192.168.2.1', ['foo' => 'bar']);
+        $data->addFirewall('my_v6_rule', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344', ['foo' => 'bar']);
         $data->addForm('my_form', 'test.createFoo', ['foo' => 'bar'], ['foo' => 'bar']);
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');

@@ -45,7 +45,7 @@ class Firewall extends ViewAbstract
 
         $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\FirewallTable::COLUMN_NAME]);
         $condition->equals(Table\Generated\FirewallTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->in(Table\Generated\FirewallTable::COLUMN_STATUS, [Table\Form::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\FirewallTable::COLUMN_STATUS, [Table\Firewall::STATUS_ACTIVE]);
 
         $builder = new Builder($this->connection);
 
@@ -55,12 +55,10 @@ class Firewall extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Firewall::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_ID),
+                'status' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_STATUS),
                 'name' => Table\Generated\FirewallTable::COLUMN_NAME,
                 'type' => Table\Generated\FirewallTable::COLUMN_TYPE,
-                'ip' => $builder->fieldCallback(Table\Generated\FirewallTable::COLUMN_IP, function ($value) {
-                    return inet_ntop($value);
-                }),
-                'mask' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_MASK),
+                'ip' => Table\Generated\FirewallTable::COLUMN_IP,
                 'expire' => $builder->fieldDateTime(Table\Generated\FirewallTable::COLUMN_EXPIRE),
                 'metadata' => $builder->fieldJson(Table\Generated\FirewallTable::COLUMN_METADATA),
             ]),
@@ -75,12 +73,10 @@ class Firewall extends ViewAbstract
 
         $definition = $builder->doEntity([$this->getTable(Table\Firewall::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_ID),
+            'status' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_STATUS),
             'name' => Table\Generated\FirewallTable::COLUMN_NAME,
             'type' => Table\Generated\FirewallTable::COLUMN_TYPE,
-            'ip' => $builder->fieldCallback(Table\Generated\FirewallTable::COLUMN_IP, function ($value) {
-                return inet_ntop($value);
-            }),
-            'mask' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_MASK),
+            'ip' => Table\Generated\FirewallTable::COLUMN_IP,
             'expire' => $builder->fieldDateTime(Table\Generated\FirewallTable::COLUMN_EXPIRE),
             'metadata' => $builder->fieldJson(Table\Generated\FirewallTable::COLUMN_METADATA),
         ]);

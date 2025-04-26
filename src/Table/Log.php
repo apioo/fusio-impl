@@ -48,19 +48,4 @@ class Log extends Generated\LogTable
 
         return $this->findOneBy($condition);
     }
-
-    public function getResponseCodeCount(?string $tenantId, string $ip, array $statusCodes, \DateInterval $timeWindow): int
-    {
-        $now = new \DateTime();
-        $now->sub($timeWindow);
-
-        $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(self::COLUMN_IP, $ip);
-        $condition->in(self::COLUMN_RESPONSE_CODE, $statusCodes);
-        $condition->greaterThan(self::COLUMN_DATE, $now->format('Y-m-d H:i:s'));
-
-        return $this->getCount($condition);
-    }
-
 }

@@ -31,6 +31,7 @@ use Fusio\Model\Backend\FirewallUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Http\Exception\ClientErrorException;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
 
@@ -45,6 +46,7 @@ readonly class Firewall
 {
     public function __construct(
         private Table\Firewall $firewallTable,
+        private Table\Firewall\Log $firewallLogTable,
         private Firewall\Validator $validator,
         private EventDispatcherInterface $eventDispatcher
     ) {
@@ -62,8 +64,7 @@ readonly class Firewall
             $row->setStatus(Table\Firewall::STATUS_ACTIVE);
             $row->setName($firewall->getName() ?? throw new StatusCode\BadRequestException('Provided no name'));
             $row->setType($firewall->getType() ?? throw new StatusCode\BadRequestException('Provided no type'));
-            $row->setIp(inet_ntop($firewall->getIp() ?? throw new StatusCode\BadRequestException('Provided no IP')));
-            $row->setMask($firewall->getMask() ?? throw new StatusCode\BadRequestException('Provided no mask'));
+            $row->setIp($firewall->getIp() ?? throw new StatusCode\BadRequestException('Provided no IP'));
             $row->setExpire($firewall->getExpire());
             $row->setMetadata($firewall->getMetadata() !== null ? Parser::encode($firewall->getMetadata()) : null);
             $this->firewallTable->create($row);
@@ -101,8 +102,7 @@ readonly class Firewall
 
             $existing->setName($firewall->getName() ?? $existing->getName());
             $existing->setType($firewall->getType() ?? $existing->getType());
-            $existing->setIp($firewall->getIp() !== null ? inet_ntop($firewall->getIp()) : $existing->getIp());
-            $existing->setMask($firewall->getMask() ?? $existing->getMask());
+            $existing->setIp($firewall->getIp() !== null ? $firewall->getIp() : $existing->getIp());
             $existing->setExpire($firewall->getExpire() ?? $existing->getExpire());
             $existing->setMetadata($firewall->getMetadata() !== null ? Parser::encode($firewall->getMetadata()) : $existing->getMetadata());
             $this->firewallTable->update($existing);
@@ -148,37 +148,11 @@ readonly class Firewall
         return $existing->getId();
     }
 
-    public function createTemporaryBanForIP(?string $tenantId, string $ip, \DateInterval $expires): void
+    public function isAllowed(string $ip, ?string $tenantId): bool
     {
-        $value = inet_pton($ip);
-        if ($value === false) {
-            throw new StatusCode\BadRequestException('Provided an invalid IP');
-        }
-
-        $now = new \DateTime();
-        $now->add($expires);
-
-        $row = new Table\Generated\FirewallRow();
-        $row->setTenantId($tenantId);
-        $row->setStatus(Table\Firewall::STATUS_ACTIVE);
-        $row->setName('Ban-' . str_replace(['.', ':'], '-', $ip) . '-' . $now->format('YmdHis'));
-        $row->setType(Table\Firewall::TYPE_DENY);
-        $row->setIp($value);
-        $row->setMask(strlen($value) === 4 ? 32 : 128);
-        $row->setExpire(LocalDateTime::from($now));
-        $this->firewallTable->create($row);
-    }
-
-    public function isAllowed(string $ip, Context $context): bool
-    {
-        $value = inet_pton($ip);
-        if ($value === false) {
-            throw new StatusCode\BadRequestException('Could not convert IP address to its packed in_addr representation');
-        }
-
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\FirewallTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->raw('(' . Table\Generated\FirewallTable::COLUMN_IP . ' & (1 << ' . Table\Generated\FirewallTable::COLUMN_MASK . ')) = (:ip & (1 << ' . Table\Generated\FirewallTable::COLUMN_MASK . '))', ['ip' => $value]);
+        $condition->equals(Table\Generated\FirewallTable::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(Table\Generated\FirewallTable::COLUMN_IP, $ip);
         $condition->add(Condition::withOr()
             ->nil(Table\Generated\FirewallTable::COLUMN_EXPIRE)
             ->greater(Table\Generated\FirewallTable::COLUMN_EXPIRE, LocalDateTime::now()->toDateTime()->format('Y-m-d H:i:s'))
@@ -196,5 +170,34 @@ readonly class Firewall
         }
 
         return $allowed;
+    }
+
+    /**
+     * fail2ban logic, in case a user has triggered too many client error responses in the last 10 minutes, we insert a ban for this IP
+     * for 10 minutes, this protects us from bruteforce attacks and other malicious requests
+     */
+    public function handleClientErrorResponse(string $ip, int $responseCode, ?string $tenantId): void
+    {
+        $count = $this->firewallLogTable->getResponseCodeCount($tenantId, $ip, new \DateInterval('PT10M'));
+        if ($count > 10) {
+            $now = new \DateTime();
+            $now->add(new \DateInterval('PT10M'));
+
+            $row = new Table\Generated\FirewallRow();
+            $row->setTenantId($tenantId);
+            $row->setStatus(Table\Firewall::STATUS_ACTIVE);
+            $row->setName('Ban-' . str_replace(['.', ':'], '-', $ip) . '-' . $now->format('YmdHis'));
+            $row->setType(Table\Firewall::TYPE_DENY);
+            $row->setIp($ip);
+            $row->setExpire(LocalDateTime::from($now));
+            $this->firewallTable->create($row);
+        } else {
+            $log = new Table\Generated\FirewallLogRow();
+            $log->setTenantId($tenantId);
+            $log->setIp($ip);
+            $log->setResponseCode($responseCode);
+            $log->setInsertDate(LocalDateTime::now());
+            $this->firewallLogTable->create($log);
+        }
     }
 }

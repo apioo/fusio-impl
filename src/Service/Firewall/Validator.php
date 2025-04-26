@@ -62,7 +62,7 @@ class Validator
         }
     }
 
-    private function assertName(string $name, ?string $tenantId, ?Table\Generated\FormRow $existing = null): void
+    private function assertName(string $name, ?string $tenantId, ?Table\Generated\FirewallRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_\\.]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid firewall name');
@@ -76,7 +76,7 @@ class Validator
     private function assertIP(string $ip): void
     {
         if (inet_pton($ip) === false) {
-            throw new StatusCode\BadRequestException('Firewall name must not be empty');
+            throw new StatusCode\BadRequestException('Firewall IP must be a valid IPv4 or IPv6');
         }
     }
 }

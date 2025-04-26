@@ -24,6 +24,7 @@ use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
+use PSX\Http\Exception\ClientErrorException;
 use PSX\Http\Exception\TooManyRequestsException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
@@ -53,20 +54,14 @@ readonly class Firewall implements FilterInterface
         $context = $this->contextFactory->getActive();
         $ip = $this->ipResolver->resolveByRequest($request);
 
-        if (!$this->firewallService->isAllowed($ip, $context)) {
-            throw new TooManyRequestsException('Your IP has send to many requests please try again later', 60 * 10);
+        if (!$this->firewallService->isAllowed($ip, $context->getTenantId())) {
+            throw new TooManyRequestsException('Your IP has sent to many requests please try again later', 60 * 10);
         }
 
         try {
             $filterChain->handle($request, $response);
-        } catch (UnauthorizedException|TooManyRequestsException $e) {
-            // fail2ban logic, in case a user has triggered too many 401 or 429 responses in the last 10 minutes, we insert a ban for this IP
-            // for 10 minutes, this protects us from bruteforce attacks and other malicious requests
-
-            $count = $this->logTable->getResponseCodeCount($context->getTenantId(), $ip, [401, 429], new \DateInterval('PT10M'));
-            if ($count > 10) {
-                $this->firewallService->createTemporaryBanForIP($context->getTenantId(), $ip, new \DateInterval('PT10M'));
-            }
+        } catch (ClientErrorException $e) {
+            $this->firewallService->handleClientErrorResponse($ip, $e->getStatusCode(), $context->getTenantId());
 
             throw $e;
         }

@@ -14,7 +14,6 @@ class FirewallTable extends \PSX\Sql\TableAbstract
     public const COLUMN_NAME = 'name';
     public const COLUMN_TYPE = 'type';
     public const COLUMN_IP = 'ip';
-    public const COLUMN_MASK = 'mask';
     public const COLUMN_EXPIRE = 'expire';
     public const COLUMN_METADATA = 'metadata';
     public function getName(): string
@@ -23,7 +22,7 @@ class FirewallTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_TYPE => 0x20000a, self::COLUMN_IP => 0xc00000, self::COLUMN_MASK => 0x20000a, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_METADATA => 0x40b00000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_TYPE => 0x20000a, self::COLUMN_IP => 0xa00027, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_METADATA => 0x40b00000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallRow>
@@ -246,74 +245,37 @@ class FirewallTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\FirewallRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByIp(mixed $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\FirewallColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    public function findByIp(string $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\FirewallColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('ip', $value);
+        $condition->like('ip', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByIp(mixed $value): ?\Fusio\Impl\Table\Generated\FirewallRow
+    public function findOneByIp(string $value): ?\Fusio\Impl\Table\Generated\FirewallRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('ip', $value);
+        $condition->like('ip', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByIp(mixed $value, \Fusio\Impl\Table\Generated\FirewallRow $record): int
+    public function updateByIp(string $value, \Fusio\Impl\Table\Generated\FirewallRow $record): int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('ip', $value);
+        $condition->like('ip', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByIp(mixed $value): int
+    public function deleteByIp(string $value): int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('ip', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\FirewallRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByMask(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\FirewallColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('mask', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByMask(int $value): ?\Fusio\Impl\Table\Generated\FirewallRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('mask', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByMask(int $value, \Fusio\Impl\Table\Generated\FirewallRow $record): int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('mask', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByMask(int $value): int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('mask', $value);
+        $condition->like('ip', $value);
         return $this->doDeleteBy($condition);
     }
     /**

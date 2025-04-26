@@ -18,47 +18,30 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Firewall;
+namespace Fusio\Impl\Table\Firewall;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
+use Fusio\Impl\Table\Generated\FirewallLogTable;
+use PSX\Sql\Condition;
 
 /**
- * Get
+ * Log
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+class Log extends FirewallLogTable
 {
-    private View\Firewall $view;
-
-    public function __construct(View\Firewall $view)
+    public function getResponseCodeCount(?string $tenantId, string $ip, \DateInterval $timeWindow): int
     {
-        $this->view = $view;
-    }
+        $now = new \DateTime();
+        $now->sub($timeWindow);
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
-    {
-        $firewall = $this->view->getEntity(
-            $request->get('firewall_id'),
-            $context
-        );
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_IP, $ip);
+        $condition->greaterThan(self::COLUMN_INSERT_DATE, $now->format('Y-m-d H:i:s'));
 
-        if (empty($firewall)) {
-            throw new StatusCode\NotFoundException('Could not find firewall');
-        }
-
-        if ($firewall['status'] == Table\Firewall::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Firewall was deleted');
-        }
-
-        return $firewall;
+        return $this->getCount($condition);
     }
 }

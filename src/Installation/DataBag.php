@@ -65,6 +65,8 @@ class DataBag
             'fusio_app_scope' => [],
             'fusio_token' => [],
             'fusio_test' => [],
+            'fusio_firewall' => [],
+            'fusio_form' => [],
             'fusio_cronjob_error' => [],
             'fusio_webhook' => [],
             'fusio_webhook_response' => [],
@@ -330,11 +332,24 @@ class DataBag
         ];
     }
 
+    public function addFirewall(string $name, string $ip, ?array $metadata = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_firewall'][$name] = [
+            'tenant_id' => $tenantId,
+            'status' => Table\Firewall::STATUS_ACTIVE,
+            'name' => $name,
+            'type' => Table\Firewall::TYPE_DENY,
+            'ip' => $ip,
+            'expire' => null,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+        ];
+    }
+
     public function addForm(string $name, string $operation, array $uiSchema, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_form'][$name] = [
             'tenant_id' => $tenantId,
-            'status' => Table\Event::STATUS_ACTIVE,
+            'status' => Table\Form::STATUS_ACTIVE,
             'name' => $name,
             'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'ui_schema' => json_encode($uiSchema),

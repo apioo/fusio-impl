@@ -29,7 +29,7 @@ class LogTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_RESPONSE_CODE => 0x20000a, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_RESPONSE_CODE => 0x4020000a, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogRow>

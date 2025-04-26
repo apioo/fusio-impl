@@ -179,13 +179,23 @@ final class Version20230508210151 extends AbstractMigration
             $firewallTable->addColumn('status', 'integer');
             $firewallTable->addColumn('name', 'string', ['length' => 64]);
             $firewallTable->addColumn('type', 'integer'); // allow/deny
-            $firewallTable->addColumn('ip', 'binary', ['length' => 16]);
-            $firewallTable->addColumn('mask', 'integer');
+            $firewallTable->addColumn('ip', 'string', ['length' => 39]);
             $firewallTable->addColumn('expire', 'datetime', ['notnull' => false]);
             $firewallTable->addColumn('metadata', 'text', ['notnull' => false]);
             $firewallTable->setPrimaryKey(['id']);
             $firewallTable->addUniqueIndex(['tenant_id', 'name']);
             $firewallTable->addIndex(['tenant_id', 'ip', 'expire']);
+        }
+
+        if (!$schema->hasTable('fusio_firewall_log')) {
+            $firewallLogTable = $schema->createTable('fusio_firewall_log');
+            $firewallLogTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $firewallLogTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $firewallLogTable->addColumn('ip', 'string', ['length' => 39]);
+            $firewallLogTable->addColumn('response_code', 'integer');
+            $firewallLogTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+            $firewallLogTable->setPrimaryKey(['id']);
+            $firewallLogTable->addUniqueIndex(['tenant_id', 'ip']);
         }
 
         if (!$schema->hasTable('fusio_form')) {

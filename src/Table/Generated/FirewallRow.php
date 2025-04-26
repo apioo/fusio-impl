@@ -9,8 +9,7 @@ class FirewallRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $status = null;
     private ?string $name = null;
     private ?int $type = null;
-    private mixed $ip = null;
-    private ?int $mask = null;
+    private ?string $ip = null;
     private ?\PSX\DateTime\LocalDateTime $expire = null;
     private ?string $metadata = null;
     public function setId(int $id): void
@@ -53,21 +52,13 @@ class FirewallRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->type ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "type" was provided');
     }
-    public function setIp(mixed $ip): void
+    public function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
-    public function getIp(): mixed
+    public function getIp(): string
     {
         return $this->ip ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ip" was provided');
-    }
-    public function setMask(int $mask): void
-    {
-        $this->mask = $mask;
-    }
-    public function getMask(): int
-    {
-        return $this->mask ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "mask" was provided');
     }
     public function setExpire(?\PSX\DateTime\LocalDateTime $expire): void
     {
@@ -95,7 +86,6 @@ class FirewallRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('type', $this->type);
         $record->put('ip', $this->ip);
-        $record->put('mask', $this->mask);
         $record->put('expire', $this->expire);
         $record->put('metadata', $this->metadata);
         return $record;
@@ -112,8 +102,7 @@ class FirewallRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->type = isset($data['type']) && is_int($data['type']) ? $data['type'] : null;
-        $row->ip = isset($data['ip']) ? $data['ip'] : null;
-        $row->mask = isset($data['mask']) && is_int($data['mask']) ? $data['mask'] : null;
+        $row->ip = isset($data['ip']) && is_string($data['ip']) ? $data['ip'] : null;
         $row->expire = isset($data['expire']) && $data['expire'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['expire']) : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;
         return $row;

@@ -10,7 +10,6 @@ enum FirewallColumn : string implements \PSX\Sql\ColumnInterface
     case NAME = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_NAME;
     case TYPE = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_TYPE;
     case IP = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_IP;
-    case MASK = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_MASK;
     case EXPIRE = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_EXPIRE;
     case METADATA = \Fusio\Impl\Table\Generated\FirewallTable::COLUMN_METADATA;
 }

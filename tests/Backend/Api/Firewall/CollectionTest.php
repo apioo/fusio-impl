@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Database\Table;
+namespace Fusio\Impl\Tests\Backend\Api\Firewall;
 
-use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -34,7 +33,7 @@ class CollectionTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/database/Test', 'GET', array(
+        $response = $this->sendRequest('/backend/firewall', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -42,57 +41,29 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 41,
-    "itemsPerPage": 16,
+    "totalResults": 2,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
-            "name": "app_news"
+            "id": 1,
+            "status": 1,
+            "name": "my_v4_rule",
+            "type": 0,
+            "ip": "192.168.2.1",
+            "metadata": {
+                "foo": "bar"
+            }
         },
         {
-            "name": "doctrine_migration_versions"
-        },
-        {
-            "name": "fusio_action"
-        },
-        {
-            "name": "fusio_app"
-        },
-        {
-            "name": "fusio_app_code"
-        },
-        {
-            "name": "fusio_app_scope"
-        },
-        {
-            "name": "fusio_audit"
-        },
-        {
-            "name": "fusio_category"
-        },
-        {
-            "name": "fusio_config"
-        },
-        {
-            "name": "fusio_connection"
-        },
-        {
-            "name": "fusio_cronjob"
-        },
-        {
-            "name": "fusio_cronjob_error"
-        },
-        {
-            "name": "fusio_event"
-        },
-        {
-            "name": "fusio_firewall"
-        },
-        {
-            "name": "fusio_firewall_log"
-        },
-        {
-            "name": "fusio_form"
+            "id": 2,
+            "status": 1,
+            "name": "my_v6_rule",
+            "type": 0,
+            "ip": "2001:0db8:85a3:08d3:1319:8a2e:0370:7344",
+            "metadata": {
+                "foo": "bar"
+            }
         }
     ]
 }
@@ -104,35 +75,26 @@ JSON;
 
     public function testPost()
     {
-        $schemaManager = $this->connection->createSchemaManager();
-        if ($schemaManager->tablesExist('my_table')) {
-            $schemaManager->dropTable('my_table');
-        }
+        $metadata = [
+            'foo' => 'bar'
+        ];
 
-        $response = $this->sendRequest('/backend/database/Test', 'POST', array(
+        $response = $this->sendRequest('/backend/firewall', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'    => 'my_table',
-            'columns' => [
-                [
-                    'name' => 'id',
-                    'type' => 'integer',
-                    'autoIncrement' => true,
-                ],
-                [
-                    'name' => 'title',
-                    'type' => 'string',
-                ]
-            ],
-            'primaryKey' => 'id',
+            'name'     => 'another-rule',
+            'type'     => 0,
+            'ip'       => '2001:0db8:85a3:08d4:1319:8a2e:0370:7344',
+            'metadata' => $metadata,
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Table successfully created"
+    "message": "Firewall successfully created",
+    "id": "3"
 }
 JSON;
 
@@ -140,22 +102,27 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $table = $schemaManager->introspectTable('my_table');
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'status', 'name', 'type', 'ip', 'metadata')
+            ->from('fusio_firewall')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
 
-        $this->assertEquals('my_table', $table->getName());
+        $row = $this->connection->fetchAssociative($sql);
 
-        $columns = $table->getColumns();
-
-        $this->assertEquals(2, count($columns));
-        $this->assertEquals('id', $columns['id']->getName());
-        $this->assertEquals('integer', Type::lookupName($columns['id']->getType()));
-        $this->assertEquals('title', $columns['title']->getName());
-        $this->assertEquals('string', Type::lookupName($columns['title']->getType()));
+        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals('another-rule', $row['name']);
+        $this->assertEquals(0, $row['type']);
+        $this->assertEquals('2001:0db8:85a3:08d4:1319:8a2e:0370:7344', $row['ip']);
+        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/database/Test', 'PUT', array(
+        $response = $this->sendRequest('/backend/firewall', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -169,7 +136,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/database/Test', 'DELETE', array(
+        $response = $this->sendRequest('/backend/firewall', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -179,10 +146,5 @@ JSON;
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-    }
-
-    protected function isTransactional(): bool
-    {
-        return false;
     }
 }
