@@ -36,7 +36,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class RequestLimit implements FilterInterface
+readonly class RequestLimit implements FilterInterface
 {
     public function __construct(
         private Service\Rate\Limiter $limiterService,
@@ -60,7 +60,7 @@ class RequestLimit implements FilterInterface
         if ($success) {
             $filterChain->handle($request, $response);
         } else {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
+            throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60 * 15);
         }
     }
 }

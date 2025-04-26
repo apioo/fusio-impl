@@ -34,19 +34,14 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ResetPassword
+readonly class ResetPassword
 {
-    private Service\User\Captcha $captchaService;
-    private Service\User\Token $tokenService;
-    private Service\User\Mailer $mailerService;
-    private Table\User $userTable;
-
-    public function __construct(Captcha $captchaService, Token $tokenService, Mailer $mailerService, Table\User $userTable)
-    {
-        $this->mailerService = $mailerService;
-        $this->captchaService = $captchaService;
-        $this->tokenService = $tokenService;
-        $this->userTable = $userTable;
+    public function __construct(
+        private Captcha $captchaService,
+        private Token $tokenService,
+        private Mailer $mailerService,
+        private Table\User $userTable,
+    ) {
     }
 
     public function resetPassword(UserEmail $reset, UserContext $context): void

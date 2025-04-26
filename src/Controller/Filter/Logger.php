@@ -35,7 +35,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Logger implements FilterInterface
+readonly class Logger implements FilterInterface
 {
     public function __construct(
         private Service\Log $logService,
@@ -62,7 +62,7 @@ class Logger implements FilterInterface
 
             throw $e;
         } finally {
-            $this->logService->finish();
+            $this->logService->finish($response->getStatusCode());
         }
     }
 }

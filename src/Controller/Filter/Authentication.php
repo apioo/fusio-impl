@@ -35,7 +35,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Authentication implements FilterInterface
+readonly class Authentication implements FilterInterface
 {
     public function __construct(
         private TokenValidator $tokenValidator,

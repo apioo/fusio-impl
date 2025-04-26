@@ -20,6 +20,7 @@ class LogTable extends \PSX\Sql\TableAbstract
     public const COLUMN_PATH = 'path';
     public const COLUMN_HEADER = 'header';
     public const COLUMN_BODY = 'body';
+    public const COLUMN_RESPONSE_CODE = 'response_code';
     public const COLUMN_EXECUTION_TIME = 'execution_time';
     public const COLUMN_DATE = 'date';
     public function getName(): string
@@ -28,7 +29,7 @@ class LogTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_RESPONSE_CODE => 0x4020000a, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogRow>
@@ -504,6 +505,43 @@ class LogTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('body', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByResponseCode(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\LogColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('response_code', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByResponseCode(int $value): ?\Fusio\Impl\Table\Generated\LogRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('response_code', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByResponseCode(int $value, \Fusio\Impl\Table\Generated\LogRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('response_code', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByResponseCode(int $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('response_code', $value);
         return $this->doDeleteBy($condition);
     }
     /**

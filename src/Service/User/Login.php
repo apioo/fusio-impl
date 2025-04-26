@@ -36,7 +36,7 @@ use PSX\OAuth2\AccessToken;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Login
+readonly class Login
 {
     public function __construct(
         private Service\User\Authenticator $authenticatorService,

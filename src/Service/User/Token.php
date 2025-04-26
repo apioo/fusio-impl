@@ -32,15 +32,12 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Token
+readonly class Token
 {
-    private Table\User $userTable;
-    private JsonWebToken $jsonWebToken;
-
-    public function __construct(Table\User $userTable, JsonWebToken $jsonWebToken)
-    {
-        $this->userTable = $userTable;
-        $this->jsonWebToken = $jsonWebToken;
+    public function __construct(
+        private Table\User $userTable,
+        private JsonWebToken $jsonWebToken,
+    ) {
     }
 
     /**

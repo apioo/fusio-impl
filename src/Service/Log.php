@@ -91,7 +91,7 @@ class Log
         $this->stack[self::$level][self::LOG_ID] = (int) $this->connection->lastInsertId();
     }
 
-    public function finish(): void
+    public function finish(int $responseCode): void
     {
         $startTime = $this->stack[self::$level][self::START_TIME] ?? null;
         $logId = $this->stack[self::$level][self::LOG_ID] ?? null;
@@ -105,6 +105,7 @@ class Log
         $endTime = hrtime(true);
 
         $this->connection->update(Table\Generated\LogTable::NAME, [
+            Table\Generated\LogTable::COLUMN_RESPONSE_CODE => $responseCode,
             Table\Generated\LogTable::COLUMN_EXECUTION_TIME => (int) (($endTime - $startTime) / 1e+6),
         ], [
             Table\Generated\LogTable::COLUMN_ID => $logId,

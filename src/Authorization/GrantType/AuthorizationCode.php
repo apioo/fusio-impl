@@ -27,8 +27,10 @@ use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\AuthorizationCodeAbstract;
 use PSX\OAuth2\AccessToken;
+use PSX\OAuth2\Exception\ErrorExceptionAbstract;
 use PSX\OAuth2\Exception\InvalidClientException;
 use PSX\OAuth2\Exception\InvalidGrantException;
+use PSX\OAuth2\Exception\InvalidRequestException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 use PSX\OAuth2\Grant;
 
@@ -45,6 +47,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         private Service\Token $tokenService,
         private Service\Scope $scopeService,
         private Service\System\FrameworkConfig $frameworkConfig,
+        private Service\Firewall $firewallService,
         private Table\App\Code $appCodeTable,
         private IPResolver $ipResolver,
     ) {
@@ -52,48 +55,62 @@ class AuthorizationCode extends AuthorizationCodeAbstract
 
     protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant): AccessToken
     {
-        $code = $this->appCodeTable->getCodeByRequest(
-            $credentials->getClientId(),
-            $credentials->getClientSecret(),
-            $grant->getCode(),
-            $grant->getRedirectUri(),
-            $this->frameworkConfig->getTenantId(),
-        );
-
-        if (empty($code)) {
-            throw new InvalidClientException('Unknown credentials');
-        }
-
-        // check whether the code is older than 30 minutes. After that we can not exchange it for an access token
-        $timestamp = strtotime($code['date']);
-        if ($timestamp === false) {
-            throw new InvalidGrantException('Provided an invalid date');
-        }
-
-        if (time() - $timestamp > 60 * 30) {
-            throw new InvalidGrantException('Code is expired');
-        }
-
-        // scopes
-        $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $code['scope'], (int) $code['app_id'], (int) $code['user_id']);
-        if (empty($scopes)) {
-            throw new InvalidScopeException('No valid scope given');
-        }
-
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $this->ipResolver->resolveByEnvironment();
-        $name = $userAgent;
+        if (!$this->firewallService->isAllowed($ip, $this->frameworkConfig->getTenantId())) {
+            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+        }
 
-        // generate access token
-        return $this->tokenService->generate(
-            $this->frameworkConfig->getTenantId(),
-            Table\Category::TYPE_AUTHORIZATION,
-            $code['app_id'],
-            $code['user_id'],
-            $name,
-            $scopes,
-            $ip,
-            $this->frameworkConfig->getExpireTokenInterval()
-        );
+        try {
+            $code = $this->appCodeTable->getCodeByRequest(
+                $credentials->getClientId(),
+                $credentials->getClientSecret(),
+                $grant->getCode(),
+                $grant->getRedirectUri(),
+                $this->frameworkConfig->getTenantId(),
+            );
+
+            if (empty($code)) {
+                throw new InvalidClientException('Unknown credentials');
+            }
+
+            // check whether the code is older than 30 minutes. After that we can not exchange it for an access token
+            $timestamp = strtotime($code['date']);
+            if ($timestamp === false) {
+                throw new InvalidGrantException('Provided an invalid date');
+            }
+
+            if (time() - $timestamp > 60 * 30) {
+                throw new InvalidGrantException('Code is expired');
+            }
+
+            // scopes
+            $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $code['scope'], (int) $code['app_id'], (int) $code['user_id']);
+            if (empty($scopes)) {
+                throw new InvalidScopeException('No valid scope given');
+            }
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+            $name = $userAgent;
+
+            // generate access token
+            return $this->tokenService->generate(
+                $this->frameworkConfig->getTenantId(),
+                Table\Category::TYPE_AUTHORIZATION,
+                $code['app_id'],
+                $code['user_id'],
+                $name,
+                $scopes,
+                $ip,
+                $this->frameworkConfig->getExpireTokenInterval()
+            );
+        } catch (ErrorExceptionAbstract $e) {
+            $this->firewallService->handleClientErrorResponse(
+                $ip,
+                $e instanceof InvalidClientException ? 401 : 400,
+                $this->frameworkConfig->getTenantId()
+            );
+
+            throw $e;
+        }
     }
 }

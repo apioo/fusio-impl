@@ -22,6 +22,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\IdentityRow;
 use Fusio\Impl\Table\Generated\LogRow;
+use PSX\DateTime\LocalDateTime;
 use PSX\Sql\Condition;
 
 /**

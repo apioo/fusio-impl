@@ -42,6 +42,31 @@ class FrameworkConfig
         $this->parser = new DBAL\Tools\DsnParser();
     }
 
+    public function getFirewallIgnoreIp(): ?array
+    {
+        return $this->config->get('fusio_firewall_ignoreip');
+    }
+
+    public function getFirewallBanTime(): \DateInterval
+    {
+        return new \DateInterval($this->config->get('fusio_firewall_bantime') ?? 'PT10M');
+    }
+
+    public function getFirewallFindTime(): \DateInterval
+    {
+        return new \DateInterval($this->config->get('fusio_firewall_findtime') ?? 'PT10M');
+    }
+
+    public function getFirewallMaxRetry(): int
+    {
+        return $this->config->get('fusio_firewall_maxretry') ?? 32;
+    }
+
+    public function getFirewallCodes(): ?array
+    {
+        return $this->config->get('fusio_firewall_codes');
+    }
+
     public function getExpireTokenInterval(): \DateInterval
     {
         return new \DateInterval($this->config->get('fusio_expire_token'));

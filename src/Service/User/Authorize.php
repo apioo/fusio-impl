@@ -37,7 +37,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Authorize
+readonly class Authorize
 {
     public function __construct(
         private Service\Token $tokenService,

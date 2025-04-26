@@ -96,6 +96,15 @@ class UsageLimiter
         );
     }
 
+    public function assertFirewallCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\FirewallTable::NAME, $tenantId),
+            $this->limiter->getFirewallCount(),
+            'firewall'
+        );
+    }
+
     public function assertFormCount(?string $tenantId): void
     {
         $this->assert(

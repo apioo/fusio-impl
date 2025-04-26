@@ -20,15 +20,16 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
-use Fusio\Impl\Authorization\TokenNameBuilder;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\PasswordAbstract;
 use PSX\OAuth2\AccessToken;
+use PSX\OAuth2\Exception\ErrorExceptionAbstract;
 use PSX\OAuth2\Exception\InvalidClientException;
 use PSX\OAuth2\Exception\InvalidGrantException;
+use PSX\OAuth2\Exception\InvalidRequestException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 use PSX\OAuth2\Grant;
 
@@ -46,6 +47,7 @@ class Password extends PasswordAbstract
         private Service\Token $tokenService,
         private Service\Scope $scopeService,
         private Service\System\FrameworkConfig $frameworkConfig,
+        private Service\Firewall $firewallService,
         private Table\App $appTable,
         private IPResolver $ipResolver,
     ) {
@@ -53,43 +55,58 @@ class Password extends PasswordAbstract
 
     protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
     {
-        $app = $this->appTable->findOneByAppKeyAndSecret($this->frameworkConfig->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
-        if (empty($app)) {
-            throw new InvalidClientException('Unknown credentials');
-        }
-
-        // check user
-        $userId = $this->authenticatorService->authenticate($grant->getUsername(), $grant->getPassword());
-        if (empty($userId)) {
-            throw new InvalidGrantException('Unknown user');
-        }
-
-        $scope = $grant->getScope();
-        if (empty($scope)) {
-            // as fallback simply use all scopes assigned to the user
-            $scope = implode(',', $this->authenticatorService->getAvailableScopes($this->frameworkConfig->getTenantId(), $userId));
-        }
-
-        // validate scopes
-        $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $scope, $app->getId(), $userId);
-        if (empty($scopes)) {
-            throw new InvalidScopeException('No valid scope given');
-        }
-
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
         $ip = $this->ipResolver->resolveByEnvironment();
-        $name = $userAgent;
+        if (!$this->firewallService->isAllowed($ip, $this->frameworkConfig->getTenantId())) {
+            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+        }
 
-        // generate access token
-        return $this->tokenService->generate(
-            $this->frameworkConfig->getTenantId(),
-            Table\Category::TYPE_AUTHORIZATION,
-            $app->getId(),
-            $userId,
-            $name,
-            $scopes,
-            $ip,
-            $this->frameworkConfig->getExpireTokenInterval()
-        );
+        try {
+            $app = $this->appTable->findOneByAppKeyAndSecret($this->frameworkConfig->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
+            if (empty($app)) {
+                throw new InvalidClientException('Unknown credentials');
+            }
+
+            // check user
+            $userId = $this->authenticatorService->authenticate($grant->getUsername(), $grant->getPassword());
+            if (empty($userId)) {
+                throw new InvalidGrantException('Unknown user');
+            }
+
+            $scope = $grant->getScope();
+            if (empty($scope)) {
+                // as fallback simply use all scopes assigned to the user
+                $scope = implode(',', $this->authenticatorService->getAvailableScopes($this->frameworkConfig->getTenantId(), $userId));
+            }
+
+            // validate scopes
+            $scopes = $this->scopeService->getValidScopes($this->frameworkConfig->getTenantId(), $scope, $app->getId(), $userId);
+            if (empty($scopes)) {
+                throw new InvalidScopeException('No valid scope given');
+            }
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
+            $ip = $this->ipResolver->resolveByEnvironment();
+            $name = $userAgent;
+
+            // generate access token
+            return $this->tokenService->generate(
+                $this->frameworkConfig->getTenantId(),
+                Table\Category::TYPE_AUTHORIZATION,
+                $app->getId(),
+                $userId,
+                $name,
+                $scopes,
+                $ip,
+                $this->frameworkConfig->getExpireTokenInterval()
+            );
+        } catch (ErrorExceptionAbstract $e) {
+            $this->firewallService->handleClientErrorResponse(
+                $ip,
+                $e instanceof InvalidClientException ? 401 : 400,
+                $this->frameworkConfig->getTenantId()
+            );
+
+            throw $e;
+        }
     }
 }

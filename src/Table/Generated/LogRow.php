@@ -16,6 +16,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $path = null;
     private ?string $header = null;
     private ?string $body = null;
+    private ?int $responseCode = null;
     private ?int $executionTime = null;
     private ?\PSX\DateTime\LocalDateTime $date = null;
     public function setId(int $id): void
@@ -114,6 +115,14 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->body;
     }
+    public function setResponseCode(?int $responseCode): void
+    {
+        $this->responseCode = $responseCode;
+    }
+    public function getResponseCode(): ?int
+    {
+        return $this->responseCode;
+    }
     public function setExecutionTime(?int $executionTime): void
     {
         $this->executionTime = $executionTime;
@@ -146,6 +155,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('path', $this->path);
         $record->put('header', $this->header);
         $record->put('body', $this->body);
+        $record->put('response_code', $this->responseCode);
         $record->put('execution_time', $this->executionTime);
         $record->put('date', $this->date);
         return $record;
@@ -169,6 +179,7 @@ class LogRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->path = isset($data['path']) && is_string($data['path']) ? $data['path'] : null;
         $row->header = isset($data['header']) && is_string($data['header']) ? $data['header'] : null;
         $row->body = isset($data['body']) && is_string($data['body']) ? $data['body'] : null;
+        $row->responseCode = isset($data['response_code']) && is_int($data['response_code']) ? $data['response_code'] : null;
         $row->executionTime = isset($data['execution_time']) && is_int($data['execution_time']) ? $data['execution_time'] : null;
         $row->date = isset($data['date']) && $data['date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['date']) : null;
         return $row;

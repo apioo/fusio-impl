@@ -34,7 +34,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Tenant implements FilterInterface
+readonly class Tenant implements FilterInterface
 {
     public function __construct(
         private FrameworkConfig $frameworkConfig,

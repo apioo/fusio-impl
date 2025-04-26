@@ -89,7 +89,7 @@ class RefreshTokenTest extends DbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "error": "server_error",
+    "error": "invalid_request",
     "error_description": "Refresh token is expired"
 }
 JSON;
@@ -110,7 +110,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "error": "server_error",
+    "error": "invalid_request",
     "error_description": "Invalid refresh token"
 }
 JSON;

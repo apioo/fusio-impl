@@ -18,17 +18,30 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Event\User;
+namespace Fusio\Impl\Table\Firewall;
 
-use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\FirewallLogTable;
+use PSX\Sql\Condition;
 
 /**
- * FailedAuthenticationEvent
+ * Log
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FailedAuthenticationEvent extends EventAbstract
+class Log extends FirewallLogTable
 {
+    public function getResponseCodeCount(?string $tenantId, string $ip, \DateInterval $timeWindow): int
+    {
+        $now = new \DateTime();
+        $now->sub($timeWindow);
+
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_IP, $ip);
+        $condition->greaterThan(self::COLUMN_INSERT_DATE, $now->format('Y-m-d H:i:s'));
+
+        return $this->getCount($condition);
+    }
 }
