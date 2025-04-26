@@ -102,7 +102,7 @@ readonly class Firewall
 
             $existing->setName($firewall->getName() ?? $existing->getName());
             $existing->setType($firewall->getType() ?? $existing->getType());
-            $existing->setIp($firewall->getIp() !== null ? $firewall->getIp() : $existing->getIp());
+            $existing->setIp($firewall->getIp() ?? $existing->getIp());
             $existing->setExpire($firewall->getExpire() ?? $existing->getExpire());
             $existing->setMetadata($firewall->getMetadata() !== null ? Parser::encode($firewall->getMetadata()) : $existing->getMetadata());
             $this->firewallTable->update($existing);
