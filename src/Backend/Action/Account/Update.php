@@ -52,9 +52,12 @@ class Update implements ActionInterface
 
         assert($body instanceof UserUpdate);
 
+        $update = new UserUpdate();
+        $update->setEmail($body->getEmail());
+
         $id = $this->userService->update(
             (string) $context->getUser()->getId(),
-            $body,
+            $update,
             $this->contextFactory->newActionContext($context)
         );
 
