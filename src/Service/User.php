@@ -199,6 +199,7 @@ class User
             $existing->setStatus($user->getStatus() ?? $existing->getStatus());
             $existing->setName($user->getName() ?? $existing->getName());
             $existing->setEmail($user->getEmail() ?? $existing->getEmail());
+            $existing->setPoints($user->getPoints() ?? $existing->getPoints());
             $existing->setMetadata($user->getMetadata() !== null ? Parser::encode($user->getMetadata()) : null);
             $this->userTable->update($existing);
 
