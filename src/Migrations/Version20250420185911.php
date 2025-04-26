@@ -32,7 +32,7 @@ final class Version20250420185911 extends AbstractMigration
             $firewallTable->addColumn('metadata', 'text', ['notnull' => false]);
             $firewallTable->setPrimaryKey(['id']);
             $firewallTable->addUniqueIndex(['tenant_id', 'name']);
-            $firewallTable->addIndex(['tenant_id', 'ip', 'expire']);
+            $firewallTable->addIndex(['tenant_id', 'type', 'ip', 'expire']);
         }
 
         if (!$schema->hasTable('fusio_firewall_log')) {

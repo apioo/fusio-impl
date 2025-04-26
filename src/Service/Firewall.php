@@ -24,14 +24,13 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Firewall\CreatedEvent;
 use Fusio\Impl\Event\Firewall\DeletedEvent;
 use Fusio\Impl\Event\Firewall\UpdatedEvent;
-use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\FirewallCreate;
 use Fusio\Model\Backend\FirewallUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\Exception\ClientErrorException;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
 
@@ -48,6 +47,7 @@ readonly class Firewall
         private Table\Firewall $firewallTable,
         private Table\Firewall\Log $firewallLogTable,
         private Firewall\Validator $validator,
+        private FrameworkConfig $frameworkConfig,
         private EventDispatcherInterface $eventDispatcher
     ) {
     }
@@ -150,26 +150,21 @@ readonly class Firewall
 
     public function isAllowed(string $ip, ?string $tenantId): bool
     {
+        $ipWhitelist = $this->frameworkConfig->getFirewallIgnoreIp();
+        if (!empty($ipWhitelist) && in_array($ip, $ipWhitelist)) {
+            return true;
+        }
+
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\FirewallTable::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(Table\Generated\FirewallTable::COLUMN_IP, $ip);
+        $condition->equals(Table\Generated\FirewallTable::COLUMN_TYPE, Table\Firewall::TYPE_DENY);
         $condition->add(Condition::withOr()
             ->nil(Table\Generated\FirewallTable::COLUMN_EXPIRE)
             ->greater(Table\Generated\FirewallTable::COLUMN_EXPIRE, LocalDateTime::now()->toDateTime()->format('Y-m-d H:i:s'))
         );
-        $result = $this->firewallTable->findAll($condition);
 
-        $allowed = true;
-        foreach ($result as $rule) {
-            if ($rule->getType() === Table\Firewall::TYPE_ALLOW) {
-                $allowed = true;
-                break;
-            } else if ($rule->getType() === Table\Firewall::TYPE_DENY) {
-                $allowed = false;
-            }
-        }
-
-        return $allowed;
+        return $this->firewallTable->getCount($condition) > 0;
     }
 
     /**
@@ -178,10 +173,10 @@ readonly class Firewall
      */
     public function handleClientErrorResponse(string $ip, int $responseCode, ?string $tenantId): void
     {
-        $count = $this->firewallLogTable->getResponseCodeCount($tenantId, $ip, new \DateInterval('PT10M'));
-        if ($count > 10) {
+        $count = $this->firewallLogTable->getResponseCodeCount($tenantId, $ip, $this->frameworkConfig->getFirewallFindTime());
+        if ($count > $this->frameworkConfig->getFirewallMaxRetry()) {
             $now = new \DateTime();
-            $now->add(new \DateInterval('PT10M'));
+            $now->add($this->frameworkConfig->getFirewallBanTime());
 
             $row = new Table\Generated\FirewallRow();
             $row->setTenantId($tenantId);
@@ -192,6 +187,11 @@ readonly class Firewall
             $row->setExpire(LocalDateTime::from($now));
             $this->firewallTable->create($row);
         } else {
+            $whitelistCodes = $this->frameworkConfig->getFirewallCodes();
+            if (!empty($whitelistCodes) && !in_array($responseCode, $whitelistCodes)) {
+                return;
+            }
+
             $log = new Table\Generated\FirewallLogRow();
             $log->setTenantId($tenantId);
             $log->setIp($ip);
