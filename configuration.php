@@ -11,7 +11,7 @@ return [
     'fusio_firewall_ignoreip'  => [],
     'fusio_firewall_bantime'   => 'PT10M',
     'fusio_firewall_findtime'  => 'PT10M',
-    'fusio_firewall_maxretry'  => 10,
+    'fusio_firewall_maxretry'  => 32,
     'fusio_firewall_codes'     => [],
 
     // OAuth2 access token expiration settings. How long can you use an access token and the refresh token. After the

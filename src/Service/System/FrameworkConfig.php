@@ -59,7 +59,7 @@ class FrameworkConfig
 
     public function getFirewallMaxRetry(): int
     {
-        return $this->config->get('fusio_firewall_maxretry') ?? 10;
+        return $this->config->get('fusio_firewall_maxretry') ?? 32;
     }
 
     public function getFirewallCodes(): ?array

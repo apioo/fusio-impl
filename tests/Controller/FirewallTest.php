@@ -37,7 +37,7 @@ class FirewallTest extends DbTestCase
     public function testIPBan()
     {
         // we send so many requests until we hit the rate limit and get an IP ban
-        for ($i = 0; $i < 21; $i++) {
+        for ($i = 0; $i < 43; $i++) {
             try {
                 $response = $this->sendRequest('/foo', 'GET', [
                     'User-Agent' => 'Fusio TestCase',
@@ -68,7 +68,7 @@ class FirewallTest extends DbTestCase
     public function testIPBanAuthorization()
     {
         // we send so many requests until we hit the rate limit and get an IP ban
-        for ($i = 0; $i < 13; $i++) {
+        for ($i = 0; $i < 35; $i++) {
             try {
                 $response = $this->sendRequest('/authorization/token', 'POST', [
                     'User-Agent'    => 'Fusio TestCase',
