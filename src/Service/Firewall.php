@@ -164,7 +164,7 @@ readonly class Firewall
             ->greater(Table\Generated\FirewallTable::COLUMN_EXPIRE, LocalDateTime::now()->toDateTime()->format('Y-m-d H:i:s'))
         );
 
-        return $this->firewallTable->getCount($condition) > 0;
+        return $this->firewallTable->getCount($condition) === 0;
     }
 
     /**
