@@ -11103,9 +11103,6 @@
         "ip": {
           "type": "string"
         },
-        "mask": {
-          "type": "integer"
-        },
         "expire": {
           "type": "string",
           "format": "date-time"
