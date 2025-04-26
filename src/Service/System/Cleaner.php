@@ -45,6 +45,8 @@ class Cleaner
         $this->cleanUpWebhookResponses();
         $this->cleanUpCronjobErrors();
         $this->cleanUpLogErrors();
+        $this->cleanUpFirewallExpired();
+        $this->cleanUpFirewallLogs();
     }
 
     private function cleanUpExpiredTokens(): void
@@ -78,6 +80,20 @@ class Cleaner
     private function cleanUpLogErrors(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_log_error WHERE insert_date < :now', [
+            'now' => (new \DateTime('first day of -3 months'))->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpFirewallExpired(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_firewall WHERE expire < :now', [
+            'now' => (new \DateTime('first day of last month'))->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    private function cleanUpFirewallLogs(): void
+    {
+        $this->connection->executeStatement('DELETE FROM fusio_firewall_log WHERE insert_date < :now', [
             'now' => (new \DateTime('first day of -3 months'))->format('Y-m-d H:i:s'),
         ]);
     }
