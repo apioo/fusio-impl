@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Tests\DbTestCase;
-use PSX\Http\Exception\TooManyRequestsException;
 use PSX\Json\Parser;
 
 /**
@@ -37,24 +36,20 @@ class FirewallTest extends DbTestCase
     {
         // we send so many requests until we hit the rate limit and get an IP ban
         for ($i = 0; $i < 43; $i++) {
-            try {
-                $response = $this->sendRequest('/foo', 'GET', [
-                    'User-Agent' => 'Fusio TestCase',
-                ]);
-            } catch (TooManyRequestsException) {
-            }
+            $response = $this->sendRequest('/foo', 'GET', [
+                'User-Agent' => 'Fusio TestCase',
+            ]);
         }
 
         $body = (string) $response->getBody();
         $data = Parser::decode($body);
 
-        $this->assertEquals(429, $response->getStatusCode(), $body);
-        $this->assertEquals('600', $response->getHeader('Retry-After'), $body);
+        $this->assertEquals(403, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success, $body);
         $this->assertEquals('Your IP has sent to many requests please try again later', substr($data->message, 0, 56), $body);
 
         $now = new \DateTime();
-        $now->add(new \DateInterval('PT10M'));
+        $now->add(new \DateInterval('PT5M'));
 
         $row = $this->connection->fetchAssociative('SELECT name, type, ip, expire FROM fusio_firewall WHERE name LIKE :name', ['name' => 'Ban%']);
         $this->assertNotEmpty($row);
@@ -68,14 +63,11 @@ class FirewallTest extends DbTestCase
     {
         // we send so many requests until we hit the rate limit and get an IP ban
         for ($i = 0; $i < 35; $i++) {
-            try {
-                $response = $this->sendRequest('/authorization/token', 'POST', [
-                    'User-Agent'    => 'Fusio TestCase',
-                    'Authorization' => 'Basic ' . base64_encode('brute:force'),
-                    'Content-Type'  => 'application/x-www-form-urlencoded',
-                ], 'grant_type=client_credentials');
-            } catch (TooManyRequestsException) {
-            }
+            $response = $this->sendRequest('/authorization/token', 'POST', [
+                'User-Agent'    => 'Fusio TestCase',
+                'Authorization' => 'Basic ' . base64_encode('brute:force'),
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+            ], 'grant_type=client_credentials');
         }
 
         $body = (string) $response->getBody();
@@ -86,7 +78,7 @@ class FirewallTest extends DbTestCase
         $this->assertEquals('Your IP has sent to many requests please try again later', $data->error_description, $body);
 
         $now = new \DateTime();
-        $now->add(new \DateInterval('PT10M'));
+        $now->add(new \DateInterval('PT5M'));
 
         $row = $this->connection->fetchAssociative('SELECT name, type, ip, expire FROM fusio_firewall WHERE name LIKE :name', ['name' => 'Ban%']);
         $this->assertNotEmpty($row);

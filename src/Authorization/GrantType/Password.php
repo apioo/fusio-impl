@@ -25,6 +25,7 @@ use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\PasswordAbstract;
+use PSX\Http\Exception\ClientErrorException;
 use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\ErrorExceptionAbstract;
 use PSX\OAuth2\Exception\InvalidClientException;
@@ -57,7 +58,11 @@ class Password extends PasswordAbstract
     {
         $ip = $this->ipResolver->resolveByEnvironment();
 
-        $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
+        try {
+            $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
+        } catch (ClientErrorException $e) {
+            throw new InvalidRequestException($e->getMessage(), previous: $e);
+        }
 
         try {
             $app = $this->appTable->findOneByAppKeyAndSecret($this->frameworkConfig->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
@@ -98,6 +103,14 @@ class Password extends PasswordAbstract
                 $ip,
                 $this->frameworkConfig->getExpireTokenInterval()
             );
+        } catch (ClientErrorException $e) {
+            $this->firewallService->handleClientErrorResponse(
+                $ip,
+                $e->getStatusCode(),
+                $this->frameworkConfig->getTenantId()
+            );
+
+            throw new InvalidRequestException($e->getMessage(), previous: $e);
         } catch (ErrorExceptionAbstract $e) {
             $this->firewallService->handleClientErrorResponse(
                 $ip,

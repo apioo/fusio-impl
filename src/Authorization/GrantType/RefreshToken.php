@@ -25,7 +25,7 @@ use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\OAuth2\Credentials;
 use PSX\Framework\OAuth2\GrantType\RefreshTokenAbstract;
-use PSX\Http\Exception\BadRequestException;
+use PSX\Http\Exception\ClientErrorException;
 use PSX\OAuth2\AccessToken;
 use PSX\OAuth2\Exception\ErrorExceptionAbstract;
 use PSX\OAuth2\Exception\InvalidClientException;
@@ -53,26 +53,34 @@ class RefreshToken extends RefreshTokenAbstract
     {
         $ip = $this->ipResolver->resolveByEnvironment();
 
-        $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
+        try {
+            $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
+        } catch (ClientErrorException $e) {
+            throw new InvalidRequestException($e->getMessage(), previous: $e);
+        }
 
         try {
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
             $ip = $this->ipResolver->resolveByEnvironment();
             $name = $userAgent;
 
-            try {
-                return $this->tokenService->refresh(
-                    $this->frameworkConfig->getTenantId(),
-                    Table\Category::TYPE_AUTHORIZATION,
-                    $name,
-                    $grant->getRefreshToken(),
-                    $ip,
-                    $this->frameworkConfig->getExpireTokenInterval(),
-                    $this->frameworkConfig->getExpireRefreshInterval()
-                );
-            } catch (BadRequestException $e) {
-                throw new InvalidRequestException($e->getMessage());
-            }
+            return $this->tokenService->refresh(
+                $this->frameworkConfig->getTenantId(),
+                Table\Category::TYPE_AUTHORIZATION,
+                $name,
+                $grant->getRefreshToken(),
+                $ip,
+                $this->frameworkConfig->getExpireTokenInterval(),
+                $this->frameworkConfig->getExpireRefreshInterval()
+            );
+        } catch (ClientErrorException $e) {
+            $this->firewallService->handleClientErrorResponse(
+                $ip,
+                $e->getStatusCode(),
+                $this->frameworkConfig->getTenantId()
+            );
+
+            throw new InvalidRequestException($e->getMessage(), previous: $e);
         } catch (ErrorExceptionAbstract $e) {
             $this->firewallService->handleClientErrorResponse(
                 $ip,

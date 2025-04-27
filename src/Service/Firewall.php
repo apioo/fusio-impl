@@ -31,7 +31,6 @@ use Fusio\Model\Backend\FirewallUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\Exception\TooManyRequestsException;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
 
@@ -169,7 +168,7 @@ readonly class Firewall
         );
 
         if ($this->firewallTable->getCount($condition) > 0) {
-            throw new TooManyRequestsException('Your IP has sent to many requests please try again later', 60 * 5);
+            throw new StatusCode\ForbiddenException('Your IP has sent to many requests please try again later');
         }
     }
 
