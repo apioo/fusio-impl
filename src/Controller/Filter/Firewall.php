@@ -54,9 +54,7 @@ readonly class Firewall implements FilterInterface
         $context = $this->contextFactory->getActive();
         $ip = $this->ipResolver->resolveByRequest($request);
 
-        if (!$this->firewallService->isAllowed($ip, $context->getTenantId())) {
-            throw new TooManyRequestsException('Your IP has sent to many requests please try again later', 60 * 10);
-        }
+        $this->firewallService->assertAllowed($ip, $context->getTenantId());
 
         try {
             $filterChain->handle($request, $response);

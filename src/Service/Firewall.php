@@ -31,6 +31,7 @@ use Fusio\Model\Backend\FirewallUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Http\Exception\TooManyRequestsException;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
 
@@ -148,11 +149,14 @@ readonly class Firewall
         return $existing->getId();
     }
 
-    public function isAllowed(string $ip, ?string $tenantId): bool
+    /**
+     * Throws an exception in case a ban exists for the provided ip
+     */
+    public function assertAllowed(string $ip, ?string $tenantId): void
     {
         $ipWhitelist = $this->frameworkConfig->getFirewallIgnoreIp();
         if (!empty($ipWhitelist) && in_array($ip, $ipWhitelist)) {
-            return true;
+            return;
         }
 
         $condition = Condition::withAnd();
@@ -164,7 +168,9 @@ readonly class Firewall
             ->greater(Table\Generated\FirewallTable::COLUMN_EXPIRE, LocalDateTime::now()->toDateTime()->format('Y-m-d H:i:s'))
         );
 
-        return $this->firewallTable->getCount($condition) === 0;
+        if ($this->firewallTable->getCount($condition) > 0) {
+            throw new TooManyRequestsException('Your IP has sent to many requests please try again later', 60 * 5);
+        }
     }
 
     /**

@@ -49,12 +49,12 @@ class FrameworkConfig
 
     public function getFirewallBanTime(): \DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_firewall_bantime') ?? 'PT10M');
+        return new \DateInterval($this->config->get('fusio_firewall_bantime') ?? 'PT5M');
     }
 
     public function getFirewallFindTime(): \DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_firewall_findtime') ?? 'PT10M');
+        return new \DateInterval($this->config->get('fusio_firewall_findtime') ?? 'PT2M');
     }
 
     public function getFirewallMaxRetry(): int

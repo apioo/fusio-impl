@@ -56,9 +56,8 @@ class ClientCredentials extends ClientCredentialsAbstract
     protected function generate(Credentials $credentials, Grant\ClientCredentials $grant): AccessToken
     {
         $ip = $this->ipResolver->resolveByEnvironment();
-        if (!$this->firewallService->isAllowed($ip, $this->frameworkConfig->getTenantId())) {
-            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
-        }
+
+        $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
 
         try {
             // check whether the credentials contain an app key and secret

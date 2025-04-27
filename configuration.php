@@ -9,8 +9,8 @@ return [
     // of client errors, we insert a ban for this ip for a specific amount of time. This protects us from brute-force
     // attacks and other malicious requests
     'fusio_firewall_ignoreip'  => [],
-    'fusio_firewall_bantime'   => 'PT10M',
-    'fusio_firewall_findtime'  => 'PT10M',
+    'fusio_firewall_bantime'   => 'PT5M',
+    'fusio_firewall_findtime'  => 'PT2M',
     'fusio_firewall_maxretry'  => 32,
     'fusio_firewall_codes'     => [],
 
