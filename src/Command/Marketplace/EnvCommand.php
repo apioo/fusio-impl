@@ -60,8 +60,8 @@ class EnvCommand extends Command
     {
         $this
             ->setName('marketplace:env')
-            ->setDescription('Replaces env variables of an existing app')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app, or "-" to ');
+            ->setDescription('Replaces env variables')
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app or "-" for all available apps');
 
         $this->contextFactory->addContextOptions($this);
     }
