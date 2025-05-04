@@ -79,6 +79,10 @@ class EnvCommand extends Command
                 }
 
                 foreach ($apps as $appName) {
+                    if (isset($appName[0]) && $appName[0] === '.') {
+                        continue;
+                    }
+
                     $dir = $this->frameworkConfig->getAppsDir() . '/' . $appName;
                     if (!is_dir($dir)) {
                         continue;
