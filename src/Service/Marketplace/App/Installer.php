@@ -102,7 +102,7 @@ class Installer implements InstallerInterface
         }
 
         $appsDir = $this->frameworkConfig->getAppsDir();
-        $appDir = $appsDir . '/' . $object->getName();
+        $appDir = $appsDir . '/' . $this->getDirName($object);
 
         return is_dir($appDir);
     }
@@ -110,7 +110,7 @@ class Installer implements InstallerInterface
     public function env(MarketplaceApp $object, UserContext $context): MarketplaceApp
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
-        $appDir = $appsDir . '/' . $object->getName();
+        $appDir = $appsDir . '/' . $this->getDirName($object);
 
         if (!is_dir($appDir)) {
             throw new MarketplaceException('Provided app does not exist');
@@ -186,15 +186,28 @@ class Installer implements InstallerInterface
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
 
-        $this->filesystem->rename($appDir, $appsDir . '/' . $app->getName());
+        $this->filesystem->rename($appDir, $appsDir . '/' . $this->getDirName($app));
+    }
+
+    private function getDirName(MarketplaceApp $app): string
+    {
+        $appName = $app->getName() ?? throw new MarketplaceException('Provided no app name');
+
+        $user = $app->getAuthor()?->getName();
+        if (empty($user) || $user === 'fusio') {
+            return $appName;
+        } else {
+            return $user . '-' . $appName;
+        }
     }
 
     private function moveToTrash(MarketplaceApp $app): void
     {
         $appsDir = $this->frameworkConfig->getAppsDir();
-        $appDir = $appsDir . '/' . $app->getName();
+        $dirName = $this->getDirName($app);
+        $appDir = $appsDir . '/' . $dirName;
 
-        $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($app->getName() . '_' . $app->getVersion() . '_' . uniqid()));
+        $this->filesystem->rename($appDir, $this->frameworkConfig->getPathCache($dirName . '_' . $app->getVersion() . '_' . uniqid()));
     }
 
     private function replaceVariables(string $appDir, MarketplaceApp $app, UserContext $context): void
@@ -242,7 +255,7 @@ class Installer implements InstallerInterface
             $appCreate->setUserId($user->getId());
             $appCreate->setStatus(1);
             $appCreate->setName($app->getName());
-            $appCreate->setUrl($this->frameworkConfig->getAppsUrl() . '/' . $app->getName());
+            $appCreate->setUrl($this->frameworkConfig->getAppsUrl() . '/' . $this->getDirName($app));
             $appCreate->setScopes($app->getScopes());
             $appId = $this->appService->create($appCreate, $context);
 

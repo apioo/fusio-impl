@@ -52,8 +52,8 @@ class Installer
         }
 
         $parts = explode('/', $fullName);
-        $user = $parts[0] ?? throw new StatusCode\BadRequestException('Name not provided');
-        $name = $parts[1] ?? throw new StatusCode\BadRequestException('User not provided');
+        $user = $parts[0] ?? throw new StatusCode\BadRequestException('User not provided');
+        $name = $parts[1] ?? throw new StatusCode\BadRequestException('Name not provided');
 
         try {
             $object = $factory->getRepository()->install($user, $name);

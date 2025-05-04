@@ -20,8 +20,11 @@
 
 namespace Fusio\Impl\Command\Marketplace;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Command\TypeSafeTrait;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\Marketplace\InstallerInterface;
+use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 use Fusio\Marketplace\MarketplaceApp;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,15 +42,18 @@ class EnvCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Service\Marketplace\Factory $factory;
-    private Service\System\ContextFactory $contextFactory;
+    private RepositoryInterface $repository;
+    private InstallerInterface $installer;
 
-    public function __construct(Service\Marketplace\Factory $factory, Service\System\ContextFactory $contextFactory)
-    {
-        $this->factory = $factory;
-        $this->contextFactory = $contextFactory;
-
+    public function __construct(
+        private Service\Marketplace\Factory $factory,
+        private Service\System\ContextFactory $contextFactory,
+        private Service\System\FrameworkConfig $frameworkConfig
+    ) {
         parent::__construct();
+
+        $this->repository = $this->factory->factory(Service\Marketplace\Type::APP)->getRepository();
+        $this->installer = $this->factory->factory(Service\Marketplace\Type::APP)->getInstaller();
     }
 
     protected function configure(): void
@@ -55,7 +61,7 @@ class EnvCommand extends Command
         $this
             ->setName('marketplace:env')
             ->setDescription('Replaces env variables of an existing app')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app, or "-" to ');
 
         $this->contextFactory->addContextOptions($this);
     }
@@ -63,39 +69,26 @@ class EnvCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $this->getArgumentAsString($input, 'name');
+        $context = $this->contextFactory->newCommandContext($input);
 
         try {
-            $context = $this->contextFactory->newCommandContext($input);
-            $repository = $this->factory->factory(Service\Marketplace\Type::APP)->getRepository();
-            $installer = $this->factory->factory(Service\Marketplace\Type::APP)->getInstaller();
+            if ($name === '-') {
+                $apps = scandir($this->frameworkConfig->getAppsDir());
+                foreach ($apps as $appName) {
+                    $dir = $this->frameworkConfig->getAppsDir() . '/' . $appName;
+                    if (!is_dir($dir)) {
+                        continue;
+                    }
 
-            $parts = explode('/', $name);
-            $user = $parts[0] ?? null;
-            $name = $parts[1] ?? null;
+                    $parts = explode('-', $appName, 2);
 
-            if (empty($name)) {
-                $name = $user;
-                $user = 'fusio';
+                    $this->replaceEnv($context, $output, ...$parts);
+                }
+            } else {
+                $parts = explode('/', $name, 2);
+
+                $this->replaceEnv($context, $output, ...$parts);
             }
-
-            if (empty($user) || empty($name)) {
-                throw new \RuntimeException('Provided an invalid name');
-            }
-
-            $app = $repository->install($user, $name);
-            if (!$app instanceof MarketplaceApp) {
-                throw new \RuntimeException('Provided app does not exist');
-            }
-
-            if (!$installer instanceof Service\Marketplace\App\Installer) {
-                throw new \RuntimeException('Provided an invalid installer');
-            }
-
-            $app = $installer->env($app, $context);
-
-            $output->writeln('');
-            $output->writeln('Replaced env ' . $app->getAuthor()?->getName() . '/' . $app->getName());
-            $output->writeln('');
         } catch (\Throwable $e) {
             $output->writeln('');
             $output->writeln($e->getMessage());
@@ -106,5 +99,32 @@ class EnvCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private function replaceEnv(UserContext $context, OutputInterface $output, ?string $user = null, ?string $name = null): void
+    {
+        if (empty($name)) {
+            $name = $user;
+            $user = 'fusio';
+        }
+
+        if (empty($user) || empty($name)) {
+            throw new \RuntimeException('Provided an invalid name');
+        }
+
+        $app = $this->repository->install($user, $name);
+        if (!$app instanceof MarketplaceApp) {
+            throw new \RuntimeException('Provided app does not exist');
+        }
+
+        if (!$this->installer instanceof Service\Marketplace\App\Installer) {
+            throw new \RuntimeException('Provided an invalid installer');
+        }
+
+        $app = $this->installer->env($app, $context);
+
+        $output->writeln('');
+        $output->writeln('Replaced env ' . $app->getAuthor()?->getName() . '/' . $app->getName());
+        $output->writeln('');
     }
 }
