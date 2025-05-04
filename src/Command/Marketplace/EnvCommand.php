@@ -74,6 +74,10 @@ class EnvCommand extends Command
         try {
             if ($name === '-') {
                 $apps = scandir($this->frameworkConfig->getAppsDir());
+                if ($apps === false) {
+                    throw new \RuntimeException('Could not scan apps directory');
+                }
+
                 foreach ($apps as $appName) {
                     $dir = $this->frameworkConfig->getAppsDir() . '/' . $appName;
                     if (!is_dir($dir)) {
