@@ -22,10 +22,13 @@ namespace Fusio\Impl\Command\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Command\TypeSafeTrait;
+use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 use Fusio\Marketplace\MarketplaceApp;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Sdkgen\Client\Exception\ClientException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -75,7 +78,7 @@ class EnvCommand extends Command
             if ($name === '-') {
                 $apps = scandir($this->frameworkConfig->getAppsDir());
                 if ($apps === false) {
-                    throw new \RuntimeException('Could not scan apps directory');
+                    throw new MarketplaceException('Could not scan apps directory');
                 }
 
                 foreach ($apps as $appName) {
@@ -97,6 +100,13 @@ class EnvCommand extends Command
 
                 $this->replaceEnv($context, $output, ...$parts);
             }
+        } catch (MarketplaceMessageException $e) {
+            $output->writeln('');
+            $output->writeln($e->getPayload()->getMessage());
+            if ($output->isVerbose()) {
+                $output->writeln($e->getTraceAsString());
+            }
+            $output->writeln('');
         } catch (\Throwable $e) {
             $output->writeln('');
             $output->writeln($e->getMessage());
@@ -109,6 +119,10 @@ class EnvCommand extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * @throws ClientException
+     * @throws MarketplaceMessageException
+     */
     private function replaceEnv(UserContext $context, OutputInterface $output, ?string $user = null, ?string $name = null): void
     {
         if (empty($name)) {
@@ -117,16 +131,16 @@ class EnvCommand extends Command
         }
 
         if (empty($user) || empty($name)) {
-            throw new \RuntimeException('Provided an invalid name');
+            throw new MarketplaceException('Provided an invalid name');
         }
 
         $app = $this->repository->install($user, $name);
         if (!$app instanceof MarketplaceApp) {
-            throw new \RuntimeException('Provided app does not exist');
+            throw new MarketplaceException('Provided app does not exist');
         }
 
         if (!$this->installer instanceof Service\Marketplace\App\Installer) {
-            throw new \RuntimeException('Provided an invalid installer');
+            throw new MarketplaceException('Provided an invalid installer');
         }
 
         $app = $this->installer->env($app, $context);
