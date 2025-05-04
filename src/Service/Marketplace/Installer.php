@@ -21,10 +21,12 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Marketplace\MarketplaceInstall;
 use Fusio\Marketplace\MarketplaceMessageException;
 use Fusio\Marketplace\MarketplaceObject;
 use PSX\Http\Exception as StatusCode;
+use Sdkgen\Client\Exception\ClientException;
 
 /**
  * Installer
@@ -58,7 +60,9 @@ class Installer
         try {
             $object = $factory->getRepository()->install($user, $name);
         } catch (MarketplaceMessageException $e) {
-            throw new StatusCode\BadRequestException('Could not install action: ' . $e->getPayload()->getMessage());
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getPayload()->getMessage(), previous: $e);
+        } catch (ClientException $e) {
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getMessage(), previous: $e);
         }
 
         $installer = $factory->getInstaller();
@@ -66,7 +70,11 @@ class Installer
             throw new StatusCode\BadRequestException(ucfirst($type->value) . ' already installed');
         }
 
-        $installer->install($object, $context);
+        try {
+            $installer->install($object, $context);
+        } catch (MarketplaceException $e) {
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getMessage(), previous: $e);
+        }
 
         return $object;
     }
@@ -78,7 +86,9 @@ class Installer
         try {
             $object = $factory->getRepository()->install($user, $name);
         } catch (MarketplaceMessageException $e) {
-            throw new StatusCode\BadRequestException('Could not install action: ' . $e->getPayload()->getMessage());
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getPayload()->getMessage());
+        } catch (ClientException $e) {
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getMessage());
         }
 
         $installer = $factory->getInstaller();
@@ -86,7 +96,11 @@ class Installer
             throw new StatusCode\BadRequestException(ucfirst($type->value) . ' is not installed');
         }
 
-        $installer->upgrade($object, $context);
+        try {
+            $installer->upgrade($object, $context);
+        } catch (MarketplaceException $e) {
+            throw new StatusCode\BadRequestException('Could not install ' . $type->value . ': ' . $e->getMessage(), previous: $e);
+        }
 
         return $object;
     }

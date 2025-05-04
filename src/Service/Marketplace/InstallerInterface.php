@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Marketplace\MarketplaceObject;
 
 /**
@@ -32,8 +33,14 @@ use Fusio\Marketplace\MarketplaceObject;
  */
 interface InstallerInterface
 {
+    /**
+     * @throws MarketplaceException
+     */
     public function install(MarketplaceObject $object, UserContext $context): void;
 
+    /**
+     * @throws MarketplaceException
+     */
     public function upgrade(MarketplaceObject $object, UserContext $context): void;
 
     public function isInstalled(MarketplaceObject $object, UserContext $context): bool;
