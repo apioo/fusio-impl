@@ -102,7 +102,7 @@ class EnvCommand extends Command
             }
         } catch (MarketplaceMessageException $e) {
             $output->writeln('');
-            $output->writeln($e->getPayload()->getMessage());
+            $output->writeln($e->getPayload()->getMessage() ?? 'Provided no message');
             if ($output->isVerbose()) {
                 $output->writeln($e->getTraceAsString());
             }
