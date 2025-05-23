@@ -157,6 +157,16 @@ class FrameworkConfig
         return $this->config->get('psx_path_app');
     }
 
+    public function getEnvironment(): string
+    {
+        return $this->config->get('psx_env');
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->config->get('psx_debug');
+    }
+
     public function getDoctrineConnectionParameters(): array
     {
         $connection = $this->config->get('psx_connection');
