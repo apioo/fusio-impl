@@ -1752,7 +1752,7 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'mcp.get' => new Operation(
-                    action: System\Action\Mcp\Get::class,
+                    action: Consumer\Action\Mcp\Get::class,
                     httpMethod: 'GET',
                     httpPath: '/mcp',
                     httpCode: 200,
@@ -1761,7 +1761,7 @@ class NewInstallation
                     public: false,
                 ),
                 'mcp.post' => new Operation(
-                    action: System\Action\Mcp\Post::class,
+                    action: Consumer\Action\Mcp\Post::class,
                     httpMethod: 'POST',
                     httpPath: '/mcp',
                     httpCode: 200,
@@ -1771,7 +1771,7 @@ class NewInstallation
                     public: false,
                 ),
                 'mcp.delete' => new Operation(
-                    action: System\Action\Mcp\Delete::class,
+                    action: Consumer\Action\Mcp\Delete::class,
                     httpMethod: 'DELETE',
                     httpPath: '/mcp',
                     httpCode: 200,
