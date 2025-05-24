@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL;
 use Fusio\Impl\Exception\InvalidConfigurationException;
+use PSX\Framework\Config\BaseUrlInterface;
 use PSX\Framework\Config\ConfigInterface;
 
 /**
@@ -31,14 +32,12 @@ use PSX\Framework\Config\ConfigInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FrameworkConfig
+readonly class FrameworkConfig
 {
-    private ConfigInterface $config;
     private DBAL\Tools\DsnParser $parser;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(private ConfigInterface $config, private BaseUrlInterface $baseUrl)
     {
-        $this->config = $config;
         $this->parser = new DBAL\Tools\DsnParser();
     }
 
@@ -134,12 +133,12 @@ class FrameworkConfig
 
     public function getUrl(...$pathFragment): string
     {
-        return $this->config->get('psx_url') . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
+        return $this->baseUrl->getUrl() . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
     }
 
     public function getDispatchUrl(...$pathFragment): string
     {
-        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
+        return $this->baseUrl->getDispatchUrl() . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
     }
 
     public function getPathCache(...$directoryFragment): string
