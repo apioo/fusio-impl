@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://127.0.0.1/",
+  "baseUrl": "http://127.0.0.1",
   "security": {
     "type": "oauth2",
     "tokenUrl": "http://127.0.0.1/authorization/token",

@@ -103,7 +103,7 @@ class CollectionTest extends DbTestCase
             "id": 14,
             "status": 4,
             "operationName": "test.createFoo",
-            "message": "Expected status code 201 got 400"
+            "message": "Expected status code 201 got 402"
         },
         {
             "id": 1,

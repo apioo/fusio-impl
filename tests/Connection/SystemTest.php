@@ -25,6 +25,7 @@ use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\System;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Config\BaseUrl;
 use PSX\Framework\Config\Config;
 
 /**
@@ -38,9 +39,10 @@ class SystemTest extends TestCase
 {
     public function testConnection()
     {
-        $config = new FrameworkConfig(new Config([
-            'psx_connection' => 'pdo-sqlite:///:memory:'
-        ]));
+        $config = new FrameworkConfig(
+            new Config(['psx_connection' => 'pdo-sqlite:///:memory:']),
+            new BaseUrl(null, null)
+        );
 
         $connection = new System($config);
 
