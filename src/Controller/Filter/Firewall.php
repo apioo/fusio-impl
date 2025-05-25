@@ -55,7 +55,9 @@ readonly class Firewall implements FilterInterface
         try {
             $filterChain->handle($request, $response);
         } catch (ClientErrorException $e) {
-            $this->firewallService->handleClientErrorResponse($ip, $e->getStatusCode(), $context->getTenantId());
+            if (!$context->isCli()) {
+                $this->firewallService->handleClientErrorResponse($ip, $e->getStatusCode(), $context->getTenantId());
+            }
 
             throw $e;
         }

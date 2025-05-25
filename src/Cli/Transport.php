@@ -22,6 +22,7 @@ namespace Fusio\Impl\Cli;
 
 use Composer\InstalledVersions;
 use Fusio\Cli\Transport\TransportInterface;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Environment\HttpResponseInterface;
@@ -40,11 +41,8 @@ use PSX\Uri\Uri;
  */
 class Transport implements TransportInterface
 {
-    private Dispatch $dispatch;
-
-    public function __construct(Dispatch $dispatch)
+    public function __construct(private Dispatch $dispatch, private ContextFactory $contextFactory)
     {
-        $this->dispatch = $dispatch;
     }
 
     public function request(string $baseUri, string $method, string $path, ?array $query = null, ?array $headers = null, $body = null): HttpResponseInterface
@@ -67,7 +65,10 @@ class Transport implements TransportInterface
         $response = new Response();
         $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
-        $this->dispatch->route($request, $response);
+        $context = $this->contextFactory->factory();
+        $context->setCli(true);
+
+        $this->dispatch->route($request, $response, $context);
 
         return new HttpResponse(
             $response->getStatusCode(),

@@ -49,13 +49,17 @@ readonly class RequestLimit implements FilterInterface
     {
         $context = $this->contextFactory->getActive();
 
-        $success = $this->limiterService->assertLimit(
-            $this->ipResolver->resolveByRequest($request),
-            $context->getOperation(),
-            $context->getApp(),
-            $context->getUser(),
-            $response
-        );
+        if (!$context->isCli()) {
+            $success = $this->limiterService->assertLimit(
+                $this->ipResolver->resolveByRequest($request),
+                $context->getOperation(),
+                $context->getApp(),
+                $context->getUser(),
+                $response
+            );
+        } else {
+            $success = true;
+        }
 
         if ($success) {
             $filterChain->handle($request, $response);
