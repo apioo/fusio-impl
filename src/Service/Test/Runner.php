@@ -27,7 +27,7 @@ use Fusio\Impl\Exception\Test\MissingParameterException;
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Engine\DispatchInterface;
+use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Request;
 use PSX\Http\Response;
 use PSX\Http\ResponseInterface;
@@ -49,7 +49,7 @@ readonly class Runner
 {
     public function __construct(
         private Table\Test $testTable,
-        private DispatchInterface $dispatcher,
+        private Dispatch $dispatch,
         private SchemaManagerInterface $schemaManager,
         private Service\Token $tokenService,
         private Connection $connection,
@@ -154,7 +154,7 @@ readonly class Runner
         $context = $this->contextFactory->factory();
         $context->setCli(true);
 
-        return $this->dispatcher->route($request, $response, $context);
+        return $this->dispatch->route($request, $response, $context);
     }
 
     private function set(Table\Generated\TestRow $test, int $status, ?string $message, ?string $response): void
