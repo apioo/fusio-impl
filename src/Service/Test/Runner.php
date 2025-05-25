@@ -24,6 +24,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Base;
 use Fusio\Impl\Exception\Test\MissingParameterException;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Engine\DispatchInterface;
@@ -44,23 +45,17 @@ use PSX\Uri\Uri;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Runner
+readonly class Runner
 {
-    private Table\Test $testTable;
-    private DispatchInterface $dispatcher;
-    private SchemaManagerInterface $schemaManager;
-    private Service\Token $tokenService;
-    private Connection $connection;
-    private ConnectionTransaction $connectionTransaction;
-
-    public function __construct(Table\Test $testTable, DispatchInterface $dispatcher, SchemaManagerInterface $schemaManager, Service\Token $tokenService, Connection $connection, ConnectionTransaction $connectionTransaction)
-    {
-        $this->testTable = $testTable;
-        $this->dispatcher = $dispatcher;
-        $this->schemaManager = $schemaManager;
-        $this->tokenService = $tokenService;
-        $this->connection = $connection;
-        $this->connectionTransaction = $connectionTransaction;
+    public function __construct(
+        private Table\Test $testTable,
+        private DispatchInterface $dispatcher,
+        private SchemaManagerInterface $schemaManager,
+        private Service\Token $tokenService,
+        private Connection $connection,
+        private ConnectionTransaction $connectionTransaction,
+        private ContextFactory $contextFactory
+    ) {
     }
 
     public function authenticate(UserContext $context): AccessToken
@@ -156,7 +151,10 @@ class Runner
         $response = new Response();
         $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
-        return $this->dispatcher->route($request, $response);
+        $context = $this->contextFactory->factory();
+        $context->setCli(true);
+
+        return $this->dispatcher->route($request, $response, $context);
     }
 
     private function set(Table\Generated\TestRow $test, int $status, ?string $message, ?string $response): void
