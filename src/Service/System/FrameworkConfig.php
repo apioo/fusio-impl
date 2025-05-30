@@ -123,7 +123,7 @@ readonly class FrameworkConfig
 
     public function getAppsUrl(): string
     {
-        return $this->config->get('fusio_apps_url');
+        return $this->config->get('fusio_apps_url') ?: $this->getUrl('apps');
     }
 
     public function getAppsDir(): string
