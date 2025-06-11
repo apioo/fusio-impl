@@ -42,13 +42,9 @@ class ListCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Service\Marketplace\Factory $factory;
-
-    public function __construct(Service\Marketplace\Factory $factory)
+    public function __construct(private Service\Marketplace\Factory $factory)
     {
         parent::__construct();
-
-        $this->factory = $factory;
     }
 
     protected function configure(): void

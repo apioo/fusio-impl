@@ -40,20 +40,13 @@ use Symfony\Component\Console\Question\Question;
  */
 class UserAddCommand extends Command
 {
-    private Service\User $userService;
-    private Service\Config $configService;
-    private Service\User\Validator $validator;
-    private Service\System\ContextFactory $contextFactory;
-    private Table\Role $roleTable;
-
-    public function __construct(Service\User $userService, Service\Config $configService, Service\User\Validator $validator, Service\System\ContextFactory $contextFactory, Table\Role $roleTable)
-    {
-        $this->userService = $userService;
-        $this->configService = $configService;
-        $this->validator = $validator;
-        $this->contextFactory = $contextFactory;
-        $this->roleTable = $roleTable;
-
+    public function __construct(
+        private Service\User $userService,
+        private Service\Config $configService,
+        private Service\User\Validator $validator,
+        private Service\System\ContextFactory $contextFactory,
+        private Table\Role $roleTable
+    ) {
         parent::__construct();
     }
 

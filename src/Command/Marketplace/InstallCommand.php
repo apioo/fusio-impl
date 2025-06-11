@@ -40,16 +40,11 @@ class InstallCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Service\Marketplace\Installer $installer;
-    private Service\Marketplace\Factory $factory;
-    private Service\System\ContextFactory $contextFactory;
-
-    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Factory $factory, Service\System\ContextFactory $contextFactory)
-    {
-        $this->installer = $installer;
-        $this->factory = $factory;
-        $this->contextFactory = $contextFactory;
-
+    public function __construct(
+        private Service\Marketplace\Installer $installer,
+        private Service\Marketplace\Factory $factory,
+        private Service\System\ContextFactory $contextFactory
+    ) {
         parent::__construct();
     }
 

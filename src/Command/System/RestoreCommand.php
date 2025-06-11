@@ -38,12 +38,8 @@ class RestoreCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Restorer $restorer;
-
-    public function __construct(Restorer $restorer)
+    public function __construct(private Restorer $restorer)
     {
-        $this->restorer = $restorer;
-
         parent::__construct();
     }
 
