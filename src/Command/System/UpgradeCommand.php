@@ -52,7 +52,7 @@ class UpgradeCommand extends Command
     {
         $output->writeln('Starting upgrade ...');
 
-        $baseDir = __DIR__ . '/../../../resources/operations';
+        $baseDir = $this->config->getPathResources('operations');;
         if (!is_dir($baseDir)) {
             $output->writeln('Folder resources/operations does not exist');
             return self::FAILURE;

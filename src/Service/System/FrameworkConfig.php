@@ -151,6 +151,11 @@ readonly class FrameworkConfig
         return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
+    public function getPathResources(...$directoryFragment): string
+    {
+        return $this->config->get('psx_path_resources') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
+    }
+
     public function getPathApp(): string
     {
         return $this->config->get('psx_path_app');
