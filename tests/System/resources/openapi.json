@@ -2,6 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Fusio",
+    "description": "Self-Hosted API Management for Builders.",
     "version": "1"
   },
   "servers": [
