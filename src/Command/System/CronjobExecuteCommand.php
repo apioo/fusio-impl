@@ -35,13 +35,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronjobExecuteCommand extends Command
 {
-    private Service\Cronjob\Executor $executor;
-
-    public function __construct(Service\Cronjob\Executor $executor)
+    public function __construct(private Service\Cronjob\Executor $executor)
     {
         parent::__construct();
-
-        $this->executor = $executor;
     }
 
     protected function configure(): void

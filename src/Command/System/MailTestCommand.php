@@ -38,13 +38,9 @@ class MailTestCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Mailer $mailer;
-
-    public function __construct(Mailer $mailer)
+    public function __construct(private Mailer $mailer)
     {
         parent::__construct();
-
-        $this->mailer = $mailer;
     }
 
     protected function configure(): void

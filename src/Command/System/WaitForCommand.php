@@ -38,13 +38,9 @@ class WaitForCommand extends Command
 {
     private const MAX_TRY = 40;
 
-    private ConfigInterface $config;
-
-    public function __construct(ConfigInterface $config)
+    public function __construct(private ConfigInterface $config)
     {
         parent::__construct();
-
-        $this->config = $config;
     }
 
     protected function configure(): void

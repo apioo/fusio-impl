@@ -18,47 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Service\Consumer\Mcp;
 
-use Fusio\Impl\Service\System\Health;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 
 /**
- * HealthCommand
+ * Tools
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HealthCommand extends Command
+class Tools
 {
-    public function __construct(private Health $health)
+    public function __construct(private Table\Operation $operationTable)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function list(ContextInterface $context): array
     {
-        $this
-            ->setName('system:health')
-            ->setDescription('Checks whether the system is healthy');
-    }
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $result = $this->health->check();
-        foreach ($result->getChecks() as $name => $check) {
-            $healthy = $check['healthy'] ? '✓' : '✖';
+        $operations = $this->operationTable->findAll($condition);
+        foreach ($operations as $operation) {
 
-            $output->writeln('[' . $healthy . '] ' . $name);
-
-            if (isset($check['error'])) {
-                $output->writeln('    ' . $check['error']);
-            }
         }
-
-        return $result->isHealthy() ? self::SUCCESS : self::FAILURE;
     }
 }

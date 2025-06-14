@@ -35,15 +35,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ClearCacheCommand extends Command
 {
-    private CacheItemPoolInterface $cache;
-    private CacheInterface $engineCache;
-
-    public function __construct(CacheItemPoolInterface $cache, CacheInterface $engineCache)
+    public function __construct(private CacheItemPoolInterface $cache, private CacheInterface $engineCache)
     {
         parent::__construct();
-
-        $this->cache = $cache;
-        $this->engineCache = $engineCache;
     }
 
     protected function configure(): void

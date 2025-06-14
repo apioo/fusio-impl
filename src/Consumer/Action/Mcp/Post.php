@@ -18,40 +18,29 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Consumer\Action\Mcp;
 
-use Fusio\Impl\Service\System\Cleaner;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Consumer\Mcp;
 
 /**
- * CleanCommand
+ * Post
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+readonly class Post implements ActionInterface
 {
-    public function __construct(private Cleaner $cleaner)
+    public function __construct(private Mcp $mcp)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $this->cleaner->cleanUp();
-
-        $output->writeln('Clean up successful!');
-
-        return self::SUCCESS;
+        return $this->mcp->run($request, $context);
     }
 }
