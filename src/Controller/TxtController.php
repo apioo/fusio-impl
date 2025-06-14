@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Path;
 use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * TxtController
@@ -41,12 +42,12 @@ class TxtController extends ControllerAbstract
 
     #[Get]
     #[Path('/humans.txt')]
-    public function getHumansTxt(): string
+    public function getHumansTxt(): HttpResponse
     {
         $title = $this->configService->getValue('info_title') ?: 'Fusio';
         $description = $this->configService->getValue('info_description') ?: null;
 
-        return <<<TEXT
+        $body = <<<TEXT
 
 {$title}
 
@@ -58,16 +59,20 @@ This API is powered by Fusio.
 https://www.fusio-project.org/
 
 TEXT;
+
+        return new HttpResponse(200, ['Content-Type' => 'text/plain'], $body);
     }
 
     #[Get]
     #[Path('/robots.txt')]
-    public function getRobotsTxt(): string
+    public function getRobotsTxt(): HttpResponse
     {
-        return <<<TEXT
+        $body = <<<TEXT
 User-agent: *
 Disallow: /
 
 TEXT;
+
+        return new HttpResponse(200, ['Content-Type' => 'text/plain'], $body);
     }
 }
