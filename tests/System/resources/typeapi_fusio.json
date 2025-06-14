@@ -10118,6 +10118,32 @@
       "authorization": false,
       "tags": []
     },
+    "system.meta.getAPICatalog": {
+      "path": "/system/api-catalog",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "System_APICatalog"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": []
+    },
     "system.meta.getAbout": {
       "path": "/system/about",
       "method": "GET",
@@ -13533,6 +13559,65 @@
       "type": "map",
       "schema": {
         "type": "any"
+      }
+    },
+    "System_APICatalog": {
+      "type": "struct",
+      "properties": {
+        "linkset": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "System_APICatalogLinkSet"
+          }
+        }
+      }
+    },
+    "System_APICatalogLink": {
+      "type": "struct",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "System_APICatalogLinkSet": {
+      "type": "struct",
+      "properties": {
+        "anchor": {
+          "type": "string"
+        },
+        "service-desc": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "System_APICatalogLink"
+          }
+        },
+        "service-doc": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "System_APICatalogLink"
+          }
+        },
+        "service-meta": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "System_APICatalogLink"
+          }
+        },
+        "status": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "System_APICatalogLink"
+          }
+        }
       }
     },
     "System_About": {
