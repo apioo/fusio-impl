@@ -44,6 +44,7 @@ class WelcomeTest extends DbTestCase
 {
     "apiVersion": "{$version}",
     "title": "Fusio",
+    "description": "Self-Hosted API Management for Builders.",
     "categories": [
         "authorization",
         "backend",
