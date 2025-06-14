@@ -69,7 +69,7 @@ class NewInstallation
         $bag->addConfig('consumer_max_webhooks', Table\Config::FORM_NUMBER, 8, 'The max amount of webhooks a consumer can register', tenantId: $tenantId);
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow', tenantId: $tenantId);
         $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application', tenantId: $tenantId);
-        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
+        $bag->addConfig('info_description', Table\Config::FORM_STRING, 'Self-Hosted API Management for Builders.', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
         $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL', tenantId: $tenantId);
         $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization', tenantId: $tenantId);
         $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL', tenantId: $tenantId);

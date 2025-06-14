@@ -20,36 +20,54 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Base;
+use Fusio\Impl\Service;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Path;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Http\Exception\PermanentRedirectException;
 
 /**
- * WellKnownController
+ * TxtController
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class WellKnownController extends ControllerAbstract
+class TxtController extends ControllerAbstract
 {
-    public function __construct(private readonly FrameworkConfig $frameworkConfig)
+    public function __construct(private readonly Service\Config $configService)
     {
     }
 
     #[Get]
-    #[Path('/.well-known/oauth-authorization-server')]
-    public function redirectOAuthAuthorizationServer(): mixed
+    #[Path('/humans.txt')]
+    public function getHumansTxt(): string
     {
-        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'oauth-authorization-server'));
+        $title = $this->configService->getValue('info_title') ?: 'Fusio';
+        $description = $this->configService->getValue('info_description') ?: null;
+
+        return <<<TEXT
+
+{$title}
+
+{$description}
+
+--
+
+This API is powered by Fusio.
+https://www.fusio-project.org/
+
+TEXT;
     }
 
     #[Get]
-    #[Path('/.well-known/api-catalog')]
-    public function redirectAPICatalog(): mixed
+    #[Path('/robots.txt')]
+    public function getRobotsTxt(): string
     {
-        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'api-catalog'));
+        return <<<TEXT
+User-agent: *
+Disallow: /
+
+TEXT;
     }
 }
