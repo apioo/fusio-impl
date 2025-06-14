@@ -36,7 +36,7 @@ use PSX\Framework\Environment\IPResolver;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Webhook implements ActionInterface
+readonly class Webhook implements ActionInterface
 {
     public function __construct(
         private Service\Log $logService,

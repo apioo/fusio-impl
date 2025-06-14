@@ -18,38 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\System\Action\Meta;
+namespace Fusio\Impl\Controller;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use PSX\Api\Scanner\FilterFactoryInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Api\Attribute\Get;
+use PSX\Api\Attribute\Path;
+use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Http\Exception\PermanentRedirectException;
 
 /**
- * GetRoutes
+ * WellKnownController
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetRoutes implements ActionInterface
+class WellKnownController extends ControllerAbstract
 {
-    public function __construct(private View\Operation $table, private FilterFactoryInterface $filterFactory)
+    public function __construct(private FrameworkConfig $frameworkConfig)
     {
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    #[Get]
+    #[Path('/.well-known/oauth-authorization-server')]
+    public function redirectOAuthAuthorizationServer(): mixed
     {
-        $filterName = $request->get('filter');
-        if (empty($filterName)) {
-            $filterName = $this->filterFactory->getDefault();
-        }
+        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'oauth-authorization-server'));
+    }
 
-        return $this->table->getRoutes(
-            $this->filterFactory->getFilter((string) $filterName),
-            $context
-        );
+    #[Get]
+    #[Path('/.well-known/api-catalog')]
+    public function redirectAPICatalog(): mixed
+    {
+        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'api-catalog'));
     }
 }

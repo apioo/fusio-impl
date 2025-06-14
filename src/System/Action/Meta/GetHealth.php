@@ -33,13 +33,10 @@ use Fusio\Impl\Service\System\Health;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetHealth implements ActionInterface
+readonly class GetHealth implements ActionInterface
 {
-    private Health $healthService;
-
-    public function __construct(Health $healthService)
+    public function __construct(private Health $healthService)
     {
-        $this->healthService = $healthService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

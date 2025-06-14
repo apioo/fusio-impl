@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Callback implements ActionInterface
+readonly class Callback implements ActionInterface
 {
-    private Connection\Token $tokenService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Connection\Token $tokenService, ContextFactory $contextFactory)
+    public function __construct(private Connection\Token $tokenService, private ContextFactory $contextFactory)
     {
-        $this->tokenService = $tokenService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

@@ -20,84 +20,45 @@
 
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
-use Fusio\Impl\Base;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
- * GetAboutTest
+ * GetAPICatalogTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAboutTest extends DbTestCase
+class GetAPICatalogTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/system/about', 'GET', array(
+        $response = $this->sendRequest('/system/api-catalog', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $version = Base::getVersion();
-        $body    = (string) $response->getBody();
-        $expect  = <<<JSON
+        $body = (string) $response->getBody();
+        $expect = <<<JSON
 {
-    "apiVersion": "{$version}",
-    "title": "Fusio",
-    "categories": [
-        "authorization",
-        "backend",
-        "consumer",
-        "default",
-        "system"
-    ],
-    "paymentCurrency": "EUR",
-    "scopes": [
-        "bar",
-        "default",
-        "foo",
-        "plan_scope"
-    ],
-    "links": [
+    "linkset": [
         {
-            "rel": "root",
-            "href": "http:\/\/127.0.0.1\/"
-        },
-        {
-            "rel": "openapi",
-            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi"
-        },
-        {
-            "rel": "typeapi",
-            "href": "http:\/\/127.0.0.1\/system\/generator\/spec-typeapi"
-        },
-        {
-            "rel": "route",
-            "href": "http:\/\/127.0.0.1\/system\/route"
-        },
-        {
-            "rel": "health",
-            "href": "http:\/\/127.0.0.1\/system\/health"
-        },
-        {
-            "rel": "oauth-authorization-server",
-            "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
-        },
-        {
-            "rel": "api-catalog",
-            "href": "http:\/\/127.0.0.1\/system\/api-catalog"
-        },
-        {
-            "rel": "oauth2",
-            "href": "http:\/\/127.0.0.1\/authorization\/token"
-        },
-        {
-            "rel": "whoami",
-            "href": "http:\/\/127.0.0.1\/authorization\/whoami"
-        },
-        {
-            "rel": "about",
-            "href": "https:\/\/www.fusio-project.org"
+            "anchor": "http:\/\/127.0.0.1\/",
+            "service-desc": {
+                "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi",
+                "type": "application\/json"
+            },
+            "service-doc": {
+                "href": "http:\/\/127.0.0.1\/apps\/redoc",
+                "type": "text\/html"
+            },
+            "service-meta": {
+                "href": "http:\/\/127.0.0.1\/system\/health",
+                "type": "application\/json"
+            },
+            "status": {
+                "href": "http:\/\/127.0.0.1\/system\/health",
+                "type": "application\/json"
+            }
         }
     ]
 }
@@ -109,7 +70,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/system/about', 'POST', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -122,7 +83,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/system/about', 'PUT', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -135,7 +96,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/system/about', 'DELETE', array(
+        $response = $this->sendRequest('/system/oauth-authorization-server', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

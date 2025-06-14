@@ -2125,6 +2125,15 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                 ),
+                'meta.getAPICatalog' => new Operation(
+                    action: System\Action\Meta\GetAPICatalog::class,
+                    httpMethod: 'GET',
+                    httpPath: '/api-catalog',
+                    httpCode: 200,
+                    outgoing: Model\System\APICatalog::class,
+                    throws: [999 => Model\Common\Message::class],
+                    public: true,
+                ),
                 'meta.getRoutes' => new Operation(
                     action: System\Action\Meta\GetRoutes::class,
                     httpMethod: 'GET',

@@ -24,32 +24,57 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use PSX\Api\Scanner\FilterFactoryInterface;
+use Fusio\Impl\Service;
+use PSX\Http\Environment\HttpResponse;
 
 /**
- * GetRoutes
+ * GetAPICatalog
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetRoutes implements ActionInterface
+readonly class GetAPICatalog implements ActionInterface
 {
-    public function __construct(private View\Operation $table, private FilterFactoryInterface $filterFactory)
+    public function __construct(private Service\System\FrameworkConfig $frameworkConfig)
     {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $filterName = $request->get('filter');
-        if (empty($filterName)) {
-            $filterName = $this->filterFactory->getDefault();
-        }
+        return new HttpResponse(200, [
+            'Content-Type' => 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"',
+        ], [
+            'linkset' => [
+                $this->buildLinkSet()
+            ],
+        ]);
+    }
 
-        return $this->table->getRoutes(
-            $this->filterFactory->getFilter((string) $filterName),
-            $context
-        );
+    private function buildLinkSet(): array
+    {
+        $baseUrl = $this->frameworkConfig->getDispatchUrl();
+        $appsUrl = $this->frameworkConfig->getAppsUrl();
+
+        $linkSet = [];
+        $linkSet['anchor'] = $baseUrl;
+        $linkSet['service-desc'] = [
+            'href' => $baseUrl . 'system/generator/spec-openapi',
+            'type' => 'application/json',
+        ];
+        $linkSet['service-doc'] = [
+            'href' => $appsUrl . '/redoc',
+            'type' => 'text/html',
+        ];
+        $linkSet['service-meta'] = [
+            'href' => $baseUrl . 'system/health',
+            'type' => 'application/json',
+        ];
+        $linkSet['status'] = [
+            'href' => $baseUrl . 'system/health',
+            'type' => 'application/json',
+        ];
+
+        return $linkSet;
     }
 }
