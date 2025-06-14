@@ -84,6 +84,10 @@ class WelcomeTest extends DbTestCase
             "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
         },
         {
+            "rel": "api-catalog",
+            "href": "http:\/\/127.0.0.1\/system\/api-catalog"
+        },
+        {
             "rel": "oauth2",
             "href": "http:\/\/127.0.0.1\/authorization\/token"
         },
