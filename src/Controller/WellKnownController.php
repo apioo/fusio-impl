@@ -52,4 +52,21 @@ class WellKnownController extends ControllerAbstract
     {
         throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'api-catalog'));
     }
+
+    #[Get]
+    #[Path('/.well-known/security.txt')]
+    public function getSecurityTxt(): string
+    {
+        $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
+
+        return <<<TEXT
+Contact: mailto:security@fusio-project.org
+Contact: https://github.com/apioo/fusio
+Contact: https://chrisk.app/
+Expires: {$expires}
+Encryption: https://chrisk.app/pub.key
+Preferred-Languages: en
+
+TEXT;
+    }
 }
