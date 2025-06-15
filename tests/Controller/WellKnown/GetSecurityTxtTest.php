@@ -51,6 +51,7 @@ Preferred-Languages: en
 TEXT;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('text/plain', $response->getHeader('Content-Type'), $body);
         $this->assertEquals($expect, $body, $body);
     }
 

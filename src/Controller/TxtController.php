@@ -20,12 +20,13 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use PSX\Api\Attribute\Get;
+use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Environment\HttpResponse;
+use PSX\Schema\ContentType;
 
 /**
  * TxtController
@@ -42,6 +43,7 @@ class TxtController extends ControllerAbstract
 
     #[Get]
     #[Path('/humans.txt')]
+    #[Outgoing(200, ContentType::TEXT)]
     public function getHumansTxt(): HttpResponse
     {
         $title = $this->configService->getValue('info_title') ?: 'Fusio';
@@ -65,6 +67,7 @@ TEXT;
 
     #[Get]
     #[Path('/robots.txt')]
+    #[Outgoing(200, ContentType::TEXT)]
     public function getRobotsTxt(): HttpResponse
     {
         $body = <<<TEXT

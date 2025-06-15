@@ -22,9 +22,12 @@ namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Api\Attribute\Get;
+use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\PermanentRedirectException;
+use PSX\Schema\ContentType;
 
 /**
  * WellKnownController
@@ -55,11 +58,12 @@ class WellKnownController extends ControllerAbstract
 
     #[Get]
     #[Path('/.well-known/security.txt')]
-    public function getSecurityTxt(): string
+    #[Outgoing(200, ContentType::TEXT)]
+    public function getSecurityTxt(): HttpResponse
     {
         $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
 
-        return <<<TEXT
+        $body = <<<TEXT
 Contact: mailto:security@fusio-project.org
 Contact: https://github.com/apioo/fusio
 Contact: https://chrisk.app/
@@ -68,5 +72,7 @@ Encryption: https://chrisk.app/pub.key
 Preferred-Languages: en
 
 TEXT;
+
+        return new HttpResponse(200, ['Content-Type' => 'text/plain'], $body);
     }
 }
