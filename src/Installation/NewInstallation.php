@@ -523,6 +523,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseTableCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'database.getTable' => new Operation(
