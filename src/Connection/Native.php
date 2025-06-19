@@ -22,9 +22,6 @@ namespace Fusio\Impl\Connection;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use Fusio\Adapter\Sql\Introspection\Introspector;
-use Fusio\Engine\Connection\IntrospectableInterface;
-use Fusio\Engine\Connection\Introspection\IntrospectorInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -38,7 +35,7 @@ use Fusio\Engine\ParametersInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Native implements ConnectionInterface, PingableInterface, IntrospectableInterface
+class Native implements ConnectionInterface, PingableInterface
 {
     private Connection $connection;
 
@@ -73,10 +70,5 @@ class Native implements ConnectionInterface, PingableInterface, IntrospectableIn
         } else {
             return false;
         }
-    }
-
-    public function getIntrospector(mixed $connection): IntrospectorInterface
-    {
-        return new Introspector($connection);
     }
 }

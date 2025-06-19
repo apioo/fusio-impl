@@ -24,9 +24,6 @@ use Doctrine\DBAL;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractAsset;
-use Fusio\Adapter\Sql\Introspection\Introspector;
-use Fusio\Engine\Connection\IntrospectableInterface;
-use Fusio\Engine\Connection\Introspection\IntrospectorInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -41,7 +38,7 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class System implements ConnectionInterface, PingableInterface, IntrospectableInterface
+class System implements ConnectionInterface, PingableInterface
 {
     private FrameworkConfig $frameworkConfig;
 
@@ -90,10 +87,5 @@ class System implements ConnectionInterface, PingableInterface, IntrospectableIn
         } else {
             return false;
         }
-    }
-
-    public function getIntrospector(mixed $connection): IntrospectorInterface
-    {
-        return new Introspector($connection);
     }
 }
