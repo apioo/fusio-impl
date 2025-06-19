@@ -2240,6 +2240,18 @@
           "schema": {
             "type": "string"
           }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
