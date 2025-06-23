@@ -40,13 +40,9 @@ class RegisterCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Installer $installer;
-
-    public function __construct(Installer $installer)
+    public function __construct(private Installer $installer)
     {
         parent::__construct();
-
-        $this->installer = $installer;
     }
 
     protected function configure(): void

@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio - Self-Hosted API Management for Builders.
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -18,40 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Service\Consumer\Mcp;
 
-use Fusio\Impl\Service\System\LogRotator;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 
 /**
- * LogRotateCommand
+ * Tools
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LogRotateCommand extends Command
+class Tools
 {
-    public function __construct(private LogRotator $logRotator)
+    public function __construct(private Table\Operation $operationTable)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function list(ContextInterface $context): array
     {
-        $this
-            ->setName('system:log_rotate')
-            ->setDescription('Rotates the log table');
-    }
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
+        $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        foreach ($this->logRotator->rotate() as $message) {
-            $output->writeln($message);
+        $operations = $this->operationTable->findAll($condition);
+        foreach ($operations as $operation) {
+
         }
-
-        return self::SUCCESS;
     }
 }

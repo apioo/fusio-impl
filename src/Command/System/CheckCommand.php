@@ -38,13 +38,9 @@ class CheckCommand extends Command
 {
     use TypeSafeTrait;
 
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
         parent::__construct();
-
-        $this->connection = $connection;
     }
 
     protected function configure(): void

@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio - Self-Hosted API Management for Builders.
+ * Fusio is an open source API management platform which helps to create innovative API solutions.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -18,40 +18,29 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Consumer\Action\Mcp;
 
-use Fusio\Impl\Service\System\LogRotator;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Consumer\Mcp;
 
 /**
- * LogRotateCommand
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LogRotateCommand extends Command
+readonly class Get implements ActionInterface
 {
-    public function __construct(private LogRotator $logRotator)
+    public function __construct(private Mcp $mcp)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this
-            ->setName('system:log_rotate')
-            ->setDescription('Rotates the log table');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        foreach ($this->logRotator->rotate() as $message) {
-            $output->writeln($message);
-        }
-
-        return self::SUCCESS;
+        return $this->mcp;
     }
 }
