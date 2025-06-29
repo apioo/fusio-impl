@@ -43,11 +43,16 @@ class Register
         private Mailer $mailerService,
         private Service\Config $configService,
         private Table\Role $roleTable,
+        private Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
 
     public function register(UserRegister $register, UserContext $context): int
     {
+        if (!$this->frameworkConfig->isRegistrationEnabled()) {
+            throw new StatusCode\BadRequestException('User registration is not enabled');
+        }
+
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
         // determine initial user status

@@ -111,14 +111,19 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_mail_sender');
     }
 
+    public function isRegistrationEnabled(): bool
+    {
+        return $this->config->get('fusio_registration') !== false;
+    }
+
     public function isDatabaseEnabled(): bool
     {
-        return !!$this->config->get('fusio_database');
+        return $this->config->get('fusio_database') !== false;
     }
 
     public function isMarketplaceEnabled(): bool
     {
-        return !!$this->config->get('fusio_marketplace');
+        return $this->config->get('fusio_marketplace') !== false;
     }
 
     public function getAppsUrl(): string
