@@ -35,7 +35,7 @@ class Captcha
 {
     public function __construct(
         private Service\Config $configService,
-        private CaptchaInterface $captcha,
+        private Service\User\Captcha\CaptchaInterface $captcha,
         private IPResolver $ipResolver,
     ) {
     }

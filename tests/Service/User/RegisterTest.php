@@ -27,6 +27,7 @@ use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Model\Backend\ConfigUpdate;
 use Fusio\Model\Consumer\UserRegister;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
 use PSX\Sql\TableManagerInterface;
@@ -42,14 +43,7 @@ class RegisterTest extends DbTestCase
 {
     public function testRegister()
     {
-        $register = new Register(
-            Environment::getService(Service\User::class),
-            $this->newCaptchaService(true),
-            Environment::getService(Service\User\Token::class),
-            $this->newMailer(true),
-            $this->newConfig('private_key', true),
-            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
-        );
+        $register = $this->newRegisterService(true, true, 'private_key', true);
 
         $user = new UserRegister();
         $user->setName('new_user');
@@ -73,14 +67,7 @@ class RegisterTest extends DbTestCase
 
     public function testRegisterNoApproval()
     {
-        $register = new Register(
-            Environment::getService(Service\User::class),
-            $this->newCaptchaService(true),
-            Environment::getService(Service\User\Token::class),
-            $this->newMailer(false),
-            $this->newConfig('private_key', false),
-            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
-        );
+        $register = $this->newRegisterService(true, false, 'private_key', false);
 
         $user = new UserRegister();
         $user->setName('new_user');
@@ -104,14 +91,7 @@ class RegisterTest extends DbTestCase
 
     public function testRegisterNoCaptchaSecret()
     {
-        $register = new Register(
-            Environment::getService(Service\User::class),
-            $this->newCaptchaService(true),
-            Environment::getService(Service\User\Token::class),
-            $this->newMailer(true),
-            $this->newConfig('', true),
-            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
-        );
+        $register = $this->newRegisterService(true, true, '', true);
 
         $user = new UserRegister();
         $user->setName('new_user');
@@ -137,14 +117,7 @@ class RegisterTest extends DbTestCase
     {
         $this->expectException(BadRequestException::class);
 
-        $register = new Register(
-            Environment::getService(Service\User::class),
-            $this->newCaptchaService(false),
-            Environment::getService(Service\User\Token::class),
-            $this->newMailer(false),
-            $this->newConfig('private_key', true),
-            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class)
-        );
+        $register = $this->newRegisterService(false, false, 'private_key', true);
 
         $user = new UserRegister();
         $user->setName('new_user');
@@ -155,22 +128,26 @@ class RegisterTest extends DbTestCase
         $register->register($user, $context);
     }
 
+    private function newRegisterService(bool $success, bool $send, string $secret, bool $userApproval): Register
+    {
+        return new Register(
+            Environment::getService(Service\User::class),
+            $this->newCaptchaService($success),
+            Environment::getService(Service\User\Token::class),
+            $this->newMailer($send),
+            $this->newConfig($secret, $userApproval),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class),
+            Environment::getService(Service\System\FrameworkConfig::class),
+        );
+    }
+
     private function newCaptchaService(bool $success): Service\User\Captcha
     {
-        $captcha = $this->getMockBuilder(Service\User\Captcha::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        if ($success) {
-            $captcha->expects($this->once())
-                ->method('assertCaptcha');
-        } else {
-            $captcha->expects($this->once())
-                ->method('assertCaptcha')
-                ->willThrowException(new BadRequestException('Invalid captcha'));
-        }
-
-        return $captcha;
+        return new Service\User\Captcha(
+            Environment::getService(Service\Config::class),
+            new Service\User\Captcha\MockCaptcha($success),
+            Environment::getService(IPResolver::class),
+        );
     }
 
     private function newConfig(string $reCaptchaSecret, bool $userApproval): Service\Config

@@ -34,7 +34,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Register
+readonly class Register
 {
     public function __construct(
         private Service\User $userService,

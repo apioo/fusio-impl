@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User;
+namespace Fusio\Impl\Service\User\Captcha;
 
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\RequestInterface;

@@ -20,24 +20,14 @@
 
 namespace Fusio\Impl\Service\User\Captcha;
 
-use PSX\Http\Client\PostRequest;
-
 /**
- * HCaptcha
+ * CaptchaInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class HCaptcha extends CaptchaAbstract
+interface CaptchaInterface
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool
-    {
-        $request = new PostRequest('https://hcaptcha.com/siteverify', [], [
-            'secret'   => $secret,
-            'response' => $captcha,
-        ]);
-
-        return $this->request($request);
-    }
+    public function verify(?string $captcha, string $secret, string $ip): bool;
 }

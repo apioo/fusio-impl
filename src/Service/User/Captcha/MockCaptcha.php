@@ -18,16 +18,23 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User;
+namespace Fusio\Impl\Service\User\Captcha;
 
 /**
- * CaptchaInterface
+ * MockCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface CaptchaInterface
+readonly class MockCaptcha implements CaptchaInterface
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool;
+    public function __construct(private bool $result = true)
+    {
+    }
+
+    public function verify(?string $captcha, string $secret, string $ip): bool
+    {
+        return $this->result;
+    }
 }
