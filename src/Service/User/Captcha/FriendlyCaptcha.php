@@ -20,44 +20,24 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
+use PSX\Http\Client\PostRequest;
 
 /**
- * Captcha
+ * FriendlyCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Captcha
+readonly class FriendlyCaptcha extends CaptchaAbstract
 {
-    public function __construct(
-        private Service\Config $configService,
-        private CaptchaInterface $captcha,
-        private IPResolver $ipResolver,
-    ) {
-    }
-
-    public function assertCaptcha(?string $captcha): void
+    public function verify(?string $captcha, string $secret, string $ip): bool
     {
-        $secret = $this->configService->getValue('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
-    }
+        $request = new PostRequest('https://global.frcapi.com/api/v2/captcha/siteverify', [], [
+            'sitekey'  => $secret,
+            'response' => $captcha,
+        ]);
 
-    protected function verifyCaptcha(?string $captcha, string $secret): bool
-    {
-        if (empty($captcha)) {
-            throw new StatusCode\BadRequestException('Invalid captcha');
-        }
-
-        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
-            return true;
-        }
-
-        throw new StatusCode\BadRequestException('Invalid captcha');
+        return $this->request($request);
     }
 }

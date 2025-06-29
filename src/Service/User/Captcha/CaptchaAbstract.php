@@ -20,44 +20,45 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
+use PSX\Http\Client\ClientInterface;
+use PSX\Http\RequestInterface;
+use PSX\Json\Parser;
 
 /**
- * Captcha
+ * ReCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Captcha
+readonly abstract class CaptchaAbstract implements CaptchaInterface
 {
-    public function __construct(
-        private Service\Config $configService,
-        private CaptchaInterface $captcha,
-        private IPResolver $ipResolver,
-    ) {
+    public function __construct(private ClientInterface $httpClient)
+    {
     }
 
-    public function assertCaptcha(?string $captcha): void
+    protected function request(RequestInterface $request, string $successProperty = 'success'): bool
     {
-        $secret = $this->configService->getValue('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
-    }
-
-    protected function verifyCaptcha(?string $captcha, string $secret): bool
-    {
-        if (empty($captcha)) {
-            throw new StatusCode\BadRequestException('Invalid captcha');
+        $response = $this->httpClient->request($request);
+        if ($response->getStatusCode() !== 200) {
+            return false;
         }
 
-        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
-            return true;
+        try {
+            $data = Parser::decode((string) $response->getBody());
+        } catch (\JsonException) {
+            return false;
         }
 
-        throw new StatusCode\BadRequestException('Invalid captcha');
+        if (!$data instanceof \stdClass) {
+            return false;
+        }
+
+        $success = $data->{$successProperty} ?? null;
+        if ($success !== true) {
+            return false;
+        }
+
+        return true;
     }
 }

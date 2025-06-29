@@ -20,44 +20,14 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
-
 /**
- * Captcha
+ * CaptchaInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Captcha
+interface CaptchaInterface
 {
-    public function __construct(
-        private Service\Config $configService,
-        private CaptchaInterface $captcha,
-        private IPResolver $ipResolver,
-    ) {
-    }
-
-    public function assertCaptcha(?string $captcha): void
-    {
-        $secret = $this->configService->getValue('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
-    }
-
-    protected function verifyCaptcha(?string $captcha, string $secret): bool
-    {
-        if (empty($captcha)) {
-            throw new StatusCode\BadRequestException('Invalid captcha');
-        }
-
-        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
-            return true;
-        }
-
-        throw new StatusCode\BadRequestException('Invalid captcha');
-    }
+    public function verify(?string $captcha, string $secret, string $ip): bool;
 }
