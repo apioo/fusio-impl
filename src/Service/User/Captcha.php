@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -22,10 +22,7 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
 use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
-use PSX\Json\Parser;
 
 /**
  * Captcha
@@ -38,7 +35,7 @@ class Captcha
 {
     public function __construct(
         private Service\Config $configService,
-        private ClientInterface $httpClient,
+        private Service\User\Captcha\CaptchaInterface $captcha,
         private IPResolver $ipResolver,
     ) {
     }
@@ -57,19 +54,8 @@ class Captcha
             throw new StatusCode\BadRequestException('Invalid captcha');
         }
 
-        $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
-            'secret'   => $secret,
-            'response' => $captcha,
-            'remoteip' => $this->ipResolver->resolveByEnvironment(),
-        ]);
-
-        $response = $this->httpClient->request($request);
-
-        if ($response->getStatusCode() == 200) {
-            $data = Parser::decode((string) $response->getBody());
-            if ($data->success === true) {
-                return true;
-            }
+        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
+            return true;
         }
 
         throw new StatusCode\BadRequestException('Invalid captcha');

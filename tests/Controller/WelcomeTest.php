@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -44,6 +44,7 @@ class WelcomeTest extends DbTestCase
 {
     "apiVersion": "{$version}",
     "title": "Fusio",
+    "description": "Self-Hosted API Management for Builders.",
     "categories": [
         "authorization",
         "backend",
@@ -82,6 +83,10 @@ class WelcomeTest extends DbTestCase
         {
             "rel": "oauth-authorization-server",
             "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
+        },
+        {
+            "rel": "api-catalog",
+            "href": "http:\/\/127.0.0.1\/system\/api-catalog"
         },
         {
             "rel": "oauth2",

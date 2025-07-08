@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL;
 use Fusio\Impl\Exception\InvalidConfigurationException;
+use PSX\Framework\Config\BaseUrlInterface;
 use PSX\Framework\Config\ConfigInterface;
 
 /**
@@ -31,14 +32,12 @@ use PSX\Framework\Config\ConfigInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class FrameworkConfig
+readonly class FrameworkConfig
 {
-    private ConfigInterface $config;
     private DBAL\Tools\DsnParser $parser;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(private ConfigInterface $config, private BaseUrlInterface $baseUrl)
     {
-        $this->config = $config;
         $this->parser = new DBAL\Tools\DsnParser();
     }
 
@@ -112,19 +111,24 @@ class FrameworkConfig
         return $this->config->get('fusio_mail_sender');
     }
 
+    public function isRegistrationEnabled(): bool
+    {
+        return $this->config->get('fusio_registration') !== false;
+    }
+
     public function isDatabaseEnabled(): bool
     {
-        return !!$this->config->get('fusio_database');
+        return $this->config->get('fusio_database') !== false;
     }
 
     public function isMarketplaceEnabled(): bool
     {
-        return !!$this->config->get('fusio_marketplace');
+        return $this->config->get('fusio_marketplace') !== false;
     }
 
     public function getAppsUrl(): string
     {
-        return $this->config->get('fusio_apps_url');
+        return $this->config->get('fusio_apps_url') ?: $this->getUrl('apps');
     }
 
     public function getAppsDir(): string
@@ -134,12 +138,12 @@ class FrameworkConfig
 
     public function getUrl(...$pathFragment): string
     {
-        return $this->config->get('psx_url') . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
+        return $this->baseUrl->getUrl() . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
     }
 
     public function getDispatchUrl(...$pathFragment): string
     {
-        return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
+        return $this->baseUrl->getDispatchUrl() . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
     }
 
     public function getPathCache(...$directoryFragment): string
@@ -150,6 +154,11 @@ class FrameworkConfig
     public function getPathPublic(...$directoryFragment): string
     {
         return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
+    }
+
+    public function getPathResources(...$directoryFragment): string
+    {
+        return $this->config->get('psx_path_resources') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
     public function getPathApp(): string

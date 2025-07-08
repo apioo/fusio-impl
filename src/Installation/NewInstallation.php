@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -69,7 +69,7 @@ class NewInstallation
         $bag->addConfig('consumer_max_webhooks', Table\Config::FORM_NUMBER, 8, 'The max amount of webhooks a consumer can register', tenantId: $tenantId);
         $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow', tenantId: $tenantId);
         $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application', tenantId: $tenantId);
-        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
+        $bag->addConfig('info_description', Table\Config::FORM_STRING, 'Self-Hosted API Management for Builders.', 'A short description of the application. CommonMark syntax MAY be used for rich text representation', tenantId: $tenantId);
         $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL', tenantId: $tenantId);
         $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization', tenantId: $tenantId);
         $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL', tenantId: $tenantId);
@@ -523,6 +523,7 @@ class NewInstallation
                     httpPath: '/database/:connection_id',
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseTableCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
                     throws: [999 => Model\Common\Message::class],
                 ),
                 'database.getTable' => new Operation(
@@ -2150,6 +2151,15 @@ class NewInstallation
                     httpPath: '/oauth-authorization-server',
                     httpCode: 200,
                     outgoing: Model\System\OAuthConfiguration::class,
+                    throws: [999 => Model\Common\Message::class],
+                    public: true,
+                ),
+                'meta.getAPICatalog' => new Operation(
+                    action: System\Action\Meta\GetAPICatalog::class,
+                    httpMethod: 'GET',
+                    httpPath: '/api-catalog',
+                    httpCode: 200,
+                    outgoing: Model\System\APICatalog::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                 ),

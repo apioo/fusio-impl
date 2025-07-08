@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -103,7 +103,7 @@ class CollectionTest extends DbTestCase
             "id": 14,
             "status": 4,
             "operationName": "test.createFoo",
-            "message": "Expected status code 201 got 400"
+            "message": "Expected status code 201 got 402"
         },
         {
             "id": 1,

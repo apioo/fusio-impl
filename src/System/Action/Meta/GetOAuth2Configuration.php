@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -36,15 +36,10 @@ use PSX\Sql\OrderBy;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetOAuth2Configuration implements ActionInterface
+readonly class GetOAuth2Configuration implements ActionInterface
 {
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private Table\Scope $scopeTable;
-
-    public function __construct(Service\System\FrameworkConfig $frameworkConfig, Table\Scope $scopeTable)
+    public function __construct(private Service\System\FrameworkConfig $frameworkConfig, private Table\Scope $scopeTable)
     {
-        $this->frameworkConfig = $frameworkConfig;
-        $this->scopeTable = $scopeTable;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -72,5 +67,4 @@ class GetOAuth2Configuration implements ActionInterface
 
         return $result;
     }
-
 }

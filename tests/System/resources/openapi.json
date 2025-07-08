@@ -2,11 +2,12 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Fusio",
+    "description": "Self-Hosted API Management for Builders.",
     "version": "1"
   },
   "servers": [
     {
-      "url": "http://127.0.0.1/"
+      "url": "http://127.0.0.1"
     }
   ],
   "paths": {

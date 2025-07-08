@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -38,11 +38,16 @@ readonly class Activate
     public function __construct(
         private Service\User $userService,
         private Service\User\Token $tokenService,
+        private Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
 
     public function activate(UserActivate $activate, UserContext $context): void
     {
+        if (!$this->frameworkConfig->isRegistrationEnabled()) {
+            throw new StatusCode\BadRequestException('User registration is not enabled');
+        }
+
         $token = $activate->getToken();
         if (empty($token)) {
             throw new StatusCode\BadRequestException('No token provided');

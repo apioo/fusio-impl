@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -108,7 +108,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "228"
+    "id": "229"
 }
 JSON;
 

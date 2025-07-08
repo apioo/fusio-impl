@@ -86,7 +86,7 @@
       "type": 1,
       "name": "info_description",
       "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
-      "value": ""
+      "value": "Self-Hosted API Management for Builders."
     },
     {
       "type": 1,
@@ -333,7 +333,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 229,
+          "operationId": 230,
           "authenticated": true
         }
       ]
@@ -350,7 +350,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 228
+          "operationId": 229
         }
       ]
     },

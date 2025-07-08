@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -209,11 +209,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 230,
+            'operation_id' => 231,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 228,
+            'operation_id' => 229,
             'allow' => 1,
         ]], $operations);
     }

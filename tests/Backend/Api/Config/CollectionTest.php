@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -106,7 +106,7 @@ class CollectionTest extends DbTestCase
             "type": 1,
             "name": "info_description",
             "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
-            "value": ""
+            "value": "Self-Hosted API Management for Builders."
         },
         {
             "id": 12,
@@ -269,7 +269,7 @@ JSON;
             "type": 1,
             "name": "info_description",
             "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
-            "value": ""
+            "value": "Self-Hosted API Management for Builders."
         },
         {
             "id": 12,

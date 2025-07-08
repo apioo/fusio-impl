@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -37,19 +37,14 @@ use PSX\Sql\OrderBy;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAbout implements ActionInterface
+readonly class GetAbout implements ActionInterface
 {
-    private Service\Config $configService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-    private Table\Category $categoryTable;
-    private Table\Scope $scopeTable;
-
-    public function __construct(Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\Category $categoryTable, Table\Scope $scopeTable)
-    {
-        $this->configService = $configService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->categoryTable = $categoryTable;
-        $this->scopeTable = $scopeTable;
+    public function __construct(
+        private Service\Config $configService,
+        private Service\System\FrameworkConfig $frameworkConfig,
+        private Table\Category $categoryTable,
+        private Table\Scope $scopeTable
+    ) {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -138,6 +133,11 @@ class GetAbout implements ActionInterface
         $links[] = [
             'rel' => 'oauth-authorization-server',
             'href' => $baseUrl . 'system/oauth-authorization-server',
+        ];
+
+        $links[] = [
+            'rel' => 'api-catalog',
+            'href' => $baseUrl . 'system/api-catalog',
         ];
 
         $links[] = [

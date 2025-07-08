@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -34,15 +34,10 @@ use PSX\Api\Scanner\FilterFactoryInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetRoutes implements ActionInterface
+readonly class GetRoutes implements ActionInterface
 {
-    private View\Operation $table;
-    private FilterFactoryInterface $filterFactory;
-
-    public function __construct(View\Operation $table, FilterFactoryInterface $filterFactory)
+    public function __construct(private View\Operation $table, private FilterFactoryInterface $filterFactory)
     {
-        $this->table = $table;
-        $this->filterFactory = $filterFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

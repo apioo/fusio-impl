@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -34,7 +34,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Register
+readonly class Register
 {
     public function __construct(
         private Service\User $userService,
@@ -43,11 +43,16 @@ class Register
         private Mailer $mailerService,
         private Service\Config $configService,
         private Table\Role $roleTable,
+        private Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
 
     public function register(UserRegister $register, UserContext $context): int
     {
+        if (!$this->frameworkConfig->isRegistrationEnabled()) {
+            throw new StatusCode\BadRequestException('User registration is not enabled');
+        }
+
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
         // determine initial user status

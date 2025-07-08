@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -52,7 +52,7 @@ class UpgradeCommand extends Command
     {
         $output->writeln('Starting upgrade ...');
 
-        $baseDir = __DIR__ . '/../../../resources/operations';
+        $baseDir = $this->config->getPathResources('operations');;
         if (!is_dir($baseDir)) {
             $output->writeln('Folder resources/operations does not exist');
             return self::FAILURE;

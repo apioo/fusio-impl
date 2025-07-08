@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -38,15 +38,10 @@ use PSX\Schema\SchemaManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetSchema implements ActionInterface
+readonly class GetSchema implements ActionInterface
 {
-    private View\Schema $view;
-    private SchemaManagerInterface $schemaManager;
-
-    public function __construct(View\Schema $view, SchemaManagerInterface $schemaManager)
+    public function __construct(private View\Schema $view, private SchemaManagerInterface $schemaManager)
     {
-        $this->view = $view;
-        $this->schemaManager = $schemaManager;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

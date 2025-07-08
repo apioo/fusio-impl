@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Command\Marketplace;
 use Fusio\Impl\Command\Marketplace\EnvCommand;
 use Fusio\Impl\Service\Marketplace\Factory;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -44,7 +45,8 @@ class EnvCommandTest extends DbTestCase
 
         $command = new EnvCommand(
             Environment::getService(Factory::class),
-            Environment::getService(ContextFactory::class)
+            Environment::getService(ContextFactory::class),
+            Environment::getService(FrameworkConfig::class)
         );
 
         $commandTester = new CommandTester($command);

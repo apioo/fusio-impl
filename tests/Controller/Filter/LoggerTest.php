@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -71,7 +71,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(228, $log['operation_id']);
+        $this->assertEquals(229, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -105,7 +105,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(228, $log['operation_id']);
+        $this->assertEquals(229, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -139,7 +139,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(228, $log['operation_id']);
+        $this->assertEquals(229, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
@@ -174,7 +174,7 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssociative('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(228, $log['operation_id']);
+        $this->assertEquals(229, $log['operation_id']);
         $this->assertEquals(1, $log['app_id']);
         $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);

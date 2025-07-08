@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -271,6 +271,14 @@ class Installer implements InstallerInterface
     private function getEnv(string $appKey): array
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();
+
+        // in case of localhost we could not auto-detect the url so we get the url dynamically via javascript
+        if ($apiUrl === 'http://localhost/') {
+            $apiUrl = "' + location.protocol + '//' + location.host + '/";
+        } elseif ($apiUrl === 'http://localhost/index.php/') {
+            $apiUrl = "' + location.protocol + '//' + location.host + '/index.php/";
+        }
+
         $url = $this->frameworkConfig->getAppsUrl();
         $basePath = (string) parse_url($url, PHP_URL_PATH);
 

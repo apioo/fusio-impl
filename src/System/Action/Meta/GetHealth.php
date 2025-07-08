@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -33,13 +33,10 @@ use Fusio\Impl\Service\System\Health;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetHealth implements ActionInterface
+readonly class GetHealth implements ActionInterface
 {
-    private Health $healthService;
-
-    public function __construct(Health $healthService)
+    public function __construct(private Health $healthService)
     {
-        $this->healthService = $healthService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

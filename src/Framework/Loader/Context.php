@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -42,6 +42,7 @@ class Context extends FrameworkContext
     private ?TokenInterface $token = null;
     private ?int $logId = null;
     private ?OperationRow $operation = null;
+    private bool $cli = false;
 
     public function getTenantId(): ?string
     {
@@ -161,5 +162,15 @@ class Context extends FrameworkContext
     public function setOperation(OperationRow $operation): void
     {
         $this->operation = $operation;
+    }
+
+    public function isCli(): bool
+    {
+        return $this->cli;
+    }
+
+    public function setCli(bool $cli): void
+    {
+        $this->cli = $cli;
     }
 }
