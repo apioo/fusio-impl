@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -18,29 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Consumer\Action\Mcp;
+namespace Fusio\Impl\Service\Consumer\Mcp;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Consumer\Mcp;
+use Mcp\Server\Transport\Http\HttpSession;
+use Mcp\Server\Transport\Http\SessionStoreInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * Get
+ * SessionStore
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Get implements ActionInterface
+readonly class SessionStore implements SessionStoreInterface
 {
-    public function __construct(private Mcp $mcp)
+    public function __construct(private CacheInterface $cache)
     {
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function load(string $sessionId): ?HttpSession
     {
-        return $this->mcp;
+        return $this->cache->get('mcp_' . $sessionId);
+    }
+
+    public function save(HttpSession $session): void
+    {
+
+        $this->cache->set('mcp_' . $session->getId(), $session);
+    }
+
+    public function delete(string $sessionId): void
+    {
+        $this->cache->delete('mcp_' . $sessionId);
     }
 }

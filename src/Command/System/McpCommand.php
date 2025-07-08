@@ -18,38 +18,46 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Consumer;
+namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service\Config;
-use Mcp\Server\Server;
-use Mcp\Types\CallToolRequestParams;
+use Fusio\Impl\Service\Consumer\Mcp;
+use Mcp\Server\ServerRunner;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Mcp
+ * McpCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Mcp
+class McpCommand extends Command
 {
-    public function __construct(private Config $configService, private Mcp\Tools $tools, private LoggerInterface $logger)
+    public function __construct(private Mcp $mcp, private LoggerInterface $logger)
     {
+        parent::__construct();
     }
 
-    public function build(): Server
+    protected function configure(): void
     {
-        $server = new Server($this->configService->getValue('info_title'), $this->logger);
+        $this
+            ->setName('system:mcp')
+            ->setAliases(['mcp'])
+            ->setDescription('Starts the MCP server');
+    }
 
-        $server->registerHandler('tools/list', function() {
-            return $this->tools->list();
-        });
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $server = $this->mcp->build();
 
-        $server->registerHandler('tools/call', function(CallToolRequestParams $params) {
-            return $this->tools->call($params);
-        });
+        $initOptions = $server->createInitializationOptions();
 
-        return $server;
+        $runner = new ServerRunner($server, $initOptions, $this->logger);
+        $runner->run();
+
+        return self::SUCCESS;
     }
 }

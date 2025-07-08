@@ -1,6 +1,6 @@
 <?php
 /*
- * Fusio is an open source API management platform which helps to create innovative API solutions.
+ * Fusio - Self-Hosted API Management for Builders.
  * For the current version and information visit <https://www.fusio-project.org/>
  *
  * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
@@ -20,8 +20,23 @@
 
 namespace Fusio\Impl\Service\Consumer\Mcp;
 
-use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Context as EngineContext;
+use Fusio\Engine\Model\AppAnonymous;
+use Fusio\Engine\Model\UserAnonymous;
+use Fusio\Engine\Processor;
+use Fusio\Engine\Request;
+use Fusio\Impl\Service\Form\JsonSchemaResolver;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use Mcp\Types\CallToolRequestParams;
+use Mcp\Types\CallToolResult;
+use Mcp\Types\ListToolsResult;
+use Mcp\Types\TextContent;
+use Mcp\Types\Tool;
+use Mcp\Types\ToolInputSchema;
+use PSX\Json\Parser;
+use PSX\Json\Rpc\Exception\InvalidParamsException;
+use PSX\Record\Record;
 use PSX\Sql\Condition;
 
 /**
@@ -31,23 +46,69 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Tools
+readonly class Tools
 {
-    public function __construct(private Table\Operation $operationTable)
-    {
+    public function __construct(
+        private Table\Operation $operationTable,
+        private Processor $processor,
+        private JsonSchemaResolver $jsonSchemaResolver,
+        private FrameworkConfig $frameworkConfig,
+    ) {
     }
 
-    public function list(ContextInterface $context): array
+    public function list(): ListToolsResult
     {
+        $tools = [];
+
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
         $operations = $this->operationTable->findAll($condition);
         foreach ($operations as $operation) {
+            $inputSchema = $this->jsonSchemaResolver->resolveIncoming($operation);
+            // @TODO use output schema
+            //$outputSchema = $this->jsonSchemaResolver->resolveOutgoing($operation);
 
+            $tools[] = new Tool(
+                $operation->getName(),
+                ToolInputSchema::fromArray($inputSchema),
+                $operation->getDescription()
+            );
+        }
+
+        return new ListToolsResult($tools);
+    }
+
+    public function call(CallToolRequestParams $params): CallToolResult
+    {
+        try {
+            $name = $params->name ?? null;
+            if (!is_string($name)) {
+                throw new InvalidParamsException('Provided an invalid tool name');
+            }
+
+            $rawArguments = $params->arguments ?? null;
+            if (isset($rawArguments) && (is_iterable($rawArguments) || is_object($rawArguments))) {
+                $arguments = Record::from($rawArguments);
+            } else {
+                $arguments = new Record();
+            }
+
+            $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($name));
+
+            $baseUrl = $this->frameworkConfig->getDispatchUrl();
+            $app = new AppAnonymous();
+            $user = new UserAnonymous();
+            $context = new EngineContext(1, $baseUrl, $app, $user, $this->frameworkConfig->getTenantId());
+
+            $data = $this->processor->execute('action://' . $name, $request, $context);
+
+            // @TODO use structuredContent
+            return new CallToolResult([new TextContent(Parser::encode($data))]);
+        } catch (\Throwable $e) {
+            return new CallToolResult([new TextContent('Failed to execute ' . $params->name . ': ' . $e->getMessage())], isError: true);
         }
     }
 }
