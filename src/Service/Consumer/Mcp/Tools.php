@@ -68,6 +68,10 @@ readonly class Tools
         $operations = $this->operationTable->findAll($condition);
         foreach ($operations as $operation) {
             $inputSchema = $this->jsonSchemaResolver->resolveIncoming($operation);
+            if ($inputSchema === null) {
+                continue;
+            }
+
             // @TODO use output schema
             //$outputSchema = $this->jsonSchemaResolver->resolveOutgoing($operation);
 
@@ -84,26 +88,21 @@ readonly class Tools
     public function call(CallToolRequestParams $params): CallToolResult
     {
         try {
-            $name = $params->name ?? null;
-            if (!is_string($name)) {
-                throw new InvalidParamsException('Provided an invalid tool name');
-            }
-
-            $rawArguments = $params->arguments ?? null;
-            if (isset($rawArguments) && (is_iterable($rawArguments) || is_object($rawArguments))) {
+            $rawArguments = $params->arguments;
+            if (is_array($rawArguments)) {
                 $arguments = Record::from($rawArguments);
             } else {
                 $arguments = new Record();
             }
 
-            $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($name));
+            $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($params->name));
 
             $baseUrl = $this->frameworkConfig->getDispatchUrl();
             $app = new AppAnonymous();
             $user = new UserAnonymous();
             $context = new EngineContext(1, $baseUrl, $app, $user, $this->frameworkConfig->getTenantId());
 
-            $data = $this->processor->execute('action://' . $name, $request, $context);
+            $data = $this->processor->execute('action://' . $params->name, $request, $context);
 
             // @TODO use structuredContent
             return new CallToolResult([new TextContent(Parser::encode($data))]);

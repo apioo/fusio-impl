@@ -69,9 +69,12 @@ class JsonSchemaResolver
 
     private function buildJsonSchema(?string $schema): ?array
     {
-        $schema = $this->schemaManager->getSchema($schema);
-        $jsonSchema = (new JsonSchema())->toArray($schema->getDefinitions(), $schema->getRoot());
+        if ($schema === null) {
+            return null;
+        }
 
-        return $jsonSchema;
+        $schema = $this->schemaManager->getSchema($schema);
+
+        return (new JsonSchema())->toArray($schema->getDefinitions(), $schema->getRoot());
     }
 }
