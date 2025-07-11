@@ -34,9 +34,16 @@ use Mcp\Types\ListToolsResult;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
 use Mcp\Types\ToolInputSchema;
+use PSX\Api\Operation\ArgumentInterface;
 use PSX\Json\Parser;
 use PSX\Json\Rpc\Exception\InvalidParamsException;
 use PSX\Record\Record;
+use PSX\Schema\Definitions;
+use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\Schema;
+use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
 
 /**
@@ -48,12 +55,16 @@ use PSX\Sql\Condition;
  */
 readonly class Tools
 {
+    private TypeSchema $schemaParser;
+
     public function __construct(
         private Table\Operation $operationTable,
         private Processor $processor,
         private JsonSchemaResolver $jsonSchemaResolver,
         private FrameworkConfig $frameworkConfig,
+        SchemaManagerInterface $schemaManager,
     ) {
+        $this->schemaParser = new TypeSchema($schemaManager);
     }
 
     public function list(): ListToolsResult
@@ -67,7 +78,12 @@ readonly class Tools
 
         $operations = $this->operationTable->findAll($condition);
         foreach ($operations as $operation) {
-            $inputSchema = $this->jsonSchemaResolver->resolveIncoming($operation);
+            if ($operation->getHttpMethod() === 'GET') {
+                $inputSchema = $this->buildSchemaFromParameters($operation);
+            } else {
+                $inputSchema = $this->jsonSchemaResolver->resolveIncoming($operation);
+            }
+
             if ($inputSchema === null) {
                 continue;
             }
@@ -109,5 +125,32 @@ readonly class Tools
         } catch (\Throwable $e) {
             return new CallToolResult([new TextContent('Failed to execute ' . $params->name . ': ' . $e->getMessage())], isError: true);
         }
+    }
+
+    private function buildSchemaFromParameters(Table\Generated\OperationRow $operation): ?array
+    {
+        $rawParameters = $operation->getParameters();
+        if (empty($rawParameters)) {
+            return null;
+        }
+
+        $parameters = Parser::decode($rawParameters);
+        if (!$parameters instanceof \stdClass) {
+            return null;
+        }
+
+        $type = new StructDefinitionType();
+        foreach ($parameters as $name => $schema) {
+            if (!$schema instanceof \stdClass) {
+                continue;
+            }
+
+            $type->addProperty($name, $this->schemaParser->parsePropertyType($schema));
+        }
+
+        $definitions = new Definitions();
+        $definitions->addType('Parameters', $type);
+
+        return (new JsonSchema())->toArray($definitions, 'Parameters');
     }
 }
