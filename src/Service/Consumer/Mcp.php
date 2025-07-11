@@ -18,40 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Service\Consumer;
 
-use Fusio\Impl\Service\System\LogRotator;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Impl\Service\Config;
+use Mcp\Server\Server;
+use Mcp\Types\CallToolRequestParams;
+use Psr\Log\LoggerInterface;
 
 /**
- * LogRotateCommand
+ * Mcp
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LogRotateCommand extends Command
+readonly class Mcp
 {
-    public function __construct(private LogRotator $logRotator)
+    public function __construct(private Config $configService, private Mcp\Tools $tools, private LoggerInterface $logger)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function build(): Server
     {
-        $this
-            ->setName('system:log_rotate')
-            ->setDescription('Rotates the log table');
-    }
+        $server = new Server($this->configService->getValue('info_title'), $this->logger);
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        foreach ($this->logRotator->rotate() as $message) {
-            $output->writeln($message);
-        }
+        $server->registerHandler('tools/list', function() {
+            return $this->tools->list();
+        });
 
-        return self::SUCCESS;
+        $server->registerHandler('tools/call', function(CallToolRequestParams $params) {
+            return $this->tools->call($params);
+        });
+
+        return $server;
     }
 }

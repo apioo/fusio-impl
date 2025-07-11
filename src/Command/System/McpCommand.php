@@ -20,21 +20,23 @@
 
 namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service\System\Health;
+use Fusio\Impl\Service\Consumer\Mcp;
+use Mcp\Server\ServerRunner;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * HealthCommand
+ * McpCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class HealthCommand extends Command
+class McpCommand extends Command
 {
-    public function __construct(private Health $health)
+    public function __construct(private Mcp $mcp, private LoggerInterface $logger)
     {
         parent::__construct();
     }
@@ -42,23 +44,20 @@ class HealthCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('system:health')
-            ->setDescription('Checks whether the system is healthy');
+            ->setName('system:mcp')
+            ->setAliases(['mcp'])
+            ->setDescription('Starts the MCP server');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $result = $this->health->check();
-        foreach ($result->getChecks() as $name => $check) {
-            $healthy = $check['healthy'] ? '✓' : '✖';
+        $server = $this->mcp->build();
 
-            $output->writeln('[' . $healthy . '] ' . $name);
+        $initOptions = $server->createInitializationOptions();
 
-            if (isset($check['error'])) {
-                $output->writeln('    ' . $check['error']);
-            }
-        }
+        $runner = new ServerRunner($server, $initOptions, $this->logger);
+        $runner->run();
 
-        return $result->isHealthy() ? self::SUCCESS : self::FAILURE;
+        return self::SUCCESS;
     }
 }

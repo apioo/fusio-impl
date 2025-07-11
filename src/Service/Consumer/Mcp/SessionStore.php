@@ -18,40 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Command\System;
+namespace Fusio\Impl\Service\Consumer\Mcp;
 
-use Fusio\Impl\Service\System\LogRotator;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Mcp\Server\Transport\Http\HttpSession;
+use Mcp\Server\Transport\Http\SessionStoreInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * LogRotateCommand
+ * SessionStore
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LogRotateCommand extends Command
+readonly class SessionStore implements SessionStoreInterface
 {
-    public function __construct(private LogRotator $logRotator)
+    public function __construct(private CacheInterface $cache)
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function load(string $sessionId): ?HttpSession
     {
-        $this
-            ->setName('system:log_rotate')
-            ->setDescription('Rotates the log table');
+        return $this->cache->get('mcp_' . $sessionId);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function save(HttpSession $session): void
     {
-        foreach ($this->logRotator->rotate() as $message) {
-            $output->writeln($message);
-        }
 
-        return self::SUCCESS;
+        $this->cache->set('mcp_' . $session->getId(), $session);
+    }
+
+    public function delete(string $sessionId): void
+    {
+        $this->cache->delete('mcp_' . $sessionId);
     }
 }
