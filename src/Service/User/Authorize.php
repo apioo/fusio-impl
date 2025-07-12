@@ -23,11 +23,15 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
+use Fusio\Model\Consumer\AuthorizeResponse;
 use PSX\DateTime\LocalDateTime;
-use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
+use PSX\OAuth2\Exception\AccessDeniedException;
+use PSX\OAuth2\Exception\ErrorExceptionAbstract;
+use PSX\OAuth2\Exception\InvalidRequestException;
+use PSX\OAuth2\Exception\ServerErrorException;
+use PSX\OAuth2\Exception\UnsupportedResponseTypeException;
 use PSX\Sql\Condition;
-use PSX\Uri\Uri;
+use PSX\Uri\Exception\InvalidFormatException;
 use PSX\Uri\Url;
 
 /**
@@ -40,162 +44,111 @@ use PSX\Uri\Url;
 readonly class Authorize
 {
     public function __construct(
-        private Service\Token $tokenService,
         private Service\Scope $scopeService,
         private Service\App\Code $appCodeService,
         private Table\App $appTable,
+        private Table\App\Scope $appScopeTable,
+        private Table\Token $tokenTable,
         private Table\User\Grant $userGrantTable,
         private Service\System\FrameworkConfig $frameworkConfig,
-        private IPResolver $ipResolver,
     ) {
     }
 
-    public function authorize(int $userId, AuthorizeRequest $request): array
+    public function authorize(int $userId, AuthorizeRequest $request): AuthorizeResponse
     {
-        // response type
-        if (!in_array($request->getResponseType(), ['code', 'token'])) {
-            throw new StatusCode\BadRequestException('Invalid response type');
-        }
+        $url = $this->parseUrl($request->getRedirectUri());
 
-        // client id
-        $clientId = $request->getClientId();
-        if (empty($clientId)) {
-            throw new StatusCode\BadRequestException('No client id provided');
-        }
-
-        $app = $this->getApp($clientId);
-
-        // redirect uri
-        $redirectUri = $request->getRedirectUri();
-        if (!empty($redirectUri)) {
-            $redirectUri = Uri::parse($redirectUri);
-
-            if (!$redirectUri->isAbsolute()) {
-                throw new StatusCode\BadRequestException('Redirect uri must be an absolute url');
+        try {
+            if ($request->getResponseType() !== 'token') {
+                throw new UnsupportedResponseTypeException('Invalid response type');
             }
 
+            $clientId = $request->getClientId();
+            if (empty($clientId)) {
+                throw new InvalidRequestException('No client id provided');
+            }
+
+            $app = $this->getApp($clientId);
+
+            if ($url instanceof Url) {
+                $appUrl = $app->getUrl();
+                if (!empty($appUrl)) {
+                    $appUrl = Url::parse($appUrl);
+                    if (!str_ends_with($url->getHost(), $appUrl->getHost())) {
+                        throw new InvalidRequestException('Redirect uri must have the same host as the app url');
+                    }
+                } else {
+                    throw new ServerErrorException('App has no url configured');
+                }
+            }
+
+            $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
+            if (empty($scopes)) {
+                $scopes = $this->appScopeTable->getAvailableScopes($this->frameworkConfig->getTenantId(), $app->getId());
+            }
+
+            if (!$request->getAllow()) {
+                $this->tokenTable->removeAllTokensFromAppAndUser($this->frameworkConfig->getTenantId(), $app->getId(), $userId);
+
+                throw new AccessDeniedException('Access denied');
+            }
+
+            // save the decision of the user so that it is possible for the user to revoke the access later on
+            $this->saveUserDecision($userId, $app->getId(), true);
+
+            // generate code which can be later exchanged by the app with an access token
+            $code = $this->appCodeService->generateCode(
+                $app->getId(),
+                $userId,
+                $url?->toString(),
+                $scopes
+            );
+
+            if ($url instanceof Url) {
+                $parameters = [];
+                $parameters['code'] = $code;
+                $parameters['state'] = $request->getState();
+
+                $url = $url->withParameters($parameters)->toString();
+            }
+
+            $response = new AuthorizeResponse();
+            $response->setType('code');
+            $response->setCode($code);
+            $response->setRedirectUri($url);
+        } catch (ErrorExceptionAbstract $e) {
+            if ($url instanceof Url) {
+                $parameters = [];
+                $parameters['error'] = $e->getType();
+                $parameters['error_description'] = $e->getMessage();
+                $parameters['state'] = $request->getState();
+
+                $url = $url->withParameters($parameters)->toString();
+            }
+
+            $response = new AuthorizeResponse();
+            $response->setType($e->getType());
+            $response->setRedirectUri($url);
+        }
+
+        return $response;
+    }
+
+    private function parseUrl(?string $url): ?Url
+    {
+        try {
+            $redirectUri = Url::parse($url);
             if (!in_array($redirectUri->getScheme(), ['http', 'https'])) {
-                throw new StatusCode\BadRequestException('Invalid redirect uri scheme');
+                return null;
             }
 
-            $url = $app->getUrl();
-            if (!empty($url)) {
-                $url = Url::parse($url);
-                if ($url->getHost() != $redirectUri->getHost()) {
-                    throw new StatusCode\BadRequestException('Redirect uri must have the same host as the app url');
-                }
-            } else {
-                throw new StatusCode\BadRequestException('App has no url configured');
-            }
-        } else {
-            $redirectUri = null;
-        }
-
-        // scopes
-        $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
-        if (empty($scopes)) {
-            throw new StatusCode\BadRequestException('No valid scopes provided');
-        }
-
-        // save the decision of the user. We save the decision so that it is
-        // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app->getId(), $request->getAllow() ?? false);
-
-        $state = $request->getState();
-        if ($request->getAllow()) {
-            if ($request->getResponseType() == 'token') {
-                // redirect uri is required for token types
-                if (!$redirectUri instanceof Uri) {
-                    throw new StatusCode\BadRequestException('Redirect uri is required');
-                }
-
-                // generate access token
-                $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
-                $ip = $this->ipResolver->resolveByEnvironment();
-                $name = 'OAuth2 Authorization Code by ' . $userAgent . ' (' . $ip . ')';
-
-                $accessToken = $this->tokenService->generate(
-                    $app->getTenantId(),
-                    Table\Category::TYPE_CONSUMER,
-                    $app->getId(),
-                    $userId,
-                    $name,
-                    $scopes,
-                    $ip,
-                    $this->frameworkConfig->getExpireTokenInterval(),
-                    $state
-                );
-
-                $parameters = array_filter([
-                    'access_token' => $accessToken->getAccessToken(),
-                    'token_type' => $accessToken->getTokenType(),
-                    'expires_in' => $accessToken->getExpiresIn(),
-                    'refresh_token' => $accessToken->getRefreshToken(),
-                    'scope' => $accessToken->getScope(),
-                    'state' => $accessToken->getState(),
-                ]);
-
-                $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
-
-                return [
-                    'type' => 'token',
-                    'token' => $parameters,
-                    'redirectUri' => $redirectUri,
-                ];
-            } else {
-                // generate code which can be later exchanged by the app with an
-                // access token
-                $code = $this->appCodeService->generateCode(
-                    $app->getId(),
-                    $userId,
-                    $redirectUri,
-                    $scopes
-                );
-
-                if ($redirectUri instanceof Uri) {
-                    $parameters = array();
-                    $parameters['code'] = $code;
-                    $parameters['state'] = $state;
-
-                    $redirectUri = $redirectUri->withParameters($parameters)->toString();
-                } else {
-                    $redirectUri = '#';
-                }
-
-                return [
-                    'type' => 'code',
-                    'code' => $code,
-                    'redirectUri' => $redirectUri,
-                ];
-            }
-        } else {
-            // @TODO delete all previously issued tokens for this app?
-
-            if ($redirectUri instanceof Uri) {
-                $parameters = array();
-                $parameters['error'] = 'access_denied';
-
-                if (!empty($state)) {
-                    $parameters['state'] = $state;
-                }
-
-                if ($request->getResponseType() == 'token') {
-                    $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
-                } else {
-                    $redirectUri = $redirectUri->withParameters($parameters)->toString();
-                }
-            } else {
-                $redirectUri = '#';
-            }
-
-            return [
-                'type' => 'access_denied',
-                'redirectUri' => $redirectUri
-            ];
+            return $redirectUri;
+        } catch (InvalidFormatException) {
+            return null;
         }
     }
 
-    protected function saveUserDecision(int $userId, int $appId, bool $allow): void
+    private function saveUserDecision(int $userId, int $appId, bool $allow): void
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\UserGrantTable::COLUMN_USER_ID, $userId);
@@ -221,12 +174,13 @@ readonly class Authorize
     private function getApp(string $clientId): Table\Generated\AppRow
     {
         $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
         $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $clientId);
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->findOneBy($condition);
-        if (empty($app)) {
-            throw new StatusCode\BadRequestException('Unknown client id');
+        if (!$app instanceof Table\Generated\AppRow) {
+            throw new InvalidRequestException('Provided an invalid client id');
         }
 
         return $app;
