@@ -40,7 +40,7 @@ class Code
         $this->appCodeTable = $appCodeTable;
     }
 
-    public function generateCode($appId, $userId, $redirectUri, array $scopes): string
+    public function generateCode(int $appId, int $userId, ?string $redirectUri, array $scopes): string
     {
         $code = TokenGenerator::generateCode();
 
