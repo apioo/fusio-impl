@@ -18,38 +18,15 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Consumer\Mcp;
-
-use Mcp\Server\Transport\Http\HttpSession;
-use Mcp\Server\Transport\Http\SessionStoreInterface;
-use Psr\SimpleCache\CacheInterface;
+namespace Fusio\Impl\Table;
 
 /**
- * SessionStore
+ * McpSession
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class SessionStore implements SessionStoreInterface
+class McpSession extends Generated\McpSessionTable
 {
-    public function __construct(private CacheInterface $cache)
-    {
-    }
-
-    public function load(string $sessionId): ?HttpSession
-    {
-        return $this->cache->get('mcp_' . $sessionId);
-    }
-
-    public function save(HttpSession $session): void
-    {
-
-        $this->cache->set('mcp_' . $session->getId(), $session);
-    }
-
-    public function delete(string $sessionId): void
-    {
-        $this->cache->delete('mcp_' . $sessionId);
-    }
 }
