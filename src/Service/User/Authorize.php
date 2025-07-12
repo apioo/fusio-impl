@@ -56,10 +56,12 @@ readonly class Authorize
 
     public function authorize(int $userId, AuthorizeRequest $request): AuthorizeResponse
     {
-        $url = $this->parseUrl($request->getRedirectUri());
+        $url = null;
 
         try {
-            if ($request->getResponseType() !== 'token') {
+            $url = $this->parseUrl($request->getRedirectUri());
+
+            if ($request->getResponseType() !== 'code') {
                 throw new UnsupportedResponseTypeException('Invalid response type');
             }
 
@@ -115,6 +117,7 @@ readonly class Authorize
             $response = new AuthorizeResponse();
             $response->setType('code');
             $response->setCode($code);
+            $response->setState($request->getState());
             $response->setRedirectUri($url);
         } catch (ErrorExceptionAbstract $e) {
             if ($url instanceof Url) {
@@ -128,6 +131,8 @@ readonly class Authorize
 
             $response = new AuthorizeResponse();
             $response->setType($e->getType());
+            $response->setError($e->getMessage());
+            $response->setState($request->getState());
             $response->setRedirectUri($url);
         }
 
@@ -142,14 +147,15 @@ readonly class Authorize
 
         try {
             $redirectUri = Url::parse($url);
-            if (!in_array($redirectUri->getScheme(), ['http', 'https'])) {
-                return null;
-            }
-
-            return $redirectUri;
-        } catch (InvalidFormatException) {
-            return null;
+        } catch (InvalidFormatException $e) {
+            throw new InvalidRequestException('Provided an invalid redirect uri', previous: $e);
         }
+
+        if (!in_array($redirectUri->getScheme(), ['http', 'https'])) {
+            throw new InvalidRequestException('Provided an invalid redirect uri');
+        }
+
+        return $redirectUri;
     }
 
     private function saveUserDecision(int $userId, int $appId, bool $allow): void
