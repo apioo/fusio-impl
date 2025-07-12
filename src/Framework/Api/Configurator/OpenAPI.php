@@ -68,9 +68,10 @@ class OpenAPI implements ConfiguratorInterface
 
         $filterId = $filter !== null ? (int) $filter->getId() : 1;
         $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());
+        $authorizationUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'authorize');
         $tokenUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
         $refreshUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
 
-        $generator->setAuthorizationFlow('app', Generator\Spec\ApiAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $scopes);
+        $generator->setAuthorizationFlow('app', Generator\Spec\ApiAbstract::FLOW_CLIENT_CREDENTIALS, $authorizationUrl, $tokenUrl, $refreshUrl, $scopes);
     }
 }

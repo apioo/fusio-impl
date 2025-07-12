@@ -57,11 +57,12 @@ class TypeAPI implements ConfiguratorInterface
         }
 
         $baseUrl = $this->frameworkConfig->getDispatchUrl();
+        $authorizationUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'authorize');
         $tokenUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
         $filterId = $filter !== null ? (int) $filter->getId() : 1;
         $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());
 
         $generator->setBaseUrl($baseUrl);
-        $generator->setSecurity(new OAuth2($tokenUrl, null, array_keys($scopes)));
+        $generator->setSecurity(new OAuth2($tokenUrl, $authorizationUrl, array_keys($scopes)));
     }
 }
