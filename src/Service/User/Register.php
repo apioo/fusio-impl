@@ -50,7 +50,7 @@ readonly class Register
     public function register(UserRegister $register, UserContext $context): int
     {
         if (!$this->frameworkConfig->isRegistrationEnabled()) {
-            throw new StatusCode\BadRequestException('User registration is not enabled');
+            throw new StatusCode\ServiceUnavailableException('User registration is not enabled');
         }
 
         $this->captchaService->assertCaptcha($register->getCaptcha());
