@@ -12618,31 +12618,16 @@
         "type": {
           "type": "string"
         },
-        "token": {
-          "type": "reference",
-          "target": "Consumer_AuthorizeResponseToken"
-        },
         "code": {
           "type": "string"
         },
+        "error": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
         "redirectUri": {
-          "type": "string"
-        }
-      }
-    },
-    "Consumer_AuthorizeResponseToken": {
-      "type": "struct",
-      "properties": {
-        "access_token": {
-          "type": "string"
-        },
-        "token_type": {
-          "type": "string"
-        },
-        "expires_in": {
-          "type": "string"
-        },
-        "scope": {
           "type": "string"
         }
       }
