@@ -117,6 +117,7 @@ class AuthorizeController extends ControllerAbstract
             $data = [
                 'type' => $response->getType(),
                 'code' => $response->getCode(),
+                'error' => $response->getError(),
             ];
 
             return new Template($data, self::TEMPLATE_FILE, $this->reverseRouter);
