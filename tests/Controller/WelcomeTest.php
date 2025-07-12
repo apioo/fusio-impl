@@ -45,6 +45,7 @@ class WelcomeTest extends DbTestCase
     "apiVersion": "{$version}",
     "title": "Fusio",
     "description": "Self-Hosted API Management for Builders.",
+    "paymentCurrency": "EUR",
     "categories": [
         "authorization",
         "backend",
@@ -52,7 +53,6 @@ class WelcomeTest extends DbTestCase
         "default",
         "system"
     ],
-    "paymentCurrency": "EUR",
     "scopes": [
         "bar",
         "default",
@@ -81,20 +81,28 @@ class WelcomeTest extends DbTestCase
             "href": "http:\/\/127.0.0.1\/system\/health"
         },
         {
-            "rel": "oauth-authorization-server",
-            "href": "http:\/\/127.0.0.1\/system\/oauth-authorization-server"
-        },
-        {
-            "rel": "api-catalog",
-            "href": "http:\/\/127.0.0.1\/system\/api-catalog"
-        },
-        {
             "rel": "oauth2",
             "href": "http:\/\/127.0.0.1\/authorization\/token"
         },
         {
             "rel": "whoami",
             "href": "http:\/\/127.0.0.1\/authorization\/whoami"
+        },
+        {
+            "rel": "api-catalog",
+            "href": "http:\/\/127.0.0.1\/.well-known\/api-catalog"
+        },
+        {
+            "rel": "oauth-authorization-server",
+            "href": "http:\/\/127.0.0.1\/.well-known\/oauth-authorization-server"
+        },
+        {
+            "rel": "oauth-protected-resource",
+            "href": "http:\/\/127.0.0.1\/.well-known\/oauth-protected-resource"
+        },
+        {
+            "rel": "security",
+            "href": "http:\/\/127.0.0.1\/.well-known\/security.txt"
         },
         {
             "rel": "about",

@@ -123,7 +123,7 @@ JSON;
         $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertEquals('Bearer realm="Fusio"', $response->getHeader('WWW-Authenticate'), $body);
+        $this->assertEquals('Bearer realm="Fusio", resource_metadata="http://127.0.0.1/.well-known/oauth-protected-resource"', $response->getHeader('WWW-Authenticate'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.listFoo', $response->getHeader('X-Operation-Id'), $body);
@@ -192,7 +192,7 @@ JSON;
         $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertEquals('Bearer realm="Fusio"', $response->getHeader('WWW-Authenticate'), $body);
+        $this->assertEquals('Bearer realm="Fusio", resource_metadata="http://127.0.0.1/.well-known/oauth-protected-resource"', $response->getHeader('WWW-Authenticate'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.createFoo', $response->getHeader('X-Operation-Id'), $body);
@@ -256,7 +256,7 @@ JSON;
         $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertEquals('Bearer realm="Fusio"', $response->getHeader('WWW-Authenticate'), $body);
+        $this->assertEquals('Bearer realm="Fusio", resource_metadata="http://127.0.0.1/.well-known/oauth-protected-resource"', $response->getHeader('WWW-Authenticate'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.createFoo', $response->getHeader('X-Operation-Id'), $body);
@@ -285,7 +285,7 @@ JSON;
         $data = \json_decode($body);
 
         $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertEquals('Bearer realm="Fusio"', $response->getHeader('WWW-Authenticate'), $body);
+        $this->assertEquals('Bearer realm="Fusio", resource_metadata="http://127.0.0.1/.well-known/oauth-protected-resource"', $response->getHeader('WWW-Authenticate'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.createFoo', $response->getHeader('X-Operation-Id'), $body);

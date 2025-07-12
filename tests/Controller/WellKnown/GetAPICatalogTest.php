@@ -37,11 +37,35 @@ class GetAPICatalogTest extends DbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "linkset": [
+        {
+            "anchor": "http:\/\/127.0.0.1\/",
+            "service-desc": {
+                "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi",
+                "type": "application\/json"
+            },
+            "service-doc": {
+                "href": "http:\/\/127.0.0.1\/apps\/redoc",
+                "type": "text\/html"
+            },
+            "service-meta": {
+                "href": "http:\/\/127.0.0.1\/system\/health",
+                "type": "application\/json"
+            },
+            "status": {
+                "href": "http:\/\/127.0.0.1\/system\/health",
+                "type": "application\/json"
+            }
+        }
+    ]
+}
+JSON;
 
-        $this->assertEquals(308, $response->getStatusCode(), $body);
-        $this->assertEquals('http://127.0.0.1/system/api-catalog', $response->getHeader('Location'), $body);
-        $this->assertEquals('', $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testPost()

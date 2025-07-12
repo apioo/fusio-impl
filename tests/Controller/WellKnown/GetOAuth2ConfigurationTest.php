@@ -37,11 +37,44 @@ class GetOAuth2ConfigurationTest extends DbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "issuer": "http:\/\/127.0.0.1",
+    "authorization_endpoint": "http:\/\/127.0.0.1\/authorization\/authorize",
+    "token_endpoint": "http:\/\/127.0.0.1\/authorization\/token",
+    "token_endpoint_auth_methods_supported": [
+        "client_secret_basic"
+    ],
+    "token_endpoint_auth_signing_alg_values_supported": [
+        "HS256"
+    ],
+    "userinfo_endpoint": "http:\/\/127.0.0.1\/authorization\/whoami",
+    "scopes_supported": [
+        "bar",
+        "default",
+        "foo",
+        "plan_scope"
+    ],
+    "response_types_supported": [
+        "code"
+    ],
+    "response_modes_supported": [
+        "query"
+    ],
+    "grant_types_supported": [
+        "authorization_code",
+        "client_credentials",
+        "password",
+        "refresh_token"
+    ],
+    "service_documentation": "https:\/\/docs.fusio-project.org\/"
+}
+JSON;
 
-        $this->assertEquals(308, $response->getStatusCode(), $body);
-        $this->assertEquals('http://127.0.0.1/system/oauth-authorization-server', $response->getHeader('Location'), $body);
-        $this->assertEquals('', $body, $body);
+
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testPost()

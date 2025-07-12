@@ -3,6 +3,7 @@
   "security": {
     "type": "oauth2",
     "tokenUrl": "http://127.0.0.1/authorization/token",
+    "authorizationUrl": "http://127.0.0.1/authorization/authorize",
     "scopes": [
       "bar",
       "default",
