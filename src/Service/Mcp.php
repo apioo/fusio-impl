@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Consumer;
+namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Service\Config;
 use Mcp\Server\Server;
 use Mcp\Types\CallToolRequestParams;
 use Psr\Log\LoggerInterface;

@@ -20,15 +20,20 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Service\Consumer\Mcp;
+use Fusio\Impl\Base;
+use Fusio\Impl\Service\Mcp;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Mcp\Server\HttpServerRunner;
 use Mcp\Server\Transport\Http\HttpMessage;
+use Mcp\Shared\RequestResponder;
+use Psr\Log\LoggerInterface;
 use PSX\Api\Attribute\Delete;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Exception\ServiceUnavailableException;
 use PSX\Http\RequestInterface;
 
 /**
@@ -40,8 +45,13 @@ use PSX\Http\RequestInterface;
  */
 class McpController extends ControllerAbstract
 {
-    public function __construct(private Mcp $mcp, private Mcp\SessionStore $sessionStore)
-    {
+    public function __construct(
+        private readonly Mcp $mcp,
+        private readonly Mcp\SessionStore $sessionStore,
+        private readonly Mcp\TokenValidator $tokenValidator,
+        private readonly LoggerInterface $logger,
+        private readonly FrameworkConfig $frameworkConfig,
+    ) {
     }
 
     #[Get]
@@ -67,20 +77,44 @@ class McpController extends ControllerAbstract
 
     private function run(RequestInterface $request): HttpResponse
     {
+        if (!$this->frameworkConfig->isMCPEnabled()) {
+            throw new ServiceUnavailableException('MCP service is not enabled');
+        }
+
         $server = $this->mcp->build();
 
         $httpOptions = [
-            'session_timeout' => 1800, // 30 minutes
-            'max_queue_size' => 500,   // Smaller queue for shared hosting
-            'enable_sse' => false,     // No SSE for compatibility
-            'shared_hosting' => true,  // Assume shared hosting for max compatibility
-            'server_header' => 'Fusio/MCP-PHP-Server/1.0',
+            'session_timeout' => $this->frameworkConfig->getMCPSessionTimeout(),
+            'enable_sse' => false,
+            'max_queue_size' => $this->frameworkConfig->getMCPQueueSize(),
+            'server_header' => 'Fusio/' . Base::getVersion(),
+            'auth_enabled' => true,
+            'token_validator' => $this->tokenValidator,
         ];
 
-        $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, null, $this->sessionStore);
+        $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, $this->logger, $this->sessionStore);
+        $runner->getServerSession()->onRequest(function (RequestResponder $responder) {
 
-        $response = $runner->handleRequest(new HttpMessage((string) $request->getBody()));
+        });
+
+        $response = $runner->handleRequest($this->toHttpMessage($request));
 
         return new HttpResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+    }
+
+    private function toHttpMessage(RequestInterface $request): HttpMessage
+    {
+        $message = new HttpMessage();
+        $message->setMethod($request->getMethod());
+        $message->setUri($request->getUri()->getPath());
+        $message->setQueryParams($request->getUri()->getParameters());
+
+        foreach ($request->getHeaders() as $name => $value) {
+            $message->setHeader($name, $value);
+        }
+
+        $message->setBody((string) $request->getBody());
+
+        return $message;
     }
 }

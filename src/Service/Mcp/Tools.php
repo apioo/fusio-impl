@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Consumer\Mcp;
+namespace Fusio\Impl\Service\Mcp;
 
-use Fusio\Engine\Context as EngineContext;
 use Fusio\Engine\Model\AppAnonymous;
 use Fusio\Engine\Model\UserAnonymous;
-use Fusio\Engine\Processor;
 use Fusio\Engine\Request;
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Form\JsonSchemaResolver;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
@@ -34,14 +34,11 @@ use Mcp\Types\ListToolsResult;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
 use Mcp\Types\ToolInputSchema;
-use PSX\Api\Operation\ArgumentInterface;
 use PSX\Json\Parser;
-use PSX\Json\Rpc\Exception\InvalidParamsException;
 use PSX\Record\Record;
 use PSX\Schema\Definitions;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\Parser\TypeSchema;
-use PSX\Schema\Schema;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
@@ -59,8 +56,8 @@ readonly class Tools
 
     public function __construct(
         private Table\Operation $operationTable,
-        private Processor $processor,
         private JsonSchemaResolver $jsonSchemaResolver,
+        private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
         SchemaManagerInterface $schemaManager,
     ) {
@@ -111,14 +108,24 @@ readonly class Tools
                 $arguments = new Record();
             }
 
-            $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($params->name));
+            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $params->name);
+            if (!$operation instanceof Table\Generated\OperationRow) {
+                throw new \RuntimeException('Provided an invalid operation name');
+            }
 
-            $baseUrl = $this->frameworkConfig->getDispatchUrl();
-            $app = new AppAnonymous();
-            $user = new UserAnonymous();
-            $context = new EngineContext(1, $baseUrl, $app, $user, $this->frameworkConfig->getTenantId());
+            if ($operation->getHttpMethod() === 'GET') {
+                $request = new Request($arguments->getAll(), new Record(), new Request\RpcRequestContext($params->name));
+            } else {
+                $request = new Request([], $arguments, new Request\RpcRequestContext($params->name));
+            }
 
-            $data = $this->processor->execute('action://' . $params->name, $request, $context);
+            $context = new Context();
+            $context->setTenantId($this->frameworkConfig->getTenantId());
+            $context->setApp(new AppAnonymous());
+            $context->setUser(new UserAnonymous());
+            $context->setOperation($operation);
+
+            $data = $this->invoker->invoke($request, $context);
 
             // @TODO use structuredContent
             return new CallToolResult([new TextContent(Parser::encode($data))]);
