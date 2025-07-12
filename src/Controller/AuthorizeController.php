@@ -61,7 +61,11 @@ class AuthorizeController extends ControllerAbstract
         #[Query('client_id')] ?string $clientId,
         #[Query('scope')] ?string $scope,
     ): Template {
-        $app = $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope);
+        if (empty($clientId)) {
+            return new Template(['error' => 'Provided no client id'], self::TEMPLATE_FILE, $this->reverseRouter);
+        }
+
+        $app = $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope ?? '');
         if (empty($app) || $app['status'] === Table\App::STATUS_DELETED) {
             return new Template(['error' => 'Provided an invalid client id'], self::TEMPLATE_FILE, $this->reverseRouter);
         }
@@ -86,6 +90,10 @@ class AuthorizeController extends ControllerAbstract
     {
         $username = $body->get('username');
         $password = $body->get('password');
+
+        if (empty($username) || empty($password)) {
+            return new Template(['error' => 'Provided no username and password'], self::TEMPLATE_FILE, $this->reverseRouter);
+        }
 
         $userId = $this->authenticatorService->authenticate($username, $password);
         if (empty($userId)) {

@@ -93,9 +93,6 @@ class McpController extends ControllerAbstract
         ];
 
         $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, $this->logger, $this->sessionStore);
-        $runner->getServerSession()->onRequest(function (RequestResponder $responder) {
-
-        });
 
         $response = $runner->handleRequest($this->toHttpMessage($request));
 

@@ -136,6 +136,10 @@ readonly class Authorize
 
     private function parseUrl(?string $url): ?Url
     {
+        if (empty($url)) {
+            return null;
+        }
+
         try {
             $redirectUri = Url::parse($url);
             if (!in_array($redirectUri->getScheme(), ['http', 'https'])) {
