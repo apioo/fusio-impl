@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Command\System;
 
-use Fusio\Impl\Service\Consumer\Mcp;
+use Fusio\Impl\Service\Mcp;
 use Mcp\Server\ServerRunner;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
