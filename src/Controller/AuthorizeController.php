@@ -85,6 +85,7 @@ class AuthorizeController extends ControllerAbstract
     {
         $username = $body->get('username');
         $password = $body->get('password');
+        $allow = $body->get('allow');
 
         if (empty($username) || empty($password)) {
             return new Template(['error' => 'Provided no username and password'], self::TEMPLATE_FILE, $this->reverseRouter);
@@ -95,13 +96,25 @@ class AuthorizeController extends ControllerAbstract
             return new Template(['error' => 'Provided invalid credentials'], self::TEMPLATE_FILE, $this->reverseRouter);
         }
 
+        $selectedScopes = [];
+        $scopes = Service\Scope::split($scope);
+        foreach ($scopes as $scopeName) {
+            if ($body->get('scope_' . $scopeName) === 'on') {
+                $selectedScopes[] = $scopeName;
+            }
+        }
+
+        if (empty($selectedScopes)) {
+            return new Template(['error' => 'No scopes selected'], self::TEMPLATE_FILE, $this->reverseRouter);
+        }
+
         $request = new AuthorizeRequest();
         $request->setResponseType($responseType);
         $request->setClientId($clientId);
         $request->setRedirectUri($redirectUri);
-        $request->setScope($scope);
+        $request->setScope(implode(' ', $selectedScopes));
         $request->setState($state);
-        $request->setAllow(true);
+        $request->setAllow($allow === 'Allow');
 
         $response = $this->authorizeService->authorize($userId, $request);
 

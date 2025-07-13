@@ -34,10 +34,10 @@
           <tr>
             <td>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="<?php echo $scope->name; ?>" checked>
+                <input class="form-check-input" type="checkbox" name="scope_<?php echo $scope->name; ?>" id="scope_<?php echo $scope->name; ?>" value="on" checked>
               </div>
             </td>
-            <td class="fw-semibold"><?php echo $scope->name; ?></td>
+            <td class="fw-semibold"><label for="scope_<?php echo $scope->name; ?>"><?php echo $scope->name; ?></label></td>
             <td><?php echo $scope->description; ?></td>
           </tr>
           <?php endforeach; ?>
@@ -53,12 +53,12 @@
           <label for="password" class="form-label">Password</label>
           <input type="password" id="password" name="password" class="form-control">
         </div>
-        <button type="submit" name="allow" class="btn btn-success">Allow</button>
-        <button type="submit" name="cancel" class="btn btn-secondary">Cancel</button>
+        <input type="submit" name="allow" value="Allow" class="btn btn-success">
+        <input type="submit" name="deny" value="Deny" class="btn btn-secondary">
       </form>
     <?php endif; ?>
   </div>
-  <p class="text-muted text-end pb-3"><small>powered by <a href="https://www.fusio-project.org/">Fusio</a></small></p>
+  <p class="text-muted text-end pb-3"><small>powered by <a href="https://www.fusio-project.org/">Fusio</a>.</small></p>
 </div>
 
 </body>
