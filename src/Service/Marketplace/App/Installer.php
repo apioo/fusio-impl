@@ -264,14 +264,15 @@ class Installer implements InstallerInterface
             }
 
             // dynamically register identity if possible
-            $identityRow = $this->identityTable->findOneByTenantAndName($context->getTenantId(), $app->getName());
+            $identityName = ucfirst($app->getName());
+            $identityRow = $this->identityTable->findOneByTenantAndName($context->getTenantId(), $identityName);
             if (!$identityRow instanceof Table\Generated\IdentityRow) {
                 $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
                 if ($role instanceof Table\Generated\RoleRow) {
                     $identityCreate = new IdentityCreate();
                     $identityCreate->setRoleId($role->getId());
                     $identityCreate->setAppId($appId);
-                    $identityCreate->setName($app->getName());
+                    $identityCreate->setName($identityName);
                     $identityCreate->setIcon('bi-' . $app->getIcon());
                     $identityCreate->setClass(ClassName::serialize(Fusio::class));
                     $identityCreate->setAllowCreate(false);
