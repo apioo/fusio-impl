@@ -62,8 +62,8 @@ readonly class Register
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
-        if (empty($role)) {
+        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+        if (!$role instanceof Table\Generated\RoleRow) {
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }
 
