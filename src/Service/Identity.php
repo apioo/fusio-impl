@@ -29,6 +29,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Identity\CreatedEvent;
 use Fusio\Impl\Event\Identity\DeletedEvent;
 use Fusio\Impl\Event\Identity\UpdatedEvent;
+use Fusio\Impl\Provider\Identity\Fusio;
 use Fusio\Impl\Provider\IdentityProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -79,6 +80,15 @@ readonly class Identity
             $this->identityTable->beginTransaction();
 
             $config = $identity->getConfig() ? $identity->getConfig()->getAll() : [];
+
+            // resolve local app
+            if ($provider instanceof Fusio) {
+                $app = $this->appTable->findOneByTenantAndId($context->getTenantId(), $identity->getAppId());
+                if ($app instanceof Table\Generated\AppRow) {
+                    $config['client_id'] = $app->getAppKey();
+                    $config['client_secret'] = $app->getAppSecret();
+                }
+            }
 
             // create category
             $row = new Table\Generated\IdentityRow();
@@ -131,6 +141,15 @@ readonly class Identity
             $this->identityTable->beginTransaction();
 
             $config = $identity->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+
+            // resolve local app
+            if ($provider instanceof Fusio) {
+                $app = $this->appTable->findOneByTenantAndId($context->getTenantId(), $identity->getAppId() ?? $existing->getAppId());
+                if ($app instanceof Table\Generated\AppRow) {
+                    $config['client_id'] = $app->getAppKey();
+                    $config['client_secret'] = $app->getAppSecret();
+                }
+            }
 
             // update category
             $existing->setAppId($identity->getAppId() ?? $existing->getAppId());
