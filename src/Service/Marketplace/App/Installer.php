@@ -20,15 +20,17 @@
 
 namespace Fusio\Impl\Service\Marketplace\App;
 
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Exception\MarketplaceException;
+use Fusio\Impl\Provider\Identity\Fusio;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
-use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Marketplace\MarketplaceApp;
 use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\AppCreate;
+use Fusio\Model\Backend\IdentityCreate;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
@@ -44,23 +46,20 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Installer implements InstallerInterface
 {
-    private Service\App $appService;
-    private Service\Config $configService;
-    private FrameworkConfig $frameworkConfig;
-    private Table\App $appTable;
-    private Table\User $userTable;
-    private ClientInterface $httpClient;
     private Filesystem $filesystem;
     private bool $replaceEnv = true;
 
-    public function __construct(Service\App $appService, Service\Config $configService, Service\System\FrameworkConfig $frameworkConfig, Table\App $appTable, Table\User $userTable, ClientInterface $httpClient)
-    {
-        $this->appService = $appService;
-        $this->configService = $configService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->appTable = $appTable;
-        $this->userTable = $userTable;
-        $this->httpClient = $httpClient;
+    public function __construct(
+        private readonly Service\App $appService,
+        private readonly Service\Identity $identityService,
+        private readonly Service\Config $configService,
+        private readonly Service\System\FrameworkConfig $frameworkConfig,
+        private readonly Table\App $appTable,
+        private readonly Table\User $userTable,
+        private readonly Table\Identity $identityTable,
+        private readonly Table\Role $roleTable,
+        private readonly ClientInterface $httpClient
+    ) {
         $this->filesystem = new Filesystem();
     }
 
@@ -262,6 +261,23 @@ class Installer implements InstallerInterface
             $existing = $this->appTable->find($appId);
             if (!$existing instanceof Table\Generated\AppRow) {
                 throw new MarketplaceException('Could not create app');
+            }
+
+            // dynamically register identity if possible
+            $identityRow = $this->identityTable->findOneByTenantAndName($context->getTenantId(), $app->getName());
+            if (!$identityRow instanceof Table\Generated\IdentityRow) {
+                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+                if ($role instanceof Table\Generated\RoleRow) {
+                    $identityCreate = new IdentityCreate();
+                    $identityCreate->setRoleId($role->getId());
+                    $identityCreate->setAppId($appId);
+                    $identityCreate->setName($app->getName());
+                    $identityCreate->setIcon($app->getIcon());
+                    $identityCreate->setClass(ClassName::serialize(Fusio::class));
+                    $identityCreate->setAllowCreate(false);
+
+                    $this->identityService->create($identityCreate, $context);
+                }
             }
 
             return $existing->getAppKey();
