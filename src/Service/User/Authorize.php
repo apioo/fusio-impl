@@ -84,9 +84,11 @@ readonly class Authorize
                 }
             }
 
-            $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
-            if (empty($scopes)) {
-                $scopes = $this->appScopeTable->getAvailableScopes($this->frameworkConfig->getTenantId(), $app->getId());
+            $scope = $request->getScope();
+            if (!empty($scope)) {
+                $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
+            } else {
+                $scopes = Table\Scope::getNames($this->appScopeTable->getAvailableScopes($this->frameworkConfig->getTenantId(), $app->getId()));
             }
 
             if (!$request->getAllow()) {
@@ -180,7 +182,7 @@ readonly class Authorize
             $this->userGrantTable->update($existing);
         }
     }
-    
+
     private function getApp(string $clientId): Table\Generated\AppRow
     {
         $condition = Condition::withAnd();

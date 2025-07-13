@@ -65,13 +65,8 @@ class AuthorizeController extends ControllerAbstract
             return new Template(['error' => 'Provided no client id'], self::TEMPLATE_FILE, $this->reverseRouter);
         }
 
-        $app = $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope ?? '');
-        if (empty($app) || $app['status'] === Table\App::STATUS_DELETED) {
-            return new Template(['error' => 'Provided an invalid client id'], self::TEMPLATE_FILE, $this->reverseRouter);
-        }
-
         $data = [
-            'app' => $app,
+            'app' => $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope),
         ];
 
         return new Template($data, self::TEMPLATE_FILE, $this->reverseRouter);
