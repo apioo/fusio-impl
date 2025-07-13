@@ -104,11 +104,13 @@ class AuthorizeController extends ControllerAbstract
             return new Template(['error' => 'Provided invalid credentials'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
+        $app = $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope);
+
         $selectedScopes = [];
-        $scopes = Service\Scope::split($scope ?? '');
-        foreach ($scopes as $scopeName) {
-            if ($body->get('scope_' . $scopeName) === 'on') {
-                $selectedScopes[] = $scopeName;
+        $availableScopes = $app['scopes'] ?? [];
+        foreach ($availableScopes as $scope) {
+            if ($body->get('scope_' . $scope['id']) === 'on') {
+                $selectedScopes[] = $scope['name'];
             }
         }
 

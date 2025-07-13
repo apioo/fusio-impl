@@ -23,28 +23,28 @@
       the app to complete the authorization request:</p>
       <pre>Code: <b><?php echo $code; ?></b></pre>
     <?php else: ?>
-      <p class="lead">The app <b><?php echo $app->name; ?></b> wants to access your account, it requests
-      the following permissions:</p>
-      <?php if (!empty($app->url)): ?>
-      <p class="text-muted"><small>App: <a href="<?php echo $app->url; ?>"><?php echo $app->url; ?></a></small></p>
-      <?php endif; ?>
-      <table class="table table-hover">
-        <tbody>
-          <?php foreach ($app->scopes ?? [] as $scope): ?>
-          <tr>
-            <td>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="scope_<?php echo $scope->name; ?>" id="scope_<?php echo $scope->name; ?>" value="on" checked>
-              </div>
-            </td>
-            <td class="fw-semibold"><label for="scope_<?php echo $scope->name; ?>"><?php echo $scope->name; ?></label></td>
-            <td><?php echo $scope->description; ?></td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-      <p class="lead">Please authenticate to authorize this request:</p>
       <form method="POST">
+        <p class="lead">The app <b><?php echo $app->name; ?></b> wants to access your account, it requests
+        the following permissions:</p>
+        <?php if (!empty($app->url)): ?>
+          <p class="text-muted"><small>App: <a href="<?php echo $app->url; ?>"><?php echo $app->url; ?></a></small></p>
+        <?php endif; ?>
+        <table class="table table-hover">
+          <tbody>
+            <?php foreach ($app->scopes ?? [] as $scope): ?>
+            <tr>
+              <td>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="scope_<?php echo $scope->id; ?>" id="scope_<?php echo $scope->id; ?>" value="on" checked>
+                </div>
+              </td>
+              <td class="fw-semibold"><label for="scope_<?php echo $scope->id; ?>"><?php echo $scope->name; ?></label></td>
+              <td><?php echo $scope->description; ?></td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+        <p class="lead">Please authenticate to authorize this request:</p>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" id="username" name="username" class="form-control">
