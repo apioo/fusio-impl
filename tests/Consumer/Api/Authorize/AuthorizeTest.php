@@ -187,9 +187,13 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
         $this->assertArrayHasKey('redirectUri', $data, $body);
         $this->assertEquals('access_denied', $data['type'], $body);
-        $this->assertEquals('http://google.com?error=access_denied&error_description=Access+denied&state=state', $data['redirectUri'], $body);
+        $this->assertEquals('The access was denied by the user', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=access_denied&error_description=The+access+was+denied+by+the+user&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostToken()
