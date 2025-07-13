@@ -94,7 +94,7 @@ readonly class Authorize
             if (!$request->getAllow()) {
                 $this->tokenTable->removeAllTokensFromAppAndUser($this->frameworkConfig->getTenantId(), $app->getId(), $userId);
 
-                throw new AccessDeniedException('Access denied');
+                throw new AccessDeniedException('The access was denied by the user');
             }
 
             // save the decision of the user so that it is possible for the user to revoke the access later on
