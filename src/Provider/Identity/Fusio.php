@@ -56,7 +56,7 @@ class Fusio extends ProviderAbstract
 
     public function getUserInfoUri(): ?string
     {
-        return $this->frameworkConfig->getDispatchUrl('authorization', 'token');
+        return $this->frameworkConfig->getDispatchUrl('authorization', 'whoami');
     }
 
     protected function getIdProperty(): string
