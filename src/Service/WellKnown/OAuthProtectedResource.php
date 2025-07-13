@@ -45,7 +45,7 @@ readonly class OAuthProtectedResource
             'resource' => $this->frameworkConfig->getUrl(),
             'authorization_servers' => [$this->frameworkConfig->getUrl()],
             'scopes_supported' => $this->getScopes(),
-            'bearer_methods_supported' => 'header',
+            'bearer_methods_supported' => ['header'],
             'resource_signing_alg_values_supported' => [JsonWebToken::ALG],
         ];
     }
