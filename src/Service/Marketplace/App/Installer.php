@@ -272,7 +272,7 @@ class Installer implements InstallerInterface
                     $identityCreate->setRoleId($role->getId());
                     $identityCreate->setAppId($appId);
                     $identityCreate->setName($app->getName());
-                    $identityCreate->setIcon($app->getIcon());
+                    $identityCreate->setIcon('bi-' . $app->getIcon());
                     $identityCreate->setClass(ClassName::serialize(Fusio::class));
                     $identityCreate->setAllowCreate(false);
 
