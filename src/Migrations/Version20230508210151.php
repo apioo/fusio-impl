@@ -72,7 +72,7 @@ final class Version20230508210151 extends AbstractMigration
             $appCodeTable->addColumn('user_id', 'integer');
             $appCodeTable->addColumn('code', 'string', ['length' => 255]);
             $appCodeTable->addColumn('redirect_uri', 'string', ['length' => 255, 'notnull' => false]);
-            $appCodeTable->addColumn('scope', 'string', ['length' => 255]);
+            $appCodeTable->addColumn('scope', 'string', ['length' => 1023]);
             $appCodeTable->addColumn('date', 'datetime');
             $appCodeTable->setPrimaryKey(['id']);
             $appCodeTable->addUniqueIndex(['code']);

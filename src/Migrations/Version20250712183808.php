@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
@@ -27,6 +28,11 @@ final class Version20250712183808 extends AbstractMigration
             $mcpSessionTable->addColumn('data', 'text');
             $mcpSessionTable->setPrimaryKey(['id']);
             $mcpSessionTable->addUniqueIndex(['tenant_id', 'session_id']);
+        }
+
+        $appCodeTable = $schema->getTable('fusio_app_code');
+        if ($appCodeTable instanceof Table && $appCodeTable->hasColumn('scope')) {
+            $appCodeTable->getColumn('scope')->setLength(1023);
         }
     }
 
