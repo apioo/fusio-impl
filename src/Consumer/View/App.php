@@ -23,6 +23,8 @@ namespace Fusio\Impl\Consumer\View;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
+use Fusio\Impl\Service;
+use PSX\Http\Exception as StatusCode;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -106,20 +108,26 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey(?string $tenantId, string $appKey, string $scope)
+    public function getEntityByAppKey(?string $tenantId, string $appKey, ?string $scope)
     {
-        $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);
-        $condition->equals(Table\Generated\AppTable::COLUMN_APP_KEY, $appKey);
+        $app = $this->getTable(Table\App::class)->findOneByTenantAndAppKey($tenantId, $appKey);
+        if (!$app instanceof Table\Generated\AppRow || $app->getStatus() !== Table\App::STATUS_ACTIVE) {
+            throw new StatusCode\NotFoundException('Provided client id does not exist');
+        }
+
+        if (empty($scope)) {
+            $scopes = Table\Scope::getNames($this->getTable(Table\App\Scope::class)->getAvailableScopes($tenantId, $app->getId()));
+        } else {
+            $scopes = Service\Scope::split($scope);
+        }
 
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
+        $definition = $builder->doEntity([$this->getTable(Table\App::class), 'find'], [$app->getId()], [
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'name' => Table\Generated\AppTable::COLUMN_NAME,
             'url' => Table\Generated\AppTable::COLUMN_URL,
-            'scopes' => $builder->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [$tenantId, new Reference('id'), explode(',', $scope), ['backend']], [
+            'scopes' => $builder->doCollection([$this->getTable(Table\App\Scope::class), 'getValidScopes'], [$tenantId, new Reference('id'), $scopes, ['backend']], [
                 'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
