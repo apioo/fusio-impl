@@ -47,7 +47,6 @@ readonly class Authorize
         private Service\Scope $scopeService,
         private Service\App\Code $appCodeService,
         private Table\App $appTable,
-        private Table\App\Scope $appScopeTable,
         private Table\Token $tokenTable,
         private Table\User\Grant $userGrantTable,
         private Service\System\FrameworkConfig $frameworkConfig,
@@ -85,11 +84,11 @@ readonly class Authorize
             }
 
             $scope = $request->getScope();
-            if (!empty($scope)) {
-                $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $request->getScope() ?? '', $app->getId(), $userId);
-            } else {
-                $scopes = Table\Scope::getNames($this->appScopeTable->getAvailableScopes($this->frameworkConfig->getTenantId(), $app->getId()));
+            if (empty($scope)) {
+                throw new InvalidRequestException('No scope was selected');
             }
+
+            $scopes = $this->scopeService->getValidScopes($app->getTenantId(), $scope, $app->getId(), $userId);
 
             if (!$request->getAllow()) {
                 $this->tokenTable->removeAllTokensFromAppAndUser($this->frameworkConfig->getTenantId(), $app->getId(), $userId);
