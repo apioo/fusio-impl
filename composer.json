@@ -16,7 +16,7 @@
   },
   "require": {
     "php": ">=8.1",
-    "psx/framework": "^7.1",
+    "psx/framework": "^8.0",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^1.0",
     "fusio/cli": "^4.0",
