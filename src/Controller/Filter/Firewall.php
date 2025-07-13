@@ -54,6 +54,12 @@ readonly class Firewall implements FilterInterface
 
         try {
             $filterChain->handle($request, $response);
+
+            if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
+                if (!$context->isCli()) {
+                    $this->firewallService->handleClientErrorResponse($ip, $response->getStatusCode(), $context->getTenantId());
+                }
+            }
         } catch (ClientErrorException $e) {
             if (!$context->isCli()) {
                 $this->firewallService->handleClientErrorResponse($ip, $e->getStatusCode(), $context->getTenantId());
