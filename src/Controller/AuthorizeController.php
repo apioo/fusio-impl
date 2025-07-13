@@ -97,7 +97,7 @@ class AuthorizeController extends ControllerAbstract
         }
 
         $selectedScopes = [];
-        $scopes = Service\Scope::split($scope);
+        $scopes = Service\Scope::split($scope ?? '');
         foreach ($scopes as $scopeName) {
             if ($body->get('scope_' . $scopeName) === 'on') {
                 $selectedScopes[] = $scopeName;
