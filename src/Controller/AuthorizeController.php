@@ -22,7 +22,6 @@ namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use Fusio\Model\Consumer\AuthorizeRequest;
 use PSX\Api\Attribute\Body;
 use PSX\Api\Attribute\Get;
@@ -55,6 +54,15 @@ class AuthorizeController extends ControllerAbstract
     ) {
     }
 
+    public function getPreFilter(): array
+    {
+        return [
+            ...parent::getPreFilter(),
+            Filter\Tenant::class,
+            Filter\Firewall::class,
+        ];
+    }
+
     #[Get]
     #[Path('/authorization/authorize')]
     public function getAuthorize(
@@ -62,7 +70,7 @@ class AuthorizeController extends ControllerAbstract
         #[Query('scope')] ?string $scope,
     ): Template {
         if (empty($clientId)) {
-            return new Template(['error' => 'Provided no client id'], self::TEMPLATE_FILE, $this->reverseRouter);
+            return new Template(['error' => 'Provided no client id'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
         $data = [
@@ -88,12 +96,12 @@ class AuthorizeController extends ControllerAbstract
         $allow = $body->get('allow');
 
         if (empty($username) || empty($password)) {
-            return new Template(['error' => 'Provided no username and password'], self::TEMPLATE_FILE, $this->reverseRouter);
+            return new Template(['error' => 'Provided no username and password'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
         $userId = $this->authenticatorService->authenticate($username, $password);
         if (empty($userId)) {
-            return new Template(['error' => 'Provided invalid credentials'], self::TEMPLATE_FILE, $this->reverseRouter);
+            return new Template(['error' => 'Provided invalid credentials'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
         $selectedScopes = [];
@@ -105,7 +113,7 @@ class AuthorizeController extends ControllerAbstract
         }
 
         if (empty($selectedScopes)) {
-            return new Template(['error' => 'No scopes selected'], self::TEMPLATE_FILE, $this->reverseRouter);
+            return new Template(['error' => 'No scopes selected'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
         $request = new AuthorizeRequest();
