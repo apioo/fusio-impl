@@ -58,7 +58,7 @@
       </form>
     <?php endif; ?>
   </div>
-  <p class="text-muted text-end pb-3"><small>powered by <a href="https://www.fusio-project.org/">Fusio</a>.</small></p>
+  <p class="text-muted text-end pb-3"><small>powered by <a href="https://www.fusio-project.org/">Fusio</a></small></p>
 </div>
 
 </body>
