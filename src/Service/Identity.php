@@ -249,8 +249,8 @@ readonly class Identity
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_IDENTITY_ID, $existing->getId());
         $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_STATE, $state);
-        $identityRequest = $this->identityRequestTable->findOneBy($condition);
 
+        $identityRequest = $this->identityRequestTable->findOneBy($condition);
         if (!$identityRequest instanceof Table\Generated\IdentityRequestRow) {
             throw new StatusCode\BadRequestException('Provided identity state was not requested');
         }
@@ -272,7 +272,11 @@ readonly class Identity
             throw new StatusCode\BadRequestException('Could not request user information');
         }
 
-        $userId = $this->userService->createRemote($existing, $user, $context);
+        if ($provider instanceof Fusio) {
+            $userId = $user->getId();
+        } else {
+            $userId = $this->userService->createRemote($existing, $user, $context);
+        }
 
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId, $context);
