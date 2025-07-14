@@ -64,7 +64,7 @@ readonly class Token
 
         $now = new DateTime();
         $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, $categoryType);
-        $app = $appId !== null ? $this->getApp($tenantId, $appId, $userId) : null;
+        $app = $appId !== null ? $this->getApp($tenantId, $appId) : null;
         $user = $this->getUser($tenantId, $userId);
         $expires = $this->getExpires($expire, $now);
 
@@ -170,15 +170,11 @@ readonly class Token
         return $this->jsonWebToken->encode($payload);
     }
 
-    private function getApp(?string $tenantId, int $appId, int $userId): Table\Generated\AppRow
+    private function getApp(?string $tenantId, int $appId): Table\Generated\AppRow
     {
         $app = $this->appTable->findOneByTenantAndId($tenantId, $appId);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Invalid app');
-        }
-
-        if ($app->getUserId() !== $userId) {
-            throw new StatusCode\BadRequestException('Provided app is not assigned to the user');
         }
 
         if ($app->getStatus() !== Table\App::STATUS_ACTIVE) {
