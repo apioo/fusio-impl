@@ -273,10 +273,13 @@ readonly class Identity
         }
 
         if ($provider instanceof Fusio) {
-            $userId = $user->getId();
-        } else {
-            $userId = $this->userService->createRemote($existing, $user, $context);
+            // for the local Fusio provider we can simply return the obtained access token
+            $this->redirectIfPossible($identityRequest, $user->getAccessToken());
+
+            return $user->getAccessToken();
         }
+
+        $userId = $this->userService->createRemote($existing, $user, $context);
 
         // get scopes for user
         $scopes = $this->userService->getAvailableScopes($userId, $context);
@@ -296,22 +299,29 @@ readonly class Identity
             $this->frameworkConfig->getExpireTokenInterval()
         );
 
-        $redirectUri = $identityRequest->getRedirectUri();
-        if (!empty($redirectUri)) {
-            // redirect the user in case a redirect uri was provided
-            $url = Url::parse($redirectUri);
-            $url = $url->withParameters(array_merge($url->getParameters(), [
-                'access_token' => $accessToken->getAccessToken(),
-                'token_type' => $accessToken->getTokenType(),
-                'expires_in' => $accessToken->getExpiresIn(),
-                'refresh_token' => $accessToken->getRefreshToken(),
-                'scope' => $accessToken->getScope(),
-            ]));
-
-            throw new StatusCode\FoundException($url->toString());
-        }
+        $this->redirectIfPossible($identityRequest, $accessToken);
 
         return $accessToken;
+    }
+
+    private function redirectIfPossible(Table\Generated\IdentityRequestRow $identityRequest, AccessToken $accessToken): void
+    {
+        $redirectUri = $identityRequest->getRedirectUri();
+        if (empty($redirectUri)) {
+            return;
+        }
+
+        // redirect the user in case a redirect uri was provided
+        $url = Url::parse($redirectUri);
+        $url = $url->withParameters(array_merge($url->getParameters(), [
+            'access_token' => $accessToken->getAccessToken(),
+            'token_type' => $accessToken->getTokenType(),
+            'expires_in' => $accessToken->getExpiresIn(),
+            'refresh_token' => $accessToken->getRefreshToken(),
+            'scope' => $accessToken->getScope(),
+        ]));
+
+        throw new StatusCode\FoundException($url->toString());
     }
 
     private function buildRedirectUri(Table\Generated\IdentityRow $existing): string
