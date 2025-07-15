@@ -34,6 +34,8 @@ use Mcp\Server\Auth\TokenValidatorInterface;
  */
 class TokenValidator implements TokenValidatorInterface
 {
+    private ?int $userId = null;
+
     public function __construct(
         private readonly Table\Token $tokenTable,
         private readonly Table\User $userTable,
@@ -60,9 +62,16 @@ class TokenValidator implements TokenValidatorInterface
             return new TokenValidationResult(false);
         }
 
+        $this->userId = $user->getId();
+
         return new TokenValidationResult(true, [
             'sub' => $user->getId(),
             'scope' => $accessToken['scope'],
         ]);
+    }
+
+    public function getCurrentUserId(): ?int
+    {
+        return $this->userId;
     }
 }

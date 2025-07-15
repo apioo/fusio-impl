@@ -21,9 +21,11 @@
 namespace Fusio\Impl\Service\Mcp;
 
 use Fusio\Engine\Model\AppAnonymous;
+use Fusio\Engine\Model\User;
 use Fusio\Engine\Model\UserAnonymous;
 use Fusio\Engine\Request;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Repository\UserDatabase;
 use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Form\JsonSchemaResolver;
 use Fusio\Impl\Service\System\FrameworkConfig;
@@ -59,6 +61,8 @@ readonly class Tools
         private JsonSchemaResolver $jsonSchemaResolver,
         private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
+        private TokenValidator $tokenValidator,
+        private UserDatabase $userRepository,
         SchemaManagerInterface $schemaManager,
     ) {
         $this->schemaParser = new TypeSchema($schemaManager);
@@ -119,10 +123,17 @@ readonly class Tools
                 $request = new Request([], $arguments, new Request\RpcRequestContext($params->name));
             }
 
+            $userId = $this->tokenValidator->getCurrentUserId();
+            if (!empty($userId)) {
+                $user = $this->userRepository->get($userId);
+            } else {
+                $user = new UserAnonymous();
+            }
+
             $context = new Context();
             $context->setTenantId($this->frameworkConfig->getTenantId());
             $context->setApp(new AppAnonymous());
-            $context->setUser(new UserAnonymous());
+            $context->setUser($user);
             $context->setOperation($operation);
 
             $data = $this->invoker->invoke($request, $context);
