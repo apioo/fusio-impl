@@ -241,7 +241,12 @@ class Installer implements InstallerInterface
 
     private function getOrCreateAppKey(MarketplaceApp $app, UserContext $context): string
     {
-        $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $app->getName() ?? '');
+        $appName = $app->getName();
+        if (empty($appName)) {
+            throw new MarketplaceException('Provided no app name');
+        }
+
+        $existing = $this->appTable->findOneByTenantAndName($context->getTenantId(), $appName);
         if ($existing instanceof Table\Generated\AppRow) {
             return $existing->getAppKey();
         } else {
@@ -253,7 +258,7 @@ class Installer implements InstallerInterface
             $appCreate = new AppCreate();
             $appCreate->setUserId($user->getId());
             $appCreate->setStatus(1);
-            $appCreate->setName($app->getName());
+            $appCreate->setName($appName);
             $appCreate->setUrl($this->frameworkConfig->getAppsUrl() . '/' . $this->getDirName($app));
             $appCreate->setScopes($app->getScopes());
             $appId = $this->appService->create($appCreate, $context);
@@ -264,7 +269,7 @@ class Installer implements InstallerInterface
             }
 
             // dynamically register identity if possible
-            $identityName = ucfirst($app->getName());
+            $identityName = ucfirst($appName);
             $identityRow = $this->identityTable->findOneByTenantAndName($context->getTenantId(), $identityName);
             if (!$identityRow instanceof Table\Generated\IdentityRow) {
                 $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
