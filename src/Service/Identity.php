@@ -94,7 +94,7 @@ readonly class Identity
             $row = new Table\Generated\IdentityRow();
             $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Identity::STATUS_ACTIVE);
-            $row->setAppId($identity->getAppId());
+            $row->setAppId($identity->getAppId() ?? throw new StatusCode\BadRequestException('Provided no app id'));
             $row->setRoleId($identity->getRoleId());
             $row->setName($identity->getName());
             $row->setIcon($identity->getIcon());
