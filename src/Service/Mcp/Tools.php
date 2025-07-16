@@ -36,6 +36,11 @@ use Mcp\Types\ListToolsResult;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
 use Mcp\Types\ToolInputSchema;
+use PSX\Data\WriterInterface;
+use PSX\Framework\Http\ResponseWriter;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Response;
+use PSX\Http\Stream\StringStream;
 use PSX\Json\Parser;
 use PSX\Record\Record;
 use PSX\Schema\Definitions;
@@ -63,6 +68,7 @@ readonly class Tools
         private FrameworkConfig $frameworkConfig,
         private ActiveUser $activeUser,
         private UserDatabase $userRepository,
+        private ResponseWriter $responseWriter,
         SchemaManagerInterface $schemaManager,
     ) {
         $this->schemaParser = new TypeSchema($schemaManager);
@@ -74,10 +80,11 @@ readonly class Tools
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-        $operations = $this->operationTable->findAll($condition);
+        $operations = $this->operationTable->findAll($condition, 0, 32);
         foreach ($operations as $operation) {
             if ($operation->getHttpMethod() === 'GET') {
                 $inputSchema = $this->buildSchemaFromParameters($operation);
@@ -136,10 +143,13 @@ readonly class Tools
             $context->setUser($user);
             $context->setOperation($operation);
 
-            $data = $this->invoker->invoke($request, $context);
+            $result = $this->invoker->invoke($request, $context);
 
-            // @TODO use structuredContent
-            return new CallToolResult([new TextContent(Parser::encode($data))]);
+            $response = new Response();
+            $this->responseWriter->setBody($response, $result, WriterInterface::JSON);
+            $text = (string) $response->getBody();
+
+            return new CallToolResult([new TextContent($text)]);
         } catch (\Throwable $e) {
             return new CallToolResult([new TextContent('Failed to execute ' . $params->name . ': ' . $e->getMessage())], isError: true);
         }
