@@ -47,6 +47,7 @@ use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 
 /**
  * Tools
@@ -84,11 +85,11 @@ readonly class Tools
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-        $count = 32;
+        $count = 128;
         $startIndex = empty($cursor) ? 0 : ((int) base64_decode($cursor));
-        $nextCursor = base64_encode('' . ($startIndex + $count + 1));
+        $nextCursor = base64_encode('' . ($startIndex + $count));
 
-        $operations = $this->operationTable->findAll($condition, $startIndex, $count);
+        $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::NAME, OrderBy::ASC);
         foreach ($operations as $operation) {
             if ($operation->getHttpMethod() === 'GET') {
                 $inputSchema = $this->buildSchemaFromParameters($operation);
@@ -140,7 +141,7 @@ readonly class Tools
 
             $userId = $this->activeUser->getUserId();
             if (!empty($userId)) {
-                $user = $this->userRepository->get($userId);
+                $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
             } else {
                 $user = new UserAnonymous();
             }
