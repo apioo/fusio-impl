@@ -22,6 +22,8 @@ namespace Fusio\Impl\Service;
 
 use Mcp\Server\Server;
 use Mcp\Types\CallToolRequestParams;
+use Mcp\Types\ListToolsRequest;
+use Mcp\Types\PaginatedRequestParams;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -41,8 +43,8 @@ readonly class Mcp
     {
         $server = new Server($this->configService->getValue('info_title'), $this->logger);
 
-        $server->registerHandler('tools/list', function() {
-            return $this->tools->list();
+        $server->registerHandler('tools/list', function(PaginatedRequestParams $params) {
+            return $this->tools->list($params);
         });
 
         $server->registerHandler('tools/call', function(CallToolRequestParams $params) {

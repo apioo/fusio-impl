@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Service\Mcp;
 
 use Fusio\Engine\Model\AppAnonymous;
-use Fusio\Engine\Model\User;
 use Fusio\Engine\Model\UserAnonymous;
 use Fusio\Engine\Request;
 use Fusio\Impl\Framework\Loader\Context;
@@ -33,14 +32,13 @@ use Fusio\Impl\Table;
 use Mcp\Types\CallToolRequestParams;
 use Mcp\Types\CallToolResult;
 use Mcp\Types\ListToolsResult;
+use Mcp\Types\PaginatedRequestParams;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
 use Mcp\Types\ToolInputSchema;
 use PSX\Data\WriterInterface;
 use PSX\Framework\Http\ResponseWriter;
-use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Response;
-use PSX\Http\Stream\StringStream;
 use PSX\Json\Parser;
 use PSX\Record\Record;
 use PSX\Schema\Definitions;
@@ -74,17 +72,23 @@ readonly class Tools
         $this->schemaParser = new TypeSchema($schemaManager);
     }
 
-    public function list(): ListToolsResult
+    public function list(PaginatedRequestParams $params): ListToolsResult
     {
+        $cursor = $params->cursor ?? null;
+
         $tools = [];
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, 1);
+        //$condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-        $operations = $this->operationTable->findAll($condition, 0, 32);
+        $count = 32;
+        $startIndex = empty($cursor) ? 0 : ((int) base64_decode($cursor));
+        $nextCursor = base64_encode('' . ($startIndex + $count + 1));
+
+        $operations = $this->operationTable->findAll($condition, $startIndex, $count);
         foreach ($operations as $operation) {
             if ($operation->getHttpMethod() === 'GET') {
                 $inputSchema = $this->buildSchemaFromParameters($operation);
@@ -100,13 +104,17 @@ readonly class Tools
             //$outputSchema = $this->jsonSchemaResolver->resolveOutgoing($operation);
 
             $tools[] = new Tool(
-                $operation->getName(),
+                $this->toMcpToolName($operation->getName()),
                 ToolInputSchema::fromArray($inputSchema),
                 $operation->getDescription()
             );
         }
 
-        return new ListToolsResult($tools);
+        if (count($tools) === 0) {
+            $nextCursor = null;
+        }
+
+        return new ListToolsResult($tools, $nextCursor);
     }
 
     public function call(CallToolRequestParams $params): CallToolResult
@@ -119,7 +127,7 @@ readonly class Tools
                 $arguments = new Record();
             }
 
-            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $params->name);
+            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $this->toOperationId($params->name));
             if (!$operation instanceof Table\Generated\OperationRow) {
                 throw new \RuntimeException('Provided an invalid operation name');
             }
@@ -127,7 +135,7 @@ readonly class Tools
             if ($operation->getHttpMethod() === 'GET') {
                 $request = new Request($arguments->getAll(), new Record(), new Request\RpcRequestContext($params->name));
             } else {
-                $request = new Request([], $arguments, new Request\RpcRequestContext($params->name));
+                $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($params->name));
             }
 
             $userId = $this->activeUser->getUserId();
@@ -179,6 +187,16 @@ readonly class Tools
         $definitions = new Definitions();
         $definitions->addType('Parameters', $type);
 
-        return (new JsonSchema())->toArray($definitions, 'Parameters');
+        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Parameters');
+    }
+
+    private function toMcpToolName(string $name): string
+    {
+        return str_replace('.', '-', $name);
+    }
+
+    private function toOperationId(string $name): string
+    {
+        return str_replace('-', '.', $name);
     }
 }

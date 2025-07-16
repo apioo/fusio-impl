@@ -75,6 +75,6 @@ class JsonSchemaResolver
 
         $schema = $this->schemaManager->getSchema($schema);
 
-        return (new JsonSchema())->toArray($schema->getDefinitions(), $schema->getRoot());
+        return (new JsonSchema(inlineDefinitions: true))->toArray($schema->getDefinitions(), $schema->getRoot());
     }
 }
