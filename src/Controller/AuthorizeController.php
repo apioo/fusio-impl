@@ -104,6 +104,10 @@ class AuthorizeController extends ControllerAbstract
             return new Template(['error' => 'Provided invalid credentials'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
         }
 
+        if (empty($clientId)) {
+            return new Template(['error' => 'Provided no client id'], self::TEMPLATE_FILE, $this->reverseRouter, 400);
+        }
+
         $app = $this->appView->getEntityByAppKey($this->frameworkConfig->getTenantId(), $clientId, $scope);
 
         $selectedScopes = [];
