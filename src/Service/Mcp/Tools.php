@@ -61,7 +61,7 @@ readonly class Tools
         private JsonSchemaResolver $jsonSchemaResolver,
         private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
-        private TokenValidator $tokenValidator,
+        private ActiveUser $activeUser,
         private UserDatabase $userRepository,
         SchemaManagerInterface $schemaManager,
     ) {
@@ -123,7 +123,7 @@ readonly class Tools
                 $request = new Request([], $arguments, new Request\RpcRequestContext($params->name));
             }
 
-            $userId = $this->tokenValidator->getCurrentUserId();
+            $userId = $this->activeUser->getUserId();
             if (!empty($userId)) {
                 $user = $this->userRepository->get($userId);
             } else {

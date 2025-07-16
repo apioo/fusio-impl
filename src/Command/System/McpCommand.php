@@ -24,6 +24,7 @@ use Fusio\Impl\Service\Mcp;
 use Mcp\Server\ServerRunner;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -36,7 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class McpCommand extends Command
 {
-    public function __construct(private Mcp $mcp, private LoggerInterface $logger)
+    public function __construct(private Mcp $mcp, private Mcp\ActiveUser $activeUser, private LoggerInterface $logger)
     {
         parent::__construct();
     }
@@ -46,12 +47,20 @@ class McpCommand extends Command
         $this
             ->setName('system:mcp')
             ->setAliases(['mcp'])
-            ->setDescription('Starts the MCP server');
+            ->setDescription('Starts the MCP server')
+            ->addArgument('user_id', InputArgument::OPTIONAL, 'Optional a user id under which all actions are executed, by default this is 1');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $server = $this->mcp->build();
+
+        $userId = (int) $input->getArgument('user_id');
+        if ($userId > 0) {
+            $this->activeUser->setUserId($userId);
+        } else {
+            $this->activeUser->setUserId(1);
+        }
 
         $initOptions = $server->createInitializationOptions();
 

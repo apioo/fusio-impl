@@ -40,6 +40,7 @@ class TokenValidator implements TokenValidatorInterface
         private readonly Table\Token $tokenTable,
         private readonly Table\User $userTable,
         private readonly Service\Security\JsonWebToken $jsonWebToken,
+        private readonly Service\Mcp\ActiveUser $activeUser,
         private readonly Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
@@ -62,7 +63,7 @@ class TokenValidator implements TokenValidatorInterface
             return new TokenValidationResult(false);
         }
 
-        $this->userId = $user->getId();
+        $this->activeUser->setUserId($user->getId());
 
         return new TokenValidationResult(true, [
             'sub' => $user->getId(),
