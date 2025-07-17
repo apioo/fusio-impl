@@ -131,7 +131,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Changes the password of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -161,7 +161,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns user data of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -199,7 +199,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates user data of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -237,7 +237,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -274,7 +274,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -318,7 +318,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Executes a specific action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -355,7 +355,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all specific action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -404,7 +404,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of actions",
       "stability": 2,
       "security": [
         "backend.action"
@@ -434,7 +434,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available action classes",
       "stability": 2,
       "security": [
         "backend.action"
@@ -471,7 +471,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the action config form",
       "stability": 2,
       "security": [
         "backend.action"
@@ -515,7 +515,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -553,7 +553,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -590,7 +590,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -633,7 +633,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing token from an app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -719,7 +719,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps",
       "stability": 2,
       "security": [
         "backend.app"
@@ -763,7 +763,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -893,7 +893,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of audits",
       "stability": 2,
       "security": [
         "backend.audit"
@@ -999,7 +999,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1036,7 +1036,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1122,7 +1122,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of categories",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1166,7 +1166,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1252,7 +1252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of configuration values",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1296,7 +1296,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing config value",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1334,7 +1334,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1371,7 +1371,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1463,7 +1463,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of connections",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1611,7 +1611,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1649,7 +1649,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1686,7 +1686,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1772,7 +1772,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of cronjobs",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1816,7 +1816,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1846,7 +1846,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available dashboard widgets",
       "stability": 2,
       "security": [
         "backend.dashboard"
@@ -1896,7 +1896,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -1940,7 +1940,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -1989,7 +1989,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2032,7 +2032,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2320,7 +2320,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2370,7 +2370,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2408,7 +2408,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2445,7 +2445,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2531,7 +2531,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of events",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2575,7 +2575,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2613,7 +2613,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2650,7 +2650,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2736,7 +2736,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of firewall rules",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2780,7 +2780,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2818,7 +2818,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2855,7 +2855,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2941,7 +2941,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of forms",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2985,7 +2985,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -3178,7 +3178,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3215,7 +3215,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3301,7 +3301,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of identities",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3412,7 +3412,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3566,7 +3566,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of logs",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3615,7 +3615,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of log errors",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3738,7 +3738,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of marketplace actions",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3905,7 +3905,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of marketplace apps",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -4024,7 +4024,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4061,7 +4061,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4147,7 +4147,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of operations",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4191,7 +4191,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4229,7 +4229,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4266,7 +4266,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4352,7 +4352,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of pages",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4396,7 +4396,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4434,7 +4434,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4471,7 +4471,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4557,7 +4557,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of plans",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4601,7 +4601,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4639,7 +4639,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new rate limitation",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4676,7 +4676,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4762,7 +4762,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of rate limitations",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4806,7 +4806,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4844,7 +4844,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -4881,7 +4881,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -4967,7 +4967,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of roles",
       "stability": 2,
       "security": [
         "backend.role"
@@ -5011,7 +5011,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -5049,7 +5049,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5086,7 +5086,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5172,7 +5172,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of schemas",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5253,7 +5253,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5297,7 +5297,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing schema form",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5335,7 +5335,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5372,7 +5372,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5458,7 +5458,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of scopes",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5532,7 +5532,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5600,7 +5600,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of SDKs",
       "stability": 2,
       "security": [
         "backend.sdk"
@@ -7311,7 +7311,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7415,7 +7415,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing test",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7545,7 +7545,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tokens",
       "stability": 2,
       "security": [
         "backend.token"
@@ -7675,7 +7675,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of transactions",
       "stability": 2,
       "security": [
         "backend.transaction"
@@ -7730,7 +7730,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available trash types",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7842,7 +7842,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -7879,7 +7879,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -7965,7 +7965,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of users",
       "stability": 2,
       "security": [
         "backend.user"
@@ -8009,7 +8009,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -8047,7 +8047,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8084,7 +8084,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8170,7 +8170,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of webhooks",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8214,7 +8214,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8600,7 +8600,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates user data for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8638,7 +8638,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8675,7 +8675,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8761,7 +8761,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8805,7 +8805,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8891,7 +8891,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.event"
@@ -8975,7 +8975,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of forms which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9010,7 +9010,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing grant for an app which was created by the authenticated user",
       "stability": 2,
       "security": [
         "consumer.grant"
@@ -9059,7 +9059,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of grants which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.grant"
@@ -9138,7 +9138,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of identities which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9257,7 +9257,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of logs which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.log"
@@ -9341,7 +9341,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of pages which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9513,7 +9513,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of plans which are relevant to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.plan"
@@ -9562,7 +9562,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of scopes which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.scope"
@@ -9630,7 +9630,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9667,7 +9667,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9753,7 +9753,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tokens which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9797,7 +9797,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9883,7 +9883,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of transactions which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.transaction"
@@ -9921,7 +9921,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -9958,7 +9958,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10044,7 +10044,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of webhooks which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10088,7 +10088,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"

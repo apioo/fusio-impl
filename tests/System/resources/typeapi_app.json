@@ -276,7 +276,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns meta information and links about the current installed Fusio version",
       "stability": 2,
       "security": [],
       "authorization": false,
