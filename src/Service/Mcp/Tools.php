@@ -77,11 +77,18 @@ readonly class Tools
     {
         $cursor = $params->cursor ?? null;
 
-        $tools = [];
+        $userId = $this->activeUser->getUserId();
+        if (!empty($userId)) {
+            $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
+        } else {
+            $user = new UserAnonymous();
+        }
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        //$condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, 1);
+        if ($user->getCategoryId() > 0) {
+            $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $user->getCategoryId());
+        }
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
@@ -89,6 +96,7 @@ readonly class Tools
         $startIndex = empty($cursor) ? 0 : ((int) base64_decode($cursor));
         $nextCursor = base64_encode('' . ($startIndex + $count));
 
+        $tools = [];
         $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::NAME, OrderBy::ASC);
         foreach ($operations as $operation) {
             if ($operation->getHttpMethod() === 'GET') {
@@ -128,7 +136,19 @@ readonly class Tools
                 $arguments = new Record();
             }
 
-            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $this->toOperationId($params->name));
+            $userId = $this->activeUser->getUserId();
+            if (!empty($userId)) {
+                $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
+            } else {
+                $user = new UserAnonymous();
+            }
+
+            $categoryId = null;
+            if ($user->getCategoryId() > 0) {
+                $categoryId = $user->getCategoryId();
+            }
+
+            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $this->toOperationId($params->name));
             if (!$operation instanceof Table\Generated\OperationRow) {
                 throw new \RuntimeException('Provided an invalid operation name');
             }
@@ -137,13 +157,6 @@ readonly class Tools
                 $request = new Request($arguments->getAll(), new Record(), new Request\RpcRequestContext($params->name));
             } else {
                 $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($params->name));
-            }
-
-            $userId = $this->activeUser->getUserId();
-            if (!empty($userId)) {
-                $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-            } else {
-                $user = new UserAnonymous();
             }
 
             $context = new Context();
