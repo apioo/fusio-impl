@@ -63,7 +63,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns user data of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"
@@ -93,7 +93,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Revoke the access token of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"
@@ -355,7 +355,7 @@
           }
         }
       ],
-      "description": "Returns all specific action",
+      "description": "Returns a specific action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -670,7 +670,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -800,7 +800,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific audit",
       "stability": 2,
       "security": [
         "backend.audit"
@@ -923,7 +923,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates an backup of the current system",
       "stability": 2,
       "security": [
         "backend.backup"
@@ -961,7 +961,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Imports an backup to the current system",
       "stability": 2,
       "security": [
         "backend.backup"
@@ -1073,7 +1073,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1203,7 +1203,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific config",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1408,7 +1408,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1493,7 +1493,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available connection classes",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1530,7 +1530,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the connection config form",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1567,7 +1567,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a redirect url to start the OAuth2 authorization flow for the given connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1723,7 +1723,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -2081,7 +2081,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2172,7 +2172,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns paginated rows at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2215,7 +2215,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the schema of a specific table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2264,7 +2264,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available tables on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2482,7 +2482,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2687,7 +2687,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2892,7 +2892,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -3103,7 +3103,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available generator classes",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3140,7 +3140,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the generator config form",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3252,7 +3252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3331,7 +3331,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available identity classes",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3368,7 +3368,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the identity config form",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3449,7 +3449,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific log",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3695,7 +3695,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific marketplace action",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3862,7 +3862,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific marketplace app",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -4098,7 +4098,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4303,7 +4303,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4508,7 +4508,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4713,7 +4713,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4918,7 +4918,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -5123,7 +5123,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5409,7 +5409,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5570,7 +5570,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates a specific SDK",
       "stability": 2,
       "security": [
         "backend.sdk"
@@ -5717,7 +5717,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the activities per user",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -5834,7 +5834,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the request count",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -5951,7 +5951,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the errors per operation",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6068,7 +6068,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the incoming requests",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6185,7 +6185,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the incoming transactions",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6302,7 +6302,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the issues tokens",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6419,7 +6419,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used activities",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6536,7 +6536,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used apps",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6653,7 +6653,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used operations",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6683,7 +6683,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the test coverage",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6800,7 +6800,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the time average",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6917,7 +6917,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the time per operation",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7034,7 +7034,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the used points",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7151,7 +7151,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the user registrations",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7188,7 +7188,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Removes an existing tenant",
       "stability": 2,
       "security": [
         "backend.tenant"
@@ -7225,7 +7225,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Setup a new tenant",
       "stability": 2,
       "security": [
         "backend.tenant"
@@ -7262,7 +7262,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific test",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7341,7 +7341,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Refresh all tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7371,7 +7371,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Run all tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7452,7 +7452,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific token",
       "stability": 2,
       "security": [
         "backend.token"
@@ -7582,7 +7582,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific transaction",
       "stability": 2,
       "security": [
         "backend.transaction"
@@ -7730,7 +7730,7 @@
           }
         }
       ],
-      "description": "Returns all available trash types",
+      "description": "Returns all deleted records by trash type",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7760,7 +7760,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all trash types",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7804,7 +7804,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Restores a previously deleted record",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7916,7 +7916,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -8121,7 +8121,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8252,7 +8252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Activates an previously registered account through a token which was provided to the user via email",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8288,7 +8288,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Authorizes the access of a specific app for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8324,7 +8324,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Change the password for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8362,7 +8362,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Change the password after the password reset flow was started",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8390,7 +8390,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a user data for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8420,7 +8420,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns information about a specific app to start the OAuth2 authorization code flow",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8456,7 +8456,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "User login by providing a username and password",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8492,7 +8492,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Refresh a previously obtained access token",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8528,7 +8528,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Register a new user account",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8564,7 +8564,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Start the password reset flow",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8712,7 +8712,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8842,7 +8842,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific event for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.event"
@@ -8928,7 +8928,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific form for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9096,7 +9096,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Identity callback endpoint to exchange an access token",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9173,7 +9173,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Redirect the user to the configured identity provider",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9208,7 +9208,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific log for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.log"
@@ -9294,7 +9294,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific page for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9383,7 +9383,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Start the checkout process for a specific plan",
       "stability": 2,
       "security": [
         "consumer.payment"
@@ -9427,7 +9427,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates a payment portal link for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.payment"
@@ -9464,7 +9464,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific plan for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.plan"
@@ -9592,7 +9592,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all scopes by category",
       "stability": 2,
       "security": [
         "consumer.scope"
@@ -9704,7 +9704,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9834,7 +9834,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific transaction for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.transaction"
@@ -9995,7 +9995,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10125,7 +10125,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Connection OAuth2 callback to authorize a connection",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10151,7 +10151,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns meta information and links about the current installed Fusio version",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10185,7 +10185,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Debug endpoint which returns the provided data",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10211,7 +10211,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Health check endpoint which returns information about the health status of the system",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10237,7 +10237,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available routes",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10270,7 +10270,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns details of a specific schema",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10303,7 +10303,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Payment webhook endpoint after successful purchase of a plan",
       "stability": 2,
       "security": [],
       "authorization": false,

@@ -32,7 +32,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns user data of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"
@@ -62,7 +62,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Revoke the access token of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"

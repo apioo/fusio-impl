@@ -237,7 +237,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Action::class,
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Returns all specific action',
+                    description: 'Returns a specific action',
                 ),
                 'action.update' => new Operation(
                     action: Backend\Action\Action\Update::class,
@@ -288,6 +288,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\App::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific app',
                 ),
                 'app.update' => new Operation(
                     action: Backend\Action\App\Update::class,
@@ -336,6 +337,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Audit::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific audit',
                 ),
                 'category.getAll' => new Operation(
                     action: Backend\Action\Category\GetAll::class,
@@ -365,6 +367,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Category::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific category',
                 ),
                 'category.update' => new Operation(
                     action: Backend\Action\Category\Update::class,
@@ -404,6 +407,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Config::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific config',
                 ),
                 'config.update' => new Operation(
                     action: Backend\Action\Config\Update::class,
@@ -444,6 +448,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionIndex::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available connection classes',
                 ),
                 'connection.getForm' => new Operation(
                     action: Backend\Action\Connection\GetForm::class,
@@ -453,6 +458,7 @@ class NewInstallation
                     outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the connection config form',
                 ),
                 'connection.get' => new Operation(
                     action: Backend\Action\Connection\Get::class,
@@ -461,6 +467,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Connection::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific connection',
                 ),
                 'connection.update' => new Operation(
                     action: Backend\Action\Connection\Update::class,
@@ -490,6 +497,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ConnectionRedirectResponse::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a redirect url to start the OAuth2 authorization flow for the given connection',
                 ),
                 'cronjob.getAll' => new Operation(
                     action: Backend\Action\Cronjob\GetAll::class,
@@ -519,6 +527,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Cronjob::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific cronjob',
                 ),
                 'cronjob.update' => new Operation(
                     action: Backend\Action\Cronjob\Update::class,
@@ -558,6 +567,7 @@ class NewInstallation
                     outgoing: Model\Backend\DatabaseTableCollection::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available tables on a database',
                 ),
                 'database.getTable' => new Operation(
                     action: Backend\Action\Database\Table\Get::class,
@@ -566,6 +576,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseTable::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the schema of a specific table on a database',
                 ),
                 'database.createTable' => new Operation(
                     action: Backend\Action\Database\Table\Create::class,
@@ -604,6 +615,7 @@ class NewInstallation
                     outgoing: Model\Backend\DatabaseRowCollection::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'filterBy' => PropertyTypeFactory::getString(), 'filterOp' => PropertyTypeFactory::getString(), 'filterValue' => PropertyTypeFactory::getString(), 'sortBy' => PropertyTypeFactory::getString(), 'sortOrder' => PropertyTypeFactory::getString(), 'columns' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns paginated rows at a table on a database',
                 ),
                 'database.getRow' => new Operation(
                     action: Backend\Action\Database\Row\Get::class,
@@ -612,6 +624,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\DatabaseRow::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific row at a table on a database',
                 ),
                 'database.createRow' => new Operation(
                     action: Backend\Action\Database\Row\Create::class,
@@ -670,6 +683,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Event::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific event',
                 ),
                 'event.update' => new Operation(
                     action: Backend\Action\Event\Update::class,
@@ -699,6 +713,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\BackupExport::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Generates an backup of the current system',
                 ),
                 'backup.import' => new Operation(
                     action: Backend\Action\Backup\Import::class,
@@ -708,6 +723,7 @@ class NewInstallation
                     outgoing: Model\Backend\BackupImportResult::class,
                     incoming: Model\Backend\BackupImport::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Imports an backup to the current system',
                 ),
                 'firewall.getAll' => new Operation(
                     action: Backend\Action\Firewall\GetAll::class,
@@ -737,6 +753,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Firewall::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific firewall rule',
                 ),
                 'firewall.update' => new Operation(
                     action: Backend\Action\Firewall\Update::class,
@@ -787,6 +804,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Form::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific form',
                 ),
                 'form.update' => new Operation(
                     action: Backend\Action\Form\Update::class,
@@ -816,6 +834,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\GeneratorIndexProviders::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available generator classes',
                 ),
                 'generator.getForm' => new Operation(
                     action: Backend\Action\Generator\GetForm::class,
@@ -824,6 +843,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the generator config form',
                 ),
                 'generator.executeProvider' => new Operation(
                     action: Backend\Action\Generator\Create::class,
@@ -871,6 +891,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\IdentityIndex::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available identity classes',
                 ),
                 'identity.getForm' => new Operation(
                     action: Backend\Action\Identity\GetForm::class,
@@ -880,6 +901,7 @@ class NewInstallation
                     outgoing: Model\Common\FormContainer::class,
                     parameters: ['class' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the identity config form',
                 ),
                 'identity.get' => new Operation(
                     action: Backend\Action\Identity\Get::class,
@@ -888,6 +910,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Identity::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific identity',
                 ),
                 'identity.update' => new Operation(
                     action: Backend\Action\Identity\Update::class,
@@ -945,6 +968,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Log::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific log',
                 ),
                 'marketplace.action.getAll' => new Operation(
                     action: Backend\Action\Marketplace\Action\GetAll::class,
@@ -972,6 +996,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Marketplace\MarketplaceAction::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific marketplace action',
                 ),
                 'marketplace.action.upgrade' => new Operation(
                     action: Backend\Action\Marketplace\Action\Upgrade::class,
@@ -1007,6 +1032,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Marketplace\MarketplaceApp::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific marketplace app',
                 ),
                 'marketplace.app.upgrade' => new Operation(
                     action: Backend\Action\Marketplace\App\Upgrade::class,
@@ -1044,6 +1070,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Page::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific page',
                 ),
                 'page.update' => new Operation(
                     action: Backend\Action\Page\Update::class,
@@ -1094,6 +1121,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Plan::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific plan',
                 ),
                 'plan.update' => new Operation(
                     action: Backend\Action\Plan\Update::class,
@@ -1144,6 +1172,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Rate::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific rate',
                 ),
                 'rate.update' => new Operation(
                     action: Backend\Action\Rate\Update::class,
@@ -1194,6 +1223,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Role::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific role',
                 ),
                 'role.update' => new Operation(
                     action: Backend\Action\Role\Update::class,
@@ -1244,6 +1274,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Operation::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific operation',
                 ),
                 'operation.update' => new Operation(
                     action: Backend\Action\Operation\Update::class,
@@ -1312,6 +1343,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Schema::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific schema',
                 ),
                 'schema.update' => new Operation(
                     action: Backend\Action\Schema\Update::class,
@@ -1370,6 +1402,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Scope::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific scope',
                 ),
                 'scope.update' => new Operation(
                     action: Backend\Action\Scope\Update::class,
@@ -1409,6 +1442,7 @@ class NewInstallation
                     outgoing: Model\Backend\SdkMessage::class,
                     incoming: Model\Backend\SdkGenerate::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Generates a specific SDK',
                 ),
                 'statistic.getActivitiesPerUser' => new Operation(
                     action: Backend\Action\Statistic\GetActivitiesPerUser::class,
@@ -1418,6 +1452,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the activities per user',
                 ),
                 'statistic.getCountRequests' => new Operation(
                     action: Backend\Action\Statistic\GetCountRequests::class,
@@ -1427,6 +1462,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticCount::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the request count',
                 ),
                 'statistic.getErrorsPerOperation' => new Operation(
                     action: Backend\Action\Statistic\GetErrorsPerOperation::class,
@@ -1436,6 +1472,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the errors per operation',
                 ),
                 'statistic.getIncomingRequests' => new Operation(
                     action: Backend\Action\Statistic\GetIncomingRequests::class,
@@ -1445,6 +1482,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the incoming requests',
                 ),
                 'statistic.getIncomingTransactions' => new Operation(
                     action: Backend\Action\Statistic\GetIncomingTransactions::class,
@@ -1454,6 +1492,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the incoming transactions',
                 ),
                 'statistic.getIssuedTokens' => new Operation(
                     action: Backend\Action\Statistic\GetIssuedTokens::class,
@@ -1463,6 +1502,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the issues tokens',
                 ),
                 'statistic.getMostUsedActivities' => new Operation(
                     action: Backend\Action\Statistic\GetMostUsedActivities::class,
@@ -1472,6 +1512,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the most used activities',
                 ),
                 'statistic.getMostUsedApps' => new Operation(
                     action: Backend\Action\Statistic\GetMostUsedApps::class,
@@ -1481,6 +1522,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the most used apps',
                 ),
                 'statistic.getMostUsedOperations' => new Operation(
                     action: Backend\Action\Statistic\GetMostUsedOperations::class,
@@ -1490,6 +1532,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the most used operations',
                 ),
                 'statistic.getTestCoverage' => new Operation(
                     action: Backend\Action\Statistic\GetTestCoverage::class,
@@ -1498,6 +1541,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\StatisticChart::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the test coverage',
                 ),
                 'statistic.getTimeAverage' => new Operation(
                     action: Backend\Action\Statistic\GetTimeAverage::class,
@@ -1507,6 +1551,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the time average',
                 ),
                 'statistic.getTimePerOperation' => new Operation(
                     action: Backend\Action\Statistic\GetTimePerOperation::class,
@@ -1516,6 +1561,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the time per operation',
                 ),
                 'statistic.getUsedPoints' => new Operation(
                     action: Backend\Action\Statistic\GetUsedPoints::class,
@@ -1525,6 +1571,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the used points',
                 ),
                 'statistic.getUserRegistrations' => new Operation(
                     action: Backend\Action\Statistic\GetUserRegistrations::class,
@@ -1534,6 +1581,7 @@ class NewInstallation
                     outgoing: Model\Backend\StatisticChart::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a statistic containing the user registrations',
                 ),
                 'tenant.setup' => new Operation(
                     action: Backend\Action\Tenant\Setup::class,
@@ -1542,6 +1590,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Setup a new tenant',
                 ),
                 'tenant.remove' => new Operation(
                     action: Backend\Action\Tenant\Remove::class,
@@ -1550,6 +1599,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Removes an existing tenant',
                 ),
                 'test.getAll' => new Operation(
                     action: Backend\Action\Test\GetAll::class,
@@ -1568,6 +1618,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Test::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific test',
                 ),
                 'test.refresh' => new Operation(
                     action: Backend\Action\Test\Refresh::class,
@@ -1576,6 +1627,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Refresh all tests',
                 ),
                 'test.run' => new Operation(
                     action: Backend\Action\Test\Run::class,
@@ -1584,6 +1636,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Run all tests',
                 ),
                 'test.update' => new Operation(
                     action: Backend\Action\Test\Update::class,
@@ -1612,6 +1665,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Token::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific token',
                 ),
                 'transaction.getAll' => new Operation(
                     action: Backend\Action\Transaction\GetAll::class,
@@ -1630,6 +1684,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Transaction::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific transaction',
                 ),
                 'trash.getTypes' => new Operation(
                     action: Backend\Action\Trash\GetTypes::class,
@@ -1638,6 +1693,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\TrashTypes::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all trash types',
                 ),
                 'trash.getAllByType' => new Operation(
                     action: Backend\Action\Trash\GetAll::class,
@@ -1647,7 +1703,7 @@ class NewInstallation
                     outgoing: Model\Backend\TrashDataCollection::class,
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Returns all available trash types',
+                    description: 'Returns all deleted records by trash type',
                 ),
                 'trash.restore' => new Operation(
                     action: Backend\Action\Trash\Restore::class,
@@ -1657,6 +1713,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\TrashRestore::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Restores a previously deleted record',
                 ),
                 'user.getAll' => new Operation(
                     action: Backend\Action\User\GetAll::class,
@@ -1686,6 +1743,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific user',
                 ),
                 'user.update' => new Operation(
                     action: Backend\Action\User\Update::class,
@@ -1736,6 +1794,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\Webhook::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific webhook',
                 ),
                 'webhook.update' => new Operation(
                     action: Backend\Action\Webhook\Update::class,
@@ -1787,6 +1846,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\App::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific app for the authenticated user',
                 ),
                 'app.update' => new Operation(
                     action: Consumer\Action\App\Update::class,
@@ -1824,6 +1884,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Event::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific event for the authenticated user',
                 ),
                 'grant.getAll' => new Operation(
                     action: Consumer\Action\Grant\GetAll::class,
@@ -1861,6 +1922,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Log::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific log for the authenticated user',
                 ),
                 'page.getAll' => new Operation(
                     action: Consumer\Action\Page\GetAll::class,
@@ -1881,6 +1943,7 @@ class NewInstallation
                     outgoing: Model\Consumer\Page::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns a specific page for the authenticated user',
                 ),
                 'form.getAll' => new Operation(
                     action: Consumer\Action\Form\GetAll::class,
@@ -1901,6 +1964,7 @@ class NewInstallation
                     outgoing: Model\Consumer\Form::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns a specific form for the authenticated user',
                 ),
                 'payment.portal' => new Operation(
                     action: Consumer\Action\Payment\Portal::class,
@@ -1910,6 +1974,7 @@ class NewInstallation
                     outgoing: Model\Consumer\PaymentPortalResponse::class,
                     incoming: Model\Consumer\PaymentPortalRequest::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Generates a payment portal link for the authenticated user',
                 ),
                 'payment.checkout' => new Operation(
                     action: Consumer\Action\Payment\Checkout::class,
@@ -1919,6 +1984,7 @@ class NewInstallation
                     outgoing: Model\Consumer\PaymentCheckoutResponse::class,
                     incoming: Model\Consumer\PaymentCheckoutRequest::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Start the checkout process for a specific plan',
                 ),
                 'plan.getAll' => new Operation(
                     action: Consumer\Action\Plan\GetAll::class,
@@ -1937,6 +2003,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Plan::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific plan for the authenticated user',
                 ),
                 'scope.getAll' => new Operation(
                     action: Consumer\Action\Scope\GetAll::class,
@@ -1955,6 +2022,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\ScopeCategories::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all scopes by category',
                 ),
                 'token.getAll' => new Operation(
                     action: Consumer\Action\Token\GetAll::class,
@@ -1983,6 +2051,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Token::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific token for the authenticated user',
                 ),
                 'token.update' => new Operation(
                     action: Consumer\Action\Token\Update::class,
@@ -2030,6 +2099,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Webhook::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific webhook for the authenticated user',
                 ),
                 'webhook.update' => new Operation(
                     action: Consumer\Action\Webhook\Update::class,
@@ -2067,6 +2137,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\Transaction::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific transaction for the authenticated user',
                 ),
                 'account.get' => new Operation(
                     action: Consumer\Action\User\Get::class,
@@ -2075,6 +2146,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Consumer\UserAccount::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a user data for the authenticated user',
                 ),
                 'account.update' => new Operation(
                     action: Consumer\Action\User\Update::class,
@@ -2094,6 +2166,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\AccountChangePassword::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Change the password for the authenticated user',
                 ),
                 'account.activate' => new Operation(
                     action: Consumer\Action\User\Activate::class,
@@ -2104,6 +2177,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserActivate::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Activates an previously registered account through a token which was provided to the user via email',
                 ),
                 'account.getApp' => new Operation(
                     action: Consumer\Action\User\GetApp::class,
@@ -2113,6 +2187,7 @@ class NewInstallation
                     outgoing: Model\Consumer\AuthorizeMeta::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns information about a specific app to start the OAuth2 authorization code flow',
                 ),
                 'account.authorize' => new Operation(
                     action: Consumer\Action\User\Authorize::class,
@@ -2123,6 +2198,7 @@ class NewInstallation
                     incoming: Model\Consumer\AuthorizeRequest::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Authorizes the access of a specific app for the authenticated user',
                 ),
                 'account.login' => new Operation(
                     action: Consumer\Action\User\Login::class,
@@ -2133,6 +2209,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserLogin::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'User login by providing a username and password',
                 ),
                 'account.refresh' => new Operation(
                     action: Consumer\Action\User\Refresh::class,
@@ -2143,6 +2220,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserRefresh::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Refresh a previously obtained access token',
                 ),
                 'account.register' => new Operation(
                     action: Consumer\Action\User\Register::class,
@@ -2153,6 +2231,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserRegister::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Register a new user account',
                 ),
                 'account.requestPasswordReset' => new Operation(
                     action: Consumer\Action\User\ResetPassword\Request::class,
@@ -2163,6 +2242,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserEmail::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Start the password reset flow',
                 ),
                 'account.executePasswordReset' => new Operation(
                     action: Consumer\Action\User\ResetPassword\Execute::class,
@@ -2173,6 +2253,7 @@ class NewInstallation
                     incoming: Model\Consumer\UserPasswordReset::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Change the password after the password reset flow was started',
                 ),
                 'identity.getAll' => new Operation(
                     action: Consumer\Action\Identity\GetAll::class,
@@ -2193,6 +2274,7 @@ class NewInstallation
                     outgoing: Passthru::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Identity callback endpoint to exchange an access token',
                 ),
                 'identity.redirect' => new Operation(
                     action: Consumer\Action\Identity\Redirect::class,
@@ -2202,6 +2284,7 @@ class NewInstallation
                     outgoing: Passthru::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Redirect the user to the configured identity provider',
                 ),
             ],
             'system' => [
@@ -2213,6 +2296,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Connection OAuth2 callback to authorize a connection',
                 ),
                 'meta.getAbout' => new Operation(
                     action: System\Action\Meta\GetAbout::class,
@@ -2222,6 +2306,7 @@ class NewInstallation
                     outgoing: Model\System\About::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns meta information and links about the current installed Fusio version',
                 ),
                 'meta.getDebug' => new Operation(
                     action: System\Action\Meta\GetDebug::class,
@@ -2232,6 +2317,7 @@ class NewInstallation
                     incoming: Passthru::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Debug endpoint which returns the provided data',
                 ),
                 'meta.getHealth' => new Operation(
                     action: System\Action\Meta\GetHealth::class,
@@ -2241,6 +2327,7 @@ class NewInstallation
                     outgoing: Model\System\HealthCheck::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Health check endpoint which returns information about the health status of the system',
                 ),
                 'meta.getRoutes' => new Operation(
                     action: System\Action\Meta\GetRoutes::class,
@@ -2250,6 +2337,7 @@ class NewInstallation
                     outgoing: Model\System\Route::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns all available routes',
                 ),
                 'meta.getSchema' => new Operation(
                     action: System\Action\Meta\GetSchema::class,
@@ -2259,6 +2347,7 @@ class NewInstallation
                     outgoing: Model\System\Schema::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Returns details of a specific schema',
                 ),
                 'payment.webhook' => new Operation(
                     action: System\Action\Payment\Webhook::class,
@@ -2268,6 +2357,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
+                    description: 'Payment webhook endpoint after successful purchase of a plan',
                 ),
             ],
             'authorization' => [
@@ -2278,6 +2368,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Revoke the access token of the current authenticated user',
                 ),
                 'getWhoami' => new Operation(
                     action: Authorization\Action\GetWhoami::class,
@@ -2286,6 +2377,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\User::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns user data of the current authenticated user',
                 ),
             ],
         ];
