@@ -150,6 +150,7 @@ readonly class Tools
 
             if ($arguments->containsKey('payload')) {
                 $payload = Record::from($arguments->get('payload'));
+                $arguments->remove('payload');
             } else {
                 $payload = new Record();
             }
