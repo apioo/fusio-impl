@@ -58,8 +58,6 @@ class McpCommand extends Command
         $userId = (int) $input->getArgument('user_id');
         if ($userId > 0) {
             $this->activeUser->setUserId($userId);
-        } else {
-            $this->activeUser->setUserId(1);
         }
 
         $initOptions = $server->createInitializationOptions();
