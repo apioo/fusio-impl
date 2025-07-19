@@ -22,7 +22,6 @@ namespace Fusio\Impl\Service;
 
 use Mcp\Server\Server;
 use Mcp\Types\CallToolRequestParams;
-use Mcp\Types\ListToolsRequest;
 use Mcp\Types\PaginatedRequestParams;
 use Psr\Log\LoggerInterface;
 

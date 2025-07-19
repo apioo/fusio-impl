@@ -84,14 +84,15 @@ readonly class Tools
         $userId = $this->activeUser->getUserId();
         if (!empty($userId)) {
             $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
+            $categoryId = $user->getCategoryId();
         } else {
-            $user = new UserAnonymous();
+            $categoryId = 0;
         }
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        if ($user->getCategoryId() > 0) {
-            $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $user->getCategoryId());
+        if ($categoryId > 0) {
+            $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $categoryId);
         }
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
@@ -138,13 +139,10 @@ readonly class Tools
             $userId = $this->activeUser->getUserId();
             if (!empty($userId)) {
                 $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-            } else {
-                $user = new UserAnonymous();
-            }
-
-            $categoryId = null;
-            if ($user->getCategoryId() > 0) {
                 $categoryId = $user->getCategoryId();
+            } else {
+                $user = $this->userRepository->get(1);
+                $categoryId = null;
             }
 
             $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $this->toOperationId($params->name));
