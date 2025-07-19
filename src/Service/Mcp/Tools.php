@@ -153,7 +153,7 @@ readonly class Tools
                 $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
                 $categoryId = $user->getCategoryId();
             } else {
-                $user = $this->userRepository->get(1);
+                $user = $this->userRepository->get(1) ?? throw new \RuntimeException('No default user is available');
                 $categoryId = null;
             }
 
