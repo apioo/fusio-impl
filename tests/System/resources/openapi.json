@@ -16,6 +16,7 @@
         "tags": [
           "authorization"
         ],
+        "description": "Returns user data of the current authenticated user",
         "operationId": "authorization.getWhoami",
         "responses": {
           "200": {
@@ -64,6 +65,7 @@
         "tags": [
           "authorization"
         ],
+        "description": "Revoke the access token of the current authenticated user",
         "operationId": "authorization.revoke",
         "responses": {
           "200": {
@@ -295,6 +297,7 @@
     },
     "/": {
       "get": {
+        "description": "Returns meta information and links about the current installed Fusio version",
         "operationId": "meta.getAbout",
         "responses": {
           "200": {
@@ -616,46 +619,57 @@
   "components": {
     "schemas": {
       "Backend_App": {
+        "description": "This object represents an app to access the API on-behalf of a user",
         "type": "object",
         "properties": {
           "id": {
+            "description": "Unique identifier for the object",
             "type": "integer"
           },
           "userId": {
             "type": "integer"
           },
           "status": {
+            "description": "Status of the object either 1 = active, 2 = pending, 3 = deactivated or 4 = deleted",
             "type": "integer"
           },
           "name": {
+            "description": "Unique name of the object",
             "type": "string"
           },
           "url": {
+            "description": "Url where the app is hosted",
             "type": "string"
           },
           "parameters": {
+            "description": "Optional URL-encoded parameters of the app i.e. foo=bar&bar=foo",
             "type": "string"
           },
           "appKey": {
+            "description": "The app key also known as client id which is generated on creation",
             "type": "string"
           },
           "appSecret": {
+            "description": "The app secret also known as client secret which is generated on creation",
             "type": "string"
           },
           "metadata": {
             "$ref": "#/components/schemas/Common_Metadata"
           },
           "date": {
+            "description": "The create date of this object",
             "type": "string",
             "format": "date-time"
           },
           "scopes": {
+            "description": "A list of assigned scopes for this app",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "tokens": {
+            "description": "A list of tokens which are assigned to this app",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Backend_Token"
@@ -664,12 +678,15 @@
         }
       },
       "Backend_Token": {
+        "description": "This object represents a token, this an access token which was requested by a user",
         "type": "object",
         "properties": {
           "id": {
+            "description": "Unique identifier for the object",
             "type": "integer"
           },
           "status": {
+            "description": "Status of the object either 1 = active or 2 = deleted",
             "type": "integer"
           },
           "name": {
@@ -695,30 +712,39 @@
         }
       },
       "Backend_User": {
+        "description": "This object represents a user",
         "type": "object",
         "properties": {
           "id": {
+            "description": "Unique identifier for the object",
             "type": "integer"
           },
           "roleId": {
+            "description": "A role which is assigned to the user",
             "type": "integer"
           },
           "planId": {
+            "description": "A plan which is assigned to the user",
             "type": "integer"
           },
           "status": {
+            "description": "Status of the object either 1 = active, 2 = disabled or 0 = deleted",
             "type": "integer"
           },
           "name": {
+            "description": "Unique name of the object",
             "type": "string"
           },
           "email": {
+            "description": "The email address of the user",
             "type": "string"
           },
           "points": {
+            "description": "Points assigned to the user",
             "type": "integer"
           },
           "scopes": {
+            "description": "List of scopes which are assigned to the user",
             "type": "array",
             "items": {
               "type": "string"
@@ -734,6 +760,7 @@
             "$ref": "#/components/schemas/Common_Metadata"
           },
           "date": {
+            "description": "The insert date",
             "type": "string",
             "format": "date-time"
           }

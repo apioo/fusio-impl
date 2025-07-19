@@ -47,6 +47,10 @@ class GetIndexTest extends DbTestCase
             "class": "Fusio.Impl.Provider.Identity.Facebook"
         },
         {
+            "name": "Fusio",
+            "class": "Fusio.Impl.Provider.Identity.Fusio"
+        },
+        {
             "name": "Github",
             "class": "Fusio.Impl.Provider.Identity.Github"
         },
