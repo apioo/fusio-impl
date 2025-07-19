@@ -36,6 +36,8 @@ use Mcp\Types\PaginatedRequestParams;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
 use Mcp\Types\ToolInputSchema;
+use PSX\Api\Operation\ArgumentInterface;
+use PSX\Api\Util\Inflection;
 use PSX\Data\WriterInterface;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Http\Response;
@@ -45,6 +47,7 @@ use PSX\Schema\Definitions;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\Type\Factory\PropertyTypeFactory;
 use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -62,13 +65,12 @@ readonly class Tools
 
     public function __construct(
         private Table\Operation $operationTable,
-        private JsonSchemaResolver $jsonSchemaResolver,
         private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
         private ActiveUser $activeUser,
         private UserDatabase $userRepository,
         private ResponseWriter $responseWriter,
-        SchemaManagerInterface $schemaManager,
+        private SchemaManagerInterface $schemaManager,
     ) {
         $this->schemaParser = new TypeSchema($schemaManager);
     }
@@ -92,19 +94,14 @@ readonly class Tools
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
         $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
 
-        $count = 128;
+        $count = 32;
         $startIndex = empty($cursor) ? 0 : ((int) base64_decode($cursor));
         $nextCursor = base64_encode('' . ($startIndex + $count));
 
         $tools = [];
-        $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::NAME, OrderBy::ASC);
+        $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::ID, OrderBy::DESC);
         foreach ($operations as $operation) {
-            if ($operation->getHttpMethod() === 'GET') {
-                $inputSchema = $this->buildSchemaFromParameters($operation);
-            } else {
-                $inputSchema = $this->jsonSchemaResolver->resolveIncoming($operation);
-            }
-
+            $inputSchema = $this->buildSchema($operation);
             if ($inputSchema === null) {
                 continue;
             }
@@ -153,11 +150,13 @@ readonly class Tools
                 throw new \RuntimeException('Provided an invalid operation name');
             }
 
-            if ($operation->getHttpMethod() === 'GET') {
-                $request = new Request($arguments->getAll(), new Record(), new Request\RpcRequestContext($params->name));
+            if ($arguments->containsKey('payload')) {
+                $payload = Record::from($arguments->get('payload'));
             } else {
-                $request = new Request($arguments->getAll(), $arguments, new Request\RpcRequestContext($params->name));
+                $payload = new Record();
             }
+
+            $request = new Request($arguments->getAll(), $payload, new Request\RpcRequestContext($params->name));
 
             $context = new Context();
             $context->setTenantId($this->frameworkConfig->getTenantId());
@@ -177,31 +176,51 @@ readonly class Tools
         }
     }
 
-    private function buildSchemaFromParameters(Table\Generated\OperationRow $operation): ?array
+    private function buildSchema(Table\Generated\OperationRow $operation): ?array
+    {
+        $rootType = new StructDefinitionType();
+        $definitions = new Definitions();
+
+        $names = Inflection::extractPlaceholderNames($operation->getHttpPath());
+        foreach ($names as $name) {
+            $rootType->addProperty($name, PropertyTypeFactory::getString());
+        }
+
+        $this->buildSchemaFromParameters($operation, $rootType);
+
+        $incoming = $operation->getIncoming();
+        if (!empty($incoming)) {
+            $payload = $this->schemaManager->getSchema($incoming);
+
+            $rootType->addProperty('payload', PropertyTypeFactory::getReference($payload->getRoot()));
+
+            $definitions->addSchema('Payload', $payload);
+        }
+
+        $definitions->addType('Root', $rootType);
+
+        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Root');
+    }
+
+    private function buildSchemaFromParameters(Table\Generated\OperationRow $operation, StructDefinitionType $rootType): void
     {
         $rawParameters = $operation->getParameters();
         if (empty($rawParameters)) {
-            return null;
+            return;
         }
 
         $parameters = Parser::decode($rawParameters);
         if (!$parameters instanceof \stdClass) {
-            return null;
+            return;
         }
 
-        $type = new StructDefinitionType();
         foreach ($parameters as $name => $schema) {
             if (!$schema instanceof \stdClass) {
                 continue;
             }
 
-            $type->addProperty($name, $this->schemaParser->parsePropertyType($schema));
+            $rootType->addProperty($name, $this->schemaParser->parsePropertyType($schema));
         }
-
-        $definitions = new Definitions();
-        $definitions->addType('Parameters', $type);
-
-        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Parameters');
     }
 
     private function toMcpToolName(string $name): string
