@@ -43,8 +43,10 @@ use PSX\Json\Parser;
 use PSX\Record\Record;
 use PSX\Schema\Definitions;
 use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\ObjectMapper;
 use PSX\Schema\Parser\TypeSchema;
-use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\SchemaSource;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
 use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
@@ -60,6 +62,7 @@ use PSX\Sql\OrderBy;
 readonly class Tools
 {
     private TypeSchema $schemaParser;
+    private ObjectMapper $objectMapper;
 
     public function __construct(
         private Table\Operation $operationTable,
@@ -68,9 +71,10 @@ readonly class Tools
         private ActiveUser $activeUser,
         private UserDatabase $userRepository,
         private ResponseWriter $responseWriter,
-        private SchemaManagerInterface $schemaManager,
+        private SchemaManager $schemaManager,
     ) {
         $this->schemaParser = new TypeSchema($schemaManager);
+        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function list(PaginatedRequestParams $params): ListToolsResult
@@ -148,8 +152,20 @@ readonly class Tools
                 throw new \RuntimeException('Provided an invalid operation name');
             }
 
-            if ($arguments->containsKey('payload')) {
-                $payload = Record::from($arguments->get('payload'));
+            $incoming = $operation->getIncoming();
+            if (!empty($incoming) && $arguments->containsKey('payload')) {
+                $rawPayload = $arguments->get('payload');
+                if (is_array($rawPayload)) {
+                    // convert array to stdClass, we need to do this unfortunately since the mcp library uses arrays
+                    $data = Parser::decode(Parser::encode($rawPayload));
+
+                    $payload = $this->objectMapper->read($data, SchemaSource::fromString($incoming));
+                } elseif ($rawPayload instanceof \stdClass) {
+                    $payload = $this->objectMapper->read($rawPayload, SchemaSource::fromString($incoming));
+                } else {
+                    $payload = new Record();
+                }
+
                 $arguments->remove('payload');
             } else {
                 $payload = new Record();

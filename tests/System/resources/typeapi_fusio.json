@@ -5263,6 +5263,50 @@
         "schema"
       ]
     },
+    "backend.schema.updateForm": {
+      "path": "/backend/schema/form/$schema_id<[0-9]+>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "schema_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Passthru"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing schema form",
+      "stability": 3,
+      "security": [
+        "backend.schema"
+      ],
+      "authorization": true,
+      "tags": [
+        "schema"
+      ]
+    },
     "backend.scope.create": {
       "path": "/backend/scope",
       "method": "POST",
