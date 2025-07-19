@@ -66,7 +66,6 @@ readonly class Schema
             $row->setStatus(Table\Schema::STATUS_ACTIVE);
             $row->setName($schema->getName());
             $row->setSource($this->parseSource($schema->getSource()) ?? throw new StatusCode\BadRequestException('Schema source must not be empty'));
-            $row->setForm($this->parseForm($schema->getForm()));
             $row->setMetadata($schema->getMetadata() !== null ? Parser::encode($schema->getMetadata()) : null);
             $this->schemaTable->create($row);
 
@@ -106,7 +105,6 @@ readonly class Schema
 
             $existing->setName($schema->getName() ?? $existing->getName());
             $existing->setSource($this->parseSource($schema->getSource()) ?? $existing->getSource());
-            $existing->setForm($this->parseForm($schema->getForm()) ?? $existing->getForm());
             $existing->setMetadata($schema->getMetadata() !== null ? Parser::encode($schema->getMetadata()) : $existing->getMetadata());
             $this->schemaTable->update($existing);
 
@@ -146,21 +144,6 @@ readonly class Schema
         return $existing->getId();
     }
 
-    public function updateForm(string $schemaId, SchemaForm $form, UserContext $context): void
-    {
-        $schema = $this->schemaTable->findOneByIdentifier($context->getTenantId(), $context->getCategoryId(), $schemaId);
-        if (empty($schema)) {
-            throw new StatusCode\NotFoundException('Could not find schema');
-        }
-
-        if ($schema->getStatus() == Table\Schema::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Schema was deleted');
-        }
-
-        $schema->setForm($this->parseForm($form));
-        $this->schemaTable->update($schema);
-    }
-
     public function generatePreview(string $schemaId): Generator\Code\Chunks|string
     {
         $schema = $this->schemaManager->getSchema(Scheme::wrap($schemaId));
@@ -176,15 +159,6 @@ readonly class Schema
             } else {
                 return Parser::encode($source, JSON_PRETTY_PRINT);
             }
-        } else {
-            return null;
-        }
-    }
-
-    private function parseForm(?RecordInterface $source): ?string
-    {
-        if ($source instanceof RecordInterface) {
-            return Parser::encode($source, JSON_PRETTY_PRINT);
         } else {
             return null;
         }

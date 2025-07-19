@@ -1326,16 +1326,6 @@ class NewInstallation
                     outgoing: Model\Backend\SchemaPreviewResponse::class,
                     throws: [999 => Model\Common\Message::class],
                 ),
-                'schema.updateForm' => new Operation(
-                    action: Backend\Action\Schema\Form::class,
-                    httpMethod: 'PUT',
-                    httpPath: '/schema/form/$schema_id<[0-9]+>',
-                    httpCode: 200,
-                    outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\SchemaForm::class,
-                    throws: [999 => Model\Common\Message::class],
-                    description: 'Updates an existing schema form',
-                ),
                 'schema.get' => new Operation(
                     action: Backend\Action\Schema\Get::class,
                     httpMethod: 'GET',
