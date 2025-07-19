@@ -2187,6 +2187,7 @@ class NewInstallation
                     httpPath: '/authorize',
                     httpCode: 200,
                     outgoing: Model\Consumer\AuthorizeMeta::class,
+                    parameters: ['client_id' => PropertyTypeFactory::getString(), 'scope' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                     description: 'Returns information about a specific app to start the OAuth2 authorization code flow',

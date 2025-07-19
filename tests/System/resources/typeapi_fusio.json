@@ -8410,7 +8410,20 @@
           "target": "Consumer_AuthorizeMeta"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "client_id": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [
         {
           "code": 999,
