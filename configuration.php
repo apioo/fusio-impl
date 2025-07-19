@@ -14,9 +14,10 @@ return [
     'fusio_firewall_maxretry'  => 32,
     'fusio_firewall_codes'     => [],
 
-    // MCP configuration, if enabled the internal MCP service is active, it can be used through the mcp CLI command or
-    // also via HTTP at /mcp. The MCP server helps to access all operations through an LLM
-    'fusio_mcp'                => true,
+    // Experimental MCP server configuration, if enabled, the MCP HTTP endpoint /mcp is active. The CLI stdio MCP service
+    // can always be used independent of this configuration via php bin/fusio mcp
+    // The MCP server helps to access all operations through an LLM
+    'fusio_mcp'                => false,
     'fusio_mcp_queue_size'     => 500,
     'fusio_mcp_timeout'        => 1800,
 
