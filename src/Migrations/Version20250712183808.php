@@ -7,6 +7,7 @@ namespace Fusio\Impl\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Installation\DataSyncronizer;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -43,5 +44,15 @@ final class Version20250712183808 extends AbstractMigration
     public function isTransactional(): bool
     {
         return false;
+    }
+
+    public function postUp(Schema $schema): void
+    {
+        // deactivate schema form endpoint
+        $this->connection->update('fusio_operation', [
+            'status' => 0,
+        ], [
+            'name' => 'backend.schema.updateForm',
+        ]);
     }
 }
