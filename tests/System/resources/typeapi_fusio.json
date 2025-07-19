@@ -5284,7 +5284,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Passthru"
+            "target": "Backend_SchemaForm"
           }
         }
       },
@@ -12047,6 +12047,13 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Schema"
+      }
+    },
+    "Backend_SchemaForm": {
+      "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "map",
+      "schema": {
+        "type": "any"
       }
     },
     "Backend_SchemaPreviewResponse": {

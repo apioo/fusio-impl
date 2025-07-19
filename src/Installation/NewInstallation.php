@@ -1333,7 +1333,7 @@ class NewInstallation
                     httpPath: '/schema/form/$schema_id<[0-9]+>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Passthru::class,
+                    incoming: Model\Backend\SchemaForm::class,
                     throws: [999 => Model\Common\Message::class],
                     stability: OperationInterface::STABILITY_LEGACY,
                     description: 'Updates an existing schema form',
