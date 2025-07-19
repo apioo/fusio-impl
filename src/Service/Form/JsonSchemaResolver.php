@@ -37,21 +37,44 @@ class JsonSchemaResolver
     {
     }
 
-    public function resolve(int $operationId): ?object
+    public function resolveIncomingByOperationId(int $operationId): ?array
     {
         $operation = $this->operationTable->find($operationId);
         if (!$operation instanceof Table\Generated\OperationRow) {
-            return new \stdClass();
+            return null;
         }
 
+        return $this->resolveIncoming($operation);
+    }
+
+    public function resolveIncoming(Table\Generated\OperationRow $operation): ?array
+    {
         $incoming = $operation->getIncoming();
         if (empty($incoming)) {
-            return new \stdClass();
+            return null;
         }
 
-        $schema = $this->schemaManager->getSchema($incoming);
-        $jsonSchema = (new JsonSchema())->toArray($schema->getDefinitions(), $schema->getRoot());
+        return $this->buildJsonSchema($incoming);
+    }
 
-        return (object) $jsonSchema;
+    public function resolveOutgoing(Table\Generated\OperationRow $operation): ?array
+    {
+        $outgoing = $operation->getOutgoing();
+        if (empty($outgoing)) {
+            return null;
+        }
+
+        return $this->buildJsonSchema($outgoing);
+    }
+
+    private function buildJsonSchema(?string $schema): ?array
+    {
+        if ($schema === null) {
+            return null;
+        }
+
+        $schema = $this->schemaManager->getSchema($schema);
+
+        return (new JsonSchema(inlineDefinitions: true))->toArray($schema->getDefinitions(), $schema->getRoot());
     }
 }

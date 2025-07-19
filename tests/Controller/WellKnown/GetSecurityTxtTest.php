@@ -39,20 +39,17 @@ class GetSecurityTxtTest extends DbTestCase
 
         $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
 
-        $body = (string) $response->getBody();
-        $expect = <<<TEXT
-Contact: mailto:security@fusio-project.org
-Contact: https://github.com/apioo/fusio
-Contact: https://chrisk.app/
-Expires: {$expires}
-Encryption: https://chrisk.app/pub.key
-Preferred-Languages: en
+        $actual = (string) $response->getBody();
+        $expect = 'Contact: mailto:security@fusio-project.org' . "\n";
+        $expect.= 'Contact: https://github.com/apioo/fusio' . "\n";
+        $expect.= 'Contact: https://chrisk.app/' . "\n";
+        $expect.= 'Expires: ' . $expires . "\n";
+        $expect.= 'Encryption: https://chrisk.app/pub.key' . "\n";
+        $expect.= 'Preferred-Languages: en';
 
-TEXT;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals('text/plain', $response->getHeader('Content-Type'), $body);
-        $this->assertEquals($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertEquals('text/plain', $response->getHeader('Content-Type'), $actual);
+        $this->assertEquals($expect, $actual, $actual);
     }
 
     public function testPost()

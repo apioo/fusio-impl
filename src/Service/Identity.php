@@ -29,6 +29,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Identity\CreatedEvent;
 use Fusio\Impl\Event\Identity\DeletedEvent;
 use Fusio\Impl\Event\Identity\UpdatedEvent;
+use Fusio\Impl\Provider\Identity\Fusio;
 use Fusio\Impl\Provider\IdentityProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -80,11 +81,20 @@ readonly class Identity
 
             $config = $identity->getConfig() ? $identity->getConfig()->getAll() : [];
 
+            // resolve local app
+            if ($provider instanceof Fusio) {
+                $app = $this->appTable->findOneByTenantAndId($context->getTenantId(), $identity->getAppId());
+                if ($app instanceof Table\Generated\AppRow) {
+                    $config['client_id'] = $app->getAppKey();
+                    $config['client_secret'] = $app->getAppSecret();
+                }
+            }
+
             // create category
             $row = new Table\Generated\IdentityRow();
             $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Identity::STATUS_ACTIVE);
-            $row->setAppId($identity->getAppId());
+            $row->setAppId($identity->getAppId() ?? throw new StatusCode\BadRequestException('Provided no app id'));
             $row->setRoleId($identity->getRoleId());
             $row->setName($identity->getName());
             $row->setIcon($identity->getIcon());
@@ -131,6 +141,15 @@ readonly class Identity
             $this->identityTable->beginTransaction();
 
             $config = $identity->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+
+            // resolve local app
+            if ($provider instanceof Fusio) {
+                $app = $this->appTable->findOneByTenantAndId($context->getTenantId(), $identity->getAppId() ?? $existing->getAppId());
+                if ($app instanceof Table\Generated\AppRow) {
+                    $config['client_id'] = $app->getAppKey();
+                    $config['client_secret'] = $app->getAppSecret();
+                }
+            }
 
             // update category
             $existing->setAppId($identity->getAppId() ?? $existing->getAppId());
@@ -230,8 +249,8 @@ readonly class Identity
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_IDENTITY_ID, $existing->getId());
         $condition->equals(Table\Generated\IdentityRequestTable::COLUMN_STATE, $state);
-        $identityRequest = $this->identityRequestTable->findOneBy($condition);
 
+        $identityRequest = $this->identityRequestTable->findOneBy($condition);
         if (!$identityRequest instanceof Table\Generated\IdentityRequestRow) {
             throw new StatusCode\BadRequestException('Provided identity state was not requested');
         }
@@ -251,6 +270,13 @@ readonly class Identity
         $user = $provider->requestUserInfo($parameters, $code, $this->buildRedirectUri($existing));
         if (!$user instanceof UserInfo) {
             throw new StatusCode\BadRequestException('Could not request user information');
+        }
+
+        if ($provider instanceof Fusio) {
+            // for the local Fusio provider we can simply return the obtained access token
+            $this->redirectIfPossible($identityRequest, $user->getAccessToken());
+
+            return $user->getAccessToken();
         }
 
         $userId = $this->userService->createRemote($existing, $user, $context);
@@ -273,22 +299,29 @@ readonly class Identity
             $this->frameworkConfig->getExpireTokenInterval()
         );
 
-        $redirectUri = $identityRequest->getRedirectUri();
-        if (!empty($redirectUri)) {
-            // redirect the user in case a redirect uri was provided
-            $url = Url::parse($redirectUri);
-            $url = $url->withParameters(array_merge($url->getParameters(), [
-                'access_token' => $accessToken->getAccessToken(),
-                'token_type' => $accessToken->getTokenType(),
-                'expires_in' => $accessToken->getExpiresIn(),
-                'refresh_token' => $accessToken->getRefreshToken(),
-                'scope' => $accessToken->getScope(),
-            ]));
-
-            throw new StatusCode\FoundException($url->toString());
-        }
+        $this->redirectIfPossible($identityRequest, $accessToken);
 
         return $accessToken;
+    }
+
+    private function redirectIfPossible(Table\Generated\IdentityRequestRow $identityRequest, AccessToken $accessToken): void
+    {
+        $redirectUri = $identityRequest->getRedirectUri();
+        if (empty($redirectUri)) {
+            return;
+        }
+
+        // redirect the user in case a redirect uri was provided
+        $url = Url::parse($redirectUri);
+        $url = $url->withParameters(array_merge($url->getParameters(), [
+            'access_token' => $accessToken->getAccessToken(),
+            'token_type' => $accessToken->getTokenType(),
+            'expires_in' => $accessToken->getExpiresIn(),
+            'refresh_token' => $accessToken->getRefreshToken(),
+            'scope' => $accessToken->getScope(),
+        ]));
+
+        throw new StatusCode\FoundException($url->toString());
     }
 
     private function buildRedirectUri(Table\Generated\IdentityRow $existing): string

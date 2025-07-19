@@ -65,6 +65,7 @@ class TokenValidator
 
             $params = [
                 'realm' => 'Fusio',
+                'resource_metadata' => $this->frameworkConfig->getDispatchUrl('.well-known' , 'oauth-protected-resource'),
             ];
 
             if (empty($type)) {

@@ -18,40 +18,24 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\System\Action\Meta;
+namespace Fusio\Impl\Service\WellKnown;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service;
-use PSX\Http\Environment\HttpResponse;
+use Fusio\Impl\Service\System\FrameworkConfig;
 
 /**
- * GetAPICatalog
+ * APICatalog
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAPICatalog implements ActionInterface
+readonly class APICatalog
 {
-    public function __construct(private Service\System\FrameworkConfig $frameworkConfig)
+    public function __construct(private FrameworkConfig $frameworkConfig)
     {
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
-    {
-        return new HttpResponse(200, [
-            'Content-Type' => 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"',
-        ], [
-            'linkset' => [
-                $this->buildLinkSet()
-            ],
-        ]);
-    }
-
-    private function buildLinkSet(): array
+    public function buildLinkSet(): array
     {
         $baseUrl = $this->frameworkConfig->getDispatchUrl();
         $appsUrl = $this->frameworkConfig->getAppsUrl();

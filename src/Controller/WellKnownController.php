@@ -20,13 +20,15 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\WellKnown\APICatalog;
+use Fusio\Impl\Service\WellKnown\OAuthAuthorizationServer;
+use Fusio\Impl\Service\WellKnown\OAuthProtectedResource;
+use Fusio\Impl\Service\WellKnown\SecurityTxt;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\PermanentRedirectException;
 use PSX\Schema\ContentType;
 
 /**
@@ -38,22 +40,46 @@ use PSX\Schema\ContentType;
  */
 class WellKnownController extends ControllerAbstract
 {
-    public function __construct(private readonly FrameworkConfig $frameworkConfig)
-    {
-    }
-
-    #[Get]
-    #[Path('/.well-known/oauth-authorization-server')]
-    public function redirectOAuthAuthorizationServer(): mixed
-    {
-        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'oauth-authorization-server'));
+    public function __construct(
+        private readonly APICatalog $apiCatalog,
+        private readonly OAuthAuthorizationServer $oauthAuthorizationServer,
+        private readonly OAuthProtectedResource $oauthProtectedResource,
+        private readonly SecurityTxt $securityTxt,
+    ) {
     }
 
     #[Get]
     #[Path('/.well-known/api-catalog')]
-    public function redirectAPICatalog(): mixed
+    public function getAPICatalog(): HttpResponse
     {
-        throw new PermanentRedirectException($this->frameworkConfig->getDispatchUrl('system', 'api-catalog'));
+        return new HttpResponse(200, [
+            'Content-Type' => 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"',
+        ], [
+            'linkset' => [
+                $this->apiCatalog->buildLinkSet()
+            ],
+        ]);
+    }
+
+    #[Get]
+    #[Path('/.well-known/oauth-authorization-server')]
+    public function getOAuthAuthorizationServer(): mixed
+    {
+        return $this->oauthAuthorizationServer->get();
+    }
+
+    #[Get]
+    #[Path('/.well-known/oauth-protected-resource')]
+    public function getOAuthProtectedResource(): mixed
+    {
+        return $this->oauthProtectedResource->get();
+    }
+
+    #[Get]
+    #[Path('/.well-known/oauth-protected-resource/*resource')]
+    public function getOAuthProtectedResourceSpecific(string $resource): mixed
+    {
+        return $this->oauthProtectedResource->get($resource);
     }
 
     #[Get]
@@ -61,18 +87,10 @@ class WellKnownController extends ControllerAbstract
     #[Outgoing(200, ContentType::TEXT)]
     public function getSecurityTxt(): HttpResponse
     {
-        $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
-
-        $body = <<<TEXT
-Contact: mailto:security@fusio-project.org
-Contact: https://github.com/apioo/fusio
-Contact: https://chrisk.app/
-Expires: {$expires}
-Encryption: https://chrisk.app/pub.key
-Preferred-Languages: en
-
-TEXT;
-
-        return new HttpResponse(200, ['Content-Type' => 'text/plain'], $body);
+        return new HttpResponse(200, [
+            'Content-Type' => 'text/plain'
+        ],
+            $this->securityTxt->build()
+        );
     }
 }

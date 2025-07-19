@@ -45,7 +45,7 @@ readonly class Activate
     public function activate(UserActivate $activate, UserContext $context): void
     {
         if (!$this->frameworkConfig->isRegistrationEnabled()) {
-            throw new StatusCode\BadRequestException('User registration is not enabled');
+            throw new StatusCode\ServiceUnavailableException('User registration is not enabled');
         }
 
         $token = $activate->getToken();

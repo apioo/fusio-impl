@@ -33,7 +33,7 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  */
 class JsonWebToken
 {
-    private const ALGO = 'HS256';
+    public const ALG = 'HS256';
 
     private FrameworkConfig $frameworkConfig;
 
@@ -44,11 +44,11 @@ class JsonWebToken
 
     public function encode(array $payload): string
     {
-        return JWT::encode($payload, $this->frameworkConfig->getProjectKey(), self::ALGO);
+        return JWT::encode($payload, $this->frameworkConfig->getProjectKey(), self::ALG);
     }
 
     public function decode(string $jwt): \stdClass
     {
-        return JWT::decode($jwt, new Key($this->frameworkConfig->getProjectKey(), self::ALGO));
+        return JWT::decode($jwt, new Key($this->frameworkConfig->getProjectKey(), self::ALG));
     }
 }

@@ -53,7 +53,7 @@ abstract class UpgradeAbstract implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         if (!$this->frameworkConfig->isMarketplaceEnabled()) {
-            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
+            throw new StatusCode\ServiceUnavailableException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
         }
 
         $type = $this->getType();

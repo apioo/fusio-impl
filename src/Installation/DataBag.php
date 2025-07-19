@@ -123,7 +123,8 @@ class DataBag
                 $this->normalizeThrows($operation->throws),
                 $action,
                 $operation->costs,
-                tenantId: $tenantId
+                tenantId: $tenantId,
+                description: $operation->description,
             );
 
             if (in_array($category, ['backend', 'consumer'])) {
@@ -569,7 +570,7 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null, ?string $description = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'tenant_id' => $tenantId,
@@ -578,7 +579,7 @@ class DataBag
             'active' => 1,
             'public' => $public ? 1 : 0,
             'stability' => $stability,
-            'description' => '',
+            'description' => $description ?? '',
             'http_method' => $httpMethod,
             'http_path' => $httpPath,
             'http_code' => $httpCode,

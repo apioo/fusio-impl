@@ -18,39 +18,35 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\System\Action\Meta;
+namespace Fusio\Impl\Service\WellKnown;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service;
+use Fusio\Impl\Service\Security\JsonWebToken;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
 /**
- * GetOAuth2Configuration
+ * OAuthProtectedResource
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetOAuth2Configuration implements ActionInterface
+readonly class OAuthProtectedResource
 {
-    public function __construct(private Service\System\FrameworkConfig $frameworkConfig, private Table\Scope $scopeTable)
+    public function __construct(private FrameworkConfig $frameworkConfig, private Table\Scope $scopeTable)
     {
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function get(?string $resource = null): array
     {
         return [
-            'issuer' => $this->frameworkConfig->getUrl(),
-            'token_endpoint' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
-            'token_endpoint_auth_methods_supported' => ['client_secret_basic'],
-            'userinfo_endpoint' => $this->frameworkConfig->getDispatchUrl('authorization', 'whoami'),
+            'resource' => $this->frameworkConfig->getUrl(),
+            'authorization_servers' => [$this->frameworkConfig->getUrl()],
             'scopes_supported' => $this->getScopes(),
-            'claims_supported' => ['iss', 'sub', 'iat', 'exp', 'name'],
+            'bearer_methods_supported' => ['header'],
+            'resource_signing_alg_values_supported' => [JsonWebToken::ALG],
         ];
     }
 
