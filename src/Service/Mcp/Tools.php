@@ -34,6 +34,7 @@ use Mcp\Types\ListToolsResult;
 use Mcp\Types\PaginatedRequestParams;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
+use Mcp\Types\ToolAnnotations;
 use Mcp\Types\ToolInputSchema;
 use PSX\Api\Util\Inflection;
 use PSX\Data\WriterInterface;
@@ -109,13 +110,24 @@ readonly class Tools
                 continue;
             }
 
+            $annotations = new ToolAnnotations();
+            if ($operation->getHttpMethod() === 'GET') {
+                $annotations->readOnlyHint = true;
+            } elseif ($operation->getHttpMethod() === 'DELETE') {
+                $annotations->destructiveHint = true;
+            }
+
+            if (in_array($operation->getHttpMethod(), ['GET', 'PUT', 'DELETE'], true)) {
+                $annotations->idempotentHint = true;
+            }
+
             // @TODO use output schema
-            //$outputSchema = $this->jsonSchemaResolver->resolveOutgoing($operation);
 
             $tools[] = new Tool(
                 $this->toMcpToolName($operation->getName()),
                 ToolInputSchema::fromArray($inputSchema),
-                $operation->getDescription()
+                $operation->getDescription(),
+                $annotations
             );
         }
 
