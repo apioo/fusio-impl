@@ -27,6 +27,7 @@ use PSX\Api\Operation\ArgumentInterface;
 use PSX\Api\OperationInterface;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
+use PSX\Api\Util\Inflection;
 use PSX\Schema\ContentType;
 use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Parser\Context\NamespaceContext;
@@ -152,27 +153,9 @@ class SpecificationBuilder
 
     private function buildPathParameters(Operation\Arguments $arguments, string $path): void
     {
-        $parts = explode('/', $path);
-        foreach ($parts as $part) {
-            if (isset($part[0])) {
-                $name = null;
-                if ($part[0] == ':') {
-                    $name = substr($part, 1);
-                } elseif ($part[0] == '{') {
-                    $name = substr($part, 1, -1);
-                } elseif ($part[0] == '$') {
-                    $pos = strpos($part, '<');
-                    if ($pos !== false) {
-                        $name = substr($part, 1, $pos - 1);
-                    } else {
-                        $name = substr($part, 1);
-                    }
-                }
-
-                if ($name !== null) {
-                    $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_PATH, PropertyTypeFactory::getString()));
-                }
-            }
+        $names = Inflection::extractPlaceholderNames($path);
+        foreach ($names as $name) {
+            $arguments->add($name, new Operation\Argument(ArgumentInterface::IN_PATH, PropertyTypeFactory::getString()));
         }
     }
 
