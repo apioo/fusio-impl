@@ -25,16 +25,20 @@ use Fusio\Impl\Service\Mcp;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Mcp\Server\HttpServerRunner;
 use Mcp\Server\Transport\Http\HttpMessage;
-use Mcp\Shared\RequestResponder;
 use Psr\Log\LoggerInterface;
 use PSX\Api\Attribute\Delete;
 use PSX\Api\Attribute\Get;
+use PSX\Api\Attribute\Incoming;
+use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\ServiceUnavailableException;
+use PSX\Http\FilterChainInterface;
 use PSX\Http\RequestInterface;
+use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\StringStream;
+use PSX\Schema\ContentType;
 
 /**
  * McpController
@@ -54,28 +58,39 @@ class McpController extends ControllerAbstract
     ) {
     }
 
+    public function getPreFilter(): array
+    {
+        $filter = parent::getPreFilter();
+        $filter[] = function (RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain) {
+            $this->run($request, $response);
+        };
+
+        return $filter;
+    }
+
     #[Get]
     #[Path('/mcp')]
-    public function get(RequestInterface $request): HttpResponse
+    #[Outgoing(200, ContentType::JSON)]
+    public function get(): void
     {
-        return $this->run($request);
     }
 
     #[Post]
     #[Path('/mcp')]
-    public function post(RequestInterface $request): HttpResponse
+    #[Incoming(ContentType::JSON)]
+    #[Outgoing(200, ContentType::JSON)]
+    public function post(): void
     {
-        return $this->run($request);
     }
 
     #[Delete]
     #[Path('/mcp')]
-    public function delete(RequestInterface $request): HttpResponse
+    #[Outgoing(200, ContentType::JSON)]
+    public function delete(): void
     {
-        return $this->run($request);
     }
 
-    private function run(RequestInterface $request): HttpResponse
+    private function run(RequestInterface $request, ResponseInterface $response): void
     {
         if (!$this->frameworkConfig->isMCPEnabled()) {
             throw new ServiceUnavailableException('MCP service is not enabled');
@@ -89,17 +104,22 @@ class McpController extends ControllerAbstract
             'max_queue_size' => $this->frameworkConfig->getMCPQueueSize(),
             'server_header' => 'Fusio/' . Base::getVersion(),
             'auth_enabled' => true,
+            'resource' => $this->frameworkConfig->getUrl(),
+            'authorization_servers' => [$this->frameworkConfig->getDispatchUrl('authorization', 'authorize')],
             'token_validator' => $this->tokenValidator,
         ];
 
         $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, $this->logger, $this->sessionStore);
 
-        $response = $runner->handleRequest($this->toHttpMessage($request));
+        $mcpRequest = $this->toMcpRequest($request);
+        $mcpResponse = $runner->handleRequest($mcpRequest);
 
-        return new HttpResponse($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+        $response->setStatus($mcpResponse->getStatusCode());
+        $response->setHeaders($mcpResponse->getHeaders());
+        $response->setBody(new StringStream((string) $mcpResponse->getBody()));
     }
 
-    private function toHttpMessage(RequestInterface $request): HttpMessage
+    private function toMcpRequest(RequestInterface $request): HttpMessage
     {
         $message = new HttpMessage();
         $message->setMethod($request->getMethod());
@@ -107,7 +127,7 @@ class McpController extends ControllerAbstract
         $message->setQueryParams($request->getUri()->getParameters());
 
         foreach ($request->getHeaders() as $name => $value) {
-            $message->setHeader($name, $value);
+            $message->setHeader($name, is_array($value) ? implode(', ', $value) : $value);
         }
 
         $message->setBody((string) $request->getBody());
