@@ -219,9 +219,6 @@ readonly class Resources
         );
     }
 
-    /**
-     * @throws ReflectionException
-     */
     private function resolveActionResourceResult(string $actionUri, ?int $categoryId): ?ReadResourceResult
     {
         [$scheme, $value] = ActionScheme::split($actionUri);
