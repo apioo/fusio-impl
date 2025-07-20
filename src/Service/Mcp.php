@@ -22,7 +22,9 @@ namespace Fusio\Impl\Service;
 
 use Mcp\Server\Server;
 use Mcp\Types\CallToolRequestParams;
+use Mcp\Types\GetPromptRequestParams;
 use Mcp\Types\PaginatedRequestParams;
+use Mcp\Types\ReadResourceRequestParams;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,13 +36,29 @@ use Psr\Log\LoggerInterface;
  */
 readonly class Mcp
 {
-    public function __construct(private Config $configService, private Mcp\Tools $tools, private LoggerInterface $logger)
+    public function __construct(private Config $configService, private Mcp\Prompts $prompts, private Mcp\Resources $resources, private Mcp\Tools $tools, private LoggerInterface $logger)
     {
     }
 
     public function build(): Server
     {
         $server = new Server($this->configService->getValue('info_title'), $this->logger);
+
+        $server->registerHandler('prompts/list', function(PaginatedRequestParams $params) {
+            return $this->prompts->list($params);
+        });
+
+        $server->registerHandler('prompts/get', function(GetPromptRequestParams $params) {
+            return $this->prompts->get($params);
+        });
+
+        $server->registerHandler('resources/list', function(PaginatedRequestParams $params) {
+            return $this->resources->list($params);
+        });
+
+        $server->registerHandler('resources/read', function(ReadResourceRequestParams $params) {
+            return $this->resources->get($params);
+        });
 
         $server->registerHandler('tools/list', function(PaginatedRequestParams $params) {
             return $this->tools->list($params);
@@ -49,6 +67,7 @@ readonly class Mcp
         $server->registerHandler('tools/call', function(CallToolRequestParams $params) {
             return $this->tools->call($params);
         });
+
 
         return $server;
     }

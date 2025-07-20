@@ -87,12 +87,12 @@ readonly class Tools
             $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
             $categoryId = $user->getCategoryId();
         } else {
-            $categoryId = 0;
+            $categoryId = null;
         }
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        if ($categoryId > 0) {
+        if ($categoryId !== null) {
             $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $categoryId);
         }
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
