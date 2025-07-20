@@ -236,9 +236,12 @@ readonly class Resources
             $text = $actionRow->getConfig() ?? '';
             $mimeType = 'application/json';
         } elseif ($scheme === ActionScheme::PHP_CLASS) {
-            $reflection = new ReflectionClass(ClassName::unserialize($value));
+            $className = ClassName::unserialize($value);
+            if (!class_exists($className)) {
+                return null;
+            }
 
-            $file = $reflection->getFileName();
+            $file = (new ReflectionClass($className))->getFileName();
             if (!is_file($file)) {
                 return null;
             }
