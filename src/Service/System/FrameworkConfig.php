@@ -128,7 +128,7 @@ readonly class FrameworkConfig
 
     public function isMCPEnabled(): bool
     {
-        return $this->config->get('fusio_mcp') !== false;
+        return $this->config->get('fusio_mcp') === true;
     }
 
     public function getMCPQueueSize(): int
