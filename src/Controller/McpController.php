@@ -112,7 +112,16 @@ class McpController extends ControllerAbstract
         $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, $this->logger, $this->sessionStore);
 
         $mcpRequest = $this->toMcpRequest($request);
-        $mcpResponse = $runner->handleRequest($mcpRequest);
+
+        $errorReporting = error_reporting();
+
+        try {
+            error_reporting($errorReporting & ~E_DEPRECATED);
+
+            $mcpResponse = $runner->handleRequest($mcpRequest);
+        } finally {
+            error_reporting($errorReporting);
+        }
 
         $response->setStatus($mcpResponse->getStatusCode());
         $response->setHeaders($mcpResponse->getHeaders());
