@@ -206,7 +206,7 @@ readonly class Resources
         return new Resource(
             name: $name,
             uri: 'action+' . $actionUri,
-            mimeType: $mimeType ?? 'text/plain'
+            mimeType: $mimeType
         );
     }
 
