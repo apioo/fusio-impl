@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
-use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Repository\UserDatabase;
@@ -39,8 +38,6 @@ use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Resources
