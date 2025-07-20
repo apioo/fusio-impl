@@ -32,16 +32,14 @@ use Mcp\Server\Auth\TokenValidatorInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TokenValidator implements TokenValidatorInterface
+readonly class TokenValidator implements TokenValidatorInterface
 {
-    private ?int $userId = null;
-
     public function __construct(
-        private readonly Table\Token $tokenTable,
-        private readonly Table\User $userTable,
-        private readonly Service\Security\JsonWebToken $jsonWebToken,
-        private readonly Service\Mcp\ActiveUser $activeUser,
-        private readonly Service\System\FrameworkConfig $frameworkConfig,
+        private Table\Token $tokenTable,
+        private Table\User $userTable,
+        private Service\Security\JsonWebToken $jsonWebToken,
+        private Service\Mcp\ActiveUser $activeUser,
+        private Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
 
@@ -67,12 +65,7 @@ class TokenValidator implements TokenValidatorInterface
 
         return new TokenValidationResult(true, [
             'sub' => $user->getId(),
-            'scope' => $accessToken['scope'],
+            'scope' => $accessToken['scope'] . ',mcp',
         ]);
-    }
-
-    public function getCurrentUserId(): ?int
-    {
-        return $this->userId;
     }
 }
