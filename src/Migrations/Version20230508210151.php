@@ -72,7 +72,7 @@ final class Version20230508210151 extends AbstractMigration
             $appCodeTable->addColumn('user_id', 'integer');
             $appCodeTable->addColumn('code', 'string', ['length' => 255]);
             $appCodeTable->addColumn('redirect_uri', 'string', ['length' => 255, 'notnull' => false]);
-            $appCodeTable->addColumn('scope', 'string', ['length' => 255]);
+            $appCodeTable->addColumn('scope', 'string', ['length' => 1023]);
             $appCodeTable->addColumn('date', 'datetime');
             $appCodeTable->setPrimaryKey(['id']);
             $appCodeTable->addUniqueIndex(['code']);
@@ -272,6 +272,16 @@ final class Version20230508210151 extends AbstractMigration
             $logErrorTable->addColumn('line', 'integer');
             $logErrorTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
             $logErrorTable->setPrimaryKey(['id']);
+        }
+
+        if (!$schema->hasTable('fusio_mcp_session')) {
+            $mcpSessionTable = $schema->createTable('fusio_mcp_session');
+            $mcpSessionTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $mcpSessionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $mcpSessionTable->addColumn('session_id', 'string', ['length' => 128]);
+            $mcpSessionTable->addColumn('data', 'text');
+            $mcpSessionTable->setPrimaryKey(['id']);
+            $mcpSessionTable->addUniqueIndex(['tenant_id', 'session_id']);
         }
 
         if (!$schema->hasTable('fusio_operation')) {

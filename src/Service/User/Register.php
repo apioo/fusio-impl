@@ -50,7 +50,7 @@ readonly class Register
     public function register(UserRegister $register, UserContext $context): int
     {
         if (!$this->frameworkConfig->isRegistrationEnabled()) {
-            throw new StatusCode\BadRequestException('User registration is not enabled');
+            throw new StatusCode\ServiceUnavailableException('User registration is not enabled');
         }
 
         $this->captchaService->assertCaptcha($register->getCaptcha());
@@ -62,8 +62,8 @@ readonly class Register
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
-        if (empty($role)) {
+        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+        if (!$role instanceof Table\Generated\RoleRow) {
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }
 

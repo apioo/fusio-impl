@@ -76,8 +76,11 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertStringStartsWith('Invalid response type', $data['message'], $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertEquals('unsupported_response_type', $data['type'], $body);
+        $this->assertEquals('Invalid response type', $data['error'], $body);
     }
 
     public function testPostCode()
@@ -143,10 +146,8 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
         $this->assertArrayHasKey('code', $data, $body);
-        $this->assertArrayHasKey('redirectUri', $data, $body);
         $this->assertEquals('code', $data['type'], $body);
         $this->assertNotEmpty($data['code'], $body);
-        $this->assertEquals('#', $data['redirectUri'], $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
@@ -186,9 +187,13 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
         $this->assertArrayHasKey('redirectUri', $data, $body);
         $this->assertEquals('access_denied', $data['type'], $body);
-        $this->assertEquals('http://google.com?error=access_denied&state=state', $data['redirectUri'], $body);
+        $this->assertEquals('The access was denied by the user', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=access_denied&error_description=The+access+was+denied+by+the+user&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostToken()
@@ -210,39 +215,13 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
-        $this->assertArrayHasKey('token', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
         $this->assertArrayHasKey('redirectUri', $data, $body);
-        $this->assertEquals('token', $data['type'], $body);
-        $this->assertTrue(is_array($data['token']), $body);
-        $this->assertNotEmpty($data['token']['access_token'], $body);
-        $this->assertEquals('bearer', $data['token']['token_type'], $body);
-        $this->assertEquals(172800, $data['token']['expires_in'], $body);
-        $this->assertEquals('authorization,foo,bar', $data['token']['scope'], $body);
-
-        // add state parameter which should be added by the server if available
-        $data['token']['state'] = 'state';
-
-        $this->assertEquals('http://google.com#' . http_build_query($data['token']), $data['redirectUri'], $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('app_id', 'user_id', 'status', 'token', 'scope', 'expire')
-            ->from('fusio_token')
-            ->where('token = :token')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql, [
-            'token' => $data['token']['access_token']
-        ]);
-
-        $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(2, $row['user_id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals($data['token']['access_token'], $row['token']);
-        $this->assertEquals('authorization,foo,bar', $row['scope']);
-        $this->assertContains($row['expire'], $this->getExpireTimes(false), $body);
+        $this->assertEquals('unsupported_response_type', $data['type'], $body);
+        $this->assertEquals('Invalid response type', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostTokenWithoutRedirectUri()
@@ -263,9 +242,11 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
-        $this->assertArrayHasKey('redirectUri', $data, $body);
-        $this->assertEquals('access_denied', $data['type'], $body);
-        $this->assertEquals('#', $data['redirectUri'], $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('unsupported_response_type', $data['type'], $body);
+        $this->assertEquals('Invalid response type', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
     }
 
     public function testPostTokenDisallow()
@@ -287,9 +268,12 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
-        $this->assertArrayHasKey('redirectUri', $data, $body);
-        $this->assertEquals('access_denied', $data['type'], $body);
-        $this->assertEquals('http://google.com#error=access_denied&state=state', $data['redirectUri'], $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('unsupported_response_type', $data['type'], $body);
+        $this->assertEquals('Invalid response type', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostInvalidResponseType()
@@ -309,8 +293,14 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid response type', substr($data['message'], 0, 21), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('unsupported_response_type', $data['type'], $body);
+        $this->assertEquals('Invalid response type', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostInvalidClient()
@@ -330,8 +320,14 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Unknown client id', substr($data['message'], 0, 17), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('invalid_request', $data['type'], $body);
+        $this->assertEquals('Provided an invalid client id', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://google.com?error=invalid_request&error_description=Provided+an+invalid+client+id&state=state', $data['redirectUri'], $body);
     }
 
     public function testPostInvalidRedirectUri()
@@ -351,8 +347,13 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Redirect uri must be an absolute url', substr($data['message'], 0, 36), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('invalid_request', $data['type'], $body);
+        $this->assertEquals('Provided an invalid redirect uri', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
     }
 
     public function testPostInvalidScheme()
@@ -372,8 +373,13 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid redirect uri scheme', substr($data['message'], 0, 27), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('invalid_request', $data['type'], $body);
+        $this->assertEquals('Provided an invalid redirect uri', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
     }
 
     public function testPostInvalidHost()
@@ -393,8 +399,14 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Redirect uri must have the same host as the app url', substr($data['message'], 0, 51), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('type', $data, $body);
+        $this->assertArrayHasKey('error', $data, $body);
+        $this->assertArrayHasKey('state', $data, $body);
+        $this->assertEquals('invalid_request', $data['type'], $body);
+        $this->assertEquals('Redirect uri must have the same host as the app url', $data['error'], $body);
+        $this->assertEquals('state', $data['state'], $body);
+        $this->assertEquals('http://yahoo.com?error=invalid_request&error_description=Redirect+uri+must+have+the+same+host+as+the+app+url&state=state', $data['redirectUri'], $body);
     }
 
     public function testPut()

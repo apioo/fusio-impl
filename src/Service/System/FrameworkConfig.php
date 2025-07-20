@@ -126,6 +126,21 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_marketplace') !== false;
     }
 
+    public function isMCPEnabled(): bool
+    {
+        return $this->config->get('fusio_mcp') === true;
+    }
+
+    public function getMCPQueueSize(): int
+    {
+        return $this->config->get('fusio_mcp_queue_size') ?? 500;
+    }
+
+    public function getMCPSessionTimeout(): int
+    {
+        return $this->config->get('fusio_mcp_timeout') ?? 1800;
+    }
+
     public function getAppsUrl(): string
     {
         return $this->config->get('fusio_apps_url') ?: $this->getUrl('apps');
@@ -164,6 +179,16 @@ readonly class FrameworkConfig
     public function getPathApp(): string
     {
         return $this->config->get('psx_path_app');
+    }
+
+    public function getEnvironment(): string
+    {
+        return $this->config->get('psx_env');
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->config->get('psx_debug');
     }
 
     public function getDoctrineConnectionParameters(): array

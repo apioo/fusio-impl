@@ -3,6 +3,7 @@
   "security": {
     "type": "oauth2",
     "tokenUrl": "http://127.0.0.1/authorization/token",
+    "authorizationUrl": "http://127.0.0.1/authorization/authorize",
     "scopes": [
       "backend",
       "backend.account",
@@ -62,7 +63,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns user data of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"
@@ -92,7 +93,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Revoke the access token of the current authenticated user",
       "stability": 2,
       "security": [
         "authorization"
@@ -130,7 +131,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Changes the password of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -160,7 +161,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns user data of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -198,7 +199,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates user data of the authenticated user",
       "stability": 2,
       "security": [
         "backend.account"
@@ -236,7 +237,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -273,7 +274,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -317,7 +318,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Executes a specific action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -354,7 +355,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -403,7 +404,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of actions",
       "stability": 2,
       "security": [
         "backend.action"
@@ -433,7 +434,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available action classes",
       "stability": 2,
       "security": [
         "backend.action"
@@ -470,7 +471,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the action config form",
       "stability": 2,
       "security": [
         "backend.action"
@@ -514,7 +515,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing action",
       "stability": 2,
       "security": [
         "backend.action"
@@ -552,7 +553,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -589,7 +590,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -632,7 +633,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing token from an app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -669,7 +670,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -718,7 +719,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps",
       "stability": 2,
       "security": [
         "backend.app"
@@ -762,7 +763,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing app",
       "stability": 2,
       "security": [
         "backend.app"
@@ -799,7 +800,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific audit",
       "stability": 2,
       "security": [
         "backend.audit"
@@ -892,7 +893,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of audits",
       "stability": 2,
       "security": [
         "backend.audit"
@@ -922,7 +923,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates an backup of the current system",
       "stability": 2,
       "security": [
         "backend.backup"
@@ -960,7 +961,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Imports an backup to the current system",
       "stability": 2,
       "security": [
         "backend.backup"
@@ -998,7 +999,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1035,7 +1036,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1072,7 +1073,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1121,7 +1122,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of categories",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1165,7 +1166,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing category",
       "stability": 2,
       "security": [
         "backend.category"
@@ -1202,7 +1203,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific config",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1251,7 +1252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of configuration values",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1295,7 +1296,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing config value",
       "stability": 2,
       "security": [
         "backend.config"
@@ -1333,7 +1334,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1370,7 +1371,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1407,7 +1408,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1462,7 +1463,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of connections",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1492,7 +1493,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available connection classes",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1529,7 +1530,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the connection config form",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1566,7 +1567,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a redirect url to start the OAuth2 authorization flow for the given connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1610,7 +1611,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1648,7 +1649,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1685,7 +1686,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1722,7 +1723,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1771,7 +1772,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of cronjobs",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1815,7 +1816,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing cronjob",
       "stability": 2,
       "security": [
         "backend.cronjob"
@@ -1845,7 +1846,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available dashboard widgets",
       "stability": 2,
       "security": [
         "backend.dashboard"
@@ -1895,7 +1896,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -1939,7 +1940,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -1988,7 +1989,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2031,7 +2032,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2080,7 +2081,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2171,7 +2172,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns paginated rows at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2214,7 +2215,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the schema of a specific table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2263,7 +2264,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available tables on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2319,7 +2320,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing row at a table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2369,7 +2370,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing table on a database",
       "stability": 2,
       "security": [
         "backend.database"
@@ -2407,7 +2408,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2444,7 +2445,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2481,7 +2482,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2530,7 +2531,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of events",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2574,7 +2575,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing event",
       "stability": 2,
       "security": [
         "backend.event"
@@ -2612,7 +2613,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2649,7 +2650,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2686,7 +2687,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2735,7 +2736,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of firewall rules",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2779,7 +2780,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing firewall rule",
       "stability": 2,
       "security": [
         "backend.firewall"
@@ -2817,7 +2818,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2854,7 +2855,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2891,7 +2892,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2940,7 +2941,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of forms",
       "stability": 2,
       "security": [
         "backend.form"
@@ -2984,7 +2985,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing form",
       "stability": 2,
       "security": [
         "backend.form"
@@ -3102,7 +3103,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available generator classes",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3139,7 +3140,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the generator config form",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3177,7 +3178,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3214,7 +3215,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3251,7 +3252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3300,7 +3301,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of identities",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3330,7 +3331,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available identity classes",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3367,7 +3368,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns the identity config form",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3411,7 +3412,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing identity",
       "stability": 2,
       "security": [
         "backend.identity"
@@ -3448,7 +3449,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific log",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3565,7 +3566,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of logs",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3614,7 +3615,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of log errors",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3694,7 +3695,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific marketplace action",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3737,7 +3738,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of marketplace actions",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3861,7 +3862,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific marketplace app",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3904,7 +3905,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of marketplace apps",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -4023,7 +4024,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4060,7 +4061,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4097,7 +4098,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4146,7 +4147,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of operations",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4190,7 +4191,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing operation",
       "stability": 2,
       "security": [
         "backend.operation"
@@ -4228,7 +4229,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4265,7 +4266,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4302,7 +4303,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4351,7 +4352,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of pages",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4395,7 +4396,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing page",
       "stability": 2,
       "security": [
         "backend.page"
@@ -4433,7 +4434,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4470,7 +4471,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4507,7 +4508,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4556,7 +4557,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of plans",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4600,7 +4601,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing plan",
       "stability": 2,
       "security": [
         "backend.plan"
@@ -4638,7 +4639,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new rate limitation",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4675,7 +4676,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4712,7 +4713,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4761,7 +4762,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of rate limitations",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4805,7 +4806,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing rate",
       "stability": 2,
       "security": [
         "backend.rate"
@@ -4843,7 +4844,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -4880,7 +4881,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -4917,7 +4918,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -4966,7 +4967,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of roles",
       "stability": 2,
       "security": [
         "backend.role"
@@ -5010,7 +5011,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing role",
       "stability": 2,
       "security": [
         "backend.role"
@@ -5048,7 +5049,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5085,7 +5086,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5122,7 +5123,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5171,7 +5172,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of schemas",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5252,7 +5253,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5296,8 +5297,8 @@
           }
         }
       ],
-      "description": "",
-      "stability": 2,
+      "description": "Updates an existing schema form",
+      "stability": 3,
       "security": [
         "backend.schema"
       ],
@@ -5334,7 +5335,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5371,7 +5372,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5408,7 +5409,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5457,7 +5458,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of scopes",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5531,7 +5532,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing scope",
       "stability": 2,
       "security": [
         "backend.scope"
@@ -5569,7 +5570,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates a specific SDK",
       "stability": 2,
       "security": [
         "backend.sdk"
@@ -5599,7 +5600,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of SDKs",
       "stability": 2,
       "security": [
         "backend.sdk"
@@ -5716,7 +5717,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the activities per user",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -5833,7 +5834,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the request count",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -5950,7 +5951,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the errors per operation",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6067,7 +6068,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the incoming requests",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6184,7 +6185,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the incoming transactions",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6301,7 +6302,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the issues tokens",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6418,7 +6419,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used activities",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6535,7 +6536,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used apps",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6652,7 +6653,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the most used operations",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6682,7 +6683,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the test coverage",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6799,7 +6800,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the time average",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -6916,7 +6917,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the time per operation",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7033,7 +7034,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the used points",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7150,7 +7151,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a statistic containing the user registrations",
       "stability": 2,
       "security": [
         "backend.statistic"
@@ -7187,7 +7188,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Removes an existing tenant",
       "stability": 2,
       "security": [
         "backend.tenant"
@@ -7224,7 +7225,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Setup a new tenant",
       "stability": 2,
       "security": [
         "backend.tenant"
@@ -7261,7 +7262,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific test",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7310,7 +7311,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7340,7 +7341,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Refresh all tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7370,7 +7371,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Run all tests",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7414,7 +7415,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing test",
       "stability": 2,
       "security": [
         "backend.test"
@@ -7451,7 +7452,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific token",
       "stability": 2,
       "security": [
         "backend.token"
@@ -7544,7 +7545,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tokens",
       "stability": 2,
       "security": [
         "backend.token"
@@ -7581,7 +7582,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific transaction",
       "stability": 2,
       "security": [
         "backend.transaction"
@@ -7674,7 +7675,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of transactions",
       "stability": 2,
       "security": [
         "backend.transaction"
@@ -7729,7 +7730,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all deleted records by trash type",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7759,7 +7760,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all trash types",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7803,7 +7804,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Restores a previously deleted record",
       "stability": 2,
       "security": [
         "backend.trash"
@@ -7841,7 +7842,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -7878,7 +7879,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -7915,7 +7916,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -7964,7 +7965,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of users",
       "stability": 2,
       "security": [
         "backend.user"
@@ -8008,7 +8009,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing user",
       "stability": 2,
       "security": [
         "backend.user"
@@ -8046,7 +8047,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8083,7 +8084,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8120,7 +8121,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8169,7 +8170,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of webhooks",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8213,7 +8214,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing webhook",
       "stability": 2,
       "security": [
         "backend.webhook"
@@ -8251,7 +8252,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Activates an previously registered account through a token which was provided to the user via email",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8287,7 +8288,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Authorizes the access of a specific app for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8323,7 +8324,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Change the password for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8361,7 +8362,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Change the password after the password reset flow was started",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8389,7 +8390,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a user data for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8409,7 +8410,20 @@
           "target": "Consumer_AuthorizeMeta"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "client_id": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [
         {
           "code": 999,
@@ -8419,7 +8433,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns information about a specific app to start the OAuth2 authorization code flow",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8455,7 +8469,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "User login by providing a username and password",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8491,7 +8505,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Refresh a previously obtained access token",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8527,7 +8541,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Register a new user account",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8563,7 +8577,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Start the password reset flow",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8599,7 +8613,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates user data for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.account"
@@ -8637,7 +8651,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8674,7 +8688,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8711,7 +8725,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8760,7 +8774,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8804,7 +8818,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing app for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.app"
@@ -8841,7 +8855,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific event for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.event"
@@ -8890,7 +8904,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of apps which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.event"
@@ -8927,7 +8941,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific form for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -8974,7 +8988,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of forms which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9009,7 +9023,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing grant for an app which was created by the authenticated user",
       "stability": 2,
       "security": [
         "consumer.grant"
@@ -9058,7 +9072,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of grants which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.grant"
@@ -9095,7 +9109,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Identity callback endpoint to exchange an access token",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9137,7 +9151,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of identities which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9172,7 +9186,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Redirect the user to the configured identity provider",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9207,7 +9221,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific log for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.log"
@@ -9256,7 +9270,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of logs which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.log"
@@ -9293,7 +9307,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific page for the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9340,7 +9354,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of pages which are relevant to the authenticated user",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -9382,7 +9396,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Start the checkout process for a specific plan",
       "stability": 2,
       "security": [
         "consumer.payment"
@@ -9426,7 +9440,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates a payment portal link for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.payment"
@@ -9463,7 +9477,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific plan for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.plan"
@@ -9512,7 +9526,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of plans which are relevant to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.plan"
@@ -9561,7 +9575,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of scopes which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.scope"
@@ -9591,7 +9605,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all scopes by category",
       "stability": 2,
       "security": [
         "consumer.scope"
@@ -9629,7 +9643,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9666,7 +9680,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9703,7 +9717,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9752,7 +9766,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of tokens which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9796,7 +9810,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing token for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.token"
@@ -9833,7 +9847,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific transaction for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.transaction"
@@ -9882,7 +9896,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of transactions which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.transaction"
@@ -9920,7 +9934,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Creates a new webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -9957,7 +9971,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Deletes an existing webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -9994,7 +10008,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10043,7 +10057,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a paginated list of webhooks which are assigned to the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10087,7 +10101,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Updates an existing webhook for the authenticated user",
       "stability": 2,
       "security": [
         "consumer.webhook"
@@ -10124,33 +10138,7 @@
           }
         }
       ],
-      "description": "",
-      "stability": 2,
-      "security": [],
-      "authorization": false,
-      "tags": []
-    },
-    "system.meta.getAPICatalog": {
-      "path": "/system/api-catalog",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "System_APICatalog"
-        }
-      },
-      "arguments": [],
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
+      "description": "Connection OAuth2 callback to authorize a connection",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10176,7 +10164,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns meta information and links about the current installed Fusio version",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10210,7 +10198,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Debug endpoint which returns the provided data",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10236,33 +10224,7 @@
           }
         }
       ],
-      "description": "",
-      "stability": 2,
-      "security": [],
-      "authorization": false,
-      "tags": []
-    },
-    "system.meta.getOAuth2Configuration": {
-      "path": "/system/oauth-authorization-server",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "System_OAuthConfiguration"
-        }
-      },
-      "arguments": [],
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "",
+      "description": "Health check endpoint which returns information about the health status of the system",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10288,7 +10250,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available routes",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10321,7 +10283,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns details of a specific schema",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10354,7 +10316,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Payment webhook endpoint after successful purchase of a plan",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -10366,45 +10328,57 @@
       "type": "struct",
       "properties": {
         "oldPassword": {
+          "description": "The old password",
           "type": "string"
         },
         "newPassword": {
+          "description": "The new password",
           "type": "string"
         },
         "verifyPassword": {
+          "description": "To verify the new password must contain the same value as the new password",
           "type": "string"
         }
       }
     },
     "Backend_Action": {
+      "description": "This object represents the business logic which can be executed either through an operation or cronjob",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 0 = deleted",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "class": {
+          "description": "Underlying class of this action which handles the action logic",
           "type": "string"
         },
         "async": {
+          "description": "Whether to execute the action asynchronously, if true the action directly returns a 202 response and the action is executed later on in the background, useful for expensive operations",
           "type": "boolean"
         },
         "config": {
+          "description": "Contains the action specific configuration",
           "type": "reference",
           "target": "Backend_ActionConfig"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_ActionCollection": {
+      "description": "A paginated collection of action objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10415,6 +10389,7 @@
       }
     },
     "Backend_ActionConfig": {
+      "description": "The action configuration which contains arbitrary key-value entries",
       "type": "map",
       "schema": {
         "type": "any"
@@ -10428,61 +10403,75 @@
       }
     },
     "Backend_ActionExecuteRequest": {
+      "description": "Represents a request to execute an action",
       "type": "struct",
       "properties": {
         "method": {
+          "description": "HTTP method i.e. GET, POST",
           "type": "string"
         },
         "uriFragments": {
+          "description": "URL-encoded uri fragments i.e. foo=bar&bar=foo",
           "type": "string"
         },
         "parameters": {
+          "description": "URL-encoded query parameters i.e. foo=bar&bar=foo",
           "type": "string"
         },
         "headers": {
+          "description": "URL-encoded headers i.e. foo=bar&bar=foo",
           "type": "string"
         },
         "body": {
+          "description": "Request body of this execution",
           "type": "reference",
           "target": "Backend_ActionExecuteRequestBody"
         }
       }
     },
     "Backend_ActionExecuteRequestBody": {
+      "description": "Represents a request body",
       "type": "map",
       "schema": {
         "type": "any"
       }
     },
     "Backend_ActionExecuteResponse": {
+      "description": "Represents an action execution response",
       "type": "struct",
       "properties": {
         "statusCode": {
+          "description": "HTTP status code i.e. 200, 400, etc.",
           "type": "integer"
         },
         "headers": {
+          "description": "The response header returned by the action",
           "type": "reference",
           "target": "Backend_ActionExecuteResponseHeaders"
         },
         "body": {
+          "description": "The response body returned by the action",
           "type": "reference",
           "target": "Backend_ActionExecuteResponseBody"
         }
       }
     },
     "Backend_ActionExecuteResponseBody": {
+      "description": "Represents a response body",
       "type": "map",
       "schema": {
         "type": "any"
       }
     },
     "Backend_ActionExecuteResponseHeaders": {
+      "description": "Represents a map of headers",
       "type": "map",
       "schema": {
         "type": "string"
       }
     },
     "Backend_ActionIndex": {
+      "description": "Contains all possible classes which can be used at an action as class",
       "type": "struct",
       "properties": {
         "actions": {
@@ -10495,12 +10484,15 @@
       }
     },
     "Backend_ActionIndexEntry": {
+      "description": "Represents a concrete action class",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Human-readable name of the action class",
           "type": "string"
         },
         "class": {
+          "description": "Technical identifier of the action class",
           "type": "string"
         }
       }
@@ -10513,47 +10505,59 @@
       }
     },
     "Backend_App": {
+      "description": "This object represents an app to access the API on-behalf of a user",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "userId": {
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active, 2 = pending, 3 = deactivated or 4 = deleted",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "url": {
+          "description": "Url where the app is hosted",
           "type": "string"
         },
         "parameters": {
+          "description": "Optional URL-encoded parameters of the app i.e. foo=bar&bar=foo",
           "type": "string"
         },
         "appKey": {
+          "description": "The app key also known as client id which is generated on creation",
           "type": "string"
         },
         "appSecret": {
+          "description": "The app secret also known as client secret which is generated on creation",
           "type": "string"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         },
         "date": {
+          "description": "The create date of this object",
           "type": "string",
           "format": "date-time"
         },
         "scopes": {
+          "description": "A list of assigned scopes for this app",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "tokens": {
+          "description": "A list of tokens which are assigned to this app",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -10563,6 +10567,7 @@
       }
     },
     "Backend_AppCollection": {
+      "description": "A paginated collection of app objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10587,9 +10592,11 @@
       }
     },
     "Backend_Audit": {
+      "description": "This object represents an audit which is created every time something was changed at the system",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "app": {
@@ -10601,25 +10608,31 @@
           "target": "Backend_User"
         },
         "event": {
+          "description": "Trigger event of this audit",
           "type": "string"
         },
         "ip": {
+          "description": "IP which as issued the request",
           "type": "string"
         },
         "message": {
+          "description": "Message of this audit event",
           "type": "string"
         },
         "content": {
+          "description": "Content of this adit event",
           "type": "reference",
           "target": "Backend_AuditObject"
         },
         "date": {
+          "description": "Insert date of this audit event",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Backend_AuditCollection": {
+      "description": "A paginated collection of audit objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10637,6 +10650,7 @@
       }
     },
     "Backend_BackupExport": {
+      "description": "Export of the complete system configuration",
       "type": "struct",
       "properties": {
         "export": {
@@ -10645,6 +10659,7 @@
       }
     },
     "Backend_BackupImport": {
+      "description": "Import a previously exported system configuration",
       "type": "struct",
       "properties": {
         "import": {
@@ -10653,6 +10668,7 @@
       }
     },
     "Backend_BackupImportResult": {
+      "description": "Result of a backup import operation",
       "type": "struct",
       "properties": {
         "success": {
@@ -10670,17 +10686,21 @@
       }
     },
     "Backend_Category": {
+      "description": "This object represents a category. Every user is assigned to a category and can only view objects which are also assigned to the same category, through this it is possible to build separate areas for external developers",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         }
       }
     },
     "Backend_CategoryCollection": {
+      "description": "A paginated collection of category objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10705,26 +10725,33 @@
       }
     },
     "Backend_Config": {
+      "description": "This object represents a system configuration",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "type": {
+          "description": "The config value type",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "description": {
+          "description": "A short description fo this configuration value",
           "type": "string"
         },
         "value": {
+          "description": "The actual config value",
           "type": "any"
         }
       }
     },
     "Backend_ConfigCollection": {
+      "description": "A paginated collection of config objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10742,15 +10769,19 @@
       }
     },
     "Backend_Connection": {
+      "description": "This object represents a connection to an external system like i.e. a database, message-queue or client-sdk",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "class": {
+          "description": "Underlying class of this connection which returns a configured client connection i.e. database, message-queue or client-sdk",
           "type": "string"
         },
         "oauth2": {
@@ -10758,16 +10789,19 @@
           "type": "boolean"
         },
         "config": {
+          "description": "Contains the connection specific configuration",
           "type": "reference",
           "target": "Backend_ConnectionConfig"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_ConnectionCollection": {
+      "description": "A paginated collection of connection objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10778,6 +10812,7 @@
       }
     },
     "Backend_ConnectionConfig": {
+      "description": "The connection configuration which contains arbitrary key-value entries",
       "type": "map",
       "schema": {
         "type": "any"
@@ -10791,6 +10826,7 @@
       }
     },
     "Backend_ConnectionIndex": {
+      "description": "Contains all possible classes which can be used at an connection as class",
       "type": "struct",
       "properties": {
         "connections": {
@@ -10803,17 +10839,21 @@
       }
     },
     "Backend_ConnectionIndexEntry": {
+      "description": "Represents a concrete connection class",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Human-readable name of the connection class",
           "type": "string"
         },
         "class": {
+          "description": "Technical identifier of the connection class",
           "type": "string"
         }
       }
     },
     "Backend_ConnectionRedirectResponse": {
+      "description": "Redirect response to initiate an OAuth2 flow",
       "type": "struct",
       "properties": {
         "redirectUri": {
@@ -10829,32 +10869,41 @@
       }
     },
     "Backend_Cronjob": {
+      "description": "This object represents a cronjob which can invoke an action at a specific interval",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "cron": {
+          "description": "The cron expression i.e. */5 * * * * for every 5 minutes",
           "type": "string"
         },
         "action": {
+          "description": "The target action which gets invoked",
           "type": "string"
         },
         "executeDate": {
+          "description": "The last execution date",
           "type": "string",
           "format": "date-time"
         },
         "exitCode": {
+          "description": "The last exit code",
           "type": "integer"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         },
         "errors": {
+          "description": "Contains an array of errors in case the cronjob has failed",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -10864,6 +10913,7 @@
       }
     },
     "Backend_CronjobCollection": {
+      "description": "A paginated collection of cronjob objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10881,6 +10931,7 @@
       }
     },
     "Backend_CronjobError": {
+      "description": "Represents an error which occurred on cronjob execution",
       "type": "struct",
       "properties": {
         "message": {
@@ -10905,6 +10956,7 @@
       }
     },
     "Backend_Dashboard": {
+      "description": "Represents an object containing all widget data for the dashboard",
       "type": "struct",
       "properties": {
         "errorsPerOperation": {
@@ -10946,12 +10998,14 @@
       }
     },
     "Backend_DatabaseRow": {
+      "description": "This object represents a row on a relational table",
       "type": "map",
       "schema": {
         "type": "any"
       }
     },
     "Backend_DatabaseRowCollection": {
+      "description": "A paginated collection of database rows",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -10962,12 +11016,15 @@
       }
     },
     "Backend_DatabaseTable": {
+      "description": "This object represents a relational table on a database connection",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the table",
           "type": "string"
         },
         "columns": {
+          "description": "Available columns on the table",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -10975,9 +11032,11 @@
           }
         },
         "primaryKey": {
+          "description": "The primary key column",
           "type": "string"
         },
         "indexes": {
+          "description": "Available indices on the table",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -10985,6 +11044,7 @@
           }
         },
         "foreignKeys": {
+          "description": "Available foreign key constraints",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -11004,59 +11064,76 @@
       }
     },
     "Backend_DatabaseTableColumn": {
+      "description": "This object represents a column at a relation table",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the column",
           "type": "string"
         },
         "type": {
+          "description": "The column type i.e. integer or string",
           "type": "string"
         },
         "length": {
+          "description": "Optional the max length of the column",
           "type": "integer"
         },
         "precision": {
+          "description": "Optional the precision of the column",
           "type": "integer"
         },
         "scale": {
+          "description": "Optional the scale of the column",
           "type": "integer"
         },
         "unsigned": {
+          "description": "Indicates whether the column is unsigned, relevant for integer types",
           "type": "boolean"
         },
         "fixed": {
+          "description": "Indicates whether the column has a fixed length",
           "type": "boolean"
         },
         "notNull": {
+          "description": "Indicates whether the column allows null",
           "type": "boolean"
         },
         "autoIncrement": {
+          "description": "Indicates whether this column is an auto increment column",
           "type": "boolean"
         },
         "default": {
+          "description": "Optional defines the default value",
           "type": "any"
         },
         "comment": {
+          "description": "Optional a comment for this column",
           "type": "string"
         }
       }
     },
     "Backend_DatabaseTableForeignKeyConstraint": {
+      "description": "This object represents a foreign key constraint on a relational database",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the foreign key constraint",
           "type": "string"
         },
         "foreignTable": {
+          "description": "Name of the foreign table",
           "type": "string"
         },
         "localColumnNames": {
+          "description": "Local column names",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "foreignColumnNames": {
+          "description": "Foreign column names",
           "type": "array",
           "schema": {
             "type": "string"
@@ -11065,15 +11142,19 @@
       }
     },
     "Backend_DatabaseTableIndex": {
+      "description": "This object represents a table index on a relational database",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the index",
           "type": "string"
         },
         "unique": {
+          "description": "Indicates whether the index is unique",
           "type": "boolean"
         },
         "columns": {
+          "description": "Columns assigned ot the index",
           "type": "array",
           "schema": {
             "type": "string"
@@ -11082,12 +11163,15 @@
       }
     },
     "Backend_Event": {
+      "description": "This object represents an event which can be triggered by an action",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "description": {
@@ -11097,12 +11181,14 @@
           "type": "string"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_EventCollection": {
+      "description": "A paginated collection of event objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11127,31 +11213,39 @@
       }
     },
     "Backend_Firewall": {
+      "description": "This object represents a firewall rule which blocks specific IP addresses",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "type": {
+          "description": "The type of the rule either 1 = allow or 0 = deny",
           "type": "integer"
         },
         "ip": {
+          "description": "The target IP address",
           "type": "string"
         },
         "expire": {
+          "description": "The expire date",
           "type": "string",
           "format": "date-time"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_FirewallCollection": {
+      "description": "A paginated collection of firewall objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11176,30 +11270,38 @@
       }
     },
     "Backend_Form": {
+      "description": "This object represents a form which helps to dynamically generate a form at a frontend app",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 0 = deleted",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "operationId": {
+          "description": "Target operation which gets invoked through this form",
           "type": "integer"
         },
         "uiSchema": {
+          "description": "Optional an UI schema to dynamically describe this form",
           "type": "any"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_FormCollection": {
+      "description": "A paginated collection of form objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11224,17 +11326,21 @@
       }
     },
     "Backend_GeneratorIndexProvider": {
+      "description": "Represents a concrete generator class",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Human-readable name of the generator class",
           "type": "string"
         },
         "class": {
+          "description": "Technical identifier of the generator class",
           "type": "string"
         }
       }
     },
     "Backend_GeneratorIndexProviders": {
+      "description": "Contains all possible classes which can be used at an generator as class",
       "type": "struct",
       "properties": {
         "providers": {
@@ -11300,24 +11406,31 @@
       }
     },
     "Backend_Identity": {
+      "description": "This object represents an identity which allows to authenticate with a remote identity provider",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "appId": {
+          "description": "The target app for this identity",
           "type": "integer"
         },
         "roleId": {
+          "description": "Role which is assigned to new users",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "icon": {
+          "description": "An icon for this identity provider",
           "type": "string"
         },
         "class": {
+          "description": "Underlying class of this identity provider",
           "type": "string"
         },
         "config": {
@@ -11330,6 +11443,7 @@
       }
     },
     "Backend_IdentityCollection": {
+      "description": "A paginated collection of identity objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11353,6 +11467,7 @@
       }
     },
     "Backend_IdentityIndex": {
+      "description": "Contains all possible classes which can be used at an identity as class",
       "type": "struct",
       "properties": {
         "providers": {
@@ -11365,12 +11480,15 @@
       }
     },
     "Backend_IdentityIndexEntry": {
+      "description": "Represents a concrete identity class",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Human-readable name of the identity class",
           "type": "string"
         },
         "class": {
+          "description": "Technical identifier of the identity class",
           "type": "string"
         }
       }
@@ -11383,34 +11501,44 @@
       }
     },
     "Backend_Log": {
+      "description": "This object represents a log entry. Every HTTP requests to the system generates such a log entry.",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "ip": {
+          "description": "The remote IP which has initiated the request",
           "type": "string"
         },
         "userAgent": {
+          "description": "The user agent provided by the HTTP user agent header",
           "type": "string"
         },
         "method": {
+          "description": "The HTTP method i.e. GET or POST",
           "type": "string"
         },
         "path": {
+          "description": "The target path",
           "type": "string"
         },
         "header": {
+          "description": "The provided HTTP headers",
           "type": "string"
         },
         "body": {
+          "description": "The provided HTTP body",
           "type": "string"
         },
         "date": {
+          "description": "Insert date of this request",
           "type": "string",
           "format": "date-time"
         },
         "errors": {
+          "description": "An array of errors which occurred through this request",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -11420,6 +11548,7 @@
       }
     },
     "Backend_LogCollection": {
+      "description": "A paginated collection of log objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11433,6 +11562,7 @@
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "logId": {
@@ -11457,6 +11587,7 @@
       }
     },
     "Backend_LogErrorCollection": {
+      "description": "A paginated collection of log error objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11467,71 +11598,91 @@
       }
     },
     "Backend_Operation": {
+      "description": "This object represents an operation, an operation invokes an action in case a specific HTTP method and path was requested. It defines also schema information about the request and response payload",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 0 = deleted",
           "type": "integer"
         },
         "active": {
+          "description": "Indicates whether the operation is active",
           "type": "boolean"
         },
         "public": {
+          "description": "Indicates whether the operation is public, if false a user must provide an Authorization header with an Bearer access token",
           "type": "boolean"
         },
         "stability": {
+          "description": "Describes the stability of this operation 0 = deprecated, 1 = experimental, 2 = stable and 3 = legacy",
           "type": "integer"
         },
         "description": {
+          "description": "A short description of this operation, it should explain the operation in a simple and precise way",
           "type": "string"
         },
         "httpMethod": {
+          "description": "The target HTTP method i.e. GET or POST",
           "type": "string"
         },
         "httpPath": {
+          "description": "The target HTTP path i.e. /foo or /product/:product_id",
           "type": "string"
         },
         "httpCode": {
+          "description": "The success HTTP code i.e. 200 or 201",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object. It is recommended to group your operations into logical units by using a dot i.e. product.getAll and product.insert which has also an effect on the automatically generated SDK",
           "type": "string"
         },
         "parameters": {
+          "description": "Describes available query parameters",
           "type": "reference",
           "target": "Backend_OperationParameters"
         },
         "incoming": {
+          "description": "Describes the incoming request payload",
           "type": "string"
         },
         "outgoing": {
+          "description": "Describes the outgoing response payload",
           "type": "string"
         },
         "throws": {
+          "description": "Describes error responses for i.e. client or server errors",
           "type": "reference",
           "target": "Backend_OperationThrows"
         },
         "action": {
+          "description": "The target action to invoke",
           "type": "string"
         },
         "costs": {
+          "description": "Costs to invoke this operation. A user can only invoke this operation in case he has enough points",
           "type": "integer"
         },
         "scopes": {
+          "description": "Scopes which are required to invoke this operation",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_OperationCollection": {
+      "description": "A paginated collection of operation objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11586,30 +11737,38 @@
       }
     },
     "Backend_Page": {
+      "description": "This object represents a page at the developer portal",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = visible, 2 = invisible or 0 = deleted",
           "type": "integer"
         },
         "title": {
+          "description": "Title of the page",
           "type": "string"
         },
         "slug": {
+          "description": "Slug of the page which gets dynamically generated from the title",
           "type": "string"
         },
         "content": {
+          "description": "HTML content of this page",
           "type": "string"
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_PageCollection": {
+      "description": "A paginated collection of page objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11634,42 +11793,53 @@
       }
     },
     "Backend_Plan": {
+      "description": "This object represents a plan, a plan allows users to obtain points or in general subscribe to your app",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the plan",
           "type": "string"
         },
         "description": {
+          "description": "Short description of the plan",
           "type": "string"
         },
         "price": {
+          "description": "The price of this plan",
           "type": "number"
         },
         "points": {
+          "description": "The points which are assigned to the user on purchase",
           "type": "integer"
         },
         "period": {
+          "description": "Whether the plan is one-time or periodically",
           "type": "integer"
         },
         "externalId": {
+          "description": "An external id of a remote payment provider like Stripe",
           "type": "string"
         },
         "scopes": {
+          "description": "Scopes which are assigned dynamically to the user on purchase",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_PlanCollection": {
+      "description": "A paginated collection of plan objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11694,24 +11864,31 @@
       }
     },
     "Backend_Rate": {
+      "description": "This object represents a rate limitation, which allows to limit the requests which a user can send",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "priority": {
+          "description": "All rates are applied based on the priority, higher priorities are applied first",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "rateLimit": {
+          "description": "Maximum number of allowed requests",
           "type": "integer"
         },
         "timespan": {
+          "description": "Timespan for the allowed requests",
           "type": "string"
         },
         "allocation": {
+          "description": "Through a rate allocation a user gets assigned to a specific rate",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -11719,15 +11896,18 @@
           }
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_RateAllocation": {
+      "description": "This object represents a rate allocation, in case a request matches it gets assigned to the attached rate",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "operationId": {
@@ -11743,11 +11923,13 @@
           "type": "integer"
         },
         "authenticated": {
+          "description": "Whether the request is authenticated",
           "type": "boolean"
         }
       }
     },
     "Backend_RateCollection": {
+      "description": "A paginated collection of rate objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11772,18 +11954,23 @@
       }
     },
     "Backend_Role": {
+      "description": "This object represents a role, every user is assigned to a role and all scopes of the role are automatically attached to the user",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "categoryId": {
+          "description": "The assigned category id of this role",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "scopes": {
+          "description": "All scopes which are assigned to this role",
           "type": "array",
           "schema": {
             "type": "string"
@@ -11792,6 +11979,7 @@
       }
     },
     "Backend_RoleCollection": {
+      "description": "A paginated collection of role objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11816,35 +12004,35 @@
       }
     },
     "Backend_Schema": {
+      "description": "This object represents a schema to describe a JSON payload",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 0 = deleted",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "source": {
+          "description": "The TypeSchema specification to describe a JSON payload",
           "type": "reference",
           "target": "Backend_SchemaSource"
         },
-        "form": {
-          "type": "reference",
-          "target": "Backend_SchemaForm"
-        },
-        "readonly": {
-          "type": "boolean"
-        },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Backend_SchemaCollection": {
+      "description": "A paginated collection of schema objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -11891,18 +12079,23 @@
       }
     },
     "Backend_Scope": {
+      "description": "This object represents a scope. A scope is assigned to a user and is required to access operations",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "description": {
+          "description": "Short description of the scope",
           "type": "string"
         },
         "operations": {
+          "description": "All operations which can be access through this scope",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -11910,6 +12103,7 @@
           }
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         }
@@ -11960,6 +12154,7 @@
       }
     },
     "Backend_ScopeCollection": {
+      "description": "A paginated collection of scope objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12029,6 +12224,7 @@
       }
     },
     "Backend_SdkTypes": {
+      "description": "Represents available SDK type which can be generated",
       "type": "map",
       "schema": {
         "type": "string"
@@ -12083,12 +12279,15 @@
       }
     },
     "Backend_Test": {
+      "description": "This object represents a test. A test helps to verify that all operations work as expected",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = pending, 2 = success, 3 = warning, 4 = error, 5 = skipped or 6 = disabled",
           "type": "integer"
         },
         "operationName": {
@@ -12107,6 +12306,7 @@
       }
     },
     "Backend_TestCollection": {
+      "description": "A paginated collection of test objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12124,12 +12324,15 @@
       }
     },
     "Backend_Token": {
+      "description": "This object represents a token, this an access token which was requested by a user",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 2 = deleted",
           "type": "integer"
         },
         "name": {
@@ -12155,6 +12358,7 @@
       }
     },
     "Backend_TokenCollection": {
+      "description": "A paginated collection of token objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12165,9 +12369,11 @@
       }
     },
     "Backend_Transaction": {
+      "description": "This object represents a transaction. A transaction is generated by the system in case the payment provide provides a message that the payment was successfully executed",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "userId": {
@@ -12200,6 +12406,7 @@
       }
     },
     "Backend_TransactionCollection": {
+      "description": "A paginated collection of transaction objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12213,9 +12420,11 @@
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active or 0 = deleted",
           "type": "integer"
         },
         "name": {
@@ -12224,6 +12433,7 @@
       }
     },
     "Backend_TrashDataCollection": {
+      "description": "A paginated collection of deleted objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12253,30 +12463,39 @@
       }
     },
     "Backend_User": {
+      "description": "This object represents a user",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "roleId": {
+          "description": "A role which is assigned to the user",
           "type": "integer"
         },
         "planId": {
+          "description": "A plan which is assigned to the user",
           "type": "integer"
         },
         "status": {
+          "description": "Status of the object either 1 = active, 2 = disabled or 0 = deleted",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the object",
           "type": "string"
         },
         "email": {
+          "description": "The email address of the user",
           "type": "string"
         },
         "points": {
+          "description": "Points assigned to the user",
           "type": "integer"
         },
         "scopes": {
+          "description": "List of scopes which are assigned to the user",
           "type": "array",
           "schema": {
             "type": "string"
@@ -12290,16 +12509,19 @@
           }
         },
         "metadata": {
+          "description": "Use this parameter to attach key-value data",
           "type": "reference",
           "target": "Common_Metadata"
         },
         "date": {
+          "description": "The insert date",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Backend_UserCollection": {
+      "description": "A paginated collection of user objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12329,9 +12551,11 @@
       }
     },
     "Backend_Webhook": {
+      "description": "This object represents a webhook, a webhook is called in case a specific event was triggered",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "eventId": {
@@ -12356,6 +12580,7 @@
       }
     },
     "Backend_WebhookCollection": {
+      "description": "A paginated collection of webhook objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12669,31 +12894,16 @@
         "type": {
           "type": "string"
         },
-        "token": {
-          "type": "reference",
-          "target": "Consumer_AuthorizeResponseToken"
-        },
         "code": {
           "type": "string"
         },
+        "error": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
         "redirectUri": {
-          "type": "string"
-        }
-      }
-    },
-    "Consumer_AuthorizeResponseToken": {
-      "type": "struct",
-      "properties": {
-        "access_token": {
-          "type": "string"
-        },
-        "token_type": {
-          "type": "string"
-        },
-        "expires_in": {
-          "type": "string"
-        },
-        "scope": {
           "type": "string"
         }
       }
@@ -13573,65 +13783,6 @@
         "type": "any"
       }
     },
-    "System_APICatalog": {
-      "type": "struct",
-      "properties": {
-        "linkset": {
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "System_APICatalogLinkSet"
-          }
-        }
-      }
-    },
-    "System_APICatalogLink": {
-      "type": "struct",
-      "properties": {
-        "href": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      }
-    },
-    "System_APICatalogLinkSet": {
-      "type": "struct",
-      "properties": {
-        "anchor": {
-          "type": "string"
-        },
-        "service-desc": {
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "System_APICatalogLink"
-          }
-        },
-        "service-doc": {
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "System_APICatalogLink"
-          }
-        },
-        "service-meta": {
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "System_APICatalogLink"
-          }
-        },
-        "status": {
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "System_APICatalogLink"
-          }
-        }
-      }
-    },
     "System_About": {
       "type": "struct",
       "properties": {
@@ -13715,38 +13866,6 @@
         },
         "error": {
           "type": "string"
-        }
-      }
-    },
-    "System_OAuthConfiguration": {
-      "type": "struct",
-      "properties": {
-        "issuer": {
-          "type": "string"
-        },
-        "token_endpoint": {
-          "type": "string"
-        },
-        "token_endpoint_auth_methods_supported": {
-          "type": "array",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "userinfo_endpoint": {
-          "type": "string"
-        },
-        "scopes_supported": {
-          "type": "array",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "claims_supported": {
-          "type": "array",
-          "schema": {
-            "type": "string"
-          }
         }
       }
     },

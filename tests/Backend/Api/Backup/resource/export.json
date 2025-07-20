@@ -333,7 +333,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 230,
+          "operationId": 228,
           "authenticated": true
         }
       ]
@@ -350,7 +350,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 229
+          "operationId": 227
         }
       ]
     },
@@ -901,7 +901,7 @@
       "active": true,
       "public": true,
       "stability": 2,
-      "description": "",
+      "description": "Returns meta information and links about the current installed Fusio version",
       "httpMethod": "GET",
       "httpPath": "\/",
       "httpCode": 200,

@@ -31,32 +31,20 @@ use PSX\Api\OperationInterface;
  */
 class Operation
 {
-    public string $action;
-    public string $httpMethod;
-    public string $httpPath;
-    public int $httpCode;
-    public string $outgoing;
-    public array $parameters;
-    public ?string $incoming;
-    public array $throws;
-    public ?string $eventName;
-    public bool $public;
-    public int $stability;
-    public ?int $costs;
-
-    public function __construct(string $action, string $httpMethod, string $httpPath, int $httpCode, string $outgoing, array $parameters = [], ?string $incoming = null, array $throws = [], ?string $eventName = null, bool $public = false, int $stability = OperationInterface::STABILITY_STABLE, ?int $costs = null)
-    {
-        $this->action = $action;
-        $this->httpMethod = $httpMethod;
-        $this->httpPath = $httpPath;
-        $this->httpCode = $httpCode;
-        $this->outgoing = $outgoing;
-        $this->parameters = $parameters;
-        $this->incoming = $incoming;
-        $this->throws = $throws;
-        $this->eventName = $eventName;
-        $this->public = $public;
-        $this->stability = $stability;
-        $this->costs = $costs;
+    public function __construct(
+        public string $action,
+        public string $httpMethod,
+        public string $httpPath,
+        public int $httpCode,
+        public string $outgoing,
+        public array $parameters = [],
+        public ?string $incoming = null,
+        public array $throws = [],
+        public ?string $eventName = null,
+        public bool $public = false,
+        public int $stability = OperationInterface::STABILITY_STABLE,
+        public ?int $costs = null,
+        public ?string $description = null,
+    ) {
     }
 }

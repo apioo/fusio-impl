@@ -24,9 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Schema;
-use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Model\Backend\SchemaForm;
+use PSX\Http\Exception\GoneException;
 
 /**
  * GetForm
@@ -37,30 +35,8 @@ use Fusio\Model\Backend\SchemaForm;
  */
 class Form implements ActionInterface
 {
-    private Schema $schemaService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Schema $schemaService, ContextFactory $contextFactory)
-    {
-        $this->schemaService = $schemaService;
-        $this->contextFactory = $contextFactory;
-    }
-
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof SchemaForm);
-
-        $this->schemaService->updateForm(
-            $request->get('schema_id'),
-            $body,
-            $this->contextFactory->newActionContext($context)
-        );
-
-        return array(
-            'success' => true,
-            'message' => 'Schema form successfully updated',
-        );
+        throw new GoneException('This endpoint is not longer supported');
     }
 }

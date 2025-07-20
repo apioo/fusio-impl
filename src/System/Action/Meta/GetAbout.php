@@ -131,16 +131,6 @@ readonly class GetAbout implements ActionInterface
         ];
 
         $links[] = [
-            'rel' => 'oauth-authorization-server',
-            'href' => $baseUrl . 'system/oauth-authorization-server',
-        ];
-
-        $links[] = [
-            'rel' => 'api-catalog',
-            'href' => $baseUrl . 'system/api-catalog',
-        ];
-
-        $links[] = [
             'rel' => 'oauth2',
             'href' => $baseUrl . 'authorization/token',
         ];
@@ -148,6 +138,26 @@ readonly class GetAbout implements ActionInterface
         $links[] = [
             'rel' => 'whoami',
             'href' => $baseUrl . 'authorization/whoami',
+        ];
+
+        $links[] = [
+            'rel' => 'api-catalog',
+            'href' => $baseUrl . '.well-known/api-catalog',
+        ];
+
+        $links[] = [
+            'rel' => 'oauth-authorization-server',
+            'href' => $baseUrl . '.well-known/oauth-authorization-server',
+        ];
+
+        $links[] = [
+            'rel' => 'oauth-protected-resource',
+            'href' => $baseUrl . '.well-known/oauth-protected-resource',
+        ];
+
+        $links[] = [
+            'rel' => 'security',
+            'href' => $baseUrl . '.well-known/security.txt',
         ];
 
         $links[] = [

@@ -103,7 +103,8 @@ class Form extends ViewAbstract
                 return $operation->getHttpMethod();
             }),
             'jsonSchema' => $builder->fieldCallback(Table\Generated\FormTable::COLUMN_OPERATION_ID, function ($operationId) {
-                return $this->jsonSchemaResolver->resolve($operationId);
+                $schema = $this->jsonSchemaResolver->resolveIncomingByOperationId($operationId);
+                return $schema !== null ? (object) $schema : new \stdClass();
             }),
             'uiSchema' => $builder->fieldJson(Table\Generated\FormTable::COLUMN_UI_SCHEMA),
             'metadata' => $builder->fieldJson(Table\Generated\FormTable::COLUMN_METADATA),

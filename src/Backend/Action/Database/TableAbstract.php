@@ -231,7 +231,7 @@ abstract class TableAbstract implements ActionInterface
     protected function assertDatabaseEnabled(): void
     {
         if (!$this->frameworkConfig->isDatabaseEnabled()) {
-            throw new StatusCode\InternalServerErrorException('Database is not enabled, please change the setting "fusio_database" at the configuration.php to "true" in order to activate the database');
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_database" at the configuration.php to "true" in order to activate the database');
         }
     }
 }

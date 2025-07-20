@@ -39,19 +39,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TokenCommand extends Command
 {
-    private Service\Token $tokenService;
-    private Service\Scope $scopeService;
-    private Table\App $appTable;
-    private Table\User $userTable;
-
-    public function __construct(Service\Token $tokenService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)
-    {
+    public function __construct(
+        private Service\Token $tokenService,
+        private Service\Scope $scopeService,
+        private Table\App $appTable,
+        private Table\User $userTable
+    ) {
         parent::__construct();
-
-        $this->tokenService = $tokenService;
-        $this->scopeService = $scopeService;
-        $this->appTable = $appTable;
-        $this->userTable = $userTable;
     }
 
     protected function configure(): void
