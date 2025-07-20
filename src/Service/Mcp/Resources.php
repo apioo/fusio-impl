@@ -80,7 +80,7 @@ readonly class Resources
             $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $categoryId);
         }
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, 1);
-        $condition->equals(Table\Generated\OperationTable::COLUMN_ACTIVE, 1);
+        $condition->like(Table\Generated\OperationTable::COLUMN_ACTION, 'action://%');
 
         $count = 32;
         $startIndex = empty($cursor) ? 0 : ((int) base64_decode($cursor));
@@ -160,8 +160,6 @@ readonly class Resources
             }
 
             $name = $schemaRow->getName();
-        } elseif ($scheme === SchemaScheme::PHP_CLASS) {
-            $name = $value;
         } else {
             return null;
         }
@@ -191,11 +189,11 @@ readonly class Resources
             )
         ]);
     }
+
     private function resolveActionResource(string $actionUri, ?int $categoryId): ?Resource
     {
         [$scheme, $value] = ActionScheme::split($actionUri);
 
-        $mimeType = null;
         if ($scheme === ActionScheme::ACTION) {
             $actionRow = $this->actionTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $value);
             if (!$actionRow instanceof Table\Generated\ActionRow) {
@@ -204,10 +202,6 @@ readonly class Resources
 
             $name = $actionRow->getName();
             $mimeType = 'application/json';
-        } elseif ($scheme === ActionScheme::PHP_CLASS) {
-            $name = $value;
-        } elseif ($scheme === ActionScheme::FILE) {
-            $name = $value;
         } else {
             return null;
         }
@@ -223,33 +217,14 @@ readonly class Resources
     {
         [$scheme, $value] = ActionScheme::split($actionUri);
 
-        $mimeType = null;
         if ($scheme === ActionScheme::ACTION) {
             $actionRow = $this->actionTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $value);
             if (!$actionRow instanceof Table\Generated\ActionRow) {
                 return null;
             }
 
-            $text = $actionRow->getConfig() ?? '';
+            $text = $actionRow->getConfig();
             $mimeType = 'application/json';
-        } elseif ($scheme === ActionScheme::PHP_CLASS) {
-            $className = ClassName::unserialize($value);
-            if (!class_exists($className)) {
-                return null;
-            }
-
-            $file = (new ReflectionClass($className))->getFileName();
-            if (!is_file($file)) {
-                return null;
-            }
-
-            $text = file_get_contents($file);
-        } elseif ($scheme === ActionScheme::FILE) {
-            if (!is_file($value)) {
-                return null;
-            }
-
-            $text = file_get_contents($value);
         } else {
             return null;
         }
@@ -262,7 +237,7 @@ readonly class Resources
             new TextResourceContents(
                 text: $text,
                 uri: 'action+' . $actionUri,
-                mimeType: $mimeType ?? 'text/plain'
+                mimeType: $mimeType
             )
         ]);
     }
