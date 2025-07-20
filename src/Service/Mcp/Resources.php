@@ -91,17 +91,26 @@ readonly class Resources
         foreach ($operations as $operation) {
             $incoming = $operation->getIncoming();
             if (!empty($incoming)) {
-                $resources[] = $this->resolveSchemaResource($incoming, $categoryId);
+                $resource = $this->resolveSchemaResource($incoming, $categoryId);
+                if ($resource !== null) {
+                    $resources[] = $resource;
+                }
             }
 
             $outgoing = $operation->getOutgoing();
             if (!empty($outgoing)) {
-                $resources[] = $this->resolveSchemaResource($outgoing, $categoryId);
+                $resource = $this->resolveSchemaResource($outgoing, $categoryId);
+                if ($resource !== null) {
+                    $resources[] = $resource;
+                }
             }
 
             $action = $operation->getAction();
             if (!empty($action)) {
-                $resources[] = $this->resolveActionResource($action, $categoryId);
+                $resource = $this->resolveActionResource($action, $categoryId);
+                if ($resource !== null) {
+                    $resources[] = $resource;
+                }
             }
         }
 
@@ -142,7 +151,7 @@ readonly class Resources
 
     private function resolveSchemaResource(string $schemaUri, ?int $categoryId): ?Resource
     {
-        [$scheme, $value] = SchemaScheme::from($schemaUri);
+        [$scheme, $value] = SchemaScheme::split($schemaUri);
 
         if ($scheme === SchemaScheme::SCHEMA) {
             $schemaRow = $this->schemaTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $value);
@@ -169,7 +178,7 @@ readonly class Resources
         try {
             $schema = $this->schemaManager->getSchema(SchemaSource::fromString($schemaUri));
 
-            $text = (new JsonSchema(inlineDefinitions: true))->generate($schema);
+            $text = (string) (new JsonSchema(inlineDefinitions: true))->generate($schema);
         } catch (InvalidSchemaException $e) {
             return null;
         }
@@ -242,6 +251,10 @@ readonly class Resources
 
             $text = file_get_contents($value);
         } else {
+            return null;
+        }
+
+        if (empty($text)) {
             return null;
         }
 

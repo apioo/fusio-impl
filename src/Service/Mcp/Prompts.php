@@ -54,7 +54,7 @@ readonly class Prompts
                 ),
                 new PromptArgument(
                     name: 'logic',
-                    description: 'Describe the business logic of the action',
+                    description: 'Describe the business logic of the action in simple words i.e. select all data from the table "person" of the system connection and return all rows.',
                     required: true
                 )
             ]
@@ -69,11 +69,14 @@ readonly class Prompts
         $arguments = $params->arguments;
 
         if ($name === 'backend-action-create-prompt') {
-            $text = 'Create a new backend action with the tool "backend-action-create" and use as name "' . $arguments?->name . '" and as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
+            $actionName = $arguments?->name ?? '';
+            $actionLogic = $arguments?->logic ?? '';
+
+            $text = 'Create a new backend action with the tool "backend-action-create" and use as name "' . $actionName . '" and as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
             $text.= 'Add also a config object with a key "code" which contains the following business logic:';
             $text.= "\n";
             $text.= '--' . "\n";
-            $text.= $arguments?->logic;
+            $text.= $actionLogic;
             $text.= "\n";
             $text.= '--' . "\n";
             $text.= 'You need to transform the described business logic into valid PHP code.';
