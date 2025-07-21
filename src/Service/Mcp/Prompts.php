@@ -48,11 +48,6 @@ readonly class Prompts
             description: 'Prompt to create a new backend action with custom logic',
             arguments: [
                 new PromptArgument(
-                    name: 'name',
-                    description: 'Name of the action',
-                    required: true
-                ),
-                new PromptArgument(
                     name: 'logic',
                     description: 'Describe the business logic of the action in simple words i.e. select all data from the table "person" of the system connection and return all rows.',
                     required: true
@@ -69,17 +64,16 @@ readonly class Prompts
         $arguments = $params->arguments;
 
         if ($name === 'backend-action-create-prompt') {
-            $actionName = $arguments?->name ?? '';
             $actionLogic = $arguments?->logic ?? '';
 
-            $text = 'Create a new backend action with the tool "backend-action-create" and use as name "' . $actionName . '" and as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
-            $text.= 'Add also a config object with a key "code" which contains the following business logic:';
+            $text = 'Create a new backend action and use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
+            $text.= 'Add a key "code" to the config property and for the value you need to transform the following logic into PHP code:';
             $text.= "\n";
             $text.= '--' . "\n";
             $text.= $actionLogic;
             $text.= "\n";
             $text.= '--' . "\n";
-            $text.= 'You need to transform the described business logic into valid PHP code.';
+            $text.= 'As name of the action summarize the logic above in lower case and seperated by hyphens.';
             $text.= 'The code which you generate is used as an action inside Fusio, which is an open source API management tool, this code helps to implement custom business logic for the user.';
             $text.= 'The resulting PHP code must be wrapped into the following code:';
             $text.= "\n";
@@ -108,12 +102,15 @@ PHP;
             $text.= '';
             $text.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.';
             $text.= 'You can get a list of all available connections through the "backend-connection-getAll" tool.';
-            $text.= 'To get more information about a specific connection you can call the "backend-connection-get" tool where you need to provide as "connection_id" the first argument of the getConnection method call and add a "~" as prefix.';
             $text.= '';
-            $text.= 'In case the connection has as class "Fusio.Impl.Connection.System" or "Fusio.Adapter.Sql.Connection.Sql" it is a Doctrine DBAL connection, this means you can use all methods of the Doctrine DBAL library.';
+            $text.= 'If the connection has as class "Fusio.Impl.Connection.System" or "Fusio.Adapter.Sql.Connection.Sql" it is a Doctrine DBAL connection, this means you can use all methods of the Doctrine DBAL library.';
+            $text.= 'If the connection has as class "Fusio.Adapter.Http.Connection.Http" it is a Guzzle connection, this means you can use all methods of the Guzzle HTTP client library.';
             $text.= '';
-            $text.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend-database-getTables" tool where you need to provide as "connection_id" the first argument of the getConnection method call and add a "~" as prefix.';
-            $text.= 'If you need to get a concrete table schema you can use the "backend-database-getTable" tool with the same connection id and the target table name.';
+            $text.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend-database-getTables" tool where you need to provide a connection id.';
+            $text.= 'If you need to get a concrete table schema you can use the "backend-database-getTable" tool where you need to provide the connection id and table name.';
+            $text.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".';
+            $text.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.';
+            $text.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.';
             $text.= '';
             $text.= 'The generated business logic must use the build method of the "$response" factory to return a result.';
             $text.= '';
