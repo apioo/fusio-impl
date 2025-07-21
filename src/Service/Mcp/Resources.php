@@ -130,13 +130,12 @@ readonly class Resources
             $categoryId = null;
         }
 
-        if (str_starts_with($uri, 'schema+')) {
+        if (str_starts_with($uri, 'schema://')) {
             $result = $this->resolveSchemaResourceResult(substr($uri, 7));
             if ($result instanceof ReadResourceResult) {
                 return $result;
             }
-
-        } elseif (str_starts_with($uri, 'action+')) {
+        } elseif (str_starts_with($uri, 'action://')) {
             $result = $this->resolveActionResourceResult(substr($uri, 7), $categoryId);
             if ($result instanceof ReadResourceResult) {
                 return $result;
@@ -163,7 +162,7 @@ readonly class Resources
 
         return new Resource(
             name: $name,
-            uri: 'schema+' . $schemaUri,
+            uri: $schemaUri,
             mimeType: 'application/json'
         );
     }
@@ -181,7 +180,7 @@ readonly class Resources
         return new ReadResourceResult([
             new TextResourceContents(
                 text: $text,
-                uri: 'schema+' . $schemaUri,
+                uri: $schemaUri,
                 mimeType: 'application/json'
             )
         ]);
@@ -205,7 +204,7 @@ readonly class Resources
 
         return new Resource(
             name: $name,
-            uri: 'action+' . $actionUri,
+            uri: $actionUri,
             mimeType: $mimeType
         );
     }
@@ -233,7 +232,7 @@ readonly class Resources
         return new ReadResourceResult([
             new TextResourceContents(
                 text: $text,
-                uri: 'action+' . $actionUri,
+                uri: $actionUri,
                 mimeType: $mimeType
             )
         ]);
