@@ -44,7 +44,7 @@ readonly class Prompts
         $prompts = [];
 
         $prompts[] = new Prompt(
-            name: 'backend-action-create-prompt',
+            name: 'backend-action-create',
             description: 'Prompt to create a new backend action with custom logic',
             arguments: [
                 new PromptArgument(
@@ -63,7 +63,7 @@ readonly class Prompts
         $name = $params->name;
         $arguments = $params->arguments;
 
-        if ($name === 'backend-action-create-prompt') {
+        if ($name === 'backend-action-create') {
             $actionLogic = $arguments?->logic ?? '';
 
             $text = 'Create a new backend action and use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
