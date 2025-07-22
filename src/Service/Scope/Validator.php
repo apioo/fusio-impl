@@ -32,15 +32,12 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Validator
+readonly class Validator
 {
-    private Table\Scope $scopeTable;
-    private UsageLimiter $usageLimiter;
-
-    public function __construct(Table\Scope $scopeTable, UsageLimiter $usageLimiter)
-    {
-        $this->scopeTable = $scopeTable;
-        $this->usageLimiter = $usageLimiter;
+    public function __construct(
+        private Table\Scope $scopeTable,
+        private UsageLimiter $usageLimiter
+    ) {
     }
 
     public function assert(Scope $scope, ?string $tenantId, ?Table\Generated\ScopeRow $existing = null): void

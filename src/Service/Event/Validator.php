@@ -36,17 +36,13 @@ use PSX\Schema\SchemaManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Validator
+readonly class Validator
 {
-    private Table\Event $eventTable;
-    private SchemaManagerInterface $schemaManager;
-    private UsageLimiter $usageLimiter;
-
-    public function __construct(Table\Event $eventTable, SchemaManagerInterface $schemaManager, UsageLimiter $usageLimiter)
-    {
-        $this->eventTable = $eventTable;
-        $this->schemaManager = $schemaManager;
-        $this->usageLimiter = $usageLimiter;
+    public function __construct(
+        private Table\Event $eventTable,
+        private SchemaManagerInterface $schemaManager,
+        private UsageLimiter $usageLimiter
+    ) {
     }
 
     public function assert(Event $event, ?string $tenantId, ?Table\Generated\EventRow $existing = null): void

@@ -33,17 +33,13 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Validator
+readonly class Validator
 {
-    private Table\App $appTable;
-    private Table\User $userTable;
-    private UsageLimiter $usageLimiter;
-
-    public function __construct(Table\App $appTable, Table\User $userTable, UsageLimiter $usageLimiter)
-    {
-        $this->appTable = $appTable;
-        $this->userTable = $userTable;
-        $this->usageLimiter = $usageLimiter;
+    public function __construct(
+        private Table\App $appTable,
+        private Table\User $userTable,
+        private UsageLimiter $usageLimiter
+    ) {
     }
 
     public function assert(App $app, ?string $tenantId, ?Table\Generated\AppRow $existing = null): void

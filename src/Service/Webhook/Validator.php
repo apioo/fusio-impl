@@ -32,17 +32,13 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Validator
+readonly class Validator
 {
-    private Table\Event $eventTable;
-    private Table\User $userTable;
-    private UsageLimiter $usageLimiter;
-
-    public function __construct(Table\Event $eventTable, Table\User $userTable, UsageLimiter $usageLimiter)
-    {
-        $this->eventTable = $eventTable;
-        $this->userTable = $userTable;
-        $this->usageLimiter = $usageLimiter;
+    public function __construct(
+        private Table\Event $eventTable,
+        private Table\User $userTable,
+        private UsageLimiter $usageLimiter
+    ) {
     }
 
     public function assert(Webhook $webhook, ?string $tenantId, ?Table\Generated\WebhookRow $existing = null): void
