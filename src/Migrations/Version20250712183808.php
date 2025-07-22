@@ -50,11 +50,19 @@ final class Version20250712183808 extends AbstractMigration
     {
         DataSyncronizer::sync($this->connection);
 
-        // deactivate schema form endpoint
-        $this->connection->update('fusio_operation', [
-            'status' => 0,
-        ], [
-            'name' => 'backend.schema.updateForm',
-        ]);
+        // deactivate legacy operations
+        $names = [
+            'backend.schema.updateForm',
+            'backend.connection.getIntrospection',
+            'backend.connection.getIntrospectionForEntity',
+        ];
+
+        foreach ($names as $name) {
+            $this->connection->update('fusio_operation', [
+                'status' => 0,
+            ], [
+                'name' => $name,
+            ]);
+        }
     }
 }
