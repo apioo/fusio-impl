@@ -45,19 +45,16 @@ use PSX\Sql\Condition;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Validator
+readonly class Validator
 {
-    private Table\Operation $operationTable;
-    private SchemaManagerInterface $schemaManager;
-    private ProcessorInterface $processor;
-    private UsageLimiter $usageLimiter;
-
-    public function __construct(Table\Operation $operationTable, SchemaManagerInterface $schemaManager, ProcessorInterface $processor, UsageLimiter $usageLimiter)
-    {
-        $this->operationTable = $operationTable;
-        $this->schemaManager = $schemaManager;
-        $this->processor = $processor;
-        $this->usageLimiter = $usageLimiter;
+    public function __construct(
+        private Table\Operation $operationTable,
+        private Table\Schema $schemaTable,
+        private Table\Action $actionTable,
+        private SchemaManagerInterface $schemaManager,
+        private ProcessorInterface $processor,
+        private UsageLimiter $usageLimiter
+    ) {
     }
 
     public function assert(Operation $operation, ?string $tenantId, ?Table\Generated\OperationRow $existing = null): void
@@ -111,22 +108,22 @@ class Validator
 
         $this->assertHttpMethodAndPathExisting($operation, $tenantId, $existing);
         $this->assertParameters($operation->getParameters());
-        $this->assertIncoming($operation->getIncoming());
+        $this->assertIncoming($operation->getIncoming(), $tenantId);
 
         $outgoing = $operation->getOutgoing();
         if ($outgoing !== null) {
-            $this->assertOutgoing($outgoing);
+            $this->assertOutgoing($outgoing, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Outgoing schema must not be empty');
             }
         }
 
-        $this->assertThrows($operation->getThrows());
+        $this->assertThrows($operation->getThrows(), $tenantId);
 
         $action = $operation->getAction();
         if ($action !== null) {
-            $this->assertAction($operation->getAction());
+            $this->assertAction($operation->getAction(), $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Action must not be empty');
@@ -243,21 +240,21 @@ class Validator
         }
     }
 
-    private function assertIncoming(?string $incoming): void
+    private function assertIncoming(?string $incoming, ?string $tenantId): void
     {
         if ($incoming === null) {
             return;
         }
 
-        $this->assertSchema($incoming, 'incoming');
+        $this->assertSchema($incoming, 'incoming', $tenantId);
     }
 
-    private function assertOutgoing(string $outgoing): void
+    private function assertOutgoing(string $outgoing, ?string $tenantId): void
     {
-        $this->assertSchema($outgoing, 'outgoing');
+        $this->assertSchema($outgoing, 'outgoing', $tenantId);
     }
 
-    private function assertThrows(?OperationThrows $throws): void
+    private function assertThrows(?OperationThrows $throws, ?string $tenantId): void
     {
         if ($throws === null) {
             return;
@@ -269,27 +266,45 @@ class Validator
                 $this->assertHttpCode($code, 400, 599, 'Throw');
             }
 
-            $this->assertSchema($throwName, 'throw ' . $statusCode);
+            $this->assertSchema($throwName, 'throw ' . $statusCode, $tenantId);
         }
     }
 
-    private function assertAction(string $actionName): void
+    private function assertAction(string $action, ?string $tenantId): void
     {
+        $scheme = ActionScheme::wrap($action);
+
+        if (str_starts_with($scheme, 'action://')) {
+            $row = $this->actionTable->findOneByTenantAndName($tenantId, null, $action);
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist, you need to provide an existing action name as value');
+            }
+        }
+
         try {
-            $this->processor->getAction(ActionScheme::wrap($actionName));
+            $this->processor->getAction($scheme);
         } catch (ActionNotFoundException|FactoryResolveException $e) {
-            throw new StatusCode\BadRequestException('Action "' . $actionName . '" does not exist', $e);
+            throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist', $e);
         }
     }
 
-    private function assertSchema(string $schema, string $type): void
+    private function assertSchema(string $schema, string $type, ?string $tenantId): void
     {
         if (str_starts_with($schema, 'mime://')) {
             return;
         }
 
+        $scheme = SchemaScheme::wrap($schema);
+
+        if (str_starts_with($scheme, 'schema://')) {
+            $row = $this->schemaTable->findOneByTenantAndName($tenantId, null, $schema);
+            if (!$row instanceof Table\Generated\SchemaRow) {
+                throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist, you need to provide an existing schema name as value');
+            }
+        }
+
         try {
-            $this->schemaManager->getSchema(SchemaScheme::wrap($schema));
+            $this->schemaManager->getSchema($scheme);
         } catch (InvalidSchemaException|ParserException $e) {
             throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist', $e);
         }
