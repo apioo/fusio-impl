@@ -57,7 +57,7 @@ readonly class Validator
     ) {
     }
 
-    public function assert(Operation $operation, ?string $tenantId, ?Table\Generated\OperationRow $existing = null): void
+    public function assert(Operation $operation, int $categoryId, ?string $tenantId, ?Table\Generated\OperationRow $existing = null): void
     {
         $this->usageLimiter->assertOperationCount($tenantId);
 
@@ -108,22 +108,22 @@ readonly class Validator
 
         $this->assertHttpMethodAndPathExisting($operation, $tenantId, $existing);
         $this->assertParameters($operation->getParameters());
-        $this->assertIncoming($operation->getIncoming(), $tenantId);
+        $this->assertIncoming($operation->getIncoming(), $categoryId, $tenantId);
 
         $outgoing = $operation->getOutgoing();
         if ($outgoing !== null) {
-            $this->assertOutgoing($outgoing, $tenantId);
+            $this->assertOutgoing($outgoing, $categoryId, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Outgoing schema must not be empty');
             }
         }
 
-        $this->assertThrows($operation->getThrows(), $tenantId);
+        $this->assertThrows($operation->getThrows(), $categoryId, $tenantId);
 
         $action = $operation->getAction();
         if ($action !== null) {
-            $this->assertAction($operation->getAction(), $tenantId);
+            $this->assertAction($operation->getAction(), $categoryId, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Action must not be empty');
@@ -240,21 +240,21 @@ readonly class Validator
         }
     }
 
-    private function assertIncoming(?string $incoming, ?string $tenantId): void
+    private function assertIncoming(?string $incoming, int $categoryId, ?string $tenantId): void
     {
         if ($incoming === null) {
             return;
         }
 
-        $this->assertSchema($incoming, 'incoming', $tenantId);
+        $this->assertSchema($incoming, 'incoming', $categoryId, $tenantId);
     }
 
-    private function assertOutgoing(string $outgoing, ?string $tenantId): void
+    private function assertOutgoing(string $outgoing, int $categoryId, ?string $tenantId): void
     {
-        $this->assertSchema($outgoing, 'outgoing', $tenantId);
+        $this->assertSchema($outgoing, 'outgoing', $categoryId, $tenantId);
     }
 
-    private function assertThrows(?OperationThrows $throws, ?string $tenantId): void
+    private function assertThrows(?OperationThrows $throws, int $categoryId, ?string $tenantId): void
     {
         if ($throws === null) {
             return;
@@ -266,16 +266,16 @@ readonly class Validator
                 $this->assertHttpCode($code, 400, 599, 'Throw');
             }
 
-            $this->assertSchema($throwName, 'throw ' . $statusCode, $tenantId);
+            $this->assertSchema($throwName, 'throw ' . $statusCode, $categoryId, $tenantId);
         }
     }
 
-    private function assertAction(string $action, ?string $tenantId): void
+    private function assertAction(string $action, int $categoryId, ?string $tenantId): void
     {
         $scheme = ActionScheme::wrap($action);
 
         if (str_starts_with($scheme, 'action://')) {
-            $row = $this->actionTable->findOneByTenantAndName($tenantId, null, $action);
+            $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, $action);
             if (!$row instanceof Table\Generated\ActionRow) {
                 throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist, you need to provide an existing action name as value');
             }
@@ -288,7 +288,7 @@ readonly class Validator
         }
     }
 
-    private function assertSchema(string $schema, string $type, ?string $tenantId): void
+    private function assertSchema(string $schema, string $type, int $categoryId, ?string $tenantId): void
     {
         if (str_starts_with($schema, 'mime://')) {
             return;
@@ -297,7 +297,7 @@ readonly class Validator
         $scheme = SchemaScheme::wrap($schema);
 
         if (str_starts_with($scheme, 'schema://')) {
-            $row = $this->schemaTable->findOneByTenantAndName($tenantId, null, $schema);
+            $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, $schema);
             if (!$row instanceof Table\Generated\SchemaRow) {
                 throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist, you need to provide an existing schema name as value');
             }

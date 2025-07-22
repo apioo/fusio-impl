@@ -60,7 +60,7 @@ readonly class Operation
 
     public function create(OperationCreate $operation, UserContext $context): int
     {
-        $this->validator->assert($operation, $context->getTenantId());
+        $this->validator->assert($operation, $context->getCategoryId(), $context->getTenantId());
 
         // create operation
         try {
@@ -123,7 +123,7 @@ readonly class Operation
             throw new StatusCode\GoneException('Operation was deleted');
         }
 
-        $this->validator->assert($operation, $context->getTenantId(), $existing);
+        $this->validator->assert($operation, $context->getCategoryId(), $context->getTenantId(), $existing);
 
         $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
 
