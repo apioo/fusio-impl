@@ -97,13 +97,6 @@
       <code><![CDATA[$row->getDescription()]]></code>
     </PossiblyNullArgument>
   </file>
-  <file src="src/Service/Operation/Validator.php">
-    <PossiblyNullArgument>
-      <code><![CDATA[$operation->getAction()]]></code>
-      <code><![CDATA[ActionScheme::wrap($actionName)]]></code>
-      <code><![CDATA[SchemaScheme::wrap($schema)]]></code>
-    </PossiblyNullArgument>
-  </file>
   <file src="src/Service/Page.php">
     <PossiblyNullArgument>
       <code><![CDATA[$page->getContent()]]></code>

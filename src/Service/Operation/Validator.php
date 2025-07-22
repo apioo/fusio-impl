@@ -107,8 +107,16 @@ readonly class Validator
         }
 
         $this->assertHttpMethodAndPathExisting($operation, $tenantId, $existing);
-        $this->assertParameters($operation->getParameters());
-        $this->assertIncoming($operation->getIncoming(), $categoryId, $tenantId);
+
+        $parameters = $operation->getParameters();
+        if ($parameters !== null) {
+            $this->assertParameters($parameters);
+        }
+
+        $incoming = $operation->getIncoming();
+        if ($incoming !== null) {
+            $this->assertIncoming($incoming, $categoryId, $tenantId);
+        }
 
         $outgoing = $operation->getOutgoing();
         if ($outgoing !== null) {
@@ -123,7 +131,7 @@ readonly class Validator
 
         $action = $operation->getAction();
         if ($action !== null) {
-            $this->assertAction($operation->getAction(), $categoryId, $tenantId);
+            $this->assertAction($action, $categoryId, $tenantId);
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Action must not be empty');
@@ -212,12 +220,8 @@ readonly class Validator
         }
     }
 
-    private function assertParameters(?OperationParameters $parameters): void
+    private function assertParameters(OperationParameters $parameters): void
     {
-        if ($parameters === null) {
-            return;
-        }
-
         foreach ($parameters as $name => $schema) {
             $this->assertParameterName($name);
 
@@ -240,12 +244,8 @@ readonly class Validator
         }
     }
 
-    private function assertIncoming(?string $incoming, int $categoryId, ?string $tenantId): void
+    private function assertIncoming(string $incoming, int $categoryId, ?string $tenantId): void
     {
-        if ($incoming === null) {
-            return;
-        }
-
         $this->assertSchema($incoming, 'incoming', $categoryId, $tenantId);
     }
 
@@ -273,6 +273,9 @@ readonly class Validator
     private function assertAction(string $action, int $categoryId, ?string $tenantId): void
     {
         $scheme = ActionScheme::wrap($action);
+        if (empty($scheme)) {
+            throw new StatusCode\BadRequestException('Action no value provided, you need to provide an existing action name as value');
+        }
 
         if (str_starts_with($scheme, 'action://')) {
             $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, $action);
@@ -295,6 +298,9 @@ readonly class Validator
         }
 
         $scheme = SchemaScheme::wrap($schema);
+        if (empty($scheme)) {
+            throw new StatusCode\BadRequestException(ucfirst($type) . ' schema no value provided, you need to provide an existing schema name as value');
+        }
 
         if (str_starts_with($scheme, 'schema://')) {
             $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, $schema);
