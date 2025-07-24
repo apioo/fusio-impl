@@ -3776,7 +3776,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Installs an action from the marketplace",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3943,7 +3943,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Installs an app from the marketplace",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -11647,11 +11647,11 @@
           "target": "Backend_OperationParameters"
         },
         "incoming": {
-          "description": "Describes the incoming request payload",
+          "description": "Describes the incoming request payload, this must contain a schema name",
           "type": "string"
         },
         "outgoing": {
-          "description": "Describes the outgoing response payload",
+          "description": "Describes the outgoing response payload, this must contain a schema name",
           "type": "string"
         },
         "throws": {
@@ -11660,7 +11660,7 @@
           "target": "Backend_OperationThrows"
         },
         "action": {
-          "description": "The target action to invoke",
+          "description": "The target action to invoke, this must contain an action name",
           "type": "string"
         },
         "costs": {

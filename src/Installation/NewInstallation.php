@@ -989,6 +989,7 @@ class NewInstallation
                     outgoing: Marketplace\MarketplaceMessage::class,
                     incoming: Marketplace\MarketplaceInstall::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Installs an action from the marketplace',
                 ),
                 'marketplace.action.get' => new Operation(
                     action: Backend\Action\Marketplace\Action\Get::class,
@@ -1025,6 +1026,7 @@ class NewInstallation
                     outgoing: Marketplace\MarketplaceMessage::class,
                     incoming: Marketplace\MarketplaceInstall::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Installs an app from the marketplace',
                 ),
                 'marketplace.app.get' => new Operation(
                     action: Backend\Action\Marketplace\App\Get::class,
