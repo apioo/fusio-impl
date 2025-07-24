@@ -854,6 +854,7 @@ class NewInstallation
                     outgoing: Model\Common\Message::class,
                     incoming: Model\Backend\GeneratorProvider::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Executes a generator with the provided config',
                 ),
                 'generator.getChangelog' => new Operation(
                     action: Backend\Action\Generator\Changelog::class,
@@ -863,6 +864,7 @@ class NewInstallation
                     outgoing: Model\Backend\GeneratorProviderChangelog::class,
                     incoming: Model\Backend\GeneratorProviderConfig::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Generates a changelog of all potential changes if you execute this generator with the provided config',
                 ),
                 'identity.getAll' => new Operation(
                     action: Backend\Action\Identity\GetAll::class,
@@ -951,6 +953,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\LogError::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific error',
                 ),
                 'log.getAll' => new Operation(
                     action: Backend\Action\Log\GetAll::class,
@@ -1007,6 +1010,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Upgrades an action from the marketplace',
                 ),
                 'marketplace.app.getAll' => new Operation(
                     action: Backend\Action\Marketplace\App\GetAll::class,
@@ -1044,6 +1048,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Marketplace\MarketplaceMessage::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Upgrades an app from the marketplace',
                 ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,
@@ -1328,6 +1333,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\SchemaPreviewResponse::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a HTML preview of the provided schema',
                 ),
                 'schema.updateForm' => new Operation(
                     action: Backend\Action\Schema\Form::class,
@@ -1398,6 +1404,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Backend\ScopeCategories::class,
                     throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available scopes grouped by category',
                 ),
                 'scope.get' => new Operation(
                     action: Backend\Action\Scope\Get::class,

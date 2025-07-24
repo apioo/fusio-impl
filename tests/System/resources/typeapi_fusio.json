@@ -3029,7 +3029,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Executes a generator with the provided config",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3073,7 +3073,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Generates a changelog of all potential changes if you execute this generator with the provided config",
       "stability": 2,
       "security": [
         "backend.generator"
@@ -3652,7 +3652,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a specific error",
       "stability": 2,
       "security": [
         "backend.log"
@@ -3819,7 +3819,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Upgrades an action from the marketplace",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -3986,7 +3986,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Upgrades an app from the marketplace",
       "stability": 2,
       "security": [
         "backend.marketplace"
@@ -5209,7 +5209,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns a HTML preview of the provided schema",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -5488,7 +5488,7 @@
           }
         }
       ],
-      "description": "",
+      "description": "Returns all available scopes grouped by category",
       "stability": 2,
       "security": [
         "backend.scope"
