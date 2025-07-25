@@ -55,6 +55,18 @@ readonly class Prompts
             ]
         );
 
+        $prompts[] = new Prompt(
+            name: 'backend-schema-create',
+            description: 'Prompt to create a new backend schema which describes a data structure',
+            arguments: [
+                new PromptArgument(
+                    name: 'logic',
+                    description: 'Describe the data structure i.e. a person with useful properties.',
+                    required: true
+                )
+            ]
+        );
+
         return new ListPromptsResult($prompts);
     }
 
@@ -64,16 +76,16 @@ readonly class Prompts
         $arguments = $params->arguments;
 
         if ($name === 'backend-action-create') {
-            $actionLogic = $arguments?->logic ?? '';
+            $logic = $arguments?->logic ?? '';
 
-            $text = 'Create a new backend action and use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal".';
-            $text.= 'Add a key "code" to the config property and for the value you need to transform the following logic into PHP code:';
+            $text = 'Use the "backend-action-create" tool and create a new backend action.';
+            $text.= 'Use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal" and add a key "code" to the config property and for the value you need to transform the following logic into PHP code:';
             $text.= "\n";
             $text.= '--' . "\n";
-            $text.= $actionLogic;
+            $text.= $logic;
             $text.= "\n";
             $text.= '--' . "\n";
-            $text.= 'As name of the action summarize the logic above in lower case and seperated by hyphens.';
+            $text.= 'As name of the action summarize the logic above into a short and precise name as lower case and seperated by hyphens.';
             $text.= 'The code which you generate is used as an action inside Fusio, which is an open source API management tool, this code helps to implement custom business logic for the user.';
             $text.= 'The resulting PHP code must be wrapped into the following code:';
             $text.= "\n";
@@ -114,6 +126,24 @@ PHP;
             $text.= '';
             $text.= 'The generated business logic must use the build method of the "$response" factory to return a result.';
             $text.= '';
+
+            return $this->newPromptResult($text);
+        } elseif ($name === 'backend-schema-create') {
+            $logic = $arguments?->logic ?? '';
+
+            $text = 'Use the "backend-schema-create" tool and create a new backend schema.';
+            $text.= 'As source property you need to transform the following logic into a TypeSchema specification:';
+            $text.= "\n";
+            $text.= '--' . "\n";
+            $text.= $logic;
+            $text.= "\n";
+            $text.= '--' . "\n";
+            $text.= 'As name of the schema summarize the logic above into a short and precise name as lower case and seperated by hyphens.';
+            $text.= 'TypeSchema is a JSON format which is similar to JSON Schema but has the following restrictions:' . "\n";
+            $text.= '- All types must be placed under the definitions keyword' . "\n";
+            $text.= '- It is not possible to build recursive schemas' . "\n";
+            $text.= '- Always add a key "root" to the object which reference the main schema under definitions' . "\n";
+            $text.= "\n";
 
             return $this->newPromptResult($text);
         }
