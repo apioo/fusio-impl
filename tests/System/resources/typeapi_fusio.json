@@ -18,7 +18,7 @@
       "backend.dashboard",
       "backend.database",
       "backend.event",
-      "backend.filesystem",
+      "backend.file",
       "backend.firewall",
       "backend.form",
       "backend.generator",
@@ -2586,8 +2586,8 @@
         "event"
       ]
     },
-    "backend.filesystem.createObject": {
-      "path": "/backend/filesystem/:connection_id",
+    "backend.file.create": {
+      "path": "/backend/file/:connection_id",
       "method": "POST",
       "return": {
         "code": 201,
@@ -2620,14 +2620,14 @@
       "description": "Uploads one or more files on the filesystem connection",
       "stability": 2,
       "security": [
-        "backend.filesystem"
+        "backend.file"
       ],
       "authorization": true,
       "tags": [
-        "filesystem"
+        "file"
       ]
     },
-    "backend.filesystem.deleteObject": {
+    "backend.file.delete": {
       "path": "/backend/filesystem/:connection_id/:file_id",
       "method": "DELETE",
       "return": {
@@ -2663,15 +2663,15 @@
       "description": "Deletes an existing file on the filesystem connection",
       "stability": 2,
       "security": [
-        "backend.filesystem"
+        "backend.file"
       ],
       "authorization": true,
       "tags": [
-        "filesystem"
+        "file"
       ]
     },
-    "backend.filesystem.getObject": {
-      "path": "/backend/filesystem/:connection_id/:file_id",
+    "backend.file.get": {
+      "path": "/backend/file/:connection_id/:file_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -2706,21 +2706,21 @@
       "description": "Returns the content of the provided file id on the filesystem connection",
       "stability": 2,
       "security": [
-        "backend.filesystem"
+        "backend.file"
       ],
       "authorization": true,
       "tags": [
-        "filesystem"
+        "file"
       ]
     },
-    "backend.filesystem.getObjects": {
-      "path": "/backend/filesystem/:connection_id",
+    "backend.file.getAll": {
+      "path": "/backend/file/:connection_id",
       "method": "GET",
       "return": {
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Backend_DatabaseTableCollection"
+          "target": "Backend_FileCollection"
         }
       },
       "arguments": {
@@ -2755,15 +2755,15 @@
       "description": "Returns all available files on the filesystem connection",
       "stability": 2,
       "security": [
-        "backend.filesystem"
+        "backend.file"
       ],
       "authorization": true,
       "tags": [
-        "filesystem"
+        "file"
       ]
     },
-    "backend.filesystem.updateObject": {
-      "path": "/backend/filesystem/:connection_id/:file_id",
+    "backend.file.update": {
+      "path": "/backend/file/:connection_id/:file_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -2802,11 +2802,11 @@
       "description": "Updates an existing file on the filesystem connection",
       "stability": 2,
       "security": [
-        "backend.filesystem"
+        "backend.file"
       ],
       "authorization": true,
       "tags": [
-        "filesystem"
+        "file"
       ]
     },
     "backend.firewall.create": {
@@ -11434,6 +11434,44 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Event"
+      }
+    },
+    "Backend_File": {
+      "description": "This object represents a file on the filesystem",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the file",
+          "type": "string"
+        },
+        "contentType": {
+          "description": "MIME type of the file",
+          "type": "string"
+        },
+        "checksum": {
+          "description": "Checksum of the file",
+          "type": "string"
+        },
+        "lastModified": {
+          "description": "Last modified date of the file",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_FileCollection": {
+      "description": "A paginated collection of file objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_File"
+        }
       }
     },
     "Backend_Firewall": {

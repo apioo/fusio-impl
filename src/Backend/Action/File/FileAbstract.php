@@ -18,8 +18,11 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Filesystem;
+namespace Fusio\Impl\Backend\Action\File;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\RequestInterface;
@@ -38,7 +41,7 @@ use Ramsey\Uuid\Uuid;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly abstract class FilesystemAbstract implements ActionInterface
+readonly abstract class FileAbstract implements ActionInterface
 {
     public function __construct(private Connector $connector, private FrameworkConfig $frameworkConfig)
     {
@@ -72,6 +75,15 @@ readonly abstract class FilesystemAbstract implements ActionInterface
     protected function getObjectId(FileAttributes $object): string
     {
         return Uuid::uuid3('f3cc3100-3111-4ff2-9554-6511ccdc0490', $object->path())->toString();
+    }
+
+    protected function getDateTimeFromTimeStamp(int $timeStamp): DateTimeInterface
+    {
+        try {
+            return new DateTimeImmutable('@' . $timeStamp);
+        } catch (Exception) {
+            throw new StatusCode\InternalServerErrorException('Provided an invalid timestamp');
+        }
     }
 
     protected function findObjectById(Filesystem $connection, string $id): FileAttributes

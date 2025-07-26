@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Filesystem;
+namespace Fusio\Impl\Backend\Action\File;
 
-use DateTimeImmutable;
 use DateTimeInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -36,7 +35,7 @@ use PSX\Http\Exception\BadRequestException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Get extends FilesystemAbstract
+readonly class Get extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
@@ -57,7 +56,7 @@ readonly class Get extends FilesystemAbstract
         }
 
         $checksum = '"' . $connection->checksum($object->path()) . '"';
-        $lastModified = new DateTimeImmutable('@' . $connection->lastModified($object->path()));
+        $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
 
         $headers = [
             'Content-Type' => $connection->mimeType($object->path()),

@@ -18,11 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Filesystem;
+namespace Fusio\Impl\Tests\Backend\Api\File;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,7 +33,7 @@ class EntityTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -53,7 +50,7 @@ class EntityTest extends DbTestCase
 
     public function testGetNotFound()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/foobar', 'GET', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -68,7 +65,7 @@ class EntityTest extends DbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

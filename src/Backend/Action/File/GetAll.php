@@ -18,8 +18,9 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Filesystem;
+namespace Fusio\Impl\Backend\Action\File;
 
+use DateTimeInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -33,7 +34,7 @@ use League\Flysystem\StorageAttributes;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAll extends FilesystemAbstract
+readonly class GetAll extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
@@ -58,12 +59,14 @@ readonly class GetAll extends FilesystemAbstract
         $result = [];
         foreach ($objects as $object) {
             if ($object instanceof FileAttributes) {
+                $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
+
                 $result[] = [
                     'id' => $this->getObjectId($object),
-                    'fileName' => $object->path(),
+                    'name' => $object->path(),
                     'contentType' => $connection->mimeType($object->path()),
                     'checksum' => $connection->checksum($object->path()),
-                    'lastModified' => $connection->lastModified($object->path()),
+                    'lastModified' => $lastModified->format(DateTimeInterface::ATOM),
                 ];
             }
         }

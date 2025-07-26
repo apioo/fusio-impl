@@ -18,35 +18,47 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Filesystem;
+namespace Fusio\Impl\Backend\Action\File;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Exception\BadRequestException;
 
 /**
- * Create
+ * Update
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Create extends FilesystemAbstract
+readonly class Update extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->assertFilesystemEnabled();
 
-        $connection = $this->getConnection($request);
-
-        foreach ($this->getUploadedFiles($request->getPayload()) as $name => $resource) {
-            $connection->writeStream($name, $resource);
+        $id = $request->get('file_id');
+        if (empty($id)) {
+            throw new BadRequestException('Provided no id');
         }
 
-        return new HttpResponse(201, [], [
+        $connection = $this->getConnection($request);
+        $object = $this->findObjectById($connection, $id);
+
+        $hasFile = false;
+        foreach ($this->getUploadedFiles($request->getPayload()) as $resource) {
+            if ($hasFile) {
+                throw new BadRequestException('It is not possible to provide multiple files when updating a single file');
+            }
+
+            $connection->writeStream($object->path(), $resource);
+            $hasFile = true;
+        }
+
+        return [
             'success' => true,
-            'message' => 'File successfully created',
-        ]);
+            'message' => 'File successfully updated',
+        ];
     }
 }

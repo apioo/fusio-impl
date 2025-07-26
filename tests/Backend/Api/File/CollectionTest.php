@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Filesystem;
+namespace Fusio\Impl\Tests\Backend\Api\File;
 
-use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -34,7 +33,7 @@ class CollectionTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem', 'GET', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -51,21 +50,21 @@ class CollectionTest extends DbTestCase
             "fileName": "collection_schema.json",
             "contentType": "application\/json",
             "checksum": "3451fb8575308d844ea3ed9f1ac60e2e",
-            "lastModified": 1605125517
+            "lastModified": "2020-11-11T20:11:57+00:00"
         },
         {
             "id": "7564504c-bfbb-387b-9ab2-bd937fa1dab7",
             "fileName": "entry_form.json",
             "contentType": "application\/json",
             "checksum": "669c26419e3be9dc363b017432661949",
-            "lastModified": 1530430810
+            "lastModified": "2018-07-01T07:40:10+00:00"
         },
         {
             "id": "79accfa8-013d-3d8d-8b5c-d7eba46910bf",
             "fileName": "entry_schema.json",
             "contentType": "application\/json",
             "checksum": "652eef86cffe31cf4de1dd37d883398d",
-            "lastModified": 1605125517
+            "lastModified": "2020-11-11T20:11:57+00:00"
         }
     ]
 }
@@ -82,7 +81,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem', 'PUT', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -96,7 +95,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem', 'DELETE', array(
+        $response = $this->sendRequest('/backend/file/LocalFilesystem', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

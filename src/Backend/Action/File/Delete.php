@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Filesystem;
+namespace Fusio\Impl\Backend\Action\File;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -32,7 +32,7 @@ use PSX\Http\Exception\BadRequestException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Delete extends FilesystemAbstract
+readonly class Delete extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
