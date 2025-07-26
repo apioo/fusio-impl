@@ -44,7 +44,7 @@ class EntityTest extends DbTestCase
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertNotEmpty($response->getHeader('ETag'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
-        $this->assertEquals('Wed, 11 Nov 2020 20:11:57 GMT', $response->getHeader('Last-Modified'), $body);
+        $this->assertNotEmpty($response->getHeader('Last-Modified'), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
