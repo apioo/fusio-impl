@@ -46,8 +46,7 @@ return [
     // Describes the default email which Fusio uses as from address
     'fusio_mail_sender'        => env('APP_MAIL_SENDER')->string(),
 
-    // Indicates whether the user registration is enabled. If true it is possible for external users to register a new
-    // account
+    // Indicates whether the user registration is enabled. If true it is possible for external users to register a new account
     'fusio_registration'       => true,
 
     // Indicates whether the database is enabled. If true it is possible to change the database schema through the backend
