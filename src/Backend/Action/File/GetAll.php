@@ -38,8 +38,8 @@ readonly class GetAll extends FileAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $connection = $this->getConnection($request);
-        $startIndex = (int)$request->get('startIndex');
-        $count = (int)$request->get('count');
+        $startIndex = (int) $request->get('startIndex');
+        $count = (int) $request->get('count');
         $limit = 1024;
 
         $startIndex = $startIndex < 0 ? 0 : $startIndex;
