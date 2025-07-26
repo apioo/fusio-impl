@@ -126,12 +126,17 @@ readonly abstract class FileAbstract implements ActionInterface
                 throw new StatusCode\BadRequestException('Provided no file name contains invalid characters');
             }
 
-            $handle = fopen($part->getTmpName(), 'r');
+            $tmpName = $part->getTmpName();
+            if (empty($tmpName) || !is_file($tmpName)) {
+                throw new StatusCode\BadRequestException('Could not find uploaded file');
+            }
+
+            $handle = fopen($tmpName, 'r');
             if (!is_resource($handle)) {
                 throw new StatusCode\BadRequestException('Could not read uploaded file');
             }
 
-            yield $part->getName() => $handle;
+            yield $name => $handle;
         }
     }
 
