@@ -31,6 +31,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\Filesystem;
 use PSX\Data\Multipart\Body;
 use PSX\Data\Multipart\File;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use Ramsey\Uuid\Uuid;
 
@@ -77,10 +78,10 @@ readonly abstract class FileAbstract implements ActionInterface
         return Uuid::uuid3('f3cc3100-3111-4ff2-9554-6511ccdc0490', $object->path())->toString();
     }
 
-    protected function getDateTimeFromTimeStamp(int $timeStamp): DateTimeInterface
+    protected function getDateTimeFromTimeStamp(int $timeStamp): LocalDateTime
     {
         try {
-            return new DateTimeImmutable('@' . $timeStamp);
+            return LocalDateTime::from(new DateTimeImmutable('@' . $timeStamp));
         } catch (Exception) {
             throw new StatusCode\InternalServerErrorException('Provided an invalid timestamp');
         }

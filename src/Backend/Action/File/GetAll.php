@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
+use PSX\DateTime\LocalDateTime;
 
 /**
  * GetAll
@@ -66,7 +67,7 @@ readonly class GetAll extends FileAbstract
                     'name' => $object->path(),
                     'contentType' => $connection->mimeType($object->path()),
                     'checksum' => $connection->checksum($object->path()),
-                    'lastModified' => $lastModified->format(DateTimeInterface::ATOM),
+                    'lastModified' => $lastModified->toString(),
                 ];
             }
         }

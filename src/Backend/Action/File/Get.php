@@ -61,14 +61,14 @@ readonly class Get extends FileAbstract
         $headers = [
             'Content-Type' => $connection->mimeType($object->path()),
             'ETag' => $checksum,
-            'Last-Modified' => $lastModified->format(DateTimeInterface::RFC7231),
+            'Last-Modified' => $lastModified->toDateTime()->format(DateTimeInterface::RFC7231),
         ];
 
         if (!empty($ifNoneMatch) && $ifNoneMatch === $checksum) {
             return new HttpResponse(304, $headers, null);
         }
 
-        if (!empty($ifModifiedSince) && $lastModified->getTimestamp() < strtotime($ifModifiedSince)) {
+        if (!empty($ifModifiedSince) && $lastModified->getUnixTimestamp() < strtotime($ifModifiedSince)) {
             return new HttpResponse(304, $headers, null);
         }
 

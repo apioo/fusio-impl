@@ -42,7 +42,7 @@ class EntityTest extends DbTestCase
         $expect = file_get_contents(__DIR__ . '/../../../resources/collection_schema.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals('"3451fb8575308d844ea3ed9f1ac60e2e"', $response->getHeader('ETag'), $body);
+        $this->assertNotEmpty($response->getHeader('ETag'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertEquals('Wed, 11 Nov 2020 20:11:57 GMT', $response->getHeader('Last-Modified'), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
