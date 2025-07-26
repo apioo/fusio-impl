@@ -251,7 +251,7 @@
       "name": "LocalFilesystem",
       "class": "Fusio.Adapter.File.Connection.Filesystem",
       "config": {
-        "config": "C:\\www\\projects\\fusio-impl\\tests\/resources"
+        "config": ".\/tests\/resources"
       }
     },
     {
