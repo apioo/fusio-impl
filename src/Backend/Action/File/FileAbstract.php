@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Backend\Action\File;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Exception;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;

@@ -20,13 +20,11 @@
 
 namespace Fusio\Impl\Backend\Action\File;
 
-use DateTimeInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
-use PSX\DateTime\LocalDateTime;
 
 /**
  * GetAll
@@ -40,8 +38,8 @@ readonly class GetAll extends FileAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $connection = $this->getConnection($request);
-        $startIndex = (int) $request->get('startIndex');
-        $count = (int) $request->get('count');
+        $startIndex = (int)$request->get('startIndex');
+        $count = (int)$request->get('count');
         $limit = 1024;
 
         $startIndex = $startIndex < 0 ? 0 : $startIndex;
@@ -51,7 +49,7 @@ readonly class GetAll extends FileAbstract
 
         $totalResults = count($objects);
 
-        usort($objects, static function(StorageAttributes $a, StorageAttributes $b) {
+        usort($objects, static function (StorageAttributes $a, StorageAttributes $b) {
             return strcasecmp($a->path(), $b->path());
         });
 
