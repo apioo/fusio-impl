@@ -47,21 +47,21 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "id": "385ee9e8-53fe-3082-8719-352b32044b13",
-            "fileName": "collection_schema.json",
+            "name": "collection_schema.json",
             "contentType": "application\/json",
             "checksum": "3451fb8575308d844ea3ed9f1ac60e2e",
             "lastModified": "2020-11-11T20:11:57+00:00"
         },
         {
             "id": "7564504c-bfbb-387b-9ab2-bd937fa1dab7",
-            "fileName": "entry_form.json",
+            "name": "entry_form.json",
             "contentType": "application\/json",
             "checksum": "669c26419e3be9dc363b017432661949",
             "lastModified": "2018-07-01T07:40:10+00:00"
         },
         {
             "id": "79accfa8-013d-3d8d-8b5c-d7eba46910bf",
-            "fileName": "entry_schema.json",
+            "name": "entry_schema.json",
             "contentType": "application\/json",
             "checksum": "652eef86cffe31cf4de1dd37d883398d",
             "lastModified": "2020-11-11T20:11:57+00:00"

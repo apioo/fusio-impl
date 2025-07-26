@@ -124,7 +124,7 @@ class CategoriesTest extends DbTestCase
                 },
                 {
                     "id": 16,
-                    "name": "backend.filesystem",
+                    "name": "backend.file",
                     "description": ""
                 },
                 {
