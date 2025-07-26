@@ -302,7 +302,7 @@ readonly class Validator
             throw new StatusCode\BadRequestException(ucfirst($type) . ' schema no value provided, you need to provide an existing schema name as value');
         }
 
-        if (str_starts_with($scheme, 'schema://')) {
+        if (str_starts_with($scheme, 'schema://') && $scheme !== 'schema://Passthru') {
             $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, $schema);
             if (!$row instanceof Table\Generated\SchemaRow) {
                 throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist, you need to provide an existing schema name as value');
