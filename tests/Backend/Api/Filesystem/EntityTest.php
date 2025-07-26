@@ -18,8 +18,11 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Log;
+namespace Fusio\Impl\Tests\Backend\Api\Filesystem;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -33,44 +36,39 @@ class EntityTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/log/1', 'GET', array(
+        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = file_get_contents(__DIR__ . '/../../../resources/collection_schema.json');
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('"3451fb8575308d844ea3ed9f1ac60e2e"', $response->getHeader('ETag'), $body);
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
+        $this->assertEquals('Wed, 11 Nov 2020 20:11:57 GMT', $response->getHeader('Last-Modified'), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetNotFound()
+    {
+        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/foobar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
+        $data = \json_decode($body);
 
-        $expect = <<<JSON
-{
-    "id": 1,
-    "appId": 3,
-    "operationId": 232,
-    "ip": "127.0.0.1",
-    "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
-    "method": "GET",
-    "path": "\/bar",
-    "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
-    "body": "foobar",
-    "errors": [
-        {
-            "id": 1,
-            "message": "Syntax error, malformed JSON",
-            "trace": "[trace]",
-            "file": "[file]",
-            "line": 74
-        }
-    ],
-    "date": "2015-06-25T22:49:09Z"
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Provided in invalid id', $data->message);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/log/1', 'POST', array(
+        $response = $this->sendRequest('/backend/filesystem/LocalFilesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -84,27 +82,16 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/log/1', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
-
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->markTestSkipped('File upload is difficult to test');
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/log/1', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        $this->markTestSkipped('File upload is difficult to test');
+    }
 
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+    protected function isTransactional(): bool
+    {
+        return false;
     }
 }

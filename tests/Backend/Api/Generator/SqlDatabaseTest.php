@@ -69,6 +69,10 @@ class SqlDatabaseTest extends ProviderTestCase
             "help": "The SQL connection which should be used",
             "options": [
                 {
+                    "key": "5",
+                    "value": "LocalFilesystem"
+                },
+                {
                     "key": "3",
                     "value": "Paypal"
                 },

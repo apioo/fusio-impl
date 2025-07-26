@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests;
 
+use Fusio\Adapter\File\Connection\Filesystem;
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
@@ -120,6 +121,7 @@ class Fixture
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey), ['foo' => 'bar']);
         $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
         $data->addConnection('Worker', Worker::class, Service\Connection\Encrypter::encrypt(['url' => 'http://127.0.0.1'], $secretKey));
+        $data->addConnection('LocalFilesystem', Filesystem::class, Service\Connection\Encrypter::encrypt(['config' => __DIR__ . '/resources'], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);

@@ -69,12 +69,12 @@ class CategoriesTest extends DbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 55,
+                    "id": 56,
                     "name": "bar",
                     "description": "Bar access"
                 },
                 {
-                    "id": 54,
+                    "id": 55,
                     "name": "foo",
                     "description": "Foo access"
                 }

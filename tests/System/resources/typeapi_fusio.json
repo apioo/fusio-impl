@@ -18,6 +18,7 @@
       "backend.dashboard",
       "backend.database",
       "backend.event",
+      "backend.filesystem",
       "backend.firewall",
       "backend.form",
       "backend.generator",
@@ -2583,6 +2584,229 @@
       "authorization": true,
       "tags": [
         "event"
+      ]
+    },
+    "backend.filesystem.createObject": {
+      "path": "/backend/filesystem/:connection_id",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "contentType": "multipart/form-data"
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Uploads one or more files on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.filesystem"
+      ],
+      "authorization": true,
+      "tags": [
+        "filesystem"
+      ]
+    },
+    "backend.filesystem.deleteObject": {
+      "path": "/backend/filesystem/:connection_id/:file_id",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing file on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.filesystem"
+      ],
+      "authorization": true,
+      "tags": [
+        "filesystem"
+      ]
+    },
+    "backend.filesystem.getObject": {
+      "path": "/backend/filesystem/:connection_id/:file_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Passthru"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the content of the provided file id on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.filesystem"
+      ],
+      "authorization": true,
+      "tags": [
+        "filesystem"
+      ]
+    },
+    "backend.filesystem.getObjects": {
+      "path": "/backend/filesystem/:connection_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_DatabaseTableCollection"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns all available files on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.filesystem"
+      ],
+      "authorization": true,
+      "tags": [
+        "filesystem"
+      ]
+    },
+    "backend.filesystem.updateObject": {
+      "path": "/backend/filesystem/:connection_id/:file_id",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "contentType": "multipart/form-data"
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing file on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.filesystem"
+      ],
+      "authorization": true,
+      "tags": [
+        "filesystem"
       ]
     },
     "backend.firewall.create": {

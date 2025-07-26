@@ -50,12 +50,13 @@ return [
     // account
     'fusio_registration'       => true,
 
-    // Indicates whether the database is enabled. If true it is possible to change the database schema through the
-    // backend
+    // Indicates whether the database is enabled. If true it is possible to change the database schema through the backend
     'fusio_database'           => true,
 
-    // Indicates whether the marketplace is enabled. If true it is possible to download and install other apps through
-    // the backend
+    // Indicates whether the filesystem is enabled. If true it is possible to upload or delete files through the backend
+    'fusio_filesystem'         => true,
+
+    // Indicates whether the marketplace is enabled. If true it is possible to download and install other apps through the backend
     'fusio_marketplace'        => false,
 
     // The public url to the apps folder (i.e. http://acme.com/apps or http://apps.acme.com)

@@ -35,6 +35,7 @@ use Fusio\Model;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
+use PSX\Schema\ContentType;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
 
 /**
@@ -706,6 +707,54 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     eventName: 'fusio.event.delete',
                     description: 'Deletes an existing event',
+                ),
+                'filesystem.getObjects' => new Operation(
+                    action: Backend\Action\Filesystem\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/filesystem/:connection_id',
+                    httpCode: 200,
+                    outgoing: Model\Backend\DatabaseTableCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all available files on the filesystem connection',
+                ),
+                'filesystem.getObject' => new Operation(
+                    action: Backend\Action\Filesystem\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/filesystem/:connection_id/:file_id',
+                    httpCode: 200,
+                    outgoing: Passthru::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the content of the provided file id on the filesystem connection',
+                ),
+                'filesystem.createObject' => new Operation(
+                    action: Backend\Action\Filesystem\Create::class,
+                    httpMethod: 'POST',
+                    httpPath: '/filesystem/:connection_id',
+                    httpCode: 201,
+                    outgoing: Model\Common\Message::class,
+                    incoming: ContentType::MULTIPART,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Uploads one or more files on the filesystem connection',
+                ),
+                'filesystem.updateObject' => new Operation(
+                    action: Backend\Action\Filesystem\Update::class,
+                    httpMethod: 'PUT',
+                    httpPath: '/filesystem/:connection_id/:file_id',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: ContentType::MULTIPART,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Updates an existing file on the filesystem connection',
+                ),
+                'filesystem.deleteObject' => new Operation(
+                    action: Backend\Action\Filesystem\Delete::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/filesystem/:connection_id/:file_id',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Deletes an existing file on the filesystem connection',
                 ),
                 'backup.export' => new Operation(
                     action: Backend\Action\Backup\Export::class,
