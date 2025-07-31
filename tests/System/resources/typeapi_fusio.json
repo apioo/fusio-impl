@@ -2628,7 +2628,7 @@
       ]
     },
     "backend.file.delete": {
-      "path": "/backend/filesystem/:connection_id/:file_id",
+      "path": "/backend/file/:connection_id/:file_id",
       "method": "DELETE",
       "return": {
         "code": 200,

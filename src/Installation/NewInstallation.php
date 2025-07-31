@@ -750,7 +750,7 @@ class NewInstallation
                 'file.delete' => new Operation(
                     action: Backend\Action\File\Delete::class,
                     httpMethod: 'DELETE',
-                    httpPath: '/filesystem/:connection_id/:file_id',
+                    httpPath: '/file/:connection_id/:file_id',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
