@@ -52,9 +52,19 @@ final class Version20250712183808 extends AbstractMigration
 
         // deactivate legacy operations
         $names = [
-            'backend.schema.updateForm',
             'backend.connection.getIntrospection',
             'backend.connection.getIntrospectionForEntity',
+            'backend.database.getTables',
+            'backend.database.getTable',
+            'backend.database.createTable',
+            'backend.database.updateTable',
+            'backend.database.deleteTable',
+            'backend.database.getRows',
+            'backend.database.getRow',
+            'backend.database.createRow',
+            'backend.database.updateRow',
+            'backend.database.deleteRow',
+            'backend.schema.updateForm',
         ];
 
         foreach ($names as $name) {
