@@ -140,10 +140,10 @@ readonly abstract class FileAbstract implements ActionInterface
         }
     }
 
-    protected function assertFilesystemEnabled(): void
+    protected function assertConnectionEnabled(): void
     {
-        if (!$this->frameworkConfig->isFilesystemEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('Filesystem is not enabled, please change the setting "fusio_filesystem" at the configuration.php to "true" in order to activate the filesystem');
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Filesystem is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the filesystem');
         }
     }
 }

@@ -228,10 +228,10 @@ abstract class TableAbstract implements ActionInterface
         return $result;
     }
 
-    protected function assertDatabaseEnabled(): void
+    protected function assertConnectionEnabled(): void
     {
-        if (!$this->frameworkConfig->isDatabaseEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_database" at the configuration.php to "true" in order to activate the database');
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
         }
     }
 }

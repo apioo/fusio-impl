@@ -116,14 +116,9 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_registration') !== false;
     }
 
-    public function isDatabaseEnabled(): bool
+    public function isConnectionEnabled(): bool
     {
-        return $this->config->get('fusio_database') !== false;
-    }
-
-    public function isFilesystemEnabled(): bool
-    {
-        return $this->config->get('fusio_filesystem') !== false;
+        return $this->config->get('fusio_connection') !== false;
     }
 
     public function isMarketplaceEnabled(): bool

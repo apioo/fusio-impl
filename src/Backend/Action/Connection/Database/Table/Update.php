@@ -37,7 +37,7 @@ class Update extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertDatabaseEnabled();
+        $this->assertConnectionEnabled();
 
         $connection = $this->getConnection($request);
         $schemaManager = $connection->createSchemaManager();

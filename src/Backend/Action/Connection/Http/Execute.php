@@ -40,6 +40,8 @@ readonly class Execute extends HttpAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $this->assertConnectionEnabled();
+
         $connection = $this->getConnection($request);
         $payload = $request->getPayload();
 

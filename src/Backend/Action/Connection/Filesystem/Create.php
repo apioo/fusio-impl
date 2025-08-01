@@ -36,7 +36,7 @@ readonly class Create extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertFilesystemEnabled();
+        $this->assertConnectionEnabled();
 
         $connection = $this->getConnection($request);
 

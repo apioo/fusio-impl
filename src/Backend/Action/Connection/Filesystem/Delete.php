@@ -36,7 +36,7 @@ readonly class Delete extends FileAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertFilesystemEnabled();
+        $this->assertConnectionEnabled();
 
         $id = $request->get('file_id');
         if (empty($id)) {

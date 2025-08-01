@@ -55,10 +55,10 @@ readonly abstract class SdkAbstract implements ActionInterface
         return $connection;
     }
 
-    protected function assertFilesystemEnabled(): void
+    protected function assertConnectionEnabled(): void
     {
-        if (!$this->frameworkConfig->isFilesystemEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('Filesystem is not enabled, please change the setting "fusio_filesystem" at the configuration.php to "true" in order to activate the filesystem');
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('SDK is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the SDK');
         }
     }
 }
