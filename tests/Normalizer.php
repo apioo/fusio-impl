@@ -33,6 +33,7 @@ class Normalizer
     {
         $data = self::normalizeUuid($data);
         $data = self::normalizeDateTime($data);
+        $data = self::normalizeHttpDateTime($data);
         return $data;
     }
 
@@ -44,5 +45,10 @@ class Normalizer
     public static function normalizeDateTime(string $data): string
     {
         return preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $data);
+    }
+
+    public static function normalizeHttpDateTime(string $data): string
+    {
+        return preg_replace('/\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/m', '[datetime]', $data);
     }
 }
