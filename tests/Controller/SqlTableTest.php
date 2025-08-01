@@ -23,7 +23,6 @@ namespace Fusio\Impl\Tests\Controller;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\OperationInterface;
-use PSX\Api\Resource;
 use PSX\Json\Parser;
 
 /**
