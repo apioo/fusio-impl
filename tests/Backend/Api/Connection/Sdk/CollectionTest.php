@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Connection\File;
+namespace Fusio\Impl\Tests\Backend\Api\Connection\Sdk;
 
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest

@@ -16,9 +16,7 @@
       "backend.connection",
       "backend.cronjob",
       "backend.dashboard",
-      "backend.database",
       "backend.event",
-      "backend.file",
       "backend.firewall",
       "backend.form",
       "backend.generator",
@@ -1345,6 +1343,530 @@
         "connection"
       ]
     },
+    "backend.connection.database.createRow": {
+      "path": "/backend/connection/:connection_id/database/:table_name/rows",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_DatabaseRow"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new row at a table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.createTable": {
+      "path": "/backend/connection/:connection_id/database",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_DatabaseTable"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.deleteRow": {
+      "path": "/backend/connection/:connection_id/database/:table_name/rows/:id",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing row at a table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.deleteTable": {
+      "path": "/backend/connection/:connection_id/database/:table_name",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.getRow": {
+      "path": "/backend/connection/:connection_id/database/:table_name/rows/:id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_DatabaseRow"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific row at a table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.getRows": {
+      "path": "/backend/connection/:connection_id/database/:table_name/rows",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_DatabaseRowCollection"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "filterBy": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "filterOp": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "filterValue": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "sortBy": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "sortOrder": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "columns": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns paginated rows at a table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.getTable": {
+      "path": "/backend/connection/:connection_id/database/:table_name",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_DatabaseTable"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the schema of a specific table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.getTables": {
+      "path": "/backend/connection/:connection_id/database",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_DatabaseTableCollection"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns all available tables on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.updateRow": {
+      "path": "/backend/connection/:connection_id/database/:table_name/rows/:id",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_DatabaseRow"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing row at a table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.database.updateTable": {
+      "path": "/backend/connection/:connection_id/database/:table_name",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "table_name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_DatabaseTable"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing table on a database",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
     "backend.connection.delete": {
       "path": "/backend/connection/$connection_id<[0-9]+|^~>",
       "method": "DELETE",
@@ -1373,6 +1895,226 @@
         }
       ],
       "description": "Deletes an existing connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.filesystem.create": {
+      "path": "/backend/connection/:connection_id/filesystem",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "contentType": "multipart/form-data"
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Uploads one or more files on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.filesystem.delete": {
+      "path": "/backend/connection/:connection_id/filesystem/:file_id",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing file on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.filesystem.get": {
+      "path": "/backend/connection/:connection_id/filesystem/:file_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "contentType": "application/octet-stream"
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the content of the provided file id on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.filesystem.getAll": {
+      "path": "/backend/connection/:connection_id/filesystem",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_FileCollection"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns all available files on the filesystem connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.filesystem.update": {
+      "path": "/backend/connection/:connection_id/filesystem/:file_id",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "file_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "contentType": "multipart/form-data"
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing file on the filesystem connection",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1542,7 +2284,7 @@
       ]
     },
     "backend.connection.getRedirect": {
-      "path": "/backend/connection/$connection_id<[0-9]+|^~>/redirect",
+      "path": "/backend/connection/:connection_id/redirect",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1569,6 +2311,87 @@
         }
       ],
       "description": "Returns a redirect url to start the OAuth2 authorization flow for the given connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.http.execute": {
+      "path": "/backend/connection/:connection_id/http",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_HttpResponse"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_HttpRequest"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Sends an arbitrary HTTP request to the connection",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.sdk.get": {
+      "path": "/backend/connection/:connection_id/sdk",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Passthru"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the SDK specification",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -1857,530 +2680,6 @@
         "dashboard"
       ]
     },
-    "backend.database.createRow": {
-      "path": "/backend/database/:connection_id/:table_name/rows",
-      "method": "POST",
-      "return": {
-        "code": 201,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "type": "reference",
-            "target": "Backend_DatabaseRow"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Creates a new row at a table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.createTable": {
-      "path": "/backend/database/:connection_id",
-      "method": "POST",
-      "return": {
-        "code": 201,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "type": "reference",
-            "target": "Backend_DatabaseTable"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Creates a new table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.deleteRow": {
-      "path": "/backend/database/:connection_id/:table_name/rows/:id",
-      "method": "DELETE",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Deletes an existing row at a table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.deleteTable": {
-      "path": "/backend/database/:connection_id/:table_name",
-      "method": "DELETE",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Deletes an existing table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.getRow": {
-      "path": "/backend/database/:connection_id/:table_name/rows/:id",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_DatabaseRow"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns a specific row at a table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.getRows": {
-      "path": "/backend/database/:connection_id/:table_name/rows",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_DatabaseRowCollection"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "filterBy": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "filterOp": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "filterValue": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "sortBy": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "sortOrder": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "columns": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns paginated rows at a table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.getTable": {
-      "path": "/backend/database/:connection_id/:table_name",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_DatabaseTable"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns the schema of a specific table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.getTables": {
-      "path": "/backend/database/:connection_id",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_DatabaseTableCollection"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns all available tables on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.updateRow": {
-      "path": "/backend/database/:connection_id/:table_name/rows/:id",
-      "method": "PUT",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "type": "reference",
-            "target": "Backend_DatabaseRow"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Updates an existing row at a table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
-    "backend.database.updateTable": {
-      "path": "/backend/database/:connection_id/:table_name",
-      "method": "PUT",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "table_name": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "schema": {
-            "type": "reference",
-            "target": "Backend_DatabaseTable"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Updates an existing table on a database",
-      "stability": 2,
-      "security": [
-        "backend.database"
-      ],
-      "authorization": true,
-      "tags": [
-        "database"
-      ]
-    },
     "backend.event.create": {
       "path": "/backend/event",
       "method": "POST",
@@ -2584,229 +2883,6 @@
       "authorization": true,
       "tags": [
         "event"
-      ]
-    },
-    "backend.file.create": {
-      "path": "/backend/file/:connection_id",
-      "method": "POST",
-      "return": {
-        "code": 201,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "contentType": "multipart/form-data"
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Uploads one or more files on the filesystem connection",
-      "stability": 2,
-      "security": [
-        "backend.file"
-      ],
-      "authorization": true,
-      "tags": [
-        "file"
-      ]
-    },
-    "backend.file.delete": {
-      "path": "/backend/file/:connection_id/:file_id",
-      "method": "DELETE",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "file_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Deletes an existing file on the filesystem connection",
-      "stability": 2,
-      "security": [
-        "backend.file"
-      ],
-      "authorization": true,
-      "tags": [
-        "file"
-      ]
-    },
-    "backend.file.get": {
-      "path": "/backend/file/:connection_id/:file_id",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Passthru"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "file_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns the content of the provided file id on the filesystem connection",
-      "stability": 2,
-      "security": [
-        "backend.file"
-      ],
-      "authorization": true,
-      "tags": [
-        "file"
-      ]
-    },
-    "backend.file.getAll": {
-      "path": "/backend/file/:connection_id",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_FileCollection"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns all available files on the filesystem connection",
-      "stability": 2,
-      "security": [
-        "backend.file"
-      ],
-      "authorization": true,
-      "tags": [
-        "file"
-      ]
-    },
-    "backend.file.update": {
-      "path": "/backend/file/:connection_id/:file_id",
-      "method": "PUT",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "file_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "payload": {
-          "in": "body",
-          "contentType": "multipart/form-data"
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Updates an existing file on the filesystem connection",
-      "stability": 2,
-      "security": [
-        "backend.file"
-      ],
-      "authorization": true,
-      "tags": [
-        "file"
       ]
     },
     "backend.firewall.create": {
@@ -11665,6 +11741,52 @@
       "type": "map",
       "schema": {
         "type": "any"
+      }
+    },
+    "Backend_HttpRequest": {
+      "description": "This object represents a HTTP request",
+      "type": "struct",
+      "properties": {
+        "method": {
+          "description": "HTTP method i.e. GET, POST",
+          "type": "string"
+        },
+        "uri": {
+          "description": "HTTP request uri",
+          "type": "string"
+        },
+        "headers": {
+          "description": "HTTP request headers",
+          "type": "map",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "description": "HTTP request body",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_HttpResponse": {
+      "description": "This object represents a HTTP response",
+      "type": "struct",
+      "properties": {
+        "statusCode": {
+          "description": "HTTP status code",
+          "type": "integer"
+        },
+        "headers": {
+          "description": "HTTP response headers",
+          "type": "map",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "description": "HTTP response body",
+          "type": "string"
+        }
       }
     },
     "Backend_Identity": {

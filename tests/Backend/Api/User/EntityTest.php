@@ -214,7 +214,7 @@ JSON;
 
         $this->assertEquals(1, count($scopes));
         $this->assertEquals(2, $scopes[0]['user_id']);
-        $this->assertEquals(56, $scopes[0]['scope_id']);
+        $this->assertEquals(54, $scopes[0]['scope_id']);
     }
 
     public function testDelete()

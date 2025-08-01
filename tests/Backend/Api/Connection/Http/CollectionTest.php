@@ -18,10 +18,9 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Connection\File;
+namespace Fusio\Impl\Tests\Backend\Api\Connection\Http;
 
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Normalizer;
 use PSX\Json\Parser;
 
 /**

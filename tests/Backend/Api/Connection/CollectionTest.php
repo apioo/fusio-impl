@@ -44,10 +44,22 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 7,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 7,
+            "status": 1,
+            "name": "StarwarsSDK",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
+        },
+        {
+            "id": 6,
+            "status": 1,
+            "name": "FusioHttpClient",
+            "class": "Fusio.Adapter.Http.Connection.Http"
+        },
         {
             "id": 5,
             "status": 1,
@@ -195,10 +207,22 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 7,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 7,
+            "status": 1,
+            "name": "StarwarsSDK",
+            "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
+        },
+        {
+            "id": 6,
+            "status": 1,
+            "name": "FusioHttpClient",
+            "class": "Fusio.Adapter.Http.Connection.Http"
+        },
         {
             "id": 5,
             "status": 1,
@@ -265,7 +289,7 @@ JSON;
 {
     "success": true,
     "message": "Connection successfully created",
-    "id": "6"
+    "id": "8"
 }
 JSON;
 
@@ -283,7 +307,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals(8, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals(ClassName::serialize(SqlAdvanced::class), $row['class']);
         $this->assertNotEmpty($row['config']);

@@ -248,6 +248,20 @@
   "connection": [
     {
       "status": 1,
+      "name": "StarwarsSDK",
+      "class": "Fusio.Adapter.SdkFabric.Connection.Starwars",
+      "config": {}
+    },
+    {
+      "status": 1,
+      "name": "FusioHttpClient",
+      "class": "Fusio.Adapter.Http.Connection.Http",
+      "config": {
+        "url": "https:\/\/api.fusio-project.org\/"
+      }
+    },
+    {
+      "status": 1,
       "name": "LocalFilesystem",
       "class": "Fusio.Adapter.File.Connection.Filesystem",
       "config": {
@@ -341,7 +355,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 233,
+          "operationId": 235,
           "authenticated": true
         }
       ]
@@ -358,7 +372,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 232
+          "operationId": 234
         }
       ]
     },
@@ -529,9 +543,7 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
-        "backend.database",
         "backend.event",
-        "backend.file",
         "backend.firewall",
         "backend.form",
         "backend.generator",
@@ -589,9 +601,7 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
-        "backend.database",
         "backend.event",
-        "backend.file",
         "backend.firewall",
         "backend.form",
         "backend.generator",
