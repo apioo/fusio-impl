@@ -48,7 +48,12 @@ readonly class Get extends SdkAbstract
             throw new StatusCode\InternalServerErrorException('Found no lock file');
         }
 
-        $data = Parser::decodeAsArray(file_get_contents($lockFile));
+        $content = file_get_contents($lockFile);
+        if ($content === false) {
+            throw new StatusCode\InternalServerErrorException('Could not read lock file');
+        }
+
+        $data = Parser::decodeAsArray($content);
 
         $specification = reset($data);
         if ($specification === false) {
