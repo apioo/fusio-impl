@@ -21,11 +21,12 @@
 namespace Fusio\Impl\Tests;
 
 use Fusio\Adapter\File\Connection\Filesystem;
+use Fusio\Adapter\Http\Connection\Http;
+use Fusio\Adapter\SdkFabric\Connection\Starwars;
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Adapter\Worker\Connection\Worker;
-use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Connection\Native;
@@ -122,6 +123,8 @@ class Fixture
         $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
         $data->addConnection('Worker', Worker::class, Service\Connection\Encrypter::encrypt(['url' => 'http://127.0.0.1'], $secretKey));
         $data->addConnection('LocalFilesystem', Filesystem::class, Service\Connection\Encrypter::encrypt(['config' => './tests/resources'], $secretKey));
+        $data->addConnection('FusioHttpClient', Http::class, Service\Connection\Encrypter::encrypt(['url' => 'https://api.fusio-project.org/'], $secretKey));
+        $data->addConnection('StarwarsSDK', Starwars::class, Service\Connection\Encrypter::encrypt([], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);
