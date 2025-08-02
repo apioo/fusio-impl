@@ -20,11 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Sdk;
 
+use Fusio\Engine\Connector;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
+use PSX\Schema\SchemaManagerInterface;
+use TypeAPI\Editor;
 
 /**
  * Get
@@ -35,6 +39,11 @@ use PSX\Json\Parser;
  */
 readonly class Get extends SdkAbstract
 {
+    public function __construct(private SchemaManagerInterface $schemaManager, Connector $connector, FrameworkConfig $frameworkConfig)
+    {
+        parent::__construct($connector, $frameworkConfig);
+    }
+
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->assertConnectionEnabled();
@@ -53,13 +62,25 @@ readonly class Get extends SdkAbstract
             throw new StatusCode\InternalServerErrorException('Could not read lock file');
         }
 
-        $data = Parser::decodeAsArray($content);
+        $data = Parser::decode($content);
+        if (!$data instanceof \stdClass) {
+            throw new StatusCode\InternalServerErrorException('Could not read lock file');
+        }
 
-        $specification = reset($data);
-        if ($specification === false) {
+        $specification = $this->getFirst($data);
+        if (!$specification instanceof \stdClass) {
             throw new StatusCode\InternalServerErrorException('Found no specification');
         }
 
-        return $specification;
+        return (new Editor\Parser($this->schemaManager))->parse($specification);
+    }
+
+    private function getFirst(\stdClass $data)
+    {
+        foreach ($data as $value) {
+            return $value;
+        }
+
+        return null;
     }
 }

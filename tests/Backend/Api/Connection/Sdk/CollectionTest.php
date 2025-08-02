@@ -43,938 +43,931 @@ class CollectionTest extends DbTestCase
         $expect = <<<'JSON'
 {
     "baseUrl": "https:\/\/swapi.dev\/api",
-    "operations": {
-        "people.getAll": {
-            "path": "\/people",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "People_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+    "imports": [],
+    "operations": [
+        {
+            "name": "people.getAll",
             "description": "Get all the people",
+            "httpMethod": "GET",
+            "httpPath": "\/people",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
+                    "in": "query",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "People_Collection",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "people.get": {
-            "path": "\/people\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "People"
-                }
-            },
-            "arguments": {
-                "id": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "people.get",
             "description": "Get a specific people",
+            "httpMethod": "GET",
+            "httpPath": "\/people\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "People",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "film.getAll": {
-            "path": "\/films",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Film_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "film.getAll",
             "description": "Get all the films",
+            "httpMethod": "GET",
+            "httpPath": "\/films",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
+                    "in": "query",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Film_Collection",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "film.get": {
-            "path": "\/films\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Film"
-                }
-            },
-            "arguments": {
-                "id": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "film.get",
             "description": "Get a specific film",
+            "httpMethod": "GET",
+            "httpPath": "\/films\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Film",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "starship.getAll": {
-            "path": "\/starships",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Starship_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "starship.getAll",
             "description": "Get all the starships",
+            "httpMethod": "GET",
+            "httpPath": "\/starships",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
+                    "in": "query",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Starship_Collection",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "starship.get": {
-            "path": "\/starships\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Starship"
-                }
-            },
-            "arguments": {
-                "id": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "starship.get",
             "description": "Get a specific starship",
+            "httpMethod": "GET",
+            "httpPath": "\/starships\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Starship",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "species.getAll": {
-            "path": "\/species",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Species_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "species.getAll",
             "description": "Get all the species",
+            "httpMethod": "GET",
+            "httpPath": "\/species",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
+                    "in": "query",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Species_Collection",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "species.get": {
-            "path": "\/species\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Species"
-                }
-            },
-            "arguments": {
-                "id": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "species.get",
             "description": "Get a specific species",
+            "httpMethod": "GET",
+            "httpPath": "\/species\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Species",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "vehicle.getAll": {
-            "path": "\/vehicles",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Vehicle_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
-                    "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
+        {
+            "name": "vehicle.getAll",
             "description": "Get all the vehicles",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "vehicle.get": {
-            "path": "\/vehicles\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Vehicle"
-                }
-            },
-            "arguments": {
-                "id": {
-                    "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
-                }
-            },
-            "throws": [],
-            "description": "Get a specific vehicle",
-            "stability": 1,
-            "security": [],
-            "authorization": true,
-            "tags": []
-        },
-        "planet.getAll": {
-            "path": "\/planets",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Planet_Collection"
-                }
-            },
-            "arguments": {
-                "search": {
+            "httpMethod": "GET",
+            "httpPath": "\/vehicles",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
                     "in": "query",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 }
-            },
+            ],
             "throws": [],
-            "description": "Get all the planets",
+            "return": "Vehicle_Collection",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         },
-        "planet.get": {
-            "path": "\/planets\/:id",
-            "method": "GET",
-            "return": {
-                "code": 200,
-                "schema": {
-                    "type": "reference",
-                    "target": "Planet"
-                }
-            },
-            "arguments": {
-                "id": {
+        {
+            "name": "vehicle.get",
+            "description": "Get a specific vehicle",
+            "httpMethod": "GET",
+            "httpPath": "\/vehicles\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
                     "in": "path",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 }
-            },
+            ],
             "throws": [],
+            "return": "Vehicle",
+            "stability": 1,
+            "security": [],
+            "authorization": true,
+            "tags": []
+        },
+        {
+            "name": "planet.getAll",
+            "description": "Get all the planets",
+            "httpMethod": "GET",
+            "httpPath": "\/planets",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "search",
+                    "in": "query",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Planet_Collection",
+            "stability": 1,
+            "security": [],
+            "authorization": true,
+            "tags": []
+        },
+        {
+            "name": "planet.get",
             "description": "Get a specific planet",
+            "httpMethod": "GET",
+            "httpPath": "\/planets\/:id",
+            "httpCode": 200,
+            "arguments": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "type": "string"
+                }
+            ],
+            "throws": [],
+            "return": "Planet",
             "stability": 1,
             "security": [],
             "authorization": true,
             "tags": []
         }
-    },
-    "definitions": {
-        "Collection": {
-            "description": "",
+    ],
+    "types": [
+        {
+            "name": "Collection",
             "type": "struct",
-            "properties": {
-                "count": {
+            "description": "",
+            "properties": [
+                {
+                    "name": "count",
                     "description": "",
                     "type": "integer"
                 },
-                "next": {
+                {
+                    "name": "next",
                     "description": "",
                     "type": "string"
                 },
-                "previous": {
+                {
+                    "name": "previous",
                     "description": "",
                     "type": "string"
                 }
-            }
+            ]
         },
-        "Film": {
-            "description": "A Film is a single film",
+        {
+            "name": "Film",
             "type": "struct",
-            "properties": {
-                "title": {
+            "description": "A Film is a single film",
+            "properties": [
+                {
+                    "name": "title",
                     "description": "The title of this film",
                     "type": "string"
                 },
-                "episode_id": {
+                {
+                    "name": "episode_id",
                     "description": "The episode number of this film",
                     "type": "integer"
                 },
-                "opening_crawl": {
+                {
+                    "name": "opening_crawl",
                     "description": "The opening paragraphs at the beginning of this film",
                     "type": "string"
                 },
-                "director": {
+                {
+                    "name": "director",
                     "description": "The name of the director of this film",
                     "type": "string"
                 },
-                "producer": {
+                {
+                    "name": "producer",
                     "description": "The name(s) of the producer(s) of this film. Comma separated",
                     "type": "string"
                 },
-                "release_date": {
+                {
+                    "name": "release_date",
                     "description": "The ISO 8601 date format of film release at original creator country",
                     "type": "string",
                     "format": "date"
                 },
-                "species": {
+                {
+                    "name": "species",
                     "description": "An array of species resource URLs that are in this film",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "starships": {
+                {
+                    "name": "starships",
                     "description": "An array of starship resource URLs that are in this film",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "vehicles": {
+                {
+                    "name": "vehicles",
                     "description": "An array of vehicle resource URLs that are in this film",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "characters": {
+                {
+                    "name": "characters",
                     "description": "An array of people resource URLs that are in this film",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "planets": {
+                {
+                    "name": "planets",
                     "description": "An array of planet resource URLs that are in this film",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "The hypermedia URL of this resource",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "The ISO 8601 date format of the time that this resource was created",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "The ISO 8601 date format of the time that this resource was edited",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "Film_Collection": {
-            "description": "",
+        {
+            "name": "Film_Collection",
             "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "description": "",
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "Film"
-                    }
+                    "reference": "Film"
                 }
-            }
+            ]
         },
-        "People": {
-            "description": "A People is an individual person or character within the Star Wars universe",
+        {
+            "name": "People",
             "type": "struct",
-            "properties": {
-                "name": {
+            "description": "A People is an individual person or character within the Star Wars universe",
+            "properties": [
+                {
+                    "name": "name",
                     "description": "The name of this person.",
                     "type": "string"
                 },
-                "birth_year": {
+                {
+                    "name": "birth_year",
                     "description": "The birth year of the person, using the in-universe standard of BBY or ABY - Before the Battle of Yavin or After the Battle of Yavin. The Battle of Yavin is a battle that occurs at the end of Star Wars episode IV: A New Hope.",
                     "type": "string"
                 },
-                "eye_color": {
+                {
+                    "name": "eye_color",
                     "description": "The eye color of this person. Will be \"unknown\" if not known or \"n\/a\" if the person does not have an eye.",
                     "type": "string"
                 },
-                "gender": {
+                {
+                    "name": "gender",
                     "description": "The gender of this person. Either \"Male\", \"Female\" or \"unknown\", \"n\/a\" if the person does not have a gender.",
                     "type": "string"
                 },
-                "hair_color": {
+                {
+                    "name": "hair_color",
                     "description": "The hair color of this person. Will be \"unknown\" if not known or \"n\/a\" if the person does not have hair.",
                     "type": "string"
                 },
-                "height": {
+                {
+                    "name": "height",
                     "description": "The height of the person in centimeters.",
                     "type": "string"
                 },
-                "mass": {
+                {
+                    "name": "mass",
                     "description": "The mass of the person in kilograms.",
                     "type": "string"
                 },
-                "skin_color": {
+                {
+                    "name": "skin_color",
                     "description": "The skin color of this person.",
                     "type": "string"
                 },
-                "homeworld": {
+                {
+                    "name": "homeworld",
                     "description": "The URL of a planet resource, a planet that this person was born on or inhabits.",
                     "type": "string"
                 },
-                "films": {
+                {
+                    "name": "films",
                     "description": "An array of film resource URLs that this person has been in.",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "species": {
+                {
+                    "name": "species",
                     "description": "An array of species resource URLs that this person belongs to.",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "starships": {
+                {
+                    "name": "starships",
                     "description": "An array of starship resource URLs that this person has piloted.",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "vehicles": {
+                {
+                    "name": "vehicles",
                     "description": "An array of vehicle resource URLs that this person has piloted.",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "The hypermedia URL of this resource.",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "The ISO 8601 date format of the time that this resource was created.",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "The ISO 8601 date format of the time that this resource was edited. Search Fields:",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "People_Collection": {
-            "description": "",
+        {
+            "name": "People_Collection",
             "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "description": "",
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "People"
-                    }
+                    "reference": "People"
                 }
-            }
+            ]
         },
-        "Planet": {
+        {
+            "name": "Planet",
+            "type": "struct",
             "description": "A Planet is a large mass, planet or planetoid in the Star Wars Universe, at the time of 0 ABY",
-            "type": "struct",
-            "properties": {
-                "name": {
+            "properties": [
+                {
+                    "name": "name",
                     "description": "",
                     "type": "string"
                 },
-                "diameter": {
+                {
+                    "name": "diameter",
                     "description": "",
                     "type": "string"
                 },
-                "rotation_period": {
+                {
+                    "name": "rotation_period",
                     "description": "",
                     "type": "string"
                 },
-                "orbital_period": {
+                {
+                    "name": "orbital_period",
                     "description": "",
                     "type": "string"
                 },
-                "gravity": {
+                {
+                    "name": "gravity",
                     "description": "",
                     "type": "string"
                 },
-                "population": {
+                {
+                    "name": "population",
                     "description": "",
                     "type": "string"
                 },
-                "climate": {
+                {
+                    "name": "climate",
                     "description": "",
                     "type": "string"
                 },
-                "terrain": {
+                {
+                    "name": "terrain",
                     "description": "",
                     "type": "string"
                 },
-                "surface_water": {
+                {
+                    "name": "surface_water",
                     "description": "",
                     "type": "string"
                 },
-                "residents": {
+                {
+                    "name": "residents",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "films": {
+                {
+                    "name": "films",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "Planet_Collection": {
-            "description": "",
+        {
+            "name": "Planet_Collection",
             "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "description": "",
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "Planet"
-                    }
+                    "reference": "Planet"
                 }
-            }
+            ]
         },
-        "Root": {
-            "description": "",
+        {
+            "name": "Root",
             "type": "struct",
-            "properties": {
-                "films": {
+            "description": "",
+            "properties": [
+                {
+                    "name": "films",
                     "description": "",
                     "type": "string"
                 },
-                "people": {
+                {
+                    "name": "people",
                     "description": "",
                     "type": "string"
                 },
-                "planets": {
+                {
+                    "name": "planets",
                     "description": "",
                     "type": "string"
                 },
-                "species": {
+                {
+                    "name": "species",
                     "description": "",
                     "type": "string"
                 },
-                "starships": {
+                {
+                    "name": "starships",
                     "description": "",
                     "type": "string"
                 },
-                "vehicles": {
+                {
+                    "name": "vehicles",
                     "description": "",
                     "type": "string"
                 }
-            }
+            ]
         },
-        "Species": {
+        {
+            "name": "Species",
+            "type": "struct",
             "description": "A Species is a type of person or character within the Star Wars Universe",
-            "type": "struct",
-            "properties": {
-                "name": {
+            "properties": [
+                {
+                    "name": "name",
                     "description": "",
                     "type": "string"
                 },
-                "classification": {
+                {
+                    "name": "classification",
                     "description": "",
                     "type": "string"
                 },
-                "designation": {
+                {
+                    "name": "designation",
                     "description": "",
                     "type": "string"
                 },
-                "average_height": {
+                {
+                    "name": "average_height",
                     "description": "",
                     "type": "string"
                 },
-                "average_lifespan": {
+                {
+                    "name": "average_lifespan",
                     "description": "",
                     "type": "string"
                 },
-                "eye_colors": {
+                {
+                    "name": "eye_colors",
                     "description": "",
                     "type": "string"
                 },
-                "hair_colors": {
+                {
+                    "name": "hair_colors",
                     "description": "",
                     "type": "string"
                 },
-                "skin_colors": {
+                {
+                    "name": "skin_colors",
                     "description": "",
                     "type": "string"
                 },
-                "language": {
+                {
+                    "name": "language",
                     "description": "",
                     "type": "string"
                 },
-                "homeworld": {
+                {
+                    "name": "homeworld",
                     "description": "",
                     "type": "string"
                 },
-                "people": {
+                {
+                    "name": "people",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "films": {
+                {
+                    "name": "films",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "Species_Collection": {
+        {
+            "name": "Species_Collection",
+            "type": "struct",
             "description": "",
-            "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "Species"
-                    }
+                    "reference": "Species"
                 }
-            }
+            ]
         },
-        "Starship": {
-            "description": "A Starship is a single transport craft that has hyperdrive capability",
+        {
+            "name": "Starship",
             "type": "struct",
-            "properties": {
-                "name": {
+            "description": "A Starship is a single transport craft that has hyperdrive capability",
+            "properties": [
+                {
+                    "name": "name",
                     "description": "The name of this starship. The common name, such as \"Death Star\"",
                     "type": "string"
                 },
-                "model": {
+                {
+                    "name": "model",
                     "description": "The model or official name of this starship. Such as \"T-65 X-wing\" or \"DS-1 Orbital Battle Station\"",
                     "type": "string"
                 },
-                "starship_class": {
+                {
+                    "name": "starship_class",
                     "description": "The class of this starship, such as \"Starfighter\" or \"Deep Space Mobile Battlestation\"",
                     "type": "string"
                 },
-                "manufacturer": {
+                {
+                    "name": "manufacturer",
                     "description": "The manufacturer of this starship. Comma separated if more than one",
                     "type": "string"
                 },
-                "cost_in_credits": {
+                {
+                    "name": "cost_in_credits",
                     "description": "The cost of this starship new, in galactic credits",
                     "type": "string"
                 },
-                "length": {
+                {
+                    "name": "length",
                     "description": "The length of this starship in meters",
                     "type": "string"
                 },
-                "crew": {
+                {
+                    "name": "crew",
                     "description": "The number of personnel needed to run or pilot this starship",
                     "type": "string"
                 },
-                "passengers": {
+                {
+                    "name": "passengers",
                     "description": "The number of non-essential people this starship can transport",
                     "type": "string"
                 },
-                "max_atmosphering_speed": {
+                {
+                    "name": "max_atmosphering_speed",
                     "description": "The maximum speed of this starship in the atmosphere. \"N\/A\" if this starship is incapable of atmospheric flight",
                     "type": "string"
                 },
-                "hyperdrive_rating": {
+                {
+                    "name": "hyperdrive_rating",
                     "description": "The class of this starships hyperdrive",
                     "type": "string"
                 },
-                "MGLT": {
+                {
+                    "name": "MGLT",
                     "description": "The Maximum number of Megalights this starship can travel in a standard hour. A \"Megalight\" is a standard unit of distance and has never been defined before within the Star Wars universe. This figure is only really useful for measuring the difference in speed of starships. We can assume it is similar to AU, the distance between our Sun (Sol) and Earth",
                     "type": "string"
                 },
-                "cargo_capacity": {
+                {
+                    "name": "cargo_capacity",
                     "description": "The maximum number of kilograms that this starship can transport",
                     "type": "string"
                 },
-                "consumables": {
+                {
+                    "name": "consumables",
                     "description": "The maximum length of time that this starship can provide consumables for its entire crew without having to resupply",
                     "type": "string"
                 },
-                "films": {
+                {
+                    "name": "films",
                     "description": "An array of Film URL Resources that this starship has appeared in",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "pilots": {
+                {
+                    "name": "pilots",
                     "description": "An array of People URL Resources that this starship has been piloted by",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "The hypermedia URL of this resource",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "The ISO 8601 date format of the time that this resource was created",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "The ISO 8601 date format of the time that this resource was edited",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "Starship_Collection": {
-            "description": "",
+        {
+            "name": "Starship_Collection",
             "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "description": "",
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "Starship"
-                    }
+                    "reference": "Starship"
                 }
-            }
+            ]
         },
-        "Vehicle": {
+        {
+            "name": "Vehicle",
+            "type": "struct",
             "description": "A Vehicle is a single transport craft that does not have hyperdrive capability",
-            "type": "struct",
-            "properties": {
-                "name": {
+            "properties": [
+                {
+                    "name": "name",
                     "description": "",
                     "type": "string"
                 },
-                "model": {
+                {
+                    "name": "model",
                     "description": "",
                     "type": "string"
                 },
-                "vehicle_class": {
+                {
+                    "name": "vehicle_class",
                     "description": "",
                     "type": "string"
                 },
-                "manufacturer": {
+                {
+                    "name": "manufacturer",
                     "description": "",
                     "type": "string"
                 },
-                "length": {
+                {
+                    "name": "length",
                     "description": "",
                     "type": "string"
                 },
-                "cost_in_credits": {
+                {
+                    "name": "cost_in_credits",
                     "description": "",
                     "type": "string"
                 },
-                "crew": {
+                {
+                    "name": "crew",
                     "description": "",
                     "type": "string"
                 },
-                "passengers": {
+                {
+                    "name": "passengers",
                     "description": "",
                     "type": "string"
                 },
-                "max_atmosphering_speed": {
+                {
+                    "name": "max_atmosphering_speed",
                     "description": "",
                     "type": "string"
                 },
-                "cargo_capacity": {
+                {
+                    "name": "cargo_capacity",
                     "description": "",
                     "type": "string"
                 },
-                "consumables": {
+                {
+                    "name": "consumables",
                     "description": "",
                     "type": "string"
                 },
-                "films": {
+                {
+                    "name": "films",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "pilots": {
+                {
+                    "name": "pilots",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "string"
-                    }
+                    "reference": "string"
                 },
-                "url": {
+                {
+                    "name": "url",
                     "description": "",
                     "type": "string"
                 },
-                "created": {
+                {
+                    "name": "created",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 },
-                "edited": {
+                {
+                    "name": "edited",
                     "description": "",
                     "type": "string",
                     "format": "date-time"
                 }
-            }
+            ]
         },
-        "Vehicle_Collection": {
-            "description": "",
+        {
+            "name": "Vehicle_Collection",
             "type": "struct",
-            "parent": {
-                "type": "reference",
-                "target": "Collection"
-            },
-            "properties": {
-                "results": {
+            "description": "",
+            "parent": "Collection",
+            "properties": [
+                {
+                    "name": "results",
                     "description": "",
                     "type": "array",
-                    "schema": {
-                        "type": "reference",
-                        "target": "Vehicle"
-                    }
+                    "reference": "Vehicle"
                 }
-            }
+            ]
         }
-    }
+    ]
 }
 JSON;
 
