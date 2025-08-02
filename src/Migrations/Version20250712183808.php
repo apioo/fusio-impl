@@ -54,6 +54,7 @@ final class Version20250712183808 extends AbstractMigration
         $names = [
             'backend.connection.getIntrospection',
             'backend.connection.getIntrospectionForEntity',
+            'backend.database.getConnections',
             'backend.database.getTables',
             'backend.database.getTable',
             'backend.database.createTable',
