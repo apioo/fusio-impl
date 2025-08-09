@@ -98,7 +98,9 @@ class Scope extends Generated\ScopeTable
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
+                'scope.' . self::COLUMN_ID,
                 'scope.' . self::COLUMN_NAME,
+                'scope.' . self::COLUMN_DESCRIPTION,
             ])
             ->from('fusio_scope', 'scope')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
