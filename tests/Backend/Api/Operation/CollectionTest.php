@@ -544,6 +544,55 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
     }
 
+    public function testPostWithScheme()
+    {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'string'
+                ]
+            ],
+            'incoming'   => 'schema://Passthru',
+            'outgoing'   => 'schema://Passthru',
+            'throws'     => [
+                500 => 'schema://Passthru',
+            ],
+            'cost'       => 10,
+            'action'     => 'action://Sql-Select-All',
+            'scopes'     => ['foo', 'baz'],
+            'metadata' => $metadata,
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Operation successfully created",
+    "id": "247"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
+    }
+
     public function testPostStabilityInvalid()
     {
         $response = $this->sendRequest('/backend/operation', 'POST', array(
@@ -780,6 +829,32 @@ JSON;
         $this->assertStringStartsWith('Incoming schema "Foobar" does not exist', $data->message);
     }
 
+    public function testPostIncomingNonExistingSchemaWithScheme()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'incoming'   => 'schema://Foobar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Incoming schema "schema://Foobar" does not exist', $data->message);
+    }
+
     public function testPostOutgoingNonExistingSchema()
     {
         $response = $this->sendRequest('/backend/operation', 'POST', array(
@@ -803,6 +878,31 @@ JSON;
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
         $this->assertStringStartsWith('Outgoing schema "Foobar" does not exist', $data->message);
+    }
+
+    public function testPostOutgoingNonExistingSchemaWithScheme()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'schema://Foobar',
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Outgoing schema "schema://Foobar" does not exist', $data->message);
     }
 
     public function testPostThrowNonExistingSchema()
@@ -831,6 +931,34 @@ JSON;
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
         $this->assertStringStartsWith('Throw 500 schema "Foobar" does not exist', $data->message);
+    }
+
+    public function testPostThrowNonExistingSchemaWithScheme()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'throws'     => [
+                500 => 'schema://Foobar',
+            ],
+            'action'     => 'Sql-Select-All',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Throw 500 schema "schema://Foobar" does not exist', $data->message);
     }
 
     public function testPostThrowInvalidStatusCode()
@@ -884,6 +1012,31 @@ JSON;
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
         $this->assertStringStartsWith('Action "Foobar" does not exist', $data->message);
+    }
+
+    public function testPostActionNonExistingWithScheme()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo/bar',
+            'httpCode'   => 200,
+            'name'       => 'test.bar',
+            'outgoing'   => 'Passthru',
+            'action'     => 'action://Foobar',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Action "action://Foobar" does not exist', $data->message);
     }
 
     public function testPut()
