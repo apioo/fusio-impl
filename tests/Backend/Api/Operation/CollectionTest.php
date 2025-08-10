@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Api\OperationInterface;
+use PSX\Json\Parser;
 
 /**
  * CollectionTest
@@ -577,17 +578,13 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Operation successfully created",
-    "id": "247"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body);
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertSame(true, $data->success);
+        $this->assertSame('Operation successfully created', $data->message);
+        $this->assertContains($data->id, ['247', '248']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
