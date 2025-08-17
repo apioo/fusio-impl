@@ -29,21 +29,19 @@
         <?php if (!empty($app->url)): ?>
           <p class="text-muted"><small>App: <a href="<?php echo $app->url; ?>"><?php echo $app->url; ?></a></small></p>
         <?php endif; ?>
-        <table class="table table-hover">
-          <tbody>
-            <?php foreach ($app->scopes ?? [] as $scope): ?>
-            <tr>
-              <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="scope_<?php echo $scope->id; ?>" id="scope_<?php echo $scope->id; ?>" value="on" checked>
-                </div>
-              </td>
-              <td class="fw-semibold"><label for="scope_<?php echo $scope->id; ?>"><?php echo $scope->name; ?></label></td>
-              <td><?php echo $scope->description; ?></td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+        <div class="row row-cols-1 row-cols-lg-3 mt-3 mb-3">
+          <?php foreach ($app->scopes ?? [] as $scope): ?>
+            <div class="col">
+              <div class="form-check overflow-hidden">
+                <input class="form-check-input" type="checkbox" name="scope_<?php echo $scope->id; ?>" id="scope_<?php echo $scope->id; ?>" value="on" checked>
+                <label class="fw-semibold" for="scope_<?php echo $scope->id; ?>">
+                  <?php echo $scope->name; ?>
+                </label>
+                <br><small><?php echo $scope->description; ?></small>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
         <p class="lead">Please authenticate to authorize this request:</p>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
