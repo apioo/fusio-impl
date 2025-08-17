@@ -37,7 +37,9 @@
                 <label class="fw-semibold" for="scope_<?php echo $scope->id; ?>">
                   <?php echo $scope->name; ?>
                 </label>
+                <?php if (!empty($scope->description)): ?>
                 <br><small><?php echo $scope->description; ?></small>
+                <?php endif; ?>
               </div>
             </div>
           <?php endforeach; ?>
