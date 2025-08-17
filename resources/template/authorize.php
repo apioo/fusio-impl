@@ -38,7 +38,8 @@
                   <?php echo $scope->name; ?>
                 </label>
                 <?php if (!empty($scope->description)): ?>
-                <br><small><?php echo $scope->description; ?></small>
+                  <br>
+                  <small><?php echo $scope->description; ?></small>
                 <?php endif; ?>
               </div>
             </div>
