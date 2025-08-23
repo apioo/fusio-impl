@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\StorageAttributes;
 
 /**
@@ -58,14 +59,24 @@ readonly class GetAll extends FileAbstract
         $result = [];
         foreach ($objects as $object) {
             if ($object instanceof FileAttributes) {
-                $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
+                try {
+                    $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
+                } catch (FilesystemException) {
+                    $lastModified = null;
+                }
+
+                try {
+                    $contentType = $connection->mimeType($object->path());
+                } catch (FilesystemException) {
+                    $contentType = null;
+                }
 
                 $result[] = [
                     'id' => $this->getObjectId($object),
                     'name' => $object->path(),
-                    'contentType' => $connection->mimeType($object->path()),
+                    'contentType' => $contentType,
                     'checksum' => $connection->checksum($object->path()),
-                    'lastModified' => $lastModified->toString(),
+                    'lastModified' => $lastModified?->toString(),
                 ];
             }
         }
