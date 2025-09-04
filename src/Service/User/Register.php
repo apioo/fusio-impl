@@ -107,7 +107,7 @@ readonly class Register
             throw new StatusCode\NotFoundException('Provided user does not exist');
         }
 
-        $token = $this->tokenService->generateToken($context->getTenantId(), $userId);
+        $token = $this->tokenService->generateToken($context->getTenantId(), $user->getId());
 
         $email = $user->getEmail();
         if (empty($email)) {
