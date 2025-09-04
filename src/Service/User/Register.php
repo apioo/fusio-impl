@@ -42,6 +42,7 @@ readonly class Register
         private Token $tokenService,
         private Mailer $mailerService,
         private Service\Config $configService,
+        private Table\User $userTable,
         private Table\Role $roleTable,
         private Service\System\FrameworkConfig $frameworkConfig,
     ) {
@@ -56,7 +57,7 @@ readonly class Register
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
         // determine initial user status
-        $status   = Table\User::STATUS_DISABLED;
+        $status = Table\User::STATUS_DISABLED;
         $approval = $this->configService->getValue('user_approval');
         if (!$approval) {
             $status = Table\User::STATUS_ACTIVE;
@@ -93,11 +94,26 @@ readonly class Register
 
         // send activation mail
         if ($approval) {
-            $token = $this->tokenService->generateToken($context->getTenantId(), $userId);
-
-            $this->mailerService->sendActivationMail($name, $email, $token);
+            $this->sendActivationMail((string) $userId, $context);
         }
 
         return $userId;
+    }
+
+    public function sendActivationMail(string $userId, UserContext $context): void
+    {
+        $user = $this->userTable->findOneByIdentifier($context->getTenantId(), $userId);
+        if (!$user instanceof Table\Generated\UserRow) {
+            throw new StatusCode\NotFoundException('Provided user does not exist');
+        }
+
+        $token = $this->tokenService->generateToken($context->getTenantId(), $userId);
+
+        $email = $user->getEmail();
+        if (empty($email)) {
+            throw new StatusCode\BadRequestException('Provided user has no email configured');
+        }
+
+        $this->mailerService->sendActivationMail($user->getName(), $email, $token);
     }
 }

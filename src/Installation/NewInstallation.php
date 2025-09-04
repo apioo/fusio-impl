@@ -1847,6 +1847,17 @@ class NewInstallation
                     eventName: 'fusio.user.delete',
                     description: 'Deletes an existing user',
                 ),
+                'user.resend' => new Operation(
+                    action: Backend\Action\User\Resend::class,
+                    httpMethod: 'POST',
+                    httpPath: '/user/$user_id<[0-9]+|^~>/resend',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Passthru::class,
+                    throws: [999 => Model\Common\Message::class],
+                    eventName: 'fusio.user.update',
+                    description: 'Resend the activation mail to the provided user',
+                ),
                 'webhook.getAll' => new Operation(
                     action: Backend\Action\Webhook\GetAll::class,
                     httpMethod: 'GET',
