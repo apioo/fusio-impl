@@ -163,13 +163,13 @@
     {
       "type": 1,
       "name": "recaptcha_key",
-      "description": "ReCaptcha key",
+      "description": "ReCaptcha Key",
       "value": ""
     },
     {
       "type": 1,
       "name": "recaptcha_secret",
-      "description": "ReCaptcha secret",
+      "description": "ReCaptcha Secret",
       "value": ""
     },
     {
@@ -235,13 +235,25 @@
     {
       "type": 1,
       "name": "marketplace_client_id",
-      "description": "The marketplace client id",
+      "description": "Marketplace Client-Id, this is either your username or app key of the Fusio marketplace (marketplace.fusio-project.org)",
       "value": ""
     },
     {
       "type": 1,
       "name": "marketplace_client_secret",
-      "description": "The marketplace client secret",
+      "description": "Marketplace Client-Secret, this is either your password or app secret of the Fusio marketplace (marketplace.fusio-project.org)",
+      "value": ""
+    },
+    {
+      "type": 1,
+      "name": "sdkgen_client_id",
+      "description": "SDKgen Client-Id, this is either your username or app key of the SDKgen app (sdkgen.app)",
+      "value": ""
+    },
+    {
+      "type": 1,
+      "name": "sdkgen_client_secret",
+      "description": "SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)",
       "value": ""
     }
   ],

@@ -41,7 +41,7 @@ class CollectionTest extends DbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 33,
+    "totalResults": 35,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -204,7 +204,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 33,
+    "totalResults": 35,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -345,14 +345,14 @@ JSON;
             "id": 32,
             "type": 1,
             "name": "marketplace_client_id",
-            "description": "The marketplace client id",
+            "description": "Marketplace Client-Id, this is either your username or app key of the Fusio marketplace (marketplace.fusio-project.org)",
             "value": ""
         },
         {
             "id": 33,
             "type": 1,
             "name": "marketplace_client_secret",
-            "description": "The marketplace client secret",
+            "description": "Marketplace Client-Secret, this is either your password or app secret of the Fusio marketplace (marketplace.fusio-project.org)",
             "value": ""
         },
         {
@@ -394,14 +394,14 @@ JSON;
             "id": 20,
             "type": 1,
             "name": "recaptcha_key",
-            "description": "ReCaptcha key",
+            "description": "ReCaptcha Key",
             "value": ""
         },
         {
             "id": 21,
             "type": 1,
             "name": "recaptcha_secret",
-            "description": "ReCaptcha secret",
+            "description": "ReCaptcha Secret",
             "value": ""
         },
         {
@@ -410,6 +410,20 @@ JSON;
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
+        },
+        {
+            "id": 34,
+            "type": 1,
+            "name": "sdkgen_client_id",
+            "description": "SDKgen Client-Id, this is either your username or app key of the SDKgen app (sdkgen.app)",
+            "value": ""
+        },
+        {
+            "id": 35,
+            "type": 1,
+            "name": "sdkgen_client_secret",
+            "description": "SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)",
+            "value": ""
         },
         {
             "id": 29,
