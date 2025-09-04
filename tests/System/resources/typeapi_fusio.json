@@ -8275,6 +8275,50 @@
         "user"
       ]
     },
+    "backend.user.resend": {
+      "path": "/backend/user/$user_id<[0-9]+|^~>/resend",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "user_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Passthru"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Resend the activation mail to the provided user",
+      "stability": 2,
+      "security": [
+        "backend.user"
+      ],
+      "authorization": true,
+      "tags": [
+        "user"
+      ]
+    },
     "backend.user.update": {
       "path": "/backend/user/$user_id<[0-9]+|^~>",
       "method": "PUT",

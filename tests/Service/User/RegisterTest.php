@@ -136,6 +136,7 @@ class RegisterTest extends DbTestCase
             Environment::getService(Service\User\Token::class),
             $this->newMailer($send),
             $this->newConfig($secret, $userApproval),
+            Environment::getService(TableManagerInterface::class)->getTable(Table\User::class),
             Environment::getService(TableManagerInterface::class)->getTable(Table\Role::class),
             Environment::getService(Service\System\FrameworkConfig::class),
         );
