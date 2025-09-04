@@ -9,6 +9,7 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Cli\Config;
 use Fusio\Impl\Cli\Transport;
 use Fusio\Impl\Framework;
+use Fusio\Impl\Framework\Api\Repository\SDKgen\Config as SDKgenConfig;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Repository as ImplRepository;
@@ -107,6 +108,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Captcha\ReCaptcha::class);
     $services->alias(Captcha\CaptchaInterface::class, Captcha\ReCaptcha::class);
+
+    $services->set(SDKgenConfig::class);
+    $services->alias(Api\Repository\SDKgen\ConfigInterface::class, SDKgenConfig::class);
 
     // psx
     $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);

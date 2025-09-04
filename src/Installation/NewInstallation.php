@@ -84,8 +84,8 @@ class NewInstallation
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret', tenantId: $tenantId);
+        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha Key', tenantId: $tenantId);
+        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha Secret', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_portal_configuration', Table\Config::FORM_STRING, '', 'The stripe portal configuration id', tenantId: $tenantId);
         $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments', tenantId: $tenantId);
@@ -96,8 +96,10 @@ class NewInstallation
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request', tenantId: $tenantId);
         $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length', tenantId: $tenantId);
         $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email', tenantId: $tenantId);
-        $bag->addConfig('marketplace_client_id', Table\Config::FORM_STRING, '', 'The marketplace client id', tenantId: $tenantId);
-        $bag->addConfig('marketplace_client_secret', Table\Config::FORM_STRING, '', 'The marketplace client secret', tenantId: $tenantId);
+        $bag->addConfig('marketplace_client_id', Table\Config::FORM_STRING, '', 'Marketplace Client-Id, this is either your username or app key of the Fusio marketplace (marketplace.fusio-project.org)', tenantId: $tenantId);
+        $bag->addConfig('marketplace_client_secret', Table\Config::FORM_STRING, '', 'Marketplace Client-Secret, this is either your password or app secret of the Fusio marketplace (marketplace.fusio-project.org)', tenantId: $tenantId);
+        $bag->addConfig('sdkgen_client_id', Table\Config::FORM_STRING, '', 'SDKgen Client-Id, this is either your username or app key of the SDKgen app (sdkgen.app)', tenantId: $tenantId);
+        $bag->addConfig('sdkgen_client_secret', Table\Config::FORM_STRING, '', 'SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)', tenantId: $tenantId);
         if ($tenantId === null) {
             // we add the system connection only at the root tenant
             $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class), tenantId: $tenantId);
