@@ -64,6 +64,7 @@ class NewInstallation
         $bag->addScope('backend', 'backend', 'Global access to the backend API', tenantId: $tenantId);
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API', tenantId: $tenantId);
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint', tenantId: $tenantId);
+        $bag->addScope('authorization', 'openid', 'OpenID scope', tenantId: $tenantId);
         $bag->addScope('default', 'default', 'Default scope', tenantId: $tenantId);
         $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', tenantId: $tenantId);
         $bag->addConfig('consumer_max_apps', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can generate', tenantId: $tenantId);

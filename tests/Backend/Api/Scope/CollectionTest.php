@@ -47,17 +47,17 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 55,
+            "id": 56,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 54,
+            "id": 55,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 53,
+            "id": 54,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -65,7 +65,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
-            "id": 4,
+            "id": 5,
             "name": "default",
             "description": ""
         }
@@ -92,7 +92,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 53,
+            "id": 54,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -122,17 +122,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 55,
+            "id": 56,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 54,
+            "id": 55,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 53,
+            "id": 54,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -140,7 +140,7 @@ JSON;
             }
         },
         {
-            "id": 4,
+            "id": 5,
             "name": "default",
             "description": ""
         }
