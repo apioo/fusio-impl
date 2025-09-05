@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Marketplace\Action;
 use Fusio\Adapter\Worker\Action\WorkerJava;
 use Fusio\Adapter\Worker\Action\WorkerJavascript;
 use Fusio\Adapter\Worker\Action\WorkerPHP;
+use Fusio\Adapter\Worker\Action\WorkerPHPLocal;
 use Fusio\Adapter\Worker\Action\WorkerPython;
 use Fusio\Adapter\Worker\Connection\Worker;
 use Fusio\Engine\Inflection\ClassName;
@@ -125,9 +126,10 @@ class Installer implements InstallerInterface
             ClassName::serialize(WorkerJava::class),
             ClassName::serialize(WorkerJavascript::class),
             ClassName::serialize(WorkerPHP::class),
+            ClassName::serialize(WorkerPHPLocal::class),
             ClassName::serialize(WorkerPython::class),
         ])) {
-            $config->put('worker', $this->getWorkerConnection());
+            $config->put('worker', $this->getWorkerConnection()->getId());
         }
 
         return $config;
