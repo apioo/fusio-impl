@@ -23,6 +23,7 @@ namespace Fusio\Impl\Controller;
 use Fusio\Impl\Service\WellKnown\APICatalog;
 use Fusio\Impl\Service\WellKnown\OAuthAuthorizationServer;
 use Fusio\Impl\Service\WellKnown\OAuthProtectedResource;
+use Fusio\Impl\Service\WellKnown\OpenIDConfiguration;
 use Fusio\Impl\Service\WellKnown\SecurityTxt;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Outgoing;
@@ -44,6 +45,7 @@ class WellKnownController extends ControllerAbstract
         private readonly APICatalog $apiCatalog,
         private readonly OAuthAuthorizationServer $oauthAuthorizationServer,
         private readonly OAuthProtectedResource $oauthProtectedResource,
+        private readonly OpenIDConfiguration $openIDConfiguration,
         private readonly SecurityTxt $securityTxt,
     ) {
     }
@@ -80,6 +82,13 @@ class WellKnownController extends ControllerAbstract
     public function getOAuthProtectedResourceSpecific(string $resource): mixed
     {
         return $this->oauthProtectedResource->get($resource);
+    }
+
+    #[Get]
+    #[Path('/.well-known/openid-configuration')]
+    public function getOpenIDConfiguration(): mixed
+    {
+        return $this->openIDConfiguration->get();
     }
 
     #[Get]
