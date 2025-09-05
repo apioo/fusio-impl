@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\CategoryRow;
 use Fusio\Impl\Table\Generated\ConnectionRow;
 use PSX\Sql\Condition;
 
@@ -65,6 +64,16 @@ class Connection extends Generated\ConnectionTable
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
         $condition->equals(self::COLUMN_NAME, $name);
+
+        return $this->findOneBy($condition);
+    }
+
+    public function findOneByTenantAndClass(?string $tenantId, int $categoryId, string $class): ?ConnectionRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        $condition->equals(self::COLUMN_CLASS, $class);
 
         return $this->findOneBy($condition);
     }

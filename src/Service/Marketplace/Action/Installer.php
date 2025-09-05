@@ -66,7 +66,7 @@ class Installer implements InstallerInterface
         }
 
         $actionName = $this->getActionName($object);
-        $config = $this->buildConfigForAction($object);
+        $config = $this->buildConfigForAction($object, $context);
 
         $create = new ActionCreate();
         $create->setName($actionName);
@@ -93,7 +93,7 @@ class Installer implements InstallerInterface
             throw new MarketplaceException('Provided an invalid action');
         }
 
-        $config = $this->buildConfigForAction($object);
+        $config = $this->buildConfigForAction($object, $context);
 
         $update = new ActionUpdate();
         $update->setClass($object->getClass());
@@ -118,7 +118,7 @@ class Installer implements InstallerInterface
         return $object->getAuthor()?->getName() . '-' . $object->getName();
     }
 
-    private function buildConfigForAction(MarketplaceAction $object): ActionConfig
+    private function buildConfigForAction(MarketplaceAction $object, UserContext $context): ActionConfig
     {
         $config = ActionConfig::from($object->getConfig() ?? []);
 
@@ -126,20 +126,19 @@ class Installer implements InstallerInterface
             ClassName::serialize(WorkerJava::class),
             ClassName::serialize(WorkerJavascript::class),
             ClassName::serialize(WorkerPHP::class),
-            ClassName::serialize(WorkerPHPLocal::class),
             ClassName::serialize(WorkerPython::class),
         ])) {
-            $config->put('worker', $this->getWorkerConnection()->getId());
+            $config->put('worker', $this->getWorkerConnection($context)->getId());
         }
 
         return $config;
     }
 
-    private function getWorkerConnection(): Table\Generated\ConnectionRow
+    private function getWorkerConnection(UserContext $context): Table\Generated\ConnectionRow
     {
         $workerClass = ClassName::serialize(Worker::class);
 
-        $connection = $this->connectionTable->findOneByClass($workerClass);
+        $connection = $this->connectionTable->findOneByTenantAndClass($context->getTenantId(), $context->getCategoryId(), $workerClass);
         if (!$connection instanceof Table\Generated\ConnectionRow) {
             throw new MarketplaceException('Could not find needed worker connection "' . $workerClass . '", create a connection of this type to use it');
         }
