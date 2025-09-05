@@ -50,6 +50,11 @@ class CategoriesTest extends DbTestCase
                     "id": 3,
                     "name": "authorization",
                     "description": ""
+                },
+                {
+                    "id": 4,
+                    "name": "openid",
+                    "description": "OpenID scope"
                 }
             ]
         },

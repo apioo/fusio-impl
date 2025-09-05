@@ -63,6 +63,7 @@ class EntityTest extends DbTestCase
     },
     "scopes": [
         "authorization",
+        "openid",
         "foo",
         "bar"
     ],

@@ -68,6 +68,7 @@ class WhoamiTest extends DbTestCase
         "consumer.transaction",
         "consumer.webhook",
         "authorization",
+        "openid",
         "foo",
         "bar",
         "plan_scope"

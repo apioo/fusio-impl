@@ -67,6 +67,7 @@ class EntityTest extends DbTestCase
     "appSecret": "342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d",
     "scopes": [
         "authorization",
+        "openid",
         "foo",
         "bar"
     ],

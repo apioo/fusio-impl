@@ -118,6 +118,8 @@ class Fixture
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
         $data->addAppCode('Foo-App', 'Consumer', 'GHMbtJi0ZuAUnp80', 'authorization');
+        $data->addAppCode('Foo-App', 'Consumer', '108742516c3fdf32', 'openid');
+        $data->addAppScope('Foo-App', 'openid');
         $data->addAudit('Backend', 'Administrator', 1, 'app.update', 'Created schema foo', '2015-06-25 22:49:09');
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey), ['foo' => 'bar']);
         $data->addConnection('Paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
@@ -169,6 +171,7 @@ class Fixture
         $data->addUserScope('Administrator', 'bar');
         $data->addUserScope('Consumer', 'consumer');
         $data->addUserScope('Consumer', 'authorization');
+        $data->addUserScope('Consumer', 'openid');
         $data->addUserScope('Consumer', 'foo');
         $data->addUserScope('Consumer', 'bar');
         $data->addUserScope('Disabled', 'authorization');

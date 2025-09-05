@@ -84,7 +84,7 @@ class ClientCredentialsTest extends DbTestCase
         ], $body);
 
         // we receive only the authorization scope since out user has not the backend scope
-        $this->assertAccessToken($response, 'consumer,consumer.account,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,foo,bar', 2);
+        $this->assertAccessToken($response, 'consumer,consumer.account,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,openid,foo,bar', 2);
     }
 
     /**
@@ -125,7 +125,7 @@ JSON;
         ], $body);
 
         // we receive only the authorization scope since out user has not the backend scope
-        $this->assertAccessToken($response, 'authorization,foo,bar', 2, 3);
+        $this->assertAccessToken($response, 'authorization,openid,foo,bar', 2, 3);
     }
 
     /**

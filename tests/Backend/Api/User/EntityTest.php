@@ -82,6 +82,7 @@ class EntityTest extends DbTestCase
         "consumer.transaction",
         "consumer.webhook",
         "authorization",
+        "openid",
         "foo",
         "bar"
     ],

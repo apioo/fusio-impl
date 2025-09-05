@@ -57,6 +57,7 @@ class AuthorizationCodeTest extends DbTestCase
         $this->assertArrayHasKey('refresh_token', $data);
         $this->assertArrayHasKey('scope', $data);
         $this->assertEquals('authorization', $data['scope']);
+        $this->assertArrayNotHasKey('id_token', $data);
 
         // check whether the token was created
         $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
@@ -67,6 +68,45 @@ class AuthorizationCodeTest extends DbTestCase
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('authorization', $row['scope']);
+        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime($row['expire'])));
+        $this->assertEquals(date('Y-m-d H'), substr($row['date'], 0, 13));
+    }
+
+    public function testPostIDToken()
+    {
+        $body     = 'grant_type=authorization_code&code=108742516c3fdf32';
+        $response = $this->sendRequest('/authorization/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
+        ], $body);
+
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $expireDate = strtotime('+2 day');
+
+        $this->assertArrayHasKey('access_token', $data);
+        $this->assertArrayHasKey('token_type', $data);
+        $this->assertEquals('bearer', $data['token_type']);
+        $this->assertArrayHasKey('expires_in', $data);
+        $this->assertEquals(172800, $data['expires_in']);
+        $this->assertArrayHasKey('refresh_token', $data);
+        $this->assertArrayHasKey('scope', $data);
+        $this->assertEquals('openid', $data['scope']);
+        $this->assertArrayHasKey('id_token', $data);
+
+        // check whether the token was created
+        $row = $this->connection->fetchAssociative('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_token WHERE token = :token', ['token' => $data['access_token']]);
+
+        $this->assertEquals(3, $row['app_id']);
+        $this->assertEquals(2, $row['user_id']);
+        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals($data['access_token'], $row['token']);
+        $this->assertEquals($data['refresh_token'], $row['refresh']);
+        $this->assertEquals('openid', $row['scope']);
         $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime($row['expire'])));
         $this->assertEquals(date('Y-m-d H'), substr($row['date'], 0, 13));
     }
