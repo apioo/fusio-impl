@@ -52,7 +52,7 @@ readonly class OpenIDConfiguration
             'response_types_supported' => ['code'],
             'response_modes_supported' => ['query'],
             'grant_types_supported' => ['authorization_code', 'client_credentials', 'password', 'refresh_token'],
-            'claims_supported' => ['iss', 'sub', 'iat', 'exp', 'name'],
+            'claims_supported' => ['iss', 'sub', 'iat', 'exp', 'name', 'preferred_username', 'aud', 'email'],
             'service_documentation' => 'https://docs.fusio-project.org/',
         ];
     }

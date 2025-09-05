@@ -73,7 +73,10 @@ class GetOpenIDConfigurationTest extends DbTestCase
         "sub",
         "iat",
         "exp",
-        "name"
+        "name",
+        "preferred_username",
+        "aud",
+        "email"
     ],
     "service_documentation": "https:\/\/docs.fusio-project.org\/"
 }

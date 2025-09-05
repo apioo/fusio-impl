@@ -74,7 +74,7 @@ readonly class Token
         }
 
         // generate access token
-        $accessToken  = $this->generateJWT($user, $now, $expires);
+        $accessToken = $this->generateJWT($user, $now, $expires, $app);
         $refreshToken = TokenGenerator::generateRefreshToken();
 
         $row = new Table\Generated\TokenRow();
@@ -94,6 +94,11 @@ readonly class Token
 
         $tokenId = $this->tokenTable->getLastInsertId();
 
+        $idToken = null;
+        if (in_array('openid', $scopes)) {
+            $idToken = $accessToken;
+        }
+
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedEvent(
             $tokenId,
@@ -110,7 +115,8 @@ readonly class Token
             $expires->getTimestamp() - $now->getTimestamp(),
             $refreshToken,
             implode(',', $scopes),
-            $state
+            $state,
+            $idToken
         );
     }
 
@@ -155,7 +161,7 @@ readonly class Token
         $this->eventDispatcher->dispatch(new RemovedEvent($tokenId, $context));
     }
 
-    private function generateJWT(Table\Generated\UserRow $user, DateTimeInterface $now, DateTimeInterface $expires): string
+    private function generateJWT(Table\Generated\UserRow $user, DateTimeInterface $now, DateTimeInterface $expires, ?Table\Generated\AppRow $app = null): string
     {
         $baseUrl = $this->frameworkConfig->getUrl();
 
@@ -164,8 +170,18 @@ readonly class Token
             'sub'  => Uuid::nameBased($baseUrl . '-' . $user->getId()),
             'iat'  => $now->getTimestamp(),
             'exp'  => $expires->getTimestamp(),
-            'name' => $user->getName()
+            'name' => $user->getName(),
+            'preferred_username' => $user->getName(),
         ];
+
+        if ($app instanceof Table\Generated\AppRow) {
+            $payload['aud'] = $app->getAppKey();
+        }
+
+        $email = $user->getEmail();
+        if (!empty($email)) {
+            $payload['email'] = $email;
+        }
 
         return $this->jsonWebToken->encode($payload);
     }
