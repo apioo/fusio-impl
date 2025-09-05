@@ -42,7 +42,7 @@ readonly class OAuthProtectedResource
     public function get(?string $resource = null): array
     {
         return [
-            'resource' => $this->frameworkConfig->getUrl(),
+            'resource' => $resource !== null ? $this->frameworkConfig->getUrl($resource) : $this->frameworkConfig->getUrl(),
             'authorization_servers' => [$this->frameworkConfig->getUrl()],
             'scopes_supported' => $this->getScopes(),
             'bearer_methods_supported' => ['header'],
