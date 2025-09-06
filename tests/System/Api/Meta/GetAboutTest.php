@@ -65,6 +65,10 @@ class GetAboutTest extends DbTestCase
             "href": "http:\/\/127.0.0.1\/"
         },
         {
+            "rel": "apps",
+            "href": "http:\/\/127.0.0.1\/apps"
+        },
+        {
             "rel": "openapi",
             "href": "http:\/\/127.0.0.1\/system\/generator\/spec-openapi"
         },
@@ -99,6 +103,10 @@ class GetAboutTest extends DbTestCase
         {
             "rel": "oauth-protected-resource",
             "href": "http:\/\/127.0.0.1\/.well-known\/oauth-protected-resource"
+        },
+        {
+            "rel": "openid-configuration",
+            "href": "http:\/\/127.0.0.1\/.well-known\/openid-configuration"
         },
         {
             "rel": "security",

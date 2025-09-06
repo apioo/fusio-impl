@@ -102,62 +102,71 @@ readonly class GetAbout implements ActionInterface
 
     private function getLinks(): array
     {
-        $baseUrl = $this->frameworkConfig->getDispatchUrl();
         $links = [];
 
         $links[] = [
             'rel' => 'root',
-            'href' => $baseUrl,
+            'href' => $this->frameworkConfig->getDispatchUrl(),
+        ];
+
+        $links[] = [
+            'rel' => 'apps',
+            'href' => $this->frameworkConfig->getAppsUrl(),
         ];
 
         $links[] = [
             'rel' => 'openapi',
-            'href' => $baseUrl . 'system/generator/spec-openapi',
+            'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-openapi'),
         ];
 
         $links[] = [
             'rel' => 'typeapi',
-            'href' => $baseUrl . 'system/generator/spec-typeapi',
+            'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-typeapi'),
         ];
 
         $links[] = [
             'rel' => 'route',
-            'href' => $baseUrl . 'system/route',
+            'href' => $this->frameworkConfig->getDispatchUrl('system', 'route'),
         ];
 
         $links[] = [
             'rel' => 'health',
-            'href' => $baseUrl . 'system/health',
+            'href' => $this->frameworkConfig->getDispatchUrl('system', 'health'),
         ];
 
         $links[] = [
             'rel' => 'oauth2',
-            'href' => $baseUrl . 'authorization/token',
+            'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
         ];
 
         $links[] = [
             'rel' => 'whoami',
-            'href' => $baseUrl . 'authorization/whoami',
+            'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'whoami'),
         ];
 
         $links[] = [
             'rel' => 'api-catalog',
-            'href' => $baseUrl . '.well-known/api-catalog',
+            'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'api-catalog'),
         ];
 
         $links[] = [
             'rel' => 'oauth-authorization-server',
-            'href' => $baseUrl . '.well-known/oauth-authorization-server',
+            'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-authorization-server'),
         ];
 
         $links[] = [
             'rel' => 'oauth-protected-resource',
-            'href' => $baseUrl . '.well-known/oauth-protected-resource',
+            'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-protected-resource'),
+        ];
+
+        $links[] = [
+            'rel' => 'openid-configuration',
+            'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'openid-configuration'),
         ];
 
         $links[] = [
             'rel' => 'security',
-            'href' => $baseUrl . '.well-known/security.txt',
+            'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'security.txt'),
         ];
 
         $links[] = [
