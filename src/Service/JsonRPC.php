@@ -36,7 +36,7 @@ use PSX\Json\Rpc\Context as RpcContext;
 use PSX\Json\Rpc\Exception\InvalidRequestException;
 use PSX\Record\Record;
 use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaSource;
 use stdClass;
 
@@ -61,7 +61,7 @@ readonly class JsonRPC
         private TokenValidator $tokenValidator,
         private Limiter $limiterService,
         private ResponseWriter $responseWriter,
-        SchemaManagerInterface $schemaManager,
+        SchemaManager $schemaManager,
     ) {
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
