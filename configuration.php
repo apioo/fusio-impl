@@ -21,6 +21,10 @@ return [
     'fusio_mcp_queue_size'     => 500,
     'fusio_mcp_timeout'        => 1800,
 
+    // Whether the JsonRPC server at /jsonrpc is enabled, it allows to invoke every operation through JsonRPC. Note the
+    //
+    'fusio_jsonrpc'            => true,
+
     // OAuth2 access token expiration settings. How long can you use an access token and the refresh token. After the
     // expiration a user either need to use a refresh token to extend the token or request a new token
     'fusio_expire_token'       => 'P2D',
