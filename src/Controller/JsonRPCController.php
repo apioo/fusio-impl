@@ -23,6 +23,7 @@ namespace Fusio\Impl\Controller;
 use Fusio\Impl\Service\JsonRPC;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use JsonException;
+use PSX\Api\Attribute\Incoming;
 use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
@@ -66,6 +67,7 @@ class JsonRPCController extends ControllerAbstract implements FilterInterface
 
     #[Post]
     #[Path('/jsonrpc')]
+    #[Incoming(ContentType::JSON)]
     #[Outgoing(200, ContentType::JSON)]
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
