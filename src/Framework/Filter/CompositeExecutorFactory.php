@@ -46,7 +46,9 @@ class CompositeExecutorFactory implements ControllerExecutorFactoryInterface
 
     public function factory(object $controller, string $methodName, Context $context): FilterInterface
     {
-        if ($controller::class === ActionController::class) {
+        if ($controller instanceof FilterInterface) {
+            return $controller;
+        } elseif ($controller::class === ActionController::class) {
             return $this->actionExecutorFactory->factory($controller, $methodName, $context);
         } else {
             return $this->controllerExecutorFactory->factory($controller, $methodName, $context);
