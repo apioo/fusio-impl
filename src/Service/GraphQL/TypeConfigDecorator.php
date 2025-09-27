@@ -53,12 +53,12 @@ readonly class TypeConfigDecorator
 
                     $condition = Condition::withAnd();
                     $condition->equals(Table\Generated\OperationColumn::TENANT_ID, $context->getTenantId());
+                    $condition->equals(Table\Generated\OperationColumn::CATEGORY_ID, 1);
+                    $condition->equals(Table\Generated\OperationColumn::HTTP_METHOD, 'GET');
                     $operations = $this->operationTable->findBy($condition);
                     foreach ($operations as $operation) {
                         $fields[$operation->getName()]['resolve'] = function () {
-
-
-
+                            // @TODO resolve arguments
                         };
                     }
 
@@ -70,7 +70,8 @@ readonly class TypeConfigDecorator
             case 'Track':
                 $typeConfig['fields'] = function () use ($typeConfig): array {
                     $fields = $typeConfig['fields']();
-                    $fields['author']['resolve'] = fn (array $track): array => Author::find($track['authorId']);
+                    // @TODO resolve model fields
+                    // $fields['author']['resolve'] = fn (array $track): array => Author::find($track['authorId']);
 
                     return $fields;
                 };
@@ -79,27 +80,5 @@ readonly class TypeConfigDecorator
         }
 
         return [];
-    }
-
-    private function loadSchema(): Schema
-    {
-        $fields = [];
-        $operations = $this->operationTable->findBy();
-        foreach ($operations as $operation) {
-            $fields[$operation->getName()] = [
-                'type' => Type::string(),
-                'args' => [
-                    'message' => Type::nonNull(Type::string()),
-                ],
-                'resolve' => fn ($rootValue, array $args): string => $rootValue['prefix'] . $args['message'],
-            ];
-        }
-
-        return new Schema([
-            'query' => new ObjectType([
-                'name' => 'Query',
-                'fields' => $fields,
-            ])
-        ]);
     }
 }
