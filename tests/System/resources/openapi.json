@@ -57,8 +57,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/authorization/revoke": {
       "post": {
@@ -106,8 +105,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/inspect/{foo}": {
       "get": {
@@ -331,8 +329,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     },
     "/mime/binary": {
       "post": {
@@ -370,8 +367,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/mime/form": {
       "post": {
@@ -407,8 +403,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/mime/json": {
       "post": {
@@ -446,8 +441,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/mime/multipart": {
       "post": {
@@ -483,8 +477,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/mime/text": {
       "post": {
@@ -520,8 +513,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/mime/xml": {
       "post": {
@@ -557,8 +549,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/foo": {
       "get": {
@@ -612,8 +603,7 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     }
   },
   "components": {
