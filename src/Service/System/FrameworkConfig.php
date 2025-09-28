@@ -146,6 +146,11 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_jsonrpc') === true;
     }
 
+    public function isGraphQLEnabled(): bool
+    {
+        return $this->config->get('fusio_graphql') === true;
+    }
+
     public function getAppsUrl(): string
     {
         return $this->config->get('fusio_apps_url') ?: $this->getUrl('apps');

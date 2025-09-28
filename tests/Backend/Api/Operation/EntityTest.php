@@ -67,7 +67,14 @@ class EntityTest extends DbTestCase
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
-    "parameters": {},
+    "parameters": {
+        "startIndex": {
+            "type": "integer"
+        },
+        "count": {
+            "type": "integer"
+        }
+    },
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": {},
     "action": "action:\/\/Sql-Select-All",
@@ -102,7 +109,14 @@ JSON;
     "httpMethod": "GET",
     "httpPath": "\/foo",
     "httpCode": 200,
-    "parameters": {},
+    "parameters": {
+        "startIndex": {
+            "type": "integer"
+        },
+        "count": {
+            "type": "integer"
+        }
+    },
     "outgoing": "schema:\/\/Collection-Schema",
     "throws": {},
     "action": "action:\/\/Sql-Select-All",

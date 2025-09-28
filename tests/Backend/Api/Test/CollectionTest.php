@@ -53,7 +53,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 9,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -104,12 +104,6 @@ class CollectionTest extends DbTestCase
             "status": 4,
             "operationName": "test.createFoo",
             "message": "Expected status code 201 got 402"
-        },
-        {
-            "id": 1,
-            "status": 4,
-            "operationName": "test.listFoo",
-            "message": "\/entry must be of type object"
         }
     ]
 }
