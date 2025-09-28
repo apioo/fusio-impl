@@ -557,6 +557,24 @@
           "bar"
         ],
         "operationId": "test.listFoo",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "startIndex",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "count",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",

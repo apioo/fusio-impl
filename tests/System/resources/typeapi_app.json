@@ -466,7 +466,20 @@
           "target": "Collection"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
       "throws": [],
       "description": "",
       "stability": 1,
