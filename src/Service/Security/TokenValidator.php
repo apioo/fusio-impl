@@ -25,7 +25,6 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Http\Exception\ForbiddenException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\OAuth2\Exception\InvalidScopeException;
 use UnexpectedValueException;
