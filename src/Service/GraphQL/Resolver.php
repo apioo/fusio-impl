@@ -27,6 +27,7 @@ use Fusio\Impl\Service\Rate\Limiter;
 use Fusio\Impl\Service\Security\TokenValidator;
 use Fusio\Impl\Table;
 use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\ResolveInfo;
 use InvalidArgumentException;
 use PSX\Data\WriterInterface;
 use PSX\Framework\Http\ResponseWriter;
@@ -72,8 +73,8 @@ readonly class Resolver
             $condition->equals(Table\Generated\OperationColumn::HTTP_METHOD, 'GET');
             $operations = $this->operationTable->findBy($condition);
             foreach ($operations as $operation) {
-                $fields[$this->normalizer->method($operation->getName())]['resolve'] = function ($rootValue, array $args) use ($operation, $context, $authorization, $ip) {
-                    $request = new Request($args, new Record(), new Request\RpcRequestContext('Resolve'));
+                $fields[$this->normalizer->method($operation->getName())]['resolve'] = function ($rootValue, array $args, $ctx, ResolveInfo $resolveInfo) use ($operation, $context, $authorization, $ip) {
+                    $request = new Request($args, new Record(), new Request\GraphQLRequestContext($rootValue, $ctx, $resolveInfo->getFieldSelection()));
 
                     $context->setOperation($operation);
 
