@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Service\GraphQL;
+use Fusio\Impl\Service\JsonRPC;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use GraphQL\Error\Error;
 use GraphQL\Error\FormattedError;
@@ -91,20 +92,29 @@ class GraphQLController extends ControllerAbstract implements FilterInterface
             throw new StatusCode\ServiceUnavailableException('GraphQL service is not enabled');
         }
 
-        $body = (string) $request->getBody();
+        $data = [];
+        if ($request->getMethod() === 'POST') {
+            $body = (string) $request->getBody();
 
-        try {
-            $data = Parser::decode($body, true);
-        } catch (JsonException) {
-            throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
+            try {
+                $data = Parser::decode($body, true);
+            } catch (JsonException) {
+                throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
+            }
+
+            if (!is_array($data)) {
+                throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
+            }
         }
 
-        if (!is_array($data)) {
-            throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
-        }
-
         try {
-            $output = $this->server->run($request->getMethod(), $data, $request->getUri()->getParameters());
+            $output = $this->server->run(
+                $request->getMethod(),
+                $data,
+                $request->getUri()->getParameters(),
+                $request->getHeader('Authorization'),
+                $this->ipResolver->resolveByRequest($request),
+            );
         } catch (Throwable $e) {
             $output = new ExecutionResult(null, [Error::createLocatedError($e)]);
         }

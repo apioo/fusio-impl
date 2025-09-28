@@ -47,6 +47,7 @@ use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Test\Environment;
 use PSX\Schema\ContentType;
+use PSX\Schema\Type\Factory\PropertyTypeFactory;
 
 /**
  * Fixture
@@ -189,6 +190,7 @@ class Fixture
                 httpPath: '/foo',
                 httpCode: 200,
                 outgoing: 'Collection-Schema',
+                parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
                 public: true,
                 stability: OperationInterface::STABILITY_EXPERIMENTAL,
             ),

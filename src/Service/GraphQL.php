@@ -21,20 +21,22 @@
 namespace Fusio\Impl\Service;
 
 use Exception;
-use Fusio\Impl\Service\GraphQL\TypeConfigDecorator;
+use Fusio\Impl\Service\GraphQL\Resolver;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use GraphQL\Error\InvariantViolation;
+use GraphQL\Executor\ExecutionResult;
 use GraphQL\Language\Parser;
 use GraphQL\Server\Helper;
 use GraphQL\Server\RequestError;
 use GraphQL\Server\ServerConfig;
 use GraphQL\Server\StandardServer;
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
-use GraphQL\Type\Schema;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Validator\DocumentValidator;
+use PSX\Api\GeneratorFactory;
+use PSX\Api\Repository\LocalRepository;
+use PSX\Api\Scanner\FilterFactoryInterface;
+use PSX\Api\ScannerInterface;
 
 /**
  * GraphQL
@@ -48,8 +50,11 @@ readonly class GraphQL
     private Helper $helper;
 
     public function __construct(
-        private TypeConfigDecorator $typeConfigDecorator,
+        private Resolver $resolver,
         private FrameworkConfig $frameworkConfig,
+        private ScannerInterface $scanner,
+        private GeneratorFactory $factory,
+        private FilterFactoryInterface $filterFactory,
     )
     {
         $this->helper = new Helper();
@@ -60,13 +65,13 @@ readonly class GraphQL
      * @throws InvariantViolation
      * @throws Exception
      */
-    public function run(string $method, array $bodyParams, array $queryParams): array
+    public function run(string $method, array $bodyParams, array $queryParams, ?string $authorization, string $ip): ExecutionResult
     {
         $data = $this->helper->parseRequestParams($method, $bodyParams, $queryParams);
 
         $cacheFilename = $this->frameworkConfig->getPathCache('graphql_schema.php');
         if (!file_exists($cacheFilename)) {
-            $schema = ''; // @TODO build schema
+            $schema = $this->generateSchema();
 
             $document = Parser::parse($schema);
             DocumentValidator::assertValidSDL($document);
@@ -75,14 +80,42 @@ readonly class GraphQL
             $document = AST::fromArray(require $cacheFilename);
         }
 
-        $schema = BuildSchema::build($document, $this->typeConfigDecorator, ['assumeValidSDL' => true]);
+        $typeConfigDecorator = function (array $typeConfig) use ($authorization, $ip) {
+            if ($typeConfig['name'] === 'Query') {
+                return $this->resolver->resolveQuery($typeConfig, $authorization, $ip);
+            } else {
+                return $this->resolver->resolveType($typeConfig);
+            }
+        };
+
+        $schema = BuildSchema::build($document, $typeConfigDecorator, ['assumeValidSDL' => true]);
 
         $config = ServerConfig::create();
         $config->setSchema($schema);
 
-        $server = new StandardServer($config);
-        $result = $server->executeRequest($data);
+        return (new StandardServer($config))->executeRequest($data);
+    }
 
-        return $result;
+    private function generateSchema(): string
+    {
+        $filterName = null; // @TODO get from request
+        if (empty($filterName)) {
+            $filterName = $this->filterFactory->getDefault();
+        }
+
+        $filter = null;
+        if (!empty($filterName) && is_string($filterName)) {
+            $filter = $this->filterFactory->getFilter($filterName);
+            if ($filter === null) {
+                throw new \RuntimeException('Provided an invalid filter name');
+            }
+        }
+
+        $registry = $this->factory->factory();
+        $generator = $registry->getGenerator(LocalRepository::SPEC_GRAPHQL);
+
+        $spec = $generator->generate($this->scanner->generate($filter));
+
+        return (string) $spec;
     }
 }
