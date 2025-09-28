@@ -26,6 +26,7 @@ use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Rate\Limiter;
 use Fusio\Impl\Service\Security\TokenValidator;
 use Fusio\Impl\Table;
+use GraphQL\Type\Definition\ObjectType;
 use InvalidArgumentException;
 use PSX\Data\WriterInterface;
 use PSX\Framework\Http\ResponseWriter;
@@ -34,6 +35,7 @@ use PSX\Http\Response;
 use PSX\Record\Record;
 use PSX\Schema\Generator\Normalizer;
 use PSX\Sql\Condition;
+use stdClass;
 
 /**
  * Resolver
@@ -101,12 +103,22 @@ readonly class Resolver
 
     public function resolveType(array $typeConfig): array
     {
-        $typeName = $typeConfig['name'];
-
         $typeConfig['fields'] = function () use ($typeConfig): array {
             $fields = $typeConfig['fields']();
-            // @TODO resolve model fields
-            // $fields['author']['resolve'] = fn (array $track): array => Author::find($track['authorId']);
+
+            foreach ($fields as $index => $field) {
+                if ($field['type'] instanceof ObjectType) {
+                    $fields[$index]['resolve'] = function ($data) use ($index) {
+                        if ($data instanceof stdClass && isset($data->{$index})) {
+                            return $data->{$index};
+                        } elseif (is_array($data) && array_key_exists($index, $data)) {
+                            return $data[$index];
+                        } else {
+                            return $data;
+                        }
+                    };
+                }
+            }
 
             return $fields;
         };

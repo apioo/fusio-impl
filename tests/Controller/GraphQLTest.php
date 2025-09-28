@@ -100,9 +100,53 @@ JSON;
 {
     "data": {
         "testListFoo": {
-            "entry": {
-                "title": "bar"
-            }
+            "entry": [
+                {
+                    "title": "bar"
+                }
+            ]
+        }
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
+    public function testPostMultipleQuery()
+    {
+        $body = <<<JSON
+{
+  "query": "{ testListFoo(count: 1) { entry { title } } completeList: testListFoo { entry { content } } }"
+}
+JSON;
+
+        $response = $this->sendRequest('/graphql', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ], $body);
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "data": {
+        "testListFoo": {
+            "entry": [
+                {
+                    "title": "bar"
+                }
+            ]
+        },
+        "completeList": {
+            "entry": [
+                {
+                    "content": "foo"
+                },
+                {
+                    "content": "bar"
+                }
+            ]
         }
     }
 }
