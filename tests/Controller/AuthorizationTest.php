@@ -116,21 +116,41 @@ JSON;
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1234'
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ]);
 
-        $body = (string)$response->getBody();
-        $data = \json_decode($body);
+        $body = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27T19:59:15+00:00"
+        },
+        {
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27T19:59:15+00:00"
+        }
+    ]
+}
+JSON;
 
-        $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertEquals('Bearer realm="Fusio", resource_metadata="http://127.0.0.1/.well-known/oauth-protected-resource"', $response->getHeader('WWW-Authenticate'), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('8', $response->getHeader('RateLimit-Limit'), $body);
+        $this->assertEquals('8', $response->getHeader('RateLimit-Remaining'), $body);
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.listFoo', $response->getHeader('X-Operation-Id'), $body);
         $this->assertEquals('experimental', $response->getHeader('X-Stability'), $body);
         $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
-        $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Invalid access token', $data->message);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPublicWithEmptyAuthorization()

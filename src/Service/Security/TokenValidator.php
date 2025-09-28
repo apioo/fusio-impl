@@ -25,8 +25,10 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use PSX\Http\Exception\ForbiddenException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\OAuth2\Exception\InvalidScopeException;
+use UnexpectedValueException;
 
 /**
  * TokenValidator
@@ -58,18 +60,22 @@ class TokenValidator
     {
         $needsAuth = $context->getOperation()->getPublic() !== 1;
 
-        if ($needsAuth || !empty($authorization)) {
-            $parts = explode(' ', $authorization ?? '', 2);
-            $type = $parts[0] ?? null;
-            $accessToken = $parts[1] ?? null;
-
+        try {
             $params = [
                 'realm' => 'Fusio',
                 'resource_metadata' => $this->frameworkConfig->getDispatchUrl('.well-known' , 'oauth-protected-resource'),
             ];
 
-            if (empty($type)) {
+            if (empty($authorization)) {
                 throw new UnauthorizedException('Missing authorization header', 'Bearer', $params);
+            }
+
+            $parts = explode(' ', $authorization, 2);
+            $type = $parts[0] ?? null;
+            $accessToken = $parts[1] ?? null;
+
+            if (empty($type)) {
+                throw new UnauthorizedException('Missing authorization type', 'Bearer', $params);
             }
 
             if ($type !== 'Bearer') {
@@ -82,7 +88,7 @@ class TokenValidator
 
             try {
                 $token = $this->getToken($accessToken, $context->getOperation()->getId());
-            } catch (\UnexpectedValueException $e) {
+            } catch (InvalidScopeException|UnexpectedValueException $e) {
                 throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
             }
 
@@ -105,15 +111,23 @@ class TokenValidator
             }
 
             $context->setToken($token);
-        } else {
-            $context->setApp(new Model\AppAnonymous());
-            $context->setUser(new Model\UserAnonymous());
-            $context->setToken(new Model\TokenAnonymous());
+        } catch (UnauthorizedException $e) {
+            if ($needsAuth) {
+                throw $e;
+            } else {
+                $context->setApp(new Model\AppAnonymous());
+                $context->setUser(new Model\UserAnonymous());
+                $context->setToken(new Model\TokenAnonymous());
+            }
         }
 
         return true;
     }
 
+    /**
+     * @throws InvalidScopeException
+     * @throws UnexpectedValueException
+     */
     private function getToken(string $token, int $operationId): ?Model\Token
     {
         // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
