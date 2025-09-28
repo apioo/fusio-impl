@@ -27,7 +27,7 @@ return [
     'fusio_jsonrpc'            => true,
 
     // Whether the GraphQL endpoint at /graphql is enabled, it allows to invoke every GET operation through GraphQL. For
-    // communication with external customers we always recommend to use REST endpoints but for internal cases it can be
+    // communication with external customers we always recommend to use REST endpoints but for web apps it can be
     // useful to use GraphQL
     'fusio_graphql'            => true,
 

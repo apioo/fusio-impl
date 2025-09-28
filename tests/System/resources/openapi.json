@@ -559,16 +559,16 @@
         "operationId": "test.listFoo",
         "parameters": [
           {
-            "in": "query",
             "name": "startIndex",
+            "in": "query",
             "required": false,
             "schema": {
               "type": "integer"
             }
           },
           {
-            "in": "query",
             "name": "count",
+            "in": "query",
             "required": false,
             "schema": {
               "type": "integer"
@@ -787,7 +787,10 @@
             "type": "integer"
           },
           "entry": {
-            "$ref": "#/components/schemas/Entry"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Entry"
+            }
           }
         }
       },

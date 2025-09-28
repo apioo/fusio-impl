@@ -462,7 +462,7 @@
       "source": {
         "definitions": {
           "Entry": {
-            "type": "object",
+            "type": "struct",
             "properties": {
               "id": {
                 "type": "integer"
@@ -480,8 +480,7 @@
             }
           },
           "Collection": {
-            "title": "collection",
-            "type": "object",
+            "type": "struct",
             "properties": {
               "totalResults": {
                 "type": "integer"
@@ -493,12 +492,16 @@
                 "type": "integer"
               },
               "entry": {
-                "$ref": "Entry"
+                "type": "array",
+                "schema": {
+                  "type": "reference",
+                  "target": "Entry"
+                }
               }
             }
           }
         },
-        "$ref": "Collection"
+        "root": "Collection"
       },
       "readonly": false
     },

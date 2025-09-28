@@ -658,8 +658,11 @@
           "type": "integer"
         },
         "entry": {
-          "type": "reference",
-          "target": "Entry"
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Entry"
+          }
         }
       }
     },
