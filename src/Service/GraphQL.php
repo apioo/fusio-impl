@@ -65,7 +65,7 @@ readonly class GraphQL
      * @throws InvariantViolation
      * @throws Exception
      */
-    public function run(string $method, array $bodyParams, array $queryParams, ?string $authorization, string $ip): ExecutionResult
+    public function run(string $method, array $bodyParams, array $queryParams, ?string $authorization, string $ip): mixed
     {
         $data = $this->helper->parseRequestParams($method, $bodyParams, $queryParams);
 
@@ -88,6 +88,7 @@ readonly class GraphQL
             }
         };
 
+        /** @psalm-suppress ImplicitToStringCast */
         $schema = BuildSchema::build($document, $typeConfigDecorator, ['assumeValidSDL' => true]);
 
         $config = ServerConfig::create();
@@ -98,13 +99,11 @@ readonly class GraphQL
 
     private function generateSchema(): string
     {
-        $filterName = null; // @TODO get from request
-        if (empty($filterName)) {
-            $filterName = $this->filterFactory->getDefault();
-        }
+        // @TODO get from request
+        $filterName = $this->filterFactory->getDefault();
 
         $filter = null;
-        if (!empty($filterName) && is_string($filterName)) {
+        if (!empty($filterName)) {
             $filter = $this->filterFactory->getFilter($filterName);
             if ($filter === null) {
                 throw new \RuntimeException('Provided an invalid filter name');
