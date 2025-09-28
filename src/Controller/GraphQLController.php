@@ -21,13 +21,9 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Service\GraphQL;
-use Fusio\Impl\Service\JsonRPC;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use GraphQL\Error\Error;
-use GraphQL\Error\FormattedError;
-use GraphQL\Error\InvariantViolation;
 use GraphQL\Executor\ExecutionResult;
-use GraphQL\Server\RequestError;
 use JsonException;
 use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Incoming;
