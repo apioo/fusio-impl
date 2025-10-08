@@ -55,7 +55,7 @@ class Get implements ActionInterface
             throw new StatusCode\NotFoundException('Could not find trigger');
         }
 
-        if ($trigger['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($trigger['status'] == Table\Trigger::STATUS_DELETED) {
             throw new StatusCode\GoneException('Trigger was deleted');
         }
 
