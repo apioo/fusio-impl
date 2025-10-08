@@ -111,6 +111,11 @@ class UnlimitedLimiter implements LimiterInterface
         return PHP_INT_MAX;
     }
 
+    public function getTriggerCount(): int
+    {
+        return PHP_INT_MAX;
+    }
+
     public function getUserCount(): int
     {
         return PHP_INT_MAX;
