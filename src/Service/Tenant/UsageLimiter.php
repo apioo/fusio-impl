@@ -186,6 +186,15 @@ class UsageLimiter
         );
     }
 
+    public function assertTriggerCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\TriggerTable::NAME, $tenantId),
+            $this->limiter->getTriggerCount(),
+            'trigger'
+        );
+    }
+
     public function assertUserCount(?string $tenantId): void
     {
         $this->assert(
