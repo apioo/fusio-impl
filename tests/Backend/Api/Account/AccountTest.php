@@ -83,6 +83,7 @@ class AccountTest extends DbTestCase
         "backend.token",
         "backend.transaction",
         "backend.trash",
+        "backend.trigger",
         "backend.user",
         "backend.webhook",
         "consumer",
