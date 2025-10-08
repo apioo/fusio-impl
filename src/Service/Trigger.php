@@ -58,9 +58,9 @@ readonly class Trigger
             $row->setTenantId($context->getTenantId());
             $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Cronjob::STATUS_ACTIVE);
-            $row->setName($trigger->getName());
-            $row->setEvent($trigger->getEvent());
-            $row->setAction($trigger->getAction());
+            $row->setName($trigger->getName() ?? throw new StatusCode\BadRequestException('No name provided'));
+            $row->setEvent($trigger->getEvent() ?? throw new StatusCode\BadRequestException('No event provided'));
+            $row->setAction($trigger->getAction() ?? throw new StatusCode\BadRequestException('No action provided'));
             $row->setMetadata($trigger->getMetadata() !== null ? Parser::encode($trigger->getMetadata()) : null);
             $this->triggerTable->create($row);
 
