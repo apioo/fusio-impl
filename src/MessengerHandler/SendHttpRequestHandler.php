@@ -38,17 +38,14 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * @link    https://www.fusio-project.org
  */
 #[AsMessageHandler]
-class SendHttpRequestHandler
+readonly class SendHttpRequestHandler
 {
     public const MAX_ATTEMPTS = 3;
 
-    private Table\Webhook\Response $responseTable;
-    private ClientInterface $httpClient;
-
-    public function __construct(Table\Webhook\Response $responseTable, ClientInterface $httpClient)
-    {
-        $this->responseTable = $responseTable;
-        $this->httpClient = $httpClient;
+    public function __construct(
+        private Table\Webhook\Response $responseTable,
+        private ClientInterface $httpClient
+    ) {
     }
 
     public function __invoke(SendHttpRequest $httpRequest): void

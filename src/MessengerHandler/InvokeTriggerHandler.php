@@ -20,50 +20,50 @@
 
 namespace Fusio\Impl\MessengerHandler;
 
-use Fusio\Impl\Messenger\SendHttpRequest;
+use Fusio\Engine\Context;
+use Fusio\Engine\Processor;
+use Fusio\Engine\Request;
 use Fusio\Impl\Messenger\TriggerEvent;
 use Fusio\Impl\Table;
-use PSX\DateTime\LocalDateTime;
+use PSX\Record\Record;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * WebhookEventHandler
+ * Invokes an action which is associated with this event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
 #[AsMessageHandler]
-readonly class WebhookSendHandler
+readonly class InvokeTriggerHandler
 {
     public function __construct(
-        private Table\Webhook $webhookTable,
-        private Table\Webhook\Response $responseTable,
-        private Table\Event $eventTable,
-        private MessageBusInterface $messageBus
+        private Processor $processor,
+        private Table\Trigger $triggerTable
     ) {
     }
 
     public function __invoke(TriggerEvent $event): void
     {
-        $existing = $this->eventTable->findOneByTenantAndName($event->getTenantId(), null, $event->getEventName());
-        if (!$existing instanceof Table\Generated\EventRow) {
-            return;
-        }
+        $result = $this->triggerTable->findByTenantAndEvent($event->getTenantId(), $event->getEventName());
+        foreach ($result as $row) {
+            $action = $row->getAction();
+            if (empty($action)) {
+                return;
+            }
 
-        $webhooks = $this->webhookTable->getWebhooksForEvent($existing->getId());
-        foreach ($webhooks as $webhook) {
-            $row = new Table\Generated\WebhookResponseRow();
-            $row->setWebhookId($webhook['id']);
-            $row->setStatus(Table\Webhook\Response::STATUS_PENDING);
-            $row->setAttempts(0);
-            $row->setInsertDate(LocalDateTime::now());
-            $this->responseTable->create($row);
+            $payload = $event->getPayload();
+            if (is_object($payload) || is_iterable($payload)) {
+                $data = Record::from($payload);
+            } else {
+                $data = new Record();
+            }
 
-            $responseId = $this->responseTable->getLastInsertId();
+            $request = new Request([], $data, new Request\EventRequestContext($event->getEventName()));
+            $context = $event->getContext() ?? new Context\AnonymousContext($event->getTenantId());
 
-            $this->messageBus->dispatch(new SendHttpRequest($responseId, $webhook['endpoint'], $event->getPayload()));
+            $this->processor->execute($action, $request, $context, false);
         }
     }
 }

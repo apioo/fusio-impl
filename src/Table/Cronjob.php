@@ -69,4 +69,13 @@ class Cronjob extends Generated\CronjobTable
 
         return $this->findOneBy($condition);
     }
+
+    public function findByTenantAndStatus(?string $tenantId, int $status): array
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_STATUS, $status);
+
+        return $this->findBy($condition);
+    }
 }

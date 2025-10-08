@@ -21,10 +21,10 @@
 namespace Fusio\Impl\Service\Cronjob;
 
 use Cron\CronExpression;
-use Fusio\Impl\Service;
+use Fusio\Impl\Messenger\InvokeCronjob;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use Fusio\Model\Backend\ActionExecuteRequest;
-use PSX\DateTime\LocalDateTime;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Executor
@@ -33,24 +33,20 @@ use PSX\DateTime\LocalDateTime;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Executor
+readonly class Executor
 {
-    private Table\Cronjob $cronjobTable;
-    private Table\Cronjob\Error $errorTable;
-    private Service\Action\Executor $executorService;
-
-    public function __construct(Table\Cronjob $cronjobTable, Table\Cronjob\Error $errorTable, Service\Action\Executor $executorService)
-    {
-        $this->cronjobTable = $cronjobTable;
-        $this->errorTable = $errorTable;
-        $this->executorService = $executorService;
+    public function __construct(
+        private Table\Cronjob $cronjobTable,
+        private MessageBusInterface $messageBus,
+        private FrameworkConfig $frameworkConfig,
+    ) {
     }
 
     public function execute(): void
     {
         $result = $this->getCronjobsToExecute();
         foreach ($result as $cronjob) {
-            $this->executeCronjob($cronjob);
+            $this->messageBus->dispatch(new InvokeCronjob($this->frameworkConfig->getTenantId(), $cronjob));
         }
     }
 
@@ -65,7 +61,7 @@ class Executor
     private function getCronjobsToExecute(): array
     {
         $execute = [];
-        $result = $this->cronjobTable->findByStatus(Table\Cronjob::STATUS_ACTIVE);
+        $result = $this->cronjobTable->findByTenantAndStatus($this->frameworkConfig->getTenantId(), Table\Cronjob::STATUS_ACTIVE);
         foreach ($result as $cronjob) {
             if (!$this->shouldExecute($cronjob)) {
                 continue;
@@ -80,33 +76,5 @@ class Executor
     private function shouldExecute(Table\Generated\CronjobRow $cronjob): bool
     {
         return (new CronExpression($cronjob->getCron()))->isDue();
-    }
-
-    private function executeCronjob(Table\Generated\CronjobRow $cronjob)
-    {
-        try {
-            $execute = new ActionExecuteRequest();
-            $execute->setMethod('GET');
-
-            $this->executorService->execute($cronjob->getAction() ?? '', $execute);
-
-            $exitCode = Table\Cronjob::CODE_SUCCESS;
-        } catch (\Throwable $e) {
-            $row = new Table\Generated\CronjobErrorRow();
-            $row->setCronjobId($cronjob->getId());
-            $row->setMessage($e->getMessage());
-            $row->setTrace($e->getTraceAsString());
-            $row->setFile($e->getFile());
-            $row->setLine($e->getLine());
-            $row->setInsertDate(LocalDateTime::now());
-            $this->errorTable->create($row);
-
-            $exitCode = Table\Cronjob::CODE_ERROR;
-        }
-
-        // set execute date
-        $cronjob->setExecuteDate(LocalDateTime::now());
-        $cronjob->setExitCode($exitCode);
-        $this->cronjobTable->update($cronjob);
     }
 }

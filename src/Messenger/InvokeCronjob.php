@@ -18,28 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\MessengerHandler;
+namespace Fusio\Impl\Messenger;
 
-use Fusio\Engine\Processor;
-use Fusio\Impl\Messenger\InvokeAction;
-use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Fusio\Impl\Table\Generated\CronjobRow;
 
 /**
- * InvokeActionHandler
+ * InvokeCronjob
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-#[AsMessageHandler]
-readonly class InvokeActionHandler
+readonly class InvokeCronjob
 {
-    public function __construct(private Processor $processor)
-    {
+    public function __construct(
+        private ?string $tenantId,
+        private CronjobRow $cronjob
+    ) {
     }
 
-    public function __invoke(InvokeAction $action): void
+    public function getTenantId(): ?string
     {
-        $this->processor->execute($action->getActionId(), $action->getRequest(), $action->getContext(), false);
+        return $this->tenantId;
+    }
+
+    public function getCronjob(): CronjobRow
+    {
+        return $this->cronjob;
     }
 }
