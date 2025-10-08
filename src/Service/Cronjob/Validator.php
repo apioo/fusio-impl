@@ -67,11 +67,11 @@ readonly class Validator
     private function assertName(string $name, ?string $tenantId, ?Table\Generated\CronjobRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid connection name');
+            throw new StatusCode\BadRequestException('Invalid cronjob name');
         }
 
         if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByTenantAndName($tenantId, null, $name)) {
-            throw new StatusCode\BadRequestException('Connection already exists');
+            throw new StatusCode\BadRequestException('Cronjob already exists');
         }
     }
 
