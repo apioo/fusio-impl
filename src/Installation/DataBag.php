@@ -643,6 +643,19 @@ class DataBag
         ];
     }
 
+    public function addTrigger(string $category, string $name, string $event, string $action, ?array $metadata = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_trigger'][$name] = [
+            'tenant_id' => $tenantId,
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'status' => Table\Trigger::STATUS_ACTIVE,
+            'name' => $name,
+            'event' => $event,
+            'action' => $action,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+        ];
+    }
+
     public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_user'][$name] = [

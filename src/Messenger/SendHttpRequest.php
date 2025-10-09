@@ -27,17 +27,13 @@ namespace Fusio\Impl\Messenger;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SendHttpRequest
+readonly class SendHttpRequest
 {
-    private int $responseId;
-    private string $endpoint;
-    private mixed $payload;
-
-    public function __construct(int $responseId, string $endpoint, mixed $payload)
-    {
-        $this->responseId = $responseId;
-        $this->endpoint = $endpoint;
-        $this->payload = $payload;
+    public function __construct(
+        private int $responseId,
+        private string $endpoint,
+        private mixed $payload
+    ) {
     }
 
     public function getResponseId(): int

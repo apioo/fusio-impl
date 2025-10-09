@@ -500,6 +500,21 @@ final class Version20230508210151 extends AbstractMigration
             $transactionTable->addUniqueIndex(['tenant_id', 'transaction_id']);
         }
 
+        if (!$schema->hasTable('fusio_trigger')) {
+            $triggerTable = $schema->createTable('fusio_trigger');
+            $triggerTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $triggerTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $triggerTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $triggerTable->addColumn('status', 'integer');
+            $triggerTable->addColumn('name', 'string', ['length' => 255]);
+            $triggerTable->addColumn('event', 'string', ['length' => 64]);
+            $triggerTable->addColumn('action', 'string', ['length' => 255]);
+            $triggerTable->addColumn('metadata', 'text', ['notnull' => false]);
+            $triggerTable->setPrimaryKey(['id']);
+            $triggerTable->addUniqueIndex(['tenant_id', 'name']);
+            $triggerTable->addIndex(['tenant_id', 'event']);
+        }
+
         if (!$schema->hasTable('fusio_user')) {
             $userTable = $schema->createTable('fusio_user');
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);

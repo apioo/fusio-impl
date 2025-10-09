@@ -30,17 +30,13 @@ use Fusio\Engine\RequestInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class InvokeAction
+readonly class InvokeAction
 {
-    private string|int $actionId;
-    private RequestInterface $request;
-    private ContextInterface $context;
-
-    public function __construct(string|int $actionId, RequestInterface $request, ContextInterface $context)
-    {
-        $this->actionId = $actionId;
-        $this->request = $request;
-        $this->context = $context;
+    public function __construct(
+        private string|int $actionId,
+        private RequestInterface $request,
+        private ContextInterface $context
+    ) {
     }
 
     public function getActionId(): int|string

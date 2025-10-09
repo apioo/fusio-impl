@@ -21,7 +21,7 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CODE => 0xa000ff, self::COLUMN_REDIRECT_URI => 0x40a000ff, self::COLUMN_SCOPE => 0xa000ff, self::COLUMN_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CODE => 0xa000ff, self::COLUMN_REDIRECT_URI => 0x40a000ff, self::COLUMN_SCOPE => 0xa003ff, self::COLUMN_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>

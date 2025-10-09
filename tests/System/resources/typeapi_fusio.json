@@ -37,6 +37,7 @@
       "backend.token",
       "backend.transaction",
       "backend.trash",
+      "backend.trigger",
       "backend.user",
       "backend.webhook"
     ]
@@ -8114,6 +8115,211 @@
         "trash"
       ]
     },
+    "backend.trigger.create": {
+      "path": "/backend/trigger",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TriggerCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new trigger",
+      "stability": 2,
+      "security": [
+        "backend.trigger"
+      ],
+      "authorization": true,
+      "tags": [
+        "trigger"
+      ]
+    },
+    "backend.trigger.delete": {
+      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "trigger_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing trigger",
+      "stability": 2,
+      "security": [
+        "backend.trigger"
+      ],
+      "authorization": true,
+      "tags": [
+        "trigger"
+      ]
+    },
+    "backend.trigger.get": {
+      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Trigger"
+        }
+      },
+      "arguments": {
+        "trigger_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific trigger",
+      "stability": 2,
+      "security": [
+        "backend.trigger"
+      ],
+      "authorization": true,
+      "tags": [
+        "trigger"
+      ]
+    },
+    "backend.trigger.getAll": {
+      "path": "/backend/trigger",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_TriggerCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of triggers",
+      "stability": 2,
+      "security": [
+        "backend.trigger"
+      ],
+      "authorization": true,
+      "tags": [
+        "trigger"
+      ]
+    },
+    "backend.trigger.update": {
+      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "trigger_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TriggerUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing trigger",
+      "stability": 2,
+      "security": [
+        "backend.trigger"
+      ],
+      "authorization": true,
+      "tags": [
+        "trigger"
+      ]
+    },
     "backend.user.create": {
       "path": "/backend/user",
       "method": "POST",
@@ -12797,7 +13003,7 @@
       }
     },
     "Backend_Transaction": {
-      "description": "This object represents a transaction. A transaction is generated by the system in case the payment provide provides a message that the payment was successfully executed",
+      "description": "This object represents a transaction. The system generates a transaction in case a payment was successfully executed",
       "type": "struct",
       "properties": {
         "id": {
@@ -12888,6 +13094,58 @@
             "type": "string"
           }
         }
+      }
+    },
+    "Backend_Trigger": {
+      "description": "This object represents a trigger which can invoke an action on a custom event",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Unique name of the object",
+          "type": "string"
+        },
+        "event": {
+          "description": "The name of the trigger event",
+          "type": "string"
+        },
+        "action": {
+          "description": "The target action which gets invoked",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Use this parameter to attach key-value data",
+          "type": "reference",
+          "target": "Common_Metadata"
+        }
+      }
+    },
+    "Backend_TriggerCollection": {
+      "description": "A paginated collection of trigger objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Trigger"
+        }
+      }
+    },
+    "Backend_TriggerCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Trigger"
+      }
+    },
+    "Backend_TriggerUpdate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Trigger"
       }
     },
     "Backend_User": {

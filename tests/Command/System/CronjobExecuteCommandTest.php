@@ -54,7 +54,8 @@ class CronjobExecuteCommandTest extends DbTestCase
         $this->assertEquals('Test-Cron', $cronjob['name']);
         $this->assertEquals('* * * * *', $cronjob['cron']);
         $this->assertEquals('Sql-Select-All', $cronjob['action']);
-        $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
+        // The command only inserts jobs to the message bus so they are executed later on
+        //$this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
         $this->assertEquals(0, $cronjob['exit_code']);
     }
 }

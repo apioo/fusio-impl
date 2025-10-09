@@ -22,8 +22,6 @@ namespace Fusio\Impl\Service\Action;
 
 use Fusio\Engine\Context;
 use Fusio\Engine\Inflection\ClassName;
-use Fusio\Engine\Model\AppAnonymous;
-use Fusio\Engine\Model\UserAnonymous;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Request;
 use Fusio\Impl\Service\System\FrameworkConfig;
@@ -39,15 +37,12 @@ use PSX\Uri\Uri;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Executor
+readonly class Executor
 {
-    private ProcessorInterface $processor;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(ProcessorInterface $processor, FrameworkConfig $frameworkConfig)
-    {
-        $this->processor = $processor;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private ProcessorInterface $processor,
+        private FrameworkConfig $frameworkConfig
+    ) {
     }
 
     public function execute(string|int $actionId, ActionExecuteRequest $request): mixed
@@ -81,7 +76,7 @@ class Executor
         $arguments = array_merge($arguments, $uriFragments);
 
         $request = new Request($arguments, $body, new Request\HttpRequestContext($httpRequest, $uriFragments));
-        $context = new Context(0, '/', new AppAnonymous(), new UserAnonymous(), $this->frameworkConfig->getTenantId());
+        $context = new Context\AnonymousContext($this->frameworkConfig->getTenantId());
 
         return $this->processor->execute($actionId, $request, $context);
     }

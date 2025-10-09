@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Engine\DispatcherInterface;
+use Fusio\Engine\Processor\ExecutionStateInterface;
 use Fusio\Impl\Messenger\TriggerEvent;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -32,19 +33,22 @@ use Symfony\Component\Messenger\MessageBusInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Dispatcher implements DispatcherInterface
+readonly class Dispatcher implements DispatcherInterface
 {
-    private MessageBusInterface $messageBus;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(MessageBusInterface $messageBus, FrameworkConfig $frameworkConfig)
-    {
-        $this->messageBus = $messageBus;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private MessageBusInterface $messageBus,
+        private ExecutionStateInterface $executionState,
+        private FrameworkConfig $frameworkConfig,
+    ) {
     }
 
     public function dispatch(string $eventName, mixed $payload): void
     {
-        $this->messageBus->dispatch(new TriggerEvent($this->frameworkConfig->getTenantId(), $eventName, $payload));
+        $this->messageBus->dispatch(new TriggerEvent(
+            $this->frameworkConfig->getTenantId(),
+            $eventName,
+            $payload,
+            $this->executionState->getCurrentContext()
+        ));
     }
 }

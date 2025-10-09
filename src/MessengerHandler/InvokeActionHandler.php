@@ -32,13 +32,10 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * @link    https://www.fusio-project.org
  */
 #[AsMessageHandler]
-class InvokeActionHandler
+readonly class InvokeActionHandler
 {
-    private Processor $processor;
-
-    public function __construct(Processor $processor)
+    public function __construct(private Processor $processor)
     {
-        $this->processor = $processor;
     }
 
     public function __invoke(InvokeAction $action): void

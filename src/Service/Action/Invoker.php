@@ -34,17 +34,13 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Invoker
+readonly class Invoker
 {
-    private Processor $processor;
-    private Service\Plan\Payer $planPayerService;
-    private Service\System\FrameworkConfig $frameworkConfig;
-
-    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Service\System\FrameworkConfig $frameworkConfig)
-    {
-        $this->processor = $processor;
-        $this->planPayerService = $planPayerService;
-        $this->frameworkConfig = $frameworkConfig;
+    public function __construct(
+        private Processor $processor,
+        private Service\Plan\Payer $planPayerService,
+        private Service\System\FrameworkConfig $frameworkConfig
+    ) {
     }
 
     public function invoke(RequestInterface $request, Context $context): mixed

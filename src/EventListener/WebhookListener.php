@@ -432,6 +432,45 @@ class WebhookListener implements EventSubscriberInterface
         $this->dispatcher->dispatch('fusio.scope.update', $event);
     }
 
+    public function onTriggerCreate(Event\Trigger\CreatedEvent $event): void
+    {
+        $event = (new Builder())
+            ->withId(Uuid::pseudoRandom())
+            ->withSource('/backend/trigger')
+            ->withType('org.fusio-project.trigger.create')
+            ->withDataContentType('application/json')
+            ->withData($event->getTrigger())
+            ->build();
+
+        $this->dispatcher->dispatch('fusio.trigger.create', $event);
+    }
+
+    public function onTriggerDelete(Event\Trigger\DeletedEvent $event): void
+    {
+        $event = (new Builder())
+            ->withId(Uuid::pseudoRandom())
+            ->withSource('/backend/trigger/' . $event->getExisting()->getId())
+            ->withType('org.fusio-project.trigger.delete')
+            ->withDataContentType('application/json')
+            ->withData($event->getExisting())
+            ->build();
+
+        $this->dispatcher->dispatch('fusio.trigger.delete', $event);
+    }
+
+    public function onTriggerUpdate(Event\Trigger\UpdatedEvent $event): void
+    {
+        $event = (new Builder())
+            ->withId(Uuid::pseudoRandom())
+            ->withSource('/backend/trigger/' . $event->getTrigger()->getId())
+            ->withType('org.fusio-project.trigger.update')
+            ->withDataContentType('application/json')
+            ->withData($event->getTrigger())
+            ->build();
+
+        $this->dispatcher->dispatch('fusio.trigger.update', $event);
+    }
+
     public function onUserCreate(Event\User\CreatedEvent $event): void
     {
         $event = (new Builder())
@@ -513,6 +552,10 @@ class WebhookListener implements EventSubscriberInterface
             Event\Scope\CreatedEvent::class => 'onScopeCreate',
             Event\Scope\DeletedEvent::class => 'onScopeDelete',
             Event\Scope\UpdatedEvent::class => 'onScopeUpdate',
+
+            Event\Trigger\CreatedEvent::class => 'onTriggerCreate',
+            Event\Trigger\DeletedEvent::class => 'onTriggerDelete',
+            Event\Trigger\UpdatedEvent::class => 'onTriggerUpdate',
 
             Event\User\CreatedEvent::class => 'onUserCreate',
             Event\User\DeletedEvent::class => 'onUserDelete',

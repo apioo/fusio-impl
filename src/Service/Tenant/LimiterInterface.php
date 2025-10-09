@@ -45,6 +45,7 @@ interface LimiterInterface
     public function getRoleCount(): int;
     public function getSchemaCount(): int;
     public function getScopeCount(): int;
+    public function getTriggerCount(): int;
     public function getUserCount(): int;
     public function getWebhookCount(): int;
 }

@@ -367,7 +367,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 236,
+          "operationId": 241,
           "authenticated": true
         }
       ]
@@ -384,7 +384,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 235
+          "operationId": 240
         }
       ]
     },
@@ -579,6 +579,7 @@
         "backend.token",
         "backend.transaction",
         "backend.trash",
+        "backend.trigger",
         "backend.user",
         "backend.webhook",
         "consumer",
@@ -637,6 +638,7 @@
         "backend.token",
         "backend.transaction",
         "backend.trash",
+        "backend.trigger",
         "backend.user",
         "backend.webhook",
         "authorization",

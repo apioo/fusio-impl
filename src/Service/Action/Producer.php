@@ -33,13 +33,10 @@ use Symfony\Component\Messenger\MessageBusInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Producer implements QueueInterface
+readonly class Producer implements QueueInterface
 {
-    private MessageBusInterface $messageBus;
-
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(private MessageBusInterface $messageBus)
     {
-        $this->messageBus = $messageBus;
     }
 
     public function push(string|int $actionId, RequestInterface $request, ContextInterface $context): void

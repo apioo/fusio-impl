@@ -35,19 +35,14 @@ use Symfony\Component\Messenger\MessageBusInterface;
  * @link    https://www.fusio-project.org
  */
 #[AsMessageHandler]
-class WebhookSendHandler
+readonly class WebhookSendHandler
 {
-    private Table\Webhook $webhookTable;
-    private Table\Webhook\Response $responseTable;
-    private Table\Event $eventTable;
-    private MessageBusInterface $messageBus;
-
-    public function __construct(Table\Webhook $webhookTable, Table\Webhook\Response $responseTable, Table\Event $eventTable, MessageBusInterface $messageBus)
-    {
-        $this->webhookTable = $webhookTable;
-        $this->responseTable = $responseTable;
-        $this->eventTable = $eventTable;
-        $this->messageBus = $messageBus;
+    public function __construct(
+        private Table\Webhook $webhookTable,
+        private Table\Webhook\Response $responseTable,
+        private Table\Event $eventTable,
+        private MessageBusInterface $messageBus
+    ) {
     }
 
     public function __invoke(TriggerEvent $event): void

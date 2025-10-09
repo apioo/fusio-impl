@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Messenger;
 
+use Fusio\Engine\ContextInterface;
+
 /**
  * TriggerEvent
  *
@@ -27,17 +29,14 @@ namespace Fusio\Impl\Messenger;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TriggerEvent
+readonly class TriggerEvent
 {
-    private ?string $tenantId;
-    private string $eventName;
-    private mixed $payload;
-
-    public function __construct(?string $tenantId, string $eventName, mixed $payload)
-    {
-        $this->tenantId = $tenantId;
-        $this->eventName = $eventName;
-        $this->payload = $payload;
+    public function __construct(
+        private ?string $tenantId,
+        private string $eventName,
+        private mixed $payload,
+        private ?ContextInterface $context = null
+    ) {
     }
 
     public function getTenantId(): ?string
@@ -53,5 +52,10 @@ class TriggerEvent
     public function getPayload(): mixed
     {
         return $this->payload;
+    }
+
+    public function getContext(): ?ContextInterface
+    {
+        return $this->context;
     }
 }
