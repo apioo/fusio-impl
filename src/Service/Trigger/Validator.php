@@ -82,7 +82,7 @@ readonly class Validator
     private function assertName(string $name, ?string $tenantId, ?Table\Generated\TriggerRow $existing = null): void
     {
         if (empty($name) || !preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $name)) {
-            throw new StatusCode\BadRequestException('Invalid connection name');
+            throw new StatusCode\BadRequestException('Invalid trigger name');
         }
 
         if (($existing === null || $name !== $existing->getName()) && $this->triggerTable->findOneByTenantAndName($tenantId, null, $name)) {
