@@ -40,6 +40,7 @@ readonly class Validator
 {
     public function __construct(
         private Table\Trigger $triggerTable,
+        private Table\Event $eventTable,
         private Table\Action $actionTable,
         private ProcessorInterface $processor,
         private UsageLimiter $usageLimiter
@@ -56,6 +57,15 @@ readonly class Validator
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Trigger name must not be empty');
+            }
+        }
+
+        $event = $trigger->getEvent();
+        if ($event !== null) {
+            $this->assertEvent($event, $categoryId, $tenantId);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Event must not be empty');
             }
         }
 
@@ -77,6 +87,14 @@ readonly class Validator
 
         if (($existing === null || $name !== $existing->getName()) && $this->triggerTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Trigger already exists');
+        }
+    }
+
+    private function assertEvent(string $event, int $categoryId, ?string $tenantId): void
+    {
+        $row = $this->eventTable->findOneByTenantAndName($tenantId, $categoryId, $event);
+        if (!$row instanceof Table\Generated\EventRow) {
+            throw new StatusCode\BadRequestException('Event "' . $event . '" does not exist, you need to provide an existing event name as value');
         }
     }
 
