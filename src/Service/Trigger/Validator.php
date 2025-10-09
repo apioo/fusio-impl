@@ -22,7 +22,7 @@ namespace Fusio\Impl\Service\Trigger;
 
 use Fusio\Engine\Exception\ActionNotFoundException;
 use Fusio\Engine\Exception\FactoryResolveException;
-use Fusio\Engine\Processor;
+use Fusio\Engine\ProcessorInterface;
 use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
@@ -41,7 +41,7 @@ readonly class Validator
     public function __construct(
         private Table\Trigger $triggerTable,
         private Table\Action $actionTable,
-        private Processor $processor,
+        private ProcessorInterface $processor,
         private UsageLimiter $usageLimiter
     ) {
     }
