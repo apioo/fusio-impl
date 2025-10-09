@@ -60,6 +60,7 @@ class Cronjob extends ViewAbstract
                 'status' => $builder->fieldInteger(Table\Generated\CronjobTable::COLUMN_STATUS),
                 'name' => Table\Generated\CronjobTable::COLUMN_NAME,
                 'cron' => Table\Generated\CronjobTable::COLUMN_CRON,
+                'action' => Table\Generated\CronjobTable::COLUMN_ACTION,
                 'executeDate' => $builder->fieldDateTime(Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE),
                 'exitCode' => $builder->fieldInteger(Table\Generated\CronjobTable::COLUMN_EXIT_CODE),
                 'metadata' => $builder->fieldJson(Table\Generated\CronjobTable::COLUMN_METADATA),

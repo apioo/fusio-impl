@@ -50,6 +50,7 @@ class CollectionTest extends DbTestCase
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
+            "action": "Sql-Select-All",
             "executeDate": "2015-02-27T19:59:15Z",
             "exitCode": 0,
             "metadata": {
@@ -83,6 +84,7 @@ JSON;
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
+            "action": "Sql-Select-All",
             "executeDate": "2015-02-27T19:59:15Z",
             "exitCode": 0,
             "metadata": {
@@ -116,6 +118,7 @@ JSON;
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
+            "action": "Sql-Select-All",
             "executeDate": "2015-02-27T19:59:15Z",
             "exitCode": 0,
             "metadata": {
