@@ -142,7 +142,7 @@ JSON;
         ), json_encode([
             'name'     => 'New-Cron',
             'cron'     => '5 * * * *',
-            'action'   => 'Sql-Table',
+            'action'   => 'action://Sql-Select-All',
             'metadata' => $metadata,
         ]));
 
@@ -172,7 +172,7 @@ JSON;
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
-        $this->assertEquals('Sql-Table', $row['action']);
+        $this->assertEquals('action://Sql-Select-All', $row['action']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 

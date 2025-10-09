@@ -139,7 +139,7 @@ JSON;
         ), json_encode([
             'name'     => 'New-Trigger',
             'event'    => 'foo-event',
-            'action'   => 'Sql-Table',
+            'action'   => 'action://Sql-Select-All',
             'metadata' => $metadata,
         ]));
 
@@ -169,7 +169,7 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('New-Trigger', $row['name']);
         $this->assertEquals('foo-event', $row['event']);
-        $this->assertEquals('Sql-Table', $row['action']);
+        $this->assertEquals('action://Sql-Select-All', $row['action']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 

@@ -22,10 +22,10 @@ namespace Fusio\Impl\Tests\Service\Cronjob;
 
 use Fusio\Impl\Backend\Filter\Cronjob\Cron;
 use Fusio\Impl\Service\Cronjob\Validator;
-use Fusio\Model\Backend\CronjobCreate;
 use PHPUnit\Framework\TestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
+use ReflectionClass;
 
 /**
  * ValidatorTest
@@ -42,10 +42,12 @@ class ValidatorTest extends TestCase
     public function testAssertCron(string $cron, bool $expect, ?string $errorMessage)
     {
         try {
-            $cronjob = new CronjobCreate();
-            $cronjob->setName('test');
-            $cronjob->setCron($cron);
-            Environment::getService(Validator::class)->assert($cronjob, null);
+            $validator = Environment::getService(Validator::class);
+            $reflection = new ReflectionClass($validator);
+
+            $method = $reflection->getMethod('assertCron');
+            $method->setAccessible(true);
+            $method->invoke($validator, $cron);
 
             $this->assertTrue($expect);
         } catch (BadRequestException $e) {

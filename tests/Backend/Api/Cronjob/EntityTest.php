@@ -143,7 +143,7 @@ JSON;
         ), json_encode([
             'name'     => 'Foo-Cron',
             'cron'     => '10 * * * *',
-            'action'   => 'Inspect',
+            'action'   => 'action://Inspect-Action',
             'metadata' => $metadata,
         ]));
 
@@ -171,7 +171,7 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
-        $this->assertEquals('Inspect', $row['action']);
+        $this->assertEquals('action://Inspect-Action', $row['action']);
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
