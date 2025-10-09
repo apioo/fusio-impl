@@ -49,7 +49,7 @@ readonly class Trigger
 
     public function create(TriggerCreate $trigger, UserContext $context): int
     {
-        $this->validator->assert($trigger, $context->getTenantId());
+        $this->validator->assert($trigger, $context->getCategoryId(), $context->getTenantId());
 
         try {
             $this->triggerTable->beginTransaction();
@@ -90,7 +90,7 @@ readonly class Trigger
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $this->validator->assert($trigger, $context->getTenantId(), $existing);
+        $this->validator->assert($trigger, $context->getCategoryId(), $context->getTenantId(), $existing);
 
         $existing->setName($trigger->getName() ?? $existing->getName());
         $existing->setEvent($trigger->getEvent() ?? $existing->getEvent());
