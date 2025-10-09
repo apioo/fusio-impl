@@ -32,6 +32,7 @@ final class Version20251008163109 extends AbstractMigration
             $triggerTable->addColumn('metadata', 'text', ['notnull' => false]);
             $triggerTable->setPrimaryKey(['id']);
             $triggerTable->addUniqueIndex(['tenant_id', 'name']);
+            $triggerTable->addIndex(['tenant_id', 'event']);
         }
     }
 
