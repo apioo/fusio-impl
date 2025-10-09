@@ -67,6 +67,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.File.Action.FileDirectoryGetAll"
         },
         {
+            "name": "File-Directory-Upload",
+            "class": "Fusio.Adapter.File.Action.FileDirectoryUpload"
+        },
+        {
             "name": "File-Processor",
             "class": "Fusio.Adapter.File.Action.FileProcessor"
         },
