@@ -21,6 +21,10 @@
 namespace Fusio\Impl\Service\Cronjob;
 
 use Cron\CronExpression;
+use Fusio\Engine\Exception\ActionNotFoundException;
+use Fusio\Engine\Exception\FactoryResolveException;
+use Fusio\Engine\Processor;
+use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Cronjob;
@@ -37,11 +41,13 @@ readonly class Validator
 {
     public function __construct(
         private Table\Cronjob $cronjobTable,
+        private Table\Action $actionTable,
+        private Processor $processor,
         private UsageLimiter $usageLimiter
     ) {
     }
 
-    public function assert(Cronjob $cronjob, ?string $tenantId, ?Table\Generated\CronjobRow $existing = null): void
+    public function assert(Cronjob $cronjob, int $categoryId, ?string $tenantId, ?Table\Generated\CronjobRow $existing = null): void
     {
         $this->usageLimiter->assertCronjobCount($tenantId);
 
@@ -60,6 +66,15 @@ readonly class Validator
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Cronjob expression must not be empty');
+            }
+        }
+
+        $action = $cronjob->getAction();
+        if ($action !== null) {
+            $this->assertAction($action, $categoryId, $tenantId);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Action must not be empty');
             }
         }
     }
@@ -85,6 +100,27 @@ readonly class Validator
             new CronExpression($cron);
         } catch (\InvalidArgumentException $e) {
             throw new StatusCode\BadRequestException($e->getMessage(), $e);
+        }
+    }
+
+    private function assertAction(string $action, int $categoryId, ?string $tenantId): void
+    {
+        $scheme = ActionScheme::wrap($action);
+        if (empty($scheme)) {
+            throw new StatusCode\BadRequestException('Action no value provided, you need to provide an existing action name as value');
+        }
+
+        if (str_starts_with($scheme, 'action://')) {
+            $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, substr($scheme, 9));
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist, you need to provide an existing action name as value');
+            }
+        }
+
+        try {
+            $this->processor->getAction($scheme);
+        } catch (ActionNotFoundException|FactoryResolveException $e) {
+            throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist', $e);
         }
     }
 }

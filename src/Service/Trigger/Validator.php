@@ -20,6 +20,10 @@
 
 namespace Fusio\Impl\Service\Trigger;
 
+use Fusio\Engine\Exception\ActionNotFoundException;
+use Fusio\Engine\Exception\FactoryResolveException;
+use Fusio\Engine\Processor;
+use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Trigger;
@@ -36,11 +40,13 @@ readonly class Validator
 {
     public function __construct(
         private Table\Trigger $triggerTable,
+        private Table\Action $actionTable,
+        private Processor $processor,
         private UsageLimiter $usageLimiter
     ) {
     }
 
-    public function assert(Trigger $trigger, ?string $tenantId, ?Table\Generated\TriggerRow $existing = null): void
+    public function assert(Trigger $trigger, int $categoryId, ?string $tenantId, ?Table\Generated\TriggerRow $existing = null): void
     {
         $this->usageLimiter->assertTriggerCount($tenantId);
 
@@ -50,6 +56,15 @@ readonly class Validator
         } else {
             if ($existing === null) {
                 throw new StatusCode\BadRequestException('Trigger name must not be empty');
+            }
+        }
+
+        $action = $trigger->getAction();
+        if ($action !== null) {
+            $this->assertAction($action, $categoryId, $tenantId);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Action must not be empty');
             }
         }
     }
@@ -62,6 +77,27 @@ readonly class Validator
 
         if (($existing === null || $name !== $existing->getName()) && $this->triggerTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Trigger already exists');
+        }
+    }
+
+    private function assertAction(string $action, int $categoryId, ?string $tenantId): void
+    {
+        $scheme = ActionScheme::wrap($action);
+        if (empty($scheme)) {
+            throw new StatusCode\BadRequestException('Action no value provided, you need to provide an existing action name as value');
+        }
+
+        if (str_starts_with($scheme, 'action://')) {
+            $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, substr($scheme, 9));
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist, you need to provide an existing action name as value');
+            }
+        }
+
+        try {
+            $this->processor->getAction($scheme);
+        } catch (ActionNotFoundException|FactoryResolveException $e) {
+            throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist', $e);
         }
     }
 }
