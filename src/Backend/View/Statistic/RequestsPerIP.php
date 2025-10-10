@@ -22,77 +22,75 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
+use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
 /**
- * ActivitiesPerUser
+ * RequestsPerIP
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActivitiesPerUser extends ChartViewAbstract
+class RequestsPerIP extends ChartViewAbstract
 {
-    public function getView(AuditQueryFilter $filter, ContextInterface $context): StatisticChart
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition = $filter->getCondition([], 'audit');
-        $condition->equals('audit.' . Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->notNil('audit.' . Table\Generated\AuditTable::COLUMN_EVENT);
+        $condition  = $filter->getCondition([], 'log');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure
-        $sql = '    SELECT audit.user_id,
-                           usr.name
-                      FROM fusio_audit audit
-                INNER JOIN fusio_user usr
-                        ON audit.user_id = usr.id
+        $sql = '    SELECT log.ip
+                      FROM fusio_log log
                      WHERE ' . $expression . '
-                  GROUP BY audit.user_id, usr.name
-                  ORDER BY COUNT(audit.id) DESC';
+                  GROUP BY log.ip
+                  ORDER BY COUNT(log.id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
-        $userIds = [];
+        $ips = [];
         $data = [];
         $series = [];
 
         foreach ($result as $row) {
-            $userIds[] = $row['user_id'];
+            $ips[] = $row['ip'];
 
-            $data[$row['user_id']] = [];
-            $series[$row['user_id']] = $row['name'];
+            $data[$row['ip']] = [];
+            $series[$row['ip']] = $row['ip'];
 
             $fromDate = $filter->getFrom();
             $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
-                $data[$row['user_id']][$fromDate->format('Y-m-d')] = 0;
+                $data[$row['ip']][$fromDate->format('Y-m-d')] = 0;
 
                 $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
-        if (!empty($userIds)) {
-            $condition->in('audit.user_id', $userIds);
+        if (!empty($ips)) {
+            $condition->in('log.ip', $ips);
         }
 
         // fill data with values
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
-        $sql = '    SELECT COUNT(audit.id) AS cnt,
-                           audit.user_id,
-                           DATE(audit.date) AS date
-                      FROM fusio_audit audit
+        $sql = '    SELECT COUNT(log.id) AS cnt,
+                           log.ip,
+                           DATE(log.date) AS date
+                      FROM fusio_log log
                      WHERE ' . $expression . '
-                  GROUP BY DATE(audit.date), audit.user_id';
+                  GROUP BY DATE(log.date), log.ip';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            if (isset($data[$row['user_id']][$row['date']])) {
-                $data[$row['user_id']][$row['date']] = (int) $row['cnt'];
+            if (isset($data[$row['ip']][$row['date']])) {
+                $data[$row['ip']][$row['date']] = (int) $row['cnt'];
             }
         }
 

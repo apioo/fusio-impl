@@ -22,35 +22,36 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
+use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
 /**
- * ActivitiesPerUser
+ * RequestsPerUser
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActivitiesPerUser extends ChartViewAbstract
+class RequestsPerUser extends ChartViewAbstract
 {
-    public function getView(AuditQueryFilter $filter, ContextInterface $context): StatisticChart
+    public function getView(Log\LogQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition = $filter->getCondition([], 'audit');
-        $condition->equals('audit.' . Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
-        $condition->notNil('audit.' . Table\Generated\AuditTable::COLUMN_EVENT);
+        $condition  = $filter->getCondition([], 'log');
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
+        $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         // build data structure
-        $sql = '    SELECT audit.user_id,
+        $sql = '    SELECT log.user_id,
                            usr.name
-                      FROM fusio_audit audit
+                      FROM fusio_log log
                 INNER JOIN fusio_user usr
-                        ON audit.user_id = usr.id
+                        ON log.user_id = usr.id
                      WHERE ' . $expression . '
-                  GROUP BY audit.user_id, usr.name
-                  ORDER BY COUNT(audit.id) DESC';
+                  GROUP BY log.user_id, usr.name
+                  ORDER BY COUNT(log.id) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
@@ -75,18 +76,18 @@ class ActivitiesPerUser extends ChartViewAbstract
         }
 
         if (!empty($userIds)) {
-            $condition->in('audit.user_id', $userIds);
+            $condition->in('log.user_id', $userIds);
         }
 
         // fill data with values
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
-        $sql = '    SELECT COUNT(audit.id) AS cnt,
-                           audit.user_id,
-                           DATE(audit.date) AS date
-                      FROM fusio_audit audit
+        $sql = '    SELECT COUNT(log.id) AS cnt,
+                           log.user_id,
+                           DATE(log.date) AS date
+                      FROM fusio_log log
                      WHERE ' . $expression . '
-                  GROUP BY DATE(audit.date), audit.user_id';
+                  GROUP BY DATE(log.date), log.user_id';
 
         $result = $this->connection->fetchAllAssociative($sql, $condition->getValues());
 
