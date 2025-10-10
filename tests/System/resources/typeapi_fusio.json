@@ -6964,6 +6964,357 @@
         "statistic"
       ]
     },
+    "backend.statistic.getRequestsPerIP": {
+      "path": "/backend/statistic/requests_per_ip",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_StatisticChart"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "operationId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a statistic containing the requests per ip",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
+    "backend.statistic.getRequestsPerOperation": {
+      "path": "/backend/statistic/requests_per_operation",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_StatisticChart"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "operationId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a statistic containing the requests per operation",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
+    "backend.statistic.getRequestsPerUser": {
+      "path": "/backend/statistic/requests_per_user",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_StatisticChart"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "from": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "to": {
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "operationId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "appId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "userId": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "ip": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "userAgent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "method": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "header": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a statistic containing the requests per user",
+      "stability": 2,
+      "security": [
+        "backend.statistic"
+      ],
+      "authorization": true,
+      "tags": [
+        "statistic"
+      ]
+    },
     "backend.statistic.getTestCoverage": {
       "path": "/backend/statistic/test_coverage",
       "method": "GET",
