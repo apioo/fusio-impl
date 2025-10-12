@@ -46,6 +46,7 @@ use Fusio\Model\Backend\SchemaSource;
 use Fusio\Model\Backend\SchemaUpdate;
 use Fusio\Model\Backend\TriggerCreate;
 use Fusio\Model\Backend\TriggerUpdate;
+use Throwable;
 
 /**
  * Installer
@@ -100,29 +101,39 @@ readonly class Installer implements InstallerInterface
             throw new MarketplaceException('No bundle config available');
         }
 
-        $actions = $config->getActions() ?? [];
-        foreach ($actions as $action) {
-            $this->installOrUpgradeAction($object, $action, $context);
-        }
+        $this->actionTable->beginTransaction();
 
-        $schemas = $config->getSchemas() ?? [];
-        foreach ($schemas as $schema) {
-            $this->installOrUpgradeSchema($object, $schema, $context);
-        }
+        try {
+            $actions = $config->getActions() ?? [];
+            foreach ($actions as $action) {
+                $this->installOrUpgradeAction($object, $action, $context);
+            }
 
-        $events = $config->getEvents() ?? [];
-        foreach ($events as $event) {
-            $this->installOrUpgradeEvent($object, $event, $context);
-        }
+            $schemas = $config->getSchemas() ?? [];
+            foreach ($schemas as $schema) {
+                $this->installOrUpgradeSchema($object, $schema, $context);
+            }
 
-        $cronjobs = $config->getCronjobs() ?? [];
-        foreach ($cronjobs as $cronjob) {
-            $this->installOrUpgradeCronjob($object, $cronjob, $context);
-        }
+            $events = $config->getEvents() ?? [];
+            foreach ($events as $event) {
+                $this->installOrUpgradeEvent($object, $event, $context);
+            }
 
-        $triggers = $config->getTriggers() ?? [];
-        foreach ($triggers as $trigger) {
-            $this->installOrUpgradeTrigger($object, $trigger, $context);
+            $cronjobs = $config->getCronjobs() ?? [];
+            foreach ($cronjobs as $cronjob) {
+                $this->installOrUpgradeCronjob($object, $cronjob, $context);
+            }
+
+            $triggers = $config->getTriggers() ?? [];
+            foreach ($triggers as $trigger) {
+                $this->installOrUpgradeTrigger($object, $trigger, $context);
+            }
+
+            $this->actionTable->commit();
+        } catch (Throwable $e) {
+            $this->actionTable->rollBack();
+
+            throw $e;
         }
     }
 
