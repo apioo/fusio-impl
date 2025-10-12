@@ -31,4 +31,5 @@ enum Type: string
 {
     case ACTION = 'action';
     case APP = 'app';
+    case BUNDLE = 'bundle';
 }
