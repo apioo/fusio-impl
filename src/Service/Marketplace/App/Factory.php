@@ -31,15 +31,10 @@ use Fusio\Impl\Service\Marketplace\RepositoryInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Factory implements FactoryInterface
+readonly class Factory implements FactoryInterface
 {
-    private Repository $repository;
-    private Installer $installer;
-
-    public function __construct(Repository $repository, Installer $installer)
+    public function __construct(private Repository $repository, private Installer $installer)
     {
-        $this->repository = $repository;
-        $this->installer = $installer;
     }
 
     public function getRepository(): RepositoryInterface

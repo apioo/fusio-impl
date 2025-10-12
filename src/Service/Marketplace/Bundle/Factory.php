@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace;
+namespace Fusio\Impl\Service\Marketplace\Bundle;
+
+use Fusio\Impl\Service\Marketplace\FactoryInterface;
+use Fusio\Impl\Service\Marketplace\InstallerInterface;
+use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 
 /**
  * Factory
@@ -27,21 +31,19 @@ namespace Fusio\Impl\Service\Marketplace;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Factory
+readonly class Factory implements FactoryInterface
 {
-    public function __construct(
-        private Action\Factory $actionFactory,
-        private App\Factory $appFactory,
-        private Bundle\Factory $bundleFactory
-    ) {
+    public function __construct(private Repository $repository, private Installer $installer)
+    {
     }
 
-    public function factory(Type $type): FactoryInterface
+    public function getRepository(): RepositoryInterface
     {
-        return match ($type) {
-            Type::ACTION => $this->actionFactory,
-            Type::APP => $this->appFactory,
-            Type::BUNDLE => $this->bundleFactory,
-        };
+        return $this->repository;
+    }
+
+    public function getInstaller(): InstallerInterface
+    {
+        return $this->installer;
     }
 }
