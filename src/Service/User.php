@@ -116,6 +116,11 @@ class User
         // replace spaces with a dot
         $name = str_replace(' ', '_', $userInfo->getName());
 
+        // remove @FQDN
+        if (str_contains($name, '@')) {
+            $name = strstr($name, '@', true);
+        }
+
         // check values
         $this->validator->assertName($name, $context->getTenantId());
 
