@@ -118,7 +118,7 @@ class User
 
         // remove @FQDN
         if (str_contains($name, '@')) {
-            $name = strstr($name, '@', true);
+            $name = (string) strstr($name, '@', true);
         }
 
         // check values
