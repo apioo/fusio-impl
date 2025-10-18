@@ -235,6 +235,16 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     description: 'Executes a specific action',
                 ),
+                'action.prompt' => new Operation(
+                    action: Backend\Action\Action\Prompt::class,
+                    httpMethod: 'POST',
+                    httpPath: '/action/prompt',
+                    httpCode: 200,
+                    outgoing: Model\Backend\ActionExecuteResponse::class,
+                    incoming: Model\Backend\ActionExecuteRequest::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Helps to create an action using AI and natural langauge',
+                ),
                 'action.get' => new Operation(
                     action: Backend\Action\Action\Get::class,
                     httpMethod: 'GET',
