@@ -47,6 +47,7 @@ class ActiveUser
     public function setToken(string $token): void
     {
         $this->token = $token;
+        $this->user = null;
     }
 
     public function getToken(): ?string
