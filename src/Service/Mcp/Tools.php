@@ -20,12 +20,8 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
-use Fusio\Engine\Model\AppAnonymous;
-use Fusio\Engine\Model\UserAnonymous;
-use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Repository\UserDatabase;
-use Fusio\Impl\Service\Action\Invoker;
+use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Service\JsonRPC;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Mcp\Types\CallToolRequestParams;
@@ -34,22 +30,7 @@ use Mcp\Types\ListToolsResult;
 use Mcp\Types\PaginatedRequestParams;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
-use Mcp\Types\ToolAnnotations;
-use Mcp\Types\ToolInputSchema;
-use PSX\Api\Util\Inflection;
-use PSX\Data\WriterInterface;
-use PSX\Framework\Http\ResponseWriter;
-use PSX\Http\Response;
-use PSX\Json\Parser;
 use PSX\Record\Record;
-use PSX\Schema\Definitions;
-use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\Parser\TypeSchema;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\SchemaSource;
-use PSX\Schema\Type\Factory\PropertyTypeFactory;
-use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -62,33 +43,23 @@ use PSX\Sql\OrderBy;
  */
 readonly class Tools
 {
-    private TypeSchema $schemaParser;
-    private ObjectMapper $objectMapper;
-
     public function __construct(
-        private Table\Operation $operationTable,
-        private Invoker $invoker,
-        private FrameworkConfig $frameworkConfig,
+        private Tools\Builder $builder,
+        private Tools\Naming $naming,
         private ActiveUser $activeUser,
-        private UserDatabase $userRepository,
-        private ResponseWriter $responseWriter,
-        private SchemaManager $schemaManager,
+        private JsonRPC\Invoker $invoker,
+        private Table\Operation $operationTable,
+        private FrameworkConfig $frameworkConfig,
+        private ContextFactory $contextFactory,
     ) {
-        $this->schemaParser = new TypeSchema($schemaManager);
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function list(PaginatedRequestParams $params): ListToolsResult
     {
         $cursor = $params->cursor ?? null;
 
-        $userId = $this->activeUser->getUserId();
-        if (!empty($userId)) {
-            $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-            $categoryId = $user->getCategoryId();
-        } else {
-            $categoryId = null;
-        }
+        $user = $this->activeUser->getUser();
+        $categoryId = $user?->getCategoryId();
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
@@ -105,30 +76,12 @@ readonly class Tools
         $tools = [];
         $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::ID, OrderBy::DESC);
         foreach ($operations as $operation) {
-            $inputSchema = $this->buildSchema($operation);
-            if ($inputSchema === null) {
+            $tool = $this->builder->build($operation);
+            if (!$tool instanceof Tool) {
                 continue;
             }
 
-            $annotations = new ToolAnnotations();
-            if ($operation->getHttpMethod() === 'GET') {
-                $annotations->readOnlyHint = true;
-            } elseif ($operation->getHttpMethod() === 'DELETE') {
-                $annotations->destructiveHint = true;
-            }
-
-            if (in_array($operation->getHttpMethod(), ['GET', 'PUT', 'DELETE'], true)) {
-                $annotations->idempotentHint = true;
-            }
-
-            // @TODO use output schema
-
-            $tools[] = new Tool(
-                $this->toMcpToolName($operation->getName()),
-                ToolInputSchema::fromArray($inputSchema),
-                $operation->getDescription(),
-                $annotations
-            );
+            $tools[] = $tool;
         }
 
         if (count($tools) === 0) {
@@ -148,113 +101,22 @@ readonly class Tools
                 $arguments = new Record();
             }
 
-            $userId = $this->activeUser->getUserId();
-            if (!empty($userId)) {
-                $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-                $categoryId = $user->getCategoryId();
-            } else {
-                $user = $this->userRepository->get(1) ?? throw new \RuntimeException('No default user is available');
-                $categoryId = null;
-            }
-
-            $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, $this->toOperationId($params->name));
-            if (!$operation instanceof Table\Generated\OperationRow) {
-                throw new \RuntimeException('Provided an invalid operation name');
-            }
-
-            $incoming = $operation->getIncoming();
-            if (!empty($incoming) && $arguments->containsKey('payload')) {
-                $rawPayload = $arguments->get('payload');
-                if (is_array($rawPayload)) {
-                    // convert array to stdClass, we need to do this unfortunately since the mcp library uses arrays
-                    $data = Parser::decode(Parser::encode($rawPayload));
-
-                    $payload = $this->objectMapper->read($data, SchemaSource::fromString($incoming));
-                } elseif ($rawPayload instanceof \stdClass) {
-                    $payload = $this->objectMapper->read($rawPayload, SchemaSource::fromString($incoming));
-                } else {
-                    $payload = new Record();
-                }
-
-                $arguments->remove('payload');
-            } else {
-                $payload = new Record();
-            }
-
-            $request = new Request($arguments->getAll(), $payload, new Request\RpcRequestContext($params->name));
-
-            $context = new Context();
+            $context = $this->contextFactory->getActive();
             $context->setTenantId($this->frameworkConfig->getTenantId());
-            $context->setApp(new AppAnonymous());
-            $context->setUser($user);
-            $context->setOperation($operation);
 
-            $result = $this->invoker->invoke($request, $context);
+            $response = $this->invoker->invoke(
+                $this->naming->toOperationId($params->name),
+                $arguments,
+                $this->activeUser->getBearerToken(),
+                null,
+                $context,
+            );
 
-            $response = new Response();
-            $this->responseWriter->setBody($response, $result, WriterInterface::JSON);
             $text = (string) $response->getBody();
 
             return new CallToolResult([new TextContent($text)]);
         } catch (\Throwable $e) {
             return new CallToolResult([new TextContent('Failed to execute ' . $params->name . ': ' . $e->getMessage())], isError: true);
         }
-    }
-
-    private function buildSchema(Table\Generated\OperationRow $operation): ?array
-    {
-        $rootType = new StructDefinitionType();
-        $definitions = new Definitions();
-
-        $names = Inflection::extractPlaceholderNames($operation->getHttpPath());
-        foreach ($names as $name) {
-            $rootType->addProperty($name, PropertyTypeFactory::getString());
-        }
-
-        $this->buildSchemaFromParameters($operation, $rootType);
-
-        $incoming = $operation->getIncoming();
-        if (!empty($incoming)) {
-            $payload = $this->schemaManager->getSchema($incoming);
-
-            $rootType->addProperty('payload', PropertyTypeFactory::getReference($payload->getRoot()));
-
-            $definitions->addSchema('Payload', $payload);
-        }
-
-        $definitions->addType('Root', $rootType);
-
-        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Root');
-    }
-
-    private function buildSchemaFromParameters(Table\Generated\OperationRow $operation, StructDefinitionType $rootType): void
-    {
-        $rawParameters = $operation->getParameters();
-        if (empty($rawParameters)) {
-            return;
-        }
-
-        $parameters = Parser::decode($rawParameters);
-        if (!$parameters instanceof \stdClass) {
-            return;
-        }
-
-        foreach ($parameters as $name => $schema) {
-            if (!$schema instanceof \stdClass) {
-                continue;
-            }
-
-            $rootType->addProperty($name, $this->schemaParser->parsePropertyType($schema));
-        }
-    }
-
-    private function toMcpToolName(string $name): string
-    {
-        return str_replace('.', '-', $name);
-    }
-
-    private function toOperationId(string $name): string
-    {
-        return str_replace('-', '.', $name);
     }
 }
