@@ -48,16 +48,16 @@ class McpCommand extends Command
             ->setName('system:mcp')
             ->setAliases(['mcp'])
             ->setDescription('Starts the MCP server')
-            ->addArgument('user_id', InputArgument::OPTIONAL, 'Optional a user id under which all actions are executed, by default this is 1');
+            ->addArgument('access_token', InputArgument::OPTIONAL, 'Optional the access token under which the MCP server runs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $server = $this->mcp->build();
 
-        $userId = (int) $input->getArgument('user_id');
-        if ($userId > 0) {
-            $this->activeUser->setUserId($userId);
+        $accessToken = $input->getArgument('access_token');
+        if (!empty($accessToken) && is_string($accessToken)) {
+            $this->activeUser->setToken($accessToken);
         }
 
         $initOptions = $server->createInitializationOptions();

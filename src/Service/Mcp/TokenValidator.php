@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
+use Fusio\Engine\Model\UserInterface;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use Mcp\Server\Auth\TokenValidationResult;
 use Mcp\Server\Auth\TokenValidatorInterface;
 
@@ -35,11 +35,8 @@ use Mcp\Server\Auth\TokenValidatorInterface;
 readonly class TokenValidator implements TokenValidatorInterface
 {
     public function __construct(
-        private Table\Token $tokenTable,
-        private Table\User $userTable,
-        private Service\Security\JsonWebToken $jsonWebToken,
         private Service\Mcp\ActiveUser $activeUser,
-        private Service\System\FrameworkConfig $frameworkConfig,
+        private Service\Security\JsonWebToken $jsonWebToken,
     ) {
     }
 
@@ -51,21 +48,16 @@ readonly class TokenValidator implements TokenValidatorInterface
             return new TokenValidationResult(false);
         }
 
-        $accessToken = $this->tokenTable->findByAccessToken($this->frameworkConfig->getTenantId(), $token);
-        if (empty($accessToken)) {
+        $this->activeUser->setToken($token);
+
+        $user = $this->activeUser->getUser();
+        if (!$user instanceof UserInterface) {
             return new TokenValidationResult(false);
         }
-
-        $user = $this->userTable->find($accessToken['user_id']);
-        if (!$user instanceof Table\Generated\UserRow || $user->getStatus() !== Table\User::STATUS_ACTIVE) {
-            return new TokenValidationResult(false);
-        }
-
-        $this->activeUser->setUserId($user->getId());
 
         return new TokenValidationResult(true, [
             'sub' => $user->getId(),
-            'scope' => $accessToken['scope'] . ',mcp',
+            'scope' => 'mcp',
         ]);
     }
 }

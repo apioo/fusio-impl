@@ -20,6 +20,11 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
+use Fusio\Engine\Model\UserInterface;
+use Fusio\Impl\Repository\UserDatabase;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
+
 /**
  * ActiveUser
  *
@@ -29,15 +34,51 @@ namespace Fusio\Impl\Service\Mcp;
  */
 class ActiveUser
 {
-    private ?int $userId = null;
+    private ?string $token = null;
+    private ?UserInterface $user = null;
 
-    public function setUserId(?int $userId): void
-    {
-        $this->userId = $userId;
+    public function __construct(
+        private readonly UserDatabase $userRepository,
+        private readonly Table\Token $tokenTable,
+        private readonly FrameworkConfig $frameworkConfig,
+    ) {
     }
 
-    public function getUserId(): ?int
+    public function setToken(string $token): void
     {
-        return $this->userId;
+        $this->token = $token;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function getBearerToken(): ?string
+    {
+        return $this->token !== null ? 'Bearer ' . $this->token : null;
+    }
+
+    public function getUser(): ?UserInterface
+    {
+        if ($this->user !== null) {
+            return $this->user;
+        }
+
+        if (empty($this->token)) {
+            return null;
+        }
+
+        $accessToken = $this->tokenTable->findByAccessToken($this->frameworkConfig->getTenantId(), $this->token);
+        if (empty($accessToken)) {
+            return null;
+        }
+
+        $user = $this->userRepository->get($accessToken['user_id']);
+        if (!$user instanceof UserInterface || $user->getStatus() !== Table\User::STATUS_ACTIVE) {
+            return null;
+        }
+
+        return $this->user = $user;
     }
 }

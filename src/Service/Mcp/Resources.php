@@ -54,7 +54,6 @@ readonly class Resources
         private Table\Action $actionTable,
         private FrameworkConfig $frameworkConfig,
         private ActiveUser $activeUser,
-        private UserDatabase $userRepository,
         private SchemaManager $schemaManager,
     ) {
     }
@@ -63,13 +62,8 @@ readonly class Resources
     {
         $cursor = $params->cursor ?? null;
 
-        $userId = $this->activeUser->getUserId();
-        if (!empty($userId)) {
-            $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-            $categoryId = $user->getCategoryId();
-        } else {
-            $categoryId = null;
-        }
+        $user = $this->activeUser->getUser();
+        $categoryId = $user?->getCategoryId();
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
@@ -122,13 +116,8 @@ readonly class Resources
     {
         $uri = $params->uri;
 
-        $userId = $this->activeUser->getUserId();
-        if (!empty($userId)) {
-            $user = $this->userRepository->get($userId) ?? throw new \RuntimeException('Provided an invalid active user');
-            $categoryId = $user->getCategoryId();
-        } else {
-            $categoryId = null;
-        }
+        $user = $this->activeUser->getUser();
+        $categoryId = $user?->getCategoryId();
 
         if (str_starts_with($uri, 'schema://')) {
             $result = $this->resolveSchemaResourceResult(substr($uri, 7));
