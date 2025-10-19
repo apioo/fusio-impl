@@ -61,7 +61,7 @@ readonly class Invoker
 
     public function invoke(string $methodName, RecordInterface $arguments, ?string $authorization, ?string $ip, Context $context): ResponseInterface
     {
-        $operation = $this->operationTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $methodName);
+        $operation = $this->operationTable->findOneByTenantAndName($context->getTenantId(), null, $methodName);
         if (!$operation instanceof Table\Generated\OperationRow) {
             throw new \RuntimeException('Provided an invalid operation name');
         }
