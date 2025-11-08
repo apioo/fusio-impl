@@ -52,7 +52,7 @@ readonly class WebhookSendHandler
             return;
         }
 
-        $webhooks = $this->webhookTable->getWebhooksForEvent($existing->getId());
+        $webhooks = $this->webhookTable->getWebhooksForEvent($existing->getId(), $event->getUserId());
         foreach ($webhooks as $webhook) {
             $row = new Table\Generated\WebhookResponseRow();
             $row->setWebhookId($webhook['id']);

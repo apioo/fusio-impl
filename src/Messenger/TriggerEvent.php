@@ -35,6 +35,7 @@ readonly class TriggerEvent
         private ?string $tenantId,
         private string $eventName,
         private mixed $payload,
+        private ?int $userId,
         private ?ContextInterface $context = null
     ) {
     }
@@ -52,6 +53,11 @@ readonly class TriggerEvent
     public function getPayload(): mixed
     {
         return $this->payload;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
     }
 
     public function getContext(): ?ContextInterface
