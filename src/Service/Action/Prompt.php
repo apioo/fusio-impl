@@ -20,15 +20,19 @@
 
 namespace Fusio\Impl\Service\Action;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Engine\Connector;
-use Fusio\Impl\Service\Mcp\Prompts;
+use Fusio\Impl\Repository\ConnectionDatabase;
 use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionPrompt;
-use Mcp\Types\GetPromptRequestParams;
+use Generator;
 use PSX\Http\Exception\InternalServerErrorException;
 use SdkFabric\Openai\Client;
-use SdkFabric\Openai\CompletionRequest;
+use SdkFabric\Openai\ResponseRequest;
+use SdkFabric\Openai\ResponseRequestInputMessage;
+use SdkFabric\Openai\ResponseResponseOutputMessage;
 
 /**
  * Prompt
@@ -39,20 +43,67 @@ use SdkFabric\Openai\CompletionRequest;
  */
 readonly class Prompt
 {
-    public function __construct(private Connector $connector, private Prompts $prompts)
+    public function __construct(private Connector $connector, private ConnectionDatabase $connectionRepository)
     {
     }
 
     public function prompt(ActionPrompt $prompt): Action
     {
-        $client = $this->getOpenAIClient();
+        $text = 'You need to transform the logic provided by the user into PHP code which is used inside an action at Fusio, an open source API management tool.' . "\n";
+        $text.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
+        $text.= "\n";
+        $text.= '<code>' . "\n";
+        $text.= <<<PHP
+<?php
 
-        $result = $this->prompts->get(new GetPromptRequestParams('backend-action-create'));
+use Doctrine\DBAL\Connection;
+use Fusio\Worker\ExecuteContext;
+use Fusio\Worker\ExecuteRequest;
+use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\Response\FactoryInterface;
+use Fusio\Engine\DispatcherInterface;
+use Psr\Log\LoggerInterface;
 
-        $request = new CompletionRequest();
-        $response = $client->completions()->create($request);
+return function(ExecuteRequest \$request, ExecuteContext \$context, ConnectorInterface \$connector, FactoryInterface \$response, DispatcherInterface \$dispatcher, LoggerInterface \$logger) {
 
-        $code = null;
+// [INSERT_CODE_HERE]
+
+};
+
+PHP;
+        $text.= '</code>' . "\n";
+        $text.= "\n";
+        $text.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
+        $text.=  "\n";
+        $text.= 'If the described logic wants to interact with an external service i.e. a database or remote HTTP endpoint you need to use the getConnection method.' . "\n";
+        $text.= 'At first argument you can use one of the following connections to access those external services:' . "\n";
+        $text.=  "\n";
+
+        foreach ($this->getAllConnections() as $connection) {
+            $text.= '* ' . $connection . "\n";
+        }
+
+        $text.= "\n";
+        $text.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".' . "\n";
+        $text.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.' . "\n";
+        $text.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.' . "\n";
+        $text.=  "\n";
+        $text.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
+
+        $tables = 'The following list shows all available database tables and columns which help to generate SQL queries:';
+
+        foreach ($this->getAllTables() as $line) {
+            $tables.= $line . "\n";
+        }
+
+        $input = new ResponseRequestInputMessage();
+        $input->setRole('user');
+        $input->setContent([
+            $prompt->getPrompt(),
+            $tables,
+        ]);
+
+        $code = $this->generateCode([$input], $text);
 
         $name = '';
         $config = new ActionConfig();
@@ -68,11 +119,106 @@ readonly class Prompt
 
     private function getOpenAIClient(): Client
     {
-        $client = $this->connector->getConnection('');
+        $client = $this->connector->getConnection('openai');
         if (!$client instanceof Client) {
             throw new InternalServerErrorException('Could not find OpenAI connection');
         }
 
         return $client;
+    }
+
+    private function generateCode(array $inputs, string $instructions): ?string
+    {
+        $client = $this->getOpenAIClient();
+
+        $request = new ResponseRequest();
+        $request->setModel('gpt-5');
+        $request->setInstructions($instructions);
+        $request->setInput($inputs);
+
+        $response = $client->responses()->create($request);
+
+        $outputs = $response->getOutput() ?? [];
+
+        foreach ($outputs as $output) {
+            if ($output instanceof ResponseResponseOutputMessage) {
+                return implode("\n", $output->getContent() ?? []);
+            }
+        }
+
+        return null;
+    }
+
+    private function getAllConnections(): Generator
+    {
+        $connections = $this->connectionRepository->getAll();
+        foreach ($connections as $connection) {
+            $description = null;
+            if (in_array($connection->getClass(), ['Fusio.Impl.Connection.System', 'Fusio.Adapter.Sql.Connection.Sql', 'Fusio.Adapter.Sql.Connection.SqlAdvanced'])) {
+                $description = 'Doctrine DBAL Connection';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Amqp.Connection.Amqp') {
+                $description = 'php-amqplib Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Beanstalk.Connection.Beanstalk') {
+                $description = 'Pheanstalk Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Elasticsearch.Connection.Elasticsearch') {
+                $description = 'Elasticsearch Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.File.Connection.Filesystem') {
+                $description = 'Flysystem';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.GraphQL.Connection.GraphQL') {
+                $description = 'GraphQL Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Http.Connection.Http') {
+                $description = 'Guzzle HTTP Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Memcache.Connection.Memcache') {
+                $description = 'PHP Memcache Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Mongodb.Connection.MongoDB') {
+                $description = 'Mongodb Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Redis.Connection.Redis') {
+                $description = 'PhpRedis Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Smtp.Connection.Smtp') {
+                $description = 'Symfony Mailer';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Soap.Connection.Soap') {
+                $description = 'PHP SOAP Client';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Stripe.Connection.Stripe') {
+                $description = 'Stripe SDK';
+            } elseif ($connection->getClass() === 'Fusio.Adapter.Worker.Connection.Worker') {
+                $description = 'Fusio Worker';
+            }
+
+            if ($description !== null) {
+                yield $connection->getName() . ': ' . $description;
+            } else {
+                yield $connection->getName();
+            }
+        }
+    }
+
+    private function getAllTables(): Generator
+    {
+        $connections = $this->connectionRepository->getAll();
+        foreach ($connections as $connection) {
+            if (!in_array($connection->getClass(), ['Fusio.Impl.Connection.System', 'Fusio.Adapter.Sql.Connection.Sql', 'Fusio.Adapter.Sql.Connection.SqlAdvanced'])) {
+                continue;
+            }
+
+            $instance = $this->connector->getConnection($connection->getName());
+            if (!$instance instanceof Connection) {
+                continue;
+            }
+
+            $schemaManager = $instance->createSchemaManager();
+            $tableNames = $schemaManager->listTableNames();
+
+            yield 'Tables for connection: ' . $connection->getName();
+
+            foreach ($tableNames as $tableName) {
+                yield 'Name: ' . $tableName;
+                yield 'Columns:';
+
+                $columns = $schemaManager->listTableColumns($tableName);
+                foreach ($columns as $column) {
+                    yield '* ' . $column->getName() . ': ' . Type::lookupName($column->getType());
+                }
+            }
+        }
     }
 }
