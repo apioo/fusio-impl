@@ -240,10 +240,10 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/action/prompt',
                     httpCode: 200,
-                    outgoing: Model\Backend\ActionExecuteResponse::class,
-                    incoming: Model\Backend\ActionExecuteRequest::class,
+                    outgoing: Model\Backend\Action::class,
+                    incoming: Model\Backend\ActionPrompt::class,
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Helps to create an action using AI and natural langauge',
+                    description: 'Helps to create an action using AI and natural language',
                 ),
                 'action.get' => new Operation(
                     action: Backend\Action\Action\Get::class,
