@@ -22,17 +22,25 @@ namespace Fusio\Impl\Service\Action;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
+use Fusio\Adapter\Worker\Action\WorkerPHPLocal;
 use Fusio\Engine\Connector;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Repository\ConnectionDatabase;
 use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionPrompt;
 use Generator;
 use PSX\Http\Exception\InternalServerErrorException;
+use PSX\Json\Parser;
 use SdkFabric\Openai\Client;
+use SdkFabric\Openai\ErrorException;
 use SdkFabric\Openai\ResponseRequest;
 use SdkFabric\Openai\ResponseRequestInputMessage;
+use SdkFabric\Openai\ResponseRequestText;
+use SdkFabric\Openai\ResponseRequestTextFormatJsonSchema;
+use SdkFabric\Openai\ResponseResponse;
 use SdkFabric\Openai\ResponseResponseOutputMessage;
+use stdClass;
 
 /**
  * Prompt
@@ -75,9 +83,8 @@ PHP;
         $text.= "\n";
         $text.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
         $text.=  "\n";
-        $text.= 'If the described logic wants to interact with an external service i.e. a database or remote HTTP endpoint you need to use the getConnection method.' . "\n";
+        $text.= 'If the described logic wants to interact with an external service i.e. a database or remote HTTP endpoint you need to use the getConnection method on the $connector.' . "\n";
         $text.= 'At first argument you can use one of the following connections to access those external services:' . "\n";
-        $text.=  "\n";
 
         foreach ($this->getAllConnections() as $connection) {
             $text.= '* ' . $connection . "\n";
@@ -89,32 +96,18 @@ PHP;
         $text.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.' . "\n";
         $text.=  "\n";
         $text.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
-
-        $tables = 'The following list shows all available database tables and columns which help to generate SQL queries:';
+        $text.=  "\n";
+        $text.= 'If needed the following list shows all available database tables and columns which help to generate SQL queries:' . "\n";
 
         foreach ($this->getAllTables() as $line) {
-            $tables.= $line . "\n";
+            $text.= $line . "\n";
         }
 
         $input = new ResponseRequestInputMessage();
         $input->setRole('user');
-        $input->setContent([
-            $prompt->getPrompt(),
-            $tables,
-        ]);
+        $input->setContent($prompt->getPrompt());
 
-        $code = $this->generateCode([$input], $text);
-
-        $name = '';
-        $config = new ActionConfig();
-        $config->put('code', $code);
-
-        $action = new Action();
-        $action->setClass($prompt->getClass());
-        $action->setName($name);
-        $action->setConfig($config);
-
-        return $action;
+        return $this->generateCode([$input], $text);
     }
 
     private function getOpenAIClient(): Client
@@ -127,7 +120,7 @@ PHP;
         return $client;
     }
 
-    private function generateCode(array $inputs, string $instructions): ?string
+    private function generateCode(array $inputs, string $instructions): Action
     {
         $client = $this->getOpenAIClient();
 
@@ -136,17 +129,62 @@ PHP;
         $request->setInstructions($instructions);
         $request->setInput($inputs);
 
-        $response = $client->responses()->create($request);
+        $format = new ResponseRequestTextFormatJsonSchema();
+        $format->setName('Action_Schema');
+        $format->setSchema([
+            'type' => 'object',
+            'properties' => [
+                'name' => [
+                    'description' => 'Contains a short precise name which summarizes the generated PHP code with only alphanumeric characters, hyphens and underscores',
+                    'type' => 'string',
+                ],
+                'code' => [
+                    'description' => 'Contains the generated PHP code',
+                    'type' => 'string',
+                ]
+            ],
+            'required' => ['name', 'code'],
+            'additionalProperties' => false,
+        ]);
+        $format->setStrict(true);
 
-        $outputs = $response->getOutput() ?? [];
+        $text = new ResponseRequestText();
+        $text->setFormat($format);
 
-        foreach ($outputs as $output) {
-            if ($output instanceof ResponseResponseOutputMessage) {
-                return implode("\n", $output->getContent() ?? []);
+        $request->setText($text);
+
+        try {
+            $response = $client->responses()->create($request);
+        } catch (ErrorException $e) {
+            $message = $e->getPayload()?->getError()?->getMessage();
+            if (!empty($message)) {
+                throw new InternalServerErrorException('Could not get response: ' . $message);
+            } else {
+                throw new InternalServerErrorException('Could not get response');
             }
         }
 
-        return null;
+        $content = $this->getFirstContent($response);
+        if (empty($content)) {
+            throw new InternalServerErrorException('Could not get response');
+        }
+
+        $config = Parser::decode($content);
+        if (!$config instanceof stdClass) {
+            throw new InternalServerErrorException('Invalid response returned');
+        }
+
+        $name = $config->name ?? null;
+        $code = $config->code ?? null;
+
+        $config = new ActionConfig();
+        $config->put('code', $code);
+
+        $action = new Action();
+        $action->setClass(ClassName::serialize(WorkerPHPLocal::class));
+        $action->setName($name);
+        $action->setConfig($config);
+        return $action;
     }
 
     private function getAllConnections(): Generator
@@ -220,5 +258,20 @@ PHP;
                 }
             }
         }
+    }
+
+    private function getFirstContent(ResponseResponse $response): ?string
+    {
+        $outputs = $response->getOutput() ?? [];
+
+        foreach ($outputs as $output) {
+            if ($output instanceof ResponseResponseOutputMessage) {
+                $contents = $output->getContent() ?? [];
+
+                return $contents[0] ?? null;
+            }
+        }
+
+        return null;
     }
 }
