@@ -47,6 +47,6 @@ readonly class Prompt implements ActionInterface
 
         assert($body instanceof ActionPrompt);
 
-        return $this->actionPromptService->prompt($body);
+        return $this->actionPromptService->prompt($body, $request->get('previousId'));
     }
 }

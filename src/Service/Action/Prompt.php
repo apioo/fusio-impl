@@ -29,6 +29,7 @@ use Fusio\Impl\Repository\ConnectionDatabase;
 use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionPrompt;
+use Fusio\Model\Common\Metadata;
 use Generator;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
@@ -55,7 +56,69 @@ readonly class Prompt
     {
     }
 
-    public function prompt(ActionPrompt $prompt): Action
+    public function prompt(ActionPrompt $prompt, ?string $previousId = null): Action
+    {
+        if (empty($previousId)) {
+            $instructions = $this->generateInstructions();
+        } else {
+            $instructions = null;
+        }
+
+        $input = new ResponseRequestInputMessage();
+        $input->setRole('user');
+        $input->setContent($prompt->getPrompt());
+
+        return $this->generateCode([$input], $instructions, $previousId);
+    }
+
+    private function getOpenAIClient(): Client
+    {
+        $client = $this->connector->getConnection('openai');
+        if (!$client instanceof Client) {
+            throw new InternalServerErrorException('Could not find OpenAI connection');
+        }
+
+        return $client;
+    }
+
+    private function generateCode(array $inputs, ?string $instructions, ?string $previousId): Action
+    {
+        $client = $this->getOpenAIClient();
+
+        $request = new ResponseRequest();
+        $request->setModel('gpt-5');
+        $request->setInput($inputs);
+
+        if (!empty($instructions)) {
+            $request->setInstructions($instructions);
+        }
+
+        if (!empty($previousId)) {
+            $request->setPreviousResponseId($previousId);
+        }
+
+        $request->setText($this->getFormat());
+
+        try {
+            $response = $client->responses()->create($request);
+        } catch (ErrorException $e) {
+            $message = $e->getPayload()?->getError()?->getMessage();
+            if (!empty($message)) {
+                throw new InternalServerErrorException('Could not get response: ' . $message);
+            } else {
+                throw new InternalServerErrorException('Could not get response');
+            }
+        }
+
+        $content = $this->getFirstContent($response);
+        if (empty($content)) {
+            throw new InternalServerErrorException('Could not get response');
+        }
+
+        return $this->buildAction($content, $response);
+    }
+
+    private function generateInstructions(): string
     {
         $text = 'You need to transform the logic provided by the user into PHP code which is used inside an action at Fusio, an open source API management tool.' . "\n";
         $text.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
@@ -103,88 +166,7 @@ PHP;
             $text.= $line . "\n";
         }
 
-        $input = new ResponseRequestInputMessage();
-        $input->setRole('user');
-        $input->setContent($prompt->getPrompt());
-
-        return $this->generateCode([$input], $text);
-    }
-
-    private function getOpenAIClient(): Client
-    {
-        $client = $this->connector->getConnection('openai');
-        if (!$client instanceof Client) {
-            throw new InternalServerErrorException('Could not find OpenAI connection');
-        }
-
-        return $client;
-    }
-
-    private function generateCode(array $inputs, string $instructions): Action
-    {
-        $client = $this->getOpenAIClient();
-
-        $request = new ResponseRequest();
-        $request->setModel('gpt-5');
-        $request->setInstructions($instructions);
-        $request->setInput($inputs);
-
-        $format = new ResponseRequestTextFormatJsonSchema();
-        $format->setName('Action_Schema');
-        $format->setSchema([
-            'type' => 'object',
-            'properties' => [
-                'name' => [
-                    'description' => 'Contains a short precise name which summarizes the generated PHP code with only alphanumeric characters, hyphens and underscores',
-                    'type' => 'string',
-                ],
-                'code' => [
-                    'description' => 'Contains the generated PHP code',
-                    'type' => 'string',
-                ]
-            ],
-            'required' => ['name', 'code'],
-            'additionalProperties' => false,
-        ]);
-        $format->setStrict(true);
-
-        $text = new ResponseRequestText();
-        $text->setFormat($format);
-
-        $request->setText($text);
-
-        try {
-            $response = $client->responses()->create($request);
-        } catch (ErrorException $e) {
-            $message = $e->getPayload()?->getError()?->getMessage();
-            if (!empty($message)) {
-                throw new InternalServerErrorException('Could not get response: ' . $message);
-            } else {
-                throw new InternalServerErrorException('Could not get response');
-            }
-        }
-
-        $content = $this->getFirstContent($response);
-        if (empty($content)) {
-            throw new InternalServerErrorException('Could not get response');
-        }
-
-        $config = Parser::decode($content);
-        if (!$config instanceof stdClass) {
-            throw new InternalServerErrorException('Invalid response returned');
-        }
-
-        $name = $config->name ?? null;
-        $code = $config->code ?? null;
-
-        $config = new ActionConfig();
-        $config->put('code', $code);
-
-        $action = new Action();
-        $action->setClass(ClassName::serialize(WorkerPHPLocal::class));
-        $action->setName($name);
-        $action->setConfig($config);
-        return $action;
+        return $text;
     }
 
     private function getAllConnections(): Generator
@@ -260,6 +242,33 @@ PHP;
         }
     }
 
+    private function getFormat(): ResponseRequestText
+    {
+        $format = new ResponseRequestTextFormatJsonSchema();
+        $format->setName('Action_Schema');
+        $format->setSchema([
+            'type' => 'object',
+            'properties' => [
+                'name' => [
+                    'description' => 'Contains a short precise name which summarizes the generated PHP code with only alphanumeric characters, hyphens and underscores',
+                    'type' => 'string',
+                ],
+                'code' => [
+                    'description' => 'Contains the generated PHP code',
+                    'type' => 'string',
+                ]
+            ],
+            'required' => ['name', 'code'],
+            'additionalProperties' => false,
+        ]);
+        $format->setStrict(true);
+
+        $text = new ResponseRequestText();
+        $text->setFormat($format);
+
+        return $text;
+    }
+
     private function getFirstContent(ResponseResponse $response): ?string
     {
         $outputs = $response->getOutput() ?? [];
@@ -273,5 +282,29 @@ PHP;
         }
 
         return null;
+    }
+
+    private function buildAction(string $content, ResponseResponse $response): Action
+    {
+        $config = Parser::decode($content);
+        if (!$config instanceof stdClass) {
+            throw new InternalServerErrorException('Invalid response returned');
+        }
+
+        $name = $config->name ?? null;
+        $code = $config->code ?? null;
+
+        $config = new ActionConfig();
+        $config->put('code', $code);
+
+        $metadata = new Metadata();
+        $metadata->put('id', $response->getId());
+
+        $action = new Action();
+        $action->setClass(ClassName::serialize(WorkerPHPLocal::class));
+        $action->setName($name);
+        $action->setConfig($config);
+        $action->setMetadata($metadata);
+        return $action;
     }
 }

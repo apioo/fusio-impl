@@ -241,6 +241,7 @@ class NewInstallation
                     httpPath: '/action/prompt',
                     httpCode: 200,
                     outgoing: Model\Backend\Action::class,
+                    parameters: ['previousId' => PropertyTypeFactory::getString()],
                     incoming: Model\Backend\ActionPrompt::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Helps to create an action using AI and natural language',
