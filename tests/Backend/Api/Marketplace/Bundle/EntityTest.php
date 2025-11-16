@@ -43,9 +43,9 @@ class EntityTest extends DbTestCase
         $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals('BulkInsert', $data['name']);
+        $this->assertEquals('hello-world', $data['name']);
         $this->assertEquals('fusio', $data['author']['name']);
-        $this->assertEquals('This action inserts multiple rows', $data['summary']);
+        $this->assertEquals('This bundle contains actions and schemas to return a hello world response	', $data['summary']);
     }
 
     public function testGetNotFound()
@@ -99,7 +99,7 @@ class EntityTest extends DbTestCase
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "App is already up-to-date"
+    "message": "Bundle is already up-to-date"
 }
 JSON;
 
@@ -122,7 +122,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "App fusio successful removed"
+    "message": "Bundle hello-world successful removed"
 }
 JSON;
 
