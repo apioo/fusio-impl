@@ -53,7 +53,9 @@ abstract class GetAbstract implements ActionInterface
         try {
             return $this->factory->factory($type)->getRepository()->fetchByName($user, $name);
         } catch (MarketplaceMessageException $e) {
-            throw new StatusCode\NotFoundException('Could not find ' . $type->value);
+            $message = $e->getPayload()->getMessage();
+
+            throw new StatusCode\InternalServerErrorException('Could not fetch ' . $type->value . ': ' . $message, previous: $e);
         }
     }
 

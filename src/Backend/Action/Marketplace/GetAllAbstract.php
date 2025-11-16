@@ -25,6 +25,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Marketplace;
+use Fusio\Marketplace\MarketplaceMessageException;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * GetAllAbstract
@@ -48,7 +50,13 @@ abstract class GetAllAbstract implements ActionInterface
         $startIndex = (int) $request->get('startIndex');
         $query = $request->get('query');
 
-        return $this->factory->factory($type)->getRepository()->fetchAll($startIndex, $query);
+        try {
+            return $this->factory->factory($type)->getRepository()->fetchAll($startIndex, $query);
+        } catch (MarketplaceMessageException $e) {
+            $message = $e->getPayload()->getMessage();
+
+            throw new StatusCode\InternalServerErrorException('Could not fetch ' . $type->value . ': ' . $message, previous: $e);
+        }
     }
 
     abstract protected function getType(): Marketplace\Type;
