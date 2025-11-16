@@ -45,7 +45,7 @@ class EntityTest extends DbTestCase
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertEquals('hello-world', $data['name']);
         $this->assertEquals('fusio', $data['author']['name']);
-        $this->assertEquals('This bundle contains actions and schemas to return a hello world response	', $data['summary']);
+        $this->assertEquals('This bundle contains actions and schemas to return a hello world response', $data['summary']);
     }
 
     public function testGetNotFound()
