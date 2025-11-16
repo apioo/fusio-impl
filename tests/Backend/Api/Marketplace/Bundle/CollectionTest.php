@@ -58,14 +58,14 @@ class CollectionTest extends DbTestCase
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name' => 'fusio',
+            'name' => 'hello-world',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Bundle fusio successful installed"
+    "message": "Bundle hello-world successful installed"
 }
 JSON;
 
