@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Action;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
+use Fusio\Adapter\SdkFabric\Connection\OpenAI;
 use Fusio\Adapter\Worker\Action\WorkerPHPLocal;
 use Fusio\Engine\Connector;
 use Fusio\Engine\Inflection\ClassName;
@@ -60,6 +61,7 @@ readonly class Prompt
     {
         if (empty($previousId)) {
             $instructions = $this->generateInstructions();
+            $instructions = null;
         } else {
             $instructions = null;
         }
@@ -73,7 +75,12 @@ readonly class Prompt
 
     private function getOpenAIClient(): Client
     {
-        $client = $this->connector->getConnection('openai');
+        $id = $this->connectionRepository->getFirstIdByClass(ClassName::serialize(OpenAI::class));
+        if (empty($id)) {
+            throw new InternalServerErrorException('Could not find OpenAI connection');
+        }
+
+        $client = $this->connector->getConnection($id);
         if (!$client instanceof Client) {
             throw new InternalServerErrorException('Could not find OpenAI connection');
         }
@@ -86,7 +93,7 @@ readonly class Prompt
         $client = $this->getOpenAIClient();
 
         $request = new ResponseRequest();
-        $request->setModel('gpt-5');
+        $request->setModel('gpt-5-mini');
         $request->setInput($inputs);
 
         if (!empty($instructions)) {
