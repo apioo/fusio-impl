@@ -42,12 +42,13 @@ readonly class Dispatcher implements DispatcherInterface
     ) {
     }
 
-    public function dispatch(string $eventName, mixed $payload): void
+    public function dispatch(string $eventName, mixed $payload, ?int $userId = null): void
     {
         $this->messageBus->dispatch(new TriggerEvent(
             $this->frameworkConfig->getTenantId(),
             $eventName,
             $payload,
+            $userId,
             $this->executionState->getCurrentContext()
         ));
     }

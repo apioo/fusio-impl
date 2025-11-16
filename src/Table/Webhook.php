@@ -63,11 +63,15 @@ class Webhook extends Generated\WebhookTable
         return $this->findOneBy($condition);
     }
 
-    public function getWebhooksForEvent(int $eventId): array
+    public function getWebhooksForEvent(int $eventId, ?int $userId = null): array
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_EVENT_ID, $eventId);
         $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
+
+        if ($userId !== null) {
+            $condition->equals(self::COLUMN_USER_ID, $userId);
+        }
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
