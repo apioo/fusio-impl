@@ -32,6 +32,7 @@ use Fusio\Marketplace\MarketplaceBundleConfig;
 use Fusio\Marketplace\MarketplaceBundleCronjob;
 use Fusio\Marketplace\MarketplaceBundleEvent;
 use Fusio\Marketplace\MarketplaceBundleSchema;
+use Fusio\Marketplace\MarketplaceBundleSchemaSource;
 use Fusio\Marketplace\MarketplaceBundleTrigger;
 use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\ActionConfig;
@@ -139,7 +140,12 @@ readonly class Installer implements InstallerInterface
 
     private function installOrUpgradeAction(MarketplaceObject $object, MarketplaceBundleAction $action, UserContext $context): void
     {
-        $actionName = $this->getObjectName($object, $action->getName());
+        $name = $action->getName();
+        if (empty($name)) {
+            throw new MarketplaceException('Provided no schema name');
+        }
+
+        $actionName = $this->getObjectName($object, $name);
 
         $existing = $this->actionTable->findOneByTenantAndName($context->getTenantId(), null, $actionName);
         if (!$existing instanceof Table\Generated\ActionRow) {
@@ -160,18 +166,23 @@ readonly class Installer implements InstallerInterface
 
     private function installOrUpgradeSchema(MarketplaceObject $object, MarketplaceBundleSchema $schema, UserContext $context): void
     {
-        $schemaName = $this->getObjectName($object, $schema->getName());
+        $name = $schema->getName();
+        if (empty($name)) {
+            throw new MarketplaceException('Provided no schema name');
+        }
+
+        $schemaName = $this->getObjectName($object, $name);
 
         $existing = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), null, $schemaName);
         if (!$existing instanceof Table\Generated\SchemaRow) {
             $create = new SchemaCreate();
             $create->setName($schemaName);
-            $create->setSource(SchemaSource::from($schema->getSource()));
+            $create->setSource(SchemaSource::from($schema->getSource() ?? throw new MarketplaceException('Provided no schema source')));
 
             $this->schemaService->create($create, $context);
         } else {
             $update = new SchemaUpdate();
-            $update->setSource(SchemaSource::from($schema->getSource()));
+            $update->setSource(SchemaSource::from($schema->getSource() ?? throw new MarketplaceException('Provided no schema source')));
 
             $this->schemaService->update('' . $existing->getId(), $update, $context);
         }
@@ -179,7 +190,12 @@ readonly class Installer implements InstallerInterface
 
     private function installOrUpgradeEvent(MarketplaceObject $object, MarketplaceBundleEvent $event, UserContext $context): void
     {
-        $eventName = $this->getObjectName($object, $event->getName());
+        $name = $event->getName();
+        if (empty($name)) {
+            throw new MarketplaceException('Provided no schema name');
+        }
+
+        $eventName = $this->getObjectName($object, $name);
 
         $existing = $this->eventTable->findOneByTenantAndName($context->getTenantId(), null, $eventName);
         if (!$existing instanceof Table\Generated\EventRow) {
@@ -200,7 +216,12 @@ readonly class Installer implements InstallerInterface
 
     private function installOrUpgradeCronjob(MarketplaceObject $object, MarketplaceBundleCronjob $cronjob, UserContext $context): void
     {
-        $cronjobName = $this->getObjectName($object, $cronjob->getName());
+        $name = $cronjob->getName();
+        if (empty($name)) {
+            throw new MarketplaceException('Provided no schema name');
+        }
+
+        $cronjobName = $this->getObjectName($object, $name);
 
         $existing = $this->cronjobTable->findOneByTenantAndName($context->getTenantId(), null, $cronjobName);
         if (!$existing instanceof Table\Generated\CronjobRow) {
@@ -221,7 +242,12 @@ readonly class Installer implements InstallerInterface
 
     private function installOrUpgradeTrigger(MarketplaceObject $object, MarketplaceBundleTrigger $trigger, UserContext $context): void
     {
-        $triggerName = $this->getObjectName($object, $trigger->getName());
+        $name = $trigger->getName();
+        if (empty($name)) {
+            throw new MarketplaceException('Provided no schema name');
+        }
+
+        $triggerName = $this->getObjectName($object, $name);
 
         $existing = $this->triggerTable->findOneByTenantAndName($context->getTenantId(), null, $triggerName);
         if (!$existing instanceof Table\Generated\TriggerRow) {
