@@ -57,6 +57,30 @@ class EntityTest extends DbTestCase
     "description": "Bar access",
     "operations": [
         {
+            "id": 253,
+            "scopeId": 56,
+            "operationId": 259,
+            "allow": true
+        },
+        {
+            "id": 252,
+            "scopeId": 56,
+            "operationId": 258,
+            "allow": true
+        },
+        {
+            "id": 251,
+            "scopeId": 56,
+            "operationId": 257,
+            "allow": true
+        },
+        {
+            "id": 250,
+            "scopeId": 56,
+            "operationId": 256,
+            "allow": true
+        },
+        {
             "id": 249,
             "scopeId": 56,
             "operationId": 255,
@@ -93,45 +117,21 @@ class EntityTest extends DbTestCase
             "allow": true
         },
         {
-            "id": 243,
+            "id": 242,
             "scopeId": 56,
             "operationId": 249,
             "allow": true
         },
         {
-            "id": 242,
+            "id": 240,
             "scopeId": 56,
             "operationId": 248,
             "allow": true
         },
         {
-            "id": 241,
+            "id": 239,
             "scopeId": 56,
             "operationId": 247,
-            "allow": true
-        },
-        {
-            "id": 240,
-            "scopeId": 56,
-            "operationId": 246,
-            "allow": true
-        },
-        {
-            "id": 238,
-            "scopeId": 56,
-            "operationId": 245,
-            "allow": true
-        },
-        {
-            "id": 236,
-            "scopeId": 56,
-            "operationId": 244,
-            "allow": true
-        },
-        {
-            "id": 235,
-            "scopeId": 56,
-            "operationId": 243,
             "allow": true
         }
     ]
@@ -157,6 +157,30 @@ JSON;
     "description": "Bar access",
     "operations": [
         {
+            "id": 253,
+            "scopeId": 56,
+            "operationId": 259,
+            "allow": true
+        },
+        {
+            "id": 252,
+            "scopeId": 56,
+            "operationId": 258,
+            "allow": true
+        },
+        {
+            "id": 251,
+            "scopeId": 56,
+            "operationId": 257,
+            "allow": true
+        },
+        {
+            "id": 250,
+            "scopeId": 56,
+            "operationId": 256,
+            "allow": true
+        },
+        {
             "id": 249,
             "scopeId": 56,
             "operationId": 255,
@@ -193,45 +217,21 @@ JSON;
             "allow": true
         },
         {
-            "id": 243,
+            "id": 242,
             "scopeId": 56,
             "operationId": 249,
             "allow": true
         },
         {
-            "id": 242,
+            "id": 240,
             "scopeId": 56,
             "operationId": 248,
             "allow": true
         },
         {
-            "id": 241,
+            "id": 239,
             "scopeId": 56,
             "operationId": 247,
-            "allow": true
-        },
-        {
-            "id": 240,
-            "scopeId": 56,
-            "operationId": 246,
-            "allow": true
-        },
-        {
-            "id": 238,
-            "scopeId": 56,
-            "operationId": 245,
-            "allow": true
-        },
-        {
-            "id": 236,
-            "scopeId": 56,
-            "operationId": 244,
-            "allow": true
-        },
-        {
-            "id": 235,
-            "scopeId": 56,
-            "operationId": 243,
             "allow": true
         }
     ]
