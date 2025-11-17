@@ -18,30 +18,22 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace;
+namespace Fusio\Impl\Backend\Action\Marketplace\Bundle;
+
+use Fusio\Impl\Backend\Action\Marketplace\GetAllAbstract;
+use Fusio\Impl\Service\Marketplace;
 
 /**
- * Factory
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Factory
+class GetAll extends GetAllAbstract
 {
-    public function __construct(
-        private Action\Factory $actionFactory,
-        private App\Factory $appFactory,
-        private Bundle\Factory $bundleFactory
-    ) {
-    }
-
-    public function factory(Type $type): FactoryInterface
+    protected function getType(): Marketplace\Type
     {
-        return match ($type) {
-            Type::ACTION => $this->actionFactory,
-            Type::APP => $this->appFactory,
-            Type::BUNDLE => $this->bundleFactory,
-        };
+        return Marketplace\Type::BUNDLE;
     }
 }

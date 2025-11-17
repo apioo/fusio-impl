@@ -4297,6 +4297,173 @@
         "marketplace"
       ]
     },
+    "backend.marketplace.bundle.get": {
+      "path": "/backend/marketplace/bundle/:user/:name",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "MarketplaceBundle"
+        }
+      },
+      "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific marketplace bundle",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.bundle.getAll": {
+      "path": "/backend/marketplace/bundle",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "MarketplaceBundleCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "query": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of marketplace bundles",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.bundle.install": {
+      "path": "/backend/marketplace/bundle",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "MarketplaceMessage"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceInstall"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Installs an bundle from the marketplace",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
+    "backend.marketplace.bundle.upgrade": {
+      "path": "/backend/marketplace/bundle/:user/:name",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "MarketplaceMessage"
+        }
+      },
+      "arguments": {
+        "user": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Upgrades an bundle from the marketplace",
+      "stability": 2,
+      "security": [
+        "backend.marketplace"
+      ],
+      "authorization": true,
+      "tags": [
+        "marketplace"
+      ]
+    },
     "backend.operation.create": {
       "path": "/backend/operation",
       "method": "POST",
@@ -14716,6 +14883,150 @@
         "target": "MarketplaceCollection",
         "template": {
           "T": "MarketplaceApp"
+        }
+      }
+    },
+    "MarketplaceBundle": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "MarketplaceObject"
+      },
+      "properties": {
+        "config": {
+          "type": "reference",
+          "target": "MarketplaceBundleConfig"
+        }
+      }
+    },
+    "MarketplaceBundleAction": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "type": "reference",
+          "target": "MarketplaceBundleActionConfig"
+        }
+      }
+    },
+    "MarketplaceBundleActionConfig": {
+      "type": "map",
+      "schema": {
+        "type": "any"
+      }
+    },
+    "MarketplaceBundleCollection": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "MarketplaceCollection",
+        "template": {
+          "T": "MarketplaceBundle"
+        }
+      }
+    },
+    "MarketplaceBundleConfig": {
+      "type": "struct",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceBundleAction"
+          }
+        },
+        "schemas": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceBundleSchema"
+          }
+        },
+        "events": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceBundleEvent"
+          }
+        },
+        "cronjobs": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceBundleCronjob"
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "MarketplaceBundleTrigger"
+          }
+        }
+      }
+    },
+    "MarketplaceBundleCronjob": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "cron": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      }
+    },
+    "MarketplaceBundleEvent": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "MarketplaceBundleSchema": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "source": {
+          "type": "reference",
+          "target": "MarketplaceBundleSchemaSource"
+        }
+      }
+    },
+    "MarketplaceBundleSchemaSource": {
+      "type": "map",
+      "schema": {
+        "type": "any"
+      }
+    },
+    "MarketplaceBundleTrigger": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
         }
       }
     },
