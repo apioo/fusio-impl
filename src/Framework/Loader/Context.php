@@ -54,20 +54,6 @@ class Context extends FrameworkContext
         $this->tenantId = $tenantId;
     }
 
-    public function getCategoryId(): int
-    {
-        if ($this->categoryId === null) {
-            throw new ContextPropertyNotSetException('categoryId');
-        }
-
-        return $this->categoryId;
-    }
-
-    public function setCategoryId(int $categoryId): void
-    {
-        $this->categoryId = $categoryId;
-    }
-
     public function getApp(): AppInterface
     {
         if ($this->app === null) {

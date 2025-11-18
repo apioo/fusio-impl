@@ -258,13 +258,12 @@ class LoggerTest extends DbTestCase
     private function newContext(Context $context): Context
     {
         $app = new App(false, 1, 0, 0, '', '', '', [], []);
-        $user = new User(false, 1, 0, 0, 0, '', '', 0);
+        $user = new User(false, 1, 0, 1, 0, '', '', 0);
         $id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
 
         $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
 
         $context->setOperation($row);
-        $context->setCategoryId(1);
         $context->setApp($app);
         $context->setUser($user);
 

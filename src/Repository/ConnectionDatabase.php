@@ -108,6 +108,29 @@ class ConnectionDatabase implements Repository\ConnectionInterface
         }
     }
 
+    public function getFirstIdByClass(string $class): ?int
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_CLASS, $class);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\ConnectionTable::COLUMN_ID,
+            ])
+            ->from('fusio_connection', 'connection')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $id = (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        if (!empty($id)) {
+            return $id;
+        } else {
+            return null;
+        }
+    }
+
     private function newConnection(array $row): Model\ConnectionInterface
     {
         $config = !empty($row[Table\Generated\ConnectionTable::COLUMN_CONFIG]) ? ConnectionService\Encrypter::decrypt($row[Table\Generated\ConnectionTable::COLUMN_CONFIG], $this->frameworkConfig->getProjectKey()) : [];

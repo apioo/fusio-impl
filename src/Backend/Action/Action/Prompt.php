@@ -18,46 +18,35 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Mcp;
+namespace Fusio\Impl\Backend\Action\Action;
 
-use Fusio\Engine\Model\UserInterface;
-use Fusio\Impl\Service;
-use Mcp\Server\Auth\TokenValidationResult;
-use Mcp\Server\Auth\TokenValidatorInterface;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Action;
+use Fusio\Model\Backend\ActionExecuteRequest;
+use Fusio\Model\Backend\ActionPrompt;
 
 /**
- * TokenValidator
+ * Prompt
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class TokenValidator implements TokenValidatorInterface
+readonly class Prompt implements ActionInterface
 {
-    public function __construct(
-        private Service\Mcp\ActiveUser $activeUser,
-        private Service\Security\JsonWebToken $jsonWebToken,
-    ) {
+    public function __construct(private Action\Prompt $actionPromptService)
+    {
     }
 
-    public function validate(string $token): TokenValidationResult
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        try {
-            $this->jsonWebToken->decode($token);
-        } catch (\Exception $e) {
-            return new TokenValidationResult(false);
-        }
+        $body = $request->getPayload();
 
-        $this->activeUser->setToken($token);
+        assert($body instanceof ActionPrompt);
 
-        $user = $this->activeUser->getUser();
-        if (!$user instanceof UserInterface) {
-            return new TokenValidationResult(false);
-        }
-
-        return new TokenValidationResult(true, [
-            'sub' => $user->getId(),
-            'scope' => 'mcp',
-        ]);
+        return $this->actionPromptService->prompt($body, $request->get('previousId'));
     }
 }
