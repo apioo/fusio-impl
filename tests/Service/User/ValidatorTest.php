@@ -36,7 +36,7 @@ use PSX\Http\Exception\BadRequestException;
 class ValidatorTest extends TestCase
 {
     #[DataProvider('assertProvider')]
-    public function testAssertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
+    public function testAssertPassword(string $password, ?int $minLength, ?int $minAlpha, ?int $minNumeric, ?int $minSpecial)
     {
         $validator = Environment::getService(Validator::class);
         $validator->assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
     }
 
     #[DataProvider('assertProviderFail')]
-    public function testAssertPasswordFail($password, $minLength, $minAlpha, $minNumeric, $minSpecial, $exceptionMessage)
+    public function testAssertPasswordFail(string $password, ?int $minLength, ?int $minAlpha, ?int $minNumeric, ?int $minSpecial, string $exceptionMessage)
     {
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage($exceptionMessage);
@@ -57,14 +57,14 @@ class ValidatorTest extends TestCase
     public static function assertProvider(): array
     {
         return [
-            ['aaaaaaaa', null, null, null, null, true],
-            ['aaaaaaa1', null, null, null, null, true],
-            ['00000000', null, null, null, null, true],
-            ['aaaaaa!1', null, null, null, null, true],
-            ['aaaaaaaa', null, 0, 0, 0, true],
-            ['aaaaaaa1', null, 0, 0, 0, true],
-            ['00000000', null, 0, 0, 0, true],
-            ['aaaa#_11', null, 2, 2, 2, true],
+            ['aaaaaaaa', null, null, null, null],
+            ['aaaaaaa1', null, null, null, null],
+            ['00000000', null, null, null, null],
+            ['aaaaaa!1', null, null, null, null],
+            ['aaaaaaaa', null, 0, 0, 0],
+            ['aaaaaaa1', null, 0, 0, 0],
+            ['00000000', null, 0, 0, 0],
+            ['aaaa#_11', null, 2, 2, 2],
         ];
     }
 
