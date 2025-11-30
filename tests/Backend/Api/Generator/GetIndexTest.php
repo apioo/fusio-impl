@@ -59,10 +59,6 @@ class GetIndexTest extends DbTestCase
             "class": "Fusio.Impl.Provider.Generator.Postman"
         },
         {
-            "name": "Redis-Hash",
-            "class": "Fusio.Adapter.Redis.Generator.RedisHash"
-        },
-        {
             "name": "SQL-Database",
             "class": "Fusio.Adapter.Sql.Generator.SqlDatabase"
         },

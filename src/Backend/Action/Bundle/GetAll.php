@@ -18,41 +18,36 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\System;
+namespace Fusio\Impl\Backend\Action\Bundle;
 
-use Fusio\Impl\Tests\DbTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\View;
 
 /**
- * TypeAPITest
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TypeAPITest extends DbTestCase
+class GetAll implements ActionInterface
 {
-    #[DataProvider('providerFilter')]
-    public function testGenerate(string $category)
+    private View\Bundle $view;
+
+    public function __construct(View\Bundle $view)
     {
-        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
-            'User-Agent' => 'Fusio TestCase',
-        ]);
-
-        $body = (string) $response->getBody();
-        $expect = __DIR__ . '/resources/typeapi_' . $category . '.json';
-        $actual = __DIR__ . '/resources/typeapi_' . $category . '_actual.json';
-
-        file_put_contents($actual, $body);
-
-        $this->assertJsonFileEqualsJsonFile($expect, $actual);
+        $this->view = $view;
     }
 
-    public function providerFilter(): array
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return [
-            ['app'],
-            ['fusio'],
-        ];
+        return $this->view->getCollection(
+            QueryFilter::from($request),
+            $context
+        );
     }
 }

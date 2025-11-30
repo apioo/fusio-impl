@@ -31,6 +31,7 @@ interface LimiterInterface
 {
     public function getActionCount(): int;
     public function getAppCount(): int;
+    public function getBundleCount(): int;
     public function getCategoryCount(): int;
     public function getConnectionCount(): int;
     public function getCronjobCount(): int;

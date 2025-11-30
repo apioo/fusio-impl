@@ -367,7 +367,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 248,
+          "operationId": 253,
           "authenticated": true
         }
       ]
@@ -384,7 +384,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 247
+          "operationId": 252
         }
       ]
     },
@@ -553,6 +553,7 @@
         "backend.app",
         "backend.audit",
         "backend.backup",
+        "backend.bundle",
         "backend.category",
         "backend.config",
         "backend.connection",
@@ -612,6 +613,7 @@
         "backend.app",
         "backend.audit",
         "backend.backup",
+        "backend.bundle",
         "backend.category",
         "backend.config",
         "backend.connection",

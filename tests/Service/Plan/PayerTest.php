@@ -27,6 +27,7 @@ use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Plan\Payer;
 use Fusio\Impl\Service\User\Mailer;
 use Fusio\Impl\Table;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,9 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PayerTest extends TestCase
 {
-    /**
-     * @dataProvider pointsProvider
-     */
+    #[DataProvider('pointsProvider')]
     public function testPay(?int $threshold, int $points, int $cost, bool $sendMail)
     {
         $userTable = $this->getMockBuilder(Table\User::class)
@@ -74,7 +73,7 @@ class PayerTest extends TestCase
         $configService->expects($this->once())
             ->method('getValue')
             ->withAnyParameters()
-            ->willReturn($this->returnValue($threshold));
+            ->willReturn($threshold);
 
         $mailerService = $this->getMockBuilder(Mailer::class)
             ->disableOriginalConstructor()

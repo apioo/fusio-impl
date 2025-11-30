@@ -94,6 +94,19 @@ final class Version20230508210151 extends AbstractMigration
             $auditTable->addIndex(['tenant_id']);
         }
 
+        if (!$schema->hasTable('fusio_bundle')) {
+            $bundleTable = $schema->createTable('fusio_bundle');
+            $bundleTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $bundleTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $bundleTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $bundleTable->addColumn('status', 'integer');
+            $bundleTable->addColumn('name', 'string', ['length' => 255]);
+            $bundleTable->addColumn('config', 'text');
+            $bundleTable->addColumn('metadata', 'text', ['notnull' => false]);
+            $bundleTable->setPrimaryKey(['id']);
+            $bundleTable->addUniqueIndex(['tenant_id', 'name']);
+        }
+
         if (!$schema->hasTable('fusio_category')) {
             $categoryTable = $schema->createTable('fusio_category');
             $categoryTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -595,6 +608,10 @@ final class Version20230508210151 extends AbstractMigration
         if (isset($appScopeTable)) {
             $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_scope_app_id');
             $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'app_scope_scope_id');
+        }
+
+        if (isset($bundleTable)) {
+            $bundleTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'bundle_category_id');
         }
 
         if (isset($cronjobTable)) {

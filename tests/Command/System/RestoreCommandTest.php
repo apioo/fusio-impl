@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Command\System;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -35,10 +36,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class RestoreCommandTest extends DbTestCase
 {
-    /**
-     * @dataProvider restoreProvider
-     */
-    public function testCommandRestore($type, $id, $status)
+    #[DataProvider('restoreProvider')]
+    public function testCommandRestore(string $type, int|string $id, int $status)
     {
         $column = is_numeric($id) ? 'id' : 'name';
 
@@ -63,7 +62,7 @@ class RestoreCommandTest extends DbTestCase
         $this->assertEquals($status, $row['status']);
     }
 
-    public function restoreProvider()
+    public static function restoreProvider(): array
     {
         return [
             ['action', 1, Table\Action::STATUS_ACTIVE],
@@ -83,10 +82,8 @@ class RestoreCommandTest extends DbTestCase
         ];
     }
 
-    /**
-     * @dataProvider restoreInvalidProvider
-     */
-    public function testCommandRestoreInvalid($type, $id)
+    #[DataProvider('restoreInvalidProvider')]
+    public function testCommandRestoreInvalid(string $type, int $id)
     {
         $command = Environment::getService(Application::class)->find('system:restore');
 
@@ -103,7 +100,7 @@ class RestoreCommandTest extends DbTestCase
         $this->assertMatchesRegularExpression('/Restored no record/', $display, $display);
     }
 
-    public function restoreInvalidProvider(): array
+    public static function restoreInvalidProvider(): array
     {
         return [
             ['action', 1024],

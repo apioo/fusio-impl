@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Service\Cronjob;
 
 use Fusio\Impl\Backend\Filter\Cronjob\Cron;
 use Fusio\Impl\Service\Cronjob\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Exception\BadRequestException;
@@ -36,9 +37,7 @@ use ReflectionClass;
  */
 class ValidatorTest extends TestCase
 {
-    /**
-     * @dataProvider pathProvider
-     */
+    #[DataProvider('pathProvider')]
     public function testAssertCron(string $cron, bool $expect, ?string $errorMessage)
     {
         try {
@@ -56,7 +55,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function pathProvider()
+    public static function pathProvider(): array
     {
         return [
             ['', false, 'Cron must not be empty'],

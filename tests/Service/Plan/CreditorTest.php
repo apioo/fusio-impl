@@ -25,6 +25,7 @@ use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
 use Fusio\Impl\Service\Plan\Creditor;
 use Fusio\Impl\Table;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,9 +37,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreditorTest extends TestCase
 {
-    /**
-     * @dataProvider pointsProvider
-     */
+    #[DataProvider('pointsProvider')]
     public function testCredit(int $points, int $cost)
     {
         $userTable = $this->getMockBuilder(Table\User::class)

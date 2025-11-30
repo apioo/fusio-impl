@@ -60,6 +60,15 @@ class UsageLimiter
         );
     }
 
+    public function assertBundleCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\BundleTable::NAME, $tenantId),
+            $this->limiter->getBundleCount(),
+            'bundle'
+        );
+    }
+
     public function assertCategoryCount(?string $tenantId): void
     {
         $this->assert(

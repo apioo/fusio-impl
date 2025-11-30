@@ -47,17 +47,17 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 57,
+            "id": 58,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 56,
+            "id": 57,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 55,
+            "id": 56,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -92,7 +92,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 55,
+            "id": 56,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -122,17 +122,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 57,
+            "id": 58,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 56,
+            "id": 57,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 55,
+            "id": 56,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -209,11 +209,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 249,
+            'operation_id' => 254,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 247,
+            'operation_id' => 252,
             'allow' => 1,
         ]], $operations);
     }

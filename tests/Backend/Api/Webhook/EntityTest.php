@@ -55,7 +55,7 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "id": 1,
-    "eventId": 65,
+    "eventId": 68,
     "userId": 1,
     "name": "ping",
     "endpoint": "http:\/\/www.fusio-project.org\/ping",

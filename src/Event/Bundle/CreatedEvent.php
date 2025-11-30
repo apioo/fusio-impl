@@ -18,41 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\System;
+namespace Fusio\Impl\Event\Bundle;
 
-use Fusio\Impl\Tests\DbTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\BundleCreate;
 
 /**
- * TypeAPITest
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TypeAPITest extends DbTestCase
+class CreatedEvent extends EventAbstract
 {
-    #[DataProvider('providerFilter')]
-    public function testGenerate(string $category)
+    private BundleCreate $bundle;
+
+    public function __construct(BundleCreate $bundle, UserContext $context)
     {
-        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
-            'User-Agent' => 'Fusio TestCase',
-        ]);
+        parent::__construct($context);
 
-        $body = (string) $response->getBody();
-        $expect = __DIR__ . '/resources/typeapi_' . $category . '.json';
-        $actual = __DIR__ . '/resources/typeapi_' . $category . '_actual.json';
-
-        file_put_contents($actual, $body);
-
-        $this->assertJsonFileEqualsJsonFile($expect, $actual);
+        $this->bundle = $bundle;
     }
 
-    public function providerFilter(): array
+    public function getCategory(): BundleCreate
     {
-        return [
-            ['app'],
-            ['fusio'],
-        ];
+        return $this->bundle;
     }
 }

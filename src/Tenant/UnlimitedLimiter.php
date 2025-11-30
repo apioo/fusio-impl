@@ -41,6 +41,11 @@ class UnlimitedLimiter implements LimiterInterface
         return PHP_INT_MAX;
     }
 
+    public function getBundleCount(): int
+    {
+        return PHP_INT_MAX;
+    }
+
     public function getCategoryCount(): int
     {
         return PHP_INT_MAX;

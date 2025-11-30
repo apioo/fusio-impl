@@ -115,22 +115,6 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Php.Action.PhpSandbox"
         },
         {
-            "name": "Redis-Hash-Delete",
-            "class": "Fusio.Adapter.Redis.Action.RedisHashDelete"
-        },
-        {
-            "name": "Redis-Hash-Get",
-            "class": "Fusio.Adapter.Redis.Action.RedisHashGet"
-        },
-        {
-            "name": "Redis-Hash-GetAll",
-            "class": "Fusio.Adapter.Redis.Action.RedisHashGetAll"
-        },
-        {
-            "name": "Redis-Hash-Set",
-            "class": "Fusio.Adapter.Redis.Action.RedisHashSet"
-        },
-        {
             "name": "SMTP-Send",
             "class": "Fusio.Adapter.Smtp.Action.SmtpSend"
         },

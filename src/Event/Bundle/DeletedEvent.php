@@ -18,41 +18,32 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\System;
+namespace Fusio\Impl\Event\Bundle;
 
-use Fusio\Impl\Tests\DbTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\BundleRow;
 
 /**
- * TypeAPITest
+ * DeletedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class TypeAPITest extends DbTestCase
+class DeletedEvent extends EventAbstract
 {
-    #[DataProvider('providerFilter')]
-    public function testGenerate(string $category)
+    private BundleRow $existing;
+
+    public function __construct(BundleRow $existing, UserContext $context)
     {
-        $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
-            'User-Agent' => 'Fusio TestCase',
-        ]);
+        parent::__construct($context);
 
-        $body = (string) $response->getBody();
-        $expect = __DIR__ . '/resources/typeapi_' . $category . '.json';
-        $actual = __DIR__ . '/resources/typeapi_' . $category . '_actual.json';
-
-        file_put_contents($actual, $body);
-
-        $this->assertJsonFileEqualsJsonFile($expect, $actual);
+        $this->existing = $existing;
     }
 
-    public function providerFilter(): array
+    public function getExisting(): BundleRow
     {
-        return [
-            ['app'],
-            ['fusio'],
-        ];
+        return $this->existing;
     }
 }
