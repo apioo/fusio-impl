@@ -11,6 +11,7 @@
       "backend.app",
       "backend.audit",
       "backend.backup",
+      "backend.bundle",
       "backend.category",
       "backend.config",
       "backend.connection",
@@ -969,6 +970,211 @@
       "authorization": true,
       "tags": [
         "backup"
+      ]
+    },
+    "backend.bundle.create": {
+      "path": "/backend/bundle",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_BundleCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new bundle",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
+      ]
+    },
+    "backend.bundle.delete": {
+      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "bundle_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing bundle",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
+      ]
+    },
+    "backend.bundle.get": {
+      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Event"
+        }
+      },
+      "arguments": {
+        "bundle_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific bundle",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
+      ]
+    },
+    "backend.bundle.getAll": {
+      "path": "/backend/bundle",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_BundleCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of bundles",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
+      ]
+    },
+    "backend.bundle.update": {
+      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "bundle_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_EventUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing bundle",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
       ]
     },
     "backend.category.create": {
@@ -11751,6 +11957,49 @@
             "type": "string"
           }
         }
+      }
+    },
+    "Backend_Bundle": {
+      "description": "This object represents a bundle which allows you to submit action, schema, event, cronjob and trigger configuration from you local instance to the Fusio marketplace",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Unique name of the object",
+          "type": "string"
+        },
+        "config": {
+          "description": "The bundle configuration",
+          "type": "reference",
+          "target": "Backend_BundleConfig"
+        }
+      }
+    },
+    "Backend_BundleCollection": {
+      "description": "A paginated collection of bundle objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Bundle"
+        }
+      }
+    },
+    "Backend_BundleConfig": {
+      "type": "map",
+      "schema": {
+        "type": "any"
+      }
+    },
+    "Backend_BundleCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Bundle"
       }
     },
     "Backend_Category": {
