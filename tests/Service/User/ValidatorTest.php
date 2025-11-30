@@ -54,7 +54,7 @@ class ValidatorTest extends TestCase
         $validator->assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
     }
 
-    public function assertProvider(): array
+    public static function assertProvider(): array
     {
         return [
             ['aaaaaaaa', null, null, null, null, true],
@@ -68,7 +68,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    public function assertProviderFail()
+    public static function assertProviderFail(): array
     {
         return [
             ['', null, null, null, null, 'Password must not be empty'],
