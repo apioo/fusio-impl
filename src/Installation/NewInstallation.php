@@ -1195,7 +1195,7 @@ class NewInstallation
                     httpPath: '/bundle/$bundle_id<[0-9]+|^~>',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
-                    incoming: Model\Backend\EventUpdate::class,
+                    incoming: Model\Backend\BundleUpdate::class,
                     throws: [999 => Model\Common\Message::class],
                     eventName: 'fusio.bundle.update',
                     description: 'Updates an existing bundle',

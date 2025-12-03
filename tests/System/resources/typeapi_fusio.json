@@ -1154,7 +1154,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_EventUpdate"
+            "target": "Backend_BundleUpdate"
           }
         }
       },
@@ -11996,6 +11996,13 @@
       }
     },
     "Backend_BundleCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Bundle"
+      }
+    },
+    "Backend_BundleUpdate": {
       "type": "struct",
       "parent": {
         "type": "reference",
