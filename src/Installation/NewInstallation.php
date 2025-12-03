@@ -1185,7 +1185,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/bundle/$bundle_id<[0-9]+|^~>',
                     httpCode: 200,
-                    outgoing: Model\Backend\Event::class,
+                    outgoing: Model\Backend\Bundle::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a specific bundle',
                 ),

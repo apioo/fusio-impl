@@ -1054,7 +1054,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Backend_Event"
+          "target": "Backend_Bundle"
         }
       },
       "arguments": {
