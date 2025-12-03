@@ -79,6 +79,7 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Bundle config must not be empty');
         }
 
+        $count = 0;
         foreach ($config->getAll() as $key => $entries) {
             if (!in_array($key, self::ALLOWED_KEYS, true)) {
                 throw new StatusCode\BadRequestException('Provided an invalid config key ' . $key . ' must be one of: ' . implode(', ', self::ALLOWED_KEYS));
@@ -88,15 +89,17 @@ readonly class Validator
                 throw new StatusCode\BadRequestException('Bundle config entries for "' . $key . '" must be of type array');
             }
 
-            if (count($entries) === 0) {
-                throw new StatusCode\BadRequestException('Bundle config entries for "' . $key . '" must have at least one entry');
-            }
-
             foreach ($entries as $index => $entry) {
                 if (!is_string($entry)) {
                     throw new StatusCode\BadRequestException('Bundle config entry for "' . $key . '" at index "' . $index . '" must be of type string');
                 }
+
+                $count++;
             }
+        }
+
+        if ($count === 0) {
+            throw new StatusCode\BadRequestException('Bundle config must have at least one entry');
         }
     }
 }
