@@ -33,32 +33,18 @@ use PSX\Sql\Condition;
  */
 class TransactionQueryFilter extends DateQueryFilter
 {
-    private ?int $invoiceId = null;
-    private ?int $status = null;
-    private ?string $provider = null;
+    private ?int $planId = null;
 
-    public function __construct(?int $invoiceId, ?int $status, ?string $provider, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function __construct(?int $planId, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
-        $this->invoiceId = $invoiceId;
-        $this->status = $status;
-        $this->provider = $provider;
+        $this->planId = $planId;
     }
 
-    public function getInvoiceId(): ?int
+    public function getPlanId(): ?int
     {
-        return $this->invoiceId;
-    }
-
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function getProvider(): ?string
-    {
-        return $this->provider;
+        return $this->planId;
     }
 
     public function getCondition(array $columnMapping, ?string $alias = null): Condition
@@ -67,15 +53,7 @@ class TransactionQueryFilter extends DateQueryFilter
         $alias = $this->getAlias($alias);
 
         if (!empty($this->invoiceId)) {
-            $condition->equals($alias . 'invoice_id', $this->invoiceId);
-        }
-
-        if (!empty($this->status)) {
-            $condition->equals($alias . 'status', $this->status);
-        }
-
-        if (!empty($this->provider)) {
-            $condition->like($alias . 'provider', $this->provider);
+            $condition->equals($alias . 'plan_id', $this->planId);
         }
 
         return $condition;
@@ -85,28 +63,7 @@ class TransactionQueryFilter extends DateQueryFilter
     {
         $arguments = parent::getConstructorArguments($request);
 
-        $invoiceId = self::toInt($request->get('invoiceId'));
-        $status = self::toInt($request->get('status'));
-        $provider = $request->get('provider');
-
-        $search = $arguments['search'] ?? null;
-        if (!empty($search)) {
-            $parts = explode(',', $search);
-            foreach ($parts as $part) {
-                $part = trim($part);
-                if (is_numeric($part)) {
-                    $status = intval($part);
-                } else {
-                    $provider = $part;
-                }
-            }
-
-            $arguments['search'] = null;
-        }
-
-        $arguments['invoiceId'] = $invoiceId;
-        $arguments['status'] = $status;
-        $arguments['provider'] = $provider;
+        $arguments['planId'] = self::toInt($request->get('planId'));
 
         return $arguments;
     }
