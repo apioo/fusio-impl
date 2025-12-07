@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Category;
+namespace Fusio\Impl\Tests\Backend\Api\Bundle;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
