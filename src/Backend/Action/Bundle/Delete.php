@@ -25,7 +25,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Bundle;
-use Fusio\Impl\Service\Category;
 use Fusio\Impl\Service\System\ContextFactory;
 
 /**
@@ -35,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Delete implements ActionInterface
+readonly class Delete implements ActionInterface
 {
-    private Bundle $bundleService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Bundle $bundleService, ContextFactory $contextFactory)
+    public function __construct(private Bundle $bundleService, private ContextFactory $contextFactory)
     {
-        $this->bundleService = $bundleService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Publish implements ActionInterface
+readonly class Publish implements ActionInterface
 {
-    private Bundle\Publisher $publisher;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Bundle\Publisher $publisher, ContextFactory $contextFactory)
+    public function __construct(private Bundle\Publisher $publisher, private ContextFactory $contextFactory)
     {
-        $this->publisher = $publisher;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

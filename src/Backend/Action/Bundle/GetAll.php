@@ -34,13 +34,10 @@ use Fusio\Impl\Backend\View;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+readonly class GetAll implements ActionInterface
 {
-    private View\Bundle $view;
-
-    public function __construct(View\Bundle $view)
+    public function __construct(private View\Bundle $view)
     {
-        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
