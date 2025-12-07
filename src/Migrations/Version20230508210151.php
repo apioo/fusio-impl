@@ -101,6 +101,11 @@ final class Version20230508210151 extends AbstractMigration
             $bundleTable->addColumn('category_id', 'integer', ['default' => 1]);
             $bundleTable->addColumn('status', 'integer');
             $bundleTable->addColumn('name', 'string', ['length' => 255]);
+            $bundleTable->addColumn('version', 'string');
+            $bundleTable->addColumn('icon', 'string');
+            $bundleTable->addColumn('summary', 'string');
+            $bundleTable->addColumn('description', 'text');
+            $bundleTable->addColumn('cost', 'integer');
             $bundleTable->addColumn('config', 'text');
             $bundleTable->addColumn('metadata', 'text', ['notnull' => false]);
             $bundleTable->setPrimaryKey(['id']);
