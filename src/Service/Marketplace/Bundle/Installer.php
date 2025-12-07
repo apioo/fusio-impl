@@ -20,8 +20,10 @@
 
 namespace Fusio\Impl\Service\Marketplace\Bundle;
 
+use Fusio\Impl\Action\Scheme;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Exception\MarketplaceException;
+use Fusio\Impl\Framework\Schema\Scheme as SchemaScheme;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Table;
@@ -202,13 +204,13 @@ readonly class Installer implements InstallerInterface
             $create = new EventCreate();
             $create->setName($eventName);
             $create->setDescription($event->getDescription());
-            $create->setSchema($event->getSchema());
+            $create->setSchema($this->resolveSchema($object, $event->getSchema()));
 
             $this->eventService->create($create, $context);
         } else {
             $update = new EventUpdate();
             $update->setDescription($event->getDescription());
-            $update->setSchema($event->getSchema());
+            $update->setSchema($this->resolveSchema($object, $event->getSchema()));
 
             $this->eventService->update('' . $existing->getId(), $update, $context);
         }
@@ -228,13 +230,13 @@ readonly class Installer implements InstallerInterface
             $create = new CronjobCreate();
             $create->setName($cronjobName);
             $create->setCron($cronjob->getCron());
-            $create->setAction($cronjob->getAction());
+            $create->setAction($this->resolveAction($object, $cronjob->getAction()));
 
             $this->cronjobService->create($create, $context);
         } else {
             $update = new CronjobUpdate();
             $update->setCron($cronjob->getCron());
-            $update->setAction($cronjob->getAction());
+            $update->setAction($this->resolveAction($object, $cronjob->getAction()));
 
             $this->cronjobService->update('' . $existing->getId(), $update, $context);
         }
@@ -253,14 +255,14 @@ readonly class Installer implements InstallerInterface
         if (!$existing instanceof Table\Generated\TriggerRow) {
             $create = new TriggerCreate();
             $create->setName($triggerName);
-            $create->setEvent($trigger->getEvent());
-            $create->setAction($trigger->getAction());
+            $create->setEvent($this->getObjectName($object, $trigger->getEvent()));
+            $create->setAction($this->resolveAction($object, $trigger->getAction()));
 
             $this->triggerService->create($create, $context);
         } else {
             $update = new TriggerUpdate();
-            $update->setEvent($trigger->getEvent());
-            $update->setAction($trigger->getAction());
+            $update->setEvent($this->getObjectName($object, $trigger->getEvent()));
+            $update->setAction($this->resolveAction($object, $trigger->getAction()));
 
             $this->triggerService->update('' . $existing->getId(), $update, $context);
         }
@@ -281,5 +283,27 @@ readonly class Installer implements InstallerInterface
         }
 
         return $result;
+    }
+
+    private function resolveAction(MarketplaceObject $object, string $actionUri): string
+    {
+        [$scheme, $value] = Scheme::split($actionUri);
+
+        if ($scheme !== Scheme::ACTION) {
+            return $actionUri;
+        }
+
+        return Scheme::ACTION->value . '://' . $this->getObjectName($object, $value);
+    }
+
+    private function resolveSchema(MarketplaceObject $object, string $schemaUri): string
+    {
+        [$scheme, $value] = SchemaScheme::split($schemaUri);
+
+        if ($scheme !== SchemaScheme::SCHEMA) {
+            return $schemaUri;
+        }
+
+        return SchemaScheme::SCHEMA->value . '://' . $this->getObjectName($object, $value);
     }
 }
