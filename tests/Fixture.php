@@ -166,6 +166,7 @@ class Fixture
         $data->addToken('Foo-App', 'Consumer', 'Foo-App/Expired', 'b41344388feed85bc362e518387fdc9c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e5be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
         $data->addTest('default', 'test.listFoo');
         $data->addTrigger('default', 'Test-Trigger', 'foo-event', 'Sql-Select-All', ['foo' => 'bar']);
+        $data->addBundle('Test-Bundle', '0.1.0', 'info', 'Test bundle', 'A test bundle', ['actions' => ['3']], 16, ['foo' => 'bar']);
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');
         $data->addPlanScope('Plan A', 'plan_scope');
