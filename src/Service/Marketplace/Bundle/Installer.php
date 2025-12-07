@@ -204,13 +204,13 @@ readonly class Installer implements InstallerInterface
             $create = new EventCreate();
             $create->setName($eventName);
             $create->setDescription($event->getDescription());
-            $create->setSchema($this->resolveSchema($object, $event->getSchema()));
+            $create->setSchema($this->resolveSchema($object, $event->getSchema() ?? throw new MarketplaceException('Provided no schema')));
 
             $this->eventService->create($create, $context);
         } else {
             $update = new EventUpdate();
             $update->setDescription($event->getDescription());
-            $update->setSchema($this->resolveSchema($object, $event->getSchema()));
+            $update->setSchema($this->resolveSchema($object, $event->getSchema() ?? throw new MarketplaceException('Provided no schema')));
 
             $this->eventService->update('' . $existing->getId(), $update, $context);
         }
@@ -230,13 +230,13 @@ readonly class Installer implements InstallerInterface
             $create = new CronjobCreate();
             $create->setName($cronjobName);
             $create->setCron($cronjob->getCron());
-            $create->setAction($this->resolveAction($object, $cronjob->getAction()));
+            $create->setAction($this->resolveAction($object, $cronjob->getAction() ?? throw new MarketplaceException('Provided no action')));
 
             $this->cronjobService->create($create, $context);
         } else {
             $update = new CronjobUpdate();
             $update->setCron($cronjob->getCron());
-            $update->setAction($this->resolveAction($object, $cronjob->getAction()));
+            $update->setAction($this->resolveAction($object, $cronjob->getAction() ?? throw new MarketplaceException('Provided no action')));
 
             $this->cronjobService->update('' . $existing->getId(), $update, $context);
         }
@@ -255,14 +255,14 @@ readonly class Installer implements InstallerInterface
         if (!$existing instanceof Table\Generated\TriggerRow) {
             $create = new TriggerCreate();
             $create->setName($triggerName);
-            $create->setEvent($this->getObjectName($object, $trigger->getEvent()));
-            $create->setAction($this->resolveAction($object, $trigger->getAction()));
+            $create->setEvent($this->getObjectName($object, $trigger->getEvent() ?? throw new MarketplaceException('Provided no event')));
+            $create->setAction($this->resolveAction($object, $trigger->getAction() ?? throw new MarketplaceException('Provided no action')));
 
             $this->triggerService->create($create, $context);
         } else {
             $update = new TriggerUpdate();
-            $update->setEvent($this->getObjectName($object, $trigger->getEvent()));
-            $update->setAction($this->resolveAction($object, $trigger->getAction()));
+            $update->setEvent($this->getObjectName($object, $trigger->getEvent() ?? throw new MarketplaceException('Provided no event')));
+            $update->setAction($this->resolveAction($object, $trigger->getAction() ?? throw new MarketplaceException('Provided no action')));
 
             $this->triggerService->update('' . $existing->getId(), $update, $context);
         }
