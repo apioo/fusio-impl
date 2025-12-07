@@ -20,23 +20,32 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
+use Fusio\Impl\Service;
 use Fusio\Marketplace\Client;
+use Sdkgen\Client\Credentials\Anonymous;
 
 /**
- * Remote
+ * ClientFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-abstract class RemoteAbstract implements RepositoryInterface
+readonly class ClientFactory
 {
-    public function __construct(private readonly ClientFactory $clientFactory)
+    public function __construct(private Service\Config $configService)
     {
     }
 
-    protected function getClient(): Client
+    public function factory(): Client
     {
-        return $this->clientFactory->factory();
+        $clientId = $this->configService->getValue('marketplace_client_id');
+        $clientSecret = $this->configService->getValue('marketplace_client_secret');
+
+        if (!empty($clientId) && !empty($clientSecret)) {
+            return Client::build($clientId, $clientSecret);
+        } else {
+            return new Client('https://api.fusio-project.org', new Anonymous());
+        }
     }
 }

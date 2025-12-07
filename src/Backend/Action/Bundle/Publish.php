@@ -18,25 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Marketplace;
+namespace Fusio\Impl\Backend\Action\Bundle;
 
-use Fusio\Marketplace\Client;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Bundle;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
- * Remote
+ * Publish
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-abstract class RemoteAbstract implements RepositoryInterface
+class Publish implements ActionInterface
 {
-    public function __construct(private readonly ClientFactory $clientFactory)
+    private Bundle\Publisher $publisher;
+    private ContextFactory $contextFactory;
+
+    public function __construct(Bundle\Publisher $publisher, ContextFactory $contextFactory)
     {
+        $this->publisher = $publisher;
+        $this->contextFactory = $contextFactory;
     }
 
-    protected function getClient(): Client
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->clientFactory->factory();
+        return $this->publisher->publish(
+            $request->get('bundle_id'),
+            $this->contextFactory->newActionContext($context)
+        );
     }
 }
