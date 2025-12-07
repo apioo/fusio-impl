@@ -57,6 +57,9 @@ class Bundle extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
                 'name' => Table\Generated\BundleTable::COLUMN_NAME,
+                'version' => Table\Generated\BundleTable::COLUMN_VERSION,
+                'icon' => Table\Generated\BundleTable::COLUMN_ICON,
+                'summary' => Table\Generated\BundleTable::COLUMN_SUMMARY,
             ]),
         ];
 
@@ -71,6 +74,10 @@ class Bundle extends ViewAbstract
             'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
             'name' => Table\Generated\BundleTable::COLUMN_NAME,
+            'version' => Table\Generated\BundleTable::COLUMN_VERSION,
+            'icon' => Table\Generated\BundleTable::COLUMN_ICON,
+            'summary' => Table\Generated\BundleTable::COLUMN_SUMMARY,
+            'description' => Table\Generated\BundleTable::COLUMN_DESCRIPTION,
             'config' => $builder->fieldJson(Table\Generated\BundleTable::COLUMN_CONFIG),
         ]);
 
