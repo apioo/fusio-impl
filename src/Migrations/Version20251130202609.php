@@ -35,8 +35,6 @@ final class Version20251130202609 extends AbstractMigration
             $bundleTable->addColumn('metadata', 'text', ['notnull' => false]);
             $bundleTable->setPrimaryKey(['id']);
             $bundleTable->addUniqueIndex(['tenant_id', 'name']);
-
-            $bundleTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'bundle_category_id');
         }
     }
 

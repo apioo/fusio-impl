@@ -614,10 +614,6 @@ final class Version20230508210151 extends AbstractMigration
             $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'app_scope_scope_id');
         }
 
-        if (isset($bundleTable)) {
-            $bundleTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'bundle_category_id');
-        }
-
         if (isset($cronjobTable)) {
             $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'cronjob_category_id');
         }
