@@ -59,6 +59,11 @@ readonly class Bundle
             $row->setTenantId($context->getTenantId());
             $row->setStatus(Table\Rate::STATUS_ACTIVE);
             $row->setName($bundle->getName() ?? throw new StatusCode\BadRequestException('Provided no bundle name'));
+            $row->setVersion($bundle->getVersion() ?? throw new StatusCode\BadRequestException('Provided no bundle version'));
+            $row->setIcon($bundle->getIcon() ?? throw new StatusCode\BadRequestException('Provided no bundle icon'));
+            $row->setSummary($bundle->getSummary() ?? throw new StatusCode\BadRequestException('Provided no bundle summary'));
+            $row->setDescription($bundle->getDescription() ?? throw new StatusCode\BadRequestException('Provided no bundle description'));
+            $row->setCost($bundle->getCost() ?? 0);
             $row->setConfig(Parser::encode($bundle->getConfig()));
             $this->bundleTable->create($row);
 
@@ -95,6 +100,11 @@ readonly class Bundle
 
             // update bundle
             $existing->setName($bundle->getName() ?? $existing->getName());
+            $existing->setVersion($bundle->getVersion() ?? $existing->getVersion());
+            $existing->setIcon($bundle->getIcon() ?? $existing->getIcon());
+            $existing->setSummary($bundle->getSummary() ?? $existing->getSummary());
+            $existing->setDescription($bundle->getDescription() ?? $existing->getDescription());
+            $existing->setCost($bundle->getCost() ?? $existing->getCost());
             $existing->setConfig($bundle->getConfig() !== null ? Parser::encode($bundle->getConfig()) : $existing->getConfig());
             $this->bundleTable->update($existing);
 
