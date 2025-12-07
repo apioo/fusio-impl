@@ -9,6 +9,11 @@ class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $tenantId = null;
     private ?int $status = null;
     private ?string $name = null;
+    private ?string $version = null;
+    private ?string $icon = null;
+    private ?string $summary = null;
+    private ?string $description = null;
+    private ?int $cost = null;
     private ?string $config = null;
     private ?string $metadata = null;
     public function setId(int $id): void
@@ -51,6 +56,46 @@ class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
+    public function setVersion(string $version): void
+    {
+        $this->version = $version;
+    }
+    public function getVersion(): string
+    {
+        return $this->version ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "version" was provided');
+    }
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
+    }
+    public function getIcon(): string
+    {
+        return $this->icon ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "icon" was provided');
+    }
+    public function setSummary(string $summary): void
+    {
+        $this->summary = $summary;
+    }
+    public function getSummary(): string
+    {
+        return $this->summary ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "summary" was provided');
+    }
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+    public function getDescription(): string
+    {
+        return $this->description ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "description" was provided');
+    }
+    public function setCost(int $cost): void
+    {
+        $this->cost = $cost;
+    }
+    public function getCost(): int
+    {
+        return $this->cost ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "cost" was provided');
+    }
     public function setConfig(string $config): void
     {
         $this->config = $config;
@@ -76,6 +121,11 @@ class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
         $record->put('name', $this->name);
+        $record->put('version', $this->version);
+        $record->put('icon', $this->icon);
+        $record->put('summary', $this->summary);
+        $record->put('description', $this->description);
+        $record->put('cost', $this->cost);
         $record->put('config', $this->config);
         $record->put('metadata', $this->metadata);
         return $record;
@@ -92,6 +142,11 @@ class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
+        $row->version = isset($data['version']) && is_string($data['version']) ? $data['version'] : null;
+        $row->icon = isset($data['icon']) && is_string($data['icon']) ? $data['icon'] : null;
+        $row->summary = isset($data['summary']) && is_string($data['summary']) ? $data['summary'] : null;
+        $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
+        $row->cost = isset($data['cost']) && is_int($data['cost']) ? $data['cost'] : null;
         $row->config = isset($data['config']) && is_string($data['config']) ? $data['config'] : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;
         return $row;
