@@ -52,7 +52,7 @@ class TransactionQueryFilter extends DateQueryFilter
         $condition = parent::getCondition($columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
-        if (!empty($this->invoiceId)) {
+        if (!empty($this->planId)) {
             $condition->equals($alias . 'plan_id', $this->planId);
         }
 
