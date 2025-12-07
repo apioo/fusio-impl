@@ -25,7 +25,6 @@ use Fusio\Adapter\Http\Action\HttpSenderAbstract;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;
-use Fusio\Engine\Generator\Setup;
 use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Schema\SchemaName;
@@ -33,6 +32,8 @@ use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\OperationCreate;
 use PSX\Api\Util\Inflection;
+use RuntimeException;
+use stdClass;
 
 /**
  * Insomnia
@@ -70,36 +71,36 @@ class Insomnia implements ProviderInterface
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Insomnia JSON export'));
     }
 
-    private function parse(string $import): \stdClass
+    private function parse(string $import): stdClass
     {
         $data = json_decode($import);
-        if (!$data instanceof \stdClass) {
-            throw new \RuntimeException('Provided invalid data');
+        if (!$data instanceof stdClass) {
+            throw new RuntimeException('Provided invalid data');
         }
 
         return $data;
     }
 
-    private function buildOperation(\stdClass $resource, array $env, SetupInterface $setup, string $index): void
+    private function buildOperation(stdClass $resource, array $env, SetupInterface $setup, string $index): void
     {
         $name = $resource->name ?? null;
         if (empty($name)) {
-            throw new \RuntimeException('No name provided for resource ' . $index);
+            throw new RuntimeException('No name provided for resource ' . $index);
         }
 
         $url = $resource->url ?? null;
         if (empty($url)) {
-            throw new \RuntimeException('No url provided for resource ' . $index);
+            throw new RuntimeException('No url provided for resource ' . $index);
         }
 
         $path = $this->normalizePath($resource);
         if (empty($path)) {
-            throw new \RuntimeException('No path provided for resource ' . $index);
+            throw new RuntimeException('No path provided for resource ' . $index);
         }
 
         $method = $resource->method ?? null;
         if (empty($method)) {
-            throw new \RuntimeException('No path provided for resource ' . $index);
+            throw new RuntimeException('No path provided for resource ' . $index);
         }
 
         foreach ($env as $key => $value) {
@@ -148,11 +149,11 @@ class Insomnia implements ProviderInterface
         return implode($separator, array_filter($parts));
     }
 
-    private function normalizePath(\stdClass $resource): string
+    private function normalizePath(stdClass $resource): string
     {
         $path = $resource->name ?? null;
         if (empty($path)) {
-            throw new \RuntimeException('Could not find path');
+            throw new RuntimeException('Could not find path');
         }
 
         return Inflection::convertPlaceholderToColon($path);
@@ -185,7 +186,7 @@ class Insomnia implements ProviderInterface
                 continue;
             }
 
-            if ($resource->data instanceof \stdClass) {
+            if ($resource->data instanceof stdClass) {
                 $data = [];
                 foreach ($resource->data as $key => $value) {
                     $data[$key] = $value;

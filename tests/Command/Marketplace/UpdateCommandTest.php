@@ -48,7 +48,6 @@ class UpdateCommandTest extends DbTestCase
 
         $command = new UpgradeCommand(
             Environment::getService(Installer::class),
-            Environment::getService(Factory::class),
             Environment::getService(ContextFactory::class)
         );
 
@@ -76,7 +75,6 @@ class UpdateCommandTest extends DbTestCase
 
         $command = new UpgradeCommand(
             Environment::getService(Installer::class),
-            Environment::getService(Factory::class),
             Environment::getService(ContextFactory::class)
         );
 

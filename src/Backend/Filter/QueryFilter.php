@@ -110,6 +110,7 @@ class QueryFilter
 
     public static function from(RequestInterface $request): static
     {
+        /** @phpstan-ignore new.static */
         return new static(...static::getConstructorArguments($request));
     }
 

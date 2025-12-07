@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Table\App;
 
-use Fusio\Impl\Table\Generated;
 use Fusio\Impl\Table;
+use Fusio\Impl\Table\Generated;
 use PSX\Sql\Condition;
 
 /**

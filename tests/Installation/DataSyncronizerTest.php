@@ -43,7 +43,6 @@ class DataSyncronizerTest extends DbTestCase
     {
         $config = $this->getConfig('info_title');
         $operation = $this->getOperation('backend.action.execute');
-        //$action = $this->getAction('Inspect-Action');
         $schema = $this->getSchema('Passthru');
         $event = $this->getEvent('fusio.app.create');
         $cronjob = $this->getCronjob('Renew_Token');
@@ -53,7 +52,6 @@ class DataSyncronizerTest extends DbTestCase
 
         $this->assertEquals($config, $this->getConfig('info_title'));
         $this->assertEquals($operation, $this->getOperation('backend.action.execute'));
-        //$this->assertEquals($action, $this->getAction('Inspect-Action'));
         $this->assertEquals($schema, $this->getSchema('Passthru'));
         $this->assertEquals($event, $this->getEvent('fusio.app.create'));
         $this->assertEquals($cronjob, $this->getCronjob('Renew_Token'));
@@ -86,19 +84,6 @@ class DataSyncronizerTest extends DbTestCase
         unset($operation['id']);
 
         return $operation;
-    }
-
-    private function getAction(string $name): array
-    {
-        $action = $this->connection->fetchAssociative('SELECT * FROM fusio_action WHERE name = :name', ['name' => $name]);
-        if (empty($action)) {
-            throw new \RuntimeException('Could not find action: ' . $name);
-        }
-
-        $this->connection->delete('fusio_action', ['id' => $action['id']]);
-        unset($action['id']);
-
-        return $action;
     }
 
     private function getSchema(string $name): array

@@ -36,6 +36,8 @@ use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
 use PSX\Schema\Type\ReferencePropertyType;
+use stdClass;
+use function json_decode;
 
 /**
  * Service which builds a specification based on the schemas defined at the database
@@ -127,8 +129,8 @@ class SpecificationBuilder
 
         $rawParameters = $row->getParameters();
         if (!empty($rawParameters)) {
-            $parameters = \json_decode($rawParameters);
-            if ($parameters instanceof \stdClass) {
+            $parameters = json_decode($rawParameters);
+            if ($parameters instanceof stdClass) {
                 $this->buildQueryParametersFromJson($arguments, $parameters);
             }
         }
@@ -138,14 +140,14 @@ class SpecificationBuilder
 
     private function buildThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
     {
-        $throws = \json_decode($row->getThrows() ?? '');
-        if (!$throws instanceof \stdClass) {
+        $throws = json_decode($row->getThrows() ?? '');
+        if (!$throws instanceof stdClass) {
             return [];
         }
 
         $result = [];
-        foreach ($throws as $httpCode => $throw) {
-            $result[] = new Operation\Response($httpCode, $this->buildSchema($throw, $definitions));
+        foreach (get_object_vars($throws) as $httpCode => $throw) {
+            $result[] = new Operation\Response((int) $httpCode, $this->buildSchema($throw, $definitions));
         }
 
         return $result;
@@ -159,10 +161,10 @@ class SpecificationBuilder
         }
     }
 
-    private function buildQueryParametersFromJson(Operation\Arguments $arguments, \stdClass $parameters): void
+    private function buildQueryParametersFromJson(Operation\Arguments $arguments, stdClass $parameters): void
     {
-        foreach ($parameters as $name => $schema) {
-            if (!$schema instanceof \stdClass) {
+        foreach (get_object_vars($parameters) as $name => $schema) {
+            if (!$schema instanceof stdClass) {
                 continue;
             }
 

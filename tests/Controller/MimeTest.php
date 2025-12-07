@@ -107,6 +107,7 @@ JSON;
     {
         $this->markTestSkipped();
 
+        /** @phpstan-ignore deadCode.unreachable */
         $_FILES['foo'] = [
             'name' => 'bar.txt',
             'type' => 'text/plain',

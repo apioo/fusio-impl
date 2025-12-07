@@ -76,7 +76,7 @@ readonly class Prompts
         $arguments = $params->arguments;
 
         if ($name === 'backend-action-create') {
-            $logic = $arguments?->logic ?? '';
+            $logic = $arguments->logic ?? '';
 
             $text = 'Use the "backend-action-create" tool and create a new backend action.';
             $text.= 'Use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal" and add a key "code" to the config property and for the value you need to transform the following logic into PHP code:';
@@ -129,7 +129,7 @@ PHP;
 
             return $this->newPromptResult($text);
         } elseif ($name === 'backend-schema-create') {
-            $logic = $arguments?->logic ?? '';
+            $logic = $arguments->logic ?? '';
 
             $text = 'Use the "backend-schema-create" tool and create a new backend schema.';
             $text.= 'As source property you need to transform the following logic into a TypeSchema specification:';

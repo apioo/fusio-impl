@@ -2660,14 +2660,4 @@ class NewInstallation
         $lines = array_map('rtrim', $lines);
         return implode("\n", $lines);
     }
-
-    private static function getContainer(): ContainerInterface
-    {
-        global $container;
-        if ($container instanceof ContainerInterface) {
-            return $container;
-        }
-
-        throw new \RuntimeException('Could not detect global container');
-    }
 }

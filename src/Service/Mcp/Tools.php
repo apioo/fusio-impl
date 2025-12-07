@@ -52,6 +52,7 @@ use PSX\Schema\Type\Factory\PropertyTypeFactory;
 use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
+use stdClass;
 
 /**
  * Tools
@@ -106,7 +107,7 @@ readonly class Tools
         $operations = $this->operationTable->findAll($condition, $startIndex, $count, Table\Generated\OperationColumn::ID, OrderBy::DESC);
         foreach ($operations as $operation) {
             $inputSchema = $this->buildSchema($operation);
-            if ($inputSchema === null) {
+            if (count($inputSchema) === 0) {
                 continue;
             }
 
@@ -170,7 +171,7 @@ readonly class Tools
                     $data = Parser::decode(Parser::encode($rawPayload));
 
                     $payload = $this->objectMapper->read($data, SchemaSource::fromString($incoming));
-                } elseif ($rawPayload instanceof \stdClass) {
+                } elseif ($rawPayload instanceof stdClass) {
                     $payload = $this->objectMapper->read($rawPayload, SchemaSource::fromString($incoming));
                 } else {
                     $payload = new Record();
@@ -201,7 +202,7 @@ readonly class Tools
         }
     }
 
-    private function buildSchema(Table\Generated\OperationRow $operation): ?array
+    private function buildSchema(Table\Generated\OperationRow $operation): array
     {
         $rootType = new StructDefinitionType();
         $definitions = new Definitions();
@@ -235,12 +236,12 @@ readonly class Tools
         }
 
         $parameters = Parser::decode($rawParameters);
-        if (!$parameters instanceof \stdClass) {
+        if (!$parameters instanceof stdClass) {
             return;
         }
 
-        foreach ($parameters as $name => $schema) {
-            if (!$schema instanceof \stdClass) {
+        foreach (get_object_vars($parameters) as $name => $schema) {
+            if (!$schema instanceof stdClass) {
                 continue;
             }
 

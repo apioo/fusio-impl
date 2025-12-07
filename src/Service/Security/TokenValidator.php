@@ -70,7 +70,7 @@ class TokenValidator
             }
 
             $parts = explode(' ', $authorization, 2);
-            $type = $parts[0] ?? null;
+            $type = $parts[0];
             $accessToken = $parts[1] ?? null;
 
             if (empty($type)) {

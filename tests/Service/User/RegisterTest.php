@@ -185,8 +185,8 @@ class RegisterTest extends DbTestCase
         return $mailer;
     }
 
-    private function getConfigId(string $name): int
+    private function getConfigId(string $name): string
     {
-        return $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
+        return (string) $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
     }
 }

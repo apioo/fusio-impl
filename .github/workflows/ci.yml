@@ -3,8 +3,8 @@ on:
   - pull_request
   - push
 jobs:
-  psalm:
-    name: Psalm
+  phpstan:
+    name: PHPStan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,10 +16,10 @@ jobs:
           coverage: none
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
-      - name: Run Psalm
-        run: vendor/bin/psalm --no-progress --show-info=false --stats
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse
   phpunit:
-    needs: psalm
+    needs: phpstan
     name: "PHPUnit (PHP: ${{ matrix.php-version }}-${{ matrix.connection }})"
     runs-on: ubuntu-latest
     strategy:

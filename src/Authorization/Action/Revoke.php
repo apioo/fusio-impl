@@ -80,7 +80,7 @@ class Revoke implements ActionInterface
     {
         $header = $requestContext->getRequest()->getHeader('Authorization');
         $parts  = explode(' ', $header, 2);
-        $type   = $parts[0] ?? null;
+        $type   = $parts[0];
         $token  = $parts[1] ?? null;
 
         if ($type !== 'Bearer') {

@@ -41,9 +41,8 @@ class UpgradeCommand extends Command
     use TypeSafeTrait;
 
     public function __construct(
-        private Service\Marketplace\Installer $installer,
-        private Service\Marketplace\Factory $factory,
-        private Service\System\ContextFactory $contextFactory
+        private readonly Service\Marketplace\Installer $installer,
+        private readonly Service\System\ContextFactory $contextFactory
     ) {
         parent::__construct();
     }
@@ -73,7 +72,7 @@ class UpgradeCommand extends Command
 
         try {
             $parts = explode('/', $name ?? '');
-            $user = $parts[0] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
+            $user = $parts[0];
             $name = $parts[1] ?? throw new \RuntimeException('Provided an invalid name must be in the format [user]/[name]');
 
             $object = $this->installer->upgrade($type, $user, $name, $this->contextFactory->newCommandContext($input));

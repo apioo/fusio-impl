@@ -43,6 +43,7 @@ class GenerateTableTest extends DbTestCase
     {
         $this->markTestSkipped();
 
+        /** @phpstan-ignore deadCode.unreachable */
         $target = __DIR__ . '/../../src/Table/Generated';
         $namespace = 'Fusio\Impl\Table\Generated';
 

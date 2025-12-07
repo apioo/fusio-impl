@@ -154,25 +154,6 @@ class OpenAPI implements ProviderInterface
         $setup->addOperation($create);
     }
 
-    private function buildName(array $parts, string $separator = '.'): string
-    {
-        $parts = array_map(function($parts) use ($separator) {
-            $parts = array_filter(explode('/', $parts));
-            $result = [];
-            foreach ($parts as $part) {
-                $result[] = preg_replace('/[^0-9A-Za-z_-]/', '_', $part);
-            }
-            return implode($separator, $result);
-        }, $parts);
-
-        return implode($separator, array_filter($parts));
-    }
-
-    private function buildPrefixFromPath($path): string
-    {
-        return implode('-', array_filter(explode('/', $path)));
-    }
-
     private function normalizePath($path): string
     {
         $path = '/' . implode('/', array_filter(explode('/', $path)));
@@ -247,7 +228,8 @@ class OpenAPI implements ProviderInterface
         foreach ($throws as $code => $response) {
             $result->put($code, $this->getRef($response->getSchema()));
         }
-        return null;
+
+        return $result;
     }
 
     private function getRef(TypeInterface|ContentType $schema): string

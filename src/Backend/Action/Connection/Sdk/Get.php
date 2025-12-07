@@ -28,6 +28,7 @@ use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 use PSX\Schema\SchemaManagerInterface;
+use stdClass;
 use TypeAPI\Editor;
 
 /**
@@ -63,21 +64,21 @@ readonly class Get extends SdkAbstract
         }
 
         $data = Parser::decode($content);
-        if (!$data instanceof \stdClass) {
+        if (!$data instanceof stdClass) {
             throw new StatusCode\InternalServerErrorException('Could not read lock file');
         }
 
         $specification = $this->getFirst($data);
-        if (!$specification instanceof \stdClass) {
+        if (!$specification instanceof stdClass) {
             throw new StatusCode\InternalServerErrorException('Found no specification');
         }
 
         return (new Editor\Parser($this->schemaManager))->parse($specification);
     }
 
-    private function getFirst(\stdClass $data)
+    private function getFirst(stdClass $data)
     {
-        foreach ($data as $value) {
+        foreach (get_object_vars($data) as $value) {
             return $value;
         }
 

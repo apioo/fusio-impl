@@ -436,18 +436,4 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
-
-    private function getExpireTimes($timestamps = true)
-    {
-        $expireTime = strtotime('+2 days');
-        $timeRange  = [$expireTime - 1, $expireTime];
-
-        if (!$timestamps) {
-            $timeRange = array_map(function ($value) {
-                return date('Y-m-d H:i:s', $value);
-            }, $timeRange);
-        }
-
-        return $timeRange;
-    }
 }

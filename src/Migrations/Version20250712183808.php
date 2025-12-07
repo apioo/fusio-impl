@@ -32,7 +32,7 @@ final class Version20250712183808 extends AbstractMigration
         }
 
         $appCodeTable = $schema->getTable('fusio_app_code');
-        if ($appCodeTable instanceof Table && $appCodeTable->hasColumn('scope')) {
+        if ($appCodeTable->hasColumn('scope')) {
             $appCodeTable->getColumn('scope')->setLength(1023);
         }
     }

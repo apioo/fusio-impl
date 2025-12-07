@@ -43,9 +43,9 @@ return [
         \stdClass::class,
     ],
     'user' => [
-        \Fusio\Impl\Provider\User\Facebook::class,
-        \Fusio\Impl\Provider\User\Github::class,
-        \Fusio\Impl\Provider\User\Google::class,
+        \Fusio\Impl\Provider\Identity\Facebook::class,
+        \Fusio\Impl\Provider\Identity\Github::class,
+        \Fusio\Impl\Provider\Identity\Google::class,
         \stdClass::class,
     ],
     'generator' => [

@@ -52,6 +52,7 @@ readonly class Executor
 
     public function executeDaemon(): void
     {
+        /** @phpstan-ignore while.alwaysTrue */
         while (true) {
             $this->execute();
             sleep(60);

@@ -25,7 +25,7 @@ use Fusio\Impl\Service\Token;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
-use PSX\Oauth2\AccessToken;
+use PSX\OAuth2\AccessToken;
 
 /**
  * TokenTest

@@ -34,7 +34,7 @@ use PSX\Json\Parser;
  */
 class SqlTableTest extends DbTestCase
 {
-    private ?int $id;
+    private ?int $id = null;
 
     protected function setUp(): void
     {
