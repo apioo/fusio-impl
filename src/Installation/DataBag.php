@@ -67,6 +67,7 @@ class DataBag
             'fusio_test' => [],
             'fusio_firewall' => [],
             'fusio_form' => [],
+            'fusio_bundle' => [],
             'fusio_cronjob_error' => [],
             'fusio_webhook' => [],
             'fusio_webhook_response' => [],
@@ -259,6 +260,22 @@ class DataBag
             'message' => $message,
             'content' => '{"foo": "bar"}',
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addBundle(string $name, string $version, string $icon, string $summary, string $description, array $config, int $cost, ?array $metadata = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_bundle'][$name] = [
+            'tenant_id' => $tenantId,
+            'status' => Table\Bundle::STATUS_ACTIVE,
+            'name' => $name,
+            'version' => $version,
+            'icon' => $icon,
+            'summary' => $summary,
+            'description' => $description,
+            'cost' => $cost,
+            'config' => json_encode($config),
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
         ];
     }
 
