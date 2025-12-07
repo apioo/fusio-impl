@@ -24,7 +24,6 @@ final class Version20251130202609 extends AbstractMigration
             $bundleTable = $schema->createTable('fusio_bundle');
             $bundleTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $bundleTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
-            $bundleTable->addColumn('category_id', 'integer', ['default' => 1]);
             $bundleTable->addColumn('status', 'integer');
             $bundleTable->addColumn('name', 'string', ['length' => 255]);
             $bundleTable->addColumn('version', 'string');
