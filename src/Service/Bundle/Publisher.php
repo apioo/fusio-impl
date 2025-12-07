@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Marketplace\Client;
 use Fusio\Marketplace\MarketplaceBundleAction;
+use Fusio\Marketplace\MarketplaceBundleActionConfig;
 use Fusio\Marketplace\MarketplaceBundleConfig;
 use Fusio\Marketplace\MarketplaceBundleCreate;
 use Fusio\Marketplace\MarketplaceBundleCronjob;
@@ -131,10 +132,15 @@ readonly class Publisher
                 continue;
             }
 
+            $config = Parser::decode($actionRow->getConfig());
+            if (!$config instanceof \stdClass) {
+                continue;
+            }
+
             $action = new MarketplaceBundleAction();
             $action->setName($actionRow->getName());
             $action->setClass($actionRow->getClass());
-            $action->setConfig($actionRow->getConfig());
+            $action->setConfig(MarketplaceBundleActionConfig::fromObject($config));
 
             $result[] = $action;
         }
