@@ -123,6 +123,9 @@ readonly class Publisher
         return $result;
     }
 
+    /**
+     * @return array<MarketplaceBundleAction>
+     */
     private function buildActions(array $actionIds, UserContext $context): array
     {
         $result = [];
@@ -153,6 +156,9 @@ readonly class Publisher
         return $result;
     }
 
+    /**
+     * @return array<MarketplaceBundleSchema>
+     */
     private function buildSchemas(array $schemaIds, UserContext $context): array
     {
         $result = [];
@@ -182,6 +188,9 @@ readonly class Publisher
         return $result;
     }
 
+    /**
+     * @return array<MarketplaceBundleEvent>
+     */
     private function buildEvents(array $eventIds, UserContext $context): array
     {
         $result = [];
@@ -202,6 +211,9 @@ readonly class Publisher
         return $result;
     }
 
+    /**
+     * @return array<MarketplaceBundleCronjob>
+     */
     private function buildCronjobs(array $cronjobIds, UserContext $context): array
     {
         $result = [];
@@ -222,6 +234,9 @@ readonly class Publisher
         return $result;
     }
 
+    /**
+     * @return array<MarketplaceBundleTrigger>
+     */
     private function buildTriggers(array $triggerIds, UserContext $context): array
     {
         $result = [];
