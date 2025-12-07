@@ -36,28 +36,22 @@ class TransactionQueryFilterTest extends FilterTestCase
     public function testCreate()
     {
         $filter = TransactionQueryFilter::from($this->createRequest([
-            'from'      => '2015-08-20',
-            'to'        => '2015-08-30',
-            'invoiceId' => 1,
-            'status'    => 1,
-            'provider'  => 'Paypal',
+            'from'   => '2015-08-20',
+            'to'     => '2015-08-30',
+            'planId' => 1,
         ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getInvoiceId());
-        $this->assertEquals(1, $filter->getStatus());
-        $this->assertEquals('Paypal', $filter->getProvider());
+        $this->assertEquals(1, $filter->getPlanId());
 
         $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'insert_date']);
 
-        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND invoice_id = ? AND status = ? AND provider LIKE ?)', $condition->getStatement());
+        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND plan_id = ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
             1,
-            1,
-            'Paypal',
         ], $condition->getValues());
     }
 }
