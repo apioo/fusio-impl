@@ -11971,6 +11971,26 @@
           "description": "Unique name of the object",
           "type": "string"
         },
+        "version": {
+          "description": "Version of this bundle",
+          "type": "string"
+        },
+        "icon": {
+          "description": "Icon to represent this bundle",
+          "type": "string"
+        },
+        "summary": {
+          "description": "Short summary which explains the use case for this bundle",
+          "type": "string"
+        },
+        "description": {
+          "description": "Long description how to use this bundle may also contains markdown syntax",
+          "type": "string"
+        },
+        "cost": {
+          "description": "Optional a cost for this bundle",
+          "type": "integer"
+        },
         "config": {
           "description": "The bundle configuration",
           "type": "reference",

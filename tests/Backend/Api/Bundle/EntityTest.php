@@ -144,8 +144,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successfully deleted",
-    "id": "2"
+    "message": "Bundle successfully deleted",
+    "id": "1"
 }
 JSON;
 
@@ -155,7 +155,7 @@ JSON;
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
-            ->from('fusio_category')
+            ->from('fusio_bundle')
             ->where('id = :id')
             ->getSQL();
 
