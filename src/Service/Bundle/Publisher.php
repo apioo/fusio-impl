@@ -132,7 +132,12 @@ readonly class Publisher
                 continue;
             }
 
-            $config = Parser::decode($actionRow->getConfig());
+            $rawConfig = $actionRow->getConfig();
+            if (empty($rawConfig)) {
+                continue;
+            }
+
+            $config = Parser::decode($rawConfig);
             if (!$config instanceof \stdClass) {
                 continue;
             }
@@ -157,7 +162,12 @@ readonly class Publisher
                 continue;
             }
 
-            $source = Parser::decode($schemaRow->getSource());
+            $rawSource = $schemaRow->getSource();
+            if (empty($rawSource)) {
+                continue;
+            }
+
+            $source = Parser::decode($rawSource);
             if (!$source instanceof \stdClass) {
                 continue;
             }
