@@ -67,6 +67,10 @@ readonly class Publisher
             throw new StatusCode\NotFoundException('Provided bundle id does not exist');
         }
 
+        if (!$this->clientFactory->isConfigured()) {
+            throw new StatusCode\InternalServerErrorException('Please configure your marketplace credentials under System / Config in order to publish a bundle. If you have no credentials you can register an account at: https://www.fusio-project.org/marketplace');
+        }
+
         try {
             $client = $this->clientFactory->factory();
 

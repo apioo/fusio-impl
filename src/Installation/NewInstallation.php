@@ -1210,6 +1210,16 @@ class NewInstallation
                     eventName: 'fusio.bundle.delete',
                     description: 'Deletes an existing bundle',
                 ),
+                'bundle.publish' => new Operation(
+                    action: Backend\Action\Bundle\Publish::class,
+                    httpMethod: 'POST',
+                    httpPath: '/bundle/$bundle_id<[0-9]+|^~>/publish',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    eventName: 'fusio.bundle.publish',
+                    description: 'Publish an existing bundle to the marketplace',
+                ),
                 'page.getAll' => new Operation(
                     action: Backend\Action\Page\GetAll::class,
                     httpMethod: 'GET',

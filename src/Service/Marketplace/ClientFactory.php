@@ -37,6 +37,14 @@ readonly class ClientFactory
     {
     }
 
+    public function isConfigured(): bool
+    {
+        $clientId = $this->configService->getValue('marketplace_client_id');
+        $clientSecret = $this->configService->getValue('marketplace_client_secret');
+
+        return !empty($clientId) && !empty($clientSecret);
+    }
+
     public function factory(): Client
     {
         $clientId = $this->configService->getValue('marketplace_client_id');
