@@ -1133,6 +1133,43 @@
         "bundle"
       ]
     },
+    "backend.bundle.publish": {
+      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>/publish",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "bundle_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Publish an existing bundle to the marketplace",
+      "stability": 2,
+      "security": [
+        "backend.bundle"
+      ],
+      "authorization": true,
+      "tags": [
+        "bundle"
+      ]
+    },
     "backend.bundle.update": {
       "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
       "method": "PUT",
