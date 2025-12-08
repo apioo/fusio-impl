@@ -23,7 +23,6 @@ namespace Fusio\Impl\Service\Bundle;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Marketplace\Client;
 use Fusio\Marketplace\MarketplaceBundleAction;
 use Fusio\Marketplace\MarketplaceBundleActionConfig;
 use Fusio\Marketplace\MarketplaceBundleConfig;
