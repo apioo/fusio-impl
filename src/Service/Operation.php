@@ -147,7 +147,11 @@ readonly class Operation
                 if ($parameters !== null) {
                     $existing->setParameters($this->wrapParameters($parameters));
                 }
-                $existing->setIncoming(SchemaScheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
+                if (in_array($existing->getHttpMethod(), ['POST', 'PUT', 'PATCH'], true)) {
+                    $existing->setIncoming(SchemaScheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
+                } else {
+                    $existing->setIncoming(null);
+                }
                 $existing->setOutgoing(SchemaScheme::wrap($operation->getOutgoing() ?? $existing->getOutgoing()));
                 $throws = $operation->getThrows();
                 if ($throws !== null) {
