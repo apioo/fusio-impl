@@ -88,7 +88,6 @@ readonly class GraphQL
             }
         };
 
-        /** @psalm-suppress ImplicitToStringCast */
         $schema = BuildSchema::build($document, $typeConfigDecorator, ['assumeValidSDL' => true]);
 
         $config = ServerConfig::create();

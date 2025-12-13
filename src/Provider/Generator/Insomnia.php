@@ -188,7 +188,7 @@ class Insomnia implements ProviderInterface
 
             if ($resource->data instanceof stdClass) {
                 $data = [];
-                foreach ($resource->data as $key => $value) {
+                foreach (get_object_vars($resource->data) as $key => $value) {
                     $data[$key] = $value;
                 }
 

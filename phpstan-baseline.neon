@@ -1,36 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Argument of an invalid type stdClass supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Provider/Generator/Insomnia.php
-
-		-
-			message: '#^Parameter \#1 \$array of function rsort contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: src/Provider/Generator/Insomnia.php
-
-		-
-			message: '#^Argument of an invalid type PSX\\Api\\Operation\\Arguments supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 2
-			path: src/Provider/Generator/OpenAPI.php
-
-		-
-			message: '#^Method Fusio\\Impl\\Provider\\Generator\\Postman\:\:getParameters\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/Provider/Generator/Postman.php
-
-		-
-			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
-			identifier: nullCoalesce.offset
-			count: 1
-			path: src/Service/Marketplace/Installer.php
-
-		-
 			message: '#^Call to an undefined method PSX\\Sql\\ViewInterface\:\:findSubScopes\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -77,9 +47,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: tests/DbTestCase.php
-
-		-
-			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
-			identifier: method.alreadyNarrowedType
-			count: 1
-			path: tests/Service/User/ValidatorTest.php

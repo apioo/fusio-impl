@@ -168,7 +168,7 @@ class OpenAPI implements ProviderInterface
         }
 
         $parameters = new OperationParameters();
-        foreach ($operation->getArguments() as $name => $argument) {
+        foreach ($operation->getArguments()->getAll() as $name => $argument) {
             /** @var ArgumentInterface $argument */
             if ($argument->getIn() !== ArgumentInterface::IN_QUERY) {
                 continue;
@@ -200,7 +200,7 @@ class OpenAPI implements ProviderInterface
 
     private function getIncoming(OperationInterface $operation): ?string
     {
-        foreach ($operation->getArguments() as $argument) {
+        foreach ($operation->getArguments()->getAll() as $argument) {
             /** @var ArgumentInterface $argument */
             if ($argument->getIn() !== ArgumentInterface::IN_BODY) {
                 continue;

@@ -41,7 +41,7 @@ class ValidatorTest extends TestCase
         $validator = Environment::getService(Validator::class);
         $validator->assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
 
-        $this->assertTrue(true);
+        $this->assertTrue(strlen($password) > $minLength);
     }
 
     #[DataProvider('assertProviderFail')]

@@ -33,6 +33,7 @@ use Fusio\Model\Backend\OperationCreate;
 use Fusio\Model\Backend\OperationParameters;
 use Fusio\Model\Backend\OperationSchema;
 use PSX\Api\Util\Inflection;
+use stdClass;
 
 /**
  * Postman
@@ -77,7 +78,7 @@ class Postman implements ProviderInterface
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Postman JSON export'));
     }
 
-    private function walk(\stdClass $item, SetupInterface $setup, array &$resources)
+    private function walk(stdClass $item, SetupInterface $setup, array &$resources)
     {
         if (isset($item->item) && is_array($item->item)) {
             foreach ($item->item as $child) {
@@ -85,7 +86,7 @@ class Postman implements ProviderInterface
             }
         }
 
-        if (isset($item->request) && $item->request instanceof \stdClass) {
+        if (isset($item->request) && $item->request instanceof stdClass) {
             $path = $this->normalizePath($item);
             if (!isset($resources[$path])) {
                 $resources[$path] = [];
@@ -110,17 +111,17 @@ class Postman implements ProviderInterface
         return $result;
     }
 
-    private function parse(string $import): \stdClass
+    private function parse(string $import): stdClass
     {
         $data = json_decode($import);
-        if (!$data instanceof \stdClass) {
+        if (!$data instanceof stdClass) {
             throw new \RuntimeException('Provided invalid data');
         }
 
         return $data;
     }
 
-    private function buildOperation(string $method, string $path, \stdClass $item, SetupInterface $setup, array $env): void
+    private function buildOperation(string $method, string $path, stdClass $item, SetupInterface $setup, array $env): void
     {
         $name = $item->name ?? null;
         if (empty($name)) {
@@ -176,7 +177,7 @@ class Postman implements ProviderInterface
         return implode('_', array_filter($result));
     }
 
-    private function normalizePath(\stdClass $item): string
+    private function normalizePath(stdClass $item): string
     {
         $path = $item->request->url->path ?? null;
         if (empty($path)) {
@@ -186,7 +187,7 @@ class Postman implements ProviderInterface
         return '/' . Inflection::convertPlaceholderToColon(implode('/', $path));
     }
 
-    private function getParameters(array $query): ?OperationParameters
+    private function getParameters(array $query): OperationParameters
     {
         $result = new OperationParameters();
         foreach ($query as $parameter) {
@@ -207,7 +208,7 @@ class Postman implements ProviderInterface
         return $result;
     }
 
-    private function getEndpointUrl(\stdClass $item, array $env): string
+    private function getEndpointUrl(stdClass $item, array $env): string
     {
         $host = $item->request->url->host ?? null;
         $path = $item->request->url->path ?? null;
