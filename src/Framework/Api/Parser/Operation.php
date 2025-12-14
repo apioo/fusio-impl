@@ -23,6 +23,7 @@ namespace Fusio\Impl\Framework\Api\Parser;
 use Fusio\Impl\Service\Operation\SpecificationBuilder;
 use PSX\Api\ParserInterface;
 use PSX\Api\SpecificationInterface;
+use PSX\Schema\Parser\ContextInterface;
 
 /**
  * Operation
@@ -40,7 +41,7 @@ class Operation implements ParserInterface
         $this->builder = $builder;
     }
 
-    public function parse(string $schema): SpecificationInterface
+    public function parse(string $schema, ?ContextInterface $context = null): SpecificationInterface
     {
         return $this->builder->build((int) $schema);
     }
