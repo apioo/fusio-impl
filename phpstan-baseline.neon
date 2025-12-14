@@ -1,42 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to an undefined method PSX\\Sql\\ViewInterface\:\:findSubScopes\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Table/App/Scope.php
-
-		-
-			message: '#^Call to an undefined method PSX\\Sql\\ViewInterface\:\:getPlanId\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Table/App/Scope.php
-
-		-
-			message: '#^Call to an undefined method PSX\\Sql\\ViewInterface\:\:getUserId\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Table/App/Scope.php
-
-		-
-			message: '#^Parameter \#1 \$tableName of method PSX\\Sql\\TableAbstract\<Fusio\\Impl\\Table\\Generated\\AppScopeRow\>\:\:getTable\(\) expects class\-string\<Fusio\\Impl\\Table\\Generated\\AppScopeRow\>, string given\.$#'
-			identifier: argument.type
-			count: 3
-			path: src/Table/App/Scope.php
-
-		-
-			message: '#^Call to an undefined method PSX\\Sql\\ViewInterface\:\:getAvailableScopes\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Table/Scope.php
-
-		-
-			message: '#^Parameter \#1 \$tableName of method PSX\\Sql\\TableAbstract\<Fusio\\Impl\\Table\\Generated\\ScopeRow\>\:\:getTable\(\) expects class\-string\<Fusio\\Impl\\Table\\Generated\\ScopeRow\>, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Table/Scope.php
-
-		-
 			message: '#^Call to method clear\(\) on an unknown class test_connector\.$#'
 			identifier: class.notFound
 			count: 1
