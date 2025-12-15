@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Backend\Filter;
 
+use DateTimeImmutable;
+use Exception;
 use Fusio\Engine\RequestInterface;
 use PSX\Sql\Condition;
 
@@ -34,10 +36,10 @@ class DateQueryFilter extends QueryFilter
 {
     public const COLUMN_DATE = 'date';
 
-    private \DateTimeImmutable $from;
-    private \DateTimeImmutable $to;
+    private DateTimeImmutable $from;
+    private DateTimeImmutable $to;
 
-    public function __construct(\DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function __construct(DateTimeImmutable $from, DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         parent::__construct($startIndex, $count, $search, $sortBy, $sortOrder);
 
@@ -45,12 +47,12 @@ class DateQueryFilter extends QueryFilter
         $this->to = $to;
     }
 
-    public function getFrom(): \DateTimeImmutable
+    public function getFrom(): DateTimeImmutable
     {
         return $this->from;
     }
 
-    public function getTo(): \DateTimeImmutable
+    public function getTo(): DateTimeImmutable
     {
         return $this->to;
     }
@@ -79,8 +81,18 @@ class DateQueryFilter extends QueryFilter
 
         $rawFrom = $request->get('from');
         $rawTo = $request->get('to');
-        $from = new \DateTimeImmutable(!empty($rawFrom) ? $rawFrom : '-1 month');
-        $to = new \DateTimeImmutable(!empty($rawTo) ? $rawTo : 'now');
+
+        try {
+            $from = new DateTimeImmutable(!empty($rawFrom) ? $rawFrom : '-1 month');
+        } catch (Exception) {
+            $from = new DateTimeImmutable('-1 month');
+        }
+
+        try {
+            $to = new DateTimeImmutable(!empty($rawTo) ? $rawTo : 'now');
+        } catch (Exception) {
+            $to = new DateTimeImmutable('now');
+        }
 
         // from date is large then to date
         if ($from->getTimestamp() > $to->getTimestamp()) {
