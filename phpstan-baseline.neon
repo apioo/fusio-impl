@@ -1,7 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: '#^Call to method clear\(\) on an unknown class test_connector\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/DbTestCase.php

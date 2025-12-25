@@ -73,6 +73,7 @@ class DbTestCase extends ControllerDbTestCase
         /** @phpstan-ignore argument.type */
         $connector = Environment::getService('test_connector');
         if ($connector instanceof Connector) {
+            /** @var Connector $connector */
             $connector->clear();
         }
     }
