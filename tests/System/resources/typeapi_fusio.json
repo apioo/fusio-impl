@@ -15381,6 +15381,9 @@
         },
         "message": {
           "type": "string"
+        },
+        "id": {
+          "type": "string"
         }
       }
     },
