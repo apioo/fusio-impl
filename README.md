@@ -24,8 +24,11 @@ This overview shows all Fusio related composer dependencies and the build status
 | [fusio/adapter-file](https://github.com/apioo/fusio-adapter-file)                   | ![Status](https://github.com/apioo/fusio-adapter-file/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-graphql](https://github.com/apioo/fusio-adapter-graphql)             | ![Status](https://github.com/apioo/fusio-adapter-graphql/actions/workflows/ci.yml/badge.svg)       |
 | [fusio/adapter-http](https://github.com/apioo/fusio-adapter-http)                   | ![Status](https://github.com/apioo/fusio-adapter-http/actions/workflows/ci.yml/badge.svg)          |
+| [fusio/adapter-ldap](https://github.com/apioo/fusio-adapter-ldap)                   | ![Status](https://github.com/apioo/fusio-adapter-ldap/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-memcache](https://github.com/apioo/fusio-adapter-memcache)           | ![Status](https://github.com/apioo/fusio-adapter-memcache/actions/workflows/ci.yml/badge.svg)      |
 | [fusio/adapter-mongodb](https://github.com/apioo/fusio-adapter-mongodb)             | ![Status](https://github.com/apioo/fusio-adapter-mongodb/actions/workflows/ci.yml/badge.svg)       |
+| [fusio/adapter-mqtt](https://github.com/apioo/fusio-adapter-mqtt)                   | ![Status](https://github.com/apioo/fusio-adapter-mqtt/actions/workflows/ci.yml/badge.svg)          |
+| [fusio/adapter-neo4j](https://github.com/apioo/fusio-adapter-neo4j)                 | ![Status](https://github.com/apioo/fusio-adapter-neo4j/actions/workflows/ci.yml/badge.svg)         |
 | [fusio/adapter-php](https://github.com/apioo/fusio-adapter-php)                     | ![Status](https://github.com/apioo/fusio-adapter-php/actions/workflows/ci.yml/badge.svg)           |
 | [fusio/adapter-redis](https://github.com/apioo/fusio-adapter-redis)                 | ![Status](https://github.com/apioo/fusio-adapter-redis/actions/workflows/ci.yml/badge.svg)         |
 | [fusio/adapter-sdkfabric](https://github.com/apioo/fusio-adapter-sdkfabric)         | ![Status](https://github.com/apioo/fusio-adapter-redis/actions/workflows/ci.yml/badge.svg)         |
