@@ -70,6 +70,7 @@ class DbTestCase extends ControllerDbTestCase
 
     private function clearState(): void
     {
+        /** @phpstan-ignore argument.type */
         $connector = Environment::getService('test_connector');
         if ($connector instanceof Connector) {
             $connector->clear();

@@ -5,9 +5,3 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: tests/DbTestCase.php
-
-		-
-			message: '#^Parameter \#1 \$id of static method PSX\\Framework\\Test\\Environment\:\:getService\(\) expects class\-string\<test_connector\>, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/DbTestCase.php
