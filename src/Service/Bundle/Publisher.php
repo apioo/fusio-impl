@@ -103,24 +103,24 @@ readonly class Publisher
         $config = Parser::decode($bundle->getConfig());
         $result = new MarketplaceBundleConfig();
 
-        if (isset($config['actions']) && is_array($config['actions'])) {
-            $result->setActions($this->buildActions($config['actions'], $context));
+        if (isset($config->actions) && is_array($config->actions)) {
+            $result->setActions($this->buildActions($config->actions, $context));
         }
 
-        if (isset($config['schemas']) && is_array($config['schemas'])) {
-            $result->setSchemas($this->buildSchemas($config['actions'], $context));
+        if (isset($config->schemas) && is_array($config->schemas)) {
+            $result->setSchemas($this->buildSchemas($config->schemas, $context));
         }
 
-        if (isset($config['events']) && is_array($config['events'])) {
-            $result->setEvents($this->buildEvents($config['actions'], $context));
+        if (isset($config->events) && is_array($config->events)) {
+            $result->setEvents($this->buildEvents($config->events, $context));
         }
 
-        if (isset($config['cronjobs']) && is_array($config['cronjobs'])) {
-            $result->setCronjobs($this->buildCronjobs($config['actions'], $context));
+        if (isset($config->cronjobs) && is_array($config->cronjobs)) {
+            $result->setCronjobs($this->buildCronjobs($config->cronjobs, $context));
         }
 
-        if (isset($config['triggers']) && is_array($config['triggers'])) {
-            $result->setTriggers($this->buildTriggers($config['actions'], $context));
+        if (isset($config->triggers) && is_array($config->triggers)) {
+            $result->setTriggers($this->buildTriggers($config->triggers, $context));
         }
 
         return $result;
