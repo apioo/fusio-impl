@@ -37,6 +37,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
+use Throwable;
 
 /**
  * Action
@@ -48,6 +49,7 @@ use PSX\Json\Parser;
 readonly class Action
 {
     public function __construct(
+        private Action\Committer $actionCommitter,
         private Table\Action $actionTable,
         private Factory\ActionInterface $actionFactory,
         private Action\Validator $validator,
@@ -91,8 +93,10 @@ readonly class Action
             $actionId = $this->actionTable->getLastInsertId();
             $action->setId($actionId);
 
+            $this->actionCommitter->commit($actionId, $row->getConfig(), $context);
+
             $this->actionTable->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->actionTable->rollBack();
 
             throw $e;
@@ -130,13 +134,25 @@ readonly class Action
         }
 
         // update action
-        $existing->setName($name);
-        $existing->setClass(ClassName::serialize($class));
-        $existing->setAsync($action->getAsync() ?? $existing->getAsync());
-        $existing->setConfig(self::serializeConfig($config));
-        $existing->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : $existing->getMetadata());
-        $existing->setDate(LocalDateTime::now());
-        $this->actionTable->update($existing);
+        try {
+            $this->actionTable->beginTransaction();
+
+            $existing->setName($name);
+            $existing->setClass(ClassName::serialize($class));
+            $existing->setAsync($action->getAsync() ?? $existing->getAsync());
+            $existing->setConfig(self::serializeConfig($config));
+            $existing->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : $existing->getMetadata());
+            $existing->setDate(LocalDateTime::now());
+            $this->actionTable->update($existing);
+
+            $this->actionCommitter->commit($existing->getId(), $existing->getConfig(), $context);
+
+            $this->actionTable->commit();
+        } catch (Throwable $e) {
+            $this->actionTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
 
