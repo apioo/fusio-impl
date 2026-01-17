@@ -79,6 +79,8 @@ class DataBag
             'fusio_user_scope' => [],
             'fusio_user_attribute' => [],
             'fusio_role_scope' => [],
+            'fusio_action_commit' => [],
+            'fusio_schema_commit' => [],
         ];
     }
 

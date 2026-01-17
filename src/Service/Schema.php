@@ -27,7 +27,6 @@ use Fusio\Impl\Event\Schema\UpdatedEvent;
 use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\SchemaCreate;
-use Fusio\Model\Backend\SchemaForm;
 use Fusio\Model\Backend\SchemaUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
@@ -46,6 +45,7 @@ use PSX\Schema\SchemaManagerInterface;
 readonly class Schema
 {
     public function __construct(
+        private Schema\Committer $schemaComitter,
         private Table\Schema $schemaTable,
         private Schema\Validator $validator,
         private SchemaManagerInterface $schemaManager,
@@ -72,8 +72,7 @@ readonly class Schema
             $schemaId = $this->schemaTable->getLastInsertId();
             $schema->setId($schemaId);
 
-            // check whether we can load the schema
-            //$this->schemaManager->getSchema(Scheme::wrap($row->getName()));
+            $this->schemaComitter->commit($schemaId, $row->getSource(), $context);
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {
@@ -112,6 +111,8 @@ readonly class Schema
             $source = Scheme::wrap($existing->getName());
             $this->schemaManager->clear($source);
             $this->schemaManager->getSchema($source);
+
+            $this->schemaComitter->commit($existing->getId(), $existing->getSource(), $context);
 
             $this->schemaTable->commit();
         } catch (\Throwable $e) {

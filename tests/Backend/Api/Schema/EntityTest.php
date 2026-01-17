@@ -152,7 +152,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema($this->connection, 'Test-Schema', json_encode($schema), null, $metadata);
+        Assert::assertSchema($this->connection, 'Test-Schema', json_encode($schema), $metadata);
     }
 
     public function testDelete()
