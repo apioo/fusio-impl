@@ -3,6 +3,8 @@
 use Fusio\Cli;
 use Fusio\Engine\Action;
 use Fusio\Engine\Adapter\ServiceBuilder;
+use Fusio\Engine\Agent\Tools;
+use Fusio\Engine\Agent\ToolsInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Repository;
@@ -14,6 +16,7 @@ use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Producer;
+use Fusio\Impl\Service\Agent;
 use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Service\Tenant\LimiterInterface;
 use Fusio\Impl\Service\User\Captcha;
@@ -30,10 +33,15 @@ use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Framework\Migration\DependencyFactoryFactory;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Schema;
+use Symfony\AI\Agent\Toolbox\Toolbox;
+use Symfony\AI\Agent\Toolbox\ToolboxInterface;
+use Symfony\AI\Agent\Toolbox\ToolCallArgumentResolverInterface;
+use Symfony\AI\Agent\Toolbox\ToolFactoryInterface;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container) {
     $services = ServiceBuilder::build($container);
@@ -61,6 +69,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Dispatcher::class);
     $services->alias(DispatcherInterface::class, Dispatcher::class);
+
+    $services->set(Tools::class);
+    $services->alias(ToolsInterface::class, Tools::class);
 
     $services->alias('test_connector', ConnectorInterface::class)
         ->public();
@@ -111,6 +122,19 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(SDKgenConfig::class);
     $services->alias(Api\Repository\SDKgen\ConfigInterface::class, SDKgenConfig::class);
+
+    $services->set(Agent\OperationToolFactory::class);
+    $services->alias(ToolFactoryInterface::class, Agent\OperationToolFactory::class);
+
+    $services->set(Agent\OperationToolCallArgumentResolver::class);
+    $services->alias(ToolCallArgumentResolverInterface::class, Agent\OperationToolCallArgumentResolver::class);
+
+    $services->set(Agent\OperationTool::class)
+        ->tag('fusio.ai.tool');
+
+    $services->set(Toolbox::class)
+        ->arg('$tools', tagged_iterator('fusio.ai.tool'));
+    $services->alias(ToolboxInterface::class, Toolbox::class);
 
     // psx
     $services->set(Framework\Loader\RoutingParser\DatabaseParser::class);
