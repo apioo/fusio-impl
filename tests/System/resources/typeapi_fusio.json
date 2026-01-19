@@ -1549,6 +1549,50 @@
         "config"
       ]
     },
+    "backend.connection.agent.send": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentResponse"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentRequest"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Executes an agent request",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
     "backend.connection.create": {
       "path": "/backend/connection",
       "method": "POST",
@@ -11813,6 +11857,178 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Action"
+      }
+    },
+    "Backend_AgentMessage": {
+      "description": "Agent call result",
+      "type": "struct",
+      "base": true,
+      "properties": {
+        "type": {
+          "description": "The result type",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Optional result metadata",
+          "type": "map",
+          "schema": {
+            "type": "any"
+          }
+        }
+      },
+      "discriminator": "type",
+      "mapping": {
+        "Backend_AgentMessageBinary": "binary",
+        "Backend_AgentMessageChoice": "choice",
+        "Backend_AgentMessageObject": "object",
+        "Backend_AgentMessageText": "text",
+        "Backend_AgentMessageToolCall": "tool_call"
+      }
+    },
+    "Backend_AgentMessageBinary": {
+      "description": "Binary agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "mime": {
+          "description": "The mime of the binary data",
+          "type": "string"
+        },
+        "data": {
+          "description": "The base64 encoded binary data",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentMessageChoice": {
+      "description": "Choice agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "items": {
+          "description": "Contains multiple agent results",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentMessage"
+          }
+        }
+      }
+    },
+    "Backend_AgentMessageObject": {
+      "description": "Structured agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "payload": {
+          "description": "The structured JSON payload",
+          "type": "any"
+        }
+      }
+    },
+    "Backend_AgentMessageText": {
+      "description": "Text agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "content": {
+          "description": "The output text",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentMessageToolCall": {
+      "description": "Tool call agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "functions": {
+          "description": "An array of functions to invoke",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentMessageToolCallFunction"
+          }
+        }
+      }
+    },
+    "Backend_AgentMessageToolCallFunction": {
+      "description": "A tool call function",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "function": {
+          "type": "reference",
+          "target": "Backend_AgentMessageToolCallFunctionDetails"
+        }
+      }
+    },
+    "Backend_AgentMessageToolCallFunctionDetails": {
+      "description": "Agent call function details",
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentRequest": {
+      "description": "This object represents an agent request",
+      "type": "struct",
+      "properties": {
+        "input": {
+          "description": "The input",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        },
+        "schemas": {
+          "description": "Optional schemas which are attached to the context",
+          "type": "array",
+          "schema": {
+            "type": "number"
+          }
+        },
+        "actions": {
+          "description": "Optional actions which are attached to the context",
+          "type": "array",
+          "schema": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "Backend_AgentResponse": {
+      "description": "This object represents an agent response",
+      "type": "struct",
+      "properties": {
+        "output": {
+          "description": "The output",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        }
       }
     },
     "Backend_App": {
