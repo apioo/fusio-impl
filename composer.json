@@ -10,10 +10,6 @@
       "homepage": "https://chrisk.app"
     }
   ],
-  "scripts": {
-    "tests": "@php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml tests",
-    "psalm": "@php vendor/vimeo/psalm/psalm"
-  },
   "require": {
     "php": ">=8.1",
     "psx/framework": "^8.0",
