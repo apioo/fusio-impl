@@ -504,6 +504,16 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a redirect url to start the OAuth2 authorization flow for the given connection',
                 ),
+                'connection.agent.send' => new Operation(
+                    action: Backend\Action\Connection\Agent\Send::class,
+                    httpMethod: 'POST',
+                    httpPath: '/connection/:connection_id/agent',
+                    httpCode: 200,
+                    outgoing: Model\Backend\AgentResponse::class,
+                    incoming: Model\Backend\AgentRequest::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Executes an agent request',
+                ),
                 'connection.database.getTables' => new Operation(
                     action: Backend\Action\Connection\Database\Table\GetAll::class,
                     httpMethod: 'GET',
