@@ -20,7 +20,18 @@
 
 namespace Fusio\Impl\Service\Agent;
 
+use Fusio\Model\Backend\AgentMessage;
+use Fusio\Model\Backend\AgentMessageBinary;
+use Fusio\Model\Backend\AgentMessageChoice;
+use Fusio\Model\Backend\AgentMessageObject;
+use Fusio\Model\Backend\AgentMessageStream;
+use Fusio\Model\Backend\AgentMessageText;
+use Fusio\Model\Backend\AgentMessageToolCall;
+use Fusio\Model\Backend\AgentMessageToolCallFunction;
+use Fusio\Model\Backend\AgentMessageToolCallFunctionDetails;
 use PSX\Http\Exception\InternalServerErrorException;
+use PSX\Json\Parser;
+use PSX\Record\Record;
 use Symfony\AI\Platform\Result\BinaryResult;
 use Symfony\AI\Platform\Result\ChoiceResult;
 use Symfony\AI\Platform\Result\ObjectResult;
@@ -38,44 +49,62 @@ use Symfony\AI\Platform\Result\ToolCallResult;
  */
 readonly class ResultSerializer
 {
-    public function serialize(ResultInterface $result): array
+    public function serialize(ResultInterface $result): AgentMessage
     {
-        $body = [];
         if ($result instanceof BinaryResult) {
-            $body['type'] = 'binary';
-            $body['mime'] = $result->getMimeType();
-            $body['data'] = $result->toBase64();
+            $message = new AgentMessageBinary();
+            $message->setType('binary');
+            $message->setMime($result->getMimeType());
+            $message->setData($result->toBase64());
         } elseif ($result instanceof ChoiceResult) {
             $items = [];
             foreach ($result->getContent() as $item) {
                 $items[] = $this->serialize($item);
             }
 
-            $body['type'] = 'choice';
-            $body['items'] = $items;
+            $message = new AgentMessageChoice();
+            $message->setType('choice');
+            $message->setItems($items);
         } elseif ($result instanceof ObjectResult) {
-            $body['type'] = 'object';
-            $body['payload'] = $result->getContent();
+            $message = new AgentMessageObject();
+            $message->setType('object');
+            $message->setPayload($result->getContent());
         } elseif ($result instanceof StreamResult) {
             $events = [];
             foreach ($result->getContent() as $event) {
                 $events[] = $event;
             }
 
-            $body['type'] = 'stream';
-            $body['events'] = $events;
+            $message = new AgentMessageStream();
+            $message->setType('stream');
+            $message->setEvents($events);
         } elseif ($result instanceof TextResult) {
-            $body['type'] = 'text';
-            $body['content'] = $result->getContent();
+            $message = new AgentMessageText();
+            $message->setType('text');
+            $message->setContent($result->getContent());
         } elseif ($result instanceof ToolCallResult) {
-            $body['type'] = 'tool_call';
-            $body['calls'] = $result->getContent();
+            $functions = [];
+            foreach ($result->getContent() as $toolCall) {
+                $functionDetails = new AgentMessageToolCallFunctionDetails();
+                $functionDetails->setName($toolCall->getName());
+                $functionDetails->setArguments(Parser::encode($toolCall->getArguments()));
+
+                $function = new AgentMessageToolCallFunction();
+                $function->setType('function');
+                $function->setFunction($functionDetails);
+                $function->setId($toolCall->getId());
+                $functions[] = $function;
+            }
+
+            $message = new AgentMessageToolCall();
+            $message->setType('tool_call');
+            $message->setFunctions($functions);
         } else {
             throw new InternalServerErrorException('Provided an unsupported result type: ' . $result::class);
         }
 
-        $body['metadata'] = $result->getMetadata();
+        $message->setMetadata(Record::fromIterable($result->getMetadata()));
 
-        return $body;
+        return $message;
     }
 }

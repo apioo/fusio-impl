@@ -29,7 +29,9 @@ use Fusio\Impl\Service\Agent\ResultSerializer;
 use Fusio\Impl\Service\Agent\SchemaSerializer;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Backend\AgentMessageText;
+use Fusio\Model\Backend\AgentMessageToolCall;
 use Fusio\Model\Backend\AgentRequest;
+use Fusio\Model\Backend\AgentResponse;
 use PSX\Http\Environment\HttpResponse;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
@@ -69,6 +71,8 @@ readonly class Send extends AgentAbstract
         $input = $payload->getInput();
         if ($input instanceof AgentMessageText) {
             $messages->add(Message::ofUser($input->getContent()));
+        } elseif ($input instanceof AgentMessageToolCall) {
+
         }
 
         $options = [
@@ -132,6 +136,9 @@ readonly class Send extends AgentAbstract
 
         $result = $agent->call($messages, $options);
 
-        return new HttpResponse(200, [], $this->resultSerializer->serialize($result));
+        $response = new AgentResponse();
+        $response->setOutput($this->resultSerializer->serialize($result));
+
+        return new HttpResponse(200, [], $response);
     }
 }
