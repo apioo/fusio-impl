@@ -57,14 +57,26 @@ readonly class Send extends AgentAbstract
 
         assert($payload instanceof AgentRequest);
 
-        $messages = new MessageBag();
-        $messages->add(Message::forSystem('You are a helpful assistant in the context of Fusio an open source API management platform. You help the user to '));
+        $introduction = 'You are a helpful assistant in the context of Fusio an open source API management platform and you help the user to configure the platform.';
+        $introduction.= 'Fusio is based on the following entities which the user can use to build powerful REST APIs:';
+        $introduction.= 'Operation: An Operation defines an API endpoint, it ties together an HTTP method and a path with an underlying action.';
+        $introduction.= 'Action: An Action implements the actual business logic behind an endpoint.';
+        $introduction.= 'Schema: A Schema defines the structure of a JSON payload.';
+        $introduction.= 'Connection: A Connection defines how to reach an external service.';
+        $introduction.= 'Event: An Event is a named occurrence emitted by an action when something significant happens.';
+        $introduction.= 'Cronjob: A Cronjob schedules an action to run at regular intervals.';
+        $introduction.= 'Trigger: A Trigger listens for a specific Event and executes an action.';
 
-        foreach ($payload->getSchemas() as $schemaId) {
+        $messages = new MessageBag();
+        $messages->add(Message::forSystem($introduction));
+
+        $schemas = $payload->getSchemas() ?? [];
+        foreach ($schemas as $schemaId) {
             $messages->add(Message::ofAssistant($this->schemaSerializer->serialize($schemaId, $context)));
         }
 
-        foreach ($payload->getActions() as $actionId) {
+        $actions = $payload->getActions() ?? [];
+        foreach ($actions as $actionId) {
             $messages->add(Message::ofAssistant($this->actionSerializer->serialize($actionId, $context)));
         }
 
