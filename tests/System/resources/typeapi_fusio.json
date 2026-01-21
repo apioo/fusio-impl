@@ -12008,14 +12008,14 @@
           "description": "Optional schemas which are attached to the context",
           "type": "array",
           "schema": {
-            "type": "number"
+            "type": "integer"
           }
         },
         "actions": {
           "description": "Optional actions which are attached to the context",
           "type": "array",
           "schema": {
-            "type": "number"
+            "type": "integer"
           }
         }
       }
