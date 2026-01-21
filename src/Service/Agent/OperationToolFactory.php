@@ -48,7 +48,6 @@ use Symfony\AI\Platform\Tool\Tool;
 readonly class OperationToolFactory implements ToolFactoryInterface
 {
     private TypeSchema $schemaParser;
-    private ObjectMapper $objectMapper;
 
     public function __construct(
         private Table\Operation $operationTable,
@@ -56,7 +55,6 @@ readonly class OperationToolFactory implements ToolFactoryInterface
         private SchemaManager $schemaManager,
     ) {
         $this->schemaParser = new TypeSchema($schemaManager);
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function getTool(string $reference): iterable

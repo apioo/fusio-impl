@@ -35,6 +35,8 @@ readonly class OperationToolCallArgumentResolver implements ToolCallArgumentReso
 {
     public function resolveArguments(object $tool, Tool $metadata, ToolCall $toolCall): array
     {
-        return [$toolCall];
+        return [
+            'toolCall' => $toolCall
+        ];
     }
 }
