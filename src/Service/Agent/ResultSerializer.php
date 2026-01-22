@@ -31,7 +31,6 @@ use Fusio\Model\Backend\AgentMessageToolCallFunction;
 use Fusio\Model\Backend\AgentMessageToolCallFunctionDetails;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
-use PSX\Record\Record;
 use Symfony\AI\Platform\Result\BinaryResult;
 use Symfony\AI\Platform\Result\ChoiceResult;
 use Symfony\AI\Platform\Result\ObjectResult;
@@ -102,8 +101,6 @@ readonly class ResultSerializer
         } else {
             throw new InternalServerErrorException('Provided an unsupported result type: ' . $result::class);
         }
-
-        $message->setMetadata(Record::fromIterable($result->getMetadata()));
 
         return $message;
     }
