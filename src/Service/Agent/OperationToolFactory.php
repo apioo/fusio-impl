@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Agent;
 
+use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use PSX\Api\Util\Inflection;
@@ -75,10 +76,15 @@ readonly class OperationToolFactory implements ToolFactoryInterface
                 continue;
             }
 
+            $description = $operation->getDescription();
+            if (empty($description)) {
+                continue;
+            }
+
             yield new Tool(
                 new ExecutionReference(OperationTool::class, 'invoke'),
                 ToolName::toMcpToolName($operation->getName()),
-                $operation->getDescription(),
+                $description,
                 $inputSchema
             );
         }
@@ -98,6 +104,11 @@ readonly class OperationToolFactory implements ToolFactoryInterface
 
         $incoming = $operation->getIncoming();
         if (!empty($incoming)) {
+            [$scheme, $value] = Scheme::split($incoming);
+            if ($scheme === Scheme::MIME) {
+                return [];
+            }
+
             $payload = $this->schemaManager->getSchema($incoming);
 
             $rootType->addProperty('payload', PropertyTypeFactory::getReference($payload->getRoot()));
@@ -130,5 +141,4 @@ readonly class OperationToolFactory implements ToolFactoryInterface
             $rootType->addProperty($name, $this->schemaParser->parsePropertyType($schema));
         }
     }
-
 }
