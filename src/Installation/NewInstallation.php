@@ -221,7 +221,7 @@ class NewInstallation
                     httpPath: '/action/form',
                     httpCode: 200,
                     outgoing: Model\Common\FormContainer::class,
-                    parameters: ['class' => PropertyTypeFactory::getString()],
+                    parameters: ['class' => PropertyTypeFactory::getString()->setDescription('The target action class')],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns the action config form',
                 ),
