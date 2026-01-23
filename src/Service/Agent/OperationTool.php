@@ -64,7 +64,7 @@ readonly class OperationTool
         $arguments = Record::fromArray($toolCall->getArguments());
         $context = $this->contextFactory->getActive();
 
-        $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $context->getCategoryId(), ToolName::toOperationId($toolCall->getName()));
+        $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, ToolName::toOperationId($toolCall->getName()));
         if (!$operation instanceof Table\Generated\OperationRow) {
             throw new RuntimeException('Provided an invalid operation name');
         }
