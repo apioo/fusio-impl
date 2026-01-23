@@ -69,6 +69,8 @@ readonly class OperationTool
             throw new RuntimeException('Provided an invalid operation name');
         }
 
+        $context->setOperation($operation);
+
         $incoming = $operation->getIncoming();
         if (!empty($incoming) && $arguments->containsKey('payload')) {
             $rawPayload = $arguments->get('payload');
