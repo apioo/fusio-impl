@@ -94,7 +94,8 @@ readonly class Send extends AgentAbstract
 
     private function getIntroduction(): string
     {
-        $introduction = 'You are a helpful assistant in the context of Fusio an open source API management platform and you help the user to configure the platform.' . "\n";
+        $introduction = 'You are a helpful assistant in the context of Fusio an open source API management platform.' . "\n";
+        $introduction.= 'You help the user to configure or get information about the Fusio instance.' . "\n";
         $introduction.= 'Fusio is based on the following entities which the user can use to build powerful REST APIs:' . "\n";
         $introduction.= 'Operation: An Operation defines an API endpoint, it ties together an HTTP method and a path with an underlying action.' . "\n";
         $introduction.= 'Action: An Action implements the actual business logic behind an endpoint.' . "\n";
@@ -197,22 +198,23 @@ return function(ExecuteRequest \$request, ExecuteContext \$context, ConnectorInt
 PHP;
         $hint.= '--' . "\n";
         $hint.= "\n";
-        $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.';
-        $hint.= '';
-        $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.';
-        $hint.= 'You can get a list of all available connections through the "backend-connection-getAll" tool.';
-        $hint.= '';
-        $hint.= 'If the connection has as class "Fusio.Impl.Connection.System" or "Fusio.Adapter.Sql.Connection.Sql" it is a Doctrine DBAL connection, this means you can use all methods of the Doctrine DBAL library.';
-        $hint.= 'If the connection has as class "Fusio.Adapter.Http.Connection.Http" it is a Guzzle connection, this means you can use all methods of the Guzzle HTTP client library.';
-        $hint.= '';
-        $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend-database-getTables" tool where you need to provide a connection id.';
-        $hint.= 'If you need to get a concrete table schema you can use the "backend-database-getTable" tool where you need to provide the connection id and table name.';
-        $hint.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".';
-        $hint.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.';
-        $hint.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.';
-        $hint.= '';
-        $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.';
-        $hint.= '';
+        $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
+        $hint.= "\n";
+        $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.' . "\n";
+        $hint.= 'You can get a list of all available connections through the "backend-connection-getAll" tool.' . "\n";
+        $hint.= "\n";
+        $hint.= 'If the connection has as class "Fusio.Impl.Connection.System" or "Fusio.Adapter.Sql.Connection.Sql" it is a Doctrine DBAL connection, this means you can use all methods of the Doctrine DBAL library.' . "\n";
+        $hint.= 'If the connection has as class "Fusio.Adapter.Http.Connection.Http" it is a Guzzle connection, this means you can use all methods of the Guzzle HTTP client library.' . "\n";
+        $hint.= "\n";
+        $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend-database-getTables" tool where you need to provide a connection id.' . "\n";
+        $hint.= 'If you need to get a concrete table schema you can use the "backend-database-getTable" tool where you need to provide the connection id and table name.' . "\n";
+        $hint.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".' . "\n";
+        $hint.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.' . "\n";
+        $hint.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.' . "\n";
+        $hint.= "\n";
+        $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
+        $hint.= "\n";
+        $hint.= 'You can also use the "backend-action-execute" tool to test the action which you have created.' . "\n";
 
         return $hint;
     }
@@ -242,10 +244,10 @@ PHP;
     private function getSchemaHint(): string
     {
         $hint = 'The user has the intent to develop a schema. Use the "backend-schema-create" tool to create a new schema.' . "\n";
+        $hint.= 'As name property of the schema summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
         $hint.= 'As source property of the schema you need to transform the provided user message into a TypeSchema specification.' . "\n";
         $hint.= 'The TypeSchema json structure is described through the provided JSON schema.' . "\n";
-        $hint.= 'As name of the schema summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
-        $hint.= '' . "\n";
+        $hint.= "\n";
 
         return $hint;
     }
