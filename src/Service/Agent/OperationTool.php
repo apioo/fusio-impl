@@ -20,12 +20,9 @@
 
 namespace Fusio\Impl\Service\Agent;
 
-use Fusio\Engine\Model\AppAnonymous;
 use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Repository\UserDatabase;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Action\Invoker;
-use Fusio\Impl\Service\Mcp\ActiveUser;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use PSX\Data\WriterInterface;
@@ -55,9 +52,8 @@ readonly class OperationTool
         private Table\Operation $operationTable,
         private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
-        private ActiveUser $activeUser,
-        private UserDatabase $userRepository,
         private ResponseWriter $responseWriter,
+        private ContextFactory $contextFactory,
         SchemaManager $schemaManager,
     ) {
         $this->objectMapper = new ObjectMapper($schemaManager);
@@ -66,17 +62,9 @@ readonly class OperationTool
     public function invoke(ToolCall $toolCall): mixed
     {
         $arguments = Record::fromArray($toolCall->getArguments());
+        $context = $this->contextFactory->factory();
 
-        $userId = $this->activeUser->getUserId();
-        if (!empty($userId)) {
-            $user = $this->userRepository->get($userId) ?? throw new RuntimeException('Provided an invalid active user');
-            $categoryId = $user->getCategoryId();
-        } else {
-            $user = $this->userRepository->get(1) ?? throw new RuntimeException('No default user is available');
-            $categoryId = null;
-        }
-
-        $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $categoryId, ToolName::toOperationId($toolCall->getName()));
+        $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $context->getCategoryId(), ToolName::toOperationId($toolCall->getName()));
         if (!$operation instanceof Table\Generated\OperationRow) {
             throw new RuntimeException('Provided an invalid operation name');
         }
@@ -101,12 +89,6 @@ readonly class OperationTool
         }
 
         $request = new Request($arguments->getAll(), $payload, new Request\RpcRequestContext($toolCall->getName()));
-
-        $context = new Context();
-        $context->setTenantId($this->frameworkConfig->getTenantId());
-        $context->setApp(new AppAnonymous());
-        $context->setUser($user);
-        $context->setOperation($operation);
 
         $result = $this->invoker->invoke($request, $context);
 
