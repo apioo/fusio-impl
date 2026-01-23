@@ -62,7 +62,7 @@ readonly class OperationTool
     public function invoke(ToolCall $toolCall): mixed
     {
         $arguments = Record::fromArray($toolCall->getArguments());
-        $context = $this->contextFactory->factory();
+        $context = $this->contextFactory->getActive();
 
         $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), $context->getCategoryId(), ToolName::toOperationId($toolCall->getName()));
         if (!$operation instanceof Table\Generated\OperationRow) {
