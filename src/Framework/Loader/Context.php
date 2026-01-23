@@ -54,6 +54,9 @@ class Context extends FrameworkContext
         $this->tenantId = $tenantId;
     }
 
+    /**
+     * @deprecated
+     */
     public function getCategoryId(): int
     {
         if ($this->categoryId === null) {
@@ -63,6 +66,9 @@ class Context extends FrameworkContext
         return $this->categoryId;
     }
 
+    /**
+     * @deprecated
+     */
     public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
