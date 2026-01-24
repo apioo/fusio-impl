@@ -90,7 +90,7 @@ readonly class Sender
 
             $this->persistUserMessages($userId, $connectionId, $userMessages);
 
-            $messages->merge($userMessages);
+            $messages = $messages->merge($userMessages);
 
             $options = [
                 'tools' => $intent->getTools(),
@@ -153,7 +153,7 @@ readonly class Sender
             $message = $this->objectMapper->readJson($chat->getMessage(), SchemaSource::fromClass(AgentMessage::class));
 
             if ($chat->getOrigin() === Table\Agent::ORIGIN_USER) {
-                $messages->merge($this->buildUserInput($message));
+                $messages = $messages->merge($this->buildUserInput($message));
             } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_ASSISTANT) {
                 if ($message instanceof AgentMessageText) {
                     $messages->add(Message::ofAssistant($message->getContent()));
