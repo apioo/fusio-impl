@@ -53,8 +53,6 @@ readonly class Get extends AgentAbstract
             throw new BadRequestException('Provided no connection');
         }
 
-        return new HttpResponse(200, [], [
-            'messages' => $this->view->getCollection($connectionId, $context),
-        ]);
+        return new HttpResponse(200, [], $this->view->getCollection($connectionId, $context));
     }
 }
