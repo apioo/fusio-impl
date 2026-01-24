@@ -24,9 +24,8 @@ use Fusio\Engine\Connector;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Table;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\BadRequestException;
 
