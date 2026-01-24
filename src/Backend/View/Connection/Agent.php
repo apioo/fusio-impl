@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Backend\View\Connection;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
@@ -52,7 +51,10 @@ class Agent extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            'messages' => $builder->doCollection([$this->getTable(Table\Agent::class), 'findBy'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+            'totalResults' => Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH,
+            'startIndex' => 0,
+            'itemsPerPage' => Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH,
+            'entry' => $builder->doCollection([$this->getTable(Table\Agent::class), 'findBy'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
                 'origin' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ORIGIN),
                 'message' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_MESSAGE),
