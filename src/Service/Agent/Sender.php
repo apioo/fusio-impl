@@ -103,7 +103,7 @@ readonly class Sender
                 $userId,
                 $connectionId,
                 Table\Agent::TYPE_ASSISTANT,
-                $input->getContent()
+                $result->getContent()
             );
         }
 
