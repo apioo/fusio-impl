@@ -66,7 +66,9 @@ readonly class MessageSerializer
         } else {
             if ($message instanceof UserMessage) {
                 foreach ($message->getContent() as $content) {
-                    yield $this->serializeContent($content);
+                    foreach ($this->serializeContent($content) as $result) {
+                        yield $result;
+                    }
                 }
             } else {
                 $result = new AgentMessageText();
@@ -102,8 +104,10 @@ readonly class MessageSerializer
             $result->setContent($content->getUrl());
         } elseif ($content instanceof Collection) {
             $result = [];
-            foreach ($content->getContent() as $item) {
-                $result[] = $this->serializeContent($item);
+            foreach ($content->getContent() as $childContent) {
+                foreach ($this->serializeContent($childContent) as $message) {
+                    $result[] = $message;
+                }
             }
 
             return $result;

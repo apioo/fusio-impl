@@ -24,7 +24,6 @@ use Fusio\Model\Backend\AgentMessage;
 use PSX\DateTime\LocalDateTime;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
-use PSX\Sql\OrderBy;
 
 /**
  * Agent
@@ -35,40 +34,23 @@ use PSX\Sql\OrderBy;
  */
 class Agent extends Generated\AgentTable
 {
-    public const TYPE_USER      = 0x1;
-    public const TYPE_ASSISTANT = 0x2;
-    public const TYPE_SYSTEM    = 0x3;
-
-    /**
-     * Max number of messages which are attached to the context
-     */
-    private const CONTEXT_MESSAGES_LENGTH = 128;
-
-    public function findMessages(int $userId, int $connectionId): array
-    {
-        $condition = Condition::withAnd();
-        $condition->equals(Generated\AgentColumn::USER_ID, $userId);
-        $condition->equals(Generated\AgentColumn::CONNECTION_ID, $connectionId);
-
-        $count = $this->getCount($condition);
-        $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
-
-        return $this->findBy($condition, $startIndex, self::CONTEXT_MESSAGES_LENGTH, Generated\AgentColumn::ID, OrderBy::ASC);
-    }
+    public const ORIGIN_USER      = 0x1;
+    public const ORIGIN_ASSISTANT = 0x2;
+    public const ORIGIN_SYSTEM    = 0x3;
 
     public function addUserMessage(int $userId, int $connectionId, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::TYPE_USER, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $message);
     }
 
     public function addAssistantMessage(int $userId, int $connectionId, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::TYPE_ASSISTANT, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $message);
     }
 
     public function addSystemMessage(int $userId, int $connectionId, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::TYPE_SYSTEM, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $message);
     }
 
     public function reset(int $userId, int $connectionId): void
@@ -80,12 +62,12 @@ class Agent extends Generated\AgentTable
         $this->deleteBy($condition);
     }
 
-    private function addMessage(int $userId, int $connectionId, int $type, AgentMessage $message): void
+    private function addMessage(int $userId, int $connectionId, int $origin, AgentMessage $message): void
     {
         $row = new Generated\AgentRow();
         $row->setUserId($userId);
         $row->setConnectionId($connectionId);
-        $row->setType($type);
+        $row->setOrigin($origin);
         $row->setMessage(Parser::encode($message));
         $row->setInsertDate(LocalDateTime::now());
         $this->create($row);

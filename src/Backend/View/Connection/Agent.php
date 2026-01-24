@@ -38,11 +38,6 @@ use PSX\Sql\ViewAbstract;
  */
 class Agent extends ViewAbstract
 {
-    /**
-     * Max number of messages which are attached to the context
-     */
-    private const CONTEXT_MESSAGES_LENGTH = 32;
-
     public function getCollection(int $connectionId, ContextInterface $context)
     {
         $condition = Condition::withAnd();
@@ -50,7 +45,7 @@ class Agent extends ViewAbstract
         $condition->equals(Table\Generated\AgentColumn::CONNECTION_ID, $connectionId);
 
         $count = $this->getTable(Table\Agent::class)->getCount($condition);
-        $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
+        $startIndex = max(0, $count - Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH);
         $sortBy = Table\Generated\AgentColumn::ID;
         $sortOrder = OrderBy::ASC;
 

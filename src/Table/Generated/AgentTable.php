@@ -12,7 +12,7 @@ class AgentTable extends \PSX\Sql\TableAbstract
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_CONNECTION_ID = 'connection_id';
     public const COLUMN_TENANT_ID = 'tenant_id';
-    public const COLUMN_TYPE = 'type';
+    public const COLUMN_ORIGIN = 'origin';
     public const COLUMN_MESSAGE = 'message';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName(): string
@@ -21,7 +21,7 @@ class AgentTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_TYPE => 0x20000a, self::COLUMN_MESSAGE => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_ORIGIN => 0x20000a, self::COLUMN_MESSAGE => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>
@@ -207,37 +207,37 @@ class AgentTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByType(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    public function findByOrigin(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('type', $value);
+        $condition->equals('origin', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByType(int $value): ?\Fusio\Impl\Table\Generated\AgentRow
+    public function findOneByOrigin(int $value): ?\Fusio\Impl\Table\Generated\AgentRow
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('type', $value);
+        $condition->equals('origin', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function updateByType(int $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
+    public function updateByOrigin(int $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('type', $value);
+        $condition->equals('origin', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
-    public function deleteByType(int $value): int
+    public function deleteByOrigin(int $value): int
     {
         $condition = \PSX\Sql\Condition::withAnd();
-        $condition->equals('type', $value);
+        $condition->equals('origin', $value);
         return $this->doDeleteBy($condition);
     }
     /**

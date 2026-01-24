@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\BadRequestException;
@@ -38,7 +39,7 @@ use PSX\Http\Exception\BadRequestException;
  */
 readonly class Get extends AgentAbstract
 {
-    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private View\Connection\Agent $view, Connector $connector, FrameworkConfig $frameworkConfig)
     {
         parent::__construct($connector, $frameworkConfig);
     }
@@ -53,7 +54,7 @@ readonly class Get extends AgentAbstract
         }
 
         return new HttpResponse(200, [], [
-            'messages' => $this->agentTable->findMessages($context->getUser()->getId(), $connectionId),
+            'messages' => $this->view->getCollection($connectionId, $context),
         ]);
     }
 }

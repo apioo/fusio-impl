@@ -31,6 +31,11 @@ use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
+use PSX\Schema\ObjectMapper;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\SchemaSource;
+use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\AgentInterface;
 use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Message\Message;
@@ -47,8 +52,21 @@ use Throwable;
  */
 readonly class Sender
 {
-    public function __construct(private Table\Agent $agentTable, private IntentFactory $intentFactory, private ResultSerializer $resultSerializer, private MessageSerializer $messageSerializer)
-    {
+    /**
+     * Max number of messages which are attached to the context
+     */
+    public const CONTEXT_MESSAGES_LENGTH = 32;
+
+    private ObjectMapper $objectMapper;
+
+    public function __construct(
+        private IntentFactory $intentFactory,
+        private ResultSerializer $resultSerializer,
+        private MessageSerializer $messageSerializer,
+        private Table\Agent $agentTable,
+        SchemaManager $schemaManager,
+    ) {
+        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function send(AgentInterface $agent, int $userId, int $connectionId, AgentRequest $request): AgentResponse
@@ -123,14 +141,27 @@ readonly class Sender
 
     private function loadPreviousMessages(int $userId, int $connectionId, MessageBag $messages): void
     {
-        $result = $this->agentTable->findMessages($userId, $connectionId);
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\AgentColumn::USER_ID, $userId);
+        $condition->equals(Table\Generated\AgentColumn::CONNECTION_ID, $connectionId);
+
+        $count = $this->agentTable->getCount($condition);
+        $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
+
+        $result = $this->agentTable->findBy($condition, $startIndex, $count, Table\Generated\AgentColumn::ID, OrderBy::ASC);
         foreach ($result as $chat) {
-            if ($chat->getType() === Table\Agent::TYPE_USER) {
-                $messages->add(Message::ofUser($chat->getMessage()));
-            } elseif ($chat->getType() === Table\Agent::TYPE_ASSISTANT) {
-                $messages->add(Message::ofAssistant($chat->getMessage()));
-            } elseif ($chat->getType() === Table\Agent::TYPE_SYSTEM) {
-                $messages->add(Message::forSystem($chat->getMessage()));
+            $message = $this->objectMapper->readJson($chat->getMessage(), SchemaSource::fromClass(AgentMessage::class));
+
+            if ($chat->getOrigin() === Table\Agent::ORIGIN_USER) {
+                $messages->merge($this->buildUserInput($message));
+            } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_ASSISTANT) {
+                if ($message instanceof AgentMessageText) {
+                    $messages->add(Message::ofAssistant($message->getContent()));
+                }
+            } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_SYSTEM) {
+                if ($message instanceof AgentMessageText) {
+                    $messages->add(Message::forSystem($message->getContent()));
+                }
             }
         }
     }
