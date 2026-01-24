@@ -28,7 +28,6 @@ use Fusio\Model\Backend\AgentMessageStream;
 use Fusio\Model\Backend\AgentMessageText;
 use Fusio\Model\Backend\AgentMessageToolCall;
 use Fusio\Model\Backend\AgentMessageToolCallFunction;
-use Fusio\Model\Backend\AgentMessageToolCallFunctionDetails;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Result\BinaryResult;

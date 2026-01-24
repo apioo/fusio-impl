@@ -27,7 +27,6 @@ use PSX\Api\Util\Inflection;
 use PSX\Json\Parser;
 use PSX\Schema\Definitions;
 use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\ObjectMapper;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManager;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
