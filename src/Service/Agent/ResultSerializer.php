@@ -84,13 +84,9 @@ readonly class ResultSerializer
         } elseif ($result instanceof ToolCallResult) {
             $functions = [];
             foreach ($result->getContent() as $toolCall) {
-                $functionDetails = new AgentMessageToolCallFunctionDetails();
-                $functionDetails->setName($toolCall->getName());
-                $functionDetails->setArguments(Parser::encode($toolCall->getArguments()));
-
                 $function = new AgentMessageToolCallFunction();
-                $function->setType('function');
-                $function->setFunction($functionDetails);
+                $function->setName($toolCall->getName());
+                $function->setArguments(Parser::encode($toolCall->getArguments()));
                 $function->setId($toolCall->getId());
                 $functions[] = $function;
             }
