@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Model\Backend\AgentMessage;
 use PSX\DateTime\LocalDateTime;
+use PSX\Json\Parser;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -35,6 +37,7 @@ class Agent extends Generated\AgentTable
 {
     public const TYPE_USER      = 0x1;
     public const TYPE_ASSISTANT = 0x2;
+    public const TYPE_SYSTEM    = 0x3;
 
     /**
      * Max number of messages which are attached to the context
@@ -53,15 +56,19 @@ class Agent extends Generated\AgentTable
         return $this->findBy($condition, $startIndex, self::CONTEXT_MESSAGES_LENGTH, Generated\AgentColumn::ID, OrderBy::ASC);
     }
 
-    public function add(int $userId, int $connectionId, int $type, string $message): void
+    public function addUserMessage(int $userId, int $connectionId, AgentMessage $message): void
     {
-        $row = new Generated\AgentRow();
-        $row->setUserId($userId);
-        $row->setConnectionId($connectionId);
-        $row->setType($type);
-        $row->setMessage($message);
-        $row->setInsertDate(LocalDateTime::now());
-        $this->create($row);
+        $this->addMessage($userId, $connectionId, self::TYPE_USER, $message);
+    }
+
+    public function addAssistantMessage(int $userId, int $connectionId, AgentMessage $message): void
+    {
+        $this->addMessage($userId, $connectionId, self::TYPE_ASSISTANT, $message);
+    }
+
+    public function addSystemMessage(int $userId, int $connectionId, AgentMessage $message): void
+    {
+        $this->addMessage($userId, $connectionId, self::TYPE_SYSTEM, $message);
     }
 
     public function reset(int $userId, int $connectionId): void
@@ -71,5 +78,16 @@ class Agent extends Generated\AgentTable
         $condition->equals(Generated\AgentColumn::CONNECTION_ID, $connectionId);
 
         $this->deleteBy($condition);
+    }
+
+    private function addMessage(int $userId, int $connectionId, int $type, AgentMessage $message): void
+    {
+        $row = new Generated\AgentRow();
+        $row->setUserId($userId);
+        $row->setConnectionId($connectionId);
+        $row->setType($type);
+        $row->setMessage(Parser::encode($message));
+        $row->setInsertDate(LocalDateTime::now());
+        $this->create($row);
     }
 }
