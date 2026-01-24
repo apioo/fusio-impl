@@ -83,7 +83,7 @@ readonly class OperationToolFactory implements ToolFactoryInterface
 
             yield new Tool(
                 new ExecutionReference(OperationTool::class, 'invoke'),
-                ToolName::toMcpToolName($operation->getName()),
+                ToolName::toToolName($operation->getName()),
                 $description,
                 $inputSchema
             );

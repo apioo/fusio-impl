@@ -504,6 +504,15 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a redirect url to start the OAuth2 authorization flow for the given connection',
                 ),
+                'connection.agent.get' => new Operation(
+                    action: Backend\Action\Connection\Agent\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/connection/:connection_id/agent',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns all previous sent messages',
+                ),
                 'connection.agent.send' => new Operation(
                     action: Backend\Action\Connection\Agent\Send::class,
                     httpMethod: 'POST',
@@ -512,7 +521,16 @@ class NewInstallation
                     outgoing: Model\Backend\AgentResponse::class,
                     incoming: Model\Backend\AgentRequest::class,
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Executes an agent request',
+                    description: 'Sends a message to an agent',
+                ),
+                'connection.agent.reset' => new Operation(
+                    action: Backend\Action\Connection\Agent\Reset::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/connection/:connection_id/agent',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Resets all agent chat messages',
                 ),
                 'connection.database.getTables' => new Operation(
                     action: Backend\Action\Connection\Database\Table\GetAll::class,

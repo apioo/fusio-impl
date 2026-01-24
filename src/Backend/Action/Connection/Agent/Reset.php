@@ -24,22 +24,21 @@ use Fusio\Engine\Connector;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Agent\Sender;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\AgentRequest;
+use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\BadRequestException;
 
 /**
- * Send
+ * Reset
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Send extends AgentAbstract
+readonly class Reset extends AgentAbstract
 {
-    public function __construct(private Sender $sender, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Table\AgentChat $agentChatTable, Connector $connector, FrameworkConfig $frameworkConfig)
     {
         parent::__construct($connector, $frameworkConfig);
     }
@@ -53,13 +52,11 @@ readonly class Send extends AgentAbstract
             throw new BadRequestException('Provided no connection');
         }
 
-        $agent = $this->getConnection($connectionId);
-        $payload = $request->getPayload();
+        $this->agentChatTable->reset($context->getUser()->getId(), $connectionId);
 
-        assert($payload instanceof AgentRequest);
-
-        $response = $this->sender->send($agent, $context->getUser()->getId(), $connectionId, $payload);
-
-        return new HttpResponse(200, [], $response);
+        return new HttpResponse(200, [], [
+            'success' => true,
+            'message' => 'Chat successfully reset',
+        ]);
     }
 }

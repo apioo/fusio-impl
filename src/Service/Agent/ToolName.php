@@ -29,7 +29,7 @@ namespace Fusio\Impl\Service\Agent;
  */
 readonly class ToolName
 {
-    public static function toMcpToolName(string $name): string
+    public static function toToolName(string $name): string
     {
         return str_replace('.', '_', $name);
     }

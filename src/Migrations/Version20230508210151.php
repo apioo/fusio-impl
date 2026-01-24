@@ -45,6 +45,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentChatTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $agentChatTable->addColumn('user_id', 'integer');
             $agentChatTable->addColumn('connection_id', 'integer');
+            $agentChatTable->addColumn('type', 'integer');
             $agentChatTable->addColumn('message', 'text');
             $agentChatTable->addColumn('insert_date', 'datetime');
             $agentChatTable->setPrimaryKey(['id']);
