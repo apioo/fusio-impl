@@ -33,7 +33,7 @@ readonly class IntentFactory
     {
     }
 
-    public function factory(string $intent): IntentInterface
+    public function factory(?string $intent): IntentInterface
     {
         return match($intent) {
             'action' => $this->actionIntent,
