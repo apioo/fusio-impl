@@ -118,10 +118,11 @@ PHP;
                             'default' => 'Fusio.Adapter.Worker.Action.WorkerPHPLocal',
                         ],
                         'config' => [
+                            'description' => 'The action config',
                             'type' => 'object',
                             'properties' => [
                                 'code' => [
-                                    'description' => 'Then generated PHP code',
+                                    'description' => 'The generated PHP code',
                                     'type' => 'string',
                                 ],
                             ],
