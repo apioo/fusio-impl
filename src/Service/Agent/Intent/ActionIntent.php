@@ -38,7 +38,7 @@ readonly class ActionIntent implements IntentInterface
         $hint.= "\n";
         $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
         $hint.= "\n";
-        $hint.= '--' . "\n";
+        $hint.= '<code>' . "\n";
         $hint.= <<<PHP
 <?php
 
@@ -57,7 +57,7 @@ return function(ExecuteRequest \$request, ExecuteContext \$context, ConnectorInt
 };
 
 PHP;
-        $hint.= '--' . "\n";
+        $hint.= '</code>' . "\n";
         $hint.= "\n";
         $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
         $hint.= "\n";
