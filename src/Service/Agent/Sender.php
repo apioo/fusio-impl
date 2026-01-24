@@ -84,7 +84,7 @@ readonly class Sender
                 $messages->add(Message::forSystem($intentMessage));
             }
 
-            $this->loadPreviousMessages($userId, $connectionId, $messages);
+            $messages = $this->loadPreviousMessages($userId, $connectionId, $messages);
 
             $userMessages = $this->buildUserInput($request->getInput());
 
@@ -139,7 +139,7 @@ readonly class Sender
         return $introduction;
     }
 
-    private function loadPreviousMessages(int $userId, int $connectionId, MessageBag $messages): void
+    private function loadPreviousMessages(int $userId, int $connectionId, MessageBag $messages): MessageBag
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentColumn::USER_ID, $userId);
@@ -164,6 +164,8 @@ readonly class Sender
                 }
             }
         }
+
+        return $messages;
     }
 
     private function buildUserInput(AgentMessage $input): MessageBag
