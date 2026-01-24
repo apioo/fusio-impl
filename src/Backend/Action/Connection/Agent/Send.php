@@ -30,6 +30,7 @@ use Fusio\Model\Backend\AgentMessageText;
 use Fusio\Model\Backend\AgentRequest;
 use Fusio\Model\Backend\AgentResponse;
 use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Exception\BadRequestException;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 
@@ -49,7 +50,14 @@ readonly class Send extends AgentAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $agent = $this->getConnection($request);
+        $this->assertConnectionEnabled();
+
+        $connectionId = (int) $request->get('connection_id');
+        if (empty($connectionId)) {
+            throw new BadRequestException('Provided no connection');
+        }
+
+        $agent = $this->getConnection($connectionId);
         $payload = $request->getPayload();
 
         assert($payload instanceof AgentRequest);
@@ -70,6 +78,8 @@ readonly class Send extends AgentAbstract
         } else {
             $tools = $this->getGeneralTools();
         }
+
+        // @TODO load past messages
 
         $input = $payload->getInput();
         if ($input instanceof AgentMessageText) {
@@ -111,66 +121,66 @@ readonly class Send extends AgentAbstract
     private function getGeneralTools(): array
     {
         return [
-            'backend-action-getAll',
-            'backend-action-get',
-            'backend-action-getClasses',
-            'backend-action-getForm',
-            'backend-action-execute',
-            'backend-action-get',
-            'backend-action-update',
-            'backend-action-delete',
-            'backend-connection-getAll',
-            'backend-connection-get',
-            'backend-connection-database-getTables',
-            'backend-connection-database-getTable',
-            'backend-connection-database-createTable',
-            'backend-connection-database-updateTable',
-            'backend-connection-database-deleteTable',
-            'backend-connection-database-getRows',
-            'backend-connection-database-getRow',
-            'backend-connection-database-createRow',
-            'backend-connection-database-updateRow',
-            'backend-connection-database-deleteRow',
-            'backend-connection-filesystem-getAll',
-            'backend-connection-filesystem-get',
-            'backend-connection-filesystem-create',
-            'backend-connection-filesystem-update',
-            'backend-connection-filesystem-delete',
-            'backend-connection-http-execute',
-            'backend-connection-sdk-get',
-            'backend-cronjob-getAll',
-            'backend-cronjob-create',
-            'backend-cronjob-get',
-            'backend-cronjob-update',
-            'backend-cronjob-delete',
-            'backend-event-getAll',
-            'backend-event-create',
-            'backend-event-get',
-            'backend-event-update',
-            'backend-event-delete',
-            'backend-log-getAll',
-            'backend-log-get',
-            'backend-operation-getAll',
-            'backend-operation-create',
-            'backend-operation-get',
-            'backend-operation-update',
-            'backend-operation-delete',
-            'backend-schema-getAll',
-            'backend-schema-create',
-            'backend-schema-get',
-            'backend-schema-update',
-            'backend-schema-delete',
-            'backend-trigger-getAll',
-            'backend-trigger-create',
-            'backend-trigger-get',
-            'backend-trigger-update',
-            'backend-trigger-delete',
+            'backend_action_getAll',
+            'backend_action_get',
+            'backend_action_getClasses',
+            'backend_action_getForm',
+            'backend_action_execute',
+            'backend_action_get',
+            'backend_action_update',
+            'backend_action_delete',
+            'backend_connection_getAll',
+            'backend_connection_get',
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
+            'backend_connection_database_createTable',
+            'backend_connection_database_updateTable',
+            'backend_connection_database_deleteTable',
+            'backend_connection_database_getRows',
+            'backend_connection_database_getRow',
+            'backend_connection_database_createRow',
+            'backend_connection_database_updateRow',
+            'backend_connection_database_deleteRow',
+            'backend_connection_filesystem_getAll',
+            'backend_connection_filesystem_get',
+            'backend_connection_filesystem_create',
+            'backend_connection_filesystem_update',
+            'backend_connection_filesystem_delete',
+            'backend_connection_http_execute',
+            'backend_connection_sdk_get',
+            'backend_cronjob_getAll',
+            'backend_cronjob_create',
+            'backend_cronjob_get',
+            'backend_cronjob_update',
+            'backend_cronjob_delete',
+            'backend_event_getAll',
+            'backend_event_create',
+            'backend_event_get',
+            'backend_event_update',
+            'backend_event_delete',
+            'backend_log_getAll',
+            'backend_log_get',
+            'backend_operation_getAll',
+            'backend_operation_create',
+            'backend_operation_get',
+            'backend_operation_update',
+            'backend_operation_delete',
+            'backend_schema_getAll',
+            'backend_schema_create',
+            'backend_schema_get',
+            'backend_schema_update',
+            'backend_schema_delete',
+            'backend_trigger_getAll',
+            'backend_trigger_create',
+            'backend_trigger_get',
+            'backend_trigger_update',
+            'backend_trigger_delete',
         ];
     }
 
     private function getActionHint(): string
     {
-        $hint = 'The user has the intent to develop an action. Use the "backend-action-create" tool to create a new action.' . "\n";
+        $hint = 'The user has the intent to develop an action. Use the "backend_action_create" tool to create a new action.' . "\n";
         $hint.= 'Use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal" and add a key "code" to the config property and for the value you need to transform the provided user message into PHP code.' . "\n";
         $hint.= "\n";
         $hint.= 'As name of the action summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
@@ -201,20 +211,20 @@ PHP;
         $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
         $hint.= "\n";
         $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.' . "\n";
-        $hint.= 'You can get a list of all available connections through the "backend-connection-getAll" tool.' . "\n";
+        $hint.= 'You can get a list of all available connections through the "backend_connection_getAll" tool.' . "\n";
         $hint.= "\n";
         $hint.= 'If the connection has as class "Fusio.Impl.Connection.System" or "Fusio.Adapter.Sql.Connection.Sql" it is a Doctrine DBAL connection, this means you can use all methods of the Doctrine DBAL library.' . "\n";
         $hint.= 'If the connection has as class "Fusio.Adapter.Http.Connection.Http" it is a Guzzle connection, this means you can use all methods of the Guzzle HTTP client library.' . "\n";
         $hint.= "\n";
-        $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend-database-getTables" tool where you need to provide a connection id.' . "\n";
-        $hint.= 'If you need to get a concrete table schema you can use the "backend-database-getTable" tool where you need to provide the connection id and table name.' . "\n";
+        $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend_database_getTables" tool where you need to provide a connection id.' . "\n";
+        $hint.= 'If you need to get a concrete table schema you can use the "backend_database_getTable" tool where you need to provide the connection id and table name.' . "\n";
         $hint.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".' . "\n";
         $hint.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.' . "\n";
         $hint.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.' . "\n";
         $hint.= "\n";
         $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
         $hint.= "\n";
-        $hint.= 'You can also use the "backend-action-execute" tool to test the action which you have created.' . "\n";
+        $hint.= 'You can also use the "backend_action_execute" tool to test the action which you have created.' . "\n";
 
         return $hint;
     }
@@ -222,28 +232,28 @@ PHP;
     private function getActionTools(): array
     {
         return [
-            'backend-action-getAll',
-            'backend-action-get',
-            'backend-action-getClasses',
-            'backend-action-getForm',
-            'backend-action-execute',
-            'backend-action-get',
-            'backend-action-update',
-            'backend-action-delete',
-            'backend-connection-getAll',
-            'backend-connection-get',
-            'backend-connection-database-getTables',
-            'backend-connection-database-getTable',
-            'backend-connection-filesystem-getAll',
-            'backend-connection-filesystem-get',
-            'backend-connection-http-execute',
-            'backend-connection-sdk-get',
+            'backend_action_getAll',
+            'backend_action_get',
+            'backend_action_getClasses',
+            'backend_action_getForm',
+            'backend_action_execute',
+            'backend_action_get',
+            'backend_action_update',
+            'backend_action_delete',
+            'backend_connection_getAll',
+            'backend_connection_get',
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
+            'backend_connection_filesystem_getAll',
+            'backend_connection_filesystem_get',
+            'backend_connection_http_execute',
+            'backend_connection_sdk_get',
         ];
     }
 
     private function getSchemaHint(): string
     {
-        $hint = 'The user has the intent to develop a schema. Use the "backend-schema-create" tool to create a new schema.' . "\n";
+        $hint = 'The user has the intent to develop a schema. Use the "backend_schema_create" tool to create a new schema.' . "\n";
         $hint.= 'As name property of the schema summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
         $hint.= 'As source property of the schema you need to transform the provided user message into a TypeSchema specification.' . "\n";
         $hint.= 'The TypeSchema json structure is described through the provided JSON schema.' . "\n";
@@ -255,11 +265,11 @@ PHP;
     private function getSchemaTools(): array
     {
         return [
-            'backend-schema-getAll',
-            'backend-schema-create',
-            'backend-schema-get',
-            'backend-schema-update',
-            'backend-schema-delete',
+            'backend_schema_getAll',
+            'backend_schema_create',
+            'backend_schema_get',
+            'backend_schema_update',
+            'backend_schema_delete',
         ];
     }
 

@@ -41,13 +41,8 @@ abstract readonly class AgentAbstract implements ActionInterface
     {
     }
 
-    protected function getConnection(RequestInterface $request): AgentInterface
+    protected function getConnection(int $connectionId): AgentInterface
     {
-        $connectionId = $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
-
         $connection = $this->connector->getConnection($connectionId);
         if (!$connection instanceof AgentInterface) {
             throw new BadRequestException('Provided an invalid connection');
@@ -59,7 +54,7 @@ abstract readonly class AgentAbstract implements ActionInterface
     protected function assertConnectionEnabled(): void
     {
         if (!$this->frameworkConfig->isConnectionEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
+            throw new StatusCode\ServiceUnavailableException('Agent is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the agent');
         }
     }
 }

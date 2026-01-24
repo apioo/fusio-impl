@@ -31,11 +31,11 @@ readonly class ToolName
 {
     public static function toMcpToolName(string $name): string
     {
-        return str_replace('.', '-', $name);
+        return str_replace('.', '_', $name);
     }
 
     public static function toOperationId(string $name): string
     {
-        return str_replace('-', '.', $name);
+        return str_replace('_', '.', $name);
     }
 }
