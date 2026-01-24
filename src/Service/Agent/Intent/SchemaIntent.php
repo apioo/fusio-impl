@@ -46,10 +46,7 @@ readonly class SchemaIntent implements IntentInterface
     {
         return [
             'backend_schema_getAll',
-            'backend_schema_create',
             'backend_schema_get',
-            'backend_schema_update',
-            'backend_schema_delete',
         ];
     }
 
