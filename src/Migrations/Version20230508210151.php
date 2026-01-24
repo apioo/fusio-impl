@@ -39,6 +39,17 @@ final class Version20230508210151 extends AbstractMigration
             $actionTable->addUniqueIndex(['tenant_id', 'name']);
         }
 
+        if (!$schema->hasTable('fusio_agent_chat')) {
+            $agentChatTable = $schema->createTable('fusio_agent_chat');
+            $agentChatTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentChatTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $agentChatTable->addColumn('user_id', 'integer');
+            $agentChatTable->addColumn('connection_id', 'integer');
+            $agentChatTable->addColumn('message', 'text');
+            $agentChatTable->addColumn('insert_date', 'datetime');
+            $agentChatTable->setPrimaryKey(['id']);
+        }
+
         if (!$schema->hasTable('fusio_app')) {
             $appTable = $schema->createTable('fusio_app');
             $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -603,6 +614,11 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($actionTable)) {
             $actionTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'action_category_id');
+        }
+
+        if (isset($agentChatTable)) {
+            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_chat_user_id');
+            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_chat_connection_id');
         }
 
         if (isset($appTable)) {

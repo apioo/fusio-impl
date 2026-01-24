@@ -20,6 +20,19 @@ final class Version20260121211342 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        if (!$schema->hasTable('fusio_agent_chat')) {
+            $agentChatTable = $schema->createTable('fusio_agent_chat');
+            $agentChatTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentChatTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $agentChatTable->addColumn('user_id', 'integer');
+            $agentChatTable->addColumn('connection_id', 'integer');
+            $agentChatTable->addColumn('message', 'text');
+            $agentChatTable->addColumn('insert_date', 'datetime');
+            $agentChatTable->setPrimaryKey(['id']);
+
+            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_chat_user_id');
+            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_chat_connection_id');
+        }
     }
 
     public function down(Schema $schema): void
