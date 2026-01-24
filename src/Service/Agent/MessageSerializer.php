@@ -46,9 +46,9 @@ use Symfony\AI\Platform\Message\UserMessage;
 readonly class MessageSerializer
 {
     /**
-     * @return iterable<AgentMessage>
+     * @return array<AgentMessage>
      */
-    public function serialize(MessageInterface $message): iterable
+    public function serialize(MessageInterface $message): array
     {
         if ($message instanceof ToolCallMessage) {
             $toolCall = $message->getToolCall();
@@ -62,21 +62,22 @@ readonly class MessageSerializer
             $result->setType('tool_call');
             $result->setFunctions([$function]);
 
-            yield $result;
-        } else {
-            if ($message instanceof UserMessage) {
-                foreach ($message->getContent() as $content) {
-                    foreach ($this->serializeContent($content) as $result) {
-                        yield $result;
-                    }
+            return [$result];
+        } elseif ($message instanceof UserMessage) {
+            $result = [];
+            foreach ($message->getContent() as $content) {
+                foreach ($this->serializeContent($content) as $entry) {
+                    $result[] = $entry;
                 }
-            } else {
-                $result = new AgentMessageText();
-                $result->setType('text');
-                $result->setContent($message->getContent());
-
-                yield $result;
             }
+
+            return $result;
+        } else {
+            $result = new AgentMessageText();
+            $result->setType('text');
+            $result->setContent($message->getContent());
+
+            return [$result];
         }
     }
 
