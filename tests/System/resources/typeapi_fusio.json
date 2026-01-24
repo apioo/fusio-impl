@@ -1557,7 +1557,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Common_Message"
+          "target": "Backend_AgentCollection"
         }
       },
       "arguments": {
@@ -11932,6 +11932,40 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Action"
+      }
+    },
+    "Backend_Agent": {
+      "description": "This object represents an agent message",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "origin": {
+          "description": "The origin of this message i.e. 1 = user, 2 = assistant or 3 = system",
+          "type": "integer"
+        },
+        "message": {
+          "description": "The message",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_AgentCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Agent"
+        }
       }
     },
     "Backend_AgentMessage": {
