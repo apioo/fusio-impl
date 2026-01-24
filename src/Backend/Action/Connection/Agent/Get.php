@@ -38,7 +38,7 @@ use PSX\Http\Exception\BadRequestException;
  */
 readonly class Get extends AgentAbstract
 {
-    public function __construct(private Table\AgentChat $agentChatTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
     {
         parent::__construct($connector, $frameworkConfig);
     }
@@ -53,7 +53,7 @@ readonly class Get extends AgentAbstract
         }
 
         return new HttpResponse(200, [], [
-            'messages' => $this->agentChatTable->findMessages($context->getUser()->getId(), $connectionId),
+            'messages' => $this->agentTable->findMessages($context->getUser()->getId(), $connectionId),
         ]);
     }
 }

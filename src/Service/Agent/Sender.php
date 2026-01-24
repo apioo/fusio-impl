@@ -40,7 +40,7 @@ use Symfony\AI\Platform\Result\TextResult;
  */
 readonly class Sender
 {
-    public function __construct(private Table\AgentChat $agentChatTable, private ResultSerializer $resultSerializer)
+    public function __construct(private Table\Agent $agentChatTable, private ResultSerializer $resultSerializer)
     {
     }
 
@@ -65,9 +65,9 @@ readonly class Sender
 
         $result = $this->agentChatTable->findMessages($userId, $connectionId);
         foreach ($result as $chat) {
-            if ($chat->getType() === Table\AgentChat::TYPE_USER) {
+            if ($chat->getType() === Table\Agent::TYPE_USER) {
                 $messages->add(Message::ofUser($chat->getMessage()));
-            } elseif ($chat->getType() === Table\AgentChat::TYPE_ASSISTANT) {
+            } elseif ($chat->getType() === Table\Agent::TYPE_ASSISTANT) {
                 $messages->add(Message::ofAssistant($chat->getMessage()));
             }
         }
@@ -79,7 +79,7 @@ readonly class Sender
             $this->agentChatTable->add(
                 $userId,
                 $connectionId,
-                Table\AgentChat::TYPE_USER,
+                Table\Agent::TYPE_USER,
                 $input->getContent()
             );
         }
@@ -102,7 +102,7 @@ readonly class Sender
             $this->agentChatTable->add(
                 $userId,
                 $connectionId,
-                Table\AgentChat::TYPE_ASSISTANT,
+                Table\Agent::TYPE_ASSISTANT,
                 $input->getContent()
             );
         }

@@ -25,13 +25,13 @@ use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
 /**
- * AgentChat
+ * Agent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class AgentChat extends Generated\AgentChatTable
+class Agent extends Generated\AgentTable
 {
     public const TYPE_USER      = 0x1;
     public const TYPE_ASSISTANT = 0x2;
@@ -44,18 +44,18 @@ class AgentChat extends Generated\AgentChatTable
     public function findMessages(int $userId, int $connectionId): array
     {
         $condition = Condition::withAnd();
-        $condition->equals(Generated\AgentChatColumn::USER_ID, $userId);
-        $condition->equals(Generated\AgentChatColumn::CONNECTION_ID, $connectionId);
+        $condition->equals(Generated\AgentColumn::USER_ID, $userId);
+        $condition->equals(Generated\AgentColumn::CONNECTION_ID, $connectionId);
 
         $count = $this->getCount($condition);
         $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
 
-        return $this->findBy($condition, $startIndex, self::CONTEXT_MESSAGES_LENGTH, Generated\AgentChatColumn::ID, OrderBy::ASC);
+        return $this->findBy($condition, $startIndex, self::CONTEXT_MESSAGES_LENGTH, Generated\AgentColumn::ID, OrderBy::ASC);
     }
 
     public function add(int $userId, int $connectionId, int $type, string $message): void
     {
-        $row = new Generated\AgentChatRow();
+        $row = new Generated\AgentRow();
         $row->setUserId($userId);
         $row->setConnectionId($connectionId);
         $row->setType($type);
@@ -67,8 +67,8 @@ class AgentChat extends Generated\AgentChatTable
     public function reset(int $userId, int $connectionId): void
     {
         $condition = Condition::withAnd();
-        $condition->equals(Generated\AgentChatColumn::USER_ID, $userId);
-        $condition->equals(Generated\AgentChatColumn::CONNECTION_ID, $connectionId);
+        $condition->equals(Generated\AgentColumn::USER_ID, $userId);
+        $condition->equals(Generated\AgentColumn::CONNECTION_ID, $connectionId);
 
         $this->deleteBy($condition);
     }

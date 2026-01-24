@@ -38,7 +38,7 @@ use PSX\Http\Exception\BadRequestException;
  */
 readonly class Reset extends AgentAbstract
 {
-    public function __construct(private Table\AgentChat $agentChatTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
     {
         parent::__construct($connector, $frameworkConfig);
     }
@@ -52,7 +52,7 @@ readonly class Reset extends AgentAbstract
             throw new BadRequestException('Provided no connection');
         }
 
-        $this->agentChatTable->reset($context->getUser()->getId(), $connectionId);
+        $this->agentTable->reset($context->getUser()->getId(), $connectionId);
 
         return new HttpResponse(200, [], [
             'success' => true,

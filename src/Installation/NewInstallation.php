@@ -530,7 +530,7 @@ class NewInstallation
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Resets all agent chat messages',
+                    description: 'Resets all agent messages',
                 ),
                 'connection.database.getTables' => new Operation(
                     action: Backend\Action\Connection\Database\Table\GetAll::class,

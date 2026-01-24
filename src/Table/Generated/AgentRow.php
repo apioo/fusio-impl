@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Table\Generated;
 
-class AgentChatRow implements \JsonSerializable, \PSX\Record\RecordableInterface
+class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
     private ?int $userId = null;

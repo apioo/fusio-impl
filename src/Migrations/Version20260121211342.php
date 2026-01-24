@@ -20,19 +20,19 @@ final class Version20260121211342 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        if (!$schema->hasTable('fusio_agent_chat')) {
-            $agentChatTable = $schema->createTable('fusio_agent_chat');
-            $agentChatTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $agentChatTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
-            $agentChatTable->addColumn('user_id', 'integer');
-            $agentChatTable->addColumn('connection_id', 'integer');
-            $agentChatTable->addColumn('type', 'integer');
-            $agentChatTable->addColumn('message', 'text');
-            $agentChatTable->addColumn('insert_date', 'datetime');
-            $agentChatTable->setPrimaryKey(['id']);
+        if (!$schema->hasTable('fusio_agent')) {
+            $agentTable = $schema->createTable('fusio_agent');
+            $agentTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $agentTable->addColumn('user_id', 'integer');
+            $agentTable->addColumn('connection_id', 'integer');
+            $agentTable->addColumn('type', 'integer');
+            $agentTable->addColumn('message', 'text');
+            $agentTable->addColumn('insert_date', 'datetime');
+            $agentTable->setPrimaryKey(['id']);
 
-            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_chat_user_id');
-            $agentChatTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_chat_connection_id');
+            $agentTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_user_id');
+            $agentTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_connection_id');
         }
     }
 

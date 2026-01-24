@@ -459,6 +459,7 @@
         "class": {
           "in": "query",
           "schema": {
+            "description": "The target action class",
             "type": "string"
           }
         }
@@ -1549,6 +1550,80 @@
         "config"
       ]
     },
+    "backend.connection.agent.get": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns all previous sent messages",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.agent.reset": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Resets all agent messages",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
     "backend.connection.agent.send": {
       "path": "/backend/connection/:connection_id/agent",
       "method": "POST",
@@ -1583,7 +1658,7 @@
           }
         }
       ],
-      "description": "Executes an agent request",
+      "description": "Sends a message to an agent",
       "stability": 2,
       "security": [
         "backend.connection"
@@ -11721,7 +11796,7 @@
           "type": "boolean"
         },
         "config": {
-          "description": "Contains the action specific configuration",
+          "description": "Contains the action specific configuration. The config depends on the action class, you can get all details of the config format by passing the class to the backend-action-getForm tool",
           "type": "reference",
           "target": "Backend_ActionConfig"
         },
@@ -11944,7 +12019,7 @@
       },
       "properties": {
         "content": {
-          "description": "The output text",
+          "description": "The content text",
           "type": "string"
         }
       }
@@ -11958,7 +12033,7 @@
       },
       "properties": {
         "functions": {
-          "description": "An array of functions to invoke",
+          "description": "An array of concrete functions",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -11968,25 +12043,12 @@
       }
     },
     "Backend_AgentMessageToolCallFunction": {
-      "description": "A tool call function",
+      "description": "Concrete values for a function tool call",
       "type": "struct",
       "properties": {
         "id": {
           "type": "string"
         },
-        "type": {
-          "type": "string"
-        },
-        "function": {
-          "type": "reference",
-          "target": "Backend_AgentMessageToolCallFunctionDetails"
-        }
-      }
-    },
-    "Backend_AgentMessageToolCallFunctionDetails": {
-      "description": "Agent call function details",
-      "type": "struct",
-      "properties": {
         "name": {
           "type": "string"
         },
@@ -11999,24 +12061,14 @@
       "description": "This object represents an agent request",
       "type": "struct",
       "properties": {
+        "intent": {
+          "description": "The intent of this request i.e. to develop an action or a general request",
+          "type": "string"
+        },
         "input": {
-          "description": "The input",
+          "description": "The input message",
           "type": "reference",
           "target": "Backend_AgentMessage"
-        },
-        "schemas": {
-          "description": "Optional schemas which are attached to the context",
-          "type": "array",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "actions": {
-          "description": "Optional actions which are attached to the context",
-          "type": "array",
-          "schema": {
-            "type": "integer"
-          }
         }
       }
     },
@@ -12025,7 +12077,7 @@
       "type": "struct",
       "properties": {
         "output": {
-          "description": "The output",
+          "description": "The output message",
           "type": "reference",
           "target": "Backend_AgentMessage"
         }
@@ -14384,6 +14436,7 @@
       }
     },
     "Common_FormContainer": {
+      "description": "Represents a config form with a list of elements",
       "type": "struct",
       "properties": {
         "element": {
@@ -14396,12 +14449,10 @@
       }
     },
     "Common_FormElement": {
+      "description": "Form base element",
       "type": "struct",
       "base": true,
       "properties": {
-        "type": {
-          "type": "string"
-        },
         "element": {
           "type": "string"
         },
@@ -14424,13 +14475,21 @@
       }
     },
     "Common_FormElementInput": {
+      "description": "Form element which represents an input element",
       "type": "struct",
       "parent": {
         "type": "reference",
         "target": "Common_FormElement"
+      },
+      "properties": {
+        "type": {
+          "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
       }
     },
     "Common_FormElementSelect": {
+      "description": "Form element which represents a select element",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14438,6 +14497,7 @@
       },
       "properties": {
         "options": {
+          "description": "Available options for the select element",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14447,6 +14507,7 @@
       }
     },
     "Common_FormElementSelectOption": {
+      "description": "Represents a concrete option entry",
       "type": "struct",
       "properties": {
         "key": {
@@ -14458,6 +14519,7 @@
       }
     },
     "Common_FormElementTag": {
+      "description": "Form element which represents an input tag editor to enter comma-separated values",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14465,6 +14527,7 @@
       }
     },
     "Common_FormElementTextArea": {
+      "description": "Form element which represents a textarea",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14472,6 +14535,7 @@
       },
       "properties": {
         "mode": {
+          "description": "Describes which data is provided at the textarea, this can be i.e. a programming language like php, java or python or also a data format like json",
           "type": "string"
         }
       }
