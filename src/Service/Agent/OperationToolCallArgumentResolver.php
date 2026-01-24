@@ -33,7 +33,7 @@ use Symfony\AI\Platform\Tool\Tool;
  */
 readonly class OperationToolCallArgumentResolver implements ToolCallArgumentResolverInterface
 {
-    public function resolveArguments(object $tool, Tool $metadata, ToolCall $toolCall): array
+    public function resolveArguments(Tool $metadata, ToolCall $toolCall): array
     {
         return [
             'toolCall' => $toolCall
