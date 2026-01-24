@@ -509,7 +509,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/connection/:connection_id/agent',
                     httpCode: 200,
-                    outgoing: Model\Common\Message::class,
+                    outgoing: Model\Backend\AgentCollection::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns all previous sent messages',
                 ),
