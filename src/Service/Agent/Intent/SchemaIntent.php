@@ -33,7 +33,7 @@ readonly class SchemaIntent implements IntentInterface
 {
     public function getMessage(): string
     {
-        $hint = 'The user has the intent to develop a schema. Use the "backend_schema_create" tool to create a new schema.' . "\n";
+        $hint = 'The user has the intent to develop a new schema.' . "\n";
         $hint.= 'As name property of the schema summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
         $hint.= 'As source property of the schema you need to transform the provided user message into a TypeSchema specification.' . "\n";
         $hint.= 'The TypeSchema json structure is described through the provided JSON schema.' . "\n";
@@ -58,10 +58,29 @@ readonly class SchemaIntent implements IntentInterface
         return [
             'type' => 'json_schema',
             'json_schema' => [
-                'name' => 'TypeSchema',
+                'name' => 'Schema',
                 'strict' => true,
                 'schema' => [
                     '$defs' => [
+                        'TypeSchema' => [
+                            'description' => 'Describes a TypeSchema specification',
+                            'type' => 'object',
+                            'properties' => [
+                                'definitions' => [
+                                    'description' => 'A map of definition types',
+                                    'type' => 'object',
+                                    'additionalProperties' => [
+                                        '$ref' => '#/$defs/DefinitionType',
+                                    ]
+                                ],
+                                'root' => [
+                                    'description' => 'A reference to the root type which must be a key at the definitions map',
+                                    'type' => 'string',
+                                ],
+                            ],
+                            'required' => ['definitions', 'root'],
+                            'additionalProperties' => false,
+                        ],
                         'PropertyType' => [
                             'anyOf' => [
                                 [
@@ -185,16 +204,13 @@ readonly class SchemaIntent implements IntentInterface
                     ],
                     'type' => 'object',
                     'properties' => [
-                        'definitions' => [
-                            'description' => 'A map of definition types',
-                            'type' => 'object',
-                            'additionalProperties' => [
-                                '$ref' => '#/$defs/DefinitionType',
-                            ]
-                        ],
-                        'root' => [
-                            'description' => 'A reference to the root type which must be a key at the definitions map',
+                        'name' => [
+                            'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the user message',
                             'type' => 'string',
+                        ],
+                        'source' => [
+                            'description' => 'The TypeSchema specification',
+                            '$ref' => '#/$defs/TypeSchema',
                         ],
                     ],
                     'required' => ['definitions', 'root'],

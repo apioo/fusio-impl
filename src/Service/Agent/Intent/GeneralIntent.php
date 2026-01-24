@@ -40,6 +40,7 @@ readonly class GeneralIntent implements IntentInterface
     {
         return [
             'backend_action_getAll',
+            'backend_action_create',
             'backend_action_get',
             'backend_action_getClasses',
             'backend_action_getForm',
