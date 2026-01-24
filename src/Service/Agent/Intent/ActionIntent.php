@@ -33,11 +33,9 @@ readonly class ActionIntent implements IntentInterface
 {
     public function getMessage(): string
     {
-        $hint = 'The user has the intent to develop an action. Use the "backend_action_create" tool to create a new action.' . "\n";
-        $hint.= 'Use as class "Fusio.Adapter.Worker.Action.WorkerPHPLocal" and add a key "code" to the config property and for the value you need to transform the provided user message into PHP code.' . "\n";
+        $hint = 'The user has the intent to develop a new action.' . "\n";
+        $hint.= 'Therefor you need to transform the provided business logic by the user message into PHP code.' . "\n";
         $hint.= "\n";
-        $hint.= 'As name of the action summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
-        $hint.= 'The code which you generate is used as an action inside Fusio, this code helps to implement custom business logic for the user.' . "\n";
         $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
         $hint.= "\n";
         $hint.= '--' . "\n";
@@ -77,7 +75,6 @@ PHP;
         $hint.= "\n";
         $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
         $hint.= "\n";
-        $hint.= 'You can also use the "backend_action_execute" tool to test the action which you have created.' . "\n";
 
         return $hint;
     }
@@ -106,6 +103,39 @@ PHP;
 
     public function getResponseFormat(): ?array
     {
-        return null;
+        return [
+            'type' => 'json_schema',
+            'json_schema' => [
+                'name' => 'Action',
+                'strict' => true,
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => [
+                            'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message',
+                            'type' => 'string',
+                        ],
+                        'class' => [
+                            'type' => 'string',
+                            'enum' => ['Fusio.Adapter.Worker.Action.WorkerPHPLocal'],
+                            'default' => 'Fusio.Adapter.Worker.Action.WorkerPHPLocal',
+                        ],
+                        'config' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'code' => [
+                                    'description' => 'Then generated PHP code',
+                                    'type' => 'string',
+                                ],
+                            ],
+                            'required' => ['code'],
+                            'additionalProperties' => false,
+                        ],
+                    ],
+                    'required' => ['name', 'class', 'config'],
+                    'additionalProperties' => false,
+                ],
+            ],
+        ];
     }
 }
