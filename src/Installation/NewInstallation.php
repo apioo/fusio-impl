@@ -233,7 +233,7 @@ class NewInstallation
                     outgoing: Model\Backend\ActionExecuteResponse::class,
                     incoming: Model\Backend\ActionExecuteRequest::class,
                     throws: [999 => Model\Common\Message::class],
-                    description: 'Executes a specific action',
+                    description: 'Executes a specific action. This method should be used to test an action configuration',
                 ),
                 'action.get' => new Operation(
                     action: Backend\Action\Action\Get::class,
