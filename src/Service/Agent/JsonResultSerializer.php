@@ -45,6 +45,10 @@ readonly class JsonResultSerializer extends ResultSerializer
                 $content = substr($content, 3);
             }
 
+            if (str_ends_with($content, '```')) {
+                $content = substr($content, 0, -3);
+            }
+
             $payload = json_decode($content);
             if ($payload instanceof stdClass) {
                 $object = new AgentMessageObject();
