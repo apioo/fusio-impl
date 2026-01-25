@@ -84,6 +84,16 @@ readonly class Sender
                 $messages->add(Message::forSystem($intentMessage));
             }
 
+            $responseFormat = $intent->getResponseFormat();
+            if ($responseFormat !== null) {
+                $schema = 'The output must be a JSON format which follows the following JSON schema:' . "\n";
+                $schema.= '<schema>' . "\n";
+                $schema.= Parser::encode($responseFormat) . "\n";
+                $schema.= '</schema>' . "\n";
+
+                $messages->add(Message::forSystem($schema));
+            }
+
             $messages = $this->loadPreviousMessages($userId, $connectionId, $messages);
 
             $userMessages = $this->buildUserInput($request->getInput());
