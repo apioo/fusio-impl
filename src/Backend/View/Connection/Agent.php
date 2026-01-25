@@ -37,11 +37,12 @@ use PSX\Sql\ViewAbstract;
  */
 class Agent extends ViewAbstract
 {
-    public function getCollection(int $connectionId, ContextInterface $context)
+    public function getCollection(int $connectionId, ?Service\Agent\Intent $intent, ContextInterface $context)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentColumn::USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\AgentColumn::CONNECTION_ID, $connectionId);
+        $condition->equals(Table\Generated\AgentColumn::INTENT, $intent?->getInt() ?? 0);
 
         $count = $this->getTable(Table\Agent::class)->getCount($condition);
         $startIndex = max(0, $count - Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH);

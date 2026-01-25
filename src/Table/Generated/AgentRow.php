@@ -9,6 +9,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $connectionId = null;
     private ?string $tenantId = null;
     private ?int $origin = null;
+    private ?int $intent = null;
     private ?string $message = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id): void
@@ -51,6 +52,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->origin ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "origin" was provided');
     }
+    public function setIntent(int $intent): void
+    {
+        $this->intent = $intent;
+    }
+    public function getIntent(): int
+    {
+        return $this->intent ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "intent" was provided');
+    }
     public function setMessage(string $message): void
     {
         $this->message = $message;
@@ -76,6 +85,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('connection_id', $this->connectionId);
         $record->put('tenant_id', $this->tenantId);
         $record->put('origin', $this->origin);
+        $record->put('intent', $this->intent);
         $record->put('message', $this->message);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -92,6 +102,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->connectionId = isset($data['connection_id']) && is_int($data['connection_id']) ? $data['connection_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->origin = isset($data['origin']) && is_int($data['origin']) ? $data['origin'] : null;
+        $row->intent = isset($data['intent']) && is_int($data['intent']) ? $data['intent'] : null;
         $row->message = isset($data['message']) && is_string($data['message']) ? $data['message'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

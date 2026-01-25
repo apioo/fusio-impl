@@ -21,24 +21,22 @@
 namespace Fusio\Impl\Service\Agent;
 
 /**
- * IntentFactory
+ * Intent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class IntentFactory
+enum Intent: string
 {
-    public function __construct(private Intent\ActionIntent $actionIntent, private Intent\SchemaIntent $schemaIntent, private Intent\GeneralIntent $generalIntent)
-    {
-    }
+    case ACTION = 'action';
+    case SCHEMA = 'schema';
 
-    public function factory(?Intent $intent): IntentInterface
+    public function getInt(): int
     {
-        return match($intent) {
-            Intent::ACTION => $this->actionIntent,
-            Intent::SCHEMA => $this->schemaIntent,
-            default => $this->generalIntent,
+        return match ($this) {
+            self::ACTION => 1,
+            self::SCHEMA => 2,
         };
     }
 }

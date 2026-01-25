@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Service\Agent\Intent;
 use Fusio\Model\Backend\AgentMessage;
 use PSX\DateTime\LocalDateTime;
 use PSX\Json\Parser;
@@ -38,19 +39,19 @@ class Agent extends Generated\AgentTable
     public const ORIGIN_ASSISTANT = 0x2;
     public const ORIGIN_SYSTEM    = 0x3;
 
-    public function addUserMessage(int $userId, int $connectionId, AgentMessage $message): void
+    public function addUserMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $intent, $message);
     }
 
-    public function addAssistantMessage(int $userId, int $connectionId, AgentMessage $message): void
+    public function addAssistantMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $intent, $message);
     }
 
-    public function addSystemMessage(int $userId, int $connectionId, AgentMessage $message): void
+    public function addSystemMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $message);
+        $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $intent, $message);
     }
 
     public function reset(int $userId, int $connectionId): void
@@ -62,12 +63,13 @@ class Agent extends Generated\AgentTable
         $this->deleteBy($condition);
     }
 
-    private function addMessage(int $userId, int $connectionId, int $origin, AgentMessage $message): void
+    private function addMessage(int $userId, int $connectionId, int $origin, ?Intent $intent, AgentMessage $message): void
     {
         $row = new Generated\AgentRow();
         $row->setUserId($userId);
         $row->setConnectionId($connectionId);
         $row->setOrigin($origin);
+        $row->setIntent($intent?->getInt() ?? 0);
         $row->setMessage(Parser::encode($message));
         $row->setInsertDate(LocalDateTime::now());
         $this->create($row);

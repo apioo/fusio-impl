@@ -510,6 +510,7 @@ class NewInstallation
                     httpPath: '/connection/:connection_id/agent',
                     httpCode: 200,
                     outgoing: Model\Backend\AgentCollection::class,
+                    parameters: ['intent' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns all previous sent messages',
                 ),

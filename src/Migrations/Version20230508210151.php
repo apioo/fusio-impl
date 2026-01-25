@@ -46,6 +46,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentTable->addColumn('user_id', 'integer');
             $agentTable->addColumn('connection_id', 'integer');
             $agentTable->addColumn('origin', 'integer');
+            $agentTable->addColumn('intent', 'integer');
             $agentTable->addColumn('message', 'text');
             $agentTable->addColumn('insert_date', 'datetime');
             $agentTable->setPrimaryKey(['id']);

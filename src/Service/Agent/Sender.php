@@ -77,14 +77,15 @@ readonly class Sender
             $messages = new MessageBag();
             $messages->add(Message::forSystem($this->getIntroduction()));
 
-            $intent = $this->intentFactory->factory($request->getIntent());
+            $intent = Intent::tryFrom($request->getIntent() ?? '');
+            $intentProvider = $this->intentFactory->factory($intent);
 
-            $intentMessage = $intent->getMessage();
+            $intentMessage = $intentProvider->getMessage();
             if (!empty($intentMessage)) {
                 $messages->add(Message::forSystem($intentMessage));
             }
 
-            $responseFormat = $intent->getResponseFormat();
+            $responseFormat = $intentProvider->getResponseFormat();
             if ($responseFormat !== null) {
                 $schema = 'The output must be a JSON format which follows the following JSON schema:' . "\n";
                 $schema.= '<schema>' . "\n";
@@ -94,19 +95,19 @@ readonly class Sender
                 $messages->add(Message::forSystem($schema));
             }
 
-            $messages = $this->loadPreviousMessages($userId, $connectionId, $messages);
+            $messages = $this->loadPreviousMessages($userId, $connectionId, $intent, $messages);
 
             $userMessages = $this->buildUserInput($request->getInput());
 
-            $this->persistUserMessages($userId, $connectionId, $userMessages);
+            $this->persistUserMessages($userId, $connectionId, $intent, $userMessages);
 
             $messages = $messages->merge($userMessages);
 
             $options = [
-                'tools' => $intent->getTools(),
+                'tools' => $intentProvider->getTools(),
             ];
 
-            $responseFormat = $intent->getResponseFormat();
+            $responseFormat = $intentProvider->getResponseFormat();
             if ($responseFormat !== null) {
                 $options['response_format'] = $responseFormat;
             }
@@ -149,11 +150,12 @@ readonly class Sender
         return $introduction;
     }
 
-    private function loadPreviousMessages(int $userId, int $connectionId, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $userId, int $connectionId, ?Intent $intent, MessageBag $messages): MessageBag
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentColumn::USER_ID, $userId);
         $condition->equals(Table\Generated\AgentColumn::CONNECTION_ID, $connectionId);
+        $condition->equals(Table\Generated\AgentColumn::INTENT, $intent?->getInt() ?? 0);
 
         $count = $this->agentTable->getCount($condition);
         $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
@@ -199,11 +201,11 @@ readonly class Sender
         return $messages;
     }
 
-    private function persistUserMessages(int $userId, int $connectionId, MessageBag $userMessages): void
+    private function persistUserMessages(int $userId, int $connectionId, ?Intent $intent, MessageBag $userMessages): void
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $item) {
-                $this->agentTable->addUserMessage($userId, $connectionId, $item);
+                $this->agentTable->addUserMessage($userId, $connectionId, $intent, $item);
             }
         }
     }
