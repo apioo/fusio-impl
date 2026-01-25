@@ -34,9 +34,12 @@ readonly class SchemaIntent implements IntentInterface
     public function getMessage(): string
     {
         $hint = 'The user has the intent to develop a new schema.' . "\n";
-        $hint.= 'As name property of the schema summarize the user message into a short and precise name as lower case and separated by hyphens.' . "\n";
-        $hint.= 'As source property of the schema you need to transform the provided user message into a TypeSchema specification.' . "\n";
-        $hint.= 'The TypeSchema json structure is described through the provided JSON schema.' . "\n";
+        $hint.= 'Therefor you need generate a JSON configuration which is used to create a new schema.' . "\n";
+        $hint.= 'The format of this schema is described in the provided JSON schema.' . "\n";
+        $hint.= "\n";
+        $hint.= 'Inside the configuration there is a source property where you need to generate a JSON TypeSchema specification.' . "\n";
+        $hint.= 'You need to transform the provided user message into a TypeSchema specification.' . "\n";
+        $hint.= 'The TypeSchema JSON structure is also described through the provided JSON schema.' . "\n";
         $hint.= "\n";
 
         return $hint;

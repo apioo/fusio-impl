@@ -34,8 +34,11 @@ readonly class ActionIntent implements IntentInterface
     public function getMessage(): string
     {
         $hint = 'The user has the intent to develop a new action.' . "\n";
-        $hint.= 'Therefor you need to transform the provided business logic by the user message into PHP code.' . "\n";
+        $hint.= 'Therefor you need generate a JSON configuration which is used to create a new action.' . "\n";
+        $hint.= 'The format of this action is described in the provided JSON schema.' . "\n";
         $hint.= "\n";
+        $hint.= 'Inside the configuration there is a code property where you need to generate PHP code.' . "\n";
+        $hint.= 'For the PHP code you need to transform the provided business logic of the user message into PHP code.' . "\n";
         $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
         $hint.= "\n";
         $hint.= '<code>' . "\n";
@@ -113,12 +116,11 @@ PHP;
                             'type' => 'string',
                         ],
                         'class' => [
+                            'description' => 'The action class is always "Fusio.Adapter.Worker.Action.WorkerPHPLocal"',
                             'type' => 'string',
-                            'enum' => ['Fusio.Adapter.Worker.Action.WorkerPHPLocal'],
-                            'default' => 'Fusio.Adapter.Worker.Action.WorkerPHPLocal',
                         ],
                         'config' => [
-                            'description' => 'The action config',
+                            'description' => 'Config properties for this action',
                             'type' => 'object',
                             'properties' => [
                                 'code' => [
