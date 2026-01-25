@@ -21,23 +21,39 @@
 namespace Fusio\Impl\Service\Agent;
 
 use Fusio\Model\Backend\AgentMessage;
+use Fusio\Model\Backend\AgentMessageObject;
+use stdClass;
 use Symfony\AI\Platform\Result\ResultInterface;
+use Symfony\AI\Platform\Result\TextResult;
 
 /**
- * An intent describes the intent of a user what he wants to achieve, depending on the intent we provide different
- * messages, tools and response formats to the agent
+ * ResultSerializer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface IntentInterface
+readonly class JsonResultSerializer extends ResultSerializer
 {
-    public function getMessage(): string;
+    public function serialize(ResultInterface $result): AgentMessage
+    {
+        if ($result instanceof TextResult) {
+            $content = $result->getContent();
+            if (str_starts_with($content, '```json')) {
+                $content = substr($content, 7);
+            } elseif (str_starts_with($content, '```')) {
+                $content = substr($content, 3);
+            }
 
-    public function getTools(): array;
+            $payload = json_decode($content);
+            if ($payload instanceof stdClass) {
+                $object = new AgentMessageObject();
+                $object->setType('object');
+                $object->setPayload($payload);
+                return $object;
+            }
+        }
 
-    public function getResponseFormat(): ?array;
-
-    public function transformResult(ResultInterface $result): AgentMessage;
+        return parent::serialize($result);
+    }
 }

@@ -21,6 +21,9 @@
 namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
+use Fusio\Impl\Service\Agent\JsonResultSerializer;
+use Fusio\Model\Backend\AgentMessage;
+use Symfony\AI\Platform\Result\ResultInterface;
 
 /**
  * SchemaIntent
@@ -31,6 +34,10 @@ use Fusio\Impl\Service\Agent\IntentInterface;
  */
 readonly class SchemaIntent implements IntentInterface
 {
+    public function __construct(private JsonResultSerializer $resultSerializer)
+    {
+    }
+
     public function getMessage(): string
     {
         $hint = 'The user has the intent to develop a new schema.' . "\n";
@@ -218,5 +225,10 @@ readonly class SchemaIntent implements IntentInterface
                 ],
             ],
         ];
+    }
+
+    public function transformResult(ResultInterface $result): AgentMessage
+    {
+        return $this->resultSerializer->serialize($result);
     }
 }

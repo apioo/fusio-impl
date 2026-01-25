@@ -61,7 +61,6 @@ readonly class Sender
 
     public function __construct(
         private IntentFactory $intentFactory,
-        private ResultSerializer $resultSerializer,
         private MessageSerializer $messageSerializer,
         private Table\Agent $agentTable,
         SchemaManager $schemaManager,
@@ -115,7 +114,7 @@ readonly class Sender
 
             $result = $agent->call($messages, $options);
 
-            $output = $this->resultSerializer->serialize($result);
+            $output = $intentProvider->transformResult($result);
 
             $this->agentTable->addAssistantMessage($userId, $connectionId, $intent, $output);
 

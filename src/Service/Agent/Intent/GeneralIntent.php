@@ -21,6 +21,9 @@
 namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
+use Fusio\Impl\Service\Agent\ResultSerializer;
+use Fusio\Model\Backend\AgentMessage;
+use Symfony\AI\Platform\Result\ResultInterface;
 
 /**
  * GeneralIntent
@@ -31,6 +34,10 @@ use Fusio\Impl\Service\Agent\IntentInterface;
  */
 readonly class GeneralIntent implements IntentInterface
 {
+    public function __construct(private ResultSerializer $resultSerializer)
+    {
+    }
+
     public function getMessage(): string
     {
         return '';
@@ -96,5 +103,10 @@ readonly class GeneralIntent implements IntentInterface
     public function getResponseFormat(): ?array
     {
         return null;
+    }
+
+    public function transformResult(ResultInterface $result): AgentMessage
+    {
+        return $this->resultSerializer->serialize($result);
     }
 }
