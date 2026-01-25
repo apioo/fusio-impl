@@ -117,7 +117,7 @@ readonly class Sender
 
             $output = $this->resultSerializer->serialize($result);
 
-            $this->agentTable->addAssistantMessage($userId, $connectionId, $output);
+            $this->agentTable->addAssistantMessage($userId, $connectionId, $intent, $output);
 
             $this->agentTable->commit();
 
