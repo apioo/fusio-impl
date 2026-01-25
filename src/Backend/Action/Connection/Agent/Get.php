@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Service\Agent\Intent;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\BadRequestException;
@@ -52,7 +53,7 @@ readonly class Get extends AgentAbstract
             throw new BadRequestException('Provided no connection');
         }
 
-        $intent = $request->get('intent');
+        $intent = Intent::tryFrom($request->get('intent') ?? '');
 
         return new HttpResponse(200, [], $this->view->getCollection($connectionId, $intent, $context));
     }
