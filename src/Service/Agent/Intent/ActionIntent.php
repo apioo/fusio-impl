@@ -52,15 +52,11 @@ readonly class ActionIntent implements IntentInterface
         $hint.= <<<PHP
 <?php
 
-use Doctrine\DBAL\Connection;
-use Fusio\Worker\ExecuteContext;
-use Fusio\Worker\ExecuteRequest;
-use Fusio\Engine\ConnectorInterface;
-use Fusio\Engine\Response\FactoryInterface;
-use Fusio\Engine\DispatcherInterface;
+use Fusio\Worker;
+use Fusio\Engine;
 use Psr\Log\LoggerInterface;
 
-return function(ExecuteRequest \$request, ExecuteContext \$context, ConnectorInterface \$connector, FactoryInterface \$response, DispatcherInterface \$dispatcher, LoggerInterface \$logger) {
+return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context, Engine\ConnectorInterface \$connector, Engine\Response\FactoryInterface \$response, Engine\DispatcherInterface \$dispatcher, LoggerInterface \$logger) {
 
 // [INSERT_CODE_HERE]
 
