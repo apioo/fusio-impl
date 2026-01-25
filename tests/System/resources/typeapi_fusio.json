@@ -319,7 +319,7 @@
           }
         }
       ],
-      "description": "Executes a specific action",
+      "description": "Executes a specific action. This method should be used to test an action configuration",
       "stability": 2,
       "security": [
         "backend.action"
@@ -1563,6 +1563,12 @@
       "arguments": {
         "connection_id": {
           "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "intent": {
+          "in": "query",
           "schema": {
             "type": "string"
           }
