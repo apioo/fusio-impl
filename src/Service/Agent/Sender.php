@@ -87,7 +87,8 @@ readonly class Sender
 
             $responseFormat = $intentProvider->getResponseFormat();
             if ($responseFormat !== null) {
-                $schema = 'The output must be a JSON format which follows the following JSON schema:' . "\n";
+                $schema = 'The output must be a plain JSON format and it must be possible to decode the output with a JSON processor.' . "\n";
+                $schema.= 'The generated JSON format must follow the JSON schema:' . "\n";
                 $schema.= '<schema>' . "\n";
                 $schema.= Parser::encode($responseFormat) . "\n";
                 $schema.= '</schema>' . "\n";
