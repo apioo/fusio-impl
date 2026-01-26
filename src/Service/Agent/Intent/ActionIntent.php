@@ -75,9 +75,21 @@ PHP;
         $hint.= "\n";
         $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend_database_getTables" tool where you need to provide a connection id.' . "\n";
         $hint.= 'If you need to get a concrete table schema you can use the "backend_database_getTable" tool where you need to provide the connection id and table name.' . "\n";
-        $hint.= 'If you need to get data from the incoming HTTP request you can get query and uri parameters through the "$request->getArguments()->get(\'[name]\')" method and the body with "$request->getPayload()".' . "\n";
         $hint.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.' . "\n";
-        $hint.= 'To dispatch an event you can use the "$dispatcher" argument which has a method "dispatch" where the first argument is the event name and the second the payload.' . "\n";
+        $hint.= "\n";
+        $hint.= 'Methods which can be used inside an action:' . "\n";
+        $hint.= '* Get uri fragment or query parameter: $request->getArguments()->get([name])' . "\n";
+        $hint.= '* Get uri fragment or query parameter with a default value: $request->getArguments()->getOrDefault([name], [default])' . "\n";
+        $hint.= '* Get request payload: $request->getPayload()' . "\n";
+        $hint.= '* Get operation id: $context->getOperationId()' . "\n";
+        $hint.= '* Get base url: $context->getBaseUrl()' . "\n";
+        $hint.= '* Get user id: $context->getUser()->getId()' . "\n";
+        $hint.= '* Get user name: $context->getUser()->getName()' . "\n";
+        $hint.= '* Get user email: $context->getUser()->getEmail()' . "\n";
+        $hint.= '* Get user points: $context->getUser()->getPoints()' . "\n";
+        $hint.= '* Get connection: $connector->getConnection([connection_id])' . "\n";
+        $hint.= '* Dispatch event: $dispatcher->dispatch([event_name], [payload])' . "\n";
+        $hint.= '* Build response: $response->build([status_code], [headers], [body])' . "\n";
         $hint.= "\n";
         $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
         $hint.= "\n";
@@ -104,41 +116,34 @@ PHP;
         ];
     }
 
-    public function getResponseFormat(): ?array
+    public function getResponseSchema(): ?array
     {
         return [
-            'type' => 'json_schema',
-            'json_schema' => [
-                'name' => 'Action',
-                'strict' => true,
-                'schema' => [
+            'type' => 'object',
+            'properties' => [
+                'name' => [
+                    'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message',
+                    'type' => 'string',
+                ],
+                'class' => [
+                    'description' => 'The action class is always "Fusio.Adapter.Worker.Action.WorkerPHPLocal"',
+                    'type' => 'string',
+                ],
+                'config' => [
+                    'description' => 'Config properties for this action',
                     'type' => 'object',
                     'properties' => [
-                        'name' => [
-                            'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message',
+                        'code' => [
+                            'description' => 'The generated PHP code',
                             'type' => 'string',
-                        ],
-                        'class' => [
-                            'description' => 'The action class is always "Fusio.Adapter.Worker.Action.WorkerPHPLocal"',
-                            'type' => 'string',
-                        ],
-                        'config' => [
-                            'description' => 'Config properties for this action',
-                            'type' => 'object',
-                            'properties' => [
-                                'code' => [
-                                    'description' => 'The generated PHP code',
-                                    'type' => 'string',
-                                ],
-                            ],
-                            'required' => ['code'],
-                            'additionalProperties' => false,
                         ],
                     ],
-                    'required' => ['name', 'class', 'config'],
+                    'required' => ['code'],
                     'additionalProperties' => false,
                 ],
             ],
+            'required' => ['name', 'class', 'config'],
+            'additionalProperties' => false,
         ];
     }
 

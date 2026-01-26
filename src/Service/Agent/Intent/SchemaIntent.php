@@ -60,170 +60,163 @@ readonly class SchemaIntent implements IntentInterface
         ];
     }
 
-    public function getResponseFormat(): ?array
+    public function getResponseSchema(): ?array
     {
         return [
-            'type' => 'json_schema',
-            'json_schema' => [
-                'name' => 'Schema',
-                'strict' => true,
-                'schema' => [
-                    '$defs' => [
-                        'TypeSchema' => [
-                            'description' => 'Describes a TypeSchema specification',
-                            'type' => 'object',
-                            'properties' => [
-                                'definitions' => [
-                                    'description' => 'A map of definition types',
-                                    'type' => 'object',
-                                    'additionalProperties' => [
-                                        '$ref' => '#/$defs/DefinitionType',
-                                    ]
-                                ],
-                                'root' => [
-                                    'description' => 'A reference to the root type which must be a key at the definitions map',
-                                    'type' => 'string',
-                                ],
-                            ],
-                            'required' => ['definitions', 'root'],
-                            'additionalProperties' => false,
-                        ],
-                        'PropertyType' => [
-                            'anyOf' => [
-                                [
-                                    'description' => 'Boolean type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['boolean'],
-                                        ],
-                                    ],
-                                    'required' => ['type'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'Integer type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['integer'],
-                                        ],
-                                    ],
-                                    'required' => ['type'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'Number type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['number'],
-                                        ],
-                                    ],
-                                    'required' => ['type'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'String type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['string'],
-                                        ],
-                                    ],
-                                    'required' => ['type'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'Reference type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['reference'],
-                                        ],
-                                        'target' => [
-                                            'description' => 'The reference target must be a key which is available under the definitions object',
-                                            'type' => 'string',
-                                        ],
-                                    ],
-                                    'required' => ['type', 'target'],
-                                    'additionalProperties' => false,
-                                ],
-                            ],
-                        ],
-                        'DefinitionType' => [
-                            'anyOf' => [
-                                [
-                                    'description' => 'Struct type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['struct'],
-                                        ],
-                                        'properties' => [
-                                            'type' => 'object',
-                                            'additionalProperties' => [
-                                                '$ref' => '#/$defs/PropertyType',
-                                            ],
-                                        ],
-                                    ],
-                                    'required' => ['type', 'properties'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'Map type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['map'],
-                                        ],
-                                        'schema' => [
-                                            '$ref' => '#/$defs/PropertyType',
-                                        ],
-                                    ],
-                                    'required' => ['type', 'schema'],
-                                    'additionalProperties' => false,
-                                ],
-                                [
-                                    'description' => 'Array type',
-                                    'type' => 'object',
-                                    'properties' => [
-                                        'type' => [
-                                            'type' => 'string',
-                                            'enum' => ['array'],
-                                        ],
-                                        'schema' => [
-                                            '$ref' => '#/$defs/PropertyType',
-                                        ],
-                                    ],
-                                    'required' => ['type', 'schema'],
-                                    'additionalProperties' => false,
-                                ],
-                            ],
-                        ],
-                    ],
+            '$defs' => [
+                'TypeSchema' => [
+                    'description' => 'Describes a TypeSchema specification',
                     'type' => 'object',
                     'properties' => [
-                        'name' => [
-                            'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the user message',
-                            'type' => 'string',
+                        'definitions' => [
+                            'description' => 'A map of definition types',
+                            'type' => 'object',
+                            'additionalProperties' => [
+                                '$ref' => '#/$defs/DefinitionType',
+                            ]
                         ],
-                        'source' => [
-                            'description' => 'The TypeSchema specification',
-                            '$ref' => '#/$defs/TypeSchema',
+                        'root' => [
+                            'description' => 'A reference to the root type which must be a key at the definitions map',
+                            'type' => 'string',
                         ],
                     ],
                     'required' => ['definitions', 'root'],
                     'additionalProperties' => false,
                 ],
+                'PropertyType' => [
+                    'anyOf' => [
+                        [
+                            'description' => 'Boolean type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['boolean'],
+                                ],
+                            ],
+                            'required' => ['type'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'Integer type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['integer'],
+                                ],
+                            ],
+                            'required' => ['type'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'Number type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['number'],
+                                ],
+                            ],
+                            'required' => ['type'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'String type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['string'],
+                                ],
+                            ],
+                            'required' => ['type'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'Reference type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['reference'],
+                                ],
+                                'target' => [
+                                    'description' => 'The reference target must be a key which is available under the definitions object',
+                                    'type' => 'string',
+                                ],
+                            ],
+                            'required' => ['type', 'target'],
+                            'additionalProperties' => false,
+                        ],
+                    ],
+                ],
+                'DefinitionType' => [
+                    'anyOf' => [
+                        [
+                            'description' => 'Struct type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['struct'],
+                                ],
+                                'properties' => [
+                                    'type' => 'object',
+                                    'additionalProperties' => [
+                                        '$ref' => '#/$defs/PropertyType',
+                                    ],
+                                ],
+                            ],
+                            'required' => ['type', 'properties'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'Map type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['map'],
+                                ],
+                                'schema' => [
+                                    '$ref' => '#/$defs/PropertyType',
+                                ],
+                            ],
+                            'required' => ['type', 'schema'],
+                            'additionalProperties' => false,
+                        ],
+                        [
+                            'description' => 'Array type',
+                            'type' => 'object',
+                            'properties' => [
+                                'type' => [
+                                    'type' => 'string',
+                                    'enum' => ['array'],
+                                ],
+                                'schema' => [
+                                    '$ref' => '#/$defs/PropertyType',
+                                ],
+                            ],
+                            'required' => ['type', 'schema'],
+                            'additionalProperties' => false,
+                        ],
+                    ],
+                ],
             ],
+            'type' => 'object',
+            'properties' => [
+                'name' => [
+                    'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the user message',
+                    'type' => 'string',
+                ],
+                'source' => [
+                    'description' => 'The TypeSchema specification',
+                    '$ref' => '#/$defs/TypeSchema',
+                ],
+            ],
+            'required' => ['definitions', 'root'],
+            'additionalProperties' => false,
         ];
     }
 

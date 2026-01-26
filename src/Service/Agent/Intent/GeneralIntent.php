@@ -100,7 +100,7 @@ readonly class GeneralIntent implements IntentInterface
         ];
     }
 
-    public function getResponseFormat(): ?array
+    public function getResponseSchema(): ?array
     {
         return null;
     }

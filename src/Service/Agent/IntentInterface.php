@@ -37,7 +37,7 @@ interface IntentInterface
 
     public function getTools(): array;
 
-    public function getResponseFormat(): ?array;
+    public function getResponseSchema(): ?array;
 
     public function transformResult(ResultInterface $result): AgentMessage;
 }

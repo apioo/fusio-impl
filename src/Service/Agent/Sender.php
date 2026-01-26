@@ -20,9 +20,11 @@
 
 namespace Fusio\Impl\Service\Agent;
 
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\AgentMessage;
 use Fusio\Model\Backend\AgentMessageBinary;
+use Fusio\Model\Backend\AgentMessageObject;
 use Fusio\Model\Backend\AgentMessageText;
 use Fusio\Model\Backend\AgentMessageToolCall;
 use Fusio\Model\Backend\AgentRequest;
@@ -37,6 +39,7 @@ use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\AgentInterface;
+use Symfony\AI\Platform\Message\Content\Document;
 use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
@@ -84,12 +87,12 @@ readonly class Sender
                 $messages->add(Message::forSystem($intentMessage));
             }
 
-            $responseFormat = $intentProvider->getResponseFormat();
-            if ($responseFormat !== null) {
+            $responseSchema = $intentProvider->getResponseSchema();
+            if ($responseSchema !== null) {
                 $schema = 'The output must be a valid JSON string and it must be possible to decode the output with a JSON parser.' . "\n";
                 $schema.= 'The generated JSON must follow the JSON schema:' . "\n";
                 $schema.= '<schema>' . "\n";
-                $schema.= Parser::encode($responseFormat) . "\n";
+                $schema.= Parser::encode($responseSchema) . "\n";
                 $schema.= '</schema>' . "\n";
 
                 $messages->add(Message::forSystem($schema));
@@ -107,9 +110,15 @@ readonly class Sender
                 'tools' => $intentProvider->getTools(),
             ];
 
-            $responseFormat = $intentProvider->getResponseFormat();
-            if ($responseFormat !== null) {
-                $options['response_format'] = $responseFormat;
+            if ($responseSchema !== null) {
+                $options['response_format'] = [
+                    'type' => 'json_schema',
+                    'json_schema' => [
+                        'name' => str_replace('\\', '-', $intentProvider::class),
+                        'strict' => true,
+                        'schema' => $responseSchema,
+                    ],
+                ];
             }
 
             $result = $agent->call($messages, $options);
@@ -169,10 +178,14 @@ readonly class Sender
             } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_ASSISTANT) {
                 if ($message instanceof AgentMessageText) {
                     $messages->add(Message::ofAssistant($message->getContent()));
+                } elseif ($message instanceof AgentMessageObject) {
+                    $messages->add(Message::ofAssistant(Parser::encode($message->getPayload())));
                 }
             } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_SYSTEM) {
                 if ($message instanceof AgentMessageText) {
                     $messages->add(Message::forSystem($message->getContent()));
+                } elseif ($message instanceof AgentMessageObject) {
+                    $messages->add(Message::forSystem(Parser::encode($message->getPayload())));
                 }
             }
         }
@@ -185,6 +198,8 @@ readonly class Sender
         $messages = new MessageBag();
         if ($input instanceof AgentMessageText) {
             $messages->add(Message::ofUser($input->getContent()));
+        } elseif ($input instanceof AgentMessageObject) {
+            $messages->add(Message::ofUser(Parser::encode($input->getPayload())));
         } elseif ($input instanceof AgentMessageBinary) {
             $messages->add(Message::ofUser(new File($input->getData(), $input->getMime())));
         } elseif ($input instanceof AgentMessageToolCall) {
