@@ -108,6 +108,7 @@ readonly class Sender
 
             $options = [
                 'tools' => $intentProvider->getTools(),
+                'temperature' => 0.2,
             ];
 
             if ($responseSchema !== null) {
