@@ -92,6 +92,8 @@ PHP;
         $hint.= '* Build response: $response->build([status_code], [headers], [body])' . "\n";
         $hint.= "\n";
         $hint.= 'The generated business logic must use the build method of the "$response" factory to return a result.' . "\n";
+        $hint.= 'Normally you do not need to set a Content-Type header or use "json_encode" since the framework handles the Content-Type and serializes the provided body into JSON.' . "\n";
+        $hint.= 'You only need to set a Content-Type and serialize the body if the user explicit wants to return a specific format like XML.' . "\n";
         $hint.= "\n";
 
         return $hint;
