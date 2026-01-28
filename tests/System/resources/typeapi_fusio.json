@@ -319,7 +319,7 @@
           }
         }
       ],
-      "description": "Executes a specific action",
+      "description": "Executes a specific action. This method should be used to test an action configuration",
       "stability": 2,
       "security": [
         "backend.action"
@@ -459,6 +459,7 @@
         "class": {
           "in": "query",
           "schema": {
+            "description": "The target action class",
             "type": "string"
           }
         }
@@ -1547,6 +1548,130 @@
       "authorization": true,
       "tags": [
         "config"
+      ]
+    },
+    "backend.connection.agent.get": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentCollection"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "intent": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns all previous sent messages",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.agent.reset": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Resets all agent messages",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
+      ]
+    },
+    "backend.connection.agent.send": {
+      "path": "/backend/connection/:connection_id/agent",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentResponse"
+        }
+      },
+      "arguments": {
+        "connection_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentRequest"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Sends a message to an agent",
+      "stability": 2,
+      "security": [
+        "backend.connection"
+      ],
+      "authorization": true,
+      "tags": [
+        "connection"
       ]
     },
     "backend.connection.create": {
@@ -11677,7 +11802,7 @@
           "type": "boolean"
         },
         "config": {
-          "description": "Contains the action specific configuration",
+          "description": "Contains the action specific configuration. The config depends on the action class, you can get all details of the config format by passing the class to the backend-action-getForm tool",
           "type": "reference",
           "target": "Backend_ActionConfig"
         },
@@ -11813,6 +11938,189 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Action"
+      }
+    },
+    "Backend_Agent": {
+      "description": "This object represents an agent message",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "origin": {
+          "description": "The origin of this message i.e. 1 = user, 2 = assistant or 3 = system",
+          "type": "integer"
+        },
+        "message": {
+          "description": "The message",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_AgentCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Agent"
+        }
+      }
+    },
+    "Backend_AgentMessage": {
+      "description": "Agent call result",
+      "type": "struct",
+      "base": true,
+      "properties": {
+        "type": {
+          "description": "The result type",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Optional result metadata",
+          "type": "map",
+          "schema": {
+            "type": "any"
+          }
+        }
+      },
+      "discriminator": "type",
+      "mapping": {
+        "Backend_AgentMessageBinary": "binary",
+        "Backend_AgentMessageChoice": "choice",
+        "Backend_AgentMessageObject": "object",
+        "Backend_AgentMessageText": "text",
+        "Backend_AgentMessageToolCall": "tool_call"
+      }
+    },
+    "Backend_AgentMessageBinary": {
+      "description": "Binary agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "mime": {
+          "description": "The mime of the binary data",
+          "type": "string"
+        },
+        "data": {
+          "description": "The base64 encoded binary data",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentMessageChoice": {
+      "description": "Choice agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "items": {
+          "description": "Contains multiple agent results",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentMessage"
+          }
+        }
+      }
+    },
+    "Backend_AgentMessageObject": {
+      "description": "Structured agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "payload": {
+          "description": "The structured JSON payload",
+          "type": "any"
+        }
+      }
+    },
+    "Backend_AgentMessageText": {
+      "description": "Text agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "content": {
+          "description": "The content text",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentMessageToolCall": {
+      "description": "Tool call agent result",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_AgentMessage"
+      },
+      "properties": {
+        "functions": {
+          "description": "An array of concrete functions",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentMessageToolCallFunction"
+          }
+        }
+      }
+    },
+    "Backend_AgentMessageToolCallFunction": {
+      "description": "Concrete values for a function tool call",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_AgentRequest": {
+      "description": "This object represents an agent request",
+      "type": "struct",
+      "properties": {
+        "intent": {
+          "description": "The intent of this request i.e. to develop an action or a general request",
+          "type": "string"
+        },
+        "input": {
+          "description": "The input message",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        }
+      }
+    },
+    "Backend_AgentResponse": {
+      "description": "This object represents an agent response",
+      "type": "struct",
+      "properties": {
+        "output": {
+          "description": "The output message",
+          "type": "reference",
+          "target": "Backend_AgentMessage"
+        }
       }
     },
     "Backend_App": {
@@ -14168,6 +14476,7 @@
       }
     },
     "Common_FormContainer": {
+      "description": "Represents a config form with a list of elements",
       "type": "struct",
       "properties": {
         "element": {
@@ -14180,12 +14489,10 @@
       }
     },
     "Common_FormElement": {
+      "description": "Form base element",
       "type": "struct",
       "base": true,
       "properties": {
-        "type": {
-          "type": "string"
-        },
         "element": {
           "type": "string"
         },
@@ -14208,13 +14515,21 @@
       }
     },
     "Common_FormElementInput": {
+      "description": "Form element which represents an input element",
       "type": "struct",
       "parent": {
         "type": "reference",
         "target": "Common_FormElement"
+      },
+      "properties": {
+        "type": {
+          "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
       }
     },
     "Common_FormElementSelect": {
+      "description": "Form element which represents a select element",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14222,6 +14537,7 @@
       },
       "properties": {
         "options": {
+          "description": "Available options for the select element",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14231,6 +14547,7 @@
       }
     },
     "Common_FormElementSelectOption": {
+      "description": "Represents a concrete option entry",
       "type": "struct",
       "properties": {
         "key": {
@@ -14242,6 +14559,7 @@
       }
     },
     "Common_FormElementTag": {
+      "description": "Form element which represents an input tag editor to enter comma-separated values",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14249,6 +14567,7 @@
       }
     },
     "Common_FormElementTextArea": {
+      "description": "Form element which represents a textarea",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14256,6 +14575,7 @@
       },
       "properties": {
         "mode": {
+          "description": "Describes which data is provided at the textarea, this can be i.e. a programming language like php, java or python or also a data format like json",
           "type": "string"
         }
       }
