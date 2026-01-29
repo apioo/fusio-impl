@@ -64,8 +64,8 @@ return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context
 PHP;
         $hint.= '</code>' . "\n";
         $hint.= "\n";
-        $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
-        $hint.= 'Replace the line "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
+        $hint.= 'Replace "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
+        $hint.= 'Replace "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
         $hint.= "\n";
         $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.' . "\n";
         $hint.= 'You can get a list of all available connections through the "backend_connection_getAll" tool.' . "\n";
