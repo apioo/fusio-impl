@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
-use Fusio\Impl\Service\Agent\Serializer\ActionResultSerializer;
+use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
 use Fusio\Model\Backend\AgentMessage;
 use Symfony\AI\Platform\Result\ResultInterface;
 
@@ -34,7 +34,7 @@ use Symfony\AI\Platform\Result\ResultInterface;
  */
 readonly class ActionIntent implements IntentInterface
 {
-    public function __construct(private ActionResultSerializer $resultSerializer)
+    public function __construct(private ResultSerializer $resultSerializer)
     {
     }
 
@@ -42,9 +42,9 @@ readonly class ActionIntent implements IntentInterface
     {
         $hint = 'The user has the intent to develop a new action.' . "\n";
         $hint.= 'Therefor you need to transform the provided business logic of the user message into PHP code.' . "\n";
-        $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
+        $hint.= 'The resulting PHP code must be wrapped into the following code template:' . "\n";
         $hint.= "\n";
-        $hint.= '--' . "\n";
+        $hint.= '<template>' . "\n";
         $hint.= <<<PHP
 Action: [NAME]
 <?php
@@ -60,7 +60,7 @@ return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context
 };
 
 PHP;
-        $hint.= '--' . "\n";
+        $hint.= '</template>' . "\n";
         $hint.= "\n";
         $hint.= 'Replace "[CODE]" with the code which you have generated.' . "\n";
         $hint.= 'Replace "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
