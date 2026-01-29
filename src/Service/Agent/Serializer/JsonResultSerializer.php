@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Service\Agent\Serializer;
 
 use Fusio\Model\Backend\AgentMessage;
 use Fusio\Model\Backend\AgentMessageObject;
@@ -39,19 +39,13 @@ readonly class JsonResultSerializer extends ResultSerializer
     {
         if ($result instanceof TextResult) {
             $content = $result->getContent();
-            if (str_starts_with($content, '```json')) {
-                $content = substr($content, 7);
-            } elseif (str_starts_with($content, '```')) {
-                $content = substr($content, 3);
-            }
 
-            if (str_ends_with($content, '```')) {
-                $content = substr($content, 0, -3);
-            }
+            // in case we get a text response we need to try to parse the text as JSON since LLMs can produce all kind
+            // of strange output, we try to remove all noice to get to the JSON payload
+            $content = trim($content);
+            $content = $this->removeMarkdownSyntax($content);
 
-            $content = str_replace('\\\\', '\\', $content);
             $payload = json_decode($content);
-
             if ($payload instanceof stdClass) {
                 $object = new AgentMessageObject();
                 $object->setType('object');
@@ -61,5 +55,20 @@ readonly class JsonResultSerializer extends ResultSerializer
         }
 
         return parent::serialize($result);
+    }
+
+    private function removeMarkdownSyntax(string $content): string
+    {
+        if (str_starts_with($content, '```json')) {
+            $content = substr($content, 7);
+        } elseif (str_starts_with($content, '```')) {
+            $content = substr($content, 3);
+        }
+
+        if (str_ends_with($content, '```')) {
+            $content = substr($content, 0, -3);
+        }
+
+        return $content;
     }
 }

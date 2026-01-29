@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Service\Agent\Serializer;
 
 use Fusio\Model\Backend\AgentMessage;
 use Fusio\Model\Backend\AgentMessageBinary;

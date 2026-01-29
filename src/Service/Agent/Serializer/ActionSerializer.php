@@ -18,39 +18,48 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Service\Agent\Serializer;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
+use Fusio\Impl\Table\Generated\ActionRow;
 use PSX\Http\Exception\BadRequestException;
-use PSX\Schema\Generator;
-use PSX\Schema\SchemaManagerInterface;
+use PSX\Json\Parser;
 
 /**
- * SchemaSerializer
+ * ActionSerializer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class SchemaSerializer
+readonly class ActionSerializer
 {
-    public function __construct(private Table\Schema $schemaTable, private SchemaManagerInterface $schemaManager)
+    public function __construct(private Table\Action $actionTable)
     {
     }
 
     public function serialize(int $id, ContextInterface $context): string
     {
-        $row = $this->schemaTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $id);
-        if (!$row instanceof Table\Generated\SchemaRow) {
-            throw new BadRequestException('Provided an invalid schema id: ' . $id);
+        $row = $this->actionTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $id);
+        if (!$row instanceof Table\Generated\ActionRow) {
+            throw new BadRequestException('Provided an invalid action id: ' . $id);
         }
 
-        $schema = $this->schemaManager->getSchema('schema://' . $row->getName());
-
-        $output = 'Schema ' . $row->getName() . ':' . "\n";
+        $output = 'Action ' . $row->getName() . ':' . "\n";
         $output.= '--' . "\n";
-        $output.= (new Generator\JsonSchema(inlineDefinitions: true))->generate($schema) . "\n";
+        $output.= $this->buildCode($row) . "\n";
         return $output;
+    }
+
+    private function buildCode(ActionRow $row): string
+    {
+        $config = Parser::decode($row->getConfig());
+
+        if (str_starts_with($row->getClass(), 'Fusio.Adapter.Worker.Action.Worker')) {
+            return $config->code ?? '';
+        }
+
+        return '';
     }
 }
