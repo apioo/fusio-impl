@@ -43,15 +43,9 @@ readonly class ActionResultSerializer extends ResultSerializer
             throw new InvalidArgumentException('Expect a text result got: ' . $result::class);
         }
 
-        $content = trim($result->getContent(), ' -');
-
-        // try to extract the action name
-        preg_match('/\* Action: ([A-Za-z0-9-]+)/im', $content, $matches);
-
-        $name = $matches[1] ?? null;
-        if (empty($name)) {
-            $name = 'Action-' . substr(sha1($content), 0, 8);
-        }
+        $content = trim($result->getContent());
+        $name = $this->extractName($content);
+        $code = $this->extractCode($content);
 
         $object = new AgentMessageObject();
         $object->setType('object');
@@ -59,10 +53,44 @@ readonly class ActionResultSerializer extends ResultSerializer
             'name' => $name,
             'class' => ClassName::serialize(WorkerPHPLocal::class),
             'config' => [
-                'code' => $content,
+                'code' => $code,
             ],
         ]);
 
         return $object;
+    }
+
+    private function extractName(string $content): string
+    {
+        preg_match('/\* Action: ([A-Za-z0-9-]+)/im', $content, $matches);
+
+        $name = $matches[1] ?? null;
+        if (empty($name)) {
+            $name = 'Action-' . substr(sha1($content), 0, 8);
+        }
+
+        return $name;
+    }
+
+    private function extractCode(string $content): string
+    {
+        $capture = false;
+        $code = '';
+        $lines = explode("\n", $content);
+        foreach ($lines as $line) {
+            if ($line === '<?php') {
+                $capture = true;
+            }
+
+            if ($capture) {
+                $code.= $line . "\n";
+            }
+
+            if ($line === '};') {
+                break;
+            }
+        }
+
+        return $code;
     }
 }

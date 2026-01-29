@@ -46,25 +46,23 @@ readonly class ActionIntent implements IntentInterface
         $hint.= "\n";
         $hint.= '--' . "\n";
         $hint.= <<<PHP
+Action: [NAME]
 <?php
 
 use Fusio\Worker;
 use Fusio\Engine;
 use Psr\Log\LoggerInterface;
 
-/**
- * Action: [NAME]
- */
 return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context, Engine\ConnectorInterface \$connector, Engine\Response\FactoryInterface \$response, Engine\DispatcherInterface \$dispatcher, LoggerInterface \$logger) {
 
-// [INSERT_CODE_HERE]
+[CODE]
 
 };
 
 PHP;
         $hint.= '--' . "\n";
         $hint.= "\n";
-        $hint.= 'Replace "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
+        $hint.= 'Replace "[CODE]" with the code which you have generated.' . "\n";
         $hint.= 'Replace "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
         $hint.= "\n";
         $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.' . "\n";
