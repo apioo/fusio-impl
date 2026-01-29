@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
-use Fusio\Impl\Service\Agent\JsonResultSerializer;
+use Fusio\Impl\Service\Agent\Serializer\ActionResultSerializer;
 use Fusio\Model\Backend\AgentMessage;
 use Symfony\AI\Platform\Result\ResultInterface;
 
@@ -34,18 +34,14 @@ use Symfony\AI\Platform\Result\ResultInterface;
  */
 readonly class ActionIntent implements IntentInterface
 {
-    public function __construct(private JsonResultSerializer $resultSerializer)
+    public function __construct(private ActionResultSerializer $resultSerializer)
     {
     }
 
     public function getMessage(): string
     {
         $hint = 'The user has the intent to develop a new action.' . "\n";
-        $hint.= 'Therefor you need generate a JSON configuration which is used to create a new action.' . "\n";
-        $hint.= 'The format of this action is described in the provided JSON schema.' . "\n";
-        $hint.= "\n";
-        $hint.= 'Inside the configuration there is a code property where you need to generate PHP code.' . "\n";
-        $hint.= 'For the PHP code you need to transform the provided business logic of the user message into PHP code.' . "\n";
+        $hint.= 'Therefor you need to transform the provided business logic of the user message into PHP code.' . "\n";
         $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
         $hint.= "\n";
         $hint.= '<code>' . "\n";
@@ -56,6 +52,9 @@ use Fusio\Worker;
 use Fusio\Engine;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Action: [NAME]
+ */
 return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context, Engine\ConnectorInterface \$connector, Engine\Response\FactoryInterface \$response, Engine\DispatcherInterface \$dispatcher, LoggerInterface \$logger) {
 
 // [INSERT_CODE_HERE]
@@ -66,6 +65,7 @@ PHP;
         $hint.= '</code>' . "\n";
         $hint.= "\n";
         $hint.= 'Replace the line "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
+        $hint.= 'Replace the line "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
         $hint.= "\n";
         $hint.= 'If the business logic wants to interact with an external service i.e. a database or remote HTTP endpoint, then you can use the getConnection method at the connector argument to access those external services.' . "\n";
         $hint.= 'You can get a list of all available connections through the "backend_connection_getAll" tool.' . "\n";
@@ -120,33 +120,7 @@ PHP;
 
     public function getResponseSchema(): ?array
     {
-        return [
-            'type' => 'object',
-            'properties' => [
-                'name' => [
-                    'description' => 'A short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message',
-                    'type' => 'string',
-                ],
-                'class' => [
-                    'description' => 'The action class is always "Fusio.Adapter.Worker.Action.WorkerPHPLocal"',
-                    'type' => 'string',
-                ],
-                'config' => [
-                    'description' => 'Config properties for this action',
-                    'type' => 'object',
-                    'properties' => [
-                        'code' => [
-                            'description' => 'The generated PHP code',
-                            'type' => 'string',
-                        ],
-                    ],
-                    'required' => ['code'],
-                    'additionalProperties' => false,
-                ],
-            ],
-            'required' => ['name', 'class', 'config'],
-            'additionalProperties' => false,
-        ];
+        return null;
     }
 
     public function transformResult(ResultInterface $result): AgentMessage

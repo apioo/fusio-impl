@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Service\Agent;
 
-use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\AgentMessage;
 use Fusio\Model\Backend\AgentMessageBinary;
@@ -39,7 +38,6 @@ use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\AgentInterface;
-use Symfony\AI\Platform\Message\Content\Document;
 use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
@@ -64,7 +62,7 @@ readonly class Sender
 
     public function __construct(
         private IntentFactory $intentFactory,
-        private MessageSerializer $messageSerializer,
+        private Serializer\MessageSerializer $messageSerializer,
         private Table\Agent $agentTable,
         SchemaManager $schemaManager,
     ) {

@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
-use Fusio\Impl\Service\Agent\ResultSerializer;
+use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
 use Fusio\Model\Backend\AgentMessage;
 use Symfony\AI\Platform\Result\ResultInterface;
 
