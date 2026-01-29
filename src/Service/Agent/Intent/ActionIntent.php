@@ -44,7 +44,7 @@ readonly class ActionIntent implements IntentInterface
         $hint.= 'Therefor you need to transform the provided business logic of the user message into PHP code.' . "\n";
         $hint.= 'The resulting PHP code must be wrapped into the following code:' . "\n";
         $hint.= "\n";
-        $hint.= '<code>' . "\n";
+        $hint.= '--' . "\n";
         $hint.= <<<PHP
 <?php
 
@@ -62,7 +62,7 @@ return function(Worker\ExecuteRequest \$request, Worker\ExecuteContext \$context
 };
 
 PHP;
-        $hint.= '</code>' . "\n";
+        $hint.= '--' . "\n";
         $hint.= "\n";
         $hint.= 'Replace "// [INSERT_CODE_HERE]" with the code which you have generated.' . "\n";
         $hint.= 'Replace "[NAME]" with a short and precise name as lower case and separated by hyphens which summarizes the business logic of the user message.' . "\n";
