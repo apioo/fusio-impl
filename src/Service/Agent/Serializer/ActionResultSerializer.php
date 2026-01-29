@@ -62,7 +62,7 @@ readonly class ActionResultSerializer extends ResultSerializer
 
     private function extractName(string $content): string
     {
-        preg_match('/\* Action: ([A-Za-z0-9-]+)/im', $content, $matches);
+        preg_match('/Action: ([A-Za-z0-9-]+)/im', $content, $matches);
 
         $name = $matches[1] ?? null;
         if (empty($name)) {
