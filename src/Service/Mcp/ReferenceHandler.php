@@ -33,7 +33,7 @@ use Mcp\Exception\InvalidArgumentException;
  */
 class ReferenceHandler implements ReferenceHandlerInterface
 {
-    public function handle(ElementReference $reference, array $arguments): string
+    public function handle(ElementReference $reference, array $arguments): mixed
     {
         if (!$reference->handler instanceof \Closure) {
             throw new InvalidArgumentException('Provided an invalid reference');

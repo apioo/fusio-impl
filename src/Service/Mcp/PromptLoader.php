@@ -41,14 +41,14 @@ readonly class PromptLoader
     public function load(RegistryInterface $registry): void
     {
         $arguments = [];
-        $arguments[] = new PromptArgument('logic', 'The business logic of the action');
+        $arguments[] = new PromptArgument('logic', 'The business logic of the action', true);
 
         $prompt = new Prompt('action-development', 'Prompt which helps to create a new action', $arguments);
 
-        $registry->registerPrompt($prompt, function (string $logic): array {
+        $registry->registerPrompt($prompt, function (array $arguments): array {
             return [
-                ['role' => 'system', 'content' => $this->actionIntent->getMessage()],
-                ['role' => 'user', 'content' => $logic],
+                ['role' => 'assistant', 'content' => $this->actionIntent->getMessage()],
+                ['role' => 'user', 'content' => $arguments['logic'] ?? ''],
             ];
         });
     }
