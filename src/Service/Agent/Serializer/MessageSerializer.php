@@ -103,6 +103,8 @@ readonly class MessageSerializer
             $result = new AgentMessageText();
             $result->setType('text');
             $result->setContent($content->getUrl());
+
+            return [$result];
         } elseif ($content instanceof Collection) {
             $result = [];
             foreach ($content->getContent() as $childContent) {
