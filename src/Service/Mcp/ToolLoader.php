@@ -20,27 +20,17 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
+use Fusio\Impl\Service\Agent\InputSchemaBuilder;
 use Fusio\Impl\Service\Agent\ToolName;
 use Fusio\Impl\Service\JsonRPC\RPCInvoker;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use Mcp\Capability\Registry\ElementReference;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Tool;
 use Mcp\Schema\ToolAnnotations;
-use PSX\Api\Util\Inflection;
-use PSX\Json\Parser;
 use PSX\Record\Record;
-use PSX\Schema\Definitions;
-use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\Parser\TypeSchema;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\Type\Factory\PropertyTypeFactory;
-use PSX\Schema\Type\StructDefinitionType;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
-use stdClass;
 
 /**
  * ToolLoader
@@ -51,15 +41,12 @@ use stdClass;
  */
 readonly class ToolLoader
 {
-    private TypeSchema $schemaParser;
-
     public function __construct(
         private RPCInvoker $invoker,
         private Table\Operation $operationTable,
+        private InputSchemaBuilder $inputSchemaBuilder,
         private FrameworkConfig $frameworkConfig,
-        private SchemaManager $schemaManager,
     ) {
-        $this->schemaParser = new TypeSchema($schemaManager);
     }
 
     public function load(RegistryInterface $registry): void
@@ -71,7 +58,7 @@ readonly class ToolLoader
 
         $operations = $this->operationTable->findAll($condition, 0, 1024, Table\Generated\OperationColumn::NAME, OrderBy::ASC);
         foreach ($operations as $operation) {
-            $inputSchema = $this->buildSchema($operation);
+            $inputSchema = $this->inputSchemaBuilder->build($operation);
             if (count($inputSchema) === 0) {
                 continue;
             }
@@ -105,53 +92,6 @@ readonly class ToolLoader
 
                 return (string) $response->getBody();
             });
-        }
-    }
-
-    private function buildSchema(Table\Generated\OperationRow $operation): array
-    {
-        $rootType = new StructDefinitionType();
-        $definitions = new Definitions();
-
-        $names = Inflection::extractPlaceholderNames($operation->getHttpPath());
-        foreach ($names as $name) {
-            $rootType->addProperty($name, PropertyTypeFactory::getString());
-        }
-
-        $this->buildSchemaFromParameters($operation, $rootType);
-
-        $incoming = $operation->getIncoming();
-        if (!empty($incoming)) {
-            $payload = $this->schemaManager->getSchema($incoming);
-
-            $rootType->addProperty('payload', PropertyTypeFactory::getReference($payload->getRoot()));
-
-            $definitions->addSchema('Payload', $payload);
-        }
-
-        $definitions->addType('Root', $rootType);
-
-        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Root');
-    }
-
-    private function buildSchemaFromParameters(Table\Generated\OperationRow $operation, StructDefinitionType $rootType): void
-    {
-        $rawParameters = $operation->getParameters();
-        if (empty($rawParameters)) {
-            return;
-        }
-
-        $parameters = Parser::decode($rawParameters);
-        if (!$parameters instanceof stdClass) {
-            return;
-        }
-
-        foreach (get_object_vars($parameters) as $name => $schema) {
-            if (!$schema instanceof stdClass) {
-                continue;
-            }
-
-            $rootType->addProperty($name, $this->schemaParser->parsePropertyType($schema));
         }
     }
 }
