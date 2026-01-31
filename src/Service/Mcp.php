@@ -53,6 +53,7 @@ readonly class Mcp
     public function __construct(
         private Config $configService,
         private Mcp\ToolLoader $toolLoader,
+        private Mcp\ReferenceHandler $referenceHandler,
         private Table\McpSession $sessionTable,
         private FrameworkConfig $frameworkConfig,
         private ContainerInterface $container,
@@ -88,22 +89,21 @@ readonly class Mcp
 
         $serverInfo = new Implementation(trim($title), Base::getVersion(), $description);
         $configuration = new Configuration($serverInfo, $capabilities, self::PAGINATION_LIMIT);
-        $referenceHandler = new Registry\ReferenceHandler($this->container);
 
         /**
          * @var array<int, RequestHandlerInterface<mixed>> $requestHandlers
          */
         $requestHandlers = [
-            new Handler\Request\CallToolHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\CallToolHandler($registry, $this->referenceHandler, $this->logger),
             new Handler\Request\CompletionCompleteHandler($registry, $this->container),
-            new Handler\Request\GetPromptHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\GetPromptHandler($registry, $this->referenceHandler, $this->logger),
             new Handler\Request\InitializeHandler($configuration),
             new Handler\Request\ListPromptsHandler($registry, self::PAGINATION_LIMIT),
             new Handler\Request\ListResourcesHandler($registry, self::PAGINATION_LIMIT),
             new Handler\Request\ListResourceTemplatesHandler($registry, self::PAGINATION_LIMIT),
             new Handler\Request\ListToolsHandler($registry, self::PAGINATION_LIMIT),
             new Handler\Request\PingHandler(),
-            new Handler\Request\ReadResourceHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\ReadResourceHandler($registry, $this->referenceHandler, $this->logger),
             new Handler\Request\SetLogLevelHandler(),
         ];
 
