@@ -53,6 +53,7 @@ readonly class Mcp
     public function __construct(
         private Config $configService,
         private Mcp\ToolLoader $toolLoader,
+        private Mcp\PromptLoader $promptLoader,
         private Mcp\ReferenceHandler $referenceHandler,
         private Table\McpSession $sessionTable,
         private FrameworkConfig $frameworkConfig,
@@ -69,6 +70,7 @@ readonly class Mcp
 
         $registry = new Registry($this->eventDispatcher, $this->logger);
 
+        $this->promptLoader->load($registry);
         $this->toolLoader->load($registry);
 
         $sessionFactory = new SessionFactory();
