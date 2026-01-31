@@ -41,28 +41,26 @@ readonly class Firewall implements FilterInterface
     public function __construct(
         private Service\Firewall $firewallService,
         private ContextFactory $contextFactory,
-        private IPResolver $ipResolver,
     ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $context = $this->contextFactory->getActive();
-        $ip = $this->ipResolver->resolveByRequest($request);
 
-        $this->firewallService->assertAllowed($ip, $context->getTenantId());
+        $this->firewallService->assertAllowed($context->getIp(), $context->getTenantId());
 
         try {
             $filterChain->handle($request, $response);
 
             if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
                 if (!$context->isCli()) {
-                    $this->firewallService->handleClientErrorResponse($ip, $response->getStatusCode(), $context->getTenantId());
+                    $this->firewallService->handleClientErrorResponse($context->getIp(), $response->getStatusCode(), $context->getTenantId());
                 }
             }
         } catch (ClientErrorException $e) {
             if (!$context->isCli()) {
-                $this->firewallService->handleClientErrorResponse($ip, $e->getStatusCode(), $context->getTenantId());
+                $this->firewallService->handleClientErrorResponse($context->getIp(), $e->getStatusCode(), $context->getTenantId());
             }
 
             throw $e;

@@ -12,13 +12,15 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_SESSION_ID = 'session_id';
     public const COLUMN_DATA = 'data';
+    public const COLUMN_UPDATE_DATE = 'update_date';
+    public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName(): string
     {
         return self::NAME;
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_SESSION_ID => 0xa00080, self::COLUMN_DATA => 0xb00000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_SESSION_ID => 0xa00080, self::COLUMN_DATA => 0xb00000, self::COLUMN_UPDATE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x40800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
@@ -198,6 +200,80 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('data', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByUpdateDate(\PSX\DateTime\LocalDateTime $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\McpSessionColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('update_date', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByUpdateDate(\PSX\DateTime\LocalDateTime $value): ?\Fusio\Impl\Table\Generated\McpSessionRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('update_date', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByUpdateDate(\PSX\DateTime\LocalDateTime $value, \Fusio\Impl\Table\Generated\McpSessionRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('update_date', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByUpdateDate(\PSX\DateTime\LocalDateTime $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('update_date', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByInsertDate(\PSX\DateTime\LocalDateTime $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\McpSessionColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByInsertDate(\PSX\DateTime\LocalDateTime $value): ?\Fusio\Impl\Table\Generated\McpSessionRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByInsertDate(\PSX\DateTime\LocalDateTime $value, \Fusio\Impl\Table\Generated\McpSessionRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByInsertDate(\PSX\DateTime\LocalDateTime $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
     /**

@@ -18,26 +18,26 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Mcp;
+namespace Fusio\Impl\Service\Agent;
+
+use Fusio\Model\Backend\AgentMessage;
+use Symfony\AI\Platform\Result\ResultInterface;
 
 /**
- * ActiveUser
+ * An intent describes the intent of a user what he wants to achieve, depending on the intent we provide different
+ * messages, tools and response formats to the agent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActiveUser
+interface IntentInterface
 {
-    private ?int $userId = null;
+    public function getMessage(): string;
 
-    public function setUserId(?int $userId): void
-    {
-        $this->userId = $userId;
-    }
+    public function getTools(): array;
 
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
+    public function getResponseSchema(): ?array;
+
+    public function transformResult(ResultInterface $result): AgentMessage;
 }

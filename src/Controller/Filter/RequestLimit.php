@@ -22,7 +22,6 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -41,7 +40,6 @@ readonly class RequestLimit implements FilterInterface
     public function __construct(
         private Service\Rate\Limiter $limiterService,
         private ContextFactory $contextFactory,
-        private IPResolver $ipResolver,
     ) {
     }
 
@@ -51,7 +49,7 @@ readonly class RequestLimit implements FilterInterface
 
         if (!$context->isCli()) {
             $success = $this->limiterService->assertLimit(
-                $this->ipResolver->resolveByRequest($request),
+                $context->getIp(),
                 $context->getOperation(),
                 $context->getApp(),
                 $context->getUser(),

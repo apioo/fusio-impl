@@ -28,7 +28,6 @@ use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -52,7 +51,6 @@ class JsonRPCController extends ControllerAbstract implements FilterInterface
     public function __construct(
         private readonly JsonRPC $server,
         private readonly FrameworkConfig $frameworkConfig,
-        private readonly IPResolver $ipResolver,
     ) {
     }
 
@@ -83,11 +81,7 @@ class JsonRPCController extends ControllerAbstract implements FilterInterface
             throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
         }
 
-        $context = new Context();
-        $context->put(JsonRPC::CONTEXT_AUTHORIZATION, $request->getHeader('Authorization'));
-        $context->put(JsonRPC::CONTEXT_IP, $this->ipResolver->resolveByRequest($request));
-
-        $return = (new Server($this->server))->invoke($data, $context);
+        $return = (new Server($this->server))->invoke($data, new Context());
 
         $response->setStatus(200);
         $response->setHeader('Content-Type', 'application/json');

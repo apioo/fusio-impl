@@ -22,10 +22,10 @@ namespace Fusio\Impl\Service\Mcp;
 
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use Mcp\Server\Transport\Http\HttpSession;
-use Mcp\Server\Transport\Http\SessionStoreInterface;
-use PSX\Json\Parser;
+use Mcp\Server\Session\SessionStoreInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Sql\Condition;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * SessionStore
@@ -40,50 +40,66 @@ readonly class SessionStore implements SessionStoreInterface
     {
     }
 
-    public function load(string $sessionId): ?HttpSession
+    public function exists(Uuid $id): bool
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\McpSessionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $sessionId);
+        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $id->toString());
+
+        return $this->mcpSessionTable->getCount($condition) > 0;
+    }
+
+    public function read(Uuid $id): string|false
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\McpSessionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $id->toString());
 
         $row = $this->mcpSessionTable->findOneBy($condition);
         if (!$row instanceof Table\Generated\McpSessionRow) {
-            return null;
+            return false;
         }
 
-        $data = Parser::decode($row->getData(), true);
-        if (!is_array($data)) {
-            return null;
-        }
-
-        return HttpSession::fromArray($data);
+        return $row->getData();
     }
 
-    public function save(HttpSession $session): void
+    public function write(Uuid $id, string $data): bool
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\McpSessionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $session->getId());
+        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $id->toString());
 
         $row = $this->mcpSessionTable->findOneBy($condition);
         if ($row instanceof Table\Generated\McpSessionRow) {
-            $row->setData(Parser::encode($session->toArray()));
+            $row->setData($data);
+            $row->setUpdateDate(LocalDateTime::now());
             $this->mcpSessionTable->update($row);
         } else {
             $row = new Table\Generated\McpSessionRow();
             $row->setTenantId($this->frameworkConfig->getTenantId());
-            $row->setSessionId($session->getId());
-            $row->setData(Parser::encode($session->toArray()));
+            $row->setSessionId($id->toString());
+            $row->setData($data);
+            $row->setUpdateDate(LocalDateTime::now());
+            $row->setInsertDate(LocalDateTime::now());
             $this->mcpSessionTable->create($row);
         }
+
+        return true;
     }
 
-    public function delete(string $sessionId): void
+    public function destroy(Uuid $id): bool
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\McpSessionTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
-        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $sessionId);
+        $condition->equals(Table\Generated\McpSessionTable::COLUMN_SESSION_ID, $id->toString());
 
         $this->mcpSessionTable->deleteBy($condition);
+
+        return true;
+    }
+
+    public function gc(): array
+    {
+        return [];
     }
 }

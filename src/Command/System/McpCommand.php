@@ -20,8 +20,10 @@
 
 namespace Fusio\Impl\Command\System;
 
+use Fusio\Cli\Service\AuthenticatorInterface;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Mcp;
-use Mcp\Server\ServerRunner;
+use Mcp\Server\Transport\StdioTransport;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,8 +39,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class McpCommand extends Command
 {
-    public function __construct(private Mcp $mcp, private Mcp\ActiveUser $activeUser, private LoggerInterface $logger)
-    {
+    public function __construct(
+        private readonly Mcp $mcp,
+        private readonly ContextFactory $contextFactory,
+        private readonly AuthenticatorInterface $authenticator,
+        private readonly LoggerInterface $logger,
+    ) {
         parent::__construct();
     }
 
@@ -48,22 +54,25 @@ class McpCommand extends Command
             ->setName('system:mcp')
             ->setAliases(['mcp'])
             ->setDescription('Starts the MCP server')
-            ->addArgument('user_id', InputArgument::OPTIONAL, 'Optional a user id under which all actions are executed, by default this is 1');
+            ->addArgument('access_token', InputArgument::OPTIONAL, 'Optional an access token to authenticate the user');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $server = $this->mcp->build();
-
-        $userId = (int) $input->getArgument('user_id');
-        if ($userId > 0) {
-            $this->activeUser->setUserId($userId);
+        $accessToken = $input->getArgument('access_token');
+        if (empty($accessToken)) {
+            $accessToken = $this->authenticator->getAccessToken();
         }
 
-        $initOptions = $server->createInitializationOptions();
+        $context = $this->contextFactory->factory();
+        $context->setIp('127.0.0.1');
+        $context->setAuthorization('Bearer ' . $accessToken);
+        $context->setCli(true);
 
-        $runner = new ServerRunner($server, $initOptions, $this->logger);
-        $runner->run();
+        $transport = new StdioTransport(logger: $this->logger);
+
+        $server = $this->mcp->build();
+        $server->run($transport);
 
         return self::SUCCESS;
     }

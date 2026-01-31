@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Service\GraphQL;
 
 use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Action\Invoker;
 use Fusio\Impl\Service\Rate\Limiter;
 use Fusio\Impl\Service\Security\TokenValidator;
@@ -52,7 +52,6 @@ readonly class Resolver
     public function __construct(
         private Table\Operation $operationTable,
         private Invoker $invoker,
-        private ContextFactory $contextFactory,
         private TokenValidator $tokenValidator,
         private Limiter $limiterService,
         private ResponseWriter $responseWriter)
@@ -60,12 +59,10 @@ readonly class Resolver
         $this->normalizer = new Normalizer\GraphQL();
     }
 
-    public function resolveQuery(array $typeConfig, ?string $authorization, string $ip): array
+    public function resolveQuery(array $typeConfig, Context $context): array
     {
-        $typeConfig['fields'] = function () use ($typeConfig, $authorization, $ip): array {
+        $typeConfig['fields'] = function () use ($typeConfig, $context): array {
             $fields = $typeConfig['fields']();
-
-            $context = $this->contextFactory->getActive();
 
             $condition = Condition::withAnd();
             $condition->equals(Table\Generated\OperationColumn::TENANT_ID, $context->getTenantId());
@@ -73,14 +70,14 @@ readonly class Resolver
             $condition->equals(Table\Generated\OperationColumn::HTTP_METHOD, 'GET');
             $operations = $this->operationTable->findBy($condition);
             foreach ($operations as $operation) {
-                $fields[$this->normalizer->method($operation->getName())]['resolve'] = function ($rootValue, array $args, $ctx, ResolveInfo $resolveInfo) use ($operation, $context, $authorization, $ip) {
+                $fields[$this->normalizer->method($operation->getName())]['resolve'] = function ($rootValue, array $args, $ctx, ResolveInfo $resolveInfo) use ($operation, $context) {
                     $request = new Request($args, new Record(), new Request\GraphQLRequestContext($rootValue, $ctx, $resolveInfo->getFieldSelection()));
 
                     $context->setOperation($operation);
 
-                    $this->tokenValidator->assertAuthorization($authorization, $context);
+                    $this->tokenValidator->assertAuthorization($context->getAuthorization(), $context);
 
-                    $this->limiterService->assertLimit($ip, $context->getOperation(), $context->getApp(), $context->getUser());
+                    $this->limiterService->assertLimit($context->getIp(), $context->getOperation(), $context->getApp(), $context->getUser());
 
                     $result = $this->invoker->invoke($request, $context);
 
