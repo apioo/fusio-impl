@@ -185,7 +185,4 @@ return static function (ContainerConfigurator $container) {
     $services->set(Transport::class);
     $services->alias(Cli\Transport\TransportInterface::class, Transport::class);
 
-    // mcp
-    $services->alias(ReferenceHandlerInterface::class, ReferenceHandler::class);
-
 };
