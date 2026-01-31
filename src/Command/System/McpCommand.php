@@ -66,7 +66,7 @@ class McpCommand extends Command
 
         $context = $this->contextFactory->factory();
         $context->setIp('127.0.0.1');
-        $context->setAuthorization($accessToken);
+        $context->setAuthorization('Bearer ' . $accessToken);
         $context->setCli(true);
 
         $transport = new StdioTransport(logger: $this->logger);
