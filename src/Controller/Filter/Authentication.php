@@ -45,8 +45,10 @@ readonly class Authentication implements FilterInterface
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
+        $context = $this->contextFactory->getActive();
+
         $success = $this->tokenValidator->assertAuthorization(
-            $request->getHeader('Authorization'),
+            $context->getAuthorization(),
             $this->contextFactory->getActive()
         );
 

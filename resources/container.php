@@ -17,9 +17,11 @@ use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Producer;
 use Fusio\Impl\Service\Agent;
 use Fusio\Impl\Service\Event\Dispatcher;
+use Fusio\Impl\Service\Mcp\ReferenceHandler;
 use Fusio\Impl\Service\Tenant\LimiterInterface;
 use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Tenant\UnlimitedLimiter;
+use Mcp\Capability\Registry\ReferenceHandlerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Api;
@@ -182,5 +184,8 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Transport::class);
     $services->alias(Cli\Transport\TransportInterface::class, Transport::class);
+
+    // mcp
+    $services->alias(ReferenceHandlerInterface::class, ReferenceHandler::class);
 
 };

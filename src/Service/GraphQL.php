@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service;
 
 use Exception;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\GraphQL\Resolver;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use GraphQL\Error\InvariantViolation;
@@ -55,6 +56,7 @@ readonly class GraphQL
         private ScannerInterface $scanner,
         private GeneratorFactory $factory,
         private FilterFactoryInterface $filterFactory,
+        private ContextFactory $contextFactory,
     )
     {
         $this->helper = new Helper();
@@ -65,8 +67,9 @@ readonly class GraphQL
      * @throws InvariantViolation
      * @throws Exception
      */
-    public function run(string $method, array $bodyParams, array $queryParams, ?string $authorization, string $ip): mixed
+    public function run(string $method, array $bodyParams, array $queryParams): mixed
     {
+        $context = $this->contextFactory->getActive();
         $data = $this->helper->parseRequestParams($method, $bodyParams, $queryParams);
 
         $cacheFilename = $this->frameworkConfig->getPathCache('graphql_schema.php');
@@ -80,9 +83,9 @@ readonly class GraphQL
             $document = AST::fromArray(require $cacheFilename);
         }
 
-        $typeConfigDecorator = function (array $typeConfig) use ($authorization, $ip) {
+        $typeConfigDecorator = function (array $typeConfig) use ($context) {
             if ($typeConfig['name'] === 'Query') {
-                return $this->resolver->resolveQuery($typeConfig, $authorization, $ip);
+                return $this->resolver->resolveQuery($typeConfig, $context);
             } else {
                 return $this->resolver->resolveType($typeConfig);
             }

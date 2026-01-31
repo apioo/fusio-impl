@@ -20,11 +20,11 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Base;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\Mcp;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Mcp\Server\HttpServerRunner;
-use Mcp\Server\Transport\Http\HttpMessage;
+use Mcp\Server\Transport\StreamableHttpTransport;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Log\LoggerInterface;
 use PSX\Api\Attribute\Delete;
 use PSX\Api\Attribute\Get;
@@ -33,11 +33,12 @@ use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception\ServiceUnavailableException;
 use PSX\Http\FilterChainInterface;
+use PSX\Http\PsrFactory;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
-use PSX\Http\Stream\StringStream;
 use PSX\Schema\ContentType;
 
 /**
@@ -51,9 +52,8 @@ class McpController extends ControllerAbstract
 {
     public function __construct(
         private readonly Mcp $mcp,
-        private readonly Mcp\SessionStore $sessionStore,
-        private readonly Mcp\TokenValidator $tokenValidator,
         private readonly LoggerInterface $logger,
+        private readonly PsrFactory $psrFactory,
         private readonly FrameworkConfig $frameworkConfig,
     ) {
     }
@@ -61,6 +61,8 @@ class McpController extends ControllerAbstract
     public function getPreFilter(): array
     {
         $filter = parent::getPreFilter();
+        $filter[] = Filter\Tenant::class;
+        $filter[] = Filter\Firewall::class;
         $filter[] = function (RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain) {
             $this->run($request, $response);
         };
@@ -96,51 +98,16 @@ class McpController extends ControllerAbstract
             throw new ServiceUnavailableException('MCP service is not enabled');
         }
 
+        $corsHeaders = [];
+        $factory = new Psr17Factory();
+        $transport = new StreamableHttpTransport($this->psrFactory->toPsrServerRequest($request), $factory, $factory, $corsHeaders, $this->logger);
+
         $server = $this->mcp->build();
 
-        $httpOptions = [
-            'session_timeout' => $this->frameworkConfig->getMCPSessionTimeout(),
-            'enable_sse' => false,
-            'max_queue_size' => $this->frameworkConfig->getMCPQueueSize(),
-            'server_header' => 'Fusio/' . Base::getVersion(),
-            'auth_enabled' => true,
-            'resource' => $this->frameworkConfig->getUrl(),
-            'authorization_servers' => [$this->frameworkConfig->getDispatchUrl('authorization', 'authorize')],
-            'token_validator' => $this->tokenValidator,
-        ];
+        $psrResponse = $server->run($transport);
 
-        $runner = new HttpServerRunner($server, $server->createInitializationOptions(), $httpOptions, $this->logger, $this->sessionStore);
-
-        $mcpRequest = $this->toMcpRequest($request);
-
-        $errorReporting = error_reporting();
-
-        try {
-            error_reporting($errorReporting & ~E_DEPRECATED);
-
-            $mcpResponse = $runner->handleRequest($mcpRequest);
-        } finally {
-            error_reporting($errorReporting);
-        }
-
-        $response->setStatus($mcpResponse->getStatusCode());
-        $response->setHeaders($mcpResponse->getHeaders());
-        $response->setBody(new StringStream((string) $mcpResponse->getBody()));
-    }
-
-    private function toMcpRequest(RequestInterface $request): HttpMessage
-    {
-        $message = new HttpMessage();
-        $message->setMethod($request->getMethod());
-        $message->setUri($request->getUri()->getPath());
-        $message->setQueryParams($request->getUri()->getParameters());
-
-        foreach ($request->getHeaders() as $name => $value) {
-            $message->setHeader($name, is_array($value) ? implode(', ', $value) : $value);
-        }
-
-        $message->setBody((string) $request->getBody());
-
-        return $message;
+        $response->setStatus($psrResponse->getStatusCode());
+        $response->setHeaders($psrResponse->getHeaders());
+        $response->setBody($psrResponse->getBody());
     }
 }

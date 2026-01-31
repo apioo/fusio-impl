@@ -35,6 +35,12 @@ final class Version20260121211342 extends AbstractMigration
             $agentTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_user_id');
             $agentTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_connection_id');
         }
+
+        $mcpSessionTable = $schema->getTable('fusio_mcp_session');
+        if (!$mcpSessionTable->hasColumn('insert_date')) {
+            $mcpSessionTable->addColumn('update_date', 'datetime', ['notnull' => false]);
+            $mcpSessionTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+        }
     }
 
     public function down(Schema $schema): void

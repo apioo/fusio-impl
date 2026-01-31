@@ -20,21 +20,11 @@
 
 namespace Fusio\Impl\Service\Agent;
 
-use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Service\Action\Invoker;
+use Fusio\Impl\Service\JsonRPC\RPCInvoker;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
-use PSX\Data\WriterInterface;
-use PSX\Framework\Http\ResponseWriter;
-use PSX\Http\Response;
-use PSX\Json\Parser;
 use PSX\Record\Record;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\SchemaSource;
 use RuntimeException;
-use stdClass;
 use Symfony\AI\Platform\Result\ToolCall;
 
 /**
@@ -46,56 +36,23 @@ use Symfony\AI\Platform\Result\ToolCall;
  */
 readonly class OperationTool
 {
-    private ObjectMapper $objectMapper;
-
     public function __construct(
+        private RPCInvoker $invoker,
         private Table\Operation $operationTable,
-        private Invoker $invoker,
         private FrameworkConfig $frameworkConfig,
-        private ResponseWriter $responseWriter,
-        private ContextFactory $contextFactory,
-        SchemaManager $schemaManager,
     ) {
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function invoke(ToolCall $toolCall): mixed
     {
-        $arguments = Record::fromArray($toolCall->getArguments());
-        $context = $this->contextFactory->getActive();
-
         $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, ToolName::toOperationId($toolCall->getName()));
         if (!$operation instanceof Table\Generated\OperationRow) {
             throw new RuntimeException('Provided an invalid operation name');
         }
 
-        $context->setOperation($operation);
+        $arguments = Record::fromArray($toolCall->getArguments());
 
-        $incoming = $operation->getIncoming();
-        if (!empty($incoming) && $arguments->containsKey('payload')) {
-            $rawPayload = $arguments->get('payload');
-            if (is_array($rawPayload)) {
-                // convert array to stdClass, we need to do this unfortunately since the mcp library uses arrays
-                $data = Parser::decode(Parser::encode($rawPayload));
-
-                $payload = $this->objectMapper->read($data, SchemaSource::fromString($incoming));
-            } elseif ($rawPayload instanceof stdClass) {
-                $payload = $this->objectMapper->read($rawPayload, SchemaSource::fromString($incoming));
-            } else {
-                $payload = new Record();
-            }
-
-            $arguments->remove('payload');
-        } else {
-            $payload = new Record();
-        }
-
-        $request = new Request($arguments->getAll(), $payload, new Request\RpcRequestContext($toolCall->getName()));
-
-        $result = $this->invoker->invoke($request, $context);
-
-        $response = new Response();
-        $this->responseWriter->setBody($response, $result, WriterInterface::JSON);
+        $response = $this->invoker->invoke($operation, $arguments);
 
         return (string) $response->getBody();
     }

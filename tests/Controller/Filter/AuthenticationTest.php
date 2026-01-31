@@ -50,10 +50,12 @@ class AuthenticationTest extends DbTestCase
 {
     public function testHandle()
     {
-        $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory());
+        $authorization = 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873';
 
-        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory(), $authorization);
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [$authorization]]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -82,10 +84,12 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(\DomainException::class);
 
-        $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory());
+        $authorization = 'Bearer foo.bar.baz';
 
-        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foo.bar.baz']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory(), $authorization);
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [$authorization]]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -105,10 +109,12 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(UnauthorizedException::class);
 
-        $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory());
+        $authorization = 'Bearer foobar';
 
-        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foobar']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory(), $authorization);
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [$authorization]]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -128,10 +134,12 @@ class AuthenticationTest extends DbTestCase
     {
         $this->expectException(UnauthorizedException::class);
 
-        $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory());
+        $authorization = 'Basic foobar';
 
-        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Basic foobar']]);
+        $contextFactory = new ContextFactory();
+        $this->newContext($contextFactory->factory(), $authorization);
+
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [$authorization]]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)
@@ -152,7 +160,7 @@ class AuthenticationTest extends DbTestCase
         $this->expectException(UnauthorizedException::class);
 
         $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory());
+        $this->newContext($contextFactory->factory(), '');
 
         $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
@@ -170,8 +178,11 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    private function newContext(Context $context): void
+    private function newContext(Context $context, string $authorization): void
     {
+        $context->setAuthorization($authorization);
+        $context->setIp('127.0.0.1');
+
         $id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
         $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
         $row->setPublic(0);

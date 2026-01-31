@@ -36,6 +36,8 @@ use PSX\Framework\Loader\Context as FrameworkContext;
 class Context extends FrameworkContext
 {
     private ?string $tenantId = null;
+    private ?string $authorization = null;
+    private ?string $ip = null;
     private ?int $categoryId = null;
     private ?AppInterface $app = null;
     private ?UserInterface $user = null;
@@ -52,6 +54,30 @@ class Context extends FrameworkContext
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
+    }
+
+    public function getAuthorization(): ?string
+    {
+        return $this->authorization;
+    }
+
+    public function setAuthorization(?string $authorization): void
+    {
+        $this->authorization = $authorization;
+    }
+
+    public function getIp(): string
+    {
+        if ($this->ip === null) {
+            throw new ContextPropertyNotSetException('ip');
+        }
+
+        return $this->ip;
+    }
+
+    public function setIp(?string $ip): void
+    {
+        $this->ip = $ip;
     }
 
     /**

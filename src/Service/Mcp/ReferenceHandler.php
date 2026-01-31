@@ -20,24 +20,25 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
+use Mcp\Capability\Registry\ElementReference;
+use Mcp\Capability\Registry\ReferenceHandlerInterface;
+use Mcp\Exception\InvalidArgumentException;
+
 /**
- * ActiveUser
+ * ReferenceHandler
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActiveUser
+class ReferenceHandler implements ReferenceHandlerInterface
 {
-    private ?int $userId = null;
-
-    public function setUserId(?int $userId): void
+    public function handle(ElementReference $reference, array $arguments): string
     {
-        $this->userId = $userId;
-    }
+        if (!$reference->handler instanceof \Closure) {
+            throw new InvalidArgumentException('Provided an invalid reference');
+        }
 
-    public function getUserId(): ?int
-    {
-        return $this->userId;
+        return call_user_func_array($reference->handler, [$arguments]);
     }
 }

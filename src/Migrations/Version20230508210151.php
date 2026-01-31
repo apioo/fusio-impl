@@ -310,6 +310,8 @@ final class Version20230508210151 extends AbstractMigration
             $mcpSessionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $mcpSessionTable->addColumn('session_id', 'string', ['length' => 128]);
             $mcpSessionTable->addColumn('data', 'text');
+            $mcpSessionTable->addColumn('update_date', 'datetime', ['notnull' => false]);
+            $mcpSessionTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
             $mcpSessionTable->setPrimaryKey(['id']);
             $mcpSessionTable->addUniqueIndex(['tenant_id', 'session_id']);
         }

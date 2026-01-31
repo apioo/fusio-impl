@@ -20,11 +20,23 @@
 
 namespace Fusio\Impl\Service;
 
-use Mcp\Server\Server;
-use Mcp\Types\CallToolRequestParams;
-use Mcp\Types\GetPromptRequestParams;
-use Mcp\Types\PaginatedRequestParams;
-use Mcp\Types\ReadResourceRequestParams;
+use Fusio\Impl\Base;
+use Fusio\Impl\Service\Mcp\SessionStore;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
+use Mcp\Capability\Registry;
+use Mcp\JsonRpc\MessageFactory;
+use Mcp\Schema\Implementation;
+use Mcp\Schema\ServerCapabilities;
+use Mcp\Server;
+use Mcp\Server\Configuration;
+use Mcp\Server\Handler;
+use Mcp\Server\Handler\Notification\NotificationHandlerInterface;
+use Mcp\Server\Handler\Request\RequestHandlerInterface;
+use Mcp\Server\Protocol;
+use Mcp\Server\Session\SessionFactory;
+use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,41 +48,81 @@ use Psr\Log\LoggerInterface;
  */
 readonly class Mcp
 {
-    public function __construct(private Config $configService, private Mcp\Resources $resources, private Mcp\Tools $tools, private LoggerInterface $logger)
-    {
+    private const PAGINATION_LIMIT = 50;
+
+    public function __construct(
+        private Config $configService,
+        private Mcp\ToolLoader $toolLoader,
+        private Table\McpSession $sessionTable,
+        private FrameworkConfig $frameworkConfig,
+        private ContainerInterface $container,
+        private EventDispatcherInterface $eventDispatcher,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function build(): Server
     {
-        $server = new Server($this->configService->getValue('info_title'), $this->logger);
+        $title = $this->configService->getValue('info_title') ?: 'Fusio';
+        $description = $this->configService->getValue('info_description') ?: null;
 
-        /*
-        $server->registerHandler('prompts/list', function(PaginatedRequestParams $params) {
-            return $this->prompts->list($params);
-        });
+        $registry = new Registry($this->eventDispatcher, $this->logger);
 
-        $server->registerHandler('prompts/get', function(GetPromptRequestParams $params) {
-            return $this->prompts->get($params);
-        });
-        */
+        $this->toolLoader->load($registry);
 
-        $server->registerHandler('resources/list', function(PaginatedRequestParams $params) {
-            return $this->resources->list($params);
-        });
+        $sessionFactory = new SessionFactory();
+        $sessionStore = new SessionStore($this->sessionTable, $this->frameworkConfig);
+        $messageFactory = MessageFactory::make();
 
-        $server->registerHandler('resources/read', function(ReadResourceRequestParams $params) {
-            return $this->resources->get($params);
-        });
+        $capabilities = $this->serverCapabilities ?? new ServerCapabilities(
+            tools: $registry->hasTools(),
+            toolsListChanged: true,
+            resources: $registry->hasResources() || $registry->hasResourceTemplates(),
+            resourcesSubscribe: false,
+            resourcesListChanged: true,
+            prompts: $registry->hasPrompts(),
+            promptsListChanged: true,
+            logging: true,
+            completions: true,
+        );
 
-        $server->registerHandler('tools/list', function(PaginatedRequestParams $params) {
-            return $this->tools->list($params);
-        });
+        $serverInfo = new Implementation(trim($title), Base::getVersion(), $description);
+        $configuration = new Configuration($serverInfo, $capabilities, self::PAGINATION_LIMIT);
+        $referenceHandler = new Registry\ReferenceHandler($this->container);
 
-        $server->registerHandler('tools/call', function(CallToolRequestParams $params) {
-            return $this->tools->call($params);
-        });
+        /**
+         * @var array<int, RequestHandlerInterface<mixed>> $requestHandlers
+         */
+        $requestHandlers = [
+            new Handler\Request\CallToolHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\CompletionCompleteHandler($registry, $this->container),
+            new Handler\Request\GetPromptHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\InitializeHandler($configuration),
+            new Handler\Request\ListPromptsHandler($registry, self::PAGINATION_LIMIT),
+            new Handler\Request\ListResourcesHandler($registry, self::PAGINATION_LIMIT),
+            new Handler\Request\ListResourceTemplatesHandler($registry, self::PAGINATION_LIMIT),
+            new Handler\Request\ListToolsHandler($registry, self::PAGINATION_LIMIT),
+            new Handler\Request\PingHandler(),
+            new Handler\Request\ReadResourceHandler($registry, $referenceHandler, $this->logger),
+            new Handler\Request\SetLogLevelHandler(),
+        ];
 
+        /**
+         * @var array<int, NotificationHandlerInterface> $notificationHandlers
+         */
+        $notificationHandlers = [
+            new Handler\Notification\InitializedHandler(),
+        ];
 
-        return $server;
+        $protocol = new Protocol(
+            requestHandlers: $requestHandlers,
+            notificationHandlers: $notificationHandlers,
+            messageFactory: $messageFactory,
+            sessionFactory: $sessionFactory,
+            sessionStore: $sessionStore,
+            logger: $this->logger,
+        );
+
+        return new Server($protocol, $this->logger);
     }
 }

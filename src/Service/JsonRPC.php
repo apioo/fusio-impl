@@ -20,24 +20,16 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Request;
-use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Service\Action\Invoker;
-use Fusio\Impl\Service\Rate\Limiter;
-use Fusio\Impl\Service\Security\TokenValidator;
+use Fusio\Impl\Service\JsonRPC\RPCInvoker;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
 use Fusio\Model;
 use InvalidArgumentException;
-use PSX\Data\WriterInterface;
-use PSX\Framework\Http\ResponseWriter;
 use PSX\Http\MediaType;
 use PSX\Http\Response;
 use PSX\Json\Rpc\Context as RpcContext;
 use PSX\Json\Rpc\Exception\InvalidRequestException;
 use PSX\Record\Record;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\SchemaSource;
 use stdClass;
 
 /**
@@ -49,21 +41,11 @@ use stdClass;
  */
 readonly class JsonRPC
 {
-    public const CONTEXT_AUTHORIZATION = 'authorization';
-    public const CONTEXT_IP = 'ip';
-
-    private ObjectMapper $objectMapper;
-
     public function __construct(
+        private RPCInvoker $invoker,
         private Table\Operation $operationTable,
-        private Invoker $invoker,
-        private ContextFactory $contextFactory,
-        private TokenValidator $tokenValidator,
-        private Limiter $limiterService,
-        private ResponseWriter $responseWriter,
-        SchemaManager $schemaManager,
+        private FrameworkConfig $frameworkConfig,
     ) {
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function __invoke(string $method, array|stdClass|null $params, RpcContext $rpcContext): mixed
@@ -78,39 +60,12 @@ readonly class JsonRPC
             $arguments = new Record();
         }
 
-        $context = $this->contextFactory->getActive();
-
-        $operation = $this->operationTable->findOneByTenantAndName($context->getTenantId(), null, $method);
+        $operation = $this->operationTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $method);
         if (!$operation instanceof Table\Generated\OperationRow) {
             throw new \RuntimeException('Provided an invalid operation name');
         }
 
-        $context->setOperation($operation);
-
-        $this->tokenValidator->assertAuthorization($rpcContext->get(self::CONTEXT_AUTHORIZATION), $context);
-
-        $this->limiterService->assertLimit($rpcContext->get(self::CONTEXT_IP), $context->getOperation(), $context->getApp(), $context->getUser());
-
-        $incoming = $operation->getIncoming();
-        if (!empty($incoming) && $arguments->containsKey('payload')) {
-            $rawPayload = $arguments->get('payload');
-            if ($rawPayload instanceof stdClass) {
-                $payload = $this->objectMapper->read($rawPayload, SchemaSource::fromString($incoming));
-            } else {
-                $payload = new Record();
-            }
-
-            $arguments->remove('payload');
-        } else {
-            $payload = new Record();
-        }
-
-        $request = new Request($arguments->getAll(), $payload, new Request\RpcRequestContext($method));
-
-        $result = $this->invoker->invoke($request, $context);
-
-        $response = new Response();
-        $this->responseWriter->setBody($response, $result, WriterInterface::JSON);
+        $response = $this->invoker->invoke($operation, $arguments);
 
         if ($this->isJson($response)) {
             // in case the response contains JSON data we decode it
