@@ -31,8 +31,10 @@ class SchemaCommit extends Generated\SchemaCommitTable
 {
     public function findCurrentHash(int $schemaId): ?string
     {
-        return (string) $this->connection->fetchOne('SELECT commit_hash FROM fusio_schema_commit WHERE schema_id = :schema_id ORDER BY id DESC', [
+        $hash = $this->connection->fetchOne('SELECT commit_hash FROM fusio_schema_commit WHERE schema_id = :schema_id ORDER BY id DESC', [
             'schema_id' => $schemaId,
         ]);
+
+        return !empty($hash) ? $hash : null;
     }
 }

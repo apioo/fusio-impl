@@ -269,7 +269,7 @@ readonly class Operation
         }
 
         $row = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), substr($scheme, 9));
-        if (!$row instanceof Table\Generated\ActionRow) {
+        if (!$row instanceof Table\Generated\SchemaRow) {
             return $schema;
         }
 
