@@ -29,7 +29,7 @@ namespace Fusio\Impl\Table;
  */
 class ActionCommit extends Generated\ActionCommitTable
 {
-    public function findPreviousHash(int $actionId): ?string
+    public function findCurrentHash(int $actionId): ?string
     {
         return (string) $this->connection->fetchOne('SELECT commit_hash FROM fusio_action_commit WHERE action_id = :action_id ORDER BY id DESC', [
             'action_id' => $actionId,

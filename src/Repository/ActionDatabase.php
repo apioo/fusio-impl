@@ -83,10 +83,16 @@ class ActionDatabase implements Repository\ActionInterface
             return null;
         }
 
+        $hash = null;
         if (is_numeric($id)) {
             $column = Table\Generated\ActionTable::COLUMN_ID;
         } else {
             $column = Table\Generated\ActionTable::COLUMN_NAME;
+
+            if (str_contains($id, '@')) {
+                $hash = substr(strstr($id, '@'), 1);
+                $id = strstr($id, '@', true);
+            }
         }
 
         $condition = Condition::withAnd();
@@ -110,6 +116,13 @@ class ActionDatabase implements Repository\ActionInterface
         $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
         if (!empty($row)) {
+            if ($hash !== null) {
+                $config = $this->resolveConfigByHash((int) $row[Table\Generated\ActionTable::COLUMN_ID], $hash);
+                if ($config !== null) {
+                    $row[Table\Generated\ActionTable::COLUMN_CONFIG] = $config;
+                }
+            }
+
             return $this->newAction($row);
         } else {
             return null;
@@ -121,7 +134,7 @@ class ActionDatabase implements Repository\ActionInterface
         $this->async = $async;
     }
 
-    protected function newAction(array $row): Model\ActionInterface
+    private function newAction(array $row): Model\ActionInterface
     {
         $config = !empty($row[Table\Generated\ActionTable::COLUMN_CONFIG]) ? Service\Action::unserializeConfig($row[Table\Generated\ActionTable::COLUMN_CONFIG]) : [];
 
@@ -141,5 +154,24 @@ class ActionDatabase implements Repository\ActionInterface
             $config ?? [],
             $metadata
         );
+    }
+
+    private function resolveConfigByHash(int $actionId, string $hash): ?string
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\ActionCommitTable::COLUMN_ACTION_ID, $actionId);
+        $condition->equals(Table\Generated\ActionCommitTable::COLUMN_COMMIT_HASH, $hash);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\ActionCommitTable::COLUMN_CONFIG,
+            ])
+            ->from('fusio_action_commit', 'action_commit')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $config = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        return !empty($config) ? $config : null;
     }
 }

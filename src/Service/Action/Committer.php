@@ -44,7 +44,7 @@ readonly class Committer
             return;
         }
 
-        $previousHash = $this->actionCommitTable->findPreviousHash($actionId);
+        $previousHash = $this->actionCommitTable->findCurrentHash($actionId);
 
         $now = LocalDateTime::now();
         $hash = sha1($actionId . $context->getUserId() . $previousHash . $config . $now->toString());

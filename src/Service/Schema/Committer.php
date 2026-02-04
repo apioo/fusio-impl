@@ -40,7 +40,7 @@ readonly class Committer
 
     public function commit(int $schemaId, string $source, UserContext $context): void
     {
-        $previousHash = $this->schemaCommitTable->findPreviousHash($schemaId);
+        $previousHash = $this->schemaCommitTable->findCurrentHash($schemaId);
 
         $now = LocalDateTime::now();
         $hash = sha1($schemaId . $context->getUserId() . $previousHash . $source . $now->toString());

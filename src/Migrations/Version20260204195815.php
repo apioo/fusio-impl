@@ -29,7 +29,7 @@ final class Version20260204195815 extends AbstractMigration
             $actionCommitTable->addColumn('config', 'text');
             $actionCommitTable->addColumn('insert_date', 'datetime');
             $actionCommitTable->setPrimaryKey(['id']);
-            $actionCommitTable->addUniqueIndex(['commit_hash']);
+            $actionCommitTable->addUniqueIndex(['action_id', 'commit_hash']);
 
             $actionCommitTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action_id'], ['id'], [], 'action_commit_action_id');
             $actionCommitTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'action_commit_user_id');
@@ -45,7 +45,7 @@ final class Version20260204195815 extends AbstractMigration
             $schemaCommitTable->addColumn('source', 'text');
             $schemaCommitTable->addColumn('insert_date', 'datetime');
             $schemaCommitTable->setPrimaryKey(['id']);
-            $schemaCommitTable->addUniqueIndex(['commit_hash']);
+            $schemaCommitTable->addUniqueIndex(['schema_id', 'commit_hash']);
 
             $schemaCommitTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['schema_id'], ['id'], [], 'schema_commit_action_id');
             $schemaCommitTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'schema_commit_user_id');

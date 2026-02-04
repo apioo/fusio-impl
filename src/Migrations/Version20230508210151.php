@@ -49,7 +49,7 @@ final class Version20230508210151 extends AbstractMigration
             $actionCommitTable->addColumn('config', 'text');
             $actionCommitTable->addColumn('insert_date', 'datetime');
             $actionCommitTable->setPrimaryKey(['id']);
-            $actionCommitTable->addUniqueIndex(['commit_hash']);
+            $actionCommitTable->addUniqueIndex(['action_id', 'commit_hash']);
         }
 
         if (!$schema->hasTable('fusio_agent')) {
@@ -478,7 +478,7 @@ final class Version20230508210151 extends AbstractMigration
             $schemaCommitTable->addColumn('source', 'text');
             $schemaCommitTable->addColumn('insert_date', 'datetime');
             $schemaCommitTable->setPrimaryKey(['id']);
-            $schemaCommitTable->addUniqueIndex(['commit_hash']);
+            $schemaCommitTable->addUniqueIndex(['schema_id', 'commit_hash']);
         }
 
         if (!$schema->hasTable('fusio_scope')) {
