@@ -202,7 +202,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema($this->connection, 'Bar-Schema', $schema, null, $metadata);
+        Assert::assertSchema($this->connection, 'Bar-Schema', $schema, $metadata);
 
         // test schema
         /** @var SchemaManagerInterface $schemaManager */
