@@ -22,6 +22,7 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Framework\Environment\IPResolver;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -39,6 +40,7 @@ readonly class Tenant implements FilterInterface
     public function __construct(
         private FrameworkConfig $frameworkConfig,
         private ContextFactory $contextFactory,
+        private IPResolver $ipResolver,
     ) {
     }
 
@@ -50,6 +52,9 @@ readonly class Tenant implements FilterInterface
         if (!empty($tenantId)) {
             $context->setTenantId($tenantId);
         }
+
+        $context->setAuthorization($request->getHeader('Authorization'));
+        $context->setIp($this->ipResolver->resolveByRequest($request));
 
         $filterChain->handle($request, $response);
     }

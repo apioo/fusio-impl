@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Backend\Action\Action;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
@@ -31,6 +32,8 @@ use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Response;
 use PSX\Http\Writer\WriterInterface;
+use stdClass;
+use Throwable;
 
 /**
  * Execute
@@ -39,14 +42,12 @@ use PSX\Http\Writer\WriterInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Execute implements ActionInterface
+readonly class Execute implements ActionInterface
 {
-    private Action\Executor $actionExecutorService;
     private Converter $exceptionConverter;
 
-    public function __construct(Action\Executor $actionExecutorService)
+    public function __construct(private Action\Executor $actionExecutorService, private Connection $connection)
     {
-        $this->actionExecutorService = $actionExecutorService;
         $this->exceptionConverter = new Converter(true);
     }
 
@@ -55,6 +56,8 @@ class Execute implements ActionInterface
         $body = $request->getPayload();
 
         assert($body instanceof ActionExecuteRequest);
+
+        $this->connection->beginTransaction();
 
         try {
             $response = $this->actionExecutorService->execute(
@@ -74,30 +77,34 @@ class Execute implements ActionInterface
                     $body = (string) $tempResponse->getBody();
                 }
 
-                return [
+                $return = [
                     'statusCode' => $response->getStatusCode(),
                     'headers' => $headers,
                     'body' => $body,
                 ];
             } else {
-                return [
+                $return = [
                     'statusCode' => 200,
-                    'headers' => new \stdClass(),
+                    'headers' => new stdClass(),
                     'body' => $response,
                 ];
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($e instanceof MessageException) {
                 $body = $e->getPayload();
             } else {
                 $body = $this->exceptionConverter->convert($e);
             }
 
-            return [
+            $return = [
                 'statusCode' => 500,
-                'headers' => new \stdClass(),
+                'headers' => new stdClass(),
                 'body' => $body,
             ];
         }
+
+        $this->connection->rollBack();
+
+        return $return;
     }
 }

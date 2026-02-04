@@ -40,18 +40,19 @@ readonly class Logger implements FilterInterface
     public function __construct(
         private Service\Log $logService,
         private ContextFactory $contextFactory,
-        private IPResolver $ipResolver,
     ) {
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
+        $context = $this->contextFactory->getActive();
+
         $this->logService->log(
-            $this->ipResolver->resolveByEnvironment(),
+            $context->getIp(),
             $request->getMethod(),
             $request->getRequestTarget(),
             $request->getHeader('User-Agent'),
-            $this->contextFactory->getActive(),
+            $context,
             $request
         );
 

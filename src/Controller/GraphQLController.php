@@ -54,7 +54,6 @@ class GraphQLController extends ControllerAbstract implements FilterInterface
     public function __construct(
         private readonly GraphQL $server,
         private readonly FrameworkConfig $frameworkConfig,
-        private readonly IPResolver $ipResolver,
     ) {
     }
 
@@ -108,8 +107,6 @@ class GraphQLController extends ControllerAbstract implements FilterInterface
                 $request->getMethod(),
                 $data,
                 $request->getUri()->getParameters(),
-                $request->getHeader('Authorization'),
-                $this->ipResolver->resolveByRequest($request),
             );
         } catch (Throwable $e) {
             $output = new ExecutionResult(null, [Error::createLocatedError($e)]);

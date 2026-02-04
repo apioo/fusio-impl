@@ -16,6 +16,7 @@ This overview shows all Fusio related composer dependencies and the build status
 | [fusio/cli](https://github.com/apioo/fusio-cli)                                     | ![Status](https://github.com/apioo/fusio-cli/actions/workflows/ci.yml/badge.svg)                   |
 | [fusio/model](https://github.com/apioo/fusio-model)                                 | ![Status](https://github.com/apioo/fusio-model/actions/workflows/ci.yml/badge.svg)                 |
 | [fusio/engine](https://github.com/apioo/fusio-engine)                               | ![Status](https://github.com/apioo/fusio-engine/actions/workflows/ci.yml/badge.svg)                |
+| [fusio/adapter-ai](https://github.com/apioo/fusio-adapter-ai)                       | ![Status](https://github.com/apioo/fusio-adapter-ai/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-amqp](https://github.com/apioo/fusio-adapter-amqp)                   | ![Status](https://github.com/apioo/fusio-adapter-amqp/actions/workflows/ci.yml/badge.svg)          |
 | [fusio/adapter-beanstalk](https://github.com/apioo/fusio-adapter-beanstalk)         | ![Status](https://github.com/apioo/fusio-adapter-beanstalk/actions/workflows/ci.yml/badge.svg)     |
 | [fusio/adapter-cli](https://github.com/apioo/fusio-adapter-cli)                     | ![Status](https://github.com/apioo/fusio-adapter-cli/actions/workflows/ci.yml/badge.svg)           |

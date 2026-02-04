@@ -52,6 +52,19 @@ final class Version20230508210151 extends AbstractMigration
             $actionCommitTable->addUniqueIndex(['commit_hash']);
         }
 
+        if (!$schema->hasTable('fusio_agent')) {
+            $agentTable = $schema->createTable('fusio_agent');
+            $agentTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $agentTable->addColumn('user_id', 'integer');
+            $agentTable->addColumn('connection_id', 'integer');
+            $agentTable->addColumn('origin', 'integer');
+            $agentTable->addColumn('intent', 'integer');
+            $agentTable->addColumn('message', 'text');
+            $agentTable->addColumn('insert_date', 'datetime');
+            $agentTable->setPrimaryKey(['id']);
+        }
+
         if (!$schema->hasTable('fusio_app')) {
             $appTable = $schema->createTable('fusio_app');
             $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -310,6 +323,8 @@ final class Version20230508210151 extends AbstractMigration
             $mcpSessionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $mcpSessionTable->addColumn('session_id', 'string', ['length' => 128]);
             $mcpSessionTable->addColumn('data', 'text');
+            $mcpSessionTable->addColumn('update_date', 'datetime', ['notnull' => false]);
+            $mcpSessionTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
             $mcpSessionTable->setPrimaryKey(['id']);
             $mcpSessionTable->addUniqueIndex(['tenant_id', 'session_id']);
         }
@@ -634,6 +649,11 @@ final class Version20230508210151 extends AbstractMigration
         if (isset($actionCommitTable)) {
             $actionCommitTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action_id'], ['id'], [], 'action_commit_action_id');
             $actionCommitTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'action_commit_user_id');
+        }
+
+        if (isset($agentTable)) {
+            $agentTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_chat_user_id');
+            $agentTable->addForeignKeyConstraint($schema->getTable('fusio_connection'), ['connection_id'], ['id'], [], 'agent_chat_connection_id');
         }
 
         if (isset($appTable)) {
