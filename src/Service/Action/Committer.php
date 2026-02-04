@@ -38,8 +38,12 @@ readonly class Committer
     ) {
     }
 
-    public function commit(int $actionId, string $config, UserContext $context): void
+    public function commit(int $actionId, ?string $config, UserContext $context): void
     {
+        if (empty($config)) {
+            return;
+        }
+
         $previousHash = $this->actionCommitTable->findPreviousHash($actionId);
 
         $now = LocalDateTime::now();
