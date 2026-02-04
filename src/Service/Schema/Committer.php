@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Schema;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Table;
 use PSX\DateTime\LocalDateTime;
 
 /**
@@ -34,26 +34,24 @@ use PSX\DateTime\LocalDateTime;
 readonly class Committer
 {
     public function __construct(
-        private Connection $connection,
+        private Table\SchemaCommit $schemaCommitTable,
     ) {
     }
 
     public function commit(int $schemaId, string $source, UserContext $context): void
     {
-        $prevHash = (string) $this->connection->fetchOne('SELECT commit_hash FROM fusio_schema_commit WHERE schema_id = :schema_id ORDER BY id DESC', [
-            'schema_id' => $schemaId,
-        ]);
+        $previousHash = $this->schemaCommitTable->findPreviousHash($schemaId);
 
         $now = LocalDateTime::now();
-        $hash = sha1($schemaId . $context->getUserId() . $prevHash . $source . $now->toString());
+        $hash = sha1($schemaId . $context->getUserId() . $previousHash . $source . $now->toString());
 
-        $this->connection->insert('fusio_schema_commit', [
-            'schema_id' => $schemaId,
-            'user_id' => $context->getUserId(),
-            'prev_hash' => $prevHash,
-            'commit_hash' => $hash,
-            'source' => $source,
-            'insert_date' => $now,
-        ]);
+        $row = new Table\Generated\SchemaCommitRow();
+        $row->setSchemaId($schemaId);
+        $row->setUserId($context->getUserId());
+        $row->setPrevHash($previousHash);
+        $row->setCommitHash($hash);
+        $row->setSource($source);
+        $row->setInsertDate($now);
+        $this->schemaCommitTable->create($row);
     }
 }

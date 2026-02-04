@@ -18,40 +18,21 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Action;
-
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Table;
-use PSX\DateTime\LocalDateTime;
+namespace Fusio\Impl\Table;
 
 /**
- * Committer
+ * ActionCommit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Committer
+class ActionCommit extends Generated\ActionCommitTable
 {
-    public function __construct(
-        private Table\ActionCommit $actionCommitTable,
-    ) {
-    }
-
-    public function commit(int $actionId, string $config, UserContext $context): void
+    public function findPreviousHash(int $actionId): ?string
     {
-        $previousHash = $this->actionCommitTable->findPreviousHash($actionId);
-
-        $now = LocalDateTime::now();
-        $hash = sha1($actionId . $context->getUserId() . $previousHash . $config . $now->toString());
-
-        $row = new Table\Generated\ActionCommitRow();
-        $row->setActionId($actionId);
-        $row->setUserId($context->getUserId());
-        $row->setPrevHash($previousHash);
-        $row->setCommitHash($hash);
-        $row->setConfig($config);
-        $row->setInsertDate($now);
-        $this->actionCommitTable->create($row);
+        return (string) $this->connection->fetchOne('SELECT commit_hash FROM fusio_action_commit WHERE action_id = :action_id ORDER BY id DESC', [
+            'action_id' => $actionId,
+        ]);
     }
 }
