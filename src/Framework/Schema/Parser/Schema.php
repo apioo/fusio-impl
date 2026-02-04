@@ -87,7 +87,7 @@ class Schema implements ParserInterface
 
         $source = $row[Table\Generated\SchemaTable::COLUMN_SOURCE] ?? throw new ParserException('Could not fetch schema source');
         if ($hash !== null) {
-            $source = $this->resolveSourceByHash((int) $row[Table\Generated\SchemaTable::COLUMN_ID], $hash);
+            $source = $this->resolveSourceByHash((int) $row[Table\Generated\SchemaTable::COLUMN_ID], $hash) ?? $source;
         }
 
         if (!str_contains($source, '{') && class_exists($source)) {
