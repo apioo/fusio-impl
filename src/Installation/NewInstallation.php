@@ -265,6 +265,16 @@ class NewInstallation
                     eventName: 'fusio.action.delete',
                     description: 'Deletes an existing action',
                 ),
+                'action.getCommits' => new Operation(
+                    action: Backend\Action\Action\Commit\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/action/$action_id<[0-9]+|^~>/commit',
+                    httpCode: 200,
+                    outgoing: Model\Backend\ActionCommitCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of action commits',
+                ),
                 'app.getAll' => new Operation(
                     action: Backend\Action\App\GetAll::class,
                     httpMethod: 'GET',
@@ -1574,6 +1584,16 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     eventName: 'fusio.schema.delete',
                     description: 'Deletes an existing schema',
+                ),
+                'schema.getCommits' => new Operation(
+                    action: Backend\Action\Schema\Commit\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/schema/$schema_id<[0-9]+|^~>/commit',
+                    httpCode: 200,
+                    outgoing: Model\Backend\SchemaCommitCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of schema commits',
                 ),
                 'scope.getAll' => new Operation(
                     action: Backend\Action\Scope\GetAll::class,

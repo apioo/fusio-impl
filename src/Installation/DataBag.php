@@ -214,6 +214,18 @@ class DataBag
         ];
     }
 
+    public function addActionCommit(string $action, string $user, string $commitHash, string $config, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_action_commit'][$commitHash] = [
+            'action_id' => $this->getReference('fusio_action', $action, $tenantId),
+            'user_id' => $user !== null ? $this->getReference('fusio_user', $user, $tenantId) : null,
+            'prev_hash' => '',
+            'commit_hash' => $commitHash,
+            'config' => $config,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
     public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_app'][$name] = [
@@ -623,6 +635,18 @@ class DataBag
             'source' => $source,
             'form' => $form,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
+        ];
+    }
+
+    public function addSchemaCommit(string $schema, string $user, string $commitHash, string $source, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_schema_commit'][$commitHash] = [
+            'schema_id' => $this->getReference('fusio_schema', $schema, $tenantId),
+            'user_id' => $user !== null ? $this->getReference('fusio_user', $user, $tenantId) : null,
+            'prev_hash' => '',
+            'commit_hash' => $commitHash,
+            'source' => $source,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 

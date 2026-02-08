@@ -52,9 +52,9 @@ readonly class Operation
     public function __construct(
         private Table\Operation $operationTable,
         private Table\Action $actionTable,
-        private Table\ActionCommit $actionCommitTable,
+        private Table\Action\Commit $actionCommitTable,
         private Table\Schema $schemaTable,
-        private Table\SchemaCommit $schemaCommitTable,
+        private Table\Schema\Commit $schemaCommitTable,
         private Service\Operation\Validator $validator,
         private Service\Scope $scopeService,
         private RoutingParserInterface $routingParser,

@@ -18,16 +18,18 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Table\Schema;
+
+use Fusio\Impl\Table\Generated;
 
 /**
- * SchemaCommit
+ * Commit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class SchemaCommit extends Generated\SchemaCommitTable
+class Commit extends Generated\SchemaCommitTable
 {
     public function findCurrentHash(int $schemaId): ?string
     {

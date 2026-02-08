@@ -34,7 +34,7 @@ use PSX\DateTime\LocalDateTime;
 readonly class Committer
 {
     public function __construct(
-        private Table\SchemaCommit $schemaCommitTable,
+        private Table\Schema\Commit $schemaCommitTable,
     ) {
     }
 

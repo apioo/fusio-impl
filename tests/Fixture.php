@@ -115,6 +115,7 @@ class Fixture
         $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
         $data->addAction('default', 'MIME-Action', MimeAction::class);
+        $data->addActionCommit('Sql-Insert', 'Consumer', 'd9b98d4f5d951d59632e7dfdc0c5737a25936358', json_encode(['foo' => 'bar']));
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
@@ -151,6 +152,7 @@ class Fixture
         $data->addTransaction('Consumer', 'Plan B', 3999, 'last month', 'next month', '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource, null, ['foo' => 'bar']);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
+        $data->addSchemaCommit('Entry-Schema', 'Consumer', '7d28d0f99f1d839a054cf080b37556d77166d788', json_encode(['foo' => 'bar']));
         $data->addScope('default', 'foo', 'Foo access', ['foo' => 'bar']);
         $data->addScope('default', 'bar', 'Bar access');
         $data->addScope('default', 'plan_scope', 'Plan scope access');

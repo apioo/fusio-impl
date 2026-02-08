@@ -18,16 +18,18 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Table\Action;
+
+use Fusio\Impl\Table\Generated;
 
 /**
- * ActionCommit
+ * Commit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActionCommit extends Generated\ActionCommitTable
+class Commit extends Generated\ActionCommitTable
 {
     public function findCurrentHash(int $actionId): ?string
     {
