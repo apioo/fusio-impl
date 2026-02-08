@@ -218,7 +218,7 @@ class DataBag
     {
         $this->data['fusio_action_commit'][$commitHash] = [
             'action_id' => $this->getReference('fusio_action', $action, $tenantId),
-            'user_id' => $user !== null ? $this->getReference('fusio_user', $user, $tenantId) : null,
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'prev_hash' => '',
             'commit_hash' => $commitHash,
             'config' => $config,
@@ -642,7 +642,7 @@ class DataBag
     {
         $this->data['fusio_schema_commit'][$commitHash] = [
             'schema_id' => $this->getReference('fusio_schema', $schema, $tenantId),
-            'user_id' => $user !== null ? $this->getReference('fusio_user', $user, $tenantId) : null,
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'prev_hash' => '',
             'commit_hash' => $commitHash,
             'source' => $source,
