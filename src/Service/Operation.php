@@ -85,7 +85,7 @@ readonly class Operation
             $row->setParameters($this->wrapParameters($operation->getParameters()));
             $row->setIncoming(SchemaScheme::wrap($operation->getIncoming()));
             $row->setOutgoing(SchemaScheme::wrap($operation->getOutgoing()));
-            $row->setThrows($this->wrapThrows($operation->getThrows(), $context));
+            $row->setThrows($this->wrapThrows($operation->getThrows(), $context, false));
             $row->setAction(ActionScheme::wrap($operation->getAction()));
             $row->setCosts($operation->getCosts());
             $row->setMetadata($operation->getMetadata() !== null ? Parser::encode($operation->getMetadata()) : null);
@@ -131,21 +131,6 @@ readonly class Operation
 
         $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
 
-        $action = $operation->getAction();
-        if (!empty($action)) {
-            $action = $this->fixActionToCurrentCommitHash($action, $context);
-        }
-
-        $incoming = $existing->getIncoming();
-        if (!empty($incoming)) {
-            $incoming = $this->fixSchemaToCurrentCommitHash($incoming, $context);
-        }
-
-        $outgoing = $existing->getOutgoing();
-        if (!empty($outgoing)) {
-            $outgoing = $this->fixSchemaToCurrentCommitHash($outgoing, $context);
-        }
-
         try {
             $this->operationTable->beginTransaction();
 
@@ -154,6 +139,24 @@ readonly class Operation
                 // if the operation is stable or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
+                // we fix action and schemas to a specific commit if we transition the operation from experimental to stable
+                $shouldFix = $existing->getStability() === OperationInterface::STABILITY_EXPERIMENTAL && $operation->getStability() === OperationInterface::STABILITY_STABLE;
+
+                $action = $operation->getAction() ?? $existing->getAction();
+                if (!empty($action) && $shouldFix) {
+                    $action = $this->fixActionToCurrentCommitHash($action, $context);
+                }
+
+                $incoming = $operation->getIncoming() ?? $existing->getIncoming();
+                if (!empty($incoming) && $shouldFix) {
+                    $incoming = $this->fixSchemaToCurrentCommitHash($incoming, $context);
+                }
+
+                $outgoing = $operation->getOutgoing() ?? $existing->getOutgoing();
+                if (!empty($outgoing) && $shouldFix) {
+                    $outgoing = $this->fixSchemaToCurrentCommitHash($outgoing, $context);
+                }
+
                 $existing->setActive($operation->getActive() !== null ? (int) $operation->getActive() : $existing->getActive());
                 $existing->setPublic($operation->getPublic() !== null ? (int) $operation->getPublic() : $existing->getPublic());
                 $existing->setStability($operation->getStability() ?? $existing->getStability());
@@ -174,7 +177,7 @@ readonly class Operation
                 $existing->setOutgoing(SchemaScheme::wrap($outgoing ?? $existing->getOutgoing()));
                 $throws = $operation->getThrows();
                 if ($throws !== null) {
-                    $existing->setThrows($this->wrapThrows($throws, $context));
+                    $existing->setThrows($this->wrapThrows($throws, $context, $shouldFix));
                 }
                 $existing->setAction(ActionScheme::wrap($action ?? $existing->getAction()));
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
@@ -240,14 +243,14 @@ readonly class Operation
         return Parser::encode($parameters);
     }
 
-    private function wrapThrows(?OperationThrows $throws, UserContext $context): ?string
+    private function wrapThrows(?OperationThrows $throws, UserContext $context, bool $shouldFix): ?string
     {
         if ($throws === null) {
             return null;
         }
 
         foreach ($throws->getAll() as $code => $schema) {
-            if (!empty($schema)) {
+            if (!empty($schema) && $shouldFix) {
                 $schema = $this->fixSchemaToCurrentCommitHash($schema, $context);
             }
 
@@ -268,7 +271,13 @@ readonly class Operation
             return $schema;
         }
 
-        $row = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), substr($scheme, 9));
+        $name = substr($scheme, 9);
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $scheme);
+            $name = $parts[0] ?? '';
+        }
+
+        $row = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
         if (!$row instanceof Table\Generated\SchemaRow) {
             return $schema;
         }
@@ -278,7 +287,7 @@ readonly class Operation
             return $schema;
         }
 
-        return $schema . '@' . $schemaHash;
+        return 'schema://' . $name . '@' . $schemaHash;
     }
 
     private function fixActionToCurrentCommitHash(?string $action, UserContext $context): ?string
@@ -292,7 +301,13 @@ readonly class Operation
             return $action;
         }
 
-        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), substr($scheme, 9));
+        $name = substr($scheme, 9);
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $scheme);
+            $name = $parts[0] ?? '';
+        }
+
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
         if (!$row instanceof Table\Generated\ActionRow) {
             return $action;
         }
@@ -302,6 +317,6 @@ readonly class Operation
             return $action;
         }
 
-        return $action . '@' . $actionHash;
+        return 'action://' . $name . '@' . $actionHash;
     }
 }
