@@ -62,7 +62,7 @@ readonly class InputSchemaBuilder
 
         $incoming = $operation->getIncoming();
         if (!empty($incoming)) {
-            [$scheme, $value] = Scheme::split($incoming);
+            [$scheme] = Scheme::split($incoming);
             if ($scheme === Scheme::MIME) {
                 return [];
             }
