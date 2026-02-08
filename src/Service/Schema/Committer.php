@@ -48,7 +48,7 @@ readonly class Committer
         $row = new Table\Generated\SchemaCommitRow();
         $row->setSchemaId($schemaId);
         $row->setUserId($context->getUserId());
-        $row->setPrevHash($previousHash);
+        $row->setPrevHash($previousHash ?? '');
         $row->setCommitHash($hash);
         $row->setSource($source);
         $row->setInsertDate($now);
