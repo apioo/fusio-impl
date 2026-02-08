@@ -274,7 +274,7 @@ readonly class Operation
         $name = substr($scheme, 9);
         if (str_contains($name, '@')) {
             $parts = explode('@', $scheme);
-            $name = $parts[0] ?? '';
+            $name = $parts[0];
         }
 
         $row = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
@@ -304,7 +304,7 @@ readonly class Operation
         $name = substr($scheme, 9);
         if (str_contains($name, '@')) {
             $parts = explode('@', $scheme);
-            $name = $parts[0] ?? '';
+            $name = $parts[0];
         }
 
         $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
