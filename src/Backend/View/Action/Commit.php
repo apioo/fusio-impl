@@ -60,7 +60,7 @@ class Commit extends ViewAbstract
                     'status' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
                     'name' => Table\Generated\UserTable::COLUMN_NAME,
                 ]),
-                'commitHash' => $builder->fieldInteger(Table\Generated\ActionCommitTable::COLUMN_COMMIT_HASH),
+                'commitHash' => Table\Generated\ActionCommitTable::COLUMN_COMMIT_HASH,
                 'config' => $builder->fieldJson(Table\Generated\ActionCommitTable::COLUMN_CONFIG),
                 'insertDate' => $builder->fieldDateTime(Table\Generated\ActionCommitTable::COLUMN_INSERT_DATE),
             ]),

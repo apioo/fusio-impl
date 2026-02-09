@@ -69,7 +69,7 @@ class CollectionTest extends DbTestCase
                 "status": 1,
                 "name": "Consumer"
             },
-            "commitHash": 0,
+            "commitHash": "d9b98d4f5d951d59632e7dfdc0c5737a25936358",
             "config": {
                 "foo": "bar"
             },
