@@ -56,18 +56,25 @@ enum Scheme: string
 
     /**
      * @param string $schema
-     * @return array{Scheme, string}
+     * @return array{Scheme, string, ?string}
      */
     public static function split(string $schema): array
     {
-        $pos = strpos($schema, '://');
-        if ($pos === false) {
-            return [self::SCHEMA, $schema];
+        $scheme = self::SCHEMA->value;
+        if (str_contains($schema, '://')) {
+            $parts = explode('://', $schema);
+            $scheme = $parts[0];
+            $schema = $parts[1];
         }
 
-        $scheme = substr($schema, 0, $pos);
-        $value = substr($schema, $pos + 3);
+        $name = $schema;
+        $hash = null;
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $name);
+            $name = $parts[0];
+            $hash = $parts[1];
+        }
 
-        return [self::from($scheme), $value];
+        return [self::from($scheme), $name, $hash];
     }
 }

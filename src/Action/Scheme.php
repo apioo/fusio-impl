@@ -57,19 +57,26 @@ enum Scheme: string
 
     /**
      * @param string $action
-     * @return array{Scheme, string}
+     * @return array{Scheme, string, ?string}
      */
     public static function split(string $action): array
     {
-        $pos = strpos($action, '://');
-        if ($pos === false) {
-            return [self::ACTION, $action];
+        $scheme = self::ACTION->value;
+        if (str_contains($action, '://')) {
+            $parts = explode('://', $action);
+            $scheme = $parts[0];
+            $action = $parts[1];
         }
 
-        $scheme = substr($action, 0, $pos);
-        $value = substr($action, $pos + 3);
+        $name = $action;
+        $hash = null;
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $name);
+            $name = $parts[0];
+            $hash = $parts[1];
+        }
 
-        return [self::from($scheme), $value];
+        return [self::from($scheme), $name, $hash];
     }
 
     private static function buildAction(string $actionName): string

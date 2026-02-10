@@ -79,6 +79,8 @@ class DataBag
             'fusio_user_scope' => [],
             'fusio_user_attribute' => [],
             'fusio_role_scope' => [],
+            'fusio_action_commit' => [],
+            'fusio_schema_commit' => [],
         ];
     }
 
@@ -209,6 +211,18 @@ class DataBag
             'config' => $config,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
             'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addActionCommit(string $action, string $user, string $commitHash, string $config, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_action_commit'][$commitHash] = [
+            'action_id' => $this->getReference('fusio_action', $action, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'prev_hash' => '',
+            'commit_hash' => $commitHash,
+            'config' => $config,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -621,6 +635,18 @@ class DataBag
             'source' => $source,
             'form' => $form,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
+        ];
+    }
+
+    public function addSchemaCommit(string $schema, string $user, string $commitHash, string $source, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_schema_commit'][$commitHash] = [
+            'schema_id' => $this->getReference('fusio_schema', $schema, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'prev_hash' => '',
+            'commit_hash' => $commitHash,
+            'source' => $source,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 

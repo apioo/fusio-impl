@@ -56,6 +56,12 @@ class Schema implements ParserInterface
 
     public function parse(string $schema, ?ContextInterface $context = null): SchemaInterface
     {
+        $hash = null;
+        if (str_contains($schema, '@')) {
+            $hash = substr(strstr($schema, '@'), 1);
+            $schema = strstr($schema, '@', true);
+        }
+
         $condition = Condition::withAnd();
         $condition->equals('sm.' . Table\Generated\SchemaTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
@@ -67,15 +73,21 @@ class Schema implements ParserInterface
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select([
+                'sm.' . Table\Generated\SchemaTable::COLUMN_ID,
                 'sm.' . Table\Generated\SchemaTable::COLUMN_SOURCE,
             ])
             ->from('fusio_schema', 'sm')
             ->where($condition->getExpression($this->connection->getDatabasePlatform()))
             ->setParameters($condition->getValues());
 
-        $source = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
-        if (empty($source)) {
+        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
+        if (empty($row)) {
             throw new ParserException('Could not find schema ' . $schema);
+        }
+
+        $source = $row[Table\Generated\SchemaTable::COLUMN_SOURCE] ?? throw new ParserException('Could not fetch schema source');
+        if ($hash !== null) {
+            $source = $this->resolveSourceByHash((int) $row[Table\Generated\SchemaTable::COLUMN_ID], $hash) ?? $source;
         }
 
         if (!str_contains($source, '{') && class_exists($source)) {
@@ -83,5 +95,24 @@ class Schema implements ParserInterface
         } else {
             return $this->typeSchema->parse($source, $context);
         }
+    }
+
+    private function resolveSourceByHash(int $schemaId, string $hash): ?string
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\SchemaCommitTable::COLUMN_SCHEMA_ID, $schemaId);
+        $condition->equals(Table\Generated\SchemaCommitTable::COLUMN_COMMIT_HASH, $hash);
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select([
+                Table\Generated\SchemaCommitTable::COLUMN_SOURCE,
+            ])
+            ->from('fusio_schema_commit', 'schema_commit')
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        $config = $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        return !empty($config) ? $config : null;
     }
 }

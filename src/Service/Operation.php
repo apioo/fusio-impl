@@ -51,6 +51,10 @@ readonly class Operation
 {
     public function __construct(
         private Table\Operation $operationTable,
+        private Table\Action $actionTable,
+        private Table\Action\Commit $actionCommitTable,
+        private Table\Schema $schemaTable,
+        private Table\Schema\Commit $schemaCommitTable,
         private Service\Operation\Validator $validator,
         private Service\Scope $scopeService,
         private RoutingParserInterface $routingParser,
@@ -81,7 +85,7 @@ readonly class Operation
             $row->setParameters($this->wrapParameters($operation->getParameters()));
             $row->setIncoming(SchemaScheme::wrap($operation->getIncoming()));
             $row->setOutgoing(SchemaScheme::wrap($operation->getOutgoing()));
-            $row->setThrows($this->wrapThrows($operation->getThrows()));
+            $row->setThrows($this->wrapThrows($operation->getThrows(), $context, false));
             $row->setAction(ActionScheme::wrap($operation->getAction()));
             $row->setCosts($operation->getCosts());
             $row->setMetadata($operation->getMetadata() !== null ? Parser::encode($operation->getMetadata()) : null);
@@ -135,6 +139,24 @@ readonly class Operation
                 // if the operation is stable or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
+                // we fix action and schemas to a specific commit if we transition the operation from experimental to stable
+                $shouldFix = $existing->getStability() === OperationInterface::STABILITY_EXPERIMENTAL && $operation->getStability() === OperationInterface::STABILITY_STABLE;
+
+                $action = $operation->getAction() ?? $existing->getAction();
+                if (!empty($action) && $shouldFix) {
+                    $action = $this->fixActionToCurrentCommitHash($action, $context);
+                }
+
+                $incoming = $operation->getIncoming() ?? $existing->getIncoming();
+                if (!empty($incoming) && $shouldFix) {
+                    $incoming = $this->fixSchemaToCurrentCommitHash($incoming, $context);
+                }
+
+                $outgoing = $operation->getOutgoing() ?? $existing->getOutgoing();
+                if (!empty($outgoing) && $shouldFix) {
+                    $outgoing = $this->fixSchemaToCurrentCommitHash($outgoing, $context);
+                }
+
                 $existing->setActive($operation->getActive() !== null ? (int) $operation->getActive() : $existing->getActive());
                 $existing->setPublic($operation->getPublic() !== null ? (int) $operation->getPublic() : $existing->getPublic());
                 $existing->setStability($operation->getStability() ?? $existing->getStability());
@@ -148,16 +170,16 @@ readonly class Operation
                     $existing->setParameters($this->wrapParameters($parameters));
                 }
                 if (in_array($existing->getHttpMethod(), ['POST', 'PUT', 'PATCH'], true)) {
-                    $existing->setIncoming(SchemaScheme::wrap($operation->getIncoming() ?? $existing->getIncoming()));
+                    $existing->setIncoming(SchemaScheme::wrap($incoming ?? $existing->getIncoming()));
                 } else {
                     $existing->setIncoming(null);
                 }
-                $existing->setOutgoing(SchemaScheme::wrap($operation->getOutgoing() ?? $existing->getOutgoing()));
+                $existing->setOutgoing(SchemaScheme::wrap($outgoing ?? $existing->getOutgoing()));
                 $throws = $operation->getThrows();
                 if ($throws !== null) {
-                    $existing->setThrows($this->wrapThrows($throws));
+                    $existing->setThrows($this->wrapThrows($throws, $context, $shouldFix));
                 }
-                $existing->setAction(ActionScheme::wrap($operation->getAction() ?? $existing->getAction()));
+                $existing->setAction(ActionScheme::wrap($action ?? $existing->getAction()));
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
                 $metadata = $operation->getMetadata();
                 if ($metadata !== null) {
@@ -221,16 +243,80 @@ readonly class Operation
         return Parser::encode($parameters);
     }
 
-    private function wrapThrows(?OperationThrows $throws): ?string
+    private function wrapThrows(?OperationThrows $throws, UserContext $context, bool $shouldFix): ?string
     {
         if ($throws === null) {
             return null;
         }
 
         foreach ($throws->getAll() as $code => $schema) {
+            if (!empty($schema) && $shouldFix) {
+                $schema = $this->fixSchemaToCurrentCommitHash($schema, $context);
+            }
+
             $throws->put($code, SchemaScheme::wrap($schema));
         }
 
         return Parser::encode($throws);
+    }
+
+    private function fixSchemaToCurrentCommitHash(?string $schema, UserContext $context): ?string
+    {
+        $scheme = SchemaScheme::wrap($schema);
+        if (empty($scheme)) {
+            return $schema;
+        }
+
+        if (!str_starts_with($scheme, 'schema://')) {
+            return $schema;
+        }
+
+        $name = substr($scheme, 9);
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $scheme);
+            $name = $parts[0];
+        }
+
+        $row = $this->schemaTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
+        if (!$row instanceof Table\Generated\SchemaRow) {
+            return $schema;
+        }
+
+        $schemaHash = $this->schemaCommitTable->findCurrentHash($row->getId());
+        if (empty($schemaHash)) {
+            return $schema;
+        }
+
+        return 'schema://' . $name . '@' . $schemaHash;
+    }
+
+    private function fixActionToCurrentCommitHash(?string $action, UserContext $context): ?string
+    {
+        $scheme = ActionScheme::wrap($action);
+        if (empty($scheme)) {
+            return $action;
+        }
+
+        if (!str_starts_with($scheme, 'action://')) {
+            return $action;
+        }
+
+        $name = substr($scheme, 9);
+        if (str_contains($name, '@')) {
+            $parts = explode('@', $scheme);
+            $name = $parts[0];
+        }
+
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $name);
+        if (!$row instanceof Table\Generated\ActionRow) {
+            return $action;
+        }
+
+        $actionHash = $this->actionCommitTable->findCurrentHash($row->getId());
+        if (empty($actionHash)) {
+            return $action;
+        }
+
+        return 'action://' . $name . '@' . $actionHash;
     }
 }

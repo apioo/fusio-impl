@@ -445,6 +445,61 @@
         "action"
       ]
     },
+    "backend.action.getCommits": {
+      "path": "/backend/action/$action_id<[0-9]+|^~>/commit",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_ActionCommitCollection"
+        }
+      },
+      "arguments": {
+        "action_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of action commits",
+      "stability": 2,
+      "security": [
+        "backend.action"
+      ],
+      "authorization": true,
+      "tags": [
+        "action"
+      ]
+    },
     "backend.action.getForm": {
       "path": "/backend/action/form",
       "method": "GET",
@@ -6009,6 +6064,61 @@
         }
       ],
       "description": "Returns a paginated list of schemas",
+      "stability": 2,
+      "security": [
+        "backend.schema"
+      ],
+      "authorization": true,
+      "tags": [
+        "schema"
+      ]
+    },
+    "backend.schema.getCommits": {
+      "path": "/backend/schema/$schema_id<[0-9]+|^~>/commit",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_SchemaCommitCollection"
+        }
+      },
+      "arguments": {
+        "schema_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of schema commits",
       "stability": 2,
       "security": [
         "backend.schema"
@@ -11824,6 +11934,45 @@
         }
       }
     },
+    "Backend_ActionCommit": {
+      "description": "An action commit which represents a change in the action configuration",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "user": {
+          "description": "The user which has made the change",
+          "type": "reference",
+          "target": "Backend_User"
+        },
+        "commitHash": {
+          "description": "A unique hash which represents this commit",
+          "type": "string"
+        },
+        "config": {
+          "description": "The provided action configuration",
+          "type": "reference",
+          "target": "Backend_ActionConfig"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_ActionCommitCollection": {
+      "description": "A paginated collection of action commit objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_ActionCommit"
+        }
+      }
+    },
     "Backend_ActionConfig": {
       "description": "The action configuration which contains arbitrary key-value entries",
       "type": "map",
@@ -13812,6 +13961,45 @@
         "target": "Common_Collection",
         "template": {
           "T": "Backend_Schema"
+        }
+      }
+    },
+    "Backend_SchemaCommit": {
+      "description": "A schema commit which represents a change in the schema source",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "user": {
+          "description": "The user which has made the change",
+          "type": "reference",
+          "target": "Backend_User"
+        },
+        "commitHash": {
+          "description": "A unique hash which represents this commit",
+          "type": "string"
+        },
+        "schema": {
+          "description": "The provided schema payload",
+          "type": "reference",
+          "target": "Backend_SchemaSource"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_SchemaCommitCollection": {
+      "description": "A paginated collection of schema commit objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_SchemaCommit"
         }
       }
     },

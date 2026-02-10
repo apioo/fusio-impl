@@ -18,10 +18,15 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Form;
+namespace Fusio\Impl\Tests\Backend\Api\Action\Commit;
 
+use Fusio\Adapter\Sql\Action\SqlInsert;
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Impl\Backend;
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
-use PSX\Json\Parser;
+use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -32,14 +37,25 @@ use PSX\Json\Parser;
  */
 class CollectionTest extends DbTestCase
 {
+    private int $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getReference('fusio_action', 'Sql-Insert')->resolve($this->connection);
+    }
+
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/form', 'GET', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
     "totalResults": 1,
@@ -48,12 +64,16 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "id": 1,
-            "status": 1,
-            "name": "my_form",
-            "operationId": 259,
-            "metadata": {
+            "user": {
+                "id": 2,
+                "status": 1,
+                "name": "Consumer"
+            },
+            "commitHash": "d9b98d4f5d951d59632e7dfdc0c5737a25936358",
+            "config": {
                 "foo": "bar"
-            }
+            },
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -65,58 +85,21 @@ JSON;
 
     public function testPost()
     {
-        $metadata = [
-            'foo' => 'bar'
-        ];
-
-        $uiSchema = [
-            'my' => 'schema'
-        ];
-
-        $response = $this->sendRequest('/backend/form', 'POST', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'new-form',
-            'operationId' => 20,
-            'uiSchema'    => $uiSchema,
-            'metadata'    => $metadata,
+            'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Form successfully created",
-    "id": "2"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name', 'operation_id', 'ui_schema', 'metadata')
-            ->from('fusio_form')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = $this->connection->fetchAssociative($sql);
-
-        $this->assertEquals(2, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('new-form', $row['name']);
-        $this->assertEquals(20, $row['operation_id']);
-        $this->assertJsonStringEqualsJsonString(json_encode($uiSchema), $row['ui_schema']);
-        $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/form', 'PUT', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -130,7 +113,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/form', 'DELETE', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

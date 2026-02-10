@@ -56,9 +56,27 @@ class Assert extends \PHPUnit\Framework\Assert
         if ($expectMetadata !== null) {
             self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $row['metadata'], $row['metadata']);
         }
+
+        // check commit
+        $sql = $connection->createQueryBuilder()
+            ->select('commit_hash', 'config')
+            ->from('fusio_action_commit')
+            ->where('action_id = :action_id')
+            ->orderBy('id', 'DESC')
+            ->getSQL();
+
+        $row = $connection->fetchAssociative($sql, ['action_id' => $row['id']]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided action name ' . $expectName . ' does not contain a commit');
+        }
+
+        $config = json_encode(Service\Action::unserializeConfig($row['config']));
+
+        self::assertNotEmpty($row['commit_hash']);
+        self::assertJsonStringEqualsJsonString($expectConfig, $config, $config);
     }
 
-    public static function assertSchema(Connection $connection, string $expectName, string $expectSchema, ?string $expectForm = null, ?array $expectMetadata = null): void
+    public static function assertSchema(Connection $connection, string $expectName, string $expectSchema, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()
             ->select('id', 'name', 'source', 'form', 'metadata')
@@ -75,13 +93,25 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertEquals($expectName, $row['name']);
         self::assertJsonStringEqualsJsonString($expectSchema, $row['source']);
 
-        if ($expectForm !== null) {
-            self::assertJsonStringEqualsJsonString($expectForm, $row['form']);
-        }
-
         if ($expectMetadata !== null) {
             self::assertJsonStringEqualsJsonString(json_encode($expectMetadata), $row['metadata'], $row['metadata']);
         }
+
+        // check commit
+        $sql = $connection->createQueryBuilder()
+            ->select('commit_hash', 'source')
+            ->from('fusio_schema_commit')
+            ->where('schema_id = :schema_id')
+            ->orderBy('id', 'DESC')
+            ->getSQL();
+
+        $row = $connection->fetchAssociative($sql, ['schema_id' => $row['id']]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided schema name ' . $expectName . ' does not contain a commit');
+        }
+
+        self::assertNotEmpty($row['commit_hash']);
+        self::assertJsonStringEqualsJsonString($expectSchema, $row['source'], $row['source']);
     }
 
     public static function assertOperation(Connection $connection, int $expectStability, string $expectName, string $expectHttpMethod, string $expectHttpPath, ?int $expectHttpCode, array $expectScopes, ?array $expectMetadata = null): void
