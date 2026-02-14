@@ -662,6 +662,7 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($actionTable)) {
             $actionTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'action_category_id');
+            $actionTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'action_taxonomy_id');
         }
 
         if (isset($actionCommitTable)) {
@@ -685,10 +686,12 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($cronjobTable)) {
             $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'cronjob_category_id');
+            $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'cronjob_taxonomy_id');
         }
 
         if (isset($eventTable)) {
             $eventTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'event_category_id');
+            $eventTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'event_taxonomy_id');
         }
 
         if (isset($formTable)) {
@@ -701,11 +704,17 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($operationTable)) {
             $operationTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'operation_category_id');
+            $operationTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'operation_taxonomy_id');
         }
 
         if (isset($tokenTable)) {
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'token_app_id');
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'token_user_id');
+        }
+
+        if (isset($triggerTable)) {
+            $triggerTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'trigger_category_id');
+            $triggerTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'trigger_taxonomy_id');
         }
 
         if (isset($planScopeTable)) {

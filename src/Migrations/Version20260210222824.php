@@ -32,6 +32,28 @@ final class Version20260210222824 extends AbstractMigration
 
             $taxonomyTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['parent_id'], ['id'], [], 'taxonomy_parent_id');
         }
+
+        $taxonomyTargets = [
+            'operation',
+            'action',
+            'event',
+            'cronjob',
+            'trigger',
+        ];
+
+        foreach ($taxonomyTargets as $taxonomyTarget) {
+            $table = $schema->getTable('fusio_' . $taxonomyTarget);
+            if (!$table->hasColumn('taxonomy_id')) {
+                $table->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
+                $table->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], $taxonomyTarget . '_taxonomy_id');
+            }
+        }
+
+        // add missing category foreign key
+        $triggerTable = $schema->getTable('fusio_trigger');
+        if (!$triggerTable->hasUniqueConstraint('trigger_category_id')) {
+            $triggerTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'trigger_category_id');
+        }
     }
 
     public function down(Schema $schema): void
