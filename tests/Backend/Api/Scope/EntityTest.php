@@ -57,6 +57,12 @@ class EntityTest extends DbTestCase
     "description": "Bar access",
     "operations": [
         {
+            "id": 270,
+            "scopeId": 58,
+            "operationId": 276,
+            "allow": true
+        },
+        {
             "id": 269,
             "scopeId": 58,
             "operationId": 275,
@@ -111,13 +117,13 @@ class EntityTest extends DbTestCase
             "allow": true
         },
         {
-            "id": 260,
+            "id": 259,
             "scopeId": 58,
             "operationId": 266,
             "allow": true
         },
         {
-            "id": 258,
+            "id": 257,
             "scopeId": 58,
             "operationId": 265,
             "allow": true
@@ -126,12 +132,6 @@ class EntityTest extends DbTestCase
             "id": 256,
             "scopeId": 58,
             "operationId": 264,
-            "allow": true
-        },
-        {
-            "id": 255,
-            "scopeId": 58,
-            "operationId": 263,
             "allow": true
         }
     ]
@@ -157,6 +157,12 @@ JSON;
     "description": "Bar access",
     "operations": [
         {
+            "id": 270,
+            "scopeId": 58,
+            "operationId": 276,
+            "allow": true
+        },
+        {
             "id": 269,
             "scopeId": 58,
             "operationId": 275,
@@ -211,13 +217,13 @@ JSON;
             "allow": true
         },
         {
-            "id": 260,
+            "id": 259,
             "scopeId": 58,
             "operationId": 266,
             "allow": true
         },
         {
-            "id": 258,
+            "id": 257,
             "scopeId": 58,
             "operationId": 265,
             "allow": true
@@ -226,12 +232,6 @@ JSON;
             "id": 256,
             "scopeId": 58,
             "operationId": 264,
-            "allow": true
-        },
-        {
-            "id": 255,
-            "scopeId": 58,
-            "operationId": 263,
             "allow": true
         }
     ]

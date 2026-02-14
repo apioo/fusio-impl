@@ -8638,6 +8638,50 @@
         "taxonomy"
       ]
     },
+    "backend.taxonomy.move": {
+      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "taxonomy_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TaxonomyMove"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Moves the provided ids to the taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
     "backend.taxonomy.update": {
       "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
       "method": "PUT",
@@ -14515,6 +14559,42 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Taxonomy"
+      }
+    },
+    "Backend_TaxonomyMove": {
+      "description": "Moves the provided objects to a taxonomy",
+      "type": "struct",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "events": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "cronjobs": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        }
       }
     },
     "Backend_TaxonomyUpdate": {
