@@ -22,9 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\Filter\TaxonomyQueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
-use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
@@ -37,14 +37,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Trigger extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(TaxonomyQueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
         $sortBy = Table\Generated\TriggerColumn::tryFrom($filter->getSortBy(Table\Generated\TriggerTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TriggerTable::COLUMN_NAME]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TriggerTable::COLUMN_NAME, TaxonomyQueryFilter::COLUMN_TAXONOMY => Table\Generated\TriggerTable::COLUMN_TAXONOMY_ID]);
         $condition->equals(Table\Generated\TriggerTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TriggerTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\TriggerTable::COLUMN_STATUS, Table\Trigger::STATUS_ACTIVE);

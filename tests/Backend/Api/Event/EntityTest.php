@@ -138,7 +138,7 @@ JSON;
 {
     "success": true,
     "message": "Event successfully updated",
-    "id": "69"
+    "id": "72"
 }
 JSON;
 
@@ -171,7 +171,7 @@ JSON;
 {
     "success": true,
     "message": "Event successfully deleted",
-    "id": "69"
+    "id": "72"
 }
 JSON;
 

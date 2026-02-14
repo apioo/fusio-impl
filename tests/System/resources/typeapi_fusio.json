@@ -33,6 +33,7 @@
       "backend.scope",
       "backend.sdk",
       "backend.statistic",
+      "backend.taxonomy",
       "backend.tenant",
       "backend.test",
       "backend.token",
@@ -3009,6 +3010,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -5027,6 +5034,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -6051,6 +6064,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -8458,6 +8477,255 @@
         "statistic"
       ]
     },
+    "backend.taxonomy.create": {
+      "path": "/backend/taxonomy",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TaxonomyCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
+    "backend.taxonomy.delete": {
+      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "taxonomy_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
+    "backend.taxonomy.get": {
+      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Taxonomy"
+        }
+      },
+      "arguments": {
+        "taxonomy_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
+    "backend.taxonomy.getAll": {
+      "path": "/backend/taxonomy",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_TaxonomyCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of taxonomies",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
+    "backend.taxonomy.move": {
+      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "taxonomy_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TaxonomyMove"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Moves the provided ids to the taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
+    "backend.taxonomy.update": {
+      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "taxonomy_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_TaxonomyUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing taxonomy",
+      "stability": 2,
+      "security": [
+        "backend.taxonomy"
+      ],
+      "authorization": true,
+      "tags": [
+        "taxonomy"
+      ]
+    },
     "backend.tenant.remove": {
       "path": "/backend/tenant/:tenant_id",
       "method": "DELETE",
@@ -8961,6 +9229,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -9250,6 +9524,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -10438,6 +10718,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -14237,6 +14523,85 @@
           "type": "string",
           "format": "date-time"
         }
+      }
+    },
+    "Backend_Taxonomy": {
+      "description": "This object represents a taxonomy. A taxonomy helps to internally organize operations, actions and other entities",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "parentId": {
+          "description": "Identifier of the parent object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Unique name of the object",
+          "type": "string"
+        }
+      }
+    },
+    "Backend_TaxonomyCollection": {
+      "description": "A paginated collection of taxonomy objects",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_Taxonomy"
+        }
+      }
+    },
+    "Backend_TaxonomyCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Taxonomy"
+      }
+    },
+    "Backend_TaxonomyMove": {
+      "description": "Moves the provided objects to a taxonomy",
+      "type": "struct",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "events": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "cronjobs": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "Backend_TaxonomyUpdate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Taxonomy"
       }
     },
     "Backend_Test": {

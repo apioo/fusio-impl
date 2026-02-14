@@ -79,6 +79,7 @@ class AccountTest extends DbTestCase
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.taxonomy",
         "backend.tenant",
         "backend.test",
         "backend.token",

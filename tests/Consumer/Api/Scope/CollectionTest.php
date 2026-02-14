@@ -47,12 +47,12 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 57,
+            "id": 58,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 56,
+            "id": 57,
             "name": "foo",
             "description": "Foo access",
             "metadata": {

@@ -58,6 +58,7 @@ class Tenant
         'fusio_token',
         'fusio_webhook',
         'fusio_category',
+        'fusio_taxonomy',
     ];
 
     private Connection $connection;
