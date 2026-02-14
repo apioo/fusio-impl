@@ -53,7 +53,7 @@ class TaxonomyQueryFilter extends QueryFilter
         $condition = parent::getCondition($columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
-        if (isset($columnMapping[self::COLUMN_TAXONOMY])) {
+        if (isset($columnMapping[self::COLUMN_TAXONOMY]) && $this->taxonomy !== 0) {
             $condition->equals($alias . $columnMapping[self::COLUMN_TAXONOMY], $this->taxonomy);
         }
 
@@ -65,7 +65,7 @@ class TaxonomyQueryFilter extends QueryFilter
         $arguments = parent::getConstructorArguments($request);
 
         $rawTaxonomy = $request->get('taxonomy');
-        if (!empty($rawTaxonomy)) {
+        if ($rawTaxonomy !== null && $rawTaxonomy !== '') {
             $taxonomy = (int) $rawTaxonomy;
         } else {
             $taxonomy = null;
