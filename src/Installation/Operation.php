@@ -45,6 +45,7 @@ class Operation
         public int $stability = OperationInterface::STABILITY_STABLE,
         public ?int $costs = null,
         public ?string $description = null,
+        public ?string $taxonomy = null,
     ) {
     }
 }

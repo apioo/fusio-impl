@@ -99,6 +99,40 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/cronjob?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 3,
+            "status": 1,
+            "name": "Second-Cron",
+            "cron": "* * * * *",
+            "action": "Sql-Select-All",
+            "executeDate": "2015-02-27T19:59:15Z",
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetCount()
     {
         $response = $this->sendRequest('/backend/cronjob?count=80', 'GET', array(
@@ -154,7 +188,7 @@ JSON;
 {
     "success": true,
     "message": "Cronjob successfully created",
-    "id": "3"
+    "id": "4"
 }
 JSON;
 
@@ -172,7 +206,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
         $this->assertEquals('action://Sql-Select-All', $row['action']);

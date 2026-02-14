@@ -47,7 +47,7 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -70,13 +70,6 @@ class CollectionTest extends DbTestCase
             "status": 1,
             "name": "Sql-Insert",
             "class": "Fusio.Adapter.Sql.Action.SqlInsert",
-            "date": "[datetime]"
-        },
-        {
-            "id": 2,
-            "status": 1,
-            "name": "Sql-Select-All",
-            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
             "date": "[datetime]"
         },
         {
@@ -109,7 +102,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -119,7 +112,31 @@ JSON;
             "name": "Sql-Insert",
             "class": "Fusio.Adapter.Sql.Action.SqlInsert",
             "date": "[datetime]"
-        },
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/action?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
             "id": 2,
             "status": 1,
@@ -147,7 +164,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -170,13 +187,6 @@ JSON;
             "status": 1,
             "name": "Sql-Insert",
             "class": "Fusio.Adapter.Sql.Action.SqlInsert",
-            "date": "[datetime]"
-        },
-        {
-            "id": 2,
-            "status": 1,
-            "name": "Sql-Select-All",
-            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
             "date": "[datetime]"
         },
         {

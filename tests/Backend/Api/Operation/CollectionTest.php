@@ -44,7 +44,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -193,18 +193,6 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 264,
-            "status": 1,
-            "active": true,
-            "public": true,
-            "stability": 1,
-            "httpMethod": "GET",
-            "httpPath": "\/foo",
-            "httpCode": 200,
-            "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
-        },
-        {
             "id": 1,
             "status": 1,
             "active": true,
@@ -306,6 +294,40 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/operation?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 264,
+            "status": 1,
+            "active": true,
+            "public": true,
+            "stability": 1,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "httpCode": 200,
+            "name": "test.listFoo",
+            "action": "action:\/\/Sql-Select-All"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetCount()
     {
         $response = $this->sendRequest('/backend/operation?count=80', 'GET', array(
@@ -316,7 +338,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -463,18 +485,6 @@ JSON;
             "httpCode": 201,
             "name": "test.createFoo",
             "action": "action:\/\/Sql-Insert"
-        },
-        {
-            "id": 264,
-            "status": 1,
-            "active": true,
-            "public": true,
-            "stability": 1,
-            "httpMethod": "GET",
-            "httpPath": "\/foo",
-            "httpCode": 200,
-            "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,

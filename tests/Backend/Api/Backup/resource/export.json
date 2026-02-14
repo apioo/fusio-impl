@@ -23,16 +23,6 @@
       "date": "[datetime]"
     },
     {
-      "name": "Sql-Select-All",
-      "class": "Fusio.Adapter.Sql.Action.SqlSelectAll",
-      "async": false,
-      "config": {
-        "connection": 2,
-        "table": "app_news"
-      },
-      "date": "[datetime]"
-    },
-    {
       "name": "Util-Static-Response",
       "class": "Fusio.Adapter.Util.Action.UtilStaticResponse",
       "async": false,
@@ -916,32 +906,6 @@
       "throws": {},
       "action": "action:\/\/Sql-Insert",
       "costs": 1
-    },
-    {
-      "status": 1,
-      "name": "test.listFoo",
-      "scopes": [
-        "bar"
-      ],
-      "active": true,
-      "public": true,
-      "stability": 1,
-      "description": "",
-      "httpMethod": "GET",
-      "httpPath": "\/foo",
-      "httpCode": 200,
-      "parameters": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        }
-      },
-      "outgoing": "schema:\/\/Collection-Schema",
-      "throws": {},
-      "action": "action:\/\/Sql-Select-All",
-      "costs": 0
     },
     {
       "status": 1,
