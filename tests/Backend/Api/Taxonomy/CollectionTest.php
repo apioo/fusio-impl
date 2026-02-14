@@ -41,34 +41,25 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 5,
+            "id": 1,
             "status": 1,
-            "name": "authorization"
+            "name": "feature_a"
         },
         {
             "id": 2,
+            "parentId": 1,
             "status": 1,
-            "name": "backend"
+            "name": "feature_a_a"
         },
         {
             "id": 3,
             "status": 1,
-            "name": "consumer"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "name": "default"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "name": "system"
+            "name": "feature_b"
         }
     ]
 }
@@ -80,7 +71,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/backend/taxonomy?search=back', 'GET', array(
+        $response = $this->sendRequest('/backend/taxonomy?search=feature_a_a', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -94,8 +85,9 @@ JSON;
     "entry": [
         {
             "id": 2,
+            "parentId": 1,
             "status": 1,
-            "name": "backend"
+            "name": "feature_a_a"
         }
     ]
 }
@@ -115,34 +107,25 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 5,
+            "id": 1,
             "status": 1,
-            "name": "authorization"
+            "name": "feature_a"
         },
         {
             "id": 2,
+            "parentId": 1,
             "status": 1,
-            "name": "backend"
+            "name": "feature_a_a"
         },
         {
             "id": 3,
             "status": 1,
-            "name": "consumer"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "name": "default"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "name": "system"
+            "name": "feature_b"
         }
     ]
 }
@@ -165,8 +148,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successfully created",
-    "id": "6"
+    "message": "Taxonomy successfully created",
+    "id": "4"
 }
 JSON;
 

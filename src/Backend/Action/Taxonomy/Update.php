@@ -37,15 +37,10 @@ use Fusio\Model\Backend\TaxonomyUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Taxonomy $taxonomyService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Taxonomy $taxonomyService, ContextFactory $contextFactory)
+    public function __construct(private Taxonomy $taxonomyService, private ContextFactory $contextFactory)
     {
-        $this->taxonomyService = $taxonomyService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

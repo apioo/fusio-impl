@@ -28,6 +28,7 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\TaxonomyCreate;
 use Fusio\Model\Backend\TaxonomyUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -59,6 +60,7 @@ readonly class Taxonomy
             $row->setParentId($taxonomy->getParentId());
             $row->setStatus(Table\Taxonomy::STATUS_ACTIVE);
             $row->setName($taxonomy->getName());
+            $row->setInsertDate(LocalDateTime::now());
             $this->taxonomyTable->create($row);
 
             $taxonomyId = $this->taxonomyTable->getLastInsertId();

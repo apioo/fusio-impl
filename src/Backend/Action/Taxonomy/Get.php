@@ -35,30 +35,27 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+readonly class Get implements ActionInterface
 {
-    private View\Category $view;
-
-    public function __construct(View\Category $view)
+    public function __construct(private View\Taxonomy $view)
     {
-        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $category = $this->view->getEntity(
-            $request->get('category_id'),
+        $taxonomy = $this->view->getEntity(
+            $request->get('taxonomy_id'),
             $context
         );
 
-        if (empty($category)) {
-            throw new StatusCode\NotFoundException('Could not find category');
+        if (empty($taxonomy)) {
+            throw new StatusCode\NotFoundException('Could not find taxonomy');
         }
 
-        if ($category['status'] == Table\Category::STATUS_DELETED) {
-            throw new StatusCode\GoneException('Category was deleted');
+        if ($taxonomy['status'] == Table\Category::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Taxonomy was deleted');
         }
 
-        return $category;
+        return $taxonomy;
     }
 }

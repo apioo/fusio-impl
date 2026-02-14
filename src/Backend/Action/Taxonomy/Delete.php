@@ -24,8 +24,8 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Category;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\Taxonomy;
 
 /**
  * Delete
@@ -34,27 +34,22 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Delete implements ActionInterface
+readonly class Delete implements ActionInterface
 {
-    private Category $categoryService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Category $categoryService, ContextFactory $contextFactory)
+    public function __construct(private Taxonomy $taxonomyService, private ContextFactory $contextFactory)
     {
-        $this->categoryService = $categoryService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $id = $this->categoryService->delete(
-            $request->get('category_id'),
+        $id = $this->taxonomyService->delete(
+            $request->get('taxonomy_id'),
             $this->contextFactory->newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'Category successfully deleted',
+            'message' => 'Taxonomy successfully deleted',
             'id' => '' . $id,
         ];
     }

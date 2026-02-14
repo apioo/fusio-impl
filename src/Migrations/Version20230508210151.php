@@ -551,7 +551,7 @@ final class Version20230508210151 extends AbstractMigration
             $taxonomyTable = $schema->createTable('fusio_taxonomy');
             $taxonomyTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $taxonomyTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
-            $taxonomyTable->addColumn('parent_id', 'integer');
+            $taxonomyTable->addColumn('parent_id', 'integer', ['notnull' => false]);
             $taxonomyTable->addColumn('status', 'integer', ['default' => 1]);
             $taxonomyTable->addColumn('name', 'string');
             $taxonomyTable->addColumn('insert_date', 'datetime');

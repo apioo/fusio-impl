@@ -38,7 +38,7 @@ class EntityTest extends DbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getReference('fusio_taxonomy', 'backend')->resolve($this->connection);
+        $this->id = Fixture::getReference('fusio_taxonomy', 'feature_a_a')->resolve($this->connection);
     }
 
     public function testGet()
@@ -52,8 +52,9 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "id": 2,
+    "parentId": 1,
     "status": 1,
-    "name": "backend"
+    "name": "feature_a_a"
 }
 JSON;
 

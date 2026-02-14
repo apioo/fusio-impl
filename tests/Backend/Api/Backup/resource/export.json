@@ -367,7 +367,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 259,
+          "operationId": 264,
           "authenticated": true
         }
       ]
@@ -384,7 +384,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 258
+          "operationId": 263
         }
       ]
     },
@@ -575,6 +575,7 @@
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.taxonomy",
         "backend.tenant",
         "backend.test",
         "backend.token",
@@ -635,6 +636,7 @@
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.taxonomy",
         "backend.tenant",
         "backend.test",
         "backend.token",

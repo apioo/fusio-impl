@@ -96,6 +96,9 @@ class Fixture
         $appsUrl = Environment::getConfig('fusio_apps_url');
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
+        $data->addTaxonomy('feature_a', null, '2026-02-14 12:02:00');
+        $data->addTaxonomy('feature_a_a', 'feature_a', '2026-02-14 12:02:00');
+        $data->addTaxonomy('feature_b', null, '2026-02-14 12:02:00');
         $data->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
         $data->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
         $data->addAppScope('Backend', 'backend');

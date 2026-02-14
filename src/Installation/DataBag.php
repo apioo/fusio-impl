@@ -43,6 +43,7 @@ class DataBag
     {
         $this->data = [
             'fusio_category' => [],
+            'fusio_taxonomy' => [],
             'fusio_role' => [],
             'fusio_plan' => [],
             'fusio_user' => [],
@@ -667,6 +668,17 @@ class DataBag
             'scope_id' => $this->getReference('fusio_scope', $scope, $tenantId),
             'operation_id' => $this->getReference('fusio_operation', $operation, $tenantId),
             'allow' => 1
+        ];
+    }
+
+    public function addTaxonomy(string $taxonomy, ?string $parent = null, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_taxonomy'][$taxonomy] = [
+            'tenant_id' => $tenantId,
+            'parent_id' => $parent !== null ? $this->getReference('fusio_taxonomy', $parent, $tenantId) : null,
+            'status' => Table\Taxonomy::STATUS_ACTIVE,
+            'name' => $taxonomy,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
