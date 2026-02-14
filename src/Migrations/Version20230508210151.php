@@ -580,6 +580,7 @@ final class Version20230508210151 extends AbstractMigration
             $triggerTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $triggerTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $triggerTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $triggerTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $triggerTable->addColumn('status', 'integer');
             $triggerTable->addColumn('name', 'string', ['length' => 255]);
             $triggerTable->addColumn('event', 'string', ['length' => 64]);

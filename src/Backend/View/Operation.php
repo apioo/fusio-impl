@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\Filter\TaxonomyQueryFilter;
 use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
 use Fusio\Impl\Table;
 use PSX\Api\Scanner\FilterInterface;
@@ -40,14 +41,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Operation extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(TaxonomyQueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
         $sortBy = Table\Generated\OperationColumn::tryFrom($filter->getSortBy(Table\Generated\OperationTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\OperationTable::COLUMN_NAME]);
+        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\OperationTable::COLUMN_NAME, TaxonomyQueryFilter::COLUMN_TAXONOMY => Table\Generated\OperationTable::COLUMN_TAXONOMY_ID]);
         $condition->equals(Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\OperationTable::COLUMN_STATUS, Table\Operation::STATUS_ACTIVE);

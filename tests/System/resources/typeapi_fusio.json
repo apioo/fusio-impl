@@ -3010,6 +3010,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -5028,6 +5034,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -6052,6 +6064,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -9167,6 +9185,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -9456,6 +9480,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -10644,6 +10674,12 @@
           "in": "query",
           "schema": {
             "type": "string"
+          }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
