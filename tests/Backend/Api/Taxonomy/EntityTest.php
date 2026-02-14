@@ -79,16 +79,42 @@ JSON;
 
     public function testPost()
     {
+        $payload = [
+            'operations' => [275],
+            'actions' => [5],
+            'events' => [72],
+            'cronjobs' => [2],
+            'triggers' => [1],
+        ];
+
         $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
+        ), json_encode($payload));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Moved objects to taxonomy successfully"
+}
+JSON;
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        foreach ($payload as $name => $ids) {
+            $sql = $this->connection->createQueryBuilder()
+                ->select('taxonomy_id')
+                ->from('fusio_' . substr($name, 0, -1))
+                ->where('id = :id')
+                ->getSQL();
+
+            $row = $this->connection->fetchAssociative($sql, ['id' => $ids[0]]);
+
+            $this->assertEquals($this->id, $row['taxonomy_id'], $name);
+        }
     }
 
     public function testPut()

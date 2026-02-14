@@ -26,10 +26,12 @@ use Fusio\Impl\Event\Taxonomy\DeletedEvent;
 use Fusio\Impl\Event\Taxonomy\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\TaxonomyCreate;
+use Fusio\Model\Backend\TaxonomyMove;
 use Fusio\Model\Backend\TaxonomyUpdate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
+use Throwable;
 
 /**
  * Taxonomy
@@ -41,6 +43,7 @@ use PSX\Http\Exception as StatusCode;
 readonly class Taxonomy
 {
     public function __construct(
+        private Taxonomy\Mover $mover,
         private Table\Taxonomy $taxonomyTable,
         private Taxonomy\Validator $validator,
         private EventDispatcherInterface $eventDispatcher
@@ -67,7 +70,7 @@ readonly class Taxonomy
             $taxonomy->setId($taxonomyId);
 
             $this->taxonomyTable->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->taxonomyTable->rollBack();
 
             throw $e;
@@ -100,7 +103,7 @@ readonly class Taxonomy
             $this->taxonomyTable->update($existing);
 
             $this->taxonomyTable->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->taxonomyTable->rollBack();
 
             throw $e;
@@ -128,5 +131,52 @@ readonly class Taxonomy
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         return $existing->getId();
+    }
+
+    public function move(string $taxonomyId, TaxonomyMove $move, UserContext $context): void
+    {
+        $existing = $this->taxonomyTable->findOneByIdentifier($context->getTenantId(), $taxonomyId);
+        if (empty($existing)) {
+            throw new StatusCode\NotFoundException('Could not find taxonomy');
+        }
+
+        if ($existing->getStatus() == Table\Taxonomy::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Taxonomy was deleted');
+        }
+
+        $this->taxonomyTable->beginTransaction();
+
+        try {
+            $operationIds = $move->getOperations() ?? [];
+            foreach ($operationIds as $operationId) {
+                $this->mover->moveOperation($context->getTenantId(), $context->getCategoryId(), $operationId, $existing);
+            }
+
+            $actionIds = $move->getActions() ?? [];
+            foreach ($actionIds as $actionId) {
+                $this->mover->moveAction($context->getTenantId(), $context->getCategoryId(), $actionId, $existing);
+            }
+
+            $eventIds = $move->getEvents() ?? [];
+            foreach ($eventIds as $eventId) {
+                $this->mover->moveEvent($context->getTenantId(), $context->getCategoryId(), $eventId, $existing);
+            }
+
+            $cronjobIds = $move->getCronjobs() ?? [];
+            foreach ($cronjobIds as $cronjobId) {
+                $this->mover->moveCronjob($context->getTenantId(), $context->getCategoryId(), $cronjobId, $existing);
+            }
+
+            $triggerIds = $move->getTriggers() ?? [];
+            foreach ($triggerIds as $triggerId) {
+                $this->mover->moveTrigger($context->getTenantId(), $context->getCategoryId(), $triggerId, $existing);
+            }
+
+            $this->taxonomyTable->commit();
+        } catch (Throwable $e) {
+            $this->taxonomyTable->rollBack();
+
+            throw $e;
+        }
     }
 }

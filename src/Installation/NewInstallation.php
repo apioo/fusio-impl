@@ -1978,6 +1978,16 @@ class NewInstallation
                     eventName: 'fusio.taxonomy.delete',
                     description: 'Deletes an existing taxonomy',
                 ),
+                'taxonomy.move' => new Operation(
+                    action: Backend\Action\Taxonomy\Move::class,
+                    httpMethod: 'POST',
+                    httpPath: '/taxonomy/$taxonomy_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\TaxonomyMove::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Moves the provided ids to the taxonomy',
+                ),
                 'transaction.getAll' => new Operation(
                     action: Backend\Action\Transaction\GetAll::class,
                     httpMethod: 'GET',
