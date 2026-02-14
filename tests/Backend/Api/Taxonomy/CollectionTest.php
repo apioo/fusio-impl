@@ -141,7 +141,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name' => 'developer',
+            'parentId' => 2,
+            'name' => 'feature_a_a_a',
         ]));
 
         $body   = (string) $response->getBody();
@@ -158,7 +159,7 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name')
+            ->select('id', 'parent_id', 'status', 'name')
             ->from('fusio_taxonomy')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -168,7 +169,8 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('developer', $row['name']);
+        $this->assertEquals(2, $row['parent_id']);
+        $this->assertEquals('feature_a_a_a', $row['name']);
     }
 
     public function testPut()

@@ -60,7 +60,7 @@ readonly class Validator
 
     private function assertParentId(int $parentId, ?string $tenantId, ?Table\Generated\TaxonomyRow $existing = null): void
     {
-        $row = $this->taxonomyTable->findOneByTenantAndId($parentId, $tenantId);
+        $row = $this->taxonomyTable->findOneByTenantAndId($tenantId, $parentId);
         if (!$row instanceof TaxonomyRow) {
             throw new StatusCode\BadRequestException('Parent taxonomy does not exist');
         }
