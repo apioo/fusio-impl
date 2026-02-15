@@ -29,8 +29,12 @@ namespace Fusio\Impl\Service\Agent;
  */
 readonly class IntentFactory
 {
-    public function __construct(private Intent\ActionIntent $actionIntent, private Intent\SchemaIntent $schemaIntent, private Intent\GeneralIntent $generalIntent)
-    {
+    public function __construct(
+        private Intent\ActionIntent $actionIntent,
+        private Intent\SchemaIntent $schemaIntent,
+        private Intent\OperationIntent $operationIntent,
+        private Intent\GeneralIntent $generalIntent
+    ) {
     }
 
     public function factory(?Intent $intent): IntentInterface
@@ -38,6 +42,7 @@ readonly class IntentFactory
         return match($intent) {
             Intent::ACTION => $this->actionIntent,
             Intent::SCHEMA => $this->schemaIntent,
+            Intent::OPERATION => $this->operationIntent,
             default => $this->generalIntent,
         };
     }
