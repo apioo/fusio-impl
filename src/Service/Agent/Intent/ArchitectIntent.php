@@ -47,6 +47,7 @@ readonly class ArchitectIntent implements IntentInterface
         $hint.= 'The incoming/outgoing schemas of the operation should be described as text which is used later on by a different agent to generate the actual schema.' . "\n";
         $hint.= 'If the logic needs to persist data you also need to generate a fitting database table schemas.' . "\n";
         $hint.= 'If needed describe in the action that the user id of the current authenticated user should be used, there is no need to create a dedicated user table since it already exists in the system.' . "\n";
+        $hint.= 'For primary key and user id columns it is preferred to use the type integer instead of guid.' . "\n";
         $hint.= "\n";
 
         return $hint;
