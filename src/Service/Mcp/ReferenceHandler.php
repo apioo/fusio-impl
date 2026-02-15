@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
+use Closure;
 use Mcp\Capability\Registry\ElementReference;
 use Mcp\Capability\Registry\ReferenceHandlerInterface;
 use Mcp\Exception\InvalidArgumentException;
@@ -35,10 +36,10 @@ class ReferenceHandler implements ReferenceHandlerInterface
 {
     public function handle(ElementReference $reference, array $arguments): mixed
     {
-        if (!$reference->handler instanceof \Closure) {
+        if (!$reference->handler instanceof Closure) {
             throw new InvalidArgumentException('Provided an invalid reference');
         }
 
-        return call_user_func_array($reference->handler, [$arguments]);
+        return call_user_func_array($reference->handler, $arguments);
     }
 }
