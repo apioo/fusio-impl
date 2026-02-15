@@ -26,13 +26,13 @@ use Fusio\Model\Backend\AgentMessage;
 use Symfony\AI\Platform\Result\ResultInterface;
 
 /**
- * OperationIntent
+ * ArchitectIntent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class OperationIntent implements IntentInterface
+readonly class ArchitectIntent implements IntentInterface
 {
     public function __construct(private JsonResultSerializer $resultSerializer)
     {
@@ -41,10 +41,11 @@ readonly class OperationIntent implements IntentInterface
     public function getMessage(): string
     {
         $hint = 'The user has the intent to design new API endpoints to solve the provided task.' . "\n";
-        $hint.= 'Therefor you need generate a list of operations following the provided JSON schema.' . "\n";
+        $hint.= 'Therefor you need generate a list of operations and optional tables following the provided JSON schema.' . "\n";
         $hint.= 'You should think like an REST API expert which has deep knowledge in describing API endpoints.' . "\n";
         $hint.= 'The action of the operation should be described as text which is used later on by a different agent to generate the actual code.' . "\n";
         $hint.= 'The incoming/outgoing schemas of the operation should be described as text which is used later on by a different agent to generate the actual schema.' . "\n";
+        $hint.= 'If the logic needs to persist data you also need to generate a fitting database table schemas.' . "\n";
         $hint.= "\n";
 
         return $hint;
@@ -53,12 +54,6 @@ readonly class OperationIntent implements IntentInterface
     public function getTools(): array
     {
         return [
-            'backend_operation_getAll',
-            'backend_operation_get',
-            'backend_action_getAll',
-            'backend_action_get',
-            'backend_schema_getAll',
-            'backend_schema_get',
         ];
     }
 
@@ -124,7 +119,7 @@ readonly class OperationIntent implements IntentInterface
                         ],
                         'httpCode' => [
                             'description' => 'The HTTP success status code, normally this is 200 but for create operations it should be 201',
-                            'type' => 'string',
+                            'type' => 'integer',
                         ],
                         'parameters' => [
                             'description' => 'Describes all query parameters for this operation',
@@ -146,10 +141,87 @@ readonly class OperationIntent implements IntentInterface
                     'required' => ['name', 'active', 'public', 'stability', 'description', 'httpMethod', 'httpPath', 'httpCode', 'outgoing', 'action'],
                     'additionalProperties' => false,
                 ],
+                'Table' => [
+                    'description' => 'Represents a table on a relational database',
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => [
+                            'description' => 'Name of the table',
+                            'type' => 'string'
+                        ],
+                        'columns' => [
+                            'description' => 'List of table columns',
+                            'type' => 'object',
+                            'additionalProperties' => [
+                                '$ref' => '#/$defs/Column',
+                            ],
+                        ],
+                        'primaryKey' => [
+                            'description' => 'The name of the primary key column',
+                            'type' => 'string'
+                        ],
+                    ],
+                ],
+                'Column' => [
+                    'description' => 'Represents a column on a table',
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => [
+                            'description' => 'Name of the column',
+                            'type' => 'string'
+                        ],
+                        'type' => [
+                            'description' => 'Type of the column',
+                            'type' => 'string',
+                            'enum' => ['smallint', 'integer', 'bigint', 'string', 'text', 'guid', 'binary', 'blob', 'boolean', 'date', 'datetime', 'time', 'simple_array', 'json'],
+                        ],
+                        'length' => [
+                            'description' => 'Optional the max column length for string types',
+                            'type' => 'integer'
+                        ],
+                        'notNull' => [
+                            'description' => 'Indicates whether null is not allowed',
+                            'type' => 'boolean'
+                        ],
+                        'autoIncrement' => [
+                            'description' => 'Indicates whether the column is autoincrement, should be only used at the primary-key column',
+                            'type' => 'boolean'
+                        ],
+                        'precision' => [
+                            'description' => 'Optional for integer types a precision',
+                            'type' => 'integer'
+                        ],
+                        'scale' => [
+                            'description' => 'Optional for integer types a scale',
+                            'type' => 'integer'
+                        ],
+                        'default' => [
+                            'description' => 'Optional the default value for the column',
+                            'type' => 'string'
+                        ],
+                        'comment' => [
+                            'description' => 'Optional a comment for the column',
+                            'type' => 'string'
+                        ],
+                    ],
+                ],
             ],
-            'type' => 'array',
-            'items' => [
-                '$ref' => '#/$defs/Operation',
+            'type' => 'object',
+            'properties' => [
+                'operations' => [
+                    'description' => 'List of operations',
+                    'type' => 'array',
+                    'items' => [
+                        '$ref' => '#/$defs/Operation',
+                    ],
+                ],
+                'tables' => [
+                    'description' => 'List of tables',
+                    'type' => 'array',
+                    'items' => [
+                        '$ref' => '#/$defs/Table',
+                    ],
+                ],
             ],
         ];
     }

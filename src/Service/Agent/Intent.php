@@ -31,14 +31,14 @@ enum Intent: string
 {
     case ACTION = 'action';
     case SCHEMA = 'schema';
-    case OPERATION = 'operation';
+    case ARCHITECT = 'architect';
 
     public function getInt(): int
     {
         return match ($this) {
             self::ACTION => 1,
             self::SCHEMA => 2,
-            self::OPERATION => 3,
+            self::ARCHITECT => 3,
         };
     }
 }

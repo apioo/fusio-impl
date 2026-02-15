@@ -32,7 +32,7 @@ readonly class IntentFactory
     public function __construct(
         private Intent\ActionIntent $actionIntent,
         private Intent\SchemaIntent $schemaIntent,
-        private Intent\OperationIntent $operationIntent,
+        private Intent\ArchitectIntent $architectIntent,
         private Intent\GeneralIntent $generalIntent
     ) {
     }
@@ -42,7 +42,7 @@ readonly class IntentFactory
         return match($intent) {
             Intent::ACTION => $this->actionIntent,
             Intent::SCHEMA => $this->schemaIntent,
-            Intent::OPERATION => $this->operationIntent,
+            Intent::ARCHITECT => $this->architectIntent,
             default => $this->generalIntent,
         };
     }

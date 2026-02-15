@@ -81,6 +81,7 @@ PHP;
         $hint.= '* Fusio.Adapter.Sql.Connection.SqlAdvanced = Connection from the Doctrine DBAL library' . "\n";
         $hint.= '* Fusio.Adapter.Stripe.Connection.Stripe = StripeClient from the Stripe PHP SDK' . "\n";
         $hint.= "\n";
+        $hint.= 'If the business logic needs a database and there is no specific connection mentioned then use as default the "System" connection.' . "\n";
         $hint.= 'If the business logic needs to work with a database table you can get all available tables for a specific connection through the "backend_database_getTables" tool where you need to provide a connection id.' . "\n";
         $hint.= 'If you need to get a concrete table schema you can use the "backend_database_getTable" tool where you need to provide the connection id and table name.' . "\n";
         $hint.= 'To add logging you can use the "$logger" argument which is a PSR-3 compatible logging interface.' . "\n";
