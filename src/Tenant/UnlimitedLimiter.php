@@ -116,6 +116,11 @@ class UnlimitedLimiter implements LimiterInterface
         return PHP_INT_MAX;
     }
 
+    public function getTaxonomyCount(): int
+    {
+        return PHP_INT_MAX;
+    }
+
     public function getTriggerCount(): int
     {
         return PHP_INT_MAX;

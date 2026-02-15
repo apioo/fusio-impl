@@ -43,6 +43,7 @@ class DataBag
     {
         $this->data = [
             'fusio_category' => [],
+            'fusio_taxonomy' => [],
             'fusio_role' => [],
             'fusio_plan' => [],
             'fusio_user' => [],
@@ -128,6 +129,7 @@ class DataBag
                 $operation->costs,
                 tenantId: $tenantId,
                 description: $operation->description,
+                taxonomy: $operation->taxonomy
             );
 
             if (in_array($category, ['backend', 'consumer'])) {
@@ -200,11 +202,12 @@ class DataBag
         return $result;
     }
 
-    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_action'][$name] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'taxonomy_id' => $taxonomy !== null ? $this->getReference('fusio_taxonomy', $taxonomy, $tenantId) : null,
             'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
             'class' => ClassName::serialize($class),
@@ -325,11 +328,12 @@ class DataBag
         ];
     }
 
-    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null, ?string $tenantId = null): void
+    public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_cronjob'][$name] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'taxonomy_id' => $taxonomy !== null ? $this->getReference('fusio_taxonomy', $taxonomy, $tenantId) : null,
             'status' => Table\Cronjob::STATUS_ACTIVE,
             'name' => $name,
             'cron' => $cron,
@@ -352,11 +356,12 @@ class DataBag
         ];
     }
 
-    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null): void
+    public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_event'][$name] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'taxonomy_id' => $taxonomy !== null ? $this->getReference('fusio_taxonomy', $taxonomy, $tenantId) : null,
             'status' => Table\Event::STATUS_ACTIVE,
             'name' => $name,
             'description' => $description,
@@ -601,11 +606,12 @@ class DataBag
         ];
     }
 
-    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null, ?string $description = null): void
+    public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null, ?string $description = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_operation'][$name] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'taxonomy_id' => $taxonomy !== null ? $this->getReference('fusio_taxonomy', $taxonomy, $tenantId) : null,
             'status' => Table\Operation::STATUS_ACTIVE,
             'active' => 1,
             'public' => $public ? 1 : 0,
@@ -670,6 +676,17 @@ class DataBag
         ];
     }
 
+    public function addTaxonomy(string $taxonomy, ?string $parent = null, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_taxonomy'][$taxonomy] = [
+            'tenant_id' => $tenantId,
+            'parent_id' => $parent !== null ? $this->getReference('fusio_taxonomy', $parent, $tenantId) : null,
+            'status' => Table\Taxonomy::STATUS_ACTIVE,
+            'name' => $taxonomy,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
     public function addTest(string $category, string $operation, ?string $tenantId = null): void
     {
         $this->data['fusio_test'][$category . $operation] = [
@@ -686,11 +703,12 @@ class DataBag
         ];
     }
 
-    public function addTrigger(string $category, string $name, string $event, string $action, ?array $metadata = null, ?string $tenantId = null): void
+    public function addTrigger(string $category, string $name, string $event, string $action, ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_trigger'][$name] = [
             'tenant_id' => $tenantId,
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'taxonomy_id' => $taxonomy !== null ? $this->getReference('fusio_taxonomy', $taxonomy, $tenantId) : null,
             'status' => Table\Trigger::STATUS_ACTIVE,
             'name' => $name,
             'event' => $event,

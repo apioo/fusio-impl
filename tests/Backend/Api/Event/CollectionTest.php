@@ -46,7 +46,100 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 69,
+            "id": 72,
+            "status": 1,
+            "name": "foo-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/backend/event?search=foo', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 72,
+            "status": 1,
+            "name": "foo-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/event?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 73,
+            "status": 1,
+            "name": "second-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetCount()
+    {
+        $response = $this->sendRequest('/backend/event?count=80', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
+        {
+            "id": 72,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",
@@ -83,7 +176,7 @@ JSON;
 {
     "success": true,
     "message": "Event successfully created",
-    "id": "70"
+    "id": "74"
 }
 JSON;
 
@@ -101,7 +194,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(70, $row['id']);
+        $this->assertEquals(74, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);

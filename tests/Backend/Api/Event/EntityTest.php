@@ -138,7 +138,7 @@ JSON;
 {
     "success": true,
     "message": "Event successfully updated",
-    "id": "69"
+    "id": "72"
 }
 JSON;
 
@@ -171,7 +171,7 @@ JSON;
 {
     "success": true,
     "message": "Event successfully deleted",
-    "id": "69"
+    "id": "72"
 }
 JSON;
 
@@ -180,15 +180,13 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id')
+            ->select('status')
             ->from('fusio_event')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql);
+        $row = $this->connection->fetchAssociative($sql, ['id' => $this->id]);
 
-        $this->assertEquals($this->id, $row['id']);
+        $this->assertEquals(0, $row['status']);
     }
 }

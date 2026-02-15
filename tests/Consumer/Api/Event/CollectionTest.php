@@ -42,14 +42,23 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 69,
+            "id": 72,
             "status": 1,
             "name": "foo-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": 73,
+            "status": 1,
+            "name": "second-event",
             "description": "Foo event description",
             "metadata": {
                 "foo": "bar"
@@ -79,7 +88,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 69,
+            "id": 72,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",

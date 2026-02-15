@@ -96,6 +96,9 @@ class Fixture
         $appsUrl = Environment::getConfig('fusio_apps_url');
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
+        $data->addTaxonomy('feature_a', null, '2026-02-14 12:02:00');
+        $data->addTaxonomy('feature_a_a', 'feature_a', '2026-02-14 12:02:00');
+        $data->addTaxonomy('feature_b', null, '2026-02-14 12:02:00');
         $data->addApp('Administrator', 'Backend', $appsUrl . '/fusio', $backendAppKey, $backendAppSecret);
         $data->addApp('Administrator', 'Developer', $appsUrl . '/developer', $consumerAppKey, $consumerAppSecret);
         $data->addAppScope('Backend', 'backend');
@@ -111,7 +114,7 @@ class Fixture
         $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE);
         $data->addUser('Backend', 'Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED);
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), ['foo' => 'bar']);
-        $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
+        $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), taxonomy: 'feature_a');
         $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
         $data->addAction('default', 'MIME-Action', MimeAction::class);
@@ -130,8 +133,10 @@ class Fixture
         $data->addConnection('FusioHttpClient', Http::class, Service\Connection\Encrypter::encrypt(['url' => 'https://api.fusio-project.org/'], $secretKey));
         $data->addConnection('StarwarsSDK', Starwars::class, Service\Connection\Encrypter::encrypt([], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
+        $data->addCronjob('default', 'Second-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar'], taxonomy: 'feature_a');
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description', ['foo' => 'bar']);
+        $data->addEvent('default', 'second-event', 'Foo event description', ['foo' => 'bar'], taxonomy: 'feature_a');
         $data->addFirewall('my_v4_rule', '192.168.2.1', ['foo' => 'bar']);
         $data->addFirewall('my_v6_rule', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344', ['foo' => 'bar']);
         $data->addForm('my_form', 'test.createFoo', ['foo' => 'bar'], ['foo' => 'bar']);
@@ -168,6 +173,7 @@ class Fixture
         $data->addToken('Foo-App', 'Consumer', 'Foo-App/Expired', 'b41344388feed85bc362e518387fdc9c81b896bfe5e794131e1469770571d873', 'b8f6f61bd22b440a3e5be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'bar', '+1 month', '2015-06-25 22:49:09');
         $data->addTest('default', 'test.listFoo');
         $data->addTrigger('default', 'Test-Trigger', 'foo-event', 'Sql-Select-All', ['foo' => 'bar']);
+        $data->addTrigger('default', 'Second-Trigger', 'foo-event', 'Sql-Select-All', ['foo' => 'bar'], taxonomy: 'feature_a');
         $data->addBundle('Test-Bundle', '0.1.0', 'info', 'Test bundle', 'A test bundle', ['actions' => ['3']], 16, ['foo' => 'bar']);
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');
@@ -197,6 +203,7 @@ class Fixture
                 parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
                 public: true,
                 stability: OperationInterface::STABILITY_EXPERIMENTAL,
+                taxonomy: 'feature_a'
             ),
             'test.createFoo' => new Operation(
                 action: 'Sql-Insert',

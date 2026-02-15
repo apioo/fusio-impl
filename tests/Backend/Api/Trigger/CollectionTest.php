@@ -95,6 +95,38 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/trigger?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 2,
+            "status": 1,
+            "name": "Second-Trigger",
+            "event": "foo-event",
+            "action": "Sql-Select-All",
+            "metadata": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetCount()
     {
         $response = $this->sendRequest('/backend/trigger?count=80', 'GET', array(
@@ -148,7 +180,7 @@ JSON;
 {
     "success": true,
     "message": "Trigger successfully created",
-    "id": "2"
+    "id": "3"
 }
 JSON;
 
@@ -166,7 +198,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(3, $row['id']);
         $this->assertEquals('New-Trigger', $row['name']);
         $this->assertEquals('foo-event', $row['event']);
         $this->assertEquals('action://Sql-Select-All', $row['action']);

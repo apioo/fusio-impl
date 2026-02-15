@@ -44,12 +44,12 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 270,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -61,7 +61,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 269,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -73,7 +73,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 268,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -85,7 +85,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 267,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -97,7 +97,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 266,
+            "id": 272,
             "status": 1,
             "active": true,
             "public": false,
@@ -109,7 +109,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 265,
+            "id": 271,
             "status": 1,
             "active": true,
             "public": false,
@@ -121,7 +121,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 264,
+            "id": 270,
             "status": 1,
             "active": true,
             "public": false,
@@ -133,7 +133,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 263,
+            "id": 269,
             "status": 1,
             "active": true,
             "public": false,
@@ -145,7 +145,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 262,
+            "id": 268,
             "status": 1,
             "active": true,
             "public": false,
@@ -157,7 +157,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 261,
+            "id": 267,
             "status": 1,
             "active": true,
             "public": false,
@@ -169,7 +169,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 260,
+            "id": 266,
             "status": 1,
             "active": true,
             "public": false,
@@ -181,7 +181,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 259,
+            "id": 265,
             "status": 1,
             "active": true,
             "public": false,
@@ -191,18 +191,6 @@ class CollectionTest extends DbTestCase
             "httpCode": 201,
             "name": "test.createFoo",
             "action": "action:\/\/Sql-Insert"
-        },
-        {
-            "id": 258,
-            "status": 1,
-            "active": true,
-            "public": true,
-            "stability": 1,
-            "httpMethod": "GET",
-            "httpPath": "\/foo",
-            "httpCode": 200,
-            "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,
@@ -239,7 +227,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 264,
+            "id": 270,
             "status": 1,
             "active": true,
             "public": false,
@@ -251,7 +239,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 263,
+            "id": 269,
             "status": 1,
             "active": true,
             "public": false,
@@ -263,7 +251,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 262,
+            "id": 268,
             "status": 1,
             "active": true,
             "public": false,
@@ -275,7 +263,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 261,
+            "id": 267,
             "status": 1,
             "active": true,
             "public": false,
@@ -287,7 +275,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 260,
+            "id": 266,
             "status": 1,
             "active": true,
             "public": false,
@@ -297,6 +285,40 @@ JSON;
             "httpCode": 200,
             "name": "inspect.get",
             "action": "action:\/\/Inspect-Action"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetTaxonomy()
+    {
+        $response = $this->sendRequest('/backend/operation?taxonomy=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 264,
+            "status": 1,
+            "active": true,
+            "public": true,
+            "stability": 1,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "httpCode": 200,
+            "name": "test.listFoo",
+            "action": "action:\/\/Sql-Select-All"
         }
     ]
 }
@@ -316,12 +338,12 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 270,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -333,7 +355,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 269,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -345,7 +367,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 268,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -357,7 +379,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 267,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -369,7 +391,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 266,
+            "id": 272,
             "status": 1,
             "active": true,
             "public": false,
@@ -381,7 +403,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 265,
+            "id": 271,
             "status": 1,
             "active": true,
             "public": false,
@@ -393,7 +415,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 264,
+            "id": 270,
             "status": 1,
             "active": true,
             "public": false,
@@ -405,7 +427,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 263,
+            "id": 269,
             "status": 1,
             "active": true,
             "public": false,
@@ -417,7 +439,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 262,
+            "id": 268,
             "status": 1,
             "active": true,
             "public": false,
@@ -429,7 +451,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 261,
+            "id": 267,
             "status": 1,
             "active": true,
             "public": false,
@@ -441,7 +463,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 260,
+            "id": 266,
             "status": 1,
             "active": true,
             "public": false,
@@ -453,7 +475,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 259,
+            "id": 265,
             "status": 1,
             "active": true,
             "public": false,
@@ -463,18 +485,6 @@ JSON;
             "httpCode": 201,
             "name": "test.createFoo",
             "action": "action:\/\/Sql-Insert"
-        },
-        {
-            "id": 258,
-            "status": 1,
-            "active": true,
-            "public": true,
-            "stability": 1,
-            "httpMethod": "GET",
-            "httpPath": "\/foo",
-            "httpCode": 200,
-            "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,
@@ -534,7 +544,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "271"
+    "id": "277"
 }
 JSON;
 
@@ -584,7 +594,7 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertSame(true, $data->success);
         $this->assertSame('Operation successfully created', $data->message);
-        $this->assertContains($data->id, ['271', '272']); // postgres does not reset the auto increment so we need to check both
+        $this->assertContains($data->id, ['277', '278']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);

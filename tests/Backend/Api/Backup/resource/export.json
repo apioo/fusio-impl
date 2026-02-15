@@ -316,6 +316,14 @@
   ],
   "cronjob": [
     {
+      "name": "Second-Cron",
+      "cron": "* * * * *",
+      "action": "Sql-Select-All",
+      "metadata": {
+        "foo": "bar"
+      }
+    },
+    {
       "name": "Test-Cron",
       "cron": "* * * * *",
       "action": "Sql-Select-All",
@@ -328,6 +336,14 @@
     {
       "status": 1,
       "name": "foo-event",
+      "description": "Foo event description",
+      "metadata": {
+        "foo": "bar"
+      }
+    },
+    {
+      "status": 1,
+      "name": "second-event",
       "description": "Foo event description",
       "metadata": {
         "foo": "bar"
@@ -367,7 +383,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 259,
+          "operationId": 265,
           "authenticated": true
         }
       ]
@@ -384,7 +400,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 258
+          "operationId": 264
         }
       ]
     },
@@ -575,6 +591,7 @@
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.taxonomy",
         "backend.tenant",
         "backend.test",
         "backend.token",
@@ -635,6 +652,7 @@
         "backend.scope",
         "backend.sdk",
         "backend.statistic",
+        "backend.taxonomy",
         "backend.tenant",
         "backend.test",
         "backend.token",

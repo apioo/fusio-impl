@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\Filter\TaxonomyQueryFilter;
 use Fusio\Impl\Backend\View;
 
 /**
@@ -46,7 +47,7 @@ class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->view->getCollection(
-            QueryFilter::from($request),
+            TaxonomyQueryFilter::from($request),
             $context
         );
     }

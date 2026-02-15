@@ -28,6 +28,7 @@ final class Version20230508210151 extends AbstractMigration
             $actionTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $actionTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $actionTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $actionTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $actionTable->addColumn('status', 'integer', ['default' => Table\Action::STATUS_ACTIVE]);
             $actionTable->addColumn('name', 'string', ['length' => 255]);
             $actionTable->addColumn('class', 'string', ['length' => 255]);
@@ -178,6 +179,7 @@ final class Version20230508210151 extends AbstractMigration
             $cronjobTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $cronjobTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $cronjobTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $cronjobTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $cronjobTable->addColumn('status', 'integer', ['default' => Table\Cronjob::STATUS_ACTIVE]);
             $cronjobTable->addColumn('name', 'string', ['length' => 64]);
             $cronjobTable->addColumn('cron', 'string');
@@ -206,6 +208,7 @@ final class Version20230508210151 extends AbstractMigration
             $eventTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $eventTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $eventTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $eventTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $eventTable->addColumn('status', 'integer');
             $eventTable->addColumn('name', 'string', ['length' => 64]);
             $eventTable->addColumn('description', 'string', ['length' => 255]);
@@ -334,6 +337,7 @@ final class Version20230508210151 extends AbstractMigration
             $operationTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $operationTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $operationTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $operationTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $operationTable->addColumn('status', 'integer', ['default' => Table\Operation::STATUS_ACTIVE]);
             $operationTable->addColumn('active', 'integer', ['default' => 0]);
             $operationTable->addColumn('public', 'integer', ['default' => 0]);
@@ -459,6 +463,7 @@ final class Version20230508210151 extends AbstractMigration
             $schemaTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $schemaTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $schemaTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $schemaTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
             $schemaTable->addColumn('name', 'string', ['length' => 255]);
             $schemaTable->addColumn('source', 'text');
@@ -542,6 +547,18 @@ final class Version20230508210151 extends AbstractMigration
             $tokenTable->addUniqueIndex(['tenant_id', 'refresh']);
         }
 
+        if (!$schema->hasTable('fusio_taxonomy')) {
+            $taxonomyTable = $schema->createTable('fusio_taxonomy');
+            $taxonomyTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $taxonomyTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $taxonomyTable->addColumn('parent_id', 'integer', ['notnull' => false]);
+            $taxonomyTable->addColumn('status', 'integer', ['default' => 1]);
+            $taxonomyTable->addColumn('name', 'string');
+            $taxonomyTable->addColumn('insert_date', 'datetime');
+            $taxonomyTable->setPrimaryKey(['id']);
+            $taxonomyTable->addUniqueIndex(['tenant_id', 'name']);
+        }
+
         if (!$schema->hasTable('fusio_transaction')) {
             $transactionTable = $schema->createTable('fusio_transaction');
             $transactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -563,6 +580,7 @@ final class Version20230508210151 extends AbstractMigration
             $triggerTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $triggerTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $triggerTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $triggerTable->addColumn('taxonomy_id', 'integer', ['notnull' => false, 'default' => null]);
             $triggerTable->addColumn('status', 'integer');
             $triggerTable->addColumn('name', 'string', ['length' => 255]);
             $triggerTable->addColumn('event', 'string', ['length' => 64]);
@@ -644,6 +662,7 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($actionTable)) {
             $actionTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'action_category_id');
+            $actionTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'action_taxonomy_id');
         }
 
         if (isset($actionCommitTable)) {
@@ -667,10 +686,12 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($cronjobTable)) {
             $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'cronjob_category_id');
+            $cronjobTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'cronjob_taxonomy_id');
         }
 
         if (isset($eventTable)) {
             $eventTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'event_category_id');
+            $eventTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'event_taxonomy_id');
         }
 
         if (isset($formTable)) {
@@ -683,11 +704,17 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($operationTable)) {
             $operationTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'operation_category_id');
+            $operationTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'operation_taxonomy_id');
         }
 
         if (isset($tokenTable)) {
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'token_app_id');
             $tokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'token_user_id');
+        }
+
+        if (isset($triggerTable)) {
+            $triggerTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'trigger_category_id');
+            $triggerTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'trigger_taxonomy_id');
         }
 
         if (isset($planScopeTable)) {
@@ -726,6 +753,10 @@ final class Version20230508210151 extends AbstractMigration
         if (isset($scopeOperationTable)) {
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'scope_operation_scope_id');
             $scopeOperationTable->addForeignKeyConstraint($schema->getTable('fusio_operation'), ['operation_id'], ['id'], [], 'scope_operation_operation_id');
+        }
+
+        if (isset($taxonomyTable)) {
+            $taxonomyTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['parent_id'], ['id'], [], 'taxonomy_parent_id');
         }
 
         if (isset($testTable)) {

@@ -195,6 +195,15 @@ class UsageLimiter
         );
     }
 
+    public function assertTaxonomyCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\TaxonomyTable::NAME, $tenantId),
+            $this->limiter->getTaxonomyCount(),
+            'taxonomy'
+        );
+    }
+
     public function assertTriggerCount(?string $tenantId): void
     {
         $this->assert(
