@@ -44,6 +44,7 @@ readonly class ArchitectIntent implements IntentInterface
         $hint.= 'Therefor you need generate a list of operations and optional tables following the provided JSON schema.' . "\n";
         $hint.= 'You should think like an REST API expert which has deep knowledge in describing API endpoints.' . "\n";
         $hint.= 'The action of the operation should be described as text which is used later on by a different agent to generate the actual code.' . "\n";
+        $hint.= 'If needed describe in the action that the user id of the current authenticated user should be used.' . "\n";
         $hint.= 'The incoming/outgoing schemas of the operation should be described as text which is used later on by a different agent to generate the actual schema.' . "\n";
         $hint.= 'If the logic needs to persist data you also need to generate a fitting database table schemas.' . "\n";
         $hint.= "\n";
