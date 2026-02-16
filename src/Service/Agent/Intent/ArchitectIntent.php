@@ -153,8 +153,8 @@ readonly class ArchitectIntent implements IntentInterface
                         ],
                         'columns' => [
                             'description' => 'List of table columns',
-                            'type' => 'object',
-                            'additionalProperties' => [
+                            'type' => 'array',
+                            'items' => [
                                 '$ref' => '#/$defs/Column',
                             ],
                         ],
