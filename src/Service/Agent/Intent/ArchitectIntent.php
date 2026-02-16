@@ -20,10 +20,16 @@
 
 namespace Fusio\Impl\Service\Agent\Intent;
 
+use Fusio\Impl\Messenger\AgentActionTask;
+use Fusio\Impl\Messenger\AgentSchemaTask;
 use Fusio\Impl\Service\Agent\IntentInterface;
 use Fusio\Impl\Service\Agent\Serializer\JsonResultSerializer;
+use Fusio\Impl\Table\Generated\AgentRow;
 use Fusio\Model\Backend\AgentMessage;
+use Fusio\Model\Backend\AgentMessageObject;
+use stdClass;
 use Symfony\AI\Platform\Result\ResultInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * ArchitectIntent
@@ -34,7 +40,7 @@ use Symfony\AI\Platform\Result\ResultInterface;
  */
 readonly class ArchitectIntent implements IntentInterface
 {
-    public function __construct(private JsonResultSerializer $resultSerializer)
+    public function __construct(private JsonResultSerializer $resultSerializer, private MessageBusInterface $messageBus)
     {
     }
 
@@ -231,5 +237,39 @@ readonly class ArchitectIntent implements IntentInterface
     public function transformResult(ResultInterface $result): AgentMessage
     {
         return $this->resultSerializer->serialize($result);
+    }
+
+    public function onMessagePersisted(AgentRow $row, AgentMessage $message): void
+    {
+        if (!$message instanceof AgentMessageObject) {
+            return;
+        }
+
+        $payload = $message->getPayload();
+        if (!$payload instanceof stdClass) {
+            return;
+        }
+
+        $operations = $payload->operations ?? null;
+        if (is_array($operations)) {
+            return;
+        }
+
+        foreach ($operations as $index => $operation) {
+            $incoming = $operation->incoming ?? null;
+            if (!empty($incoming)) {
+                $this->messageBus->dispatch(new AgentSchemaTask($row, $index, 'incoming', $incoming));
+            }
+
+            $outgoing = $operation->outgoing ?? null;
+            if (!empty($outgoing)) {
+                $this->messageBus->dispatch(new AgentSchemaTask($row, $index, 'outgoing', $outgoing));
+            }
+
+            $action = $operation->action ?? null;
+            if (!empty($action)) {
+                $this->messageBus->dispatch(new AgentActionTask($row, $index, $action));
+            }
+        }
     }
 }

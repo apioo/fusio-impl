@@ -22,6 +22,7 @@ namespace Fusio\Impl\Service\Agent\Intent;
 
 use Fusio\Impl\Service\Agent\IntentInterface;
 use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
+use Fusio\Impl\Table\Generated\AgentRow;
 use Fusio\Model\Backend\AgentMessage;
 use Symfony\AI\Platform\Result\ResultInterface;
 
@@ -135,5 +136,9 @@ PHP;
     public function transformResult(ResultInterface $result): AgentMessage
     {
         return $this->resultSerializer->serialize($result);
+    }
+
+    public function onMessagePersisted(AgentRow $row, AgentMessage $message): void
+    {
     }
 }

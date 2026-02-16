@@ -18,29 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Messenger;
 
 use Fusio\Impl\Table\Generated\AgentRow;
-use Fusio\Model\Backend\AgentMessage;
-use Symfony\AI\Platform\Result\ResultInterface;
 
 /**
- * An intent describes the intent of a user what he wants to achieve, depending on the intent we provide different
- * messages, tools and response formats to the agent
+ * AgentSchemaTask
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface IntentInterface
+readonly class AgentSchemaTask
 {
-    public function getMessage(): string;
+    public function __construct(
+        private AgentRow $row,
+        private int $index,
+        private string $type,
+        private string $message,
+    ) {
+    }
 
-    public function getTools(): array;
+    public function getRow(): AgentRow
+    {
+        return $this->row;
+    }
 
-    public function getResponseSchema(): ?array;
+    public function getIndex(): int
+    {
+        return $this->index;
+    }
 
-    public function transformResult(ResultInterface $result): AgentMessage;
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
-    public function onMessagePersisted(AgentRow $row, AgentMessage $message): void;
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
 }

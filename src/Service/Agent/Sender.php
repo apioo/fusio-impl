@@ -124,7 +124,9 @@ readonly class Sender
 
             $output = $intentProvider->transformResult($result);
 
-            $this->agentTable->addAssistantMessage($userId, $connectionId, $intent, $output);
+            $row = $this->agentTable->addAssistantMessage($userId, $connectionId, $intent, $output);
+
+            $intentProvider->onMessagePersisted($row, $output);
 
             $this->agentTable->commit();
 

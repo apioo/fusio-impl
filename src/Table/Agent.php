@@ -39,19 +39,19 @@ class Agent extends Generated\AgentTable
     public const ORIGIN_ASSISTANT = 0x2;
     public const ORIGIN_SYSTEM    = 0x3;
 
-    public function addUserMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
+    public function addUserMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): Generated\AgentRow
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $intent, $message);
+        return $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $intent, $message);
     }
 
-    public function addAssistantMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
+    public function addAssistantMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): Generated\AgentRow
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $intent, $message);
+        return $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $intent, $message);
     }
 
-    public function addSystemMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
+    public function addSystemMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): Generated\AgentRow
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $intent, $message);
+        return $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $intent, $message);
     }
 
     public function reset(int $userId, int $connectionId): void
@@ -63,7 +63,7 @@ class Agent extends Generated\AgentTable
         $this->deleteBy($condition);
     }
 
-    private function addMessage(int $userId, int $connectionId, int $origin, ?Intent $intent, AgentMessage $message): void
+    private function addMessage(int $userId, int $connectionId, int $origin, ?Intent $intent, AgentMessage $message): Generated\AgentRow
     {
         $row = new Generated\AgentRow();
         $row->setUserId($userId);
@@ -73,5 +73,9 @@ class Agent extends Generated\AgentTable
         $row->setMessage(Parser::encode($message));
         $row->setInsertDate(LocalDateTime::now());
         $this->create($row);
+
+        $row->setId($this->getLastInsertId());
+
+        return $row;
     }
 }
