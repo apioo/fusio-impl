@@ -38,6 +38,7 @@ final class Version20260218181413 extends AbstractMigration
             $agentTable->addColumn('category_id', 'integer', ['default' => 1]);
             $agentTable->addColumn('connection_id', 'integer');
             $agentTable->addColumn('status', 'integer', ['default' => Table\Agent::STATUS_ACTIVE]);
+            $agentTable->addColumn('type', 'integer', ['default' => Table\Agent::TYPE_GENERAL]);
             $agentTable->addColumn('name', 'string');
             $agentTable->addColumn('description', 'string');
             $agentTable->addColumn('introduction', 'text');
