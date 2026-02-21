@@ -21,29 +21,24 @@
 namespace Fusio\Impl\Service\Agent;
 
 use Fusio\Engine\ConnectorInterface;
-use Fusio\Impl\Authorization\UserContext;
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\AgentContent;
-use Fusio\Model\Backend\AgentContentBinary;
 use Fusio\Model\Backend\AgentContentObject;
 use Fusio\Model\Backend\AgentContentText;
-use Fusio\Model\Backend\AgentContentToolCall;
-use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManagerInterface;
+use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\Agent;
-use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
-use Symfony\AI\Platform\Result\ToolCall;
 use Throwable;
 
 /**
@@ -68,15 +63,16 @@ readonly class Sender
         private Serializer\MessageSerializer $messageSerializer,
         private Serializer\ResultSerializer $resultSerializer,
         private Serializer\JsonResultSerializer $jsonResultSerializer,
+        private Unserializer\MessageUnserializer $messageUnserializer,
         private ConnectorInterface $connector,
-        private SchemaManagerInterface $schemaManager,
+        private SchemaManager $schemaManager,
     ) {
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(int $agentId, int $userId, AgentContent $content, UserContext $context): AgentContent
+    public function send(int $agentId, AgentContent $content, ContextInterface $context): int
     {
-        $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getCategoryId(), $agentId);
+        $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
             throw new NotFoundException('Could not find provided agent');
         }
@@ -103,11 +99,11 @@ readonly class Sender
                 $messages->add(Message::forSystem($schema));
             }
 
-            $messages = $this->loadPreviousMessages($agentId, $userId, $messages);
+            $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $messages);
 
-            $userMessages = $this->buildUserInput($content);
+            $userMessages = $this->messageUnserializer->unserialize($content);
 
-            $this->persistUserMessages($agentId, $userId, $userMessages);
+            $this->persistUserMessages($agentId, $context->getUser()->getId(), $userMessages);
 
             $messages = $messages->merge($userMessages);
 
@@ -135,11 +131,11 @@ readonly class Sender
                 $output = $this->resultSerializer->serialize($result);
             }
 
-            $this->messageTable->addAssistantMessage($row->getId(), $userId, $output);
+            $messageRow = $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $output);
 
             $this->agentTable->commit();
 
-            return $output;
+            return $messageRow->getId();
         } catch (Throwable $e) {
             $this->agentTable->rollBack();
 
@@ -149,22 +145,6 @@ readonly class Sender
                 throw new InternalServerErrorException($e->getMessage(), $e);
             }
         }
-    }
-
-    private function getIntroduction(): string
-    {
-        $introduction = 'You are a helpful assistant in the context of Fusio an open source API management platform.' . "\n";
-        $introduction.= 'You help the user to configure or get information about the Fusio instance.' . "\n";
-        $introduction.= 'Fusio is based on the following entities which the user can use to build powerful REST APIs:' . "\n";
-        $introduction.= 'Operation: An Operation defines an API endpoint, it ties together an HTTP method and a path with an underlying action.' . "\n";
-        $introduction.= 'Action: An Action implements the actual business logic behind an endpoint.' . "\n";
-        $introduction.= 'Schema: A Schema defines the structure of a JSON payload.' . "\n";
-        $introduction.= 'Connection: A Connection defines how to reach an external service.' . "\n";
-        $introduction.= 'Event: An Event is a named occurrence emitted by an action when something significant happens.' . "\n";
-        $introduction.= 'Cronjob: A Cronjob schedules an action to run at regular intervals.' . "\n";
-        $introduction.= 'Trigger: A Trigger listens for a specific Event and executes an action.' . "\n";
-
-        return $introduction;
     }
 
     private function loadPreviousMessages(int $agentId, int $userId, MessageBag $messages): MessageBag
@@ -181,7 +161,7 @@ readonly class Sender
             $message = $this->objectMapper->readJson($row->getContent(), SchemaSource::fromClass(AgentContent::class));
 
             if ($row->getOrigin() === Table\Agent\Message::ORIGIN_USER) {
-                $messages = $messages->merge($this->buildUserInput($message));
+                $messages = $messages->merge($this->messageUnserializer->unserialize($message));
             } elseif ($row->getOrigin() === Table\Agent\Message::ORIGIN_ASSISTANT) {
                 if ($message instanceof AgentContentText) {
                     $messages->add(Message::ofAssistant($message->getContent()));
@@ -195,29 +175,6 @@ readonly class Sender
                     $messages->add(Message::forSystem(Parser::encode($message->getPayload())));
                 }
             }
-        }
-
-        return $messages;
-    }
-
-    private function buildUserInput(AgentContent $content): MessageBag
-    {
-        $messages = new MessageBag();
-        if ($content instanceof AgentContentText) {
-            $messages->add(Message::ofUser($content->getContent()));
-        } elseif ($content instanceof AgentContentObject) {
-            $messages->add(Message::ofUser(Parser::encode($content->getPayload())));
-        } elseif ($content instanceof AgentContentBinary) {
-            $messages->add(Message::ofUser(new File($content->getData(), $content->getMime())));
-        } elseif ($content instanceof AgentContentToolCall) {
-            $functions = $content->getFunctions();
-            foreach ($functions as $function) {
-                $toolCall = new ToolCall($function->getId(), $function->getName(), Parser::decode($function->getArguments()));
-
-                $messages->add(Message::ofToolCall($toolCall, ''));
-            }
-        } else {
-            throw new BadRequestException('Provided a not supported message content type');
         }
 
         return $messages;
