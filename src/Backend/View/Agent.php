@@ -56,7 +56,13 @@ class Agent extends ViewAbstract
             'entry' => $builder->doCollection([$this->getTable(Table\Agent::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
+                'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
                 'name' => Table\Generated\AgentTable::COLUMN_NAME,
+                'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
+                'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
+                'action' => Table\Generated\AgentTable::COLUMN_ACTION,
+                'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
+                'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -70,7 +76,15 @@ class Agent extends ViewAbstract
         $definition = $builder->doEntity([$this->getTable(Table\Agent::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
+            'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
             'name' => Table\Generated\AgentTable::COLUMN_NAME,
+            'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
+            'introduction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION,
+            'tools' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_TOOLS),
+            'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
+            'action' => Table\Generated\AgentTable::COLUMN_ACTION,
+            'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
+            'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
         ]);
 
         return $builder->build($definition);
