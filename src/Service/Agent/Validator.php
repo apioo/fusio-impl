@@ -59,6 +59,11 @@ readonly class Validator
             }
         }
 
+        $type = $agent->getType();
+        if ($type !== null) {
+            $this->assertType($type);
+        }
+
         $action = $agent->getAction();
         if ($action !== null) {
             $this->assertAction($action, $categoryId, $tenantId);
@@ -77,6 +82,13 @@ readonly class Validator
 
         if (($existing === null || $name !== $existing->getName()) && $this->agentTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Agent already exists');
+        }
+    }
+
+    private function assertType(int $type): void
+    {
+        if (!in_array($type, [Table\Agent::TYPE_GENERAL, Table\Agent::TYPE_OPERATION, Table\Agent::TYPE_ACTION, Table\Agent::TYPE_SCHEMA], true)) {
+            throw new StatusCode\BadRequestException('Provided an invalid agent type');
         }
     }
 

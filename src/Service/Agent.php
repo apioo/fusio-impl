@@ -60,10 +60,10 @@ readonly class Agent
             $row->setTenantId($context->getTenantId());
             $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Agent::STATUS_ACTIVE);
+            $row->setType($agent->getType() ?? Table\Agent::TYPE_GENERAL);
             $row->setName($agent->getName());
             $row->setDescription($agent->getDescription());
             $row->setIntroduction($agent->getIntroduction());
-            $row->setMessages($agent->getMessages() !== null ? Parser::encode($agent->getMessages()) : null);
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
             $row->setAction($agent->getAction());
@@ -99,10 +99,10 @@ readonly class Agent
 
         $this->validator->assert($agent, $context->getCategoryId(), $context->getTenantId(), $existing);
 
+        $existing->setType($agent->getType() ?? $existing->getType());
         $existing->setName($agent->getName() ?? $existing->getName());
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());
-        $existing->setMessages($agent->getMessages() !== null ? Parser::encode($agent->getMessages()) : $existing->getMessages());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());
         $existing->setAction($agent->getAction() ?? $existing->getAction());

@@ -13,7 +13,6 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $name = null;
     private ?string $description = null;
     private ?string $introduction = null;
-    private ?string $messages = null;
     private ?string $tools = null;
     private ?string $outgoing = null;
     private ?string $action = null;
@@ -91,14 +90,6 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->introduction ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "introduction" was provided');
     }
-    public function setMessages(string $messages): void
-    {
-        $this->messages = $messages;
-    }
-    public function getMessages(): string
-    {
-        return $this->messages ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "messages" was provided');
-    }
     public function setTools(string $tools): void
     {
         $this->tools = $tools;
@@ -152,7 +143,6 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('description', $this->description);
         $record->put('introduction', $this->introduction);
-        $record->put('messages', $this->messages);
         $record->put('tools', $this->tools);
         $record->put('outgoing', $this->outgoing);
         $record->put('action', $this->action);
@@ -176,7 +166,6 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
         $row->introduction = isset($data['introduction']) && is_string($data['introduction']) ? $data['introduction'] : null;
-        $row->messages = isset($data['messages']) && is_string($data['messages']) ? $data['messages'] : null;
         $row->tools = isset($data['tools']) && is_string($data['tools']) ? $data['tools'] : null;
         $row->outgoing = isset($data['outgoing']) && is_string($data['outgoing']) ? $data['outgoing'] : null;
         $row->action = isset($data['action']) && is_string($data['action']) ? $data['action'] : null;

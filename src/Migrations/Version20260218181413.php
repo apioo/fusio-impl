@@ -42,7 +42,6 @@ final class Version20260218181413 extends AbstractMigration
             $agentTable->addColumn('name', 'string');
             $agentTable->addColumn('description', 'string');
             $agentTable->addColumn('introduction', 'text');
-            $agentTable->addColumn('messages', 'text');
             $agentTable->addColumn('tools', 'text');
             $agentTable->addColumn('outgoing', 'string', ['length' => 255]);
             $agentTable->addColumn('action', 'string', ['length' => 255]);

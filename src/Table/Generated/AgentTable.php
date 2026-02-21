@@ -17,7 +17,6 @@ class AgentTable extends \PSX\Sql\TableAbstract
     public const COLUMN_NAME = 'name';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_INTRODUCTION = 'introduction';
-    public const COLUMN_MESSAGES = 'messages';
     public const COLUMN_TOOLS = 'tools';
     public const COLUMN_OUTGOING = 'outgoing';
     public const COLUMN_ACTION = 'action';
@@ -29,7 +28,7 @@ class AgentTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_MESSAGES => 0xb00000, self::COLUMN_TOOLS => 0xb00000, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_TOOLS => 0xb00000, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>
@@ -394,43 +393,6 @@ class AgentTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('introduction', $value);
-        return $this->doDeleteBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\AgentRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByMessages(string $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('messages', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByMessages(string $value): ?\Fusio\Impl\Table\Generated\AgentRow
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('messages', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function updateByMessages(string $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('messages', $value);
-        return $this->doUpdateBy($condition, $record->toRecord());
-    }
-    /**
-     * @throws \PSX\Sql\Exception\ManipulationException
-     */
-    public function deleteByMessages(string $value): int
-    {
-        $condition = \PSX\Sql\Condition::withAnd();
-        $condition->like('messages', $value);
         return $this->doDeleteBy($condition);
     }
     /**

@@ -13,7 +13,6 @@ enum AgentColumn : string implements \PSX\Sql\ColumnInterface
     case NAME = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_NAME;
     case DESCRIPTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_DESCRIPTION;
     case INTRODUCTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_INTRODUCTION;
-    case MESSAGES = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_MESSAGES;
     case TOOLS = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_TOOLS;
     case OUTGOING = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_OUTGOING;
     case ACTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_ACTION;
