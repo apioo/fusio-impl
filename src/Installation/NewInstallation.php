@@ -331,7 +331,7 @@ class NewInstallation
                     httpMethod: 'GET',
                     httpPath: '/agent/tools',
                     httpCode: 200,
-                    outgoing: Model\Common\Message::class,
+                    outgoing: Model\Backend\AgentTools::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns available tools for an agent',
                 ),
