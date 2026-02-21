@@ -18,32 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Backend\Action\Agent;
+
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Agent;
+use Fusio\Impl\Service\System\ContextFactory;
 
 /**
- * IntentFactory
+ * Update
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class IntentFactory
+readonly class Update implements ActionInterface
 {
-    public function __construct(
-        private Intent\ActionIntent $actionIntent,
-        private Intent\SchemaIntent $schemaIntent,
-        private Intent\ArchitectIntent $architectIntent,
-        private Intent\GeneralIntent $generalIntent
-    ) {
+    public function __construct(private Agent $agentService, private ContextFactory $contextFactory)
+    {
     }
 
-    public function factory(?Intent $intent): IntentInterface
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return match($intent) {
-            Intent::ACTION => $this->actionIntent,
-            Intent::SCHEMA => $this->schemaIntent,
-            Intent::ARCHITECT => $this->architectIntent,
-            default => $this->generalIntent,
-        };
+        $body = $request->getPayload();
+
+        assert($body instanceof AgentUpdate);
+
+        $id = $this->agentService->update(
+            $request->get('agent_id'),
+            $body,
+            $this->contextFactory->newActionContext($context)
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Agent successfully updated',
+            'id' => '' . $id,
+        ];
     }
 }

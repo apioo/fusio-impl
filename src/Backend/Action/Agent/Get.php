@@ -18,29 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Backend\Action\Agent;
 
-use Fusio\Impl\Table\Generated\AgentRow;
-use Fusio\Model\Backend\AgentMessage;
-use Symfony\AI\Platform\Result\ResultInterface;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * An intent describes the intent of a user what he wants to achieve, depending on the intent we provide different
- * messages, tools and response formats to the agent
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface IntentInterface
+class Get implements ActionInterface
 {
-    public function getMessage(): string;
+    public function __construct(private View\Agent $view)
+    {
+    }
 
-    public function getTools(): array;
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    {
+        $agent = $this->view->getEntity(
+            $request->get('agent_id'),
+            $context
+        );
 
-    public function getResponseSchema(): ?array;
+        if (empty($agent)) {
+            throw new StatusCode\NotFoundException('Could not find agent');
+        }
 
-    public function transformResult(ResultInterface $result): AgentMessage;
+        if ($agent['status'] == Table\Agent::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Agent was deleted');
+        }
 
-    public function onMessagePersisted(AgentRow $row, AgentMessage $message): void;
+        return $agent;
+    }
 }
