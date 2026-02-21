@@ -82,7 +82,7 @@ JSON;
         $payload = [
             'operations' => [275],
             'actions' => [5],
-            'events' => [72],
+            'events' => [75],
             'cronjobs' => [2],
             'triggers' => [1],
         ];

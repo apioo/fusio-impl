@@ -8,6 +8,7 @@
       "backend",
       "backend.account",
       "backend.action",
+      "backend.agent",
       "backend.app",
       "backend.audit",
       "backend.backup",
@@ -581,6 +582,328 @@
       "authorization": true,
       "tags": [
         "action"
+      ]
+    },
+    "backend.agent.create": {
+      "path": "/backend/agent",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentCreate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new agent",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.delete": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Deletes an existing agent",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.get": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_Agent"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific agent",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.getAll": {
+      "path": "/backend/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agents",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.getTools": {
+      "path": "/backend/agent/tools",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentTools"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns available tools for an agent",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.message.getAll": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentMessageCollection"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "parent_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agent messages",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.message.submit": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentMessage"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Submits a new agent message",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.update": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "method": "PUT",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentUpdate"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Updates an existing agent",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
       ]
     },
     "backend.app.create": {
@@ -1606,86 +1929,6 @@
         "config"
       ]
     },
-    "backend.connection.agent.get": {
-      "path": "/backend/connection/:connection_id/agent",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_AgentCollection"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        },
-        "intent": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns all previous sent messages",
-      "stability": 2,
-      "security": [
-        "backend.connection"
-      ],
-      "authorization": true,
-      "tags": [
-        "connection"
-      ]
-    },
-    "backend.connection.agent.reset": {
-      "path": "/backend/connection/:connection_id/agent",
-      "method": "DELETE",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Common_Message"
-        }
-      },
-      "arguments": {
-        "connection_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Resets all agent messages",
-      "stability": 2,
-      "security": [
-        "backend.connection"
-      ],
-      "authorization": true,
-      "tags": [
-        "connection"
-      ]
-    },
     "backend.connection.agent.send": {
       "path": "/backend/connection/:connection_id/agent",
       "method": "POST",
@@ -1693,7 +1936,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Backend_AgentResponse"
+          "target": "Backend_AgentMessage"
         }
       },
       "arguments": {
@@ -1707,7 +1950,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentRequest"
+            "target": "Backend_AgentMessage"
           }
         }
       },
@@ -12376,25 +12619,56 @@
       }
     },
     "Backend_Agent": {
-      "description": "This object represents an agent message",
+      "description": "This object represents an agent",
       "type": "struct",
       "properties": {
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
-        "origin": {
-          "description": "The origin of this message i.e. 1 = user, 2 = assistant or 3 = system",
+        "connection": {
+          "description": "The agent connection which should be used",
           "type": "integer"
         },
-        "message": {
-          "description": "The message",
-          "type": "reference",
-          "target": "Backend_AgentMessage"
+        "type": {
+          "description": "The agent type",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the agent",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the agent",
+          "type": "string"
+        },
+        "introduction": {
+          "description": "Introduction message",
+          "type": "string"
+        },
+        "tools": {
+          "description": "Tools available to this agent",
+          "type": "array",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "outgoing": {
+          "description": "Describes the outgoing response payload, this must contain a schema name",
+          "type": "string"
+        },
+        "action": {
+          "description": "Action which gets invoked for each generated response",
+          "type": "string"
         },
         "insertDate": {
           "type": "string",
           "format": "date-time"
+        },
+        "metadata": {
+          "description": "Use this parameter to attach key-value data",
+          "type": "reference",
+          "target": "Common_Metadata"
         }
       }
     },
@@ -12409,8 +12683,8 @@
         }
       }
     },
-    "Backend_AgentMessage": {
-      "description": "Agent call result",
+    "Backend_AgentContent": {
+      "description": "Agent message",
       "type": "struct",
       "base": true,
       "properties": {
@@ -12428,19 +12702,19 @@
       },
       "discriminator": "type",
       "mapping": {
-        "Backend_AgentMessageBinary": "binary",
-        "Backend_AgentMessageChoice": "choice",
-        "Backend_AgentMessageObject": "object",
-        "Backend_AgentMessageText": "text",
-        "Backend_AgentMessageToolCall": "tool_call"
+        "Backend_AgentContentBinary": "binary",
+        "Backend_AgentContentChoice": "choice",
+        "Backend_AgentContentObject": "object",
+        "Backend_AgentContentText": "text",
+        "Backend_AgentContentToolCall": "tool_call"
       }
     },
-    "Backend_AgentMessageBinary": {
-      "description": "Binary agent result",
+    "Backend_AgentContentBinary": {
+      "description": "Binary agent message",
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Backend_AgentMessage"
+        "target": "Backend_AgentContent"
       },
       "properties": {
         "mime": {
@@ -12453,30 +12727,30 @@
         }
       }
     },
-    "Backend_AgentMessageChoice": {
-      "description": "Choice agent result",
+    "Backend_AgentContentChoice": {
+      "description": "Choice agent message",
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Backend_AgentMessage"
+        "target": "Backend_AgentContent"
       },
       "properties": {
         "items": {
-          "description": "Contains multiple agent results",
+          "description": "Contains multiple agent messages",
           "type": "array",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentMessage"
+            "target": "Backend_AgentContent"
           }
         }
       }
     },
-    "Backend_AgentMessageObject": {
-      "description": "Structured agent result",
+    "Backend_AgentContentObject": {
+      "description": "Structured agent message",
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Backend_AgentMessage"
+        "target": "Backend_AgentContent"
       },
       "properties": {
         "payload": {
@@ -12485,12 +12759,12 @@
         }
       }
     },
-    "Backend_AgentMessageText": {
-      "description": "Text agent result",
+    "Backend_AgentContentText": {
+      "description": "Text agent message",
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Backend_AgentMessage"
+        "target": "Backend_AgentContent"
       },
       "properties": {
         "content": {
@@ -12499,12 +12773,12 @@
         }
       }
     },
-    "Backend_AgentMessageToolCall": {
-      "description": "Tool call agent result",
+    "Backend_AgentContentToolCall": {
+      "description": "Tool call agent message",
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Backend_AgentMessage"
+        "target": "Backend_AgentContent"
       },
       "properties": {
         "functions": {
@@ -12512,12 +12786,12 @@
           "type": "array",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentMessageToolCallFunction"
+            "target": "Backend_AgentContentToolCallFunction"
           }
         }
       }
     },
-    "Backend_AgentMessageToolCallFunction": {
+    "Backend_AgentContentToolCallFunction": {
       "description": "Concrete values for a function tool call",
       "type": "struct",
       "properties": {
@@ -12532,30 +12806,79 @@
         }
       }
     },
-    "Backend_AgentRequest": {
-      "description": "This object represents an agent request",
+    "Backend_AgentCreate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Agent"
+      }
+    },
+    "Backend_AgentMessage": {
+      "description": "This object represents an agent message",
       "type": "struct",
       "properties": {
-        "intent": {
-          "description": "The intent of this request i.e. to develop an action or a general request",
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "role": {
+          "description": "The role of this message i.e. user, assistant or system",
           "type": "string"
         },
-        "input": {
-          "description": "The input message",
+        "content": {
+          "description": "The message content",
           "type": "reference",
-          "target": "Backend_AgentMessage"
+          "target": "Backend_AgentContent"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "Backend_AgentResponse": {
-      "description": "This object represents an agent response",
+    "Backend_AgentMessageCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_AgentMessage"
+        }
+      }
+    },
+    "Backend_AgentTool": {
+      "description": "Represents a concrete tool",
       "type": "struct",
       "properties": {
-        "output": {
-          "description": "The output message",
-          "type": "reference",
-          "target": "Backend_AgentMessage"
+        "name": {
+          "description": "Name of the tool",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the tool",
+          "type": "string"
         }
+      }
+    },
+    "Backend_AgentTools": {
+      "description": "Represents a collection of available tools",
+      "type": "struct",
+      "properties": {
+        "tools": {
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentTool"
+          }
+        }
+      }
+    },
+    "Backend_AgentUpdate": {
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Backend_Agent"
       }
     },
     "Backend_App": {

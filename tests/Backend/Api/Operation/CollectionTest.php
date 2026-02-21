@@ -49,7 +49,7 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 276,
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -61,7 +61,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 275,
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -73,7 +73,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 274,
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -85,7 +85,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 273,
+            "id": 279,
             "status": 1,
             "active": true,
             "public": false,
@@ -97,7 +97,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 272,
+            "id": 278,
             "status": 1,
             "active": true,
             "public": false,
@@ -109,7 +109,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 271,
+            "id": 277,
             "status": 1,
             "active": true,
             "public": false,
@@ -121,7 +121,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 270,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -133,7 +133,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 269,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -145,7 +145,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 268,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -157,7 +157,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 267,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -169,7 +169,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 266,
+            "id": 272,
             "status": 1,
             "active": true,
             "public": false,
@@ -181,7 +181,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 265,
+            "id": 271,
             "status": 1,
             "active": true,
             "public": false,
@@ -227,7 +227,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 270,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -239,7 +239,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 269,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -251,7 +251,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 268,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -263,7 +263,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 267,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -275,7 +275,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 266,
+            "id": 272,
             "status": 1,
             "active": true,
             "public": false,
@@ -309,7 +309,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 264,
+            "id": 270,
             "status": 1,
             "active": true,
             "public": true,
@@ -343,7 +343,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 276,
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -355,7 +355,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 275,
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -367,7 +367,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 274,
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -379,7 +379,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 273,
+            "id": 279,
             "status": 1,
             "active": true,
             "public": false,
@@ -391,7 +391,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 272,
+            "id": 278,
             "status": 1,
             "active": true,
             "public": false,
@@ -403,7 +403,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 271,
+            "id": 277,
             "status": 1,
             "active": true,
             "public": false,
@@ -415,7 +415,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 270,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -427,7 +427,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 269,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -439,7 +439,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 268,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -451,7 +451,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 267,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -463,7 +463,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 266,
+            "id": 272,
             "status": 1,
             "active": true,
             "public": false,
@@ -475,7 +475,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 265,
+            "id": 271,
             "status": 1,
             "active": true,
             "public": false,
@@ -544,7 +544,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "277"
+    "id": "283"
 }
 JSON;
 
@@ -594,7 +594,7 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertSame(true, $data->success);
         $this->assertSame('Operation successfully created', $data->message);
-        $this->assertContains($data->id, ['277', '278']); // postgres does not reset the auto increment so we need to check both
+        $this->assertContains($data->id, ['283', '284']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);

@@ -54,6 +54,7 @@ class AccountTest extends DbTestCase
         "backend",
         "backend.account",
         "backend.action",
+        "backend.agent",
         "backend.app",
         "backend.audit",
         "backend.backup",

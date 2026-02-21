@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Scope;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 
 /**
  * CollectionTest
@@ -31,6 +32,17 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class CollectionTest extends DbTestCase
 {
+    private ?int $scopeFooId = null;
+    private ?int $scopeBarId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->scopeFooId = Fixture::getReference('fusio_scope', 'foo')->resolve($this->connection);
+        $this->scopeBarId = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/scope', 'GET', array(
@@ -40,19 +52,19 @@ class CollectionTest extends DbTestCase
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 58,
+            "id": {$this->scopeBarId},
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 57,
+            "id": {$this->scopeFooId},
             "name": "foo",
             "description": "Foo access",
             "metadata": {

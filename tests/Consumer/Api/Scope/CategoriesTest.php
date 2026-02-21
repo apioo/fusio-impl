@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Scope;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 
 /**
  * CategoriesTest
@@ -31,6 +32,17 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class CategoriesTest extends DbTestCase
 {
+    private ?int $scopeFooId = null;
+    private ?int $scopeBarId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->scopeFooId = Fixture::getReference('fusio_scope', 'foo')->resolve($this->connection);
+        $this->scopeBarId = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/scope/categories', 'GET', array(
@@ -39,7 +51,7 @@ class CategoriesTest extends DbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "categories": [
         {
@@ -74,12 +86,12 @@ class CategoriesTest extends DbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 58,
+                    "id": {$this->scopeBarId},
                     "name": "bar",
                     "description": "Bar access"
                 },
                 {
-                    "id": 57,
+                    "id": {$this->scopeFooId},
                     "name": "foo",
                     "description": "Foo access"
                 }

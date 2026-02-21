@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Webhook;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
 
 /**
@@ -32,6 +33,15 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class EntityTest extends DbTestCase
 {
+    private ?int $eventFooId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->eventFooId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/webhook/2', 'GET', array(
@@ -112,7 +122,7 @@ JSON;
         $row = $this->connection->fetchAssociative($sql, ['id' => 2]);
 
         $this->assertEquals(2, $row['id']);
-        $this->assertEquals(72, $row['event_id']);
+        $this->assertEquals($this->eventFooId, $row['event_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('foofoo', $row['name']);

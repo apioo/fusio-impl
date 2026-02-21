@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 
 /**
  * EntityTest
@@ -31,18 +32,27 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
+    private ?int $eventId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->eventId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
+    }
+
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/event/72', 'GET', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "id": 72,
+    "id": {$this->eventId},
     "status": 1,
     "name": "foo-event",
     "description": "Foo event description",
@@ -65,9 +75,9 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "id": 72,
+    "id": {$this->eventId},
     "status": 1,
     "name": "foo-event",
     "description": "Foo event description",
@@ -95,7 +105,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/event/56', 'POST', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -109,7 +119,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/event/56', 'PUT', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -126,7 +136,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/event/56', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 
 /**
  * CollectionTest
@@ -31,6 +32,17 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class CollectionTest extends DbTestCase
 {
+    private ?int $eventFooId = null;
+    private ?int $eventSecondId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->eventFooId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
+        $this->eventSecondId = Fixture::getReference('fusio_event', 'second-event')->resolve($this->connection);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/event', 'GET', array(
@@ -40,14 +52,14 @@ class CollectionTest extends DbTestCase
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 72,
+            "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",
@@ -56,7 +68,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
-            "id": 73,
+            "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
             "description": "Foo event description",
@@ -81,14 +93,14 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 72,
+            "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description",
