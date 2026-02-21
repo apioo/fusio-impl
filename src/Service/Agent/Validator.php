@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Service\Agent;
 
+use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Exception\ActionNotFoundException;
+use Fusio\Engine\Exception\ConnectionNotFoundException;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Impl\Action\Scheme as ActionScheme;
@@ -28,6 +30,7 @@ use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Agent;
 use PSX\Http\Exception as StatusCode;
+use Symfony\AI\Agent\AgentInterface;
 
 /**
  * Validator
@@ -41,6 +44,7 @@ readonly class Validator
     public function __construct(
         private Table\Agent $agentTable,
         private Table\Action $actionTable,
+        private ConnectorInterface $connector,
         private ProcessorInterface $processor,
         private UsageLimiter $usageLimiter
     ) {
@@ -62,6 +66,15 @@ readonly class Validator
         $type = $agent->getType();
         if ($type !== null) {
             $this->assertType($type);
+        }
+
+        $connection = $agent->getConnection();
+        if ($connection !== null) {
+            $this->assertConnection($connection);
+        } else {
+            if ($existing === null) {
+                throw new StatusCode\BadRequestException('Connection must not be empty');
+            }
         }
 
         $action = $agent->getAction();
@@ -89,6 +102,19 @@ readonly class Validator
     {
         if (!in_array($type, [Table\Agent::TYPE_GENERAL, Table\Agent::TYPE_OPERATION, Table\Agent::TYPE_ACTION, Table\Agent::TYPE_SCHEMA], true)) {
             throw new StatusCode\BadRequestException('Provided an invalid agent type');
+        }
+    }
+
+    private function assertConnection(int $connectionId): void
+    {
+        try {
+            $connection = $this->connector->getConnection($connectionId);
+        } catch (ConnectionNotFoundException) {
+            throw new StatusCode\BadRequestException('Provided connection is not available');
+        }
+
+        if (!$connection instanceof AgentInterface) {
+            throw new StatusCode\BadRequestException('Provided an invalid connection type, the connection must be an agent connection');
         }
     }
 
