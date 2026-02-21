@@ -18,45 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection\Agent;
+namespace Fusio\Impl\Backend\Action\Agent\Message;
 
-use Fusio\Engine\Connector;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Impl\Table;
-use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
+use Fusio\Impl\Backend\View;
 
 /**
- * Reset
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Reset extends AgentAbstract
+readonly class GetAll implements ActionInterface
 {
-    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private View\Agent\Message $view)
     {
-        parent::__construct($connector, $frameworkConfig);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertConnectionEnabled();
-
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
-
-        $this->agentTable->reset($context->getUser()->getId(), $connectionId);
-
-        return new HttpResponse(200, [], [
-            'success' => true,
-            'message' => 'Chat successfully reset',
-        ]);
+        return $this->view->getCollection(
+            (int) $request->get('agent_id'),
+            (int) $request->get('parent_id'),
+            $context
+        );
     }
 }

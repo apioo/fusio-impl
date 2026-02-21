@@ -18,43 +18,45 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection\Agent;
+namespace Fusio\Impl\Backend\Action\Agent\Message;
 
-use Fusio\Engine\Connector;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use Fusio\Impl\Service\Agent\Intent;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\Agent;
+use Fusio\Model\Backend\AgentContent;
 use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
 
 /**
- * Get
+ * Submit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Get extends AgentAbstract
+readonly class Submit implements ActionInterface
 {
-    public function __construct(private View\Connection\Agent $view, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Agent\Sender $sender)
     {
-        parent::__construct($connector, $frameworkConfig);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertConnectionEnabled();
+        $body = $request->getPayload();
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
+        assert($body instanceof AgentContent);
 
-        $intent = Intent::tryFrom($request->get('intent') ?? '');
+        $messageId = $this->sender->send(
+            $request->get('agent_id'),
+            $body,
+            $context,
+        );
 
-        return new HttpResponse(200, [], $this->view->getCollection($connectionId, $intent, $context));
+        return new HttpResponse(201, [], [
+            'success' => true,
+            'message' => 'Agent message successfully submitted',
+            'id' => '' . $messageId,
+        ]);
     }
 }
