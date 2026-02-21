@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Backend\AgentMessage;
-use Fusio\Model\Backend\AgentMessageObject;
+use Fusio\Model\Backend\AgentContent;
+use Fusio\Model\Backend\AgentContentObject;
 use stdClass;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\Result\TextResult;
@@ -35,7 +35,7 @@ use Symfony\AI\Platform\Result\TextResult;
  */
 readonly class JsonResultSerializer extends ResultSerializer
 {
-    public function serialize(ResultInterface $result): AgentMessage
+    public function serialize(ResultInterface $result): AgentContent
     {
         if ($result instanceof TextResult) {
             $content = $result->getContent();
@@ -47,7 +47,7 @@ readonly class JsonResultSerializer extends ResultSerializer
 
             $payload = json_decode($content);
             if ($payload instanceof stdClass) {
-                $object = new AgentMessageObject();
+                $object = new AgentContentObject();
                 $object->setType('object');
                 $object->setPayload($payload);
                 return $object;

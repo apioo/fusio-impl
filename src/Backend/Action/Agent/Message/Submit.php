@@ -18,57 +18,45 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection\Agent;
+namespace Fusio\Impl\Backend\Action\Agent\Message;
 
-use Fusio\Engine\Connector;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
-use Fusio\Impl\Service\Agent\Unserializer\MessageUnserializer;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Service\Agent;
 use Fusio\Model\Backend\AgentContent;
 use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
 
 /**
- * Send
+ * Submit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Send extends AgentAbstract
+readonly class Submit implements ActionInterface
 {
-    public function __construct(private MessageUnserializer $messageUnserializer, private ResultSerializer $resultSerializer, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Agent\Sender $sender)
     {
-        parent::__construct($connector, $frameworkConfig);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertConnectionEnabled();
+        $body = $request->getPayload();
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
+        assert($body instanceof AgentContent);
 
-        $agent = $this->getConnection($connectionId);
-        $payload = $request->getPayload();
+        $messageId = $this->sender->send(
+            $request->get('agent_id'),
+            $body,
+            $context,
+        );
 
-        assert($payload instanceof AgentContent);
-
-        $messages = $this->messageUnserializer->unserialize($payload);
-
-        $options = [
-            'temperature' => 0.4
-        ];
-
-        $result = $agent->call($messages, $options);
-
-        $output = $this->resultSerializer->serialize($result);
-
-        return new HttpResponse(200, [], $output);
+        return new HttpResponse(201, [], [
+            'success' => true,
+            'message' => 'Agent message successfully submitted',
+            'id' => '' . $messageId,
+        ]);
     }
 }

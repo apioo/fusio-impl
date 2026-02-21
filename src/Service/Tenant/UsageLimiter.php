@@ -51,6 +51,15 @@ class UsageLimiter
         );
     }
 
+    public function assertAgentCount(?string $tenantId): void
+    {
+        $this->assert(
+            $this->getActualCount(Table\Generated\AgentTable::NAME, $tenantId),
+            $this->limiter->getAgentCount(),
+            'agent'
+        );
+    }
+
     public function assertAppCount(?string $tenantId): void
     {
         $this->assert(

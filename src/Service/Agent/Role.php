@@ -21,24 +21,15 @@
 namespace Fusio\Impl\Service\Agent;
 
 /**
- * Intent
+ * Role
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-enum Intent: string
+enum Role: string
 {
-    case ACTION = 'action';
-    case SCHEMA = 'schema';
-    case ARCHITECT = 'architect';
-
-    public function getInt(): int
-    {
-        return match ($this) {
-            self::ACTION => 1,
-            self::SCHEMA => 2,
-            self::ARCHITECT => 3,
-        };
-    }
+    case USER = 'user';
+    case ASSISTANT = 'assistant';
+    case SYSTEM = 'system';
 }

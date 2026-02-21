@@ -20,21 +20,19 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Backend\AgentMessage;
-use Fusio\Model\Backend\AgentMessageBinary;
-use Fusio\Model\Backend\AgentMessageChoice;
-use Fusio\Model\Backend\AgentMessageObject;
-use Fusio\Model\Backend\AgentMessageStream;
-use Fusio\Model\Backend\AgentMessageText;
-use Fusio\Model\Backend\AgentMessageToolCall;
-use Fusio\Model\Backend\AgentMessageToolCallFunction;
+use Fusio\Model\Backend\AgentContent;
+use Fusio\Model\Backend\AgentContentBinary;
+use Fusio\Model\Backend\AgentContentChoice;
+use Fusio\Model\Backend\AgentContentObject;
+use Fusio\Model\Backend\AgentContentText;
+use Fusio\Model\Backend\AgentContentToolCall;
+use Fusio\Model\Backend\AgentContentToolCallFunction;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Result\BinaryResult;
 use Symfony\AI\Platform\Result\ChoiceResult;
 use Symfony\AI\Platform\Result\ObjectResult;
 use Symfony\AI\Platform\Result\ResultInterface;
-use Symfony\AI\Platform\Result\StreamResult;
 use Symfony\AI\Platform\Result\TextResult;
 use Symfony\AI\Platform\Result\ToolCallResult;
 
@@ -47,10 +45,10 @@ use Symfony\AI\Platform\Result\ToolCallResult;
  */
 readonly class ResultSerializer
 {
-    public function serialize(ResultInterface $result): AgentMessage
+    public function serialize(ResultInterface $result): AgentContent
     {
         if ($result instanceof BinaryResult) {
-            $message = new AgentMessageBinary();
+            $message = new AgentContentBinary();
             $message->setType('binary');
             $message->setMime($result->getMimeType());
             $message->setData($result->toBase64());
@@ -60,37 +58,28 @@ readonly class ResultSerializer
                 $items[] = $this->serialize($item);
             }
 
-            $message = new AgentMessageChoice();
+            $message = new AgentContentChoice();
             $message->setType('choice');
             $message->setItems($items);
         } elseif ($result instanceof ObjectResult) {
-            $message = new AgentMessageObject();
+            $message = new AgentContentObject();
             $message->setType('object');
             $message->setPayload($result->getContent());
-        } elseif ($result instanceof StreamResult) {
-            $events = [];
-            foreach ($result->getContent() as $event) {
-                $events[] = $event;
-            }
-
-            $message = new AgentMessageStream();
-            $message->setType('stream');
-            $message->setEvents($events);
         } elseif ($result instanceof TextResult) {
-            $message = new AgentMessageText();
+            $message = new AgentContentText();
             $message->setType('text');
             $message->setContent($result->getContent());
         } elseif ($result instanceof ToolCallResult) {
             $functions = [];
             foreach ($result->getContent() as $toolCall) {
-                $function = new AgentMessageToolCallFunction();
+                $function = new AgentContentToolCallFunction();
                 $function->setName($toolCall->getName());
                 $function->setArguments(Parser::encode($toolCall->getArguments()));
                 $function->setId($toolCall->getId());
                 $functions[] = $function;
             }
 
-            $message = new AgentMessageToolCall();
+            $message = new AgentContentToolCall();
             $message->setType('tool_call');
             $message->setFunctions($functions);
         } else {

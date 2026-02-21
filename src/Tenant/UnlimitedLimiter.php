@@ -36,6 +36,11 @@ class UnlimitedLimiter implements LimiterInterface
         return PHP_INT_MAX;
     }
 
+    public function getAgentCount(): int
+    {
+        return PHP_INT_MAX;
+    }
+
     public function getAppCount(): int
     {
         return PHP_INT_MAX;

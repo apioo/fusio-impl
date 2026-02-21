@@ -18,45 +18,45 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection\Agent;
+namespace Fusio\Impl\Backend\Action\Agent;
 
-use Fusio\Engine\Connector;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Impl\Table;
+use Fusio\Impl\Service\Agent;
+use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Model\Backend\AgentCreate;
 use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
 
 /**
- * Reset
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Reset extends AgentAbstract
+readonly class Create implements ActionInterface
 {
-    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Agent $agentService, private ContextFactory $contextFactory)
     {
-        parent::__construct($connector, $frameworkConfig);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertConnectionEnabled();
+        $body = $request->getPayload();
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
+        assert($body instanceof AgentCreate);
 
-        $this->agentTable->reset($context->getUser()->getId(), $connectionId);
+        $id = $this->agentService->create(
+            $body,
+            $this->contextFactory->newActionContext($context)
+        );
 
-        return new HttpResponse(200, [], [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Chat successfully reset',
+            'message' => 'Agent successfully created',
+            'id' => '' . $id,
         ]);
     }
 }

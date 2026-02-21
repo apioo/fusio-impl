@@ -20,12 +20,12 @@
 
 namespace Fusio\Impl\Service\Mcp;
 
-use Fusio\Impl\Service\Agent\Intent\ActionIntent;
-use Fusio\Impl\Service\Agent\Intent\ArchitectIntent;
-use Fusio\Impl\Service\Agent\Intent\SchemaIntent;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Table;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\PromptArgument;
+use PSX\Sql\Condition;
 use RuntimeException;
 
 /**
@@ -37,77 +37,33 @@ use RuntimeException;
  */
 readonly class PromptLoader
 {
-    public function __construct(
-        private ActionIntent $actionIntent,
-        private SchemaIntent $schemaIntent,
-        private ArchitectIntent $architectIntent,
-    ) {
+    public function __construct(private Table\Agent $agentTable, private FrameworkConfig $frameworkConfig)
+    {
     }
 
     public function load(RegistryInterface $registry): void
     {
-        $this->loadAction($registry);
-        $this->loadSchema($registry);
-        $this->loadArchitect($registry);
-    }
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Agent::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
 
-    private function loadAction(RegistryInterface $registry): void
-    {
-        $arguments = [];
-        $arguments[] = new PromptArgument('logic', 'Describe the business logic of a new action', true);
+        $result = $this->agentTable->findAll($condition);
+        foreach ($result as $row) {
+            $arguments = [];
+            $arguments[] = new PromptArgument('message', 'The message', true);
 
-        $prompt = new Prompt('new-action', 'Prompt which helps to create a new action', $arguments);
+            $prompt = new Prompt($row->getName(), $row->getDescription(), $arguments);
 
-        $registry->registerPrompt($prompt, function (array $arguments): array {
-            $logic = $arguments['logic'] ?? null;
-            if (!is_string($logic) || $logic === '') {
-                throw new RuntimeException('Could not extract logic from arguments, got: ' . var_export($arguments, true));
-            }
+            $registry->registerPrompt($prompt, function (array $arguments) use ($row): array {
+                $message = $arguments['message'] ?? null;
+                if (!is_string($message) || $message === '') {
+                    throw new RuntimeException('Could not extract message from arguments, got: ' . var_export($arguments, true));
+                }
 
-            return [
-                ['role' => 'assistant', 'content' => $this->actionIntent->getMessage()],
-                ['role' => 'user', 'content' => $logic],
-            ];
-        });
-    }
-
-    private function loadSchema(RegistryInterface $registry): void
-    {
-        $arguments = [];
-        $arguments[] = new PromptArgument('structure', 'Describe the structure of a new schema', true);
-
-        $prompt = new Prompt('new-schema', 'Prompt which helps to create a new schema', $arguments);
-
-        $registry->registerPrompt($prompt, function (array $arguments): array {
-            $structure = $arguments['structure'] ?? null;
-            if (!is_string($structure) || $structure === '') {
-                throw new RuntimeException('Could not extract structure from arguments, got: ' . var_export($arguments, true));
-            }
-
-            return [
-                ['role' => 'assistant', 'content' => $this->schemaIntent->getMessage()],
-                ['role' => 'user', 'content' => $structure],
-            ];
-        });
-    }
-
-    private function loadArchitect(RegistryInterface $registry): void
-    {
-        $arguments = [];
-        $arguments[] = new PromptArgument('description', 'Describe what you want to build from a high level view', true);
-
-        $prompt = new Prompt('architect', 'Prompt which helps to create complete systems from a high level view', $arguments);
-
-        $registry->registerPrompt($prompt, function (array $arguments): array {
-            $description = $arguments['description'] ?? null;
-            if (!is_string($description) || $description === '') {
-                throw new RuntimeException('Could not extract description from arguments, got: ' . var_export($arguments, true));
-            }
-
-            return [
-                ['role' => 'assistant', 'content' => $this->architectIntent->getMessage()],
-                ['role' => 'user', 'content' => $description],
-            ];
-        });
+                return [
+                    ['role' => 'assistant', 'content' => $row->getIntroduction()],
+                    ['role' => 'user', 'content' => $message],
+                ];
+            });
+        }
     }
 }
