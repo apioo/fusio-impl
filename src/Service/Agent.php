@@ -59,6 +59,7 @@ readonly class Agent
             $row = new Table\Generated\AgentRow();
             $row->setTenantId($context->getTenantId());
             $row->setCategoryId($context->getCategoryId());
+            $row->setConnectionId($agent->getConnection());
             $row->setStatus(Table\Agent::STATUS_ACTIVE);
             $row->setType($agent->getType() ?? Table\Agent::TYPE_GENERAL);
             $row->setName($agent->getName());
@@ -99,6 +100,7 @@ readonly class Agent
 
         $this->validator->assert($agent, $context->getCategoryId(), $context->getTenantId(), $existing);
 
+        $existing->setConnectionId($agent->getConnection() ?? $existing->getConnectionId());
         $existing->setType($agent->getType() ?? $existing->getType());
         $existing->setName($agent->getName() ?? $existing->getName());
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
