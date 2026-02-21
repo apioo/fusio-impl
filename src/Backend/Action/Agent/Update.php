@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Agent;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Model\Backend\AgentUpdate;
 
 /**
  * Update
