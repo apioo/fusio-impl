@@ -32,7 +32,6 @@ use Fusio\Impl\System;
 use Fusio\Impl\Table;
 use Fusio\Marketplace;
 use Fusio\Model;
-use Psr\Container\ContainerInterface;
 use PSX\Api\Model\Passthru;
 use PSX\Api\OperationInterface;
 use PSX\Schema\ContentType;
@@ -599,8 +598,8 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/connection/:connection_id/agent',
                     httpCode: 200,
-                    outgoing: Model\Backend\AgentMessage::class,
-                    incoming: Model\Backend\AgentMessage::class,
+                    outgoing: Model\Backend\AgentContent::class,
+                    incoming: Model\Backend\AgentContent::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Sends a message to an agent',
                 ),

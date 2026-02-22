@@ -41,8 +41,13 @@ abstract readonly class AgentAbstract implements ActionInterface
     {
     }
 
-    protected function getConnection(int $connectionId): AgentInterface
+    protected function getConnection(RequestInterface $request): AgentInterface
     {
+        $connectionId = $request->get('connection_id');
+        if (empty($connectionId)) {
+            throw new BadRequestException('Provided no connection');
+        }
+
         $connection = $this->connector->getConnection($connectionId);
         if (!$connection instanceof AgentInterface) {
             throw new BadRequestException('Provided an invalid connection');

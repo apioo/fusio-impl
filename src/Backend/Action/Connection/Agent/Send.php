@@ -49,12 +49,7 @@ readonly class Send extends AgentAbstract
     {
         $this->assertConnectionEnabled();
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
-
-        $agent = $this->getConnection($connectionId);
+        $agent = $this->getConnection($request);
         $payload = $request->getPayload();
 
         assert($payload instanceof AgentContent);
