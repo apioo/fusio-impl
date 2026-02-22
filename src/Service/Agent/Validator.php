@@ -29,7 +29,10 @@ use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Agent;
+use Fusio\Model\Backend\SchemaSource;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Exception\SchemaException;
+use PSX\Schema\SchemaManagerInterface;
 use Symfony\AI\Agent\AgentInterface;
 
 /**
@@ -46,6 +49,7 @@ readonly class Validator
         private Table\Action $actionTable,
         private ConnectorInterface $connector,
         private ProcessorInterface $processor,
+        private SchemaManagerInterface $schemaManager,
         private UsageLimiter $usageLimiter
     ) {
     }
@@ -77,13 +81,14 @@ readonly class Validator
             }
         }
 
+        $outgoing = $agent->getOutgoing();
+        if ($outgoing !== null) {
+            $this->assertSchema($outgoing);
+        }
+
         $action = $agent->getAction();
         if ($action !== null) {
             $this->assertAction($action, $categoryId, $tenantId);
-        } else {
-            if ($existing === null) {
-                throw new StatusCode\BadRequestException('Action must not be empty');
-            }
         }
     }
 
@@ -115,6 +120,15 @@ readonly class Validator
 
         if (!$connection instanceof AgentInterface) {
             throw new StatusCode\BadRequestException('Provided an invalid connection type, the connection must be an agent connection');
+        }
+    }
+
+    private function assertSchema(string $schema): void
+    {
+        try {
+            $this->schemaManager->getSchema($schema);
+        } catch (SchemaException) {
+            throw new StatusCode\BadRequestException('Could not resolve provided schema');
         }
     }
 

@@ -25,6 +25,7 @@ use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Table;
+use PSX\Json\Parser;
 use PSX\Schema\ContentType;
 use PSX\Schema\TypeInterface;
 
@@ -55,6 +56,7 @@ class DataBag
             'fusio_connection' => [],
             'fusio_cronjob' => [],
             'fusio_event' => [],
+            'fusio_agent' => [],
             'fusio_log' => [],
             'fusio_provider' => [],
             'fusio_page' => [],
@@ -82,6 +84,7 @@ class DataBag
             'fusio_role_scope' => [],
             'fusio_action_commit' => [],
             'fusio_schema_commit' => [],
+            'fusio_agent_message' => [],
         ];
     }
 
@@ -226,6 +229,37 @@ class DataBag
             'commit_hash' => $commitHash,
             'config' => $config,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addAgent(string $category, string $connection, int $type, string $name, string $description, string $introduction, array $tools, string $outgoing, string $action, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_agent'][$name] = [
+            'tenant_id' => $tenantId,
+            'category_id' => $this->getReference('fusio_category', $category, $tenantId),
+            'connection_id' => $this->getReference('fusio_connection', $connection, $tenantId),
+            'status' => $status,
+            'type' => $type,
+            'name' => $name,
+            'description' => $description,
+            'introduction' => $introduction,
+            'tools' => Parser::encode($tools),
+            'outgoing' => $outgoing,
+            'action' => $action,
+            'metadata' => $metadata !== null ? json_encode($metadata) : null,
+            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addAgentMessage(string $agent, string $user, int $origin, string $content, ?int $parentId = null, ?string $date = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_agent_message'][$content] = [
+            'agent_id' => $this->getReference('fusio_agent', $agent, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'parent_id' => $parentId !== null ? $parentId : null,
+            'origin' => $origin,
+            'content' => $content,
+            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
