@@ -44,10 +44,16 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 7,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 8,
+            "status": 1,
+            "name": "Agent",
+            "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
+        },
         {
             "id": 7,
             "status": 1,
@@ -207,10 +213,16 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 7,
+    "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 8,
+            "status": 1,
+            "name": "Agent",
+            "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
+        },
         {
             "id": 7,
             "status": 1,
@@ -289,7 +301,7 @@ JSON;
 {
     "success": true,
     "message": "Connection successfully created",
-    "id": "8"
+    "id": "9"
 }
 JSON;
 
@@ -307,7 +319,7 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql);
 
-        $this->assertEquals(8, $row['id']);
+        $this->assertEquals(9, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals(ClassName::serialize(SqlAdvanced::class), $row['class']);
         $this->assertNotEmpty($row['config']);

@@ -24,9 +24,10 @@ use Fusio\Engine\Connector;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Agent\Sender;
+use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
+use Fusio\Impl\Service\Agent\Unserializer\MessageUnserializer;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\AgentRequest;
+use Fusio\Model\Backend\AgentContent;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception\BadRequestException;
 
@@ -39,7 +40,7 @@ use PSX\Http\Exception\BadRequestException;
  */
 readonly class Send extends AgentAbstract
 {
-    public function __construct(private Sender $sender, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private MessageUnserializer $messageUnserializer, private ResultSerializer $resultSerializer, Connector $connector, FrameworkConfig $frameworkConfig)
     {
         parent::__construct($connector, $frameworkConfig);
     }
@@ -48,18 +49,21 @@ readonly class Send extends AgentAbstract
     {
         $this->assertConnectionEnabled();
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
-        }
-
-        $agent = $this->getConnection($connectionId);
+        $agent = $this->getConnection($request);
         $payload = $request->getPayload();
 
-        assert($payload instanceof AgentRequest);
+        assert($payload instanceof AgentContent);
 
-        $response = $this->sender->send($agent, $context->getUser()->getId(), $connectionId, $payload);
+        $messages = $this->messageUnserializer->unserialize($payload);
 
-        return new HttpResponse(200, [], $response);
+        $options = [
+            'temperature' => 0.4
+        ];
+
+        $result = $agent->call($messages, $options);
+
+        $output = $this->resultSerializer->serialize($result);
+
+        return new HttpResponse(200, [], $output);
     }
 }

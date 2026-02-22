@@ -20,10 +20,7 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Service\Agent\Intent;
-use Fusio\Model\Backend\AgentMessage;
-use PSX\DateTime\LocalDateTime;
-use PSX\Json\Parser;
+use Fusio\Impl\Table\Generated\AgentRow;
 use PSX\Sql\Condition;
 
 /**
@@ -35,43 +32,42 @@ use PSX\Sql\Condition;
  */
 class Agent extends Generated\AgentTable
 {
-    public const ORIGIN_USER      = 0x1;
-    public const ORIGIN_ASSISTANT = 0x2;
-    public const ORIGIN_SYSTEM    = 0x3;
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
-    public function addUserMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
+    public const TYPE_GENERAL = 0;
+    public const TYPE_OPERATION = 1;
+    public const TYPE_ACTION = 2;
+    public const TYPE_SCHEMA = 3;
+
+    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?AgentRow
     {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_USER, $intent, $message);
+        if (str_starts_with($id, '~')) {
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
+        } else {
+            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+        }
     }
 
-    public function addAssistantMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
-    {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_ASSISTANT, $intent, $message);
-    }
-
-    public function addSystemMessage(int $userId, int $connectionId, ?Intent $intent, AgentMessage $message): void
-    {
-        $this->addMessage($userId, $connectionId, self::ORIGIN_SYSTEM, $intent, $message);
-    }
-
-    public function reset(int $userId, int $connectionId): void
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?AgentRow
     {
         $condition = Condition::withAnd();
-        $condition->equals(Generated\AgentColumn::USER_ID, $userId);
-        $condition->equals(Generated\AgentColumn::CONNECTION_ID, $connectionId);
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        $condition->equals(self::COLUMN_ID, $id);
 
-        $this->deleteBy($condition);
+        return $this->findOneBy($condition);
     }
 
-    private function addMessage(int $userId, int $connectionId, int $origin, ?Intent $intent, AgentMessage $message): void
+    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name): ?AgentRow
     {
-        $row = new Generated\AgentRow();
-        $row->setUserId($userId);
-        $row->setConnectionId($connectionId);
-        $row->setOrigin($origin);
-        $row->setIntent($intent?->getInt() ?? 0);
-        $row->setMessage(Parser::encode($message));
-        $row->setInsertDate(LocalDateTime::now());
-        $this->create($row);
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        if ($categoryId !== null) {
+            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        }
+        $condition->equals(self::COLUMN_NAME, $name);
+
+        return $this->findOneBy($condition);
     }
 }

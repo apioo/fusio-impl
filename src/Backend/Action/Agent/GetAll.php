@@ -18,26 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Backend\Action\Agent;
 
-use Fusio\Model\Backend\AgentMessage;
-use Symfony\AI\Platform\Result\ResultInterface;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Backend\View;
 
 /**
- * An intent describes the intent of a user what he wants to achieve, depending on the intent we provide different
- * messages, tools and response formats to the agent
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface IntentInterface
+class GetAll implements ActionInterface
 {
-    public function getMessage(): string;
+    public function __construct(private View\Agent $view)
+    {
+    }
 
-    public function getTools(): array;
-
-    public function getResponseSchema(): ?array;
-
-    public function transformResult(ResultInterface $result): AgentMessage;
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    {
+        return $this->view->getCollection(
+            QueryFilter::from($request),
+            $context
+        );
+    }
 }

@@ -79,171 +79,176 @@ class CategoriesTest extends DbTestCase
                 },
                 {
                     "id": 8,
-                    "name": "backend.app",
+                    "name": "backend.agent",
                     "description": ""
                 },
                 {
                     "id": 9,
-                    "name": "backend.audit",
-                    "description": ""
-                },
-                {
-                    "id": 16,
-                    "name": "backend.backup",
-                    "description": ""
-                },
-                {
-                    "id": 23,
-                    "name": "backend.bundle",
+                    "name": "backend.app",
                     "description": ""
                 },
                 {
                     "id": 10,
-                    "name": "backend.category",
-                    "description": ""
-                },
-                {
-                    "id": 11,
-                    "name": "backend.config",
-                    "description": ""
-                },
-                {
-                    "id": 12,
-                    "name": "backend.connection",
-                    "description": ""
-                },
-                {
-                    "id": 13,
-                    "name": "backend.cronjob",
-                    "description": ""
-                },
-                {
-                    "id": 14,
-                    "name": "backend.dashboard",
-                    "description": ""
-                },
-                {
-                    "id": 15,
-                    "name": "backend.event",
+                    "name": "backend.audit",
                     "description": ""
                 },
                 {
                     "id": 17,
-                    "name": "backend.firewall",
-                    "description": ""
-                },
-                {
-                    "id": 18,
-                    "name": "backend.form",
-                    "description": ""
-                },
-                {
-                    "id": 19,
-                    "name": "backend.generator",
-                    "description": ""
-                },
-                {
-                    "id": 20,
-                    "name": "backend.identity",
-                    "description": ""
-                },
-                {
-                    "id": 21,
-                    "name": "backend.log",
-                    "description": ""
-                },
-                {
-                    "id": 22,
-                    "name": "backend.marketplace",
-                    "description": ""
-                },
-                {
-                    "id": 28,
-                    "name": "backend.operation",
+                    "name": "backend.backup",
                     "description": ""
                 },
                 {
                     "id": 24,
-                    "name": "backend.page",
+                    "name": "backend.bundle",
                     "description": ""
                 },
                 {
-                    "id": 25,
-                    "name": "backend.plan",
+                    "id": 11,
+                    "name": "backend.category",
                     "description": ""
                 },
                 {
-                    "id": 26,
-                    "name": "backend.rate",
+                    "id": 12,
+                    "name": "backend.config",
                     "description": ""
                 },
                 {
-                    "id": 27,
-                    "name": "backend.role",
+                    "id": 13,
+                    "name": "backend.connection",
+                    "description": ""
+                },
+                {
+                    "id": 14,
+                    "name": "backend.cronjob",
+                    "description": ""
+                },
+                {
+                    "id": 15,
+                    "name": "backend.dashboard",
+                    "description": ""
+                },
+                {
+                    "id": 16,
+                    "name": "backend.event",
+                    "description": ""
+                },
+                {
+                    "id": 18,
+                    "name": "backend.firewall",
+                    "description": ""
+                },
+                {
+                    "id": 19,
+                    "name": "backend.form",
+                    "description": ""
+                },
+                {
+                    "id": 20,
+                    "name": "backend.generator",
+                    "description": ""
+                },
+                {
+                    "id": 21,
+                    "name": "backend.identity",
+                    "description": ""
+                },
+                {
+                    "id": 22,
+                    "name": "backend.log",
+                    "description": ""
+                },
+                {
+                    "id": 23,
+                    "name": "backend.marketplace",
                     "description": ""
                 },
                 {
                     "id": 29,
-                    "name": "backend.schema",
+                    "name": "backend.operation",
+                    "description": ""
+                },
+                {
+                    "id": 25,
+                    "name": "backend.page",
+                    "description": ""
+                },
+                {
+                    "id": 26,
+                    "name": "backend.plan",
+                    "description": ""
+                },
+                {
+                    "id": 27,
+                    "name": "backend.rate",
+                    "description": ""
+                },
+                {
+                    "id": 28,
+                    "name": "backend.role",
                     "description": ""
                 },
                 {
                     "id": 30,
-                    "name": "backend.scope",
+                    "name": "backend.schema",
                     "description": ""
                 },
                 {
                     "id": 31,
-                    "name": "backend.sdk",
+                    "name": "backend.scope",
                     "description": ""
                 },
                 {
                     "id": 32,
-                    "name": "backend.statistic",
-                    "description": ""
-                },
-                {
-                    "id": 36,
-                    "name": "backend.taxonomy",
+                    "name": "backend.sdk",
                     "description": ""
                 },
                 {
                     "id": 33,
-                    "name": "backend.tenant",
-                    "description": ""
-                },
-                {
-                    "id": 34,
-                    "name": "backend.test",
-                    "description": ""
-                },
-                {
-                    "id": 35,
-                    "name": "backend.token",
+                    "name": "backend.statistic",
                     "description": ""
                 },
                 {
                     "id": 37,
-                    "name": "backend.transaction",
+                    "name": "backend.taxonomy",
+                    "description": ""
+                },
+                {
+                    "id": 34,
+                    "name": "backend.tenant",
+                    "description": ""
+                },
+                {
+                    "id": 35,
+                    "name": "backend.test",
+                    "description": ""
+                },
+                {
+                    "id": 36,
+                    "name": "backend.token",
                     "description": ""
                 },
                 {
                     "id": 38,
-                    "name": "backend.trash",
+                    "name": "backend.transaction",
                     "description": ""
                 },
                 {
                     "id": 39,
-                    "name": "backend.trigger",
+                    "name": "backend.trash",
                     "description": ""
                 },
                 {
                     "id": 40,
-                    "name": "backend.user",
+                    "name": "backend.trigger",
                     "description": ""
                 },
                 {
                     "id": 41,
+                    "name": "backend.user",
+                    "description": ""
+                },
+                {
+                    "id": 42,
                     "name": "backend.webhook",
                     "description": ""
                 }
@@ -259,72 +264,72 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 54,
+                    "id": 55,
                     "name": "consumer.account",
                     "description": ""
                 },
                 {
-                    "id": 42,
+                    "id": 43,
                     "name": "consumer.app",
                     "description": ""
                 },
                 {
-                    "id": 43,
+                    "id": 44,
                     "name": "consumer.event",
                     "description": ""
                 },
                 {
-                    "id": 47,
+                    "id": 48,
                     "name": "consumer.form",
                     "description": ""
                 },
                 {
-                    "id": 44,
+                    "id": 45,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 55,
+                    "id": 56,
                     "name": "consumer.identity",
                     "description": ""
                 },
                 {
-                    "id": 45,
+                    "id": 46,
                     "name": "consumer.log",
                     "description": ""
                 },
                 {
-                    "id": 46,
+                    "id": 47,
                     "name": "consumer.page",
                     "description": ""
                 },
                 {
-                    "id": 48,
+                    "id": 49,
                     "name": "consumer.payment",
                     "description": ""
                 },
                 {
-                    "id": 49,
+                    "id": 50,
                     "name": "consumer.plan",
                     "description": ""
                 },
                 {
-                    "id": 50,
+                    "id": 51,
                     "name": "consumer.scope",
                     "description": ""
                 },
                 {
-                    "id": 51,
+                    "id": 52,
                     "name": "consumer.token",
                     "description": ""
                 },
                 {
-                    "id": 53,
+                    "id": 54,
                     "name": "consumer.transaction",
                     "description": ""
                 },
                 {
-                    "id": 52,
+                    "id": 53,
                     "name": "consumer.webhook",
                     "description": ""
                 }
@@ -335,7 +340,7 @@ class CategoriesTest extends DbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 58,
+                    "id": 59,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -345,12 +350,12 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 57,
+                    "id": 58,
                     "name": "foo",
                     "description": "Foo access"
                 },
                 {
-                    "id": 59,
+                    "id": 60,
                     "name": "plan_scope",
                     "description": "Plan scope access"
                 }
@@ -361,7 +366,7 @@ class CategoriesTest extends DbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 56,
+                    "id": 57,
                     "name": "system",
                     "description": ""
                 }

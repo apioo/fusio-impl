@@ -51,6 +51,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Ai.Connection.Agent"
         },
         {
+            "name": "Agent-Connection",
+            "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
+        },
+        {
             "name": "Beanstalk",
             "class": "Fusio.Adapter.Beanstalk.Connection.Beanstalk"
         },

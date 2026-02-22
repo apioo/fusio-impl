@@ -18,45 +18,44 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection\Agent;
+namespace Fusio\Impl\Backend\Action\Agent;
 
-use Fusio\Engine\Connector;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\System\FrameworkConfig;
+use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
-use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * Reset
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Reset extends AgentAbstract
+readonly class Get implements ActionInterface
 {
-    public function __construct(private Table\Agent $agentTable, Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private View\Agent $view)
     {
-        parent::__construct($connector, $frameworkConfig);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $this->assertConnectionEnabled();
+        $agent = $this->view->getEntity(
+            $request->get('agent_id'),
+            $context
+        );
 
-        $connectionId = (int) $request->get('connection_id');
-        if (empty($connectionId)) {
-            throw new BadRequestException('Provided no connection');
+        if (empty($agent)) {
+            throw new StatusCode\NotFoundException('Could not find agent');
         }
 
-        $this->agentTable->reset($context->getUser()->getId(), $connectionId);
+        if ($agent['status'] == Table\Agent::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Agent was deleted');
+        }
 
-        return new HttpResponse(200, [], [
-            'success' => true,
-            'message' => 'Chat successfully reset',
-        ]);
+        return $agent;
     }
 }

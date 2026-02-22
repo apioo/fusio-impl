@@ -260,6 +260,12 @@
   "connection": [
     {
       "status": 1,
+      "name": "Agent",
+      "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection",
+      "config": {}
+    },
+    {
+      "status": 1,
       "name": "StarwarsSDK",
       "class": "Fusio.Adapter.SdkFabric.Connection.Starwars",
       "config": {}
@@ -383,7 +389,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 265,
+          "operationId": 271,
           "authenticated": true
         }
       ]
@@ -400,7 +406,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 264
+          "operationId": 270
         }
       ]
     },
@@ -566,6 +572,7 @@
         "backend",
         "backend.account",
         "backend.action",
+        "backend.agent",
         "backend.app",
         "backend.audit",
         "backend.backup",
@@ -627,6 +634,7 @@
         "backend",
         "backend.account",
         "backend.action",
+        "backend.agent",
         "backend.app",
         "backend.audit",
         "backend.backup",

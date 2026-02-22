@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Authorize;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
 
 /**
  * AuthorizeTest
@@ -31,6 +32,17 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class AuthorizeTest extends DbTestCase
 {
+    private ?int $scopeFooId = null;
+    private ?int $scopeBarId = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->scopeFooId = Fixture::getReference('fusio_scope', 'foo')->resolve($this->connection);
+        $this->scopeBarId = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('/consumer/authorize?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', array(
@@ -40,19 +52,19 @@ class AuthorizeTest extends DbTestCase
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "id": 3,
     "name": "Foo-App",
     "url": "http:\/\/google.com",
     "scopes": [
         {
-            "id": 57,
+            "id": {$this->scopeFooId},
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 58,
+            "id": {$this->scopeBarId},
             "name": "bar",
             "description": "Bar access"
         }

@@ -18,27 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\Agent;
+namespace Fusio\Impl\Backend\Action\Agent\Message;
+
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View;
 
 /**
- * Intent
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-enum Intent: string
+readonly class GetAll implements ActionInterface
 {
-    case ACTION = 'action';
-    case SCHEMA = 'schema';
-    case ARCHITECT = 'architect';
-
-    public function getInt(): int
+    public function __construct(private View\Agent\Message $view)
     {
-        return match ($this) {
-            self::ACTION => 1,
-            self::SCHEMA => 2,
-            self::ARCHITECT => 3,
-        };
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    {
+        return $this->view->getCollection(
+            (int) $request->get('agent_id'),
+            (int) $request->get('parent'),
+            $context
+        );
     }
 }

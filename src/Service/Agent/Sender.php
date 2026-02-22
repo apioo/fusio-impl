@@ -20,28 +20,26 @@
 
 namespace Fusio\Impl\Service\Agent;
 
+use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\AgentContent;
+use Fusio\Model\Backend\AgentContentObject;
+use Fusio\Model\Backend\AgentContentText;
 use Fusio\Model\Backend\AgentMessage;
-use Fusio\Model\Backend\AgentMessageBinary;
-use Fusio\Model\Backend\AgentMessageObject;
-use Fusio\Model\Backend\AgentMessageText;
-use Fusio\Model\Backend\AgentMessageToolCall;
-use Fusio\Model\Backend\AgentRequest;
-use Fusio\Model\Backend\AgentResponse;
-use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\InternalServerErrorException;
+use PSX\Http\Exception\NotFoundException;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
+use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\ObjectMapper;
 use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\AgentInterface;
-use Symfony\AI\Platform\Message\Content\File;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
-use Symfony\AI\Platform\Result\ToolCall;
 use Throwable;
 
 /**
@@ -56,36 +54,42 @@ readonly class Sender
     /**
      * Max number of messages which are attached to the context
      */
-    public const CONTEXT_MESSAGES_LENGTH = 32;
+    public const CONTEXT_MESSAGES_LENGTH = 16;
 
     private ObjectMapper $objectMapper;
 
     public function __construct(
-        private IntentFactory $intentFactory,
-        private Serializer\MessageSerializer $messageSerializer,
         private Table\Agent $agentTable,
-        SchemaManager $schemaManager,
+        private Table\Agent\Message $messageTable,
+        private Serializer\MessageSerializer $messageSerializer,
+        private Serializer\ResultSerializer $resultSerializer,
+        private Serializer\JsonResultSerializer $jsonResultSerializer,
+        private Unserializer\MessageUnserializer $messageUnserializer,
+        private ConnectorInterface $connector,
+        private SchemaManager $schemaManager,
     ) {
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(AgentInterface $agent, int $userId, int $connectionId, AgentRequest $request): AgentResponse
+    public function send(int $agentId, AgentContent $content, ContextInterface $context): AgentMessage
     {
+        $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
+        if (!$row instanceof Table\Generated\AgentRow) {
+            throw new NotFoundException('Could not find provided agent');
+        }
+
+        $agent = $this->connector->getConnection($row->getConnectionId());
+        if (!$agent instanceof AgentInterface) {
+            throw new InternalServerErrorException('Could not resolve agent connection');
+        }
+
         $this->agentTable->beginTransaction();
 
         try {
             $messages = new MessageBag();
-            $messages->add(Message::forSystem($this->getIntroduction()));
+            $messages->add(Message::forSystem($row->getIntroduction()));
 
-            $intent = Intent::tryFrom($request->getIntent() ?? '');
-            $intentProvider = $this->intentFactory->factory($intent);
-
-            $intentMessage = $intentProvider->getMessage();
-            if (!empty($intentMessage)) {
-                $messages->add(Message::forSystem($intentMessage));
-            }
-
-            $responseSchema = $intentProvider->getResponseSchema();
+            $responseSchema = $this->getResponseSchema($row);
             if ($responseSchema !== null) {
                 $schema = 'The output must be a valid JSON string and it must be possible to decode the output with a JSON parser.' . "\n";
                 $schema.= 'The generated JSON must follow the JSON schema:' . "\n";
@@ -96,16 +100,16 @@ readonly class Sender
                 $messages->add(Message::forSystem($schema));
             }
 
-            $messages = $this->loadPreviousMessages($userId, $connectionId, $intent, $messages);
+            $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $messages);
 
-            $userMessages = $this->buildUserInput($request->getInput());
+            $userMessages = $this->messageUnserializer->unserialize($content);
 
-            $this->persistUserMessages($userId, $connectionId, $intent, $userMessages);
+            $this->persistUserMessages($agentId, $context->getUser()->getId(), $userMessages);
 
             $messages = $messages->merge($userMessages);
 
             $options = [
-                'tools' => $intentProvider->getTools(),
+                'tools' => $this->getTools($row),
                 'temperature' => 0.2,
             ];
 
@@ -113,7 +117,7 @@ readonly class Sender
                 $options['response_format'] = [
                     'type' => 'json_schema',
                     'json_schema' => [
-                        'name' => str_replace('\\', '-', $intentProvider::class),
+                        'name' => $row->getName(),
                         'strict' => true,
                         'schema' => $responseSchema,
                     ],
@@ -122,15 +126,25 @@ readonly class Sender
 
             $result = $agent->call($messages, $options);
 
-            $output = $intentProvider->transformResult($result);
+            if ($responseSchema !== null) {
+                $output = $this->jsonResultSerializer->serialize($result);
+            } else {
+                $output = $this->resultSerializer->serialize($result);
+            }
 
-            $this->agentTable->addAssistantMessage($userId, $connectionId, $intent, $output);
+            $messageRow = $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $output);
 
             $this->agentTable->commit();
 
-            $response = new AgentResponse();
-            $response->setOutput($output);
-            return $response;
+            $message = new AgentMessage();
+            $message->setId($messageRow->getId());
+            $message->setRole(match ($messageRow->getOrigin()) {
+                Table\Agent\Message::ORIGIN_ASSISTANT => 'assistant',
+                Table\Agent\Message::ORIGIN_SYSTEM => 'system',
+                default => 'user',
+            });
+            $message->setContent($output);
+            return $message;
         } catch (Throwable $e) {
             $this->agentTable->rollBack();
 
@@ -142,48 +156,31 @@ readonly class Sender
         }
     }
 
-    private function getIntroduction(): string
-    {
-        $introduction = 'You are a helpful assistant in the context of Fusio an open source API management platform.' . "\n";
-        $introduction.= 'You help the user to configure or get information about the Fusio instance.' . "\n";
-        $introduction.= 'Fusio is based on the following entities which the user can use to build powerful REST APIs:' . "\n";
-        $introduction.= 'Operation: An Operation defines an API endpoint, it ties together an HTTP method and a path with an underlying action.' . "\n";
-        $introduction.= 'Action: An Action implements the actual business logic behind an endpoint.' . "\n";
-        $introduction.= 'Schema: A Schema defines the structure of a JSON payload.' . "\n";
-        $introduction.= 'Connection: A Connection defines how to reach an external service.' . "\n";
-        $introduction.= 'Event: An Event is a named occurrence emitted by an action when something significant happens.' . "\n";
-        $introduction.= 'Cronjob: A Cronjob schedules an action to run at regular intervals.' . "\n";
-        $introduction.= 'Trigger: A Trigger listens for a specific Event and executes an action.' . "\n";
-
-        return $introduction;
-    }
-
-    private function loadPreviousMessages(int $userId, int $connectionId, ?Intent $intent, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $agentId, int $userId, MessageBag $messages): MessageBag
     {
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AgentColumn::USER_ID, $userId);
-        $condition->equals(Table\Generated\AgentColumn::CONNECTION_ID, $connectionId);
-        $condition->equals(Table\Generated\AgentColumn::INTENT, $intent?->getInt() ?? 0);
+        $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
+        $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $userId);
 
-        $count = $this->agentTable->getCount($condition);
+        $count = $this->messageTable->getCount($condition);
         $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
 
-        $result = $this->agentTable->findBy($condition, $startIndex, $count, Table\Generated\AgentColumn::ID, OrderBy::ASC);
-        foreach ($result as $chat) {
-            $message = $this->objectMapper->readJson($chat->getMessage(), SchemaSource::fromClass(AgentMessage::class));
+        $result = $this->messageTable->findBy($condition, $startIndex, $count, Table\Generated\AgentMessageColumn::ID, OrderBy::ASC);
+        foreach ($result as $row) {
+            $message = $this->objectMapper->readJson($row->getContent(), SchemaSource::fromClass(AgentContent::class));
 
-            if ($chat->getOrigin() === Table\Agent::ORIGIN_USER) {
-                $messages = $messages->merge($this->buildUserInput($message));
-            } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_ASSISTANT) {
-                if ($message instanceof AgentMessageText) {
+            if ($row->getOrigin() === Table\Agent\Message::ORIGIN_USER) {
+                $messages = $messages->merge($this->messageUnserializer->unserialize($message));
+            } elseif ($row->getOrigin() === Table\Agent\Message::ORIGIN_ASSISTANT) {
+                if ($message instanceof AgentContentText) {
                     $messages->add(Message::ofAssistant($message->getContent()));
-                } elseif ($message instanceof AgentMessageObject) {
+                } elseif ($message instanceof AgentContentObject) {
                     $messages->add(Message::ofAssistant(Parser::encode($message->getPayload())));
                 }
-            } elseif ($chat->getOrigin() === Table\Agent::ORIGIN_SYSTEM) {
-                if ($message instanceof AgentMessageText) {
+            } elseif ($row->getOrigin() === Table\Agent\Message::ORIGIN_SYSTEM) {
+                if ($message instanceof AgentContentText) {
                     $messages->add(Message::forSystem($message->getContent()));
-                } elseif ($message instanceof AgentMessageObject) {
+                } elseif ($message instanceof AgentContentObject) {
                     $messages->add(Message::forSystem(Parser::encode($message->getPayload())));
                 }
             }
@@ -192,35 +189,44 @@ readonly class Sender
         return $messages;
     }
 
-    private function buildUserInput(AgentMessage $input): MessageBag
-    {
-        $messages = new MessageBag();
-        if ($input instanceof AgentMessageText) {
-            $messages->add(Message::ofUser($input->getContent()));
-        } elseif ($input instanceof AgentMessageObject) {
-            $messages->add(Message::ofUser(Parser::encode($input->getPayload())));
-        } elseif ($input instanceof AgentMessageBinary) {
-            $messages->add(Message::ofUser(new File($input->getData(), $input->getMime())));
-        } elseif ($input instanceof AgentMessageToolCall) {
-            $functions = $input->getFunctions();
-            foreach ($functions as $function) {
-                $toolCall = new ToolCall($function->getId(), $function->getName(), Parser::decode($function->getArguments()));
-
-                $messages->add(Message::ofToolCall($toolCall, ''));
-            }
-        } else {
-            throw new BadRequestException('Provided a not supported input type');
-        }
-
-        return $messages;
-    }
-
-    private function persistUserMessages(int $userId, int $connectionId, ?Intent $intent, MessageBag $userMessages): void
+    private function persistUserMessages(int $agentId, int $userId, MessageBag $userMessages): void
     {
         foreach ($userMessages as $userMessage) {
-            foreach ($this->messageSerializer->serialize($userMessage) as $item) {
-                $this->agentTable->addUserMessage($userId, $connectionId, $intent, $item);
+            foreach ($this->messageSerializer->serialize($userMessage) as $content) {
+                $this->messageTable->addUserMessage($agentId, $userId, $content);
             }
         }
+    }
+
+    private function getResponseSchema(Table\Generated\AgentRow $row): ?array
+    {
+        $outgoing = $row->getOutgoing();
+        if (empty($outgoing)) {
+            return null;
+        }
+
+        $schema = $this->schemaManager->getSchema($outgoing);
+
+        $jsonSchema = (new JsonSchema(inlineDefinitions: true))->toArray($schema->getDefinitions(), $schema->getRoot());
+        if (count($jsonSchema) === 0) {
+            return null;
+        }
+
+        return $jsonSchema;
+    }
+
+    private function getTools(Table\Generated\AgentRow $row): array
+    {
+        $rawTools = $row->getTools();
+        if (empty($rawTools)) {
+            return [];
+        }
+
+        $tools = Parser::decode($rawTools);
+        if (!is_array($tools)) {
+            return [];
+        }
+
+        return $tools;
     }
 }

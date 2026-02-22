@@ -69,6 +69,10 @@ class SqlDatabaseTest extends ProviderTestCase
             "help": "The SQL connection which should be used",
             "options": [
                 {
+                    "key": "8",
+                    "value": "Agent"
+                },
+                {
                     "key": "6",
                     "value": "FusioHttpClient"
                 },
