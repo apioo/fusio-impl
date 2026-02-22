@@ -6,6 +6,7 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Table;
 
 /**
@@ -78,5 +79,10 @@ final class Version20260218181413 extends AbstractMigration
     public function isTransactional(): bool
     {
         return false;
+    }
+
+    public function postUp(Schema $schema): void
+    {
+        DataSyncronizer::sync($this->connection);
     }
 }
