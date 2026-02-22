@@ -260,6 +260,12 @@
   "connection": [
     {
       "status": 1,
+      "name": "Agent",
+      "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection",
+      "config": {}
+    },
+    {
+      "status": 1,
       "name": "StarwarsSDK",
       "class": "Fusio.Adapter.SdkFabric.Connection.Starwars",
       "config": {}
