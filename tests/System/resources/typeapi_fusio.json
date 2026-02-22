@@ -792,7 +792,7 @@
             "type": "string"
           }
         },
-        "parent_id": {
+        "parent": {
           "in": "query",
           "schema": {
             "type": "integer"
@@ -825,7 +825,7 @@
         "code": 201,
         "schema": {
           "type": "reference",
-          "target": "Common_Message"
+          "target": "Backend_AgentMessage"
         }
       },
       "arguments": {
@@ -839,7 +839,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentMessage"
+            "target": "Backend_AgentContent"
           }
         }
       },
@@ -1936,7 +1936,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Backend_AgentMessage"
+          "target": "Backend_AgentContent"
         }
       },
       "arguments": {
@@ -1950,7 +1950,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentMessage"
+            "target": "Backend_AgentContent"
           }
         }
       },
