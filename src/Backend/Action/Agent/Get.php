@@ -35,7 +35,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+readonly class Get implements ActionInterface
 {
     public function __construct(private View\Agent $view)
     {

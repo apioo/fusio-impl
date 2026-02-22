@@ -38,7 +38,7 @@ class EntityTest extends DbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getReference('fusio_category', 'backend')->resolve($this->connection);
+        $this->id = Fixture::getReference('fusio_agent', 'agent-test')->resolve($this->connection);
     }
 
     public function testGet()
@@ -51,9 +51,18 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 2,
+    "id": {$this->id},
     "status": 1,
-    "name": "backend"
+    "type": 0,
+    "name": "agent-test",
+    "description": "An agent test",
+    "introduction": "A test agent which always return \"Hello World\"",
+    "tools": [
+        "test_listFoo"
+    ],
+    "outgoing": "schema:\/\/Entry-Schema",
+    "action": "action:\/\/Inspect-Action",
+    "insertDate": "2026-02-22T13:06:00Z"
 }
 JSON;
 
@@ -73,7 +82,7 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Could not find category', $data->message);
+        $this->assertStringStartsWith('Could not find agent', $data->message);
     }
 
     public function testPost()
@@ -97,14 +106,16 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name' => 'foo',
+            'description' => 'foo',
+            'introduction' => 'foo',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successfully updated",
-    "id": "2"
+    "message": "Agent successfully updated",
+    "id": "1"
 }
 JSON;
 
@@ -113,15 +124,18 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name')
-            ->from('fusio_category')
+            ->select('status', 'type', 'name', 'description', 'introduction')
+            ->from('fusio_agent')
             ->where('id = :id')
             ->getSQL();
 
         $row = $this->connection->fetchAssociative($sql, ['id' => $this->id]);
 
         $this->assertEquals(1, $row['status']);
+        $this->assertEquals(0, $row['type']);
         $this->assertEquals('foo', $row['name']);
+        $this->assertEquals('foo', $row['description']);
+        $this->assertEquals('foo', $row['introduction']);
     }
 
     public function testDelete()
@@ -135,8 +149,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successfully deleted",
-    "id": "2"
+    "message": "Agent successfully deleted",
+    "id": "1"
 }
 JSON;
 
@@ -146,7 +160,7 @@ JSON;
         // check database
         $sql = $this->connection->createQueryBuilder()
             ->select('id', 'status')
-            ->from('fusio_category')
+            ->from('fusio_agent')
             ->where('id = :id')
             ->getSQL();
 

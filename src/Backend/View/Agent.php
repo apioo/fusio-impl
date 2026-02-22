@@ -73,7 +73,7 @@ class Agent extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Agent::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+        $definition = $builder->doEntity([$this->getTable(Table\Agent::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
             'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),

@@ -90,29 +90,29 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->introduction ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "introduction" was provided');
     }
-    public function setTools(string $tools): void
+    public function setTools(?string $tools): void
     {
         $this->tools = $tools;
     }
-    public function getTools(): string
+    public function getTools(): ?string
     {
-        return $this->tools ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "tools" was provided');
+        return $this->tools;
     }
-    public function setOutgoing(string $outgoing): void
+    public function setOutgoing(?string $outgoing): void
     {
         $this->outgoing = $outgoing;
     }
-    public function getOutgoing(): string
+    public function getOutgoing(): ?string
     {
-        return $this->outgoing ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "outgoing" was provided');
+        return $this->outgoing;
     }
-    public function setAction(string $action): void
+    public function setAction(?string $action): void
     {
         $this->action = $action;
     }
-    public function getAction(): string
+    public function getAction(): ?string
     {
-        return $this->action ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "action" was provided');
+        return $this->action;
     }
     public function setMetadata(?string $metadata): void
     {

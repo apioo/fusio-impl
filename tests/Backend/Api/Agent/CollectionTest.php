@@ -138,15 +138,15 @@ JSON;
             'type' => Table\Agent::TYPE_GENERAL,
             'name' => 'my-agent',
             'description' => 'A short agent description',
-            'introduction' => 'Your an helpful agent which returns current only useful information',
+            'introduction' => 'Your an helpful agent which returns only useful information',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successfully created",
-    "id": "6"
+    "message": "Agent successfully created",
+    "id": "2"
 }
 JSON;
 
@@ -155,8 +155,8 @@ JSON;
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'status', 'name')
-            ->from('fusio_category')
+            ->select('status', 'type', 'name', 'description', 'introduction')
+            ->from('fusio_agent')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -165,7 +165,10 @@ JSON;
         $row = $this->connection->fetchAssociative($sql);
 
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('developer', $row['name']);
+        $this->assertEquals(0, $row['type']);
+        $this->assertEquals('my-agent', $row['name']);
+        $this->assertEquals('A short agent description', $row['description']);
+        $this->assertEquals('Your an helpful agent which returns only useful information', $row['introduction']);
     }
 
     public function testPut()

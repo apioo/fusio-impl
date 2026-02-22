@@ -28,7 +28,7 @@ class AgentTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_TOOLS => 0xb00000, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_TOOLS => 0x40b00000, self::COLUMN_OUTGOING => 0x40a000ff, self::COLUMN_ACTION => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>

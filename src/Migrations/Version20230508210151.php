@@ -64,9 +64,9 @@ final class Version20230508210151 extends AbstractMigration
             $agentTable->addColumn('name', 'string');
             $agentTable->addColumn('description', 'string');
             $agentTable->addColumn('introduction', 'text');
-            $agentTable->addColumn('tools', 'text');
-            $agentTable->addColumn('outgoing', 'string', ['length' => 255]);
-            $agentTable->addColumn('action', 'string', ['length' => 255]);
+            $agentTable->addColumn('tools', 'text', ['notnull' => false, 'default' => null]);
+            $agentTable->addColumn('outgoing', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $agentTable->addColumn('action', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $agentTable->addColumn('metadata', 'text', ['notnull' => false]);
             $agentTable->addColumn('insert_date', 'datetime');
             $agentTable->setPrimaryKey(['id']);
