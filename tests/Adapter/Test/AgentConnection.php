@@ -18,33 +18,34 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Agent\Message;
+namespace Fusio\Impl\Tests\Adapter\Test;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
+use Symfony\AI\Agent\MockAgent;
+use Symfony\AI\Agent\MockResponse;
 
 /**
- * GetAll
+ * AgentConnection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAll implements ActionInterface
+class AgentConnection extends ConnectionAbstract
 {
-    public function __construct(private View\Agent\Message $view)
+    public function getName(): string
     {
+        return 'Agent-Connection';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function getConnection(ParametersInterface $config): mixed
     {
-        return $this->view->getCollection(
-            (int) $request->get('agent_id'),
-            (int) $request->get('parent'),
-            $context
-        );
+        $response = new MockResponse('The answer ist: 42');
+
+        $agent = new MockAgent();
+        $agent->addResponse('What is the meaning of life?', $response);
+
+        return $agent;
     }
 }

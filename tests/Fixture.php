@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Tests;
 
-use Fusio\Adapter\Ai\Connection\Agent;
 use Fusio\Adapter\File\Connection\Filesystem;
 use Fusio\Adapter\Http\Connection\Http;
 use Fusio\Adapter\SdkFabric\Connection\Starwars;
@@ -41,6 +40,7 @@ use Fusio\Impl\Provider\Identity\Google;
 use Fusio\Impl\Provider\Identity\OpenIDConnect;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Adapter\Test\AgentConnection;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\MimeAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
@@ -133,7 +133,7 @@ class Fixture
         $data->addConnection('LocalFilesystem', Filesystem::class, Service\Connection\Encrypter::encrypt(['config' => './tests/resources'], $secretKey));
         $data->addConnection('FusioHttpClient', Http::class, Service\Connection\Encrypter::encrypt(['url' => 'https://api.fusio-project.org/'], $secretKey));
         $data->addConnection('StarwarsSDK', Starwars::class, Service\Connection\Encrypter::encrypt([], $secretKey));
-        $data->addConnection('Agent', Agent::class, Service\Connection\Encrypter::encrypt(['type' => 'ollama', 'model' => 'gpt-oss:20b-cloud', 'url' => 'http://localhost:11434'], $secretKey));
+        $data->addConnection('Agent', AgentConnection::class, Service\Connection\Encrypter::encrypt([], $secretKey));
         $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar']);
         $data->addCronjob('default', 'Second-Cron', '* * * * *', 'Sql-Select-All', ['foo' => 'bar'], taxonomy: 'feature_a');
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
@@ -143,8 +143,8 @@ class Fixture
         $data->addFirewall('my_v6_rule', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344', ['foo' => 'bar']);
         $data->addForm('my_form', 'test.createFoo', ['foo' => 'bar'], ['foo' => 'bar']);
         $data->addAgent('default', 'Agent', Table\Agent::TYPE_GENERAL, 'agent-test', 'An agent test', 'A test agent which always return "Hello World"', ['test_listFoo'], 'schema://Entry-Schema', 'action://Inspect-Action', date: '2026-02-22 13:06:00');
-        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_USER, 'This is a test message');
-        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_ASSISTANT, 'And an agent response', 1);
+        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_USER, 'This is a test message', date: '2026-02-22 19:17:00');
+        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_ASSISTANT, 'And an agent response', 1, date: '2026-02-22 19:17:00');
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');
         $data->addWebhookResponse(1);

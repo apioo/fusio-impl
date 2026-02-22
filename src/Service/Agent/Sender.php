@@ -26,6 +26,7 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\AgentContent;
 use Fusio\Model\Backend\AgentContentObject;
 use Fusio\Model\Backend\AgentContentText;
+use Fusio\Model\Backend\AgentMessage;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
 use PSX\Http\Exception\StatusCodeException;
@@ -36,7 +37,7 @@ use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
-use Symfony\AI\Agent\Agent;
+use Symfony\AI\Agent\AgentInterface;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 use Throwable;
@@ -70,7 +71,7 @@ readonly class Sender
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(int $agentId, AgentContent $content, ContextInterface $context): int
+    public function send(int $agentId, AgentContent $content, ContextInterface $context): AgentMessage
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
@@ -78,7 +79,7 @@ readonly class Sender
         }
 
         $agent = $this->connector->getConnection($row->getConnectionId());
-        if (!$agent instanceof Agent) {
+        if (!$agent instanceof AgentInterface) {
             throw new InternalServerErrorException('Could not resolve agent connection');
         }
 
@@ -135,7 +136,15 @@ readonly class Sender
 
             $this->agentTable->commit();
 
-            return $messageRow->getId();
+            $message = new AgentMessage();
+            $message->setId($messageRow->getId());
+            $message->setRole(match ($messageRow->getOrigin()) {
+                Table\Agent\Message::ORIGIN_ASSISTANT => 'assistant',
+                Table\Agent\Message::ORIGIN_SYSTEM => 'system',
+                default => 'user',
+            });
+            $message->setContent($output);
+            return $message;
         } catch (Throwable $e) {
             $this->agentTable->rollBack();
 

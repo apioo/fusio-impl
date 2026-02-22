@@ -258,7 +258,7 @@ class DataBag
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'parent_id' => $parentId !== null ? $parentId : null,
             'origin' => $origin,
-            'content' => $content,
+            'content' => Parser::encode(['type' => 'text', 'content' => $content]),
             'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }

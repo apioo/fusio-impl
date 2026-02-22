@@ -47,16 +47,12 @@ readonly class Submit implements ActionInterface
 
         assert($body instanceof AgentContent);
 
-        $messageId = $this->sender->send(
+        $message = $this->sender->send(
             $request->get('agent_id'),
             $body,
             $context,
         );
 
-        return new HttpResponse(201, [], [
-            'success' => true,
-            'message' => 'Agent message successfully submitted',
-            'id' => '' . $messageId,
-        ]);
+        return new HttpResponse(201, [], $message);
     }
 }

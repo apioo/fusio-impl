@@ -1,6 +1,7 @@
 <?php
 
 use Fusio\Engine\Adapter\ServiceBuilder;
+use Fusio\Impl\Tests\Adapter\Test\AgentConnection;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\MimeAction;
 use Fusio\Impl\Tests\Adapter\Test\Paypal;
@@ -12,6 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $container) {
     $services = ServiceBuilder::build($container);
+    $services->set(AgentConnection::class);
     $services->set(InspectAction::class);
     $services->set(MimeAction::class);
     $services->set(Paypal::class);
