@@ -3494,6 +3494,12 @@
           "schema": {
             "type": "string"
           }
+        },
+        "taxonomy": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -10961,12 +10967,6 @@
           "in": "query",
           "schema": {
             "type": "string"
-          }
-        },
-        "taxonomy": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
           }
         }
       },
