@@ -97,6 +97,17 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = $this->connection->createQueryBuilder()
+            ->select('status')
+            ->from('fusio_app')
+            ->where('id = 4')
+            ->getSQL();
+
+        $row = $this->connection->fetchAssociative($sql);
+
+        $this->assertEquals(1, $row['status']);
     }
 
     public function testPut()

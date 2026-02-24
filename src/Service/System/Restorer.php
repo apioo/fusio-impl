@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\System;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 
 /**
  * Restorer
@@ -34,16 +35,15 @@ use PSX\Http\Exception as StatusCode;
 class Restorer
 {
     private const TABLE_NAME = 0;
-    private const NAME_COLUMN = 1;
-    private const STATUS_COLUMN = 2;
-    private const ACTIVE_STATUS = 3;
+    private const TENANT_ID_COLUMN = 1;
+    private const NAME_COLUMN = 2;
+    private const STATUS_COLUMN = 3;
+    private const ACTIVE_STATUS = 4;
 
-    private Connection $connection;
     private array $config;
 
-    public function __construct(Connection $connection)
+    public function __construct(private readonly Connection $connection, private readonly FrameworkConfig $frameworkConfig)
     {
-        $this->connection = $connection;
         $this->config = $this->buildConfig();
     }
 
@@ -68,23 +68,12 @@ class Restorer
 
         $config = $this->config[$type];
 
-        $query = 'SELECT COUNT(*) AS cnt
-                    FROM ' . $config[self::TABLE_NAME] . '
-                   WHERE ' . $config[self::STATUS_COLUMN] . ' != :status';
-        $totalResults = (int) $this->connection->fetchOne($query, ['status' => $config[self::ACTIVE_STATUS]]);
+        $condition = Condition::withAnd();
+        $condition->equals($config[self::TENANT_ID_COLUMN], $this->frameworkConfig->getTenantId());
+        $condition->notEquals($config[self::STATUS_COLUMN], $config[self::ACTIVE_STATUS]);
 
-        $columns = [
-            'id',
-            $config[self::STATUS_COLUMN] . ' AS status',
-            $config[self::NAME_COLUMN] . ' AS name',
-        ];
-
-        $query = 'SELECT ' . implode(', ', $columns) . '
-                    FROM ' . $config[self::TABLE_NAME] . '
-                   WHERE ' . $config[self::STATUS_COLUMN] . ' != :status
-                ORDER BY id DESC';
-        $query = $this->connection->getDatabasePlatform()->modifyLimitQuery($query, $count, $startIndex);
-        $result = $this->connection->fetchAllAssociative($query, ['status' => $config[self::ACTIVE_STATUS]]);
+        $totalResults = $this->getTotalResults($config, $condition);
+        $result = $this->getEntries($config, $condition, $startIndex, $count);
 
         $entries = [];
         foreach ($result as $row) {
@@ -118,13 +107,14 @@ class Restorer
         return $this->restoreRecord(
             $id,
             $config[self::TABLE_NAME],
+            $config[self::TENANT_ID_COLUMN],
             $config[self::NAME_COLUMN],
             $config[self::STATUS_COLUMN],
             $config[self::ACTIVE_STATUS]
         );
     }
 
-    private function restoreRecord(string $id, string $table, string $nameColumn, string $statusColumn, int $status): int
+    private function restoreRecord(string $id, string $table, string $tenantIdColumn, string $nameColumn, string $statusColumn, int $status): int
     {
         if (is_numeric($id)) {
             $id = (int) $id;
@@ -134,87 +124,126 @@ class Restorer
         return (int) $this->connection->update($table, [
             $statusColumn => $status,
         ], [
-            $nameColumn => $id
+            $tenantIdColumn => $this->frameworkConfig->getTenantId(),
+            $nameColumn => $id,
         ]);
     }
 
-    public function buildConfig(): array
+    private function getTotalResults(array $config, Condition $condition): int
+    {
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from($config[self::TABLE_NAME])
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->setParameters($condition->getValues());
+
+        return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
+    }
+
+    private function getEntries(array $config, Condition $condition, int $startIndex, int $count): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select(['id', $config[self::STATUS_COLUMN] . ' AS status', $config[self::NAME_COLUMN] . ' AS name'])
+            ->from($config[self::TABLE_NAME])
+            ->where($condition->getExpression($this->connection->getDatabasePlatform()))
+            ->orderBy('id', 'DESC')
+            ->setParameters($condition->getValues());
+
+        $query = $this->connection->getDatabasePlatform()->modifyLimitQuery($queryBuilder->getSQL(), $count, $startIndex);
+
+        return $this->connection->fetchAllAssociative($query, $queryBuilder->getParameters());
+    }
+
+    private function buildConfig(): array
     {
         return [
             'action' => [
                 Table\Generated\ActionTable::NAME,
+                Table\Generated\ActionTable::COLUMN_TENANT_ID,
                 Table\Generated\ActionTable::COLUMN_NAME,
                 Table\Generated\ActionTable::COLUMN_STATUS,
                 Table\Action::STATUS_ACTIVE,
             ],
             'app' => [
                 Table\Generated\AppTable::NAME,
+                Table\Generated\AppTable::COLUMN_TENANT_ID,
                 Table\Generated\AppTable::COLUMN_NAME,
                 Table\Generated\AppTable::COLUMN_STATUS,
                 Table\App::STATUS_ACTIVE,
             ],
             'connection' => [
                 Table\Generated\ConnectionTable::NAME,
+                Table\Generated\ConnectionTable::COLUMN_TENANT_ID,
                 Table\Generated\ConnectionTable::COLUMN_NAME,
                 Table\Generated\ConnectionTable::COLUMN_STATUS,
                 Table\Connection::STATUS_ACTIVE,
             ],
             'cronjob' => [
                 Table\Generated\CronjobTable::NAME,
+                Table\Generated\CronjobTable::COLUMN_TENANT_ID,
                 Table\Generated\CronjobTable::COLUMN_NAME,
                 Table\Generated\CronjobTable::COLUMN_STATUS,
                 Table\Cronjob::STATUS_ACTIVE,
             ],
             'event' => [
                 Table\Generated\EventTable::NAME,
+                Table\Generated\EventTable::COLUMN_TENANT_ID,
                 Table\Generated\EventTable::COLUMN_NAME,
                 Table\Generated\EventTable::COLUMN_STATUS,
                 Table\Event::STATUS_ACTIVE,
             ],
             'page' => [
                 Table\Generated\PageTable::NAME,
+                Table\Generated\PageTable::COLUMN_TENANT_ID,
                 Table\Generated\PageTable::COLUMN_TITLE,
                 Table\Generated\PageTable::COLUMN_STATUS,
                 Table\Page::STATUS_VISIBLE,
             ],
             'plan' => [
                 Table\Generated\PlanTable::NAME,
+                Table\Generated\PlanTable::COLUMN_TENANT_ID,
                 Table\Generated\PlanTable::COLUMN_NAME,
                 Table\Generated\PlanTable::COLUMN_STATUS,
                 Table\Plan::STATUS_ACTIVE,
             ],
             'rate' => [
                 Table\Generated\RateTable::NAME,
+                Table\Generated\RateTable::COLUMN_TENANT_ID,
                 Table\Generated\RateTable::COLUMN_NAME,
                 Table\Generated\RateTable::COLUMN_STATUS,
                 Table\Rate::STATUS_ACTIVE,
             ],
             'role' => [
                 Table\Generated\RoleTable::NAME,
+                Table\Generated\RoleTable::COLUMN_TENANT_ID,
                 Table\Generated\RoleTable::COLUMN_NAME,
                 Table\Generated\RoleTable::COLUMN_STATUS,
                 Table\Role::STATUS_ACTIVE,
             ],
             'operation' => [
                 Table\Generated\OperationTable::NAME,
+                Table\Generated\OperationTable::COLUMN_TENANT_ID,
                 Table\Generated\OperationTable::COLUMN_NAME,
                 Table\Generated\OperationTable::COLUMN_STATUS,
                 Table\Operation::STATUS_ACTIVE,
             ],
             'schema' => [
                 Table\Generated\SchemaTable::NAME,
+                Table\Generated\SchemaTable::COLUMN_TENANT_ID,
                 Table\Generated\SchemaTable::COLUMN_NAME,
                 Table\Generated\SchemaTable::COLUMN_STATUS,
                 Table\Schema::STATUS_ACTIVE,
             ],
             'scope' => [
                 Table\Generated\ScopeTable::NAME,
+                Table\Generated\ScopeTable::COLUMN_TENANT_ID,
                 Table\Generated\ScopeTable::COLUMN_NAME,
                 Table\Generated\ScopeTable::COLUMN_STATUS,
                 Table\Scope::STATUS_ACTIVE,
             ],
             'user' => [
                 Table\Generated\UserTable::NAME,
+                Table\Generated\UserTable::COLUMN_TENANT_ID,
                 Table\Generated\UserTable::COLUMN_NAME,
                 Table\Generated\UserTable::COLUMN_STATUS,
                 Table\User::STATUS_ACTIVE,
