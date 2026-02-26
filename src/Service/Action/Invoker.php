@@ -50,7 +50,7 @@ readonly class Invoker
         $costs = $operation->getCosts();
 
         if ($operation->getActive() === 0) {
-            throw new StatusCode\GoneException('This action is not longer available');
+            throw new StatusCode\GoneException('This action is no longer available');
         }
 
         $baseUrl = $this->frameworkConfig->getDispatchUrl();
