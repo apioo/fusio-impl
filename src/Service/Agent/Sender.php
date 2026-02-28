@@ -26,9 +26,10 @@ use Fusio\Impl\Table;
 use Fusio\Model\Backend\AgentContent;
 use Fusio\Model\Backend\AgentContentObject;
 use Fusio\Model\Backend\AgentContentText;
+use Fusio\Model\Backend\AgentInput;
 use Fusio\Model\Backend\AgentMessage;
-use PSX\Http\Exception\InternalServerErrorException;
-use PSX\Http\Exception\NotFoundException;
+use Fusio\Model\Backend\AgentOutput;
+use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
 use PSX\Schema\Generator\Config;
@@ -72,17 +73,19 @@ readonly class Sender
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(int $agentId, AgentContent $content, ContextInterface $context): AgentMessage
+    public function send(int $agentId, AgentInput $message, ContextInterface $context): AgentOutput
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
-            throw new NotFoundException('Could not find provided agent');
+            throw new StatusCode\NotFoundException('Could not find provided agent');
         }
 
         $agent = $this->connector->getConnection($row->getConnectionId());
         if (!$agent instanceof AgentInterface) {
-            throw new InternalServerErrorException('Could not resolve agent connection');
+            throw new StatusCode\InternalServerErrorException('Could not resolve agent connection');
         }
+
+        $input = $message->getInput() ?? throw new StatusCode\BadRequestException('Provided no input');
 
         $this->agentTable->beginTransaction();
 
@@ -90,20 +93,9 @@ readonly class Sender
             $messages = new MessageBag();
             $messages->add(Message::forSystem($row->getIntroduction()));
 
-            $responseSchema = $this->getResponseSchema($row);
-            if ($responseSchema !== null) {
-                $schema = 'The output must be a valid JSON string and it must be possible to decode the output with a JSON parser.' . "\n";
-                $schema.= 'The generated JSON must follow the JSON schema:' . "\n";
-                $schema.= '<schema>' . "\n";
-                $schema.= Parser::encode($responseSchema) . "\n";
-                $schema.= '</schema>' . "\n";
-
-                $messages->add(Message::forSystem($schema));
-            }
-
             $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $messages);
 
-            $userMessages = $this->messageUnserializer->unserialize($content);
+            $userMessages = $this->messageUnserializer->unserialize($input);
 
             $this->persistUserMessages($agentId, $context->getUser()->getId(), $userMessages);
 
@@ -114,6 +106,7 @@ readonly class Sender
                 'temperature' => 0.2,
             ];
 
+            $responseSchema = $this->getResponseSchema($row);
             if ($responseSchema !== null) {
                 $options['response_format'] = [
                     'type' => 'json_schema',
@@ -137,14 +130,9 @@ readonly class Sender
 
             $this->agentTable->commit();
 
-            $message = new AgentMessage();
-            $message->setId($messageRow->getId());
-            $message->setRole(match ($messageRow->getOrigin()) {
-                Table\Agent\Message::ORIGIN_ASSISTANT => 'assistant',
-                Table\Agent\Message::ORIGIN_SYSTEM => 'system',
-                default => 'user',
-            });
-            $message->setContent($output);
+            $message = new AgentOutput();
+            $message->setId('' . $messageRow->getId());
+            $message->setOutput($output);
             return $message;
         } catch (Throwable $e) {
             $this->agentTable->rollBack();
@@ -152,7 +140,7 @@ readonly class Sender
             if ($e instanceof StatusCodeException) {
                 throw $e;
             } else {
-                throw new InternalServerErrorException($e->getMessage(), $e);
+                throw new StatusCode\InternalServerErrorException($e->getMessage(), $e);
             }
         }
     }

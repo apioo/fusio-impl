@@ -825,7 +825,7 @@
         "code": 201,
         "schema": {
           "type": "reference",
-          "target": "Backend_AgentMessage"
+          "target": "Backend_AgentOutput"
         }
       },
       "arguments": {
@@ -839,7 +839,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentContent"
+            "target": "Backend_AgentInput"
           }
         }
       },
@@ -12862,6 +12862,10 @@
       "description": "This object represents an agent output",
       "type": "struct",
       "properties": {
+        "id": {
+          "description": "Available if the message was persisted",
+          "type": "string"
+        },
         "output": {
           "description": "The output",
           "type": "reference",
