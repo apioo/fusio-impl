@@ -31,6 +31,7 @@ use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
+use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\ObjectMapper;
 use PSX\Schema\SchemaManager;
@@ -207,7 +208,10 @@ readonly class Sender
 
         $schema = $this->schemaManager->getSchema($outgoing);
 
-        $jsonSchema = (new JsonSchema(inlineDefinitions: true))->toArray($schema->getDefinitions(), $schema->getRoot());
+        $config = new Config();
+        $config->put('openai_mode', true);
+
+        $jsonSchema = (new JsonSchema($config))->toArray($schema->getDefinitions(), $schema->getRoot());
         if (count($jsonSchema) === 0) {
             return null;
         }

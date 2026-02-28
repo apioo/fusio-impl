@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Form;
 
 use Fusio\Impl\Table;
+use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\SchemaManagerInterface;
 
@@ -75,6 +76,9 @@ class JsonSchemaResolver
 
         $schema = $this->schemaManager->getSchema($schema);
 
-        return (new JsonSchema(inlineDefinitions: true))->toArray($schema->getDefinitions(), $schema->getRoot());
+        $config = new Config();
+        $config->put('inline_definitions', true);
+
+        return (new JsonSchema($config))->toArray($schema->getDefinitions(), $schema->getRoot());
     }
 }

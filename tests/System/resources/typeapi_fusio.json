@@ -1936,7 +1936,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Backend_AgentContent"
+          "target": "Backend_AgentOutput"
         }
       },
       "arguments": {
@@ -1950,7 +1950,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Backend_AgentContent"
+            "target": "Backend_AgentInput"
           }
         }
       },
@@ -12813,6 +12813,17 @@
         "target": "Backend_Agent"
       }
     },
+    "Backend_AgentInput": {
+      "description": "This object represents an agent input",
+      "type": "struct",
+      "properties": {
+        "input": {
+          "description": "The input",
+          "type": "reference",
+          "target": "Backend_AgentContent"
+        }
+      }
+    },
     "Backend_AgentMessage": {
       "description": "This object represents an agent message",
       "type": "struct",
@@ -12844,6 +12855,17 @@
         "target": "Common_Collection",
         "template": {
           "T": "Backend_AgentMessage"
+        }
+      }
+    },
+    "Backend_AgentOutput": {
+      "description": "This object represents an agent output",
+      "type": "struct",
+      "properties": {
+        "output": {
+          "description": "The output",
+          "type": "reference",
+          "target": "Backend_AgentContent"
         }
       }
     },

@@ -27,9 +27,9 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
 use Fusio\Impl\Service\Agent\Unserializer\MessageUnserializer;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\AgentContent;
+use Fusio\Model\Backend\AgentInput;
+use Fusio\Model\Backend\AgentOutput;
 use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
 
 /**
  * Send
@@ -52,9 +52,9 @@ readonly class Send extends AgentAbstract
         $agent = $this->getConnection($request);
         $payload = $request->getPayload();
 
-        assert($payload instanceof AgentContent);
+        assert($payload instanceof AgentInput);
 
-        $messages = $this->messageUnserializer->unserialize($payload);
+        $messages = $this->messageUnserializer->unserialize($payload->getInput());
 
         $options = [
             'temperature' => 0.4
@@ -62,7 +62,8 @@ readonly class Send extends AgentAbstract
 
         $result = $agent->call($messages, $options);
 
-        $output = $this->resultSerializer->serialize($result);
+        $output = new AgentOutput();
+        $output->setOutput($this->resultSerializer->serialize($result));
 
         return new HttpResponse(200, [], $output);
     }

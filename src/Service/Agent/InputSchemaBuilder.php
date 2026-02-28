@@ -25,6 +25,7 @@ use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Api\Util\Inflection;
 use PSX\Json\Parser;
 use PSX\Schema\Definitions;
+use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManager;
@@ -76,7 +77,10 @@ readonly class InputSchemaBuilder
 
         $definitions->addType('Root', $rootType);
 
-        return (new JsonSchema(inlineDefinitions: true))->toArray($definitions, 'Root');
+        $config = new Config();
+        $config->put('inline_definitions', true);
+
+        return (new JsonSchema($config))->toArray($definitions, 'Root');
     }
 
     private function buildSchemaFromParameters(OperationRow $operation, StructDefinitionType $rootType): void

@@ -49,16 +49,20 @@ class CollectionTest extends DbTestCase
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'type' => 'text',
-            'content' => 'What is the meaning of life?',
+            'input' => [
+                'type' => 'text',
+                'content' => 'What is the meaning of life?',
+            ]
         ]));
 
         $body = (string) $response->getBody();
 
         $expect = <<<JSON
 {
+  "output": {
     "type": "text",
     "content": "The answer ist: 42"
+  }
 }
 JSON;
 
