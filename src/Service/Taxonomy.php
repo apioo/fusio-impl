@@ -98,12 +98,7 @@ readonly class Taxonomy
             $this->taxonomyTable->beginTransaction();
 
             // update taxonomy
-            $parentId = $taxonomy->getParentId() ?? $existing->getParentId();
-            if ($parentId === 0) {
-                $parentId = null;
-            }
-
-            $existing->setParentId($parentId);
+            $existing->setParentId($taxonomy->getParentId());
             $existing->setName($taxonomy->getName() ?? $existing->getName());
             $this->taxonomyTable->update($existing);
 

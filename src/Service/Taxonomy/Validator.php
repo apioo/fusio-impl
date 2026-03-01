@@ -46,7 +46,7 @@ readonly class Validator
         $this->usageLimiter->assertTaxonomyCount($tenantId);
 
         $parentId = $taxonomy->getParentId();
-        if ($parentId !== null && $parentId !== 0) {
+        if ($parentId !== null) {
             $this->assertParentId($parentId, $tenantId, $existing);
         }
 
