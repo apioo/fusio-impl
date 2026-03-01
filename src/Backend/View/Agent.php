@@ -55,7 +55,7 @@ class Agent extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Agent::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
-                'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
+                'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),
                 'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
                 'name' => Table\Generated\AgentTable::COLUMN_NAME,
                 'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
@@ -75,7 +75,7 @@ class Agent extends ViewAbstract
 
         $definition = $builder->doEntity([$this->getTable(Table\Agent::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
             'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
-            'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
+            'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),
             'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
             'name' => Table\Generated\AgentTable::COLUMN_NAME,
             'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
