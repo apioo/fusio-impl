@@ -43,7 +43,7 @@ class Firewall extends ViewAbstract
         $sortBy = Table\Generated\FirewallColumn::tryFrom($filter->getSortBy(Table\Generated\FirewallTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\FirewallTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Firewall::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\FirewallColumn::NAME]);
         $condition->equals(Table\Generated\FirewallTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\FirewallTable::COLUMN_STATUS, [Table\Firewall::STATUS_ACTIVE]);
 

@@ -23,6 +23,9 @@ namespace Fusio\Impl\Tests\Backend\Filter\Audit;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
+use Fusio\Impl\Table;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * AuditQueryFilterTest
@@ -52,7 +55,8 @@ class AuditQueryFilterTest extends FilterTestCase
         $this->assertEquals('create', $filter->getEvent());
         $this->assertEquals('127.0.0.1', $filter->getIp());
 
-        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
+        $tableManager = Environment::getService(TableManagerInterface::class);
+        $condition = $filter->getCondition($tableManager->getTable(Table\Audit::class), [DateQueryFilter::COLUMN_DATE => 'date']);
 
         $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatement());
         $this->assertEquals([

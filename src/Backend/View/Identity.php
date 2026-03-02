@@ -43,7 +43,7 @@ class Identity extends ViewAbstract
         $sortBy = Table\Generated\IdentityColumn::tryFrom($filter->getSortBy(Table\Generated\IdentityTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Identity::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\IdentityColumn::NAME]);
         $condition->equals(Table\Generated\IdentityTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\IdentityTable::COLUMN_STATUS, [Table\Identity::STATUS_ACTIVE]);
 

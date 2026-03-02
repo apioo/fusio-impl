@@ -44,7 +44,7 @@ class Role extends ViewAbstract
         $sortBy = Table\Generated\RoleColumn::tryFrom($filter->getSortBy(Table\Generated\RateTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\RoleTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Role::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\RoleColumn::NAME]);
         $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\RoleTable::COLUMN_STATUS, [Table\Role::STATUS_ACTIVE]);
 

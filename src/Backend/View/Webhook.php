@@ -44,7 +44,7 @@ class Webhook extends ViewAbstract
         $sortBy = Table\Generated\WebhookColumn::tryFrom($filter->getSortBy(Table\Generated\WebhookTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\WebhookTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Webhook::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\WebhookColumn::NAME]);
         $condition->equals(Table\Generated\WebhookTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $builder = new Builder($this->connection);

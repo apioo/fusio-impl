@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\Filter\Audit;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\TableInterface;
 
 /**
  * AuditQueryFilter
@@ -75,9 +77,9 @@ class AuditQueryFilter extends DateQueryFilter
         return $this->message;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($columnMapping, $alias);
+        $condition = parent::getCondition($table, $columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
         if (!empty($this->appId)) {

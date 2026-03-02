@@ -43,7 +43,7 @@ class Bundle extends ViewAbstract
         $sortBy = Table\Generated\BundleColumn::tryFrom($filter->getSortBy(Table\Generated\BundleTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\BundleTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Bundle::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\BundleColumn::NAME]);
         $condition->equals(Table\Generated\BundleTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\BundleTable::COLUMN_STATUS, [Table\Bundle::STATUS_ACTIVE]);
 

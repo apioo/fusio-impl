@@ -44,7 +44,7 @@ class Rate extends ViewAbstract
         $sortBy = Table\Generated\RateColumn::tryFrom($filter->getSortBy(Table\Generated\RateTable::COLUMN_PRIORITY) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\RateTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Rate::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\RateColumn::NAME]);
         $condition->equals(Table\Generated\RateTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\RateTable::COLUMN_STATUS, [Table\Rate::STATUS_ACTIVE]);
 

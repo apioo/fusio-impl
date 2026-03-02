@@ -45,7 +45,7 @@ class Token extends ViewAbstract
         $sortBy = Table\Generated\TokenColumn::tryFrom($filter->getSortBy(Table\Generated\TokenTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TokenTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Token::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TokenColumn::NAME]);
         $condition->equals(Table\Generated\TokenTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\TokenTable::COLUMN_USER_ID, $context->getUser()->getId());

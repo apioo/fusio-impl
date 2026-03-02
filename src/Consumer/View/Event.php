@@ -43,7 +43,7 @@ class Event extends ViewAbstract
         $sortBy = Table\Generated\EventColumn::tryFrom($filter->getSortBy(Table\Generated\EventTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Event::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\EventColumn::NAME]);
         $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);

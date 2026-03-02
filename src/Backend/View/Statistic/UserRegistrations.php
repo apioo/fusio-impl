@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
@@ -36,7 +37,7 @@ class UserRegistrations extends ChartViewAbstract
 {
     public function getView(DateQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition  = $filter->getCondition([], 'usr');
+        $condition  = $filter->getCondition($this->getTable(Table\User::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\UserColumn::NAME], 'usr');
         $condition->equals('usr.' . Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

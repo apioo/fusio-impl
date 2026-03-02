@@ -45,7 +45,7 @@ class Transaction extends ViewAbstract
         $sortBy = Table\Generated\TransactionColumn::tryFrom($filter->getSortBy(Table\Generated\TransactionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID]);
+        $condition = $filter->getCondition($this->getTable(Table\Transaction::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TransactionColumn::TRANSACTION_ID]);
         $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TransactionTable::COLUMN_USER_ID, $context->getUser()->getId());
 

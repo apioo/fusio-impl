@@ -23,6 +23,9 @@ namespace Fusio\Impl\Tests\Backend\Filter\Log;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
+use Fusio\Impl\Table;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * LogQueryFilterTest
@@ -61,7 +64,8 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('text/xml', $filter->getHeader());
         $this->assertEquals('<foo />', $filter->getBody());
 
-        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
+        $tableManager = Environment::getService(TableManagerInterface::class);
+        $condition = $filter->getCondition($tableManager->getTable(Table\Log::class), [DateQueryFilter::COLUMN_DATE => 'date']);
 
         $this->assertEquals('WHERE (date >= ? AND date <= ? AND operation_id = ? AND app_id = ? AND user_id = ? AND ip LIKE ? AND user_agent LIKE ? AND method = ? AND path LIKE ? AND header LIKE ? AND body LIKE ?)', $condition->getStatement());
         $this->assertEquals([

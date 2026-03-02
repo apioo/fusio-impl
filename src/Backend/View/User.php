@@ -44,7 +44,7 @@ class User extends ViewAbstract
         $sortBy = Table\Generated\UserColumn::tryFrom($filter->getSortBy(Table\Generated\UserTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\UserTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\User::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\UserColumn::NAME]);
         $condition->equals(Table\Generated\UserTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->notEquals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_DELETED);
 

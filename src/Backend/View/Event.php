@@ -22,7 +22,6 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
-use Fusio\Impl\Backend\Filter\TaxonomyQueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -37,14 +36,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection(TaxonomyQueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
         $sortBy = Table\Generated\EventColumn::tryFrom($filter->getSortBy(Table\Generated\EventTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\EventTable::COLUMN_NAME, TaxonomyQueryFilter::COLUMN_TAXONOMY => Table\Generated\EventTable::COLUMN_TAXONOMY_ID]);
+        $condition = $filter->getCondition($this->getTable(Table\Event::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\EventColumn::NAME]);
         $condition->equals(Table\Generated\EventTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->in(Table\Generated\EventTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);

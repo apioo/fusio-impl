@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\Filter;
 
 use Fusio\Engine\RequestInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\TableInterface;
 
 /**
  * DateQueryFilter
@@ -48,9 +49,9 @@ class ClassQueryFilter extends QueryFilter
         return $this->class;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($columnMapping, $alias);
+        $condition = parent::getCondition($table, $columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
         if (isset($columnMapping[self::COLUMN_CLASS]) && count($this->class) > 0) {

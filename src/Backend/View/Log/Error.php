@@ -41,7 +41,7 @@ class Error extends ViewAbstract
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogErrorTable::COLUMN_MESSAGE], 'error');
+        $condition = $filter->getCondition($this->getTable(Table\Log\Error::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\LogErrorColumn::MESSAGE], 'error');
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 

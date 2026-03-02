@@ -46,7 +46,7 @@ class Log extends ViewAbstract
         $sortBy = Table\Generated\LogColumn::tryFrom($filter->getSortBy(Table\Generated\LogTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\LogTable::COLUMN_PATH, DateQueryFilter::COLUMN_DATE => Table\Generated\LogTable::COLUMN_DATE]);
+        $condition = $filter->getCondition($this->getTable(Table\Log::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\LogColumn::PATH, DateQueryFilter::COLUMN_DATE => Table\Generated\LogTable::COLUMN_DATE]);
         $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 

@@ -43,7 +43,7 @@ class Taxonomy extends ViewAbstract
         $sortBy = Table\Generated\TaxonomyColumn::tryFrom($filter->getSortBy(Table\Generated\TaxonomyTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TaxonomyTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Taxonomy::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TaxonomyColumn::NAME]);
         $condition->equals(Table\Generated\TaxonomyTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\TaxonomyTable::COLUMN_STATUS, [Table\Taxonomy::STATUS_ACTIVE]);
 

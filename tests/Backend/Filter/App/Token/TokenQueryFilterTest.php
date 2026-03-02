@@ -23,6 +23,9 @@ namespace Fusio\Impl\Tests\Backend\Filter\App\Token;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
+use Fusio\Impl\Table;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * TokenQueryFilterTest
@@ -53,7 +56,8 @@ class TokenQueryFilterTest extends FilterTestCase
         $this->assertEquals('foo', $filter->getScope());
         $this->assertEquals('127.0.0.1', $filter->getIp());
 
-        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'date']);
+        $tableManager = Environment::getService(TableManagerInterface::class);
+        $condition = $filter->getCondition($tableManager->getTable(Table\Token::class), [DateQueryFilter::COLUMN_DATE => 'date']);
 
         $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND status = ? AND scope LIKE ? AND ip LIKE ?)', $condition->getStatement());
         $this->assertEquals([

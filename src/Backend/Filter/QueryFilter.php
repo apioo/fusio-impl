@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\Filter;
 
 use Fusio\Engine\RequestInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\Filter\Builder;
 use PSX\Sql\OrderBy;
+use PSX\Sql\TableInterface;
 
 /**
  * QueryFilter
@@ -91,16 +93,13 @@ class QueryFilter
         return $this->sortOrder ?? $default;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = Condition::withAnd();
-        $alias = $this->getAlias($alias);
-
         if (isset($columnMapping[self::COLUMN_SEARCH]) && !empty($this->search)) {
-            $condition->like($alias . $columnMapping[self::COLUMN_SEARCH], '%' . $this->search . '%');
+            return (new Builder())->build($table, $columnMapping[self::COLUMN_SEARCH], $this->search, $alias);
         }
 
-        return $condition;
+        return Condition::withAnd();
     }
 
     protected function getAlias(?string $alias): string

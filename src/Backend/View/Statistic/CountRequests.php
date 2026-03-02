@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Sql\ViewAbstract;
 
@@ -36,7 +37,7 @@ class CountRequests extends ViewAbstract
 {
     public function getView(Log\LogQueryFilter $filter, ContextInterface $context): array
     {
-        $condition = $filter->getCondition([], 'log');
+        $condition = $filter->getCondition($this->getTable(Table\Log::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\LogColumn::PATH], 'log');
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals('log.' . Table\Generated\LogTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 

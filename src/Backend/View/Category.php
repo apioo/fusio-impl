@@ -43,7 +43,7 @@ class Category extends ViewAbstract
         $sortBy = Table\Generated\CategoryColumn::tryFrom($filter->getSortBy(Table\Generated\CategoryTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\CategoryTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Category::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\CategoryColumn::NAME]);
         $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\CategoryTable::COLUMN_STATUS, [Table\Category::STATUS_ACTIVE]);
 

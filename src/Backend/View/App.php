@@ -44,7 +44,7 @@ class App extends ViewAbstract
         $sortBy = Table\Generated\AppColumn::tryFrom($filter->getSortBy(Table\Generated\AppTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\App::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AppColumn::NAME]);
         $condition->equals(Table\Generated\ActionTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
 

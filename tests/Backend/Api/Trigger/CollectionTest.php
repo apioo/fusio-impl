@@ -41,10 +41,20 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 2,
+            "status": 1,
+            "name": "Second-Trigger",
+            "event": "foo-event",
+            "action": "Sql-Select-All",
+            "metadata": {
+                "foo": "bar"
+            }
+        },
         {
             "id": 1,
             "status": 1,
@@ -97,7 +107,7 @@ JSON;
 
     public function testGetTaxonomy()
     {
-        $response = $this->sendRequest('/backend/trigger?taxonomy=1', 'GET', array(
+        $response = $this->sendRequest('/backend/trigger?search=taxonomy_id:1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -137,10 +147,20 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 2,
+            "status": 1,
+            "name": "Second-Trigger",
+            "event": "foo-event",
+            "action": "Sql-Select-All",
+            "metadata": {
+                "foo": "bar"
+            }
+        },
         {
             "id": 1,
             "status": 1,

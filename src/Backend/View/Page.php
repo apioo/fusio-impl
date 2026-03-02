@@ -43,7 +43,7 @@ class Page extends ViewAbstract
         $sortBy = Table\Generated\PageColumn::tryFrom($filter->getSortBy(Table\Generated\PageTable::COLUMN_SLUG) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PageTable::COLUMN_TITLE]);
+        $condition = $filter->getCondition($this->getTable(Table\Page::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\PageColumn::TITLE]);
         $condition->equals(Table\Generated\PageTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
 

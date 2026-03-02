@@ -22,7 +22,6 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
-use Fusio\Impl\Backend\Filter\TaxonomyQueryFilter;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -37,14 +36,14 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection(TaxonomyQueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context)
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
         $sortBy = Table\Generated\SchemaColumn::tryFrom($filter->getSortBy(Table\Generated\SchemaTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\SchemaTable::COLUMN_NAME, TaxonomyQueryFilter::COLUMN_TAXONOMY => Table\Generated\SchemaTable::COLUMN_TAXONOMY_ID]);
+        $condition = $filter->getCondition($this->getTable(Table\Schema::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\SchemaColumn::NAME]);
         $condition->equals(Table\Generated\SchemaTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\SchemaTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);

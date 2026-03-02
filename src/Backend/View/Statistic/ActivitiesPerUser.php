@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
@@ -36,7 +37,7 @@ class ActivitiesPerUser extends ChartViewAbstract
 {
     public function getView(AuditQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition = $filter->getCondition([], 'audit');
+        $condition = $filter->getCondition($this->getTable(Table\Audit::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AuditColumn::MESSAGE], 'audit');
         $condition->equals('audit.' . Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->notNil('audit.' . Table\Generated\AuditTable::COLUMN_EVENT);
 

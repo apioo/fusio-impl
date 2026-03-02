@@ -47,7 +47,7 @@ class Connection extends ViewAbstract
         $sortBy = Table\Generated\ConnectionColumn::tryFrom($filter->getSortBy(Table\Generated\ConnectionTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionTable::COLUMN_NAME, ClassQueryFilter::COLUMN_CLASS => Table\Generated\ConnectionTable::COLUMN_CLASS]);
+        $condition = $filter->getCondition($this->getTable(Table\Connection::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\ConnectionColumn::NAME, ClassQueryFilter::COLUMN_CLASS => Table\Generated\ConnectionTable::COLUMN_CLASS]);
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);

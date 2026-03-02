@@ -22,7 +22,10 @@ namespace Fusio\Impl\Tests\Backend\Filter\Transaction;
 
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\Transaction\TransactionQueryFilter;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * TransactionQueryFilterTest
@@ -45,7 +48,8 @@ class TransactionQueryFilterTest extends FilterTestCase
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
         $this->assertEquals(1, $filter->getPlanId());
 
-        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'insert_date']);
+        $tableManager = Environment::getService(TableManagerInterface::class);
+        $condition = $filter->getCondition($tableManager->getTable(Table\Transaction::class), [DateQueryFilter::COLUMN_DATE => 'insert_date']);
 
         $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND plan_id = ?)', $condition->getStatement());
         $this->assertEquals([

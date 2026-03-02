@@ -22,7 +22,10 @@ namespace Fusio\Impl\Tests\Backend\Filter\Plan\Usage;
 
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Backend\Filter\FilterTestCase;
+use PSX\Framework\Test\Environment;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * UsageQueryFilterTest
@@ -49,9 +52,10 @@ class UsageQueryFilterTest extends FilterTestCase
         $this->assertEquals(1, $filter->getAppId());
         $this->assertEquals(1, $filter->getUserId());
 
-        $condition = $filter->getCondition([DateQueryFilter::COLUMN_DATE => 'insert_date']);
+        $tableManager = Environment::getService(TableManagerInterface::class);
+        $condition = $filter->getCondition($tableManager->getTable(Table\Plan\Usage::class), [DateQueryFilter::COLUMN_DATE => 'insert_date']);
 
-        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND route_id = ? AND user_id = ? AND app_id = ?)', $condition->getStatement());
+        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND operation_id = ? AND user_id = ? AND app_id = ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',

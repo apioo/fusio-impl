@@ -53,7 +53,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -61,6 +61,15 @@ class CollectionTest extends DbTestCase
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": {$this->eventSecondId},
+            "status": 1,
+            "name": "second-event",
             "description": "Foo event description",
             "metadata": {
                 "foo": "bar"
@@ -107,7 +116,7 @@ JSON;
 
     public function testGetTaxonomy()
     {
-        $response = $this->sendRequest('/backend/event?taxonomy=1', 'GET', array(
+        $response = $this->sendRequest('/backend/event?search=taxonomy_id:1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -146,7 +155,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -154,6 +163,15 @@ JSON;
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
+            "description": "Foo event description",
+            "metadata": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": {$this->eventSecondId},
+            "status": 1,
+            "name": "second-event",
             "description": "Foo event description",
             "metadata": {
                 "foo": "bar"

@@ -20,9 +20,11 @@
 
 namespace Fusio\Impl\Backend\Filter\App\Token;
 
+use DateTimeImmutable;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use PSX\Sql\Condition;
+use PSX\Sql\TableInterface;
 
 /**
  * TokenQueryFilter
@@ -39,7 +41,7 @@ class TokenQueryFilter extends DateQueryFilter
     private ?string $scope = null;
     private ?string $ip = null;
 
-    public function __construct(?int $appId, ?int $userId, ?int $status, ?string $scope, ?string $ip, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function __construct(?int $appId, ?int $userId, ?int $status, ?string $scope, ?string $ip, DateTimeImmutable $from, DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
@@ -75,9 +77,9 @@ class TokenQueryFilter extends DateQueryFilter
         return $this->ip;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($columnMapping, $alias);
+        $condition = parent::getCondition($table, $columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
         if (!empty($this->appId)) {

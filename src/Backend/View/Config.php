@@ -44,7 +44,7 @@ class Config extends ViewAbstract
         $sortBy = Table\Generated\ConfigColumn::tryFrom($filter->getSortBy(Table\Generated\ConfigTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ConfigTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Config::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\ConfigColumn::NAME]);
         $condition->equals(Table\Generated\ConfigTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $builder = new Builder($this->connection);

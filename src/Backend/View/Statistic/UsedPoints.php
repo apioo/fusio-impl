@@ -22,6 +22,7 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
@@ -36,7 +37,7 @@ class UsedPoints extends ChartViewAbstract
 {
     public function getView(UsageQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition = $filter->getCondition([], 'usag');
+        $condition = $filter->getCondition($this->getTable(Table\Plan\Usage::class), [], 'usag');
         $condition->equals('oper.' . Table\Generated\OperationTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals('oper.' . Table\Generated\OperationTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
 

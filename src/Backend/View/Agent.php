@@ -43,7 +43,7 @@ class Agent extends ViewAbstract
         $sortBy = Table\Generated\AgentColumn::tryFrom($filter->getSortBy(Table\Generated\AgentTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AgentTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Agent::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AgentColumn::NAME]);
         $condition->equals(Table\Generated\AgentTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\AgentTable::COLUMN_STATUS, [Table\Agent::STATUS_ACTIVE]);
 

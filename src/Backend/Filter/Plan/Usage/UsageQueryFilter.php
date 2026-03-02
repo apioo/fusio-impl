@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\Filter\Plan\Usage;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\TableInterface;
 
 /**
  * UsageQueryFilter
@@ -61,13 +63,13 @@ class UsageQueryFilter extends DateQueryFilter
         return $this->appId;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($columnMapping, $alias);
+        $condition = parent::getCondition($table, $columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
         if (!empty($this->operationId)) {
-            $condition->equals($alias . 'route_id', $this->operationId);
+            $condition->equals($alias . 'operation_id', $this->operationId);
         }
 
         if (!empty($this->userId)) {

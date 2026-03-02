@@ -22,8 +22,8 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
-use Fusio\Impl\Table;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -47,7 +47,7 @@ class App extends ViewAbstract
         $sortBy = Table\Generated\AppColumn::tryFrom($filter->getSortBy(Table\Generated\AppTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AppTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\App::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AppColumn::NAME]);
         $condition->equals(Table\Generated\AppTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $context->getUser()->getId());
         $condition->equals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_ACTIVE);

@@ -22,6 +22,8 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App;
+use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
 /**
@@ -35,7 +37,7 @@ class IssuedTokens extends ChartViewAbstract
 {
     public function getView(App\Token\TokenQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition = $filter->getCondition([], 'token');
+        $condition = $filter->getCondition($this->getTable(Table\Token::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TokenColumn::NAME], 'token');
         $condition->equals('usr.tenant_id', $context->getTenantId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

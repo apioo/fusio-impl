@@ -44,7 +44,7 @@ class Plan extends ViewAbstract
         $sortBy = Table\Generated\PlanColumn::tryFrom($filter->getSortBy(Table\Generated\PlanTable::COLUMN_PRICE) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\PlanTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Plan::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\PlanColumn::NAME]);
         $condition->equals(Table\Generated\PlanTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 

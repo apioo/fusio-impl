@@ -44,7 +44,7 @@ class Commit extends ViewAbstract
         $sortBy = Table\Generated\ActionCommitColumn::tryFrom($filter->getSortBy(Table\Generated\ActionCommitTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ActionCommitTable::COLUMN_CONFIG]);
+        $condition = $filter->getCondition($this->getTable(Table\Action\Commit::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\ActionCommitColumn::CONFIG]);
         $condition->equals(Table\Generated\ActionCommitTable::COLUMN_ACTION_ID, $actionId);
 
         $builder = new Builder($this->connection);

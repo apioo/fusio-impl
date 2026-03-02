@@ -44,7 +44,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 13,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -193,6 +193,18 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
+            "id": 270,
+            "status": 1,
+            "active": true,
+            "public": true,
+            "stability": 1,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "httpCode": 200,
+            "name": "test.listFoo",
+            "action": "action:\/\/Sql-Select-All"
+        },
+        {
             "id": 1,
             "status": 1,
             "active": true,
@@ -296,7 +308,7 @@ JSON;
 
     public function testGetTaxonomy()
     {
-        $response = $this->sendRequest('/backend/operation?taxonomy=1', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?search=taxonomy_id:1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -338,7 +350,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 13,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -485,6 +497,18 @@ JSON;
             "httpCode": 201,
             "name": "test.createFoo",
             "action": "action:\/\/Sql-Insert"
+        },
+        {
+            "id": 270,
+            "status": 1,
+            "active": true,
+            "public": true,
+            "stability": 1,
+            "httpMethod": "GET",
+            "httpPath": "\/foo",
+            "httpCode": 200,
+            "name": "test.listFoo",
+            "action": "action:\/\/Sql-Select-All"
         },
         {
             "id": 1,

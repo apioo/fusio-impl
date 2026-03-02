@@ -45,7 +45,7 @@ class Scope extends ViewAbstract
         $sortBy = Table\Generated\ScopeColumn::tryFrom($filter->getSortBy(Table\Generated\ScopeTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\ScopeTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Scope::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\ScopeColumn::NAME]);
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_STATUS, Table\Scope::STATUS_ACTIVE);

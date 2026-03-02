@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Backend\Filter\Transaction;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
@@ -36,7 +37,7 @@ class IncomingTransactions extends ChartViewAbstract
 {
     public function getView(Transaction\TransactionQueryFilter $filter, ContextInterface $context): StatisticChart
     {
-        $condition  = $filter->getCondition([], 'trans');
+        $condition  = $filter->getCondition($this->getTable(Table\Transaction::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TransactionColumn::TRANSACTION_ID], 'trans');
         $condition->equals('trans.' . Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());

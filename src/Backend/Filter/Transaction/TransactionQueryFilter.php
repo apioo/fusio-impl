@@ -20,9 +20,12 @@
 
 namespace Fusio\Impl\Backend\Filter\Transaction;
 
+use DateTimeImmutable;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
+use PSX\Sql\TableInterface;
 
 /**
  * TransactionQueryFilter
@@ -35,7 +38,7 @@ class TransactionQueryFilter extends DateQueryFilter
 {
     private ?int $planId = null;
 
-    public function __construct(?int $planId, \DateTimeImmutable $from, \DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function __construct(?int $planId, DateTimeImmutable $from, DateTimeImmutable $to, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         parent::__construct($from, $to, $startIndex, $count, $search, $sortBy, $sortOrder);
 
@@ -47,9 +50,9 @@ class TransactionQueryFilter extends DateQueryFilter
         return $this->planId;
     }
 
-    public function getCondition(array $columnMapping, ?string $alias = null): Condition
+    public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
-        $condition = parent::getCondition($columnMapping, $alias);
+        $condition = parent::getCondition($table, $columnMapping, $alias);
         $alias = $this->getAlias($alias);
 
         if (!empty($this->planId)) {

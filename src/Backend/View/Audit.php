@@ -46,7 +46,7 @@ class Audit extends ViewAbstract
         $sortBy = Table\Generated\AuditColumn::tryFrom($filter->getSortBy(Table\Generated\AuditTable::COLUMN_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\AuditTable::COLUMN_MESSAGE, DateQueryFilter::COLUMN_DATE => Table\Generated\AuditTable::COLUMN_DATE]);
+        $condition = $filter->getCondition($this->getTable(Table\Audit::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AuditColumn::MESSAGE, DateQueryFilter::COLUMN_DATE => Table\Generated\AuditTable::COLUMN_DATE]);
         $condition->equals(Table\Generated\AuditTable::COLUMN_TENANT_ID, $context->getTenantId());
 
         $builder = new Builder($this->connection);

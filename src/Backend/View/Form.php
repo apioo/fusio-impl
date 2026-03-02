@@ -43,7 +43,7 @@ class Form extends ViewAbstract
         $sortBy = Table\Generated\FormColumn::tryFrom($filter->getSortBy(Table\Generated\FormTable::COLUMN_NAME) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::ASC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\FormTable::COLUMN_NAME]);
+        $condition = $filter->getCondition($this->getTable(Table\Form::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\FormColumn::NAME]);
         $condition->equals(Table\Generated\FormTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->in(Table\Generated\FormTable::COLUMN_STATUS, [Table\Form::STATUS_ACTIVE]);
 

@@ -44,7 +44,7 @@ class Test extends ViewAbstract
         $sortBy = Table\Generated\TestColumn::tryFrom($filter->getSortBy(Table\Generated\TestTable::COLUMN_OPERATION_ID) ?? '');
         $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
-        $condition = $filter->getCondition([QueryFilter::COLUMN_SEARCH => Table\Generated\TestTable::COLUMN_MESSAGE]);
+        $condition = $filter->getCondition($this->getTable(Table\Test::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\TestColumn::MESSAGE]);
         $condition->equals(Table\Generated\TestTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\TestTable::COLUMN_CATEGORY_ID, $context->getUser()->getCategoryId());
         $condition->notEquals(Table\Generated\TestTable::COLUMN_STATUS, Table\Test::STATUS_SUCCESS);
