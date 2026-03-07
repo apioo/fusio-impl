@@ -96,7 +96,8 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Moved objects to taxonomy successfully"
+    "message": "Moved objects to taxonomy successfully",
+    "id": "2"
 }
 JSON;
 
