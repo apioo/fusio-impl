@@ -129,7 +129,7 @@ readonly class Operation
 
         $this->validator->assert($operation, $context->getCategoryId(), $context->getTenantId(), $existing);
 
-        $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_LEGACY], true);
+        $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_DEPRECATED, OperationInterface::STABILITY_LEGACY], true);
 
         try {
             $this->operationTable->beginTransaction();
