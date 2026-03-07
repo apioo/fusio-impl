@@ -133,7 +133,7 @@ readonly class Taxonomy
         return $existing->getId();
     }
 
-    public function move(string $taxonomyId, TaxonomyMove $move, UserContext $context): void
+    public function move(string $taxonomyId, TaxonomyMove $move, UserContext $context): int
     {
         $existing = $this->taxonomyTable->findOneByIdentifier($context->getTenantId(), $taxonomyId);
         if (empty($existing)) {
@@ -157,6 +157,11 @@ readonly class Taxonomy
                 $this->mover->moveAction($context->getTenantId(), $context->getCategoryId(), $actionId, $existing);
             }
 
+            $schemaIds = $move->getSchemas() ?? [];
+            foreach ($schemaIds as $schemaId) {
+                $this->mover->moveSchema($context->getTenantId(), $context->getCategoryId(), $schemaId, $existing);
+            }
+
             $eventIds = $move->getEvents() ?? [];
             foreach ($eventIds as $eventId) {
                 $this->mover->moveEvent($context->getTenantId(), $context->getCategoryId(), $eventId, $existing);
@@ -173,6 +178,8 @@ readonly class Taxonomy
             }
 
             $this->taxonomyTable->commit();
+
+            return $existing->getId();
         } catch (Throwable $e) {
             $this->taxonomyTable->rollBack();
 

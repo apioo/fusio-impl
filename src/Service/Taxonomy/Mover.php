@@ -38,6 +38,7 @@ readonly class Mover
     public function __construct(
         private Table\Operation $operationTable,
         private Table\Action $actionTable,
+        private Table\Schema $schemaTable,
         private Table\Event $eventTable,
         private Table\Cronjob $cronjobTable,
         private Table\Trigger $triggerTable,
@@ -64,6 +65,17 @@ readonly class Mover
 
         $actionRow->setTaxonomyId($taxonomyRow->getId());
         $this->actionTable->update($actionRow);
+    }
+
+    public function moveSchema(?string $tenantId, int $categoryId, int $schemaId, TaxonomyRow $taxonomyRow): void
+    {
+        $schemaRow = $this->schemaTable->findOneByTenantAndId($tenantId, $categoryId, $schemaId);
+        if (!$schemaRow instanceof Table\Generated\SchemaRow) {
+            throw new StatusCode\BadRequestException('Provided an invalid schema id: ' . $schemaId);
+        }
+
+        $schemaRow->setTaxonomyId($taxonomyRow->getId());
+        $this->schemaTable->update($schemaRow);
     }
 
     public function moveEvent(?string $tenantId, int $categoryId, int $eventId, TaxonomyRow $taxonomyRow): void

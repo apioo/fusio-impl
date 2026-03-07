@@ -47,7 +47,7 @@ readonly class Move implements ActionInterface
 
         assert($body instanceof TaxonomyMove);
 
-        $this->taxonomyService->move(
+        $taxonomyId = $this->taxonomyService->move(
             $request->get('taxonomy_id'),
             $body,
             $this->contextFactory->newActionContext($context)
@@ -56,6 +56,7 @@ readonly class Move implements ActionInterface
         return [
             'success' => true,
             'message' => 'Moved objects to taxonomy successfully',
+            'id'      => '' . $taxonomyId,
         ];
     }
 }
