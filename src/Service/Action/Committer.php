@@ -46,8 +46,12 @@ readonly class Committer
 
         $previousHash = $this->actionCommitTable->findCurrentHash($actionId);
 
-        $now = LocalDateTime::now();
-        $hash = sha1($actionId . $context->getUserId() . $previousHash . $config . $now->toString());
+        $hash = sha1($context->getTenantId() . $context->getUserId() . $actionId . $previousHash . $config);
+
+        $existing = $this->actionCommitTable->findOneByCommitHash($hash);
+        if ($existing instanceof Table\Generated\ActionCommitRow) {
+            return;
+        }
 
         $row = new Table\Generated\ActionCommitRow();
         $row->setActionId($actionId);
@@ -55,7 +59,7 @@ readonly class Committer
         $row->setPrevHash($previousHash ?? '');
         $row->setCommitHash($hash);
         $row->setConfig($config);
-        $row->setInsertDate($now);
+        $row->setInsertDate(LocalDateTime::now());
         $this->actionCommitTable->create($row);
     }
 }

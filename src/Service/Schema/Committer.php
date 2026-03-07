@@ -42,8 +42,12 @@ readonly class Committer
     {
         $previousHash = $this->schemaCommitTable->findCurrentHash($schemaId);
 
-        $now = LocalDateTime::now();
-        $hash = sha1($schemaId . $context->getUserId() . $previousHash . $source . $now->toString());
+        $hash = sha1($context->getTenantId() . $context->getUserId() . $schemaId . $previousHash . $source);
+
+        $existing = $this->schemaCommitTable->findOneByCommitHash($hash);
+        if ($existing instanceof Table\Generated\SchemaCommitRow) {
+            return;
+        }
 
         $row = new Table\Generated\SchemaCommitRow();
         $row->setSchemaId($schemaId);
@@ -51,7 +55,7 @@ readonly class Committer
         $row->setPrevHash($previousHash ?? '');
         $row->setCommitHash($hash);
         $row->setSource($source);
-        $row->setInsertDate($now);
+        $row->setInsertDate(LocalDateTime::now());
         $this->schemaCommitTable->create($row);
     }
 }
