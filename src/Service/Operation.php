@@ -129,31 +129,31 @@ readonly class Operation
 
         $this->validator->assert($operation, $context->getCategoryId(), $context->getTenantId(), $existing);
 
-        $isStable = in_array($existing->getStability(), [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_DEPRECATED, OperationInterface::STABILITY_LEGACY], true);
+        $shouldNotChange = $this->shouldNotChange($existing->getStability());
 
         try {
             $this->operationTable->beginTransaction();
 
             // update operation
-            if ($isStable) {
-                // if the operation is stable or legacy we can only change the stability
+            if ($shouldNotChange) {
+                // if the operation is stable, deprecated or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
             } else {
                 // we fix action and schemas to a specific commit if we transition the operation from experimental to stable
-                $shouldFix = $existing->getStability() === OperationInterface::STABILITY_EXPERIMENTAL && $operation->getStability() === OperationInterface::STABILITY_STABLE;
+                $shouldFixCommit = $existing->getStability() === OperationInterface::STABILITY_EXPERIMENTAL && $this->shouldNotChange($operation->getStability());
 
                 $action = $operation->getAction() ?? $existing->getAction();
-                if (!empty($action) && $shouldFix) {
+                if (!empty($action) && $shouldFixCommit) {
                     $action = $this->fixActionToCurrentCommitHash($action, $context);
                 }
 
                 $incoming = $operation->getIncoming() ?? $existing->getIncoming();
-                if (!empty($incoming) && $shouldFix) {
+                if (!empty($incoming) && $shouldFixCommit) {
                     $incoming = $this->fixSchemaToCurrentCommitHash($incoming, $context);
                 }
 
                 $outgoing = $operation->getOutgoing() ?? $existing->getOutgoing();
-                if (!empty($outgoing) && $shouldFix) {
+                if (!empty($outgoing) && $shouldFixCommit) {
                     $outgoing = $this->fixSchemaToCurrentCommitHash($outgoing, $context);
                 }
 
@@ -177,7 +177,7 @@ readonly class Operation
                 $existing->setOutgoing(SchemaScheme::wrap($outgoing ?? $existing->getOutgoing()));
                 $throws = $operation->getThrows();
                 if ($throws !== null) {
-                    $existing->setThrows($this->wrapThrows($throws, $context, $shouldFix));
+                    $existing->setThrows($this->wrapThrows($throws, $context, $shouldFixCommit));
                 }
                 $existing->setAction(ActionScheme::wrap($action ?? $existing->getAction()));
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
@@ -189,7 +189,7 @@ readonly class Operation
 
             $this->operationTable->update($existing);
 
-            if (!$isStable) {
+            if (!$shouldNotChange) {
                 // assign scopes
                 $scopes = $operation->getScopes();
                 if (!empty($scopes)) {
@@ -243,14 +243,14 @@ readonly class Operation
         return Parser::encode($parameters);
     }
 
-    private function wrapThrows(?OperationThrows $throws, UserContext $context, bool $shouldFix): ?string
+    private function wrapThrows(?OperationThrows $throws, UserContext $context, bool $shouldFixCommit): ?string
     {
         if ($throws === null) {
             return null;
         }
 
         foreach ($throws->getAll() as $code => $schema) {
-            if (!empty($schema) && $shouldFix) {
+            if (!empty($schema) && $shouldFixCommit) {
                 $schema = $this->fixSchemaToCurrentCommitHash($schema, $context);
             }
 
@@ -318,5 +318,14 @@ readonly class Operation
         }
 
         return 'action://' . $name . '@' . $actionHash;
+    }
+
+    private function shouldNotChange(?int $stability): bool
+    {
+        if ($stability === null) {
+            return true;
+        }
+
+        return in_array($stability, [OperationInterface::STABILITY_STABLE, OperationInterface::STABILITY_DEPRECATED, OperationInterface::STABILITY_LEGACY], true);
     }
 }
