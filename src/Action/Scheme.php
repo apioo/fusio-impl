@@ -85,7 +85,7 @@ enum Scheme: string
             throw new StatusCode\BadRequestException('Provided an invalid action url, must be in the format i.e. action://my_action_name');
         }
 
-        [$scheme, $value] = self::split($actionName);
+        [$scheme, $value, $hash] = self::split($actionName);
 
         if (empty($value)) {
             throw new StatusCode\BadRequestException('Provided action url contains an empty value');
@@ -118,6 +118,11 @@ enum Scheme: string
                 break;
         }
 
-        return $scheme->value . '://' . $value;
+        $action = $scheme->value . '://' . $value;
+        if (!empty($hash)) {
+            $action.= '@' . $hash;
+        }
+
+        return $action;
     }
 }

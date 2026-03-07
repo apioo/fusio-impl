@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SchemeTest extends TestCase
 {
-    #[DataProvider('schemeProvider')]
+    #[DataProvider('splitProvider')]
     public function testSplit(string $action, Scheme $expectScheme, string $expectName, ?string $expectHash): void
     {
         [$actualScheme, $actualName, $actualHash] = Scheme::split($action);
@@ -43,13 +43,31 @@ class SchemeTest extends TestCase
         $this->assertEquals($expectHash, $actualHash);
     }
 
-    public static function schemeProvider(): array
+    public static function splitProvider(): array
     {
         return [
             ['foo', Scheme::ACTION, 'foo', null],
             ['action://foo', Scheme::ACTION, 'foo', null],
             ['action://foo@hash', Scheme::ACTION, 'foo', 'hash'],
             ['https://api.fusio-project.org', Scheme::HTTPS, 'api.fusio-project.org', null],
+        ];
+    }
+
+    #[DataProvider('wrapProvider')]
+    public function testWrap(string $actionName, string $expectAction): void
+    {
+        $action = Scheme::wrap($actionName);
+
+        $this->assertEquals($expectAction, $action);
+    }
+
+    public static function wrapProvider(): array
+    {
+        return [
+            ['foo', 'action://foo'],
+            ['action://foo', 'action://foo'],
+            ['action://foo@hash', 'action://foo@hash'],
+            ['https://api.fusio-project.org', 'https://api.fusio-project.org'],
         ];
     }
 }
