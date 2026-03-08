@@ -69,11 +69,6 @@ readonly class Action
         $parameters = new Parameters($config);
         $handler    = $this->newAction($class);
 
-        // call lifecycle
-        if ($handler instanceof LifecycleInterface) {
-            $handler->onCreate($name, $parameters);
-        }
-
         // create action
         try {
             $this->actionTable->beginTransaction();
@@ -93,7 +88,12 @@ readonly class Action
             $actionId = $this->actionTable->getLastInsertId();
             $action->setId($actionId);
 
-            $this->actionCommitter->commit($actionId, $row->getConfig(), $context);
+            $hash = $this->actionCommitter->commit($actionId, $row->getConfig(), $context);
+
+            // call lifecycle
+            if ($handler instanceof LifecycleInterface) {
+                $handler->onCreate($name, $parameters, $hash);
+            }
 
             $this->actionTable->commit();
         } catch (Throwable $e) {
@@ -128,11 +128,6 @@ readonly class Action
         $parameters = new Parameters($config ?? []);
         $handler    = $this->newAction($class);
 
-        // call lifecycle
-        if ($handler instanceof LifecycleInterface) {
-            $handler->onUpdate($name, $parameters);
-        }
-
         // update action
         try {
             $this->actionTable->beginTransaction();
@@ -145,7 +140,12 @@ readonly class Action
             $existing->setDate(LocalDateTime::now());
             $this->actionTable->update($existing);
 
-            $this->actionCommitter->commit($existing->getId(), $existing->getConfig(), $context);
+            $hash = $this->actionCommitter->commit($existing->getId(), $existing->getConfig(), $context);
+
+            // call lifecycle
+            if ($handler instanceof LifecycleInterface) {
+                $handler->onUpdate($name, $parameters, $hash);
+            }
 
             $this->actionTable->commit();
         } catch (Throwable $e) {

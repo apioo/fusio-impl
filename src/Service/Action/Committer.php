@@ -38,10 +38,10 @@ readonly class Committer
     ) {
     }
 
-    public function commit(int $actionId, ?string $config, UserContext $context): void
+    public function commit(int $actionId, ?string $config, UserContext $context): ?string
     {
         if (empty($config)) {
-            return;
+            return null;
         }
 
         $previousHash = $this->actionCommitTable->findCurrentHash($actionId);
@@ -50,7 +50,7 @@ readonly class Committer
 
         $existing = $this->actionCommitTable->findOneByCommitHash($hash);
         if ($existing instanceof Table\Generated\ActionCommitRow) {
-            return;
+            return null;
         }
 
         $row = new Table\Generated\ActionCommitRow();
@@ -61,5 +61,7 @@ readonly class Committer
         $row->setConfig($config);
         $row->setInsertDate(LocalDateTime::now());
         $this->actionCommitTable->create($row);
+
+        return $hash;
     }
 }

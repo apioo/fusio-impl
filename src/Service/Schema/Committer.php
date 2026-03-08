@@ -38,7 +38,7 @@ readonly class Committer
     ) {
     }
 
-    public function commit(int $schemaId, string $source, UserContext $context): void
+    public function commit(int $schemaId, string $source, UserContext $context): ?string
     {
         $previousHash = $this->schemaCommitTable->findCurrentHash($schemaId);
 
@@ -46,7 +46,7 @@ readonly class Committer
 
         $existing = $this->schemaCommitTable->findOneByCommitHash($hash);
         if ($existing instanceof Table\Generated\SchemaCommitRow) {
-            return;
+            return null;
         }
 
         $row = new Table\Generated\SchemaCommitRow();
@@ -57,5 +57,7 @@ readonly class Committer
         $row->setSource($source);
         $row->setInsertDate(LocalDateTime::now());
         $this->schemaCommitTable->create($row);
+
+        return $hash;
     }
 }
