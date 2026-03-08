@@ -92,6 +92,7 @@ readonly class Action
 
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
+                /** @phpstan-ignore arguments.count */
                 $handler->onCreate($name, $parameters, $hash);
             }
 
@@ -144,6 +145,7 @@ readonly class Action
 
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
+                /** @phpstan-ignore arguments.count */
                 $handler->onUpdate($name, $parameters, $hash);
             }
 
