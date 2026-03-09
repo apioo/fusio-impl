@@ -227,6 +227,7 @@ class DataBag
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'prev_hash' => '',
             'commit_hash' => $commitHash,
+            'config_hash' => sha1($config),
             'config' => $config,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
@@ -685,6 +686,7 @@ class DataBag
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'prev_hash' => '',
             'commit_hash' => $commitHash,
+            'source_hash' => sha1($source),
             'source' => $source,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
