@@ -26,6 +26,7 @@ final class Version20260204195815 extends AbstractMigration
             $actionCommitTable->addColumn('user_id', 'integer');
             $actionCommitTable->addColumn('prev_hash', 'string', ['length' => 40]);
             $actionCommitTable->addColumn('commit_hash', 'string', ['length' => 40]);
+            $actionCommitTable->addColumn('config_hash', 'string', ['length' => 40]);
             $actionCommitTable->addColumn('config', 'text');
             $actionCommitTable->addColumn('insert_date', 'datetime');
             $actionCommitTable->setPrimaryKey(['id']);
@@ -42,6 +43,7 @@ final class Version20260204195815 extends AbstractMigration
             $schemaCommitTable->addColumn('user_id', 'integer');
             $schemaCommitTable->addColumn('prev_hash', 'string', ['length' => 40]);
             $schemaCommitTable->addColumn('commit_hash', 'string', ['length' => 40]);
+            $schemaCommitTable->addColumn('source_hash', 'string', ['length' => 40]);
             $schemaCommitTable->addColumn('source', 'text');
             $schemaCommitTable->addColumn('insert_date', 'datetime');
             $schemaCommitTable->setPrimaryKey(['id']);

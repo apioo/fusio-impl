@@ -9,6 +9,7 @@ class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     private ?int $userId = null;
     private ?string $prevHash = null;
     private ?string $commitHash = null;
+    private ?string $configHash = null;
     private ?string $config = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id): void
@@ -51,6 +52,14 @@ class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     {
         return $this->commitHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "commit_hash" was provided');
     }
+    public function setConfigHash(string $configHash): void
+    {
+        $this->configHash = $configHash;
+    }
+    public function getConfigHash(): string
+    {
+        return $this->configHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "config_hash" was provided');
+    }
     public function setConfig(string $config): void
     {
         $this->config = $config;
@@ -76,6 +85,7 @@ class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('user_id', $this->userId);
         $record->put('prev_hash', $this->prevHash);
         $record->put('commit_hash', $this->commitHash);
+        $record->put('config_hash', $this->configHash);
         $record->put('config', $this->config);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -92,6 +102,7 @@ class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->prevHash = isset($data['prev_hash']) && is_string($data['prev_hash']) ? $data['prev_hash'] : null;
         $row->commitHash = isset($data['commit_hash']) && is_string($data['commit_hash']) ? $data['commit_hash'] : null;
+        $row->configHash = isset($data['config_hash']) && is_string($data['config_hash']) ? $data['config_hash'] : null;
         $row->config = isset($data['config']) && is_string($data['config']) ? $data['config'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

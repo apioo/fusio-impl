@@ -282,12 +282,12 @@ readonly class Operation
             return $schema;
         }
 
-        $schemaHash = $this->schemaCommitTable->findCurrentHash($row->getId());
-        if (empty($schemaHash)) {
+        [$commitHash] = $this->schemaCommitTable->findCurrentHash($row->getId());
+        if (empty($commitHash)) {
             return $schema;
         }
 
-        return 'schema://' . $name . '@' . $schemaHash;
+        return 'schema://' . $name . '@' . $commitHash;
     }
 
     private function fixActionToCurrentCommitHash(?string $action, UserContext $context): ?string
@@ -312,12 +312,12 @@ readonly class Operation
             return $action;
         }
 
-        $actionHash = $this->actionCommitTable->findCurrentHash($row->getId());
-        if (empty($actionHash)) {
+        [$commitHash] = $this->actionCommitTable->findCurrentHash($row->getId());
+        if (empty($commitHash)) {
             return $action;
         }
 
-        return 'action://' . $name . '@' . $actionHash;
+        return 'action://' . $name . '@' . $commitHash;
     }
 
     private function shouldNotChange(?int $stability): bool

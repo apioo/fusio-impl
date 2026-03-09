@@ -40,11 +40,20 @@ readonly class Committer
 
     public function commit(int $schemaId, string $source, UserContext $context): ?string
     {
-        $previousHash = $this->schemaCommitTable->findCurrentHash($schemaId);
+        if (empty($source)) {
+            return null;
+        }
 
-        $hash = sha1($context->getTenantId() . $context->getUserId() . $schemaId . $previousHash . $source);
+        [$previousCommitHash, $previousSourceHash] = $this->schemaCommitTable->findCurrentHash($schemaId);
 
-        $existing = $this->schemaCommitTable->findOneByCommitHash($hash);
+        $sourceHash = sha1($source);
+        if ($sourceHash === $previousSourceHash) {
+            return null;
+        }
+
+        $commitHash = sha1($context->getTenantId() . $context->getUserId() . $schemaId . $previousCommitHash . $source);
+
+        $existing = $this->schemaCommitTable->findOneByCommitHash($commitHash);
         if ($existing instanceof Table\Generated\SchemaCommitRow) {
             return null;
         }
@@ -52,12 +61,13 @@ readonly class Committer
         $row = new Table\Generated\SchemaCommitRow();
         $row->setSchemaId($schemaId);
         $row->setUserId($context->getUserId());
-        $row->setPrevHash($previousHash ?? '');
-        $row->setCommitHash($hash);
+        $row->setPrevHash($previousCommitHash ?? '');
+        $row->setCommitHash($commitHash);
+        $row->setSourceHash($sourceHash);
         $row->setSource($source);
         $row->setInsertDate(LocalDateTime::now());
         $this->schemaCommitTable->create($row);
 
-        return $hash;
+        return $commitHash;
     }
 }

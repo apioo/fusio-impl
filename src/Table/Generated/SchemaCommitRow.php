@@ -9,6 +9,7 @@ class SchemaCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     private ?int $userId = null;
     private ?string $prevHash = null;
     private ?string $commitHash = null;
+    private ?string $sourceHash = null;
     private ?string $source = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id): void
@@ -51,6 +52,14 @@ class SchemaCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     {
         return $this->commitHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "commit_hash" was provided');
     }
+    public function setSourceHash(string $sourceHash): void
+    {
+        $this->sourceHash = $sourceHash;
+    }
+    public function getSourceHash(): string
+    {
+        return $this->sourceHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "source_hash" was provided');
+    }
     public function setSource(string $source): void
     {
         $this->source = $source;
@@ -76,6 +85,7 @@ class SchemaCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('user_id', $this->userId);
         $record->put('prev_hash', $this->prevHash);
         $record->put('commit_hash', $this->commitHash);
+        $record->put('source_hash', $this->sourceHash);
         $record->put('source', $this->source);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -92,6 +102,7 @@ class SchemaCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->prevHash = isset($data['prev_hash']) && is_string($data['prev_hash']) ? $data['prev_hash'] : null;
         $row->commitHash = isset($data['commit_hash']) && is_string($data['commit_hash']) ? $data['commit_hash'] : null;
+        $row->sourceHash = isset($data['source_hash']) && is_string($data['source_hash']) ? $data['source_hash'] : null;
         $row->source = isset($data['source']) && is_string($data['source']) ? $data['source'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

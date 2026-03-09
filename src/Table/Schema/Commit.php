@@ -31,12 +31,16 @@ use Fusio\Impl\Table\Generated;
  */
 class Commit extends Generated\SchemaCommitTable
 {
-    public function findCurrentHash(int $schemaId): ?string
+    public function findCurrentHash(int $schemaId): array
     {
-        $hash = $this->connection->fetchOne('SELECT commit_hash FROM fusio_schema_commit WHERE schema_id = :schema_id ORDER BY id DESC', [
+        $row = $this->connection->fetchAssociative('SELECT commit_hash, source_hash FROM fusio_schema_commit WHERE schema_id = :schema_id ORDER BY id DESC', [
             'schema_id' => $schemaId,
         ]);
 
-        return !empty($hash) ? $hash : null;
+        if (empty($row)) {
+            return [null, null];
+        }
+
+        return [$row['commit_hash'], $row['source_hash']];
     }
 }

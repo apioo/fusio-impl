@@ -13,6 +13,7 @@ class ActionCommitTable extends \PSX\Sql\TableAbstract
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_PREV_HASH = 'prev_hash';
     public const COLUMN_COMMIT_HASH = 'commit_hash';
+    public const COLUMN_CONFIG_HASH = 'config_hash';
     public const COLUMN_CONFIG = 'config';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName(): string
@@ -21,7 +22,7 @@ class ActionCommitTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_ACTION_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PREV_HASH => 0xa00028, self::COLUMN_COMMIT_HASH => 0xa00028, self::COLUMN_CONFIG => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_ACTION_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PREV_HASH => 0xa00028, self::COLUMN_COMMIT_HASH => 0xa00028, self::COLUMN_CONFIG_HASH => 0xa00028, self::COLUMN_CONFIG => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\ActionCommitRow>
@@ -238,6 +239,43 @@ class ActionCommitTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('commit_hash', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\ActionCommitRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByConfigHash(string $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\ActionCommitColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('config_hash', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByConfigHash(string $value): ?\Fusio\Impl\Table\Generated\ActionCommitRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('config_hash', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByConfigHash(string $value, \Fusio\Impl\Table\Generated\ActionCommitRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('config_hash', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByConfigHash(string $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('config_hash', $value);
         return $this->doDeleteBy($condition);
     }
     /**

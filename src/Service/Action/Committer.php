@@ -44,11 +44,16 @@ readonly class Committer
             return null;
         }
 
-        $previousHash = $this->actionCommitTable->findCurrentHash($actionId);
+        [$previousCommitHash, $previousConfigHash] = $this->actionCommitTable->findCurrentHash($actionId);
 
-        $hash = sha1($context->getTenantId() . $context->getUserId() . $actionId . $previousHash . $config);
+        $configHash = sha1($config);
+        if ($configHash === $previousConfigHash) {
+            return null;
+        }
 
-        $existing = $this->actionCommitTable->findOneByCommitHash($hash);
+        $commitHash = sha1($context->getTenantId() . $context->getUserId() . $actionId . $previousCommitHash . $config);
+
+        $existing = $this->actionCommitTable->findOneByCommitHash($commitHash);
         if ($existing instanceof Table\Generated\ActionCommitRow) {
             return null;
         }
@@ -56,12 +61,13 @@ readonly class Committer
         $row = new Table\Generated\ActionCommitRow();
         $row->setActionId($actionId);
         $row->setUserId($context->getUserId());
-        $row->setPrevHash($previousHash ?? '');
-        $row->setCommitHash($hash);
+        $row->setPrevHash($previousCommitHash ?? '');
+        $row->setCommitHash($commitHash);
+        $row->setConfigHash($configHash);
         $row->setConfig($config);
         $row->setInsertDate(LocalDateTime::now());
         $this->actionCommitTable->create($row);
 
-        return $hash;
+        return $commitHash;
     }
 }
