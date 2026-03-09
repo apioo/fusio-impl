@@ -51,7 +51,7 @@ readonly class Committer
             return null;
         }
 
-        $commitHash = sha1($context->getTenantId() . $context->getUserId() . $schemaId . $previousCommitHash . $source);
+        $commitHash = sha1($context->getTenantId() . $context->getUserId() . $schemaId . $previousCommitHash . $sourceHash);
 
         $existing = $this->schemaCommitTable->findOneByCommitHash($commitHash);
         if ($existing instanceof Table\Generated\SchemaCommitRow) {
