@@ -128,12 +128,12 @@ readonly class Sender
                 $output = $this->resultSerializer->serialize($result);
             }
 
-            $messageRow = $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $parentId, $output);
+            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $parentId, $output);
 
             $this->agentTable->commit();
 
             $message = new AgentOutput();
-            $message->setId('' . $messageRow->getId());
+            $message->setId('' . $parentId);
             $message->setOutput($output);
             return $message;
         } catch (Throwable $e) {
