@@ -841,6 +841,12 @@
             "type": "reference",
             "target": "Backend_AgentInput"
           }
+        },
+        "parent": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
