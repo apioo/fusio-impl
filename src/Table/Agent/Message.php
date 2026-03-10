@@ -39,19 +39,19 @@ class Message extends Generated\AgentMessageTable
     public const ORIGIN_ASSISTANT = 0x2;
     public const ORIGIN_SYSTEM    = 0x3;
 
-    public function addUserMessage(int $agentId, int $userId, AgentContent $content): Generated\AgentMessageRow
+    public function addUserMessage(int $agentId, int $userId, int $parentId, AgentContent $content): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, self::ORIGIN_USER, $content);
+        return $this->addMessage($agentId, $userId, $parentId, self::ORIGIN_USER, $content);
     }
 
-    public function addAssistantMessage(int $agentId, int $userId, AgentContent $content): Generated\AgentMessageRow
+    public function addAssistantMessage(int $agentId, int $userId, int $parentId, AgentContent $content): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, self::ORIGIN_ASSISTANT, $content);
+        return $this->addMessage($agentId, $userId, $parentId, self::ORIGIN_ASSISTANT, $content);
     }
 
-    public function addSystemMessage(int $agentId, int $userId, AgentContent $content): Generated\AgentMessageRow
+    public function addSystemMessage(int $agentId, int $userId, int $parentId, AgentContent $content): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, self::ORIGIN_SYSTEM, $content);
+        return $this->addMessage($agentId, $userId, $parentId, self::ORIGIN_SYSTEM, $content);
     }
 
     public function reset(int $agentId, int $userId): void
@@ -63,11 +63,12 @@ class Message extends Generated\AgentMessageTable
         $this->deleteBy($condition);
     }
 
-    private function addMessage(int $agentId, int $userId, int $role, AgentContent $content): Generated\AgentMessageRow
+    private function addMessage(int $agentId, int $userId, int $parentId, int $role, AgentContent $content): Generated\AgentMessageRow
     {
         $row = new Generated\AgentMessageRow();
         $row->setAgentId($agentId);
         $row->setUserId($userId);
+        $row->setParentId($parentId === 0 ? null : $parentId);
         $row->setOrigin($role);
         $row->setContent(Parser::encode($content));
         $row->setInsertDate(LocalDateTime::now());

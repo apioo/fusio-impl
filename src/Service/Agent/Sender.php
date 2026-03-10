@@ -73,7 +73,7 @@ readonly class Sender
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(int $agentId, AgentInput $message, ContextInterface $context): AgentOutput
+    public function send(int $agentId, int $parentId, AgentInput $message, ContextInterface $context): AgentOutput
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
@@ -93,11 +93,13 @@ readonly class Sender
             $messages = new MessageBag();
             $messages->add(Message::forSystem($row->getIntroduction()));
 
-            $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $messages);
+            if ($parentId > 0) {
+                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $parentId, $messages);
+            }
 
             $userMessages = $this->messageUnserializer->unserialize($input);
 
-            $this->persistUserMessages($agentId, $context->getUser()->getId(), $userMessages);
+            $parentId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $parentId, $userMessages);
 
             $messages = $messages->merge($userMessages);
 
@@ -126,7 +128,7 @@ readonly class Sender
                 $output = $this->resultSerializer->serialize($result);
             }
 
-            $messageRow = $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $output);
+            $messageRow = $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $parentId, $output);
 
             $this->agentTable->commit();
 
@@ -145,11 +147,16 @@ readonly class Sender
         }
     }
 
-    private function loadPreviousMessages(int $agentId, int $userId, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $agentId, int $userId, int $parentId, MessageBag $messages): MessageBag
     {
+        $idCondition = Condition::withOr();
+        $idCondition->equals(Table\Generated\AgentMessageColumn::ID, $parentId);
+        $idCondition->equals(Table\Generated\AgentMessageColumn::PARENT_ID, $parentId);
+
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $userId);
+        $condition->add($idCondition);
 
         $count = $this->messageTable->getCount($condition);
         $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
@@ -178,13 +185,19 @@ readonly class Sender
         return $messages;
     }
 
-    private function persistUserMessages(int $agentId, int $userId, MessageBag $userMessages): void
+    private function persistUserMessages(int $agentId, int $userId, int $parentId, MessageBag $userMessages): int
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $content) {
-                $this->messageTable->addUserMessage($agentId, $userId, $content);
+                $message = $this->messageTable->addUserMessage($agentId, $userId, $parentId, $content);
+
+                if ($parentId === 0) {
+                    $parentId = $message->getId();
+                }
             }
         }
+
+        return $parentId;
     }
 
     private function getResponseSchema(Table\Generated\AgentRow $row): ?array

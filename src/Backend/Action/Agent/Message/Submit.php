@@ -48,7 +48,8 @@ readonly class Submit implements ActionInterface
         assert($body instanceof AgentInput);
 
         $output = $this->sender->send(
-            $request->get('agent_id'),
+            (int) $request->get('agent_id'),
+            (int) $request->get('parent'),
             $body,
             $context,
         );

@@ -350,6 +350,7 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 201,
                     outgoing: Model\Backend\AgentOutput::class,
+                    parameters: ['parent' => PropertyTypeFactory::getInteger()],
                     incoming: Model\Backend\AgentInput::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Submits a new agent message',
