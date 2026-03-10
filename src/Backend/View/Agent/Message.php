@@ -45,14 +45,15 @@ class Message extends ViewAbstract
 
         if ($parentId > 0) {
             $condition->equals(Table\Generated\AgentMessageColumn::PARENT_ID, $parentId);
+            $sortOrder = OrderBy::ASC;
         } else {
             $condition->nil(Table\Generated\AgentMessageColumn::PARENT_ID);
+            $sortOrder = OrderBy::DESC;
         }
 
         $count = $this->getTable(Table\Agent\Message::class)->getCount($condition);
         $startIndex = max(0, $count - Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH);
         $sortBy = Table\Generated\AgentMessageColumn::ID;
-        $sortOrder = OrderBy::ASC;
 
         $builder = new Builder($this->connection);
 
