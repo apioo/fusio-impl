@@ -105,7 +105,7 @@ readonly class Validator
 
     private function assertType(int $type): void
     {
-        if (!in_array($type, [Table\Agent::TYPE_GENERAL, Table\Agent::TYPE_OPERATION, Table\Agent::TYPE_ACTION, Table\Agent::TYPE_SCHEMA, Table\Agent::TYPE_DATABASE], true)) {
+        if (!in_array($type, [Table\Agent::TYPE_GENERAL, Table\Agent::TYPE_ARCHITECT, Table\Agent::TYPE_ACTION, Table\Agent::TYPE_SCHEMA, Table\Agent::TYPE_DATABASE], true)) {
             throw new StatusCode\BadRequestException('Provided an invalid agent type');
         }
     }
