@@ -38,12 +38,7 @@ readonly class JsonResultSerializer extends ResultSerializer
     public function serialize(ResultInterface $result): AgentContent
     {
         if ($result instanceof TextResult) {
-            $content = $result->getContent();
-
-            // in case we get a text response we need to try to parse the text as JSON since LLMs can produce all kind
-            // of strange output, we try to remove all noice to get to the JSON payload
-            $content = trim($content);
-            $content = $this->removeMarkdownSyntax($content);
+            $content = $this->removeNoice($result->getContent());
 
             $payload = json_decode($content);
             if ($payload instanceof stdClass) {
@@ -57,16 +52,18 @@ readonly class JsonResultSerializer extends ResultSerializer
         return parent::serialize($result);
     }
 
-    private function removeMarkdownSyntax(string $content): string
+    /**
+     * In case we get a text response we need to try to parse the text as JSON since LLMs can produce all kind of
+     * strange output, we try to remove all noice to get to the JSON payload
+     */
+    private function removeNoice(string $content): string
     {
-        if (str_starts_with($content, '```json')) {
-            $content = substr($content, 7);
-        } elseif (str_starts_with($content, '```')) {
-            $content = substr($content, 3);
-        }
+        $content = trim($content);
+        $firstPos = strpos($content, '{');
+        $lastPos = strrpos($content, '}');
 
-        if (str_ends_with($content, '```')) {
-            $content = substr($content, 0, -3);
+        if ($firstPos !== false && $lastPos !== false) {
+            $content = substr($content, $firstPos, $lastPos - $firstPos + 1);
         }
 
         return $content;
