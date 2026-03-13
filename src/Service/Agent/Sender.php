@@ -103,12 +103,13 @@ readonly class Sender
 
             $messages = $messages->merge($userMessages);
 
+            $responseSchema = $this->getResponseSchema($row);
+
             $options = [
                 'tools' => $this->getTools($row),
-                'temperature' => 0.2,
+                'temperature' => $responseSchema !== null ? 0 : 0.4,
             ];
 
-            $responseSchema = $this->getResponseSchema($row);
             if ($responseSchema !== null) {
                 $options['response_format'] = [
                     'type' => 'json_schema',
