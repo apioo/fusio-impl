@@ -39,6 +39,7 @@ class Agent extends Generated\AgentTable
     public const TYPE_OPERATION = 1;
     public const TYPE_ACTION = 2;
     public const TYPE_SCHEMA = 3;
+    public const TYPE_DATABASE = 4;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?AgentRow
     {
