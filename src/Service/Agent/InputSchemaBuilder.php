@@ -78,7 +78,7 @@ readonly class InputSchemaBuilder
         $definitions->addType('Root', $rootType);
 
         $config = new Config();
-        $config->put('inline_definitions', true);
+        $config->put('openai_mode', true);
 
         return (new JsonSchema($config))->toArray($definitions, 'Root');
     }
