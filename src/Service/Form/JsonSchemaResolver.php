@@ -77,7 +77,6 @@ class JsonSchemaResolver
         $schema = $this->schemaManager->getSchema($schema);
 
         $config = new Config();
-        $config->put('openai_mode', true);
 
         return (new JsonSchema($config))->toArray($schema->getDefinitions(), $schema->getRoot());
     }
