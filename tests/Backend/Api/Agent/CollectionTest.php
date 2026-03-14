@@ -54,7 +54,6 @@ class CollectionTest extends DbTestCase
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "action": "action:\/\/Inspect-Action",
             "insertDate": "2026-02-22T13:06:00Z"
         }
     ]
@@ -87,7 +86,6 @@ JSON;
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "action": "action:\/\/Inspect-Action",
             "insertDate": "2026-02-22T13:06:00Z"
         }
     ]
@@ -120,7 +118,6 @@ JSON;
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "action": "action:\/\/Inspect-Action",
             "insertDate": "2026-02-22T13:06:00Z"
         }
     ]

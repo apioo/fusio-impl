@@ -36,7 +36,7 @@ use Symfony\AI\Platform\Result\TextResult;
  */
 class JsonResultSerializerTest extends TestCase
 {
-    #[DataProvider('testProvider')]
+    #[DataProvider('serializeTextProvider')]
     public function testSerializeText(string $content, string $expect): void
     {
         $serializer = new JsonResultSerializer();
@@ -47,7 +47,7 @@ class JsonResultSerializerTest extends TestCase
         $this->assertJsonStringEqualsJsonString($expect, Parser::encode($result->getPayload()));
     }
 
-    public static function testProvider(): array
+    public static function serializeTextProvider(): array
     {
         return [
             ['{}', '{}'],

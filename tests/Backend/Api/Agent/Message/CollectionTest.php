@@ -109,7 +109,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": "4",
+    "id": "3",
     "output": {
         "type": "text",
         "content": "The answer ist: 42"
