@@ -233,7 +233,7 @@ class DataBag
         ];
     }
 
-    public function addAgent(string $category, string $connection, int $type, string $name, string $description, string $introduction, array $tools, string $outgoing, string $action, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAgent(string $category, string $connection, int $type, string $name, string $description, string $introduction, array $tools, string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_agent'][$name] = [
             'tenant_id' => $tenantId,
@@ -246,7 +246,6 @@ class DataBag
             'introduction' => $introduction,
             'tools' => Parser::encode($tools),
             'outgoing' => $outgoing,
-            'action' => $action,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
             'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];

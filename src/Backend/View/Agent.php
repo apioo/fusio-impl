@@ -61,7 +61,6 @@ class Agent extends ViewAbstract
                 'name' => Table\Generated\AgentTable::COLUMN_NAME,
                 'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
                 'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
-                'action' => Table\Generated\AgentTable::COLUMN_ACTION,
                 'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
                 'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
             ]),
@@ -84,7 +83,6 @@ class Agent extends ViewAbstract
             'introduction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION,
             'tools' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_TOOLS),
             'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
-            'action' => Table\Generated\AgentTable::COLUMN_ACTION,
             'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
             'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
         ]);

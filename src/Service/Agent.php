@@ -67,7 +67,6 @@ readonly class Agent
             $row->setIntroduction($agent->getIntroduction());
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
-            $row->setAction($agent->getAction());
             $row->setInsertDate(LocalDateTime::now());
             $row->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : null);
             $this->agentTable->create($row);
@@ -107,7 +106,6 @@ readonly class Agent
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());
-        $existing->setAction($agent->getAction() ?? $existing->getAction());
         $existing->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : $existing->getMetadata());
         $this->agentTable->update($existing);
 
