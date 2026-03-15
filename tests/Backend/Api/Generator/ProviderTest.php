@@ -57,7 +57,6 @@ class ProviderTest extends ProviderTestCase
             "element": "input",
             "name": "table",
             "title": "Table",
-            "help": null,
             "type": "text"
         }
     ]
