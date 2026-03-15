@@ -65,7 +65,7 @@ JSON;
     }
     public function testGetParent()
     {
-        $response = $this->sendRequest('/backend/agent/1/message?parent=1', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/1/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -73,10 +73,19 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 1,
+            "role": "user",
+            "content": {
+                "type": "text",
+                "content": "This is a test message"
+            },
+            "insertDate": "2026-02-22T19:17:00Z"
+        },
         {
             "id": 2,
             "role": "assistant",
@@ -106,23 +115,19 @@ JSON;
             ],
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "id": "3",
-    "output": {
-        "type": "text",
-        "content": "The answer ist: 42"
-    }
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body);
+
+        $chatId = $data->id ?? null;
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertNotEmpty($chatId);
+        $this->assertEquals('text', $data->output->type);
+        $this->assertEquals('The answer ist: 42', $data->output->content);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
-            ->select('origin', 'content')
+            ->select('chat_id', 'child', 'origin', 'content')
             ->from('fusio_agent_message')
             ->where('agent_id = :agent_id')
             ->orderBy('id', 'DESC')
@@ -130,6 +135,8 @@ JSON;
 
         $row = $this->connection->fetchAssociative($sql, ['agent_id' => 1]);
 
+        $this->assertEquals($chatId, $row['chat_id']);
+        $this->assertEquals(1, $row['child']);
         $this->assertEquals(2, $row['origin']);
         $this->assertJsonStringEqualsJsonString(Parser::encode(['type' => 'text', 'content' => 'The answer ist: 42']), $row['content']);
     }

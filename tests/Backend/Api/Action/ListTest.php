@@ -47,6 +47,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Amqp.Action.AmqpPublish"
         },
         {
+            "name": "Agent-Call",
+            "class": "Fusio.Adapter.Ai.Action.AgentCall"
+        },
+        {
             "name": "Beanstalk-Publish",
             "class": "Fusio.Adapter.Beanstalk.Action.BeanstalkPublish"
         },

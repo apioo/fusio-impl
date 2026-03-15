@@ -183,7 +183,7 @@ readonly class Sender implements SenderInterface
         return $messages;
     }
 
-    private function persistUserMessages(int $agentId, int $userId, ?string $chatId, MessageBag $userMessages): int
+    private function persistUserMessages(int $agentId, int $userId, ?string $chatId, MessageBag $userMessages): string
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $content) {

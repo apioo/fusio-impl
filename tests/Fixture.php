@@ -143,8 +143,8 @@ class Fixture
         $data->addFirewall('my_v6_rule', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344', ['foo' => 'bar']);
         $data->addForm('my_form', 'test.createFoo', ['foo' => 'bar'], ['foo' => 'bar']);
         $data->addAgent('default', 'Agent', Table\Agent::TYPE_GENERAL, 'agent-test', 'An agent test', 'A test agent which always return "Hello World"', ['test_listFoo'], 'schema://Entry-Schema', date: '2026-02-22 13:06:00');
-        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_USER, 'This is a test message', date: '2026-02-22 19:17:00');
-        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_ASSISTANT, 'And an agent response', date: '2026-02-22 19:17:00');
+        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_USER, 0, 'This is a test message', date: '2026-02-22 19:17:00');
+        $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_ASSISTANT, 1, 'And an agent response', date: '2026-02-22 19:17:00');
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');
         $data->addWebhookResponse(1);
