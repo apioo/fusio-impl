@@ -70,6 +70,7 @@ class Message extends Generated\AgentMessageTable
         $row->setAgentId($agentId);
         $row->setUserId($userId);
         $row->setChatId(empty($chatId) ? Uuid::v4()->toString() : $chatId);
+        $row->setChild(empty($chatId) ? 0 : 1);
         $row->setOrigin($role);
         $row->setContent(Parser::encode($content));
         $row->setInsertDate(LocalDateTime::now());

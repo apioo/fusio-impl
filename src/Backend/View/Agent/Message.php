@@ -37,17 +37,17 @@ use PSX\Sql\ViewAbstract;
  */
 class Message extends ViewAbstract
 {
-    public function getCollection(int $agentId, int $parentId, ContextInterface $context)
+    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context)
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $context->getUser()->getId());
 
-        if ($parentId > 0) {
-            $condition->equals(Table\Generated\AgentMessageColumn::PARENT_ID, $parentId);
+        if (!empty($chatId)) {
+            $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);
             $sortOrder = OrderBy::ASC;
         } else {
-            $condition->nil(Table\Generated\AgentMessageColumn::PARENT_ID);
+            $condition->equals(Table\Generated\AgentMessageColumn::CHILD, 0);
             $sortOrder = OrderBy::DESC;
         }
 

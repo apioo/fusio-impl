@@ -8,6 +8,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     private ?int $agentId = null;
     private ?int $userId = null;
     private ?string $chatId = null;
+    private ?int $child = null;
     private ?int $origin = null;
     private ?string $content = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
@@ -43,6 +44,14 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     {
         return $this->chatId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "chat_id" was provided');
     }
+    public function setChild(int $child): void
+    {
+        $this->child = $child;
+    }
+    public function getChild(): int
+    {
+        return $this->child ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "child" was provided');
+    }
     public function setOrigin(int $origin): void
     {
         $this->origin = $origin;
@@ -75,6 +84,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('agent_id', $this->agentId);
         $record->put('user_id', $this->userId);
         $record->put('chat_id', $this->chatId);
+        $record->put('child', $this->child);
         $record->put('origin', $this->origin);
         $record->put('content', $this->content);
         $record->put('insert_date', $this->insertDate);
@@ -91,6 +101,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $row->agentId = isset($data['agent_id']) && is_int($data['agent_id']) ? $data['agent_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->chatId = isset($data['chat_id']) && is_string($data['chat_id']) ? $data['chat_id'] : null;
+        $row->child = isset($data['child']) && is_int($data['child']) ? $data['child'] : null;
         $row->origin = isset($data['origin']) && is_int($data['origin']) ? $data['origin'] : null;
         $row->content = isset($data['content']) && is_string($data['content']) ? $data['content'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;

@@ -79,11 +79,13 @@ final class Version20230508210151 extends AbstractMigration
             $agentMessageTable->addColumn('agent_id', 'integer');
             $agentMessageTable->addColumn('user_id', 'integer');
             $agentMessageTable->addColumn('chat_id', 'string');
+            $agentMessageTable->addColumn('child', 'integer');
             $agentMessageTable->addColumn('origin', 'integer');
             $agentMessageTable->addColumn('content', 'text');
             $agentMessageTable->addColumn('insert_date', 'datetime');
             $agentMessageTable->setPrimaryKey(['id']);
-            $agentMessageTable->addIndex(['chat_id']);
+            $agentMessageTable->addIndex(['agent_id', 'user_id', 'chat_id']);
+            $agentMessageTable->addIndex(['agent_id', 'user_id', 'child']);
         }
 
         if (!$schema->hasTable('fusio_app')) {

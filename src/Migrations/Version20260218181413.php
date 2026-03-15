@@ -60,11 +60,13 @@ final class Version20260218181413 extends AbstractMigration
             $agentMessageTable->addColumn('agent_id', 'integer');
             $agentMessageTable->addColumn('user_id', 'integer');
             $agentMessageTable->addColumn('chat_id', 'string');
+            $agentMessageTable->addColumn('child', 'integer');
             $agentMessageTable->addColumn('origin', 'integer');
             $agentMessageTable->addColumn('content', 'text');
             $agentMessageTable->addColumn('insert_date', 'datetime');
             $agentMessageTable->setPrimaryKey(['id']);
-            $agentMessageTable->addIndex(['chat_id']);
+            $agentMessageTable->addIndex(['agent_id', 'user_id', 'chat_id']);
+            $agentMessageTable->addIndex(['agent_id', 'user_id', 'child']);
 
             $agentMessageTable->addForeignKeyConstraint($schema->getTable('fusio_agent'), ['agent_id'], ['id'], [], 'agent_message_agent_id');
             $agentMessageTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_message_user_id');

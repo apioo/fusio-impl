@@ -12,6 +12,7 @@ class AgentMessageTable extends \PSX\Sql\TableAbstract
     public const COLUMN_AGENT_ID = 'agent_id';
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_CHAT_ID = 'chat_id';
+    public const COLUMN_CHILD = 'child';
     public const COLUMN_ORIGIN = 'origin';
     public const COLUMN_CONTENT = 'content';
     public const COLUMN_INSERT_DATE = 'insert_date';
@@ -21,7 +22,7 @@ class AgentMessageTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_AGENT_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CHAT_ID => 0xa000ff, self::COLUMN_ORIGIN => 0x20000a, self::COLUMN_CONTENT => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_AGENT_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CHAT_ID => 0xa000ff, self::COLUMN_CHILD => 0x20000a, self::COLUMN_ORIGIN => 0x20000a, self::COLUMN_CONTENT => 0xb00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentMessageRow>
@@ -201,6 +202,43 @@ class AgentMessageTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('chat_id', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AgentMessageRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByChild(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentMessageColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('child', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByChild(int $value): ?\Fusio\Impl\Table\Generated\AgentMessageRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('child', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByChild(int $value, \Fusio\Impl\Table\Generated\AgentMessageRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('child', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByChild(int $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('child', $value);
         return $this->doDeleteBy($condition);
     }
     /**

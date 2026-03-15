@@ -340,7 +340,7 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 200,
                     outgoing: Model\Backend\AgentMessageCollection::class,
-                    parameters: ['parent' => PropertyTypeFactory::getInteger()],
+                    parameters: ['chat_id' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a paginated list of agent messages',
                 ),
