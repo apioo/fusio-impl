@@ -25,7 +25,7 @@ use Fusio\Engine\Model\User;
 use Fusio\Impl\Controller\Filter\Authentication;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Framework\Loader\ContextFactory;
-use Fusio\Impl\Repository\AppDatabase;
+use Fusio\Impl\Repository\AppRepository;
 use Fusio\Impl\Service\Security\TokenValidator;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table\Operation;
@@ -188,7 +188,7 @@ class AuthenticationTest extends DbTestCase
         $row->setPublic(0);
         $context->setOperation($row);
 
-        $app = (new AppDatabase($this->connection, Environment::getService(FrameworkConfig::class)))->get(1);
+        $app = (new AppRepository($this->connection, Environment::getService(FrameworkConfig::class)))->get(1);
         $context->setApp($app);
     }
 }
