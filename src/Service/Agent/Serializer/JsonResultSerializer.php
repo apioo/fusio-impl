@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Backend\AgentContent;
-use Fusio\Model\Backend\AgentContentObject;
+use Fusio\Model\Common\AgentContent;
+use Fusio\Model\Common\AgentContentObject;
 use stdClass;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\Result\TextResult;

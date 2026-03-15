@@ -29,7 +29,6 @@ use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Service\Tenant\UsageLimiter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Agent;
-use Fusio\Model\Backend\SchemaSource;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Exception\SchemaException;
 use PSX\Schema\SchemaManagerInterface;

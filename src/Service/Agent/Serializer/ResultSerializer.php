@@ -20,13 +20,13 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Backend\AgentContent;
-use Fusio\Model\Backend\AgentContentBinary;
-use Fusio\Model\Backend\AgentContentChoice;
-use Fusio\Model\Backend\AgentContentObject;
-use Fusio\Model\Backend\AgentContentText;
-use Fusio\Model\Backend\AgentContentToolCall;
-use Fusio\Model\Backend\AgentContentToolCallFunction;
+use Fusio\Model\Common\AgentContent;
+use Fusio\Model\Common\AgentContentBinary;
+use Fusio\Model\Common\AgentContentChoice;
+use Fusio\Model\Common\AgentContentObject;
+use Fusio\Model\Common\AgentContentText;
+use Fusio\Model\Common\AgentContentToolCall;
+use Fusio\Model\Common\AgentContentToolCallFunction;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Result\BinaryResult;
