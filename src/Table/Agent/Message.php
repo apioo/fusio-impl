@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Table\Agent;
 
 use Fusio\Impl\Table\Generated;
-use Fusio\Model\Backend\AgentContent;
+use Fusio\Model\Common\AgentContent;
 use PSX\DateTime\LocalDateTime;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;

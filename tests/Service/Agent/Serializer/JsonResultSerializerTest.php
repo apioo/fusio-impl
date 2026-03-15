@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Tests\Service;
 
 use Fusio\Impl\Service\Agent\Serializer\JsonResultSerializer;
-use Fusio\Model\Backend\AgentContentObject;
+use Fusio\Model\Common\AgentContentObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Json\Parser;

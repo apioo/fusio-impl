@@ -21,11 +21,11 @@
 namespace Fusio\Impl\Backend\Action\Agent\Message;
 
 use Fusio\Engine\ActionInterface;
+use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Agent;
-use Fusio\Model\Backend\AgentInput;
+use Fusio\Model\Common\AgentInput;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -37,7 +37,7 @@ use PSX\Http\Environment\HttpResponse;
  */
 readonly class Submit implements ActionInterface
 {
-    public function __construct(private Agent\Sender $sender)
+    public function __construct(private SenderInterface $sender)
     {
     }
 
@@ -49,7 +49,6 @@ readonly class Submit implements ActionInterface
 
         $output = $this->sender->send(
             (int) $request->get('agent_id'),
-            (int) $request->get('parent'),
             $body,
             $context,
         );

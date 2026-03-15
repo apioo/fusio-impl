@@ -27,8 +27,8 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Agent\Serializer\ResultSerializer;
 use Fusio\Impl\Service\Agent\Unserializer\MessageUnserializer;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\AgentInput;
-use Fusio\Model\Backend\AgentOutput;
+use Fusio\Model\Common\AgentInput;
+use Fusio\Model\Common\AgentOutput;
 use PSX\Http\Environment\HttpResponse;
 
 /**

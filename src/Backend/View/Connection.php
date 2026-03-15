@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Common\FormElementInput;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -103,7 +104,7 @@ class Connection extends ViewAbstract
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();
                         foreach ($elements as $element) {
-                            if ($element instanceof Form\Element\Input && $element->getType() == 'password') {
+                            if ($element instanceof FormElementInput && $element->getType() == 'password') {
                                 if (isset($config[$element->getName()])) {
                                     unset($config[$element->getName()]);
                                 }
