@@ -28,13 +28,13 @@ use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 
 /**
- * ActionDatabase
+ * ActionRepository
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ActionDatabase implements Repository\ActionInterface
+class ActionRepository implements Repository\ActionInterface
 {
     private Connection $connection;
     private Service\System\FrameworkConfig $frameworkConfig;

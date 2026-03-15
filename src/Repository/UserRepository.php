@@ -28,13 +28,13 @@ use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 
 /**
- * UserDatabase
+ * UserRepository
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class UserDatabase implements Repository\UserInterface
+class UserRepository implements Repository\UserInterface
 {
     private Connection $connection;
     private FrameworkConfig $frameworkConfig;

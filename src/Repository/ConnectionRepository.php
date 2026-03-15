@@ -29,13 +29,13 @@ use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 
 /**
- * ConnectionDatabase
+ * ConnectionRepository
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class ConnectionDatabase implements Repository\ConnectionInterface
+class ConnectionRepository implements Repository\ConnectionInterface
 {
     private Connection $connection;
     private FrameworkConfig $frameworkConfig;

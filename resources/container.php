@@ -51,17 +51,20 @@ return static function (ContainerConfigurator $container) {
         ->tag('fusio.mailer.sender');
 
     // engine
-    $services->set(ImplRepository\ActionDatabase::class);
-    $services->alias(Repository\ActionInterface::class, ImplRepository\ActionDatabase::class);
+    $services->set(ImplRepository\ActionRepository::class);
+    $services->alias(Repository\ActionInterface::class, ImplRepository\ActionRepository::class);
 
-    $services->set(ImplRepository\ConnectionDatabase::class);
-    $services->alias(Repository\ConnectionInterface::class, ImplRepository\ConnectionDatabase::class);
+    $services->set(ImplRepository\AgentRepository::class);
+    $services->alias(Repository\AgentInterface::class, ImplRepository\AgentRepository::class);
 
-    $services->set(ImplRepository\AppDatabase::class);
-    $services->alias(Repository\AppInterface::class, ImplRepository\AppDatabase::class);
+    $services->set(ImplRepository\ConnectionRepository::class);
+    $services->alias(Repository\ConnectionInterface::class, ImplRepository\ConnectionRepository::class);
 
-    $services->set(ImplRepository\UserDatabase::class);
-    $services->alias(Repository\UserInterface::class, ImplRepository\UserDatabase::class);
+    $services->set(ImplRepository\AppRepository::class);
+    $services->alias(Repository\AppInterface::class, ImplRepository\AppRepository::class);
+
+    $services->set(ImplRepository\UserRepository::class);
+    $services->alias(Repository\UserInterface::class, ImplRepository\UserRepository::class);
 
     $services->set(Producer::class);
     $services->alias(Action\QueueInterface::class, Producer::class);
@@ -70,6 +73,8 @@ return static function (ContainerConfigurator $container) {
     $services->alias(DispatcherInterface::class, Dispatcher::class);
 
     $services->set(Agent\Tools::class);
+    $services->alias(ToolsInterface::class, Agent\Tools::class);
+
     $services->alias(ToolsInterface::class, Agent\Tools::class);
 
     $services->alias('test_connector', ConnectorInterface::class)

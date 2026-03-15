@@ -23,7 +23,6 @@ namespace Fusio\Impl\Event\Agent;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 use Fusio\Model\Backend\AgentCreate;
-use Fusio\Model\Backend\CronjobCreate;
 
 /**
  * CreatedEvent
