@@ -85,7 +85,7 @@ readonly class Sender implements SenderInterface
             throw new StatusCode\InternalServerErrorException('Could not resolve agent connection');
         }
 
-        $previousId = $input->getPreviousId();
+        $chatId = $input->getPreviousId();
         $input = $input->getInput() ?? throw new StatusCode\BadRequestException('Provided no input');
 
         $this->agentTable->beginTransaction();
@@ -94,13 +94,13 @@ readonly class Sender implements SenderInterface
             $messages = new MessageBag();
             $messages->add(Message::forSystem($row->getIntroduction()));
 
-            if (!empty($previousId)) {
-                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $previousId, $messages);
+            if (!empty($chatId)) {
+                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $chatId, $messages);
             }
 
             $userMessages = $this->messageUnserializer->unserialize($input);
 
-            $previousId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $previousId, $userMessages);
+            $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $chatId, $userMessages);
 
             $messages = $messages->merge($userMessages);
 
@@ -130,12 +130,12 @@ readonly class Sender implements SenderInterface
                 $output = $this->resultSerializer->serialize($result);
             }
 
-            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $previousId, $output);
+            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $chatId, $output);
 
             $this->agentTable->commit();
 
             $message = new AgentOutput();
-            $message->setId('' . $previousId);
+            $message->setId('' . $chatId);
             $message->setOutput($output);
             return $message;
         } catch (Throwable $e) {
@@ -149,16 +149,12 @@ readonly class Sender implements SenderInterface
         }
     }
 
-    private function loadPreviousMessages(int $agentId, int $userId, string $previousId, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $agentId, int $userId, string $chatId, MessageBag $messages): MessageBag
     {
-        $idCondition = Condition::withOr();
-        $idCondition->equals(Table\Generated\AgentMessageColumn::ID, $parentId);
-        $idCondition->equals(Table\Generated\AgentMessageColumn::PARENT_ID, $parentId);
-
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $userId);
-        $condition->add($idCondition);
+        $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);
 
         $count = $this->messageTable->getCount($condition);
         $startIndex = max(0, $count - self::CONTEXT_MESSAGES_LENGTH);
@@ -187,19 +183,19 @@ readonly class Sender implements SenderInterface
         return $messages;
     }
 
-    private function persistUserMessages(int $agentId, int $userId, int $parentId, MessageBag $userMessages): int
+    private function persistUserMessages(int $agentId, int $userId, ?string $chatId, MessageBag $userMessages): int
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $content) {
-                $message = $this->messageTable->addUserMessage($agentId, $userId, $parentId, $content);
+                $message = $this->messageTable->addUserMessage($agentId, $userId, $chatId, $content);
 
-                if ($parentId === 0) {
-                    $parentId = $message->getId();
+                if (empty($chatId)) {
+                    $chatId = $message->getChatId();
                 }
             }
         }
 
-        return $parentId;
+        return $chatId;
     }
 
     private function getResponseSchema(Table\Generated\AgentRow $row): ?array

@@ -251,12 +251,12 @@ class DataBag
         ];
     }
 
-    public function addAgentMessage(string $agent, string $user, int $origin, string $content, ?int $parentId = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAgentMessage(string $agent, string $user, int $origin, string $content, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_agent_message'][$content] = [
             'agent_id' => $this->getReference('fusio_agent', $agent, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
-            'parent_id' => $parentId !== null ? $parentId : null,
+            'chat_id' => '41fd19b2-2dc0-46d9-b904-85c0d0b61a77',
             'origin' => $origin,
             'content' => Parser::encode(['type' => 'text', 'content' => $content]),
             'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
