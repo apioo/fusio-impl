@@ -3,6 +3,7 @@
 use Fusio\Cli;
 use Fusio\Engine\Action;
 use Fusio\Engine\Adapter\ServiceBuilder;
+use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\Agent\ToolsInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
@@ -75,7 +76,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(Agent\Tools::class);
     $services->alias(ToolsInterface::class, Agent\Tools::class);
 
-    $services->alias(ToolsInterface::class, Agent\Tools::class);
+    $services->alias(SenderInterface::class, Agent\Sender::class);
 
     $services->alias('test_connector', ConnectorInterface::class)
         ->public();
