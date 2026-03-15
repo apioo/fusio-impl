@@ -15420,33 +15420,14 @@
       },
       "discriminator": "type",
       "mapping": {
-        "Common_FormElementAction": "action",
-        "Common_FormElementAgent": "agent",
         "Common_FormElementCheckbox": "checkbox",
         "Common_FormElementCollection": "collection",
-        "Common_FormElementConnection": "connection",
         "Common_FormElementInput": "input",
         "Common_FormElementMap": "map",
         "Common_FormElementSelect": "select",
         "Common_FormElementTextArea": "textarea",
         "Common_FormElementTypeAPI": "typeapi",
         "Common_FormElementTypeSchema": "typeschema"
-      }
-    },
-    "Common_FormElementAction": {
-      "description": "Form element which represents an action selection",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_FormElementSelect"
-      }
-    },
-    "Common_FormElementAgent": {
-      "description": "Form element which represents an agent selection",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_FormElementSelect"
       }
     },
     "Common_FormElementCheckbox": {
@@ -15463,14 +15444,6 @@
       "parent": {
         "type": "reference",
         "target": "Common_FormElementInput"
-      }
-    },
-    "Common_FormElementConnection": {
-      "description": "Form element which represents a connection selection",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_FormElementSelect"
       }
     },
     "Common_FormElementInput": {
