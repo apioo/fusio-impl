@@ -15443,7 +15443,13 @@
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Common_FormElementInput"
+        "target": "Common_FormElement"
+      },
+      "properties": {
+        "type": {
+          "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
       }
     },
     "Common_FormElementInput": {
@@ -15465,7 +15471,13 @@
       "type": "struct",
       "parent": {
         "type": "reference",
-        "target": "Common_FormElementInput"
+        "target": "Common_FormElement"
+      },
+      "properties": {
+        "type": {
+          "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
       }
     },
     "Common_FormElementSelect": {
