@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Table\Agent;
 
 use Fusio\Impl\Table\Generated;
+use Fusio\Model\Agent\Item;
 use Fusio\Model\Common\AgentContent;
 use PSX\DateTime\LocalDateTime;
 use PSX\Json\Parser;
@@ -40,19 +41,19 @@ class Message extends Generated\AgentMessageTable
     public const ORIGIN_ASSISTANT = 0x2;
     public const ORIGIN_SYSTEM    = 0x3;
 
-    public function addUserMessage(int $agentId, int $userId, ?string $chatId, AgentContent $content): Generated\AgentMessageRow
+    public function addUserMessage(int $agentId, int $userId, ?string $chatId, Item $item): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_USER, $content);
+        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_USER, $item);
     }
 
-    public function addAssistantMessage(int $agentId, int $userId, ?string $chatId, AgentContent $content): Generated\AgentMessageRow
+    public function addAssistantMessage(int $agentId, int $userId, ?string $chatId, Item $item): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_ASSISTANT, $content);
+        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_ASSISTANT, $item);
     }
 
-    public function addSystemMessage(int $agentId, int $userId, ?string $chatId, AgentContent $content): Generated\AgentMessageRow
+    public function addSystemMessage(int $agentId, int $userId, ?string $chatId, Item $item): Generated\AgentMessageRow
     {
-        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_SYSTEM, $content);
+        return $this->addMessage($agentId, $userId, $chatId, self::ORIGIN_SYSTEM, $item);
     }
 
     public function reset(int $agentId, int $userId): void
@@ -64,7 +65,7 @@ class Message extends Generated\AgentMessageTable
         $this->deleteBy($condition);
     }
 
-    private function addMessage(int $agentId, int $userId, ?string $chatId, int $role, AgentContent $content): Generated\AgentMessageRow
+    private function addMessage(int $agentId, int $userId, ?string $chatId, int $role, Item $item): Generated\AgentMessageRow
     {
         $row = new Generated\AgentMessageRow();
         $row->setAgentId($agentId);
@@ -72,7 +73,7 @@ class Message extends Generated\AgentMessageTable
         $row->setChatId(empty($chatId) ? Uuid::v4()->toString() : $chatId);
         $row->setChild(empty($chatId) ? 0 : 1);
         $row->setOrigin($role);
-        $row->setContent(Parser::encode($content));
+        $row->setContent(Parser::encode($item));
         $row->setInsertDate(LocalDateTime::now());
         $this->create($row);
 

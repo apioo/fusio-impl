@@ -25,7 +25,7 @@ use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Model\Common\AgentInput;
+use Fusio\Model\Agent\Input;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -45,7 +45,7 @@ readonly class Submit implements ActionInterface
     {
         $body = $request->getPayload();
 
-        assert($body instanceof AgentInput);
+        assert($body instanceof Input);
 
         $output = $this->sender->send(
             (int) $request->get('agent_id'),

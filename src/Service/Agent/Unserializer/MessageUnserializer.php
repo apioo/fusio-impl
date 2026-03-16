@@ -20,11 +20,11 @@
 
 namespace Fusio\Impl\Service\Agent\Unserializer;
 
-use Fusio\Model\Common\AgentContent;
-use Fusio\Model\Common\AgentContentBinary;
-use Fusio\Model\Common\AgentContentObject;
-use Fusio\Model\Common\AgentContentText;
-use Fusio\Model\Common\AgentContentToolCall;
+use Fusio\Model\Agent\Item;
+use Fusio\Model\Agent\ItemBinary;
+use Fusio\Model\Agent\ItemObject;
+use Fusio\Model\Agent\ItemText;
+use Fusio\Model\Agent\ItemToolCall;
 use PSX\Http\Exception\BadRequestException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Message\Content\File;
@@ -41,16 +41,16 @@ use Symfony\AI\Platform\Result\ToolCall;
  */
 readonly class MessageUnserializer
 {
-    public function unserialize(AgentContent $content): MessageBag
+    public function unserialize(Item $content): MessageBag
     {
         $messages = new MessageBag();
-        if ($content instanceof AgentContentText) {
+        if ($content instanceof ItemText) {
             $messages->add(Message::ofUser($content->getContent()));
-        } elseif ($content instanceof AgentContentObject) {
+        } elseif ($content instanceof ItemObject) {
             $messages->add(Message::ofUser(Parser::encode($content->getPayload())));
-        } elseif ($content instanceof AgentContentBinary) {
+        } elseif ($content instanceof ItemBinary) {
             $messages->add(Message::ofUser(new File($content->getData(), $content->getMime())));
-        } elseif ($content instanceof AgentContentToolCall) {
+        } elseif ($content instanceof ItemToolCall) {
             $functions = $content->getFunctions();
             foreach ($functions as $function) {
                 $toolCall = new ToolCall($function->getId(), $function->getName(), Parser::decode($function->getArguments()));

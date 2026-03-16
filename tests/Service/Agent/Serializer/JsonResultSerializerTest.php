@@ -21,7 +21,7 @@
 namespace Fusio\Impl\Tests\Service;
 
 use Fusio\Impl\Service\Agent\Serializer\JsonResultSerializer;
-use Fusio\Model\Common\AgentContentObject;
+use Fusio\Model\Agent\ItemObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Json\Parser;
@@ -43,7 +43,7 @@ class JsonResultSerializerTest extends TestCase
 
         $result = $serializer->serialize(new TextResult($content));
 
-        $this->assertInstanceOf(AgentContentObject::class, $result);
+        $this->assertInstanceOf(ItemObject::class, $result);
         $this->assertJsonStringEqualsJsonString($expect, Parser::encode($result->getPayload()));
     }
 

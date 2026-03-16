@@ -24,6 +24,11 @@ use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Table;
+use Fusio\Model\Agent\Input;
+use Fusio\Model\Agent\Item;
+use Fusio\Model\Agent\ItemObject;
+use Fusio\Model\Agent\ItemText;
+use Fusio\Model\Agent\Output;
 use Fusio\Model\Common\AgentContent;
 use Fusio\Model\Common\AgentContentObject;
 use Fusio\Model\Common\AgentContentText;
@@ -73,7 +78,7 @@ readonly class Sender implements SenderInterface
         $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
-    public function send(int $agentId, AgentInput $input, ContextInterface $context): AgentOutput
+    public function send(int $agentId, Input $input, ContextInterface $context): Output
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
@@ -91,7 +96,7 @@ readonly class Sender implements SenderInterface
         }
 
         $chatId = $input->getPreviousId();
-        $input = $input->getInput() ?? throw new StatusCode\BadRequestException('Provided no input');
+        $item = $input->getItem() ?? throw new StatusCode\BadRequestException('Provided no input');
 
         $this->agentTable->beginTransaction();
 
@@ -103,7 +108,7 @@ readonly class Sender implements SenderInterface
                 $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $chatId, $messages);
             }
 
-            $userMessages = $this->messageUnserializer->unserialize($input);
+            $userMessages = $this->messageUnserializer->unserialize($item);
 
             $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $chatId, $userMessages);
 
@@ -130,18 +135,18 @@ readonly class Sender implements SenderInterface
             $result = $agent->call($messages, $options);
 
             if ($responseSchema !== null) {
-                $output = $this->jsonResultSerializer->serialize($result);
+                $item = $this->jsonResultSerializer->serialize($result);
             } else {
-                $output = $this->resultSerializer->serialize($result);
+                $item = $this->resultSerializer->serialize($result);
             }
 
-            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $chatId, $output);
+            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $chatId, $item);
 
             $this->agentTable->commit();
 
-            $message = new AgentOutput();
-            $message->setId('' . $chatId);
-            $message->setOutput($output);
+            $message = new Output();
+            $message->setId($chatId);
+            $message->setItem($item);
             return $message;
         } catch (Throwable $e) {
             $this->agentTable->rollBack();
@@ -166,20 +171,20 @@ readonly class Sender implements SenderInterface
 
         $result = $this->messageTable->findBy($condition, $startIndex, $count, Table\Generated\AgentMessageColumn::ID, OrderBy::ASC);
         foreach ($result as $row) {
-            $message = $this->objectMapper->readJson($row->getContent(), SchemaSource::fromClass(AgentContent::class));
+            $message = $this->objectMapper->readJson($row->getContent(), SchemaSource::fromClass(Item::class));
 
             if ($row->getOrigin() === Table\Agent\Message::ORIGIN_USER) {
                 $messages = $messages->merge($this->messageUnserializer->unserialize($message));
             } elseif ($row->getOrigin() === Table\Agent\Message::ORIGIN_ASSISTANT) {
-                if ($message instanceof AgentContentText) {
+                if ($message instanceof ItemText) {
                     $messages->add(Message::ofAssistant($message->getContent()));
-                } elseif ($message instanceof AgentContentObject) {
+                } elseif ($message instanceof ItemObject) {
                     $messages->add(Message::ofAssistant(Parser::encode($message->getPayload())));
                 }
             } elseif ($row->getOrigin() === Table\Agent\Message::ORIGIN_SYSTEM) {
-                if ($message instanceof AgentContentText) {
+                if ($message instanceof ItemText) {
                     $messages->add(Message::forSystem($message->getContent()));
-                } elseif ($message instanceof AgentContentObject) {
+                } elseif ($message instanceof ItemObject) {
                     $messages->add(Message::forSystem(Parser::encode($message->getPayload())));
                 }
             }

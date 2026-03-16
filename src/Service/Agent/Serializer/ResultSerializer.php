@@ -20,13 +20,13 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Common\AgentContent;
-use Fusio\Model\Common\AgentContentBinary;
-use Fusio\Model\Common\AgentContentChoice;
-use Fusio\Model\Common\AgentContentObject;
-use Fusio\Model\Common\AgentContentText;
-use Fusio\Model\Common\AgentContentToolCall;
-use Fusio\Model\Common\AgentContentToolCallFunction;
+use Fusio\Model\Agent\Item;
+use Fusio\Model\Agent\ItemBinary;
+use Fusio\Model\Agent\ItemChoice;
+use Fusio\Model\Agent\ItemObject;
+use Fusio\Model\Agent\ItemText;
+use Fusio\Model\Agent\ItemToolCall;
+use Fusio\Model\Agent\ItemToolCallFunction;
 use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Result\BinaryResult;
@@ -45,10 +45,10 @@ use Symfony\AI\Platform\Result\ToolCallResult;
  */
 readonly class ResultSerializer
 {
-    public function serialize(ResultInterface $result): AgentContent
+    public function serialize(ResultInterface $result): Item
     {
         if ($result instanceof BinaryResult) {
-            $message = new AgentContentBinary();
+            $message = new ItemBinary();
             $message->setType('binary');
             $message->setMime($result->getMimeType());
             $message->setData($result->toBase64());
@@ -58,28 +58,28 @@ readonly class ResultSerializer
                 $items[] = $this->serialize($item);
             }
 
-            $message = new AgentContentChoice();
+            $message = new ItemChoice();
             $message->setType('choice');
             $message->setItems($items);
         } elseif ($result instanceof ObjectResult) {
-            $message = new AgentContentObject();
+            $message = new ItemObject();
             $message->setType('object');
             $message->setPayload($result->getContent());
         } elseif ($result instanceof TextResult) {
-            $message = new AgentContentText();
+            $message = new ItemText();
             $message->setType('text');
             $message->setContent($result->getContent());
         } elseif ($result instanceof ToolCallResult) {
             $functions = [];
             foreach ($result->getContent() as $toolCall) {
-                $function = new AgentContentToolCallFunction();
+                $function = new ItemToolCallFunction();
                 $function->setName($toolCall->getName());
                 $function->setArguments(Parser::encode($toolCall->getArguments()));
                 $function->setId($toolCall->getId());
                 $functions[] = $function;
             }
 
-            $message = new AgentContentToolCall();
+            $message = new ItemToolCall();
             $message->setType('tool_call');
             $message->setFunctions($functions);
         } else {

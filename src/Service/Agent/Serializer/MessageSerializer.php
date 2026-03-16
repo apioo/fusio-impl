@@ -20,11 +20,11 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Common\AgentContent;
-use Fusio\Model\Common\AgentContentBinary;
-use Fusio\Model\Common\AgentContentText;
-use Fusio\Model\Common\AgentContentToolCall;
-use Fusio\Model\Common\AgentContentToolCallFunction;
+use Fusio\Model\Agent\Item;
+use Fusio\Model\Agent\ItemBinary;
+use Fusio\Model\Agent\ItemText;
+use Fusio\Model\Agent\ItemToolCall;
+use Fusio\Model\Agent\ItemToolCallFunction;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Message\Content\Collection;
 use Symfony\AI\Platform\Message\Content\ContentInterface;
@@ -46,19 +46,19 @@ use Symfony\AI\Platform\Message\UserMessage;
 readonly class MessageSerializer
 {
     /**
-     * @return array<AgentContent>
+     * @return array<Item>
      */
     public function serialize(MessageInterface $message): array
     {
         if ($message instanceof ToolCallMessage) {
             $toolCall = $message->getToolCall();
 
-            $function = new AgentContentToolCallFunction();
+            $function = new ItemToolCallFunction();
             $function->setName($toolCall->getName());
             $function->setArguments(Parser::encode($toolCall->getArguments()));
             $function->setId($toolCall->getId());
 
-            $result = new AgentContentToolCall();
+            $result = new ItemToolCall();
             $result->setType('tool_call');
             $result->setFunctions([$function]);
 
@@ -73,7 +73,7 @@ readonly class MessageSerializer
 
             return $result;
         } else {
-            $result = new AgentContentText();
+            $result = new ItemText();
             $result->setType('text');
             $result->setContent($message->getContent());
 
@@ -82,25 +82,25 @@ readonly class MessageSerializer
     }
 
     /**
-     * @return array<AgentContent>
+     * @return array<Item>
      */
     private function serializeContent(ContentInterface $content): array
     {
         if ($content instanceof File) {
-            $result = new AgentContentBinary();
+            $result = new ItemBinary();
             $result->setType('binary');
             $result->setMime($content->getFormat());
             $result->setData($content->asBase64());
 
             return [$result];
         } elseif ($content instanceof Text) {
-            $result = new AgentContentText();
+            $result = new ItemText();
             $result->setType('text');
             $result->setContent($content->getText());
 
             return [$result];
         } elseif ($content instanceof ImageUrl || $content instanceof DocumentUrl) {
-            $result = new AgentContentText();
+            $result = new ItemText();
             $result->setType('text');
             $result->setContent($content->getUrl());
 

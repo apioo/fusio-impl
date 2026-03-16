@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Service\Agent\Serializer;
 
-use Fusio\Model\Common\AgentContent;
-use Fusio\Model\Common\AgentContentObject;
+use Fusio\Model\Agent\Item;
+use Fusio\Model\Agent\ItemObject;
 use stdClass;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\Result\TextResult;
@@ -35,14 +35,14 @@ use Symfony\AI\Platform\Result\TextResult;
  */
 readonly class JsonResultSerializer extends ResultSerializer
 {
-    public function serialize(ResultInterface $result): AgentContent
+    public function serialize(ResultInterface $result): Item
     {
         if ($result instanceof TextResult) {
             $content = $this->removeNoice($result->getContent());
 
             $payload = json_decode($content);
             if ($payload instanceof stdClass) {
-                $object = new AgentContentObject();
+                $object = new ItemObject();
                 $object->setType('object');
                 $object->setPayload($payload);
                 return $object;
@@ -61,6 +61,13 @@ readonly class JsonResultSerializer extends ResultSerializer
         $content = trim($content);
         $firstPos = strpos($content, '{');
         $lastPos = strrpos($content, '}');
+
+        $squareBracketFirstPos = strpos($content, '[');
+        $squareBracketLastPos = strrpos($content, ']');
+        if ($squareBracketFirstPos < $firstPos) {
+            $firstPos = $squareBracketFirstPos;
+            $lastPos = $squareBracketLastPos;
+        }
 
         if ($firstPos !== false && $lastPos !== false) {
             $content = substr($content, $firstPos, $lastPos - $firstPos + 1);
