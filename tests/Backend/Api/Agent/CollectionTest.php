@@ -52,7 +52,6 @@ class CollectionTest extends DbTestCase
         {
             "id": 3,
             "status": 1,
-            "connection": 1,
             "type": 2,
             "name": "Fusio-Action",
             "description": "Helps to develop custom action business logic",
@@ -62,7 +61,6 @@ class CollectionTest extends DbTestCase
         {
             "id": 2,
             "status": 1,
-            "connection": 1,
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
@@ -72,7 +70,6 @@ class CollectionTest extends DbTestCase
         {
             "id": 5,
             "status": 1,
-            "connection": 1,
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
@@ -82,7 +79,6 @@ class CollectionTest extends DbTestCase
         {
             "id": 1,
             "status": 1,
-            "connection": 1,
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
@@ -92,7 +88,6 @@ class CollectionTest extends DbTestCase
         {
             "id": 4,
             "status": 1,
-            "connection": 1,
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
@@ -168,7 +163,6 @@ JSON;
         {
             "id": 3,
             "status": 1,
-            "connection": 1,
             "type": 2,
             "name": "Fusio-Action",
             "description": "Helps to develop custom action business logic",
@@ -178,7 +172,6 @@ JSON;
         {
             "id": 2,
             "status": 1,
-            "connection": 1,
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
@@ -188,7 +181,6 @@ JSON;
         {
             "id": 5,
             "status": 1,
-            "connection": 1,
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
@@ -198,7 +190,6 @@ JSON;
         {
             "id": 1,
             "status": 1,
-            "connection": 1,
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
@@ -208,7 +199,6 @@ JSON;
         {
             "id": 4,
             "status": 1,
-            "connection": 1,
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
