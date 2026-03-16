@@ -33,13 +33,13 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
-    public function setConnectionId(int $connectionId): void
+    public function setConnectionId(?int $connectionId): void
     {
         $this->connectionId = $connectionId;
     }
-    public function getConnectionId(): int
+    public function getConnectionId(): ?int
     {
-        return $this->connectionId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "connection_id" was provided');
+        return $this->connectionId;
     }
     public function setTenantId(?string $tenantId): void
     {
