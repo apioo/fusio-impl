@@ -23,7 +23,6 @@ namespace Fusio\Impl\Backend\Filter;
 use DateTimeImmutable;
 use Exception;
 use Fusio\Engine\RequestInterface;
-use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\TableInterface;
 

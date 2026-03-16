@@ -36,6 +36,7 @@ use PSX\Sql\TableInterface;
 class QueryFilter
 {
     public const COLUMN_SEARCH = 'search';
+    public const DEFAULT_LENGTH = 16;
 
     private int $startIndex;
     private int $count;
@@ -50,7 +51,7 @@ class QueryFilter
         }
 
         if ($count < 1 || $count > 1024) {
-            $count = 16;
+            $count = self::DEFAULT_LENGTH;
         }
 
         if ($sortOrder === 'asc') {

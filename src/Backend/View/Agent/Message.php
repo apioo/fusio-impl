@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\View\Agent;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Nested\Builder;
@@ -45,14 +46,18 @@ class Message extends ViewAbstract
 
         if (!empty($chatId)) {
             $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);
+
+            $count = $this->getTable(Table\Agent\Message::class)->getCount($condition);
+            $startIndex = max(0, $count - Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH);
             $sortOrder = OrderBy::ASC;
         } else {
             $condition->equals(Table\Generated\AgentMessageColumn::CHILD, 0);
+
+            $startIndex = 0;
+            $count = QueryFilter::DEFAULT_LENGTH;
             $sortOrder = OrderBy::DESC;
         }
 
-        $count = $this->getTable(Table\Agent\Message::class)->getCount($condition);
-        $startIndex = max(0, $count - Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH);
         $sortBy = Table\Generated\AgentMessageColumn::ID;
 
         $builder = new Builder($this->connection);
@@ -63,6 +68,7 @@ class Message extends ViewAbstract
             'itemsPerPage' => Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH,
             'entry' => $builder->doCollection([$this->getTable(Table\Agent\Message::class), 'findBy'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $builder->fieldInteger(Table\Generated\AgentMessageTable::COLUMN_ID),
+                'chatId' => Table\Generated\AgentMessageTable::COLUMN_CHAT_ID,
                 'role' => $builder->fieldCallback(Table\Generated\AgentMessageTable::COLUMN_ORIGIN, function ($value) {
                     return match ($value) {
                         Table\Agent\Message::ORIGIN_ASSISTANT => 'assistant',

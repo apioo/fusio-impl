@@ -56,7 +56,7 @@ readonly class Sender implements SenderInterface
     /**
      * Max number of messages which are attached to the context
      */
-    public const CONTEXT_MESSAGES_LENGTH = 16;
+    public const CONTEXT_MESSAGES_LENGTH = 10;
 
     private ObjectMapper $objectMapper;
 
