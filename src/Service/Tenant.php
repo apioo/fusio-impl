@@ -41,6 +41,7 @@ class Tenant
         'fusio_connection',
         'fusio_cronjob',
         'fusio_action',
+        'fusio_agent',
         'fusio_test',
         'fusio_operation',
         'fusio_page',
