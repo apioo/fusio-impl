@@ -71,4 +71,18 @@ class Agent extends Generated\AgentTable
 
         return $this->findOneBy($condition);
     }
+
+    /**
+     * We create the Fusio default agents with 1 as connection, which is not an actual agent connection but the system
+     * connection, we do this since we have no actual agent connection. If a user creates the first agent connection we
+     * internally update the connection id to use the fitting connection
+     */
+    public function replaceDefaultConnection(int $connectionId): void
+    {
+        $this->connection->update(self::NAME, [
+            self::COLUMN_CONNECTION_ID => $connectionId
+        ], [
+            self::COLUMN_CONNECTION_ID => 1
+        ]);
+    }
 }

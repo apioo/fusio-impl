@@ -125,12 +125,61 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'consumer', tenantId: $tenantId);
         $bag->addUserScope('Administrator', 'authorization', tenantId: $tenantId);
         $bag->addUserScope('Administrator', 'default', tenantId: $tenantId);
-        $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE, tenantId: $tenantId);
-        $bag->addPage('Getting started', 'getting-started', self::readFile('getting-started.html'), tenantId: $tenantId);
-        $bag->addPage('API', 'api', self::readFile('api.html'), tenantId: $tenantId);
-        $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'), tenantId: $tenantId);
-        $bag->addPage('Support', 'support', self::readFile('support.html'), tenantId: $tenantId);
-        $bag->addPage('SDK', 'sdk', self::readFile('sdk.html'), tenantId: $tenantId);
+        $bag->addPage('Overview', 'overview', self::readPage('overview.html'), Table\Page::STATUS_INVISIBLE, tenantId: $tenantId);
+        $bag->addPage('Getting started', 'getting-started', self::readPage('getting-started.html'), tenantId: $tenantId);
+        $bag->addPage('API', 'api', self::readPage('api.html'), tenantId: $tenantId);
+        $bag->addPage('Authorization', 'authorization', self::readPage('authorization.html'), tenantId: $tenantId);
+        $bag->addPage('Support', 'support', self::readPage('support.html'), tenantId: $tenantId);
+        $bag->addPage('SDK', 'sdk', self::readPage('sdk.html'), tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, 'Fusio-General', 'Helps to answer general questions about your Fusio instance', self::readAgent('general.md'), [
+            'backend_operation_getAll',
+            'backend_operation_get',
+            'backend_action_getAll',
+            'backend_action_get',
+            'backend_action_getClasses',
+            'backend_action_getForm',
+            'backend_action_execute',
+            'backend_action_get',
+            'backend_schema_getAll',
+            'backend_schema_get',
+            'backend_connection_getAll',
+            'backend_connection_get',
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
+            'backend_connection_database_getRows',
+            'backend_connection_database_getRow',
+            'backend_connection_filesystem_getAll',
+            'backend_connection_filesystem_get',
+            'backend_connection_http_execute',
+            'backend_connection_sdk_get',
+            'backend_event_getAll',
+            'backend_event_get',
+            'backend_cronjob_getAll',
+            'backend_cronjob_get',
+            'backend_trigger_getAll',
+            'backend_trigger_get',
+            'backend_log_getAll',
+            'backend_log_get',
+            'backend_log_getAllErrors',
+            'backend_log_getError',
+        ], '', tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Helps to build complete operations, it uses internally the action, schema and database agent', self::readAgent('architect.md'), [], '', tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Helps to develop custom action business logic', self::readAgent('action.md'), [
+            'backend_action_getAll',
+            'backend_action_get',
+            'backend_connection_getAll',
+            'backend_connection_get',
+            'backend_database_getTables',
+            'backend_database_getTable',
+        ], '', tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Helps to build new schemas to describe JSON payloads', self::readAgent('schema.md'), [
+            'backend_schema_getAll',
+            'backend_schema_get',
+        ], '', tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Helps to design database table schemas', self::readAgent('database.md'), [
+            'backend_database_getTables',
+            'backend_database_getTable',
+        ], '', tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
             $bag->addOperations($tenantId, $category, $operations);
@@ -2827,12 +2876,20 @@ class NewInstallation
         ];
     }
 
-    /**
-     * Reads files in new line neutral way that means we always use \n
-     */
-    private static function readFile(string $file): string
+    private static function readPage(string $file): string
     {
-        $lines = file(__DIR__ . '/resources/' . $file);
+        $lines = file(__DIR__ . '/resources/page/' . $file);
+        if ($lines === false) {
+            throw new \RuntimeException('Could not read file: ' . $file);
+        }
+
+        $lines = array_map('rtrim', $lines);
+        return implode("\n", $lines);
+    }
+
+    private static function readAgent(string $file): string
+    {
+        $lines = file(__DIR__ . '/resources/agent/' . $file);
         if ($lines === false) {
             throw new \RuntimeException('Could not read file: ' . $file);
         }

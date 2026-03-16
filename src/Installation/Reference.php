@@ -23,6 +23,7 @@ namespace Fusio\Impl\Installation;
 use Doctrine\DBAL\Connection;
 use PSX\Sql\Condition;
 use PSX\Sql\Test\ResolvableInterface;
+use RuntimeException;
 
 /**
  * Reference
@@ -64,7 +65,7 @@ class Reference implements ResolvableInterface
 
         $id = (int) $connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
         if (empty($id)) {
-            throw new \RuntimeException('Could not resolve ' . $this->name . ' for table ' . $this->tableName);
+            throw new RuntimeException('Could not resolve ' . $this->name . ' for table ' . $this->tableName);
         }
 
         return $id;

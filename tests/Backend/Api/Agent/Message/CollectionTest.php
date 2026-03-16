@@ -20,8 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Agent\Message;
 
-use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Json\Parser;
 
 /**
@@ -35,26 +35,29 @@ class CollectionTest extends DbTestCase
 {
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/agent/1/message', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 16,
     "startIndex": 0,
-    "itemsPerPage": 16,
+    "itemsPerPage": 10,
     "entry": [
         {
             "id": 1,
+            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
             "content": {
                 "type": "text",
                 "content": "This is a test message"
             },
-            "insertDate": "2026-02-22T19:17:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -65,35 +68,39 @@ JSON;
     }
     public function testGetParent()
     {
-        $response = $this->sendRequest('/backend/agent/1/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/6/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
         $expect = <<<'JSON'
 {
     "totalResults": 2,
     "startIndex": 0,
-    "itemsPerPage": 16,
+    "itemsPerPage": 10,
     "entry": [
         {
             "id": 1,
+            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
             "content": {
                 "type": "text",
                 "content": "This is a test message"
             },
-            "insertDate": "2026-02-22T19:17:00Z"
+            "insertDate": "[datetime]"
         },
         {
             "id": 2,
+            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "assistant",
             "content": {
                 "type": "text",
                 "content": "And an agent response"
             },
-            "insertDate": "2026-02-22T19:17:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -105,7 +112,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/agent/1/message', 'POST', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -133,7 +140,7 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['agent_id' => 1]);
+        $row = $this->connection->fetchAssociative($sql, ['agent_id' => 6]);
 
         $this->assertEquals($chatId, $row['chat_id']);
         $this->assertEquals(1, $row['child']);
@@ -143,7 +150,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/agent/1/message', 'PUT', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -157,7 +164,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/agent/1/message', 'DELETE', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

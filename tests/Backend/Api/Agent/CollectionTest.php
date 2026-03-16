@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,22 +40,74 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 3,
+            "status": 1,
+            "connection": 1,
+            "type": 2,
+            "name": "Fusio-Action",
+            "description": "Helps to develop custom action business logic",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "connection": 1,
+            "type": 1,
+            "name": "Fusio-Architect",
+            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 5,
+            "status": 1,
+            "connection": 1,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Helps to design database table schemas",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 1,
+            "status": 1,
+            "connection": 1,
+            "type": 0,
+            "name": "Fusio-General",
+            "description": "Helps to answer general questions about your Fusio instance",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "connection": 1,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Helps to build new schemas to describe JSON payloads",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 6,
             "status": 1,
             "connection": 8,
             "type": 0,
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "2026-02-22T13:06:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -79,7 +132,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 1,
+            "id": 6,
             "status": 1,
             "connection": 8,
             "type": 0,
@@ -103,22 +156,74 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "id": 3,
+            "status": 1,
+            "connection": 1,
+            "type": 2,
+            "name": "Fusio-Action",
+            "description": "Helps to develop custom action business logic",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "connection": 1,
+            "type": 1,
+            "name": "Fusio-Architect",
+            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 5,
+            "status": 1,
+            "connection": 1,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Helps to design database table schemas",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 1,
+            "status": 1,
+            "connection": 1,
+            "type": 0,
+            "name": "Fusio-General",
+            "description": "Helps to answer general questions about your Fusio instance",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "connection": 1,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Helps to build new schemas to describe JSON payloads",
+            "outgoing": "",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 6,
             "status": 1,
             "connection": 8,
             "type": 0,
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "2026-02-22T13:06:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -146,7 +251,7 @@ JSON;
 {
     "success": true,
     "message": "Agent successfully created",
-    "id": "2"
+    "id": "7"
 }
 JSON;
 
