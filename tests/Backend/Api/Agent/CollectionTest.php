@@ -50,6 +50,34 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 6,
+            "status": 1,
+            "connection": 8,
+            "type": 0,
+            "name": "agent-test",
+            "description": "An agent test",
+            "outgoing": "schema:\/\/Entry-Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 5,
+            "status": 1,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Helps to design database table schemas",
+            "outgoing": "php+class:\/\/Fusio.Agent.Database",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Helps to build new schemas to describe JSON payloads",
+            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 3,
             "status": 1,
             "type": 2,
@@ -67,39 +95,11 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
-            "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
             "id": 1,
             "status": 1,
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
             "insertDate": "[datetime]"
         }
     ]
@@ -159,6 +159,34 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
+            "id": 6,
+            "status": 1,
+            "connection": 8,
+            "type": 0,
+            "name": "agent-test",
+            "description": "An agent test",
+            "outgoing": "schema:\/\/Entry-Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 5,
+            "status": 1,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Helps to design database table schemas",
+            "outgoing": "php+class:\/\/Fusio.Agent.Database",
+            "insertDate": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Helps to build new schemas to describe JSON payloads",
+            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 3,
             "status": 1,
             "type": 2,
@@ -176,39 +204,11 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
-            "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
             "id": 1,
             "status": 1,
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
             "insertDate": "[datetime]"
         }
     ]

@@ -40,8 +40,8 @@ class Agent extends ViewAbstract
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
-        $sortBy = Table\Generated\AgentColumn::tryFrom($filter->getSortBy(Table\Generated\AgentTable::COLUMN_NAME) ?? '');
-        $sortOrder = $filter->getSortOrder(OrderBy::ASC);
+        $sortBy = Table\Generated\AgentColumn::tryFrom($filter->getSortBy(Table\Generated\AgentTable::COLUMN_ID) ?? '');
+        $sortOrder = $filter->getSortOrder(OrderBy::DESC);
 
         $condition = $filter->getCondition($this->getTable(Table\Agent::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\AgentColumn::NAME]);
         $condition->equals(Table\Generated\AgentTable::COLUMN_TENANT_ID, $context->getTenantId());
