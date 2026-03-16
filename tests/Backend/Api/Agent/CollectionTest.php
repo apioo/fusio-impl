@@ -55,7 +55,6 @@ class CollectionTest extends DbTestCase
             "type": 2,
             "name": "Fusio-Action",
             "description": "Helps to develop custom action business logic",
-            "outgoing": "",
             "insertDate": "[datetime]"
         },
         {
@@ -64,7 +63,7 @@ class CollectionTest extends DbTestCase
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Blueprint",
             "insertDate": "[datetime]"
         },
         {
@@ -73,7 +72,7 @@ class CollectionTest extends DbTestCase
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Database",
             "insertDate": "[datetime]"
         },
         {
@@ -82,7 +81,6 @@ class CollectionTest extends DbTestCase
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
-            "outgoing": "",
             "insertDate": "[datetime]"
         },
         {
@@ -91,7 +89,7 @@ class CollectionTest extends DbTestCase
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
             "insertDate": "[datetime]"
         },
         {
@@ -166,7 +164,6 @@ JSON;
             "type": 2,
             "name": "Fusio-Action",
             "description": "Helps to develop custom action business logic",
-            "outgoing": "",
             "insertDate": "[datetime]"
         },
         {
@@ -175,7 +172,7 @@ JSON;
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Blueprint",
             "insertDate": "[datetime]"
         },
         {
@@ -184,7 +181,7 @@ JSON;
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Database",
             "insertDate": "[datetime]"
         },
         {
@@ -193,7 +190,6 @@ JSON;
             "type": 0,
             "name": "Fusio-General",
             "description": "Helps to answer general questions about your Fusio instance",
-            "outgoing": "",
             "insertDate": "[datetime]"
         },
         {
@@ -202,7 +198,7 @@ JSON;
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "",
+            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
             "insertDate": "[datetime]"
         },
         {

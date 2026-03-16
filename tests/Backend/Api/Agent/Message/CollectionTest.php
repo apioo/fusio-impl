@@ -116,7 +116,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'input' => [
+            'item' => [
                 'type' => 'text',
                 'content' => 'What is the meaning of life?',
             ],
@@ -129,8 +129,8 @@ JSON;
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertNotEmpty($chatId);
-        $this->assertEquals('text', $data->output->type);
-        $this->assertEquals('The answer ist: 42', $data->output->content);
+        $this->assertEquals('text', $data->item->type);
+        $this->assertEquals('The answer ist: 42', $data->item->content);
 
         // check database
         $sql = $this->connection->createQueryBuilder()

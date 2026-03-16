@@ -62,13 +62,6 @@ readonly class JsonResultSerializer extends ResultSerializer
         $firstPos = strpos($content, '{');
         $lastPos = strrpos($content, '}');
 
-        $squareBracketFirstPos = strpos($content, '[');
-        $squareBracketLastPos = strrpos($content, ']');
-        if ($squareBracketFirstPos < $firstPos) {
-            $firstPos = $squareBracketFirstPos;
-            $lastPos = $squareBracketLastPos;
-        }
-
         if ($firstPos !== false && $lastPos !== false) {
             $content = substr($content, $firstPos, $lastPos - $firstPos + 1);
         }

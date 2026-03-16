@@ -825,7 +825,7 @@
         "code": 201,
         "schema": {
           "type": "reference",
-          "target": "Common_AgentOutput"
+          "target": "Agent_Output"
         }
       },
       "arguments": {
@@ -839,7 +839,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Common_AgentInput"
+            "target": "Agent_Input"
           }
         }
       },
@@ -1936,7 +1936,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Common_AgentOutput"
+          "target": "Agent_Output"
         }
       },
       "arguments": {
@@ -1950,7 +1950,7 @@
           "in": "body",
           "schema": {
             "type": "reference",
-            "target": "Common_AgentInput"
+            "target": "Agent_Input"
           }
         }
       },
@@ -12399,6 +12399,157 @@
     }
   },
   "definitions": {
+    "Agent_Input": {
+      "description": "This object represents an agent input",
+      "type": "struct",
+      "properties": {
+        "previousId": {
+          "description": "Optional the chat id of this conversation",
+          "type": "string"
+        },
+        "item": {
+          "type": "reference",
+          "target": "Agent_Item"
+        }
+      }
+    },
+    "Agent_Item": {
+      "description": "Agent item",
+      "type": "struct",
+      "base": true,
+      "properties": {
+        "type": {
+          "description": "The result type",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Optional result metadata",
+          "type": "map",
+          "schema": {
+            "type": "any"
+          }
+        }
+      },
+      "discriminator": "type",
+      "mapping": {
+        "Agent_ItemBinary": "binary",
+        "Agent_ItemChoice": "choice",
+        "Agent_ItemObject": "object",
+        "Agent_ItemText": "text",
+        "Agent_ItemToolCall": "tool_call"
+      }
+    },
+    "Agent_ItemBinary": {
+      "description": "Binary agent message",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Agent_Item"
+      },
+      "properties": {
+        "mime": {
+          "description": "The mime of the binary data",
+          "type": "string"
+        },
+        "data": {
+          "description": "The base64 encoded binary data",
+          "type": "string"
+        }
+      }
+    },
+    "Agent_ItemChoice": {
+      "description": "Choice agent message",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Agent_Item"
+      },
+      "properties": {
+        "items": {
+          "description": "Contains multiple agent items",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Agent_Item"
+          }
+        }
+      }
+    },
+    "Agent_ItemObject": {
+      "description": "Structured agent message",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Agent_Item"
+      },
+      "properties": {
+        "payload": {
+          "description": "The structured JSON payload",
+          "type": "any"
+        }
+      }
+    },
+    "Agent_ItemText": {
+      "description": "Text agent message",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Agent_Item"
+      },
+      "properties": {
+        "content": {
+          "description": "The content text",
+          "type": "string"
+        }
+      }
+    },
+    "Agent_ItemToolCall": {
+      "description": "Tool call agent message",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Agent_Item"
+      },
+      "properties": {
+        "functions": {
+          "description": "An array of concrete functions",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Agent_ItemToolCallFunction"
+          }
+        }
+      }
+    },
+    "Agent_ItemToolCallFunction": {
+      "description": "Concrete values for a function tool call",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "string"
+        }
+      }
+    },
+    "Agent_Output": {
+      "description": "This object represents an agent output",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Chat id of this conversation",
+          "type": "string"
+        },
+        "item": {
+          "type": "reference",
+          "target": "Agent_Item"
+        }
+      }
+    },
     "Backend_AccountChangePassword": {
       "type": "struct",
       "properties": {
@@ -12698,14 +12849,18 @@
           "description": "Unique identifier for the object",
           "type": "integer"
         },
+        "chatId": {
+          "description": "The assigned chat id which can be used to load the complete conversation",
+          "type": "string"
+        },
         "role": {
           "description": "The role of this message i.e. user, assistant or system",
           "type": "string"
         },
-        "content": {
-          "description": "The message content",
+        "item": {
+          "description": "The message item",
           "type": "reference",
-          "target": "Common_AgentContent"
+          "target": "Agent_Item"
         },
         "insertDate": {
           "type": "string",
@@ -15210,159 +15365,6 @@
       "parent": {
         "type": "reference",
         "target": "Backend_Webhook"
-      }
-    },
-    "Common_AgentContent": {
-      "description": "Agent message",
-      "type": "struct",
-      "base": true,
-      "properties": {
-        "type": {
-          "description": "The result type",
-          "type": "string"
-        },
-        "metadata": {
-          "description": "Optional result metadata",
-          "type": "map",
-          "schema": {
-            "type": "any"
-          }
-        }
-      },
-      "discriminator": "type",
-      "mapping": {
-        "Common_AgentContentBinary": "binary",
-        "Common_AgentContentChoice": "choice",
-        "Common_AgentContentObject": "object",
-        "Common_AgentContentText": "text",
-        "Common_AgentContentToolCall": "tool_call"
-      }
-    },
-    "Common_AgentContentBinary": {
-      "description": "Binary agent message",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_AgentContent"
-      },
-      "properties": {
-        "mime": {
-          "description": "The mime of the binary data",
-          "type": "string"
-        },
-        "data": {
-          "description": "The base64 encoded binary data",
-          "type": "string"
-        }
-      }
-    },
-    "Common_AgentContentChoice": {
-      "description": "Choice agent message",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_AgentContent"
-      },
-      "properties": {
-        "items": {
-          "description": "Contains multiple agent messages",
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "Common_AgentContent"
-          }
-        }
-      }
-    },
-    "Common_AgentContentObject": {
-      "description": "Structured agent message",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_AgentContent"
-      },
-      "properties": {
-        "payload": {
-          "description": "The structured JSON payload",
-          "type": "any"
-        }
-      }
-    },
-    "Common_AgentContentText": {
-      "description": "Text agent message",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_AgentContent"
-      },
-      "properties": {
-        "content": {
-          "description": "The content text",
-          "type": "string"
-        }
-      }
-    },
-    "Common_AgentContentToolCall": {
-      "description": "Tool call agent message",
-      "type": "struct",
-      "parent": {
-        "type": "reference",
-        "target": "Common_AgentContent"
-      },
-      "properties": {
-        "functions": {
-          "description": "An array of concrete functions",
-          "type": "array",
-          "schema": {
-            "type": "reference",
-            "target": "Common_AgentContentToolCallFunction"
-          }
-        }
-      }
-    },
-    "Common_AgentContentToolCallFunction": {
-      "description": "Concrete values for a function tool call",
-      "type": "struct",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "arguments": {
-          "type": "string"
-        }
-      }
-    },
-    "Common_AgentInput": {
-      "description": "This object represents an agent input",
-      "type": "struct",
-      "properties": {
-        "previousId": {
-          "description": "Optional the previous input id, must be an id which has been previously returned by an output",
-          "type": "string"
-        },
-        "input": {
-          "description": "The input",
-          "type": "reference",
-          "target": "Common_AgentContent"
-        }
-      }
-    },
-    "Common_AgentOutput": {
-      "description": "This object represents an agent output",
-      "type": "struct",
-      "properties": {
-        "id": {
-          "description": "Available if the message was persisted",
-          "type": "string"
-        },
-        "output": {
-          "description": "The output",
-          "type": "reference",
-          "target": "Common_AgentContent"
-        }
       }
     },
     "Common_Collection": {
