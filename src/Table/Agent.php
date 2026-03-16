@@ -82,7 +82,7 @@ class Agent extends Generated\AgentTable
         $this->connection->update(self::NAME, [
             self::COLUMN_CONNECTION_ID => $connectionId
         ], [
-            self::COLUMN_CONNECTION_ID => 1
+            self::COLUMN_CONNECTION_ID => null
         ]);
     }
 }
