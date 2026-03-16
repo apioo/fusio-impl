@@ -82,7 +82,7 @@ readonly class Sender implements SenderInterface
 
         $agent = $this->connector->getConnection($row->getConnectionId());
         if (!$agent instanceof AgentInterface) {
-            throw new StatusCode\InternalServerErrorException('Could not resolve agent connection');
+            throw new StatusCode\InternalServerErrorException('Could not resolve agent connection, please create first an agent connection to a LLM provider like ChatGPT or Ollama');
         }
 
         $chatId = $input->getPreviousId();
