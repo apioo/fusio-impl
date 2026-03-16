@@ -162,8 +162,8 @@ class NewInstallation
             'backend_log_get',
             'backend_log_getAllErrors',
             'backend_log_getError',
-        ], '', tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Helps to build complete operations, it uses internally the action, schema and database agent', self::readAgent('architect.md'), [], '', tenantId: $tenantId);
+        ], null, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Helps to build complete operations, it uses internally the action, schema and database agent', self::readAgent('architect.md'), [], 'php+class://Fusio.Agent.Blueprint', tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Helps to develop custom action business logic', self::readAgent('action.md'), [
             'backend_action_getAll',
             'backend_action_get',
@@ -171,15 +171,15 @@ class NewInstallation
             'backend_connection_get',
             'backend_database_getTables',
             'backend_database_getTable',
-        ], '', tenantId: $tenantId);
+        ], null, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Helps to build new schemas to describe JSON payloads', self::readAgent('schema.md'), [
             'backend_schema_getAll',
             'backend_schema_get',
-        ], '', tenantId: $tenantId);
+        ], 'php+class://Fusio.Agent.Schema', tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Helps to design database table schemas', self::readAgent('database.md'), [
             'backend_database_getTables',
             'backend_database_getTable',
-        ], '', tenantId: $tenantId);
+        ], 'php+class://Fusio.Agent.Database', tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
             $bag->addOperations($tenantId, $category, $operations);
