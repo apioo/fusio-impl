@@ -238,7 +238,7 @@ class DataBag
         if (!empty($outgoing) && class_exists($outgoing)) {
             $outgoing = 'php+class://' . ClassName::serialize($outgoing);
         } else {
-            $outgoing = null;
+            $outgoing = 'schema://' . $outgoing;
         }
 
         $this->data['fusio_agent'][$name] = [
