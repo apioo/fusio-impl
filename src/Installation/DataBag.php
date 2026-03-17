@@ -235,10 +235,14 @@ class DataBag
 
     public function addAgent(string $category, ?string $connection, int $type, string $name, string $description, string $introduction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
-        if (!empty($outgoing) && class_exists($outgoing)) {
-            $outgoing = 'php+class://' . ClassName::serialize($outgoing);
+        if (!empty($outgoing)) {
+            if (class_exists($outgoing)) {
+                $outgoing = 'php+class://' . ClassName::serialize($outgoing);
+            } else {
+                $outgoing = 'schema://' . $outgoing;
+            }
         } else {
-            $outgoing = 'schema://' . $outgoing;
+            $outgoing = null;
         }
 
         $this->data['fusio_agent'][$name] = [

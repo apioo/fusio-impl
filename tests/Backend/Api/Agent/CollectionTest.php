@@ -65,7 +65,7 @@ class CollectionTest extends DbTestCase
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Agent.Database",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
             "insertDate": "[datetime]"
         },
         {
@@ -74,7 +74,7 @@ class CollectionTest extends DbTestCase
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
             "insertDate": "[datetime]"
         },
         {
@@ -91,7 +91,7 @@ class CollectionTest extends DbTestCase
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Agent.Blueprint",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
             "insertDate": "[datetime]"
         },
         {
@@ -174,7 +174,7 @@ JSON;
             "type": 4,
             "name": "Fusio-Database",
             "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Agent.Database",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
             "insertDate": "[datetime]"
         },
         {
@@ -183,7 +183,7 @@ JSON;
             "type": 3,
             "name": "Fusio-Schema",
             "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Agent.Schema",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
             "insertDate": "[datetime]"
         },
         {
@@ -200,7 +200,7 @@ JSON;
             "type": 1,
             "name": "Fusio-Architect",
             "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Agent.Blueprint",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
             "insertDate": "[datetime]"
         },
         {
