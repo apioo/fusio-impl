@@ -76,7 +76,7 @@ class Message extends ViewAbstract
                         default => 'user',
                     };
                 }),
-                'content' => $builder->fieldJson(Table\Generated\AgentMessageTable::COLUMN_CONTENT),
+                'item' => $builder->fieldJson(Table\Generated\AgentMessageTable::COLUMN_CONTENT),
                 'insertDate' => $builder->fieldDateTime(Table\Generated\AgentMessageTable::COLUMN_INSERT_DATE),
             ]),
         ];

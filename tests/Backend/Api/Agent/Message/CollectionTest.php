@@ -53,7 +53,7 @@ class CollectionTest extends DbTestCase
             "id": 1,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
-            "content": {
+            "item": {
                 "type": "text",
                 "content": "This is a test message"
             },
@@ -86,7 +86,7 @@ JSON;
             "id": 1,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
-            "content": {
+            "item": {
                 "type": "text",
                 "content": "This is a test message"
             },
@@ -96,7 +96,7 @@ JSON;
             "id": 2,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "assistant",
-            "content": {
+            "item": {
                 "type": "text",
                 "content": "And an agent response"
             },
