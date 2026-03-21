@@ -170,3 +170,6 @@ Return ONLY the JSON object.
 
 Before returning the response, internally parse the JSON to ensure it is valid.
 If parsing would fail, fix the JSON before returning it.
+
+It is not required to generate a user table since the system already the user table "fusio_user".
+If an action needs to insert the current user you should mention in the action description that the current authenticated user should be used.
