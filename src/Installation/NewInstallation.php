@@ -169,16 +169,20 @@ class NewInstallation
             'backend_action_get',
             'backend_connection_getAll',
             'backend_connection_get',
-            'backend_database_getTables',
-            'backend_database_getTable',
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
+            'backend_connection_filesystem_getAll',
+            'backend_connection_filesystem_get',
+            'backend_connection_http_execute',
+            'backend_connection_sdk_get',
         ], null, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Helps to build new schemas to describe JSON payloads', self::readAgent('schema.md'), [
             'backend_schema_getAll',
             'backend_schema_get',
         ], Model\Agent\Schema::class, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Helps to design database table schemas', self::readAgent('database.md'), [
-            'backend_database_getTables',
-            'backend_database_getTable',
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
