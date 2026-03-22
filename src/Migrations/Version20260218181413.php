@@ -6,8 +6,10 @@ namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Installation\DataSyncronizer;
 use Fusio\Impl\Table;
+use Fusio\Model;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -85,5 +87,27 @@ final class Version20260218181413 extends AbstractMigration
     public function postUp(Schema $schema): void
     {
         DataSyncronizer::sync($this->connection);
+
+        // deactivate legacy operations
+        $names = [
+            'backend.connection.agent.get',
+            'backend.connection.agent.reset',
+        ];
+
+        foreach ($names as $name) {
+            $this->connection->update('fusio_operation', [
+                'status' => 0,
+            ], [
+                'name' => $name,
+            ]);
+        }
+
+        // update send operation
+        $this->connection->update('fusio_operation', [
+            'outgoing' => 'php+class://' . ClassName::serialize(Model\Agent\Output::class),
+            'incoming' => 'php+class://' . ClassName::serialize(Model\Agent\Input::class),
+        ], [
+            'name' => 'backend.connection.agent.send',
+        ]);
     }
 }
