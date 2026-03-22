@@ -17,6 +17,11 @@ return function(Worker\ExecuteRequest $request, Worker\ExecuteContext $context, 
 
 };
 
+# DATA ACCESS RULES (STRICT)
+- **Request Body**: Use `$request->getPayload()`. This returns an **stdClass**. Access via `->propertyName`.
+- **URL Parameters**: Use `$request->getArguments()->get('name')`. This applies to BOTH dynamic path fragments (e.g., /users/:id) and query strings (e.g., ?status=active).
+- **NEVER** use `getPayload()` to access path or query parameters.
+
 # CONNECTION MAPPING (CRITICAL)
 When using `$connector->getConnection(id)`, the returned object type depends on the connection provider:
 - Fusio.Adapter.Amqp.Connection.Amqp = AMQPStreamConnection (php-amqplib)
@@ -31,12 +36,11 @@ When using `$connector->getConnection(id)`, the returned object type depends on 
 - Fusio.Adapter.Stripe.Connection.Stripe = Stripe\StripeClient
 
 # IMPLEMENTATION RULES
-1. **Payload Access**: `$request->getPayload()` returns a PHP **stdClass** object. Access properties using arrow notation, e.g., `$request->getPayload()->propertyName`.
-2. **Connections**: Use `backend_connection_getAll` to verify the ID. Use the "System" connection for general DB tasks.
-3. **Database**: If accessing tables, use `backend_database_getTables`. Always use Prepared Statements via Doctrine DBAL.
-4. **Response**: Always return `$response->build(statusCode, headers, body)`. 
-5. **Serialization**: Do not use `json_encode` for the body; Fusio handles this automatically.
-6. **Error Handling**: Wrap external service calls (HTTP, SQL, Stripe) in try-catch blocks. Return a 400/500 status code on failure.
+1. **Connections**: Use `backend_connection_getAll` to verify the ID. Use the "System" connection for general DB tasks.
+2. **Database**: If accessing tables, use `backend_connection_database_getTables`. Always use Prepared Statements via Doctrine DBAL.
+3. **Response**: Always return `$response->build(statusCode, headers, body)`. 
+4. **Serialization**: Do not use `json_encode` for the body; Fusio handles this automatically.
+5. **Error Handling**: Wrap external service calls (HTTP, SQL, Stripe) in try-catch blocks. Return a 400/500 status code on failure.
 
 # AVAILABLE API
 - **Request**: `$request->getArguments()->get(name)`, `$request->getPayload()` (stdClass).
