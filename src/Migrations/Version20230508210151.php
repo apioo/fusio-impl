@@ -767,6 +767,7 @@ final class Version20230508210151 extends AbstractMigration
 
         if (isset($schemaTable)) {
             $schemaTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'schema_category_id');
+            $schemaTable->addForeignKeyConstraint($schema->getTable('fusio_taxonomy'), ['taxonomy_id'], ['id'], [], 'schema_taxonomy_id');
         }
 
         if (isset($schemaCommitTable)) {
