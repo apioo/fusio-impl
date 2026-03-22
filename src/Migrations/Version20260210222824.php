@@ -36,6 +36,7 @@ final class Version20260210222824 extends AbstractMigration
         $taxonomyTargets = [
             'operation',
             'action',
+            'schema',
             'event',
             'cronjob',
             'trigger',
