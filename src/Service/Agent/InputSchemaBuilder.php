@@ -75,12 +75,13 @@ readonly class InputSchemaBuilder
             $definitions->addSchema('Payload', $payload);
         }
 
-        $definitions->addType('Root', $rootType);
+        $rootName = 'Root_' . uniqid();
+        $definitions->addType($rootName, $rootType);
 
         $config = new Config();
         $config->put('openai_mode', true);
 
-        return (new JsonSchema($config))->toArray($definitions, 'Root');
+        return (new JsonSchema($config))->toArray($definitions, $rootName);
     }
 
     private function buildSchemaFromParameters(OperationRow $operation, StructDefinitionType $rootType): void
