@@ -40,8 +40,22 @@ When using `$connector->getConnection(id)`, the returned object type depends on 
 - Fusio.Adapter.Sql.Connection.Sql = Doctrine\DBAL\Connection
 - Fusio.Adapter.Stripe.Connection.Stripe = Stripe\StripeClient
 
+# COLLECTION & PAGINATION RULES
+When implementing a "list" or "collection" operation:
+- **Input**: Always look for `startIndex` and `count` in `$request->getArguments()`. Default them to `0` and `16` if missing.
+- **Total Count**: You MUST perform a count query (e.g., `SELECT COUNT(*)`) to determine the `totalResults`.
+- **Wrapper**: The response body MUST be an associative array with this exact structure:
+```php
+[
+    "totalResults" => (int) $total,
+    "startIndex" => (int) $startIndex,
+    "itemsPerPage" => (int) $count,
+    "entries" => $data // Array of associative arrays (entities)
+]
+```
+
 # IMPLEMENTATION RULES
-1. **Connections**: Use `$connector->getConnection('verified_id')`.
+1. **Connections**: Use `$connector->getConnection('verified_name')`.
 2. **Database**: Use Doctrine DBAL with Prepared Statements.
 3. **Response**: Always return `$response->build(statusCode, headers, body)`. 
 4. **No JSON Encode**: Do not use `json_encode` for the body; Fusio handles this.
