@@ -49,7 +49,7 @@ return function(Worker\ExecuteRequest $request, Worker\ExecuteContext $context, 
 
 # IMPLEMENTATION RULES
 
-1. **Connections (REQUIRED)**: Fetch connections via `$connection = $connector->getConnection("name");`.
+1. **Connections (REQUIRED)**: Fetch connections via `$connection = $connector->getConnection("name")` MUST use a name found via `backend_connection_getAll`. **Never guess.**
 2. **Database (Doctrine DBAL)**: **Strictly avoid** `$connection->prepare()`. Use shorthand methods:
     - `$connection->fetchAllAssociative($sql, $params)`
     - `$connection->fetchAssociative($sql, $params)`
