@@ -47,22 +47,29 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 5,
+            "id": 6,
             "status": 1,
             "name": "MIME-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction",
             "date": "[datetime]"
         },
         {
-            "id": 4,
+            "id": 5,
             "status": 1,
             "name": "Inspect-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "PHP-Local",
+            "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal",
             "date": "[datetime]"
         },
         {
@@ -178,22 +185,29 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 5,
+            "id": 6,
             "status": 1,
             "name": "MIME-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction",
             "date": "[datetime]"
         },
         {
-            "id": 4,
+            "id": 5,
             "status": 1,
             "name": "Inspect-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction",
+            "date": "[datetime]"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "name": "PHP-Local",
+            "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal",
             "date": "[datetime]"
         },
         {
@@ -272,7 +286,7 @@ JSON;
 {
     "success": true,
     "message": "Action successfully created",
-    "id": "6"
+    "id": "7"
 }
 JSON;
 

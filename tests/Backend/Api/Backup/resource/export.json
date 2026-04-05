@@ -13,6 +13,15 @@
       "date": "[datetime]"
     },
     {
+      "name": "PHP-Local",
+      "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal",
+      "async": false,
+      "config": {
+        "code": "<?php\r\n\r\nuse Fusio\\Worker;\r\nuse Fusio\\Engine;\r\nuse Psr\\Log\\LoggerInterface;\r\n\r\nreturn function(Worker\\ExecuteRequest $request, Worker\\ExecuteContext $context, Engine\\ConnectorInterface $connector, Engine\\Response\\FactoryInterface $response, Engine\\DispatcherInterface $dispatcher, LoggerInterface $logger) {\r\n    return $response->ok([\r\n        'foo' => 'bar',\r\n    ]);\r\n};\r\n"
+      },
+      "date": "[datetime]"
+    },
+    {
       "name": "Sql-Insert",
       "class": "Fusio.Adapter.Sql.Action.SqlInsert",
       "async": false,
@@ -938,7 +947,7 @@
       "incoming": "schema:\/\/Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788",
       "outgoing": "schema:\/\/Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788",
       "throws": {},
-      "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa",
+      "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa",
       "costs": 1
     },
     {

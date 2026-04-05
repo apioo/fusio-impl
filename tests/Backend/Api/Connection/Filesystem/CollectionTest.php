@@ -45,7 +45,7 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 5,
     "itemsPerPage": 16,
     "startIndex": 0,
     "entry": [
@@ -67,6 +67,20 @@ class CollectionTest extends DbTestCase
             "id": "79accfa8-013d-3d8d-8b5c-d7eba46910bf",
             "name": "entry_schema.json",
             "contentType": "application\/json",
+            "checksum": "[checksum]",
+            "lastModified": "[datetime]"
+        },
+        {
+            "id": "1314aaa1-23c4-3ef7-85a1-4ae9cf90ca87",
+            "name": "local-php-fix.php",
+            "contentType": "text\/x-php",
+            "checksum": "[checksum]",
+            "lastModified": "[datetime]"
+        },
+        {
+            "id": "62574473-a47d-387b-a6bc-bfba25f83771",
+            "name": "local-php.php",
+            "contentType": "text\/x-php",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         }

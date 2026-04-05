@@ -190,7 +190,7 @@ class CollectionTest extends DbTestCase
             "httpPath": "\/bar",
             "httpCode": 201,
             "name": "test.createBar",
-            "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
+            "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "id": 271,
@@ -508,7 +508,7 @@ JSON;
             "httpPath": "\/bar",
             "httpCode": 201,
             "name": "test.createBar",
-            "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
+            "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "id": 271,
