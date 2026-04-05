@@ -278,7 +278,7 @@ readonly class Validator
         }
 
         if (str_starts_with($scheme, 'action://')) {
-            [$actionName] = ActionScheme::split($scheme);
+            [, $actionName] = ActionScheme::split($scheme);
 
             $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, $actionName);
             if (!$row instanceof Table\Generated\ActionRow) {
@@ -305,7 +305,7 @@ readonly class Validator
         }
 
         if (str_starts_with($scheme, 'schema://') && $scheme !== 'schema://Passthru') {
-            [$schemaName] = ActionScheme::split($scheme);
+            [, $schemaName] = SchemaScheme::split($scheme);
 
             $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, $schemaName);
             if (!$row instanceof Table\Generated\SchemaRow) {

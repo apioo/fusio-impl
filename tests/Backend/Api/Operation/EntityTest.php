@@ -254,6 +254,55 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_DEPRECATED, 'test.createFoo', 'POST', '/foo', 201, ['bar']);
     }
 
+    public function testPutWithHash()
+    {
+        $metadata = [
+            'foo' => 'bar'
+        ];
+
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active'     => true,
+            'public'     => true,
+            'stability'  => OperationInterface::STABILITY_STABLE,
+            'httpMethod' => 'GET',
+            'httpPath'   => '/foo',
+            'httpCode'   => 201,
+            'name'       => 'test.baz',
+            'parameters' => [
+                'foo' => [
+                    'type' => 'string'
+                ]
+            ],
+            'incoming'   => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
+            'outgoing'   => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
+            'throws'     => [
+                500 => 'Passthru',
+            ],
+            'cost'       => 10,
+            'action'     => 'action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358',
+            'scopes'     => ['foo', 'baz'],
+            'metadata' => $metadata,
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Operation successfully updated",
+    "id": "270"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        Assert::assertOperation($this->connection, OperationInterface::STABILITY_STABLE, 'test.baz', 'GET', '/foo', 201, ['foo', 'baz'], $metadata);
+    }
+
     public function testDelete()
     {
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'DELETE', array(
