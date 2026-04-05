@@ -44,12 +44,12 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 282,
+            "id": 283,
             "status": 1,
             "active": true,
             "public": false,
@@ -61,7 +61,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 281,
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -73,7 +73,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 280,
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -85,7 +85,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 279,
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -97,7 +97,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 278,
+            "id": 279,
             "status": 1,
             "active": true,
             "public": false,
@@ -109,7 +109,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 277,
+            "id": 278,
             "status": 1,
             "active": true,
             "public": false,
@@ -121,7 +121,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 276,
+            "id": 277,
             "status": 1,
             "active": true,
             "public": false,
@@ -133,7 +133,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -145,7 +145,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 274,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -157,7 +157,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 273,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -169,7 +169,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 272,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -179,6 +179,18 @@ class CollectionTest extends DbTestCase
             "httpCode": 200,
             "name": "inspect.get",
             "action": "action:\/\/Inspect-Action"
+        },
+        {
+            "id": 272,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/bar",
+            "httpCode": 201,
+            "name": "test.createBar",
+            "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "id": 271,
@@ -239,7 +251,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 276,
+            "id": 277,
             "status": 1,
             "active": true,
             "public": false,
@@ -251,7 +263,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -263,7 +275,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 274,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -275,7 +287,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 273,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -287,7 +299,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 272,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -350,12 +362,12 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 282,
+            "id": 283,
             "status": 1,
             "active": true,
             "public": false,
@@ -367,7 +379,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 281,
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -379,7 +391,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 280,
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -391,7 +403,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 279,
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -403,7 +415,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 278,
+            "id": 279,
             "status": 1,
             "active": true,
             "public": false,
@@ -415,7 +427,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 277,
+            "id": 278,
             "status": 1,
             "active": true,
             "public": false,
@@ -427,7 +439,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 276,
+            "id": 277,
             "status": 1,
             "active": true,
             "public": false,
@@ -439,7 +451,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "id": 276,
             "status": 1,
             "active": true,
             "public": false,
@@ -451,7 +463,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 274,
+            "id": 275,
             "status": 1,
             "active": true,
             "public": false,
@@ -463,7 +475,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 273,
+            "id": 274,
             "status": 1,
             "active": true,
             "public": false,
@@ -475,7 +487,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 272,
+            "id": 273,
             "status": 1,
             "active": true,
             "public": false,
@@ -485,6 +497,18 @@ JSON;
             "httpCode": 200,
             "name": "inspect.get",
             "action": "action:\/\/Inspect-Action"
+        },
+        {
+            "id": 272,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "\/bar",
+            "httpCode": 201,
+            "name": "test.createBar",
+            "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "id": 271,
@@ -568,7 +592,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully created",
-    "id": "283"
+    "id": "284"
 }
 JSON;
 

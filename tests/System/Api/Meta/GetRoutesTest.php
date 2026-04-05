@@ -44,6 +44,9 @@ class GetRoutesTest extends DbTestCase
         "\/": {
             "GET": "meta.getAbout"
         },
+        "\/bar": {
+            "POST": "test.createBar"
+        },
         "\/foo": {
             "GET": "test.listFoo",
             "POST": "test.createFoo"

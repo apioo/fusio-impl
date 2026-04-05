@@ -71,7 +71,27 @@ class CollectionTest extends DbTestCase
             },
             "commitHash": "7d28d0f99f1d839a054cf080b37556d77166d788",
             "schema": {
-                "foo": "bar"
+                "definitions": {
+                    "Entry": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "content": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "$ref": "Entry"
             },
             "insertDate": "[datetime]"
         }

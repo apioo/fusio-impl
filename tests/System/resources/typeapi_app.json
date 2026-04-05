@@ -426,6 +426,36 @@
         "bar"
       ]
     },
+    "test.createBar": {
+      "path": "/bar",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Entry"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Entry"
+          }
+        }
+      },
+      "throws": [],
+      "description": "",
+      "stability": 2,
+      "security": [
+        "bar"
+      ],
+      "authorization": true,
+      "tags": [
+        "bar"
+      ]
+    },
     "test.createFoo": {
       "path": "/foo",
       "method": "POST",

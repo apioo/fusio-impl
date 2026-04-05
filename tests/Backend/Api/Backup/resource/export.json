@@ -923,6 +923,26 @@
     },
     {
       "status": 1,
+      "name": "test.createBar",
+      "scopes": [
+        "bar"
+      ],
+      "active": true,
+      "public": false,
+      "stability": 2,
+      "description": "",
+      "httpMethod": "POST",
+      "httpPath": "\/bar",
+      "httpCode": 201,
+      "parameters": {},
+      "incoming": "schema:\/\/Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788",
+      "outgoing": "schema:\/\/Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788",
+      "throws": {},
+      "action": "action:\/\/Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa",
+      "costs": 1
+    },
+    {
+      "status": 1,
       "name": "test.createFoo",
       "scopes": [
         "bar"

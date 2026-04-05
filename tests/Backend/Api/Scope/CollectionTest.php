@@ -209,7 +209,7 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 272,
+            'operation_id' => 273,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,

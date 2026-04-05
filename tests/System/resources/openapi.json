@@ -551,6 +551,42 @@
         ]
       }
     },
+    "/bar": {
+      "post": {
+        "tags": [
+          "bar"
+        ],
+        "operationId": "test.createBar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Entry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Entry"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      }
+    },
     "/foo": {
       "get": {
         "tags": [

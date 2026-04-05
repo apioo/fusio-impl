@@ -71,7 +71,8 @@ class CollectionTest extends DbTestCase
             },
             "commitHash": "d9b98d4f5d951d59632e7dfdc0c5737a25936358",
             "config": {
-                "foo": "bar"
+                "connection": 2,
+                "table": "app_news"
             },
             "insertDate": "[datetime]"
         }

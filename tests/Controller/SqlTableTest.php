@@ -183,7 +183,7 @@ JSON;
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ], $body);
 
-        $body = (string)$response->getBody();
+        $body = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
@@ -198,6 +198,39 @@ JSON;
         $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
         $this->assertEquals('test.createFoo', $response->getHeader('X-Operation-Id'), $body);
+        $this->assertEquals('stable', $response->getHeader('X-Stability'), $body);
+        $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPostCommitFix()
+    {
+        $body = <<<'JSON'
+{
+    "title": "foo",
+    "content": "bar",
+    "date": "2015-07-04T13:03:00Z"
+}
+JSON;
+
+        $response = $this->sendRequest('/bar', 'POST', [
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ], $body);
+
+        $body = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "foo": "baz"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('3600', $response->getHeader('RateLimit-Limit'), $body);
+        $this->assertEquals('3600', $response->getHeader('RateLimit-Remaining'), $body);
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
+        $this->assertEquals('test.createBar', $response->getHeader('X-Operation-Id'), $body);
         $this->assertEquals('stable', $response->getHeader('X-Stability'), $body);
         $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
