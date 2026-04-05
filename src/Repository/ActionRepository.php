@@ -123,7 +123,7 @@ class ActionRepository implements Repository\ActionInterface
                 }
             }
 
-            return $this->newAction($row);
+            return $this->newAction($row, $hash);
         } else {
             return null;
         }
@@ -134,7 +134,7 @@ class ActionRepository implements Repository\ActionInterface
         $this->async = $async;
     }
 
-    private function newAction(array $row): Model\ActionInterface
+    private function newAction(array $row, ?string $hash = null): Model\ActionInterface
     {
         $config = !empty($row[Table\Generated\ActionTable::COLUMN_CONFIG]) ? Service\Action::unserializeConfig($row[Table\Generated\ActionTable::COLUMN_CONFIG]) : [];
 
@@ -152,7 +152,8 @@ class ActionRepository implements Repository\ActionInterface
             $row[Table\Generated\ActionTable::COLUMN_CLASS],
             $this->async ? (bool) $row[Table\Generated\ActionTable::COLUMN_ASYNC] : false,
             $config ?? [],
-            $metadata
+            $metadata,
+            $hash
         );
     }
 

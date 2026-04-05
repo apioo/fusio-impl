@@ -26,6 +26,7 @@ use Fusio\Adapter\SdkFabric\Connection\Starwars;
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Adapter\Worker\Action\WorkerPHPLocal;
 use Fusio\Adapter\Worker\Connection\Worker;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
@@ -94,6 +95,9 @@ class Fixture
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
+        $localPhp = file_get_contents(__DIR__ . '/resources/local-php.php');
+        $localPhpFix = file_get_contents(__DIR__ . '/resources/local-php-fix.php');
+
         $appsUrl = Environment::getConfig('fusio_apps_url');
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
@@ -117,10 +121,11 @@ class Fixture
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), ['foo' => 'bar']);
         $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), taxonomy: 'feature_a');
         $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
+        $data->addAction('default', 'PHP-Local', WorkerPHPLocal::class, Service\Action::serializeConfig(['code' => $localPhp]));
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
         $data->addAction('default', 'MIME-Action', MimeAction::class);
         $data->addActionCommit('Sql-Insert', 'Consumer', 'd9b98d4f5d951d59632e7dfdc0c5737a25936358', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
-        $data->addActionCommit('Util-Static-Response', 'Consumer', '913c5d62a340e5db90e2577f01caf9bd072e1bfa', Service\Action::serializeConfig(['response' => '{"foo": "baz"}']));
+        $data->addActionCommit('PHP-Local', 'Consumer', '913c5d62a340e5db90e2577f01caf9bd072e1bfa', Service\Action::serializeConfig(['code' => $localPhpFix]));
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
@@ -221,7 +226,7 @@ class Fixture
                 costs: 1,
             ),
             'test.createBar' => new Operation(
-                action: 'Util-Static-Response@913c5d62a340e5db90e2577f01caf9bd072e1bfa',
+                action: 'PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa',
                 httpMethod: 'POST',
                 httpPath: '/bar',
                 httpCode: 201,
