@@ -278,7 +278,9 @@ readonly class Validator
         }
 
         if (str_starts_with($scheme, 'action://')) {
-            $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, substr($scheme, 9));
+            [$actionName] = ActionScheme::split($scheme);
+
+            $row = $this->actionTable->findOneByTenantAndName($tenantId, $categoryId, $actionName);
             if (!$row instanceof Table\Generated\ActionRow) {
                 throw new StatusCode\BadRequestException('Action "' . $action . '" does not exist, you need to provide an existing action name as value');
             }
@@ -303,7 +305,9 @@ readonly class Validator
         }
 
         if (str_starts_with($scheme, 'schema://') && $scheme !== 'schema://Passthru') {
-            $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, substr($scheme, 9));
+            [$schemaName] = ActionScheme::split($scheme);
+
+            $row = $this->schemaTable->findOneByTenantAndName($tenantId, $categoryId, $schemaName);
             if (!$row instanceof Table\Generated\SchemaRow) {
                 throw new StatusCode\BadRequestException(ucfirst($type) . ' schema "' . $schema . '" does not exist, you need to provide an existing schema name as value');
             }
