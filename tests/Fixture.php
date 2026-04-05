@@ -95,8 +95,8 @@ class Fixture
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
-        $localPhp = file_get_contents(__DIR__ . '/resources/local-php.php');
-        $localPhpFix = file_get_contents(__DIR__ . '/resources/local-php-fix.php');
+        $localPhp = Normalizer::normalizeNewLine(file_get_contents(__DIR__ . '/resources/local-php.php'));
+        $localPhpFix = Normalizer::normalizeNewLine(file_get_contents(__DIR__ . '/resources/local-php-fix.php'));
 
         $appsUrl = Environment::getConfig('fusio_apps_url');
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
