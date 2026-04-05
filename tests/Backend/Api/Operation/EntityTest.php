@@ -279,7 +279,7 @@ JSON;
             'incoming'   => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
             'outgoing'   => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
             'throws'     => [
-                500 => 'Passthru',
+                500 => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
             ],
             'cost'       => 10,
             'action'     => 'action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358',

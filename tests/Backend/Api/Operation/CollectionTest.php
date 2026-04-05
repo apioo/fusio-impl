@@ -1070,6 +1070,121 @@ JSON;
         $this->assertStringStartsWith('Action "action://Foobar" does not exist', $data->message);
     }
 
+    public function testPostStabilityLifeCycle()
+    {
+        $response = $this->sendRequest('/backend/operation', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active' => true,
+            'public' => true,
+            'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'POST',
+            'httpPath' => '/my/execute',
+            'httpCode' => 200,
+            'name' => 'test.execute',
+            'incoming' => 'schema://Entry-Schema',
+            'outgoing' => 'schema://Entry-Schema',
+            'throws' => [
+                500 => 'schema://Entry-Schema',
+            ],
+            'action' => 'action://Sql-Insert',
+        ]));
+
+        $body = (string)$response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertTrue($data->success);
+
+        // move operation to stable
+        $response = $this->sendRequest('/backend/operation/' . $data->id, 'PUT', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active' => true,
+            'public' => true,
+            'stability' => OperationInterface::STABILITY_STABLE,
+            'httpMethod' => 'POST',
+            'httpPath' => '/my/execute',
+            'httpCode' => 200,
+            'name' => 'test.execute',
+            'incoming' => 'schema://Entry-Schema',
+            'outgoing' => 'schema://Entry-Schema',
+            'throws' => [
+                500 => 'schema://Entry-Schema',
+            ],
+            'action' => 'action://Sql-Insert',
+        ]));
+
+        $body = (string)$response->getBody();
+        $data = \json_decode($body);
+        $id = $data->id ?? null;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertTrue($data->success);
+
+        // check whether all schemas and actions are fixed to the commit
+        $sql = $this->connection->createQueryBuilder()
+            ->select('incoming', 'outgoing', 'throws', 'action')
+            ->from('fusio_operation')
+            ->where('id = :id')
+            ->getSQL();
+
+        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided operation ' . $id . ' does not exist');
+        }
+
+        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['incoming']);
+        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['outgoing']);
+        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788']), $row['throws']);
+        $this->assertEquals('action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358', $row['action']);
+
+        // move schema back to experimental
+        $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'active' => true,
+            'public' => true,
+            'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
+            'httpMethod' => 'POST',
+            'httpPath' => '/my/execute',
+            'httpCode' => 200,
+            'name' => 'test.execute',
+            'incoming' => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
+            'outgoing' => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
+            'throws' => [
+                500 => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788',
+            ],
+            'action' => 'action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358',
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertTrue($data->success);
+
+        // check whether all schemas and actions are relaxed to the commit
+        $sql = $this->connection->createQueryBuilder()
+            ->select('incoming', 'outgoing', 'throws', 'action')
+            ->from('fusio_operation')
+            ->where('id = :id')
+            ->getSQL();
+
+        $row = $this->connection->fetchAssociative($sql, ['id' => $id]);
+        if (empty($row)) {
+            throw new \RuntimeException('Provided operation ' . $id . ' does not exist');
+        }
+
+        $this->assertEquals('schema://Entry-Schema', $row['incoming']);
+        $this->assertEquals('schema://Entry-Schema', $row['outgoing']);
+        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema']), $row['throws']);
+        $this->assertEquals('action://Sql-Insert', $row['action']);
+    }
+
     public function testPut()
     {
         $response = $this->sendRequest('/backend/operation', 'PUT', array(

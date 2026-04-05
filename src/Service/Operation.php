@@ -85,7 +85,7 @@ readonly class Operation
             $row->setParameters($this->wrapParameters($operation->getParameters()));
             $row->setIncoming($this->buildSchemaUri($operation->getIncoming(), false, $context));
             $row->setOutgoing($this->buildSchemaUri($operation->getOutgoing(), false, $context));
-            $row->setThrows($this->wrapThrows($operation->getThrows(), false, true, $context));
+            $row->setThrows($this->wrapThrows($operation->getThrows(), false, false, $context));
             $row->setAction($this->buildActionUri($operation->getAction(), false, $context));
             $row->setCosts($operation->getCosts());
             $row->setMetadata($operation->getMetadata() !== null ? Parser::encode($operation->getMetadata()) : null);
@@ -138,35 +138,57 @@ readonly class Operation
             if ($shouldNotChange) {
                 // if the operation is stable, deprecated or legacy we can only change the stability
                 $existing->setStability($operation->getStability());
+
+                // in case the operation is stable but we move back to experimental we remove the hash
+                $shouldRelaxCommit = $operation->getStability() === OperationInterface::STABILITY_EXPERIMENTAL;
+
+                if ($shouldRelaxCommit) {
+                    $incoming = $existing->getIncoming();
+                    if (!empty($incoming)) {
+                        $incoming = $this->buildSchemaUri($incoming, false, $context);
+
+                        $existing->setIncoming(SchemaScheme::wrap($incoming));
+                    }
+
+                    $outgoing = $existing->getOutgoing();
+                    if (!empty($outgoing)) {
+                        $outgoing = $this->buildSchemaUri($outgoing, false, $context);
+
+                        $existing->setOutgoing(SchemaScheme::wrap($outgoing));
+                    }
+
+                    $throws = $this->parseThrows($existing->getThrows());
+                    if ($throws !== null) {
+                        $existing->setThrows($this->wrapThrows($throws, false, true, $context));
+                    }
+
+                    $action = $existing->getAction();
+                    if (!empty($action)) {
+                        $action = $this->buildActionUri($action, false, $context);
+
+                        $existing->setAction(ActionScheme::wrap($action));
+                    }
+                }
             } else {
                 // we fix action and schemas to a specific commit if we transition the operation from experimental to stable
                 $shouldFixCommit = $existing->getStability() === OperationInterface::STABILITY_EXPERIMENTAL && $this->shouldNotChange($operation->getStability());
-                $shouldRelaxCommit = $this->shouldNotChange($existing->getStability()) && $operation->getStability() === OperationInterface::STABILITY_EXPERIMENTAL;
-
-                $action = $operation->getAction() ?? $existing->getAction();
-                if (!empty($action)) {
-                    if ($shouldFixCommit) {
-                        $action = $this->buildActionUri($action, true, $context);
-                    } elseif ($shouldRelaxCommit) {
-                        $action = $this->buildActionUri($action, false, $context);
-                    }
-                }
 
                 $incoming = $operation->getIncoming() ?? $existing->getIncoming();
-                if (!empty($incoming)) {
-                    if ($shouldFixCommit) {
-                        $incoming = $this->buildSchemaUri($incoming, true, $context);
-                    } elseif ($shouldRelaxCommit) {
-                        $incoming = $this->buildSchemaUri($incoming, false, $context);
-                    }
-                }
-
                 $outgoing = $operation->getOutgoing() ?? $existing->getOutgoing();
-                if (!empty($outgoing)) {
-                    if ($shouldFixCommit) {
+                $throws = $operation->getThrows() ?? $this->parseThrows($existing->getThrows());
+                $action = $operation->getAction() ?? $existing->getAction();
+
+                if ($shouldFixCommit) {
+                    if (!empty($incoming)) {
+                        $incoming = $this->buildSchemaUri($incoming, true, $context);
+                    }
+
+                    if (!empty($outgoing)) {
                         $outgoing = $this->buildSchemaUri($outgoing, true, $context);
-                    } elseif ($shouldRelaxCommit) {
-                        $outgoing = $this->buildSchemaUri($outgoing, false, $context);
+                    }
+
+                    if (!empty($action)) {
+                        $action = $this->buildActionUri($action, true, $context);
                     }
                 }
 
@@ -183,16 +205,13 @@ readonly class Operation
                     $existing->setParameters($this->wrapParameters($parameters));
                 }
                 if (in_array($existing->getHttpMethod(), ['POST', 'PUT', 'PATCH'], true)) {
-                    $existing->setIncoming(SchemaScheme::wrap($incoming ?? $existing->getIncoming()));
+                    $existing->setIncoming(SchemaScheme::wrap($incoming));
                 } else {
                     $existing->setIncoming(null);
                 }
-                $existing->setOutgoing(SchemaScheme::wrap($outgoing ?? $existing->getOutgoing()));
-                $throws = $operation->getThrows();
-                if ($throws !== null) {
-                    $existing->setThrows($this->wrapThrows($throws, $shouldFixCommit, $shouldRelaxCommit, $context));
-                }
-                $existing->setAction(ActionScheme::wrap($action ?? $existing->getAction()));
+                $existing->setOutgoing(SchemaScheme::wrap($outgoing));
+                $existing->setThrows($this->wrapThrows($throws, $shouldFixCommit, false, $context));
+                $existing->setAction(ActionScheme::wrap($action));
                 $existing->setCosts($operation->getCosts() ?? $existing->getCosts());
                 $metadata = $operation->getMetadata();
                 if ($metadata !== null) {
@@ -263,18 +282,34 @@ readonly class Operation
         }
 
         foreach ($throws->getAll() as $code => $schema) {
-            if (!empty($schema)) {
-                if ($shouldFixCommit) {
-                    $schema = $this->buildSchemaUri($schema, true, $context);
-                } elseif ($shouldRelaxCommit) {
-                    $schema = $this->buildSchemaUri($schema, false, $context);
-                }
+            if (empty($schema)) {
+                continue;
+            }
+
+            if ($shouldFixCommit) {
+                $schema = $this->buildSchemaUri($schema, true, $context);
+            } elseif ($shouldRelaxCommit) {
+                $schema = $this->buildSchemaUri($schema, false, $context);
             }
 
             $throws->put($code, SchemaScheme::wrap($schema));
         }
 
         return Parser::encode($throws);
+    }
+
+    private function parseThrows(?string $throws): ?OperationThrows
+    {
+        if (empty($throws)) {
+            return null;
+        }
+
+        $data = \json_decode($throws);
+        if (!$data instanceof \stdClass) {
+            return null;
+        }
+
+        return OperationThrows::fromObject($data);
     }
 
     private function buildSchemaUri(?string $schema, bool $includeHash, UserContext $context): ?string
