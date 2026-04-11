@@ -52,92 +52,92 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 59,
+    "id": 60,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 279,
+            "scopeId": 60,
+            "operationId": 285,
+            "allow": true
+        },
+        {
+            "id": 278,
+            "scopeId": 60,
+            "operationId": 284,
+            "allow": true
+        },
+        {
             "id": 277,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 283,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 282,
             "allow": true
         },
         {
             "id": 275,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 281,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 280,
             "allow": true
         },
         {
             "id": 273,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 279,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 278,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 277,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 276,
             "allow": true
         },
         {
-            "id": 269,
-            "scopeId": 59,
+            "id": 268,
+            "scopeId": 60,
             "operationId": 275,
             "allow": true
         },
         {
-            "id": 268,
-            "scopeId": 59,
+            "id": 266,
+            "scopeId": 60,
             "operationId": 274,
             "allow": true
         },
         {
-            "id": 266,
-            "scopeId": 59,
+            "id": 265,
+            "scopeId": 60,
             "operationId": 273,
             "allow": true
         },
         {
             "id": 264,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 272,
-            "allow": true
-        },
-        {
-            "id": 263,
-            "scopeId": 59,
-            "operationId": 271,
-            "allow": true
-        },
-        {
-            "id": 262,
-            "scopeId": 59,
-            "operationId": 270,
             "allow": true
         }
     ]
@@ -158,92 +158,92 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 59,
+    "id": 60,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 279,
+            "scopeId": 60,
+            "operationId": 285,
+            "allow": true
+        },
+        {
+            "id": 278,
+            "scopeId": 60,
+            "operationId": 284,
+            "allow": true
+        },
+        {
             "id": 277,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 283,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 282,
             "allow": true
         },
         {
             "id": 275,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 281,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 280,
             "allow": true
         },
         {
             "id": 273,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 279,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 278,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 277,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 276,
             "allow": true
         },
         {
-            "id": 269,
-            "scopeId": 59,
+            "id": 268,
+            "scopeId": 60,
             "operationId": 275,
             "allow": true
         },
         {
-            "id": 268,
-            "scopeId": 59,
+            "id": 266,
+            "scopeId": 60,
             "operationId": 274,
             "allow": true
         },
         {
-            "id": 266,
-            "scopeId": 59,
+            "id": 265,
+            "scopeId": 60,
             "operationId": 273,
             "allow": true
         },
         {
             "id": 264,
-            "scopeId": 59,
+            "scopeId": 60,
             "operationId": 272,
-            "allow": true
-        },
-        {
-            "id": 263,
-            "scopeId": 59,
-            "operationId": 271,
-            "allow": true
-        },
-        {
-            "id": 262,
-            "scopeId": 59,
-            "operationId": 270,
             "allow": true
         }
     ]
@@ -302,7 +302,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully updated",
-    "id": "59"
+    "id": "60"
 }
 JSON;
 
@@ -339,7 +339,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully deleted",
-    "id": "59"
+    "id": "60"
 }
 JSON;
 

@@ -41,7 +41,7 @@ class CollectionTest extends DbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 35,
+    "totalResults": 37,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -204,7 +204,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 35,
+    "totalResults": 37,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -437,6 +437,20 @@ JSON;
             "type": 1,
             "name": "system_mailer",
             "description": "Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable",
+            "value": ""
+        },
+        {
+            "id": 36,
+            "type": 1,
+            "name": "typehub_client_id",
+            "description": "TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)",
+            "value": ""
+        },
+        {
+            "id": 37,
+            "type": 1,
+            "name": "typehub_client_secret",
+            "description": "TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)",
             "value": ""
         },
         {

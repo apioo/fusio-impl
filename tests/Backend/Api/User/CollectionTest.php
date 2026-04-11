@@ -243,7 +243,7 @@ JSON;
 
         $userScopes = $this->connection->fetchAllAssociative($sql, ['user_id' => $data->id]);
 
-        $this->assertEquals(55, count($userScopes));
+        $this->assertEquals(56, count($userScopes));
     }
 
     public function testPostNameExists()

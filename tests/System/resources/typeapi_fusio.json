@@ -33,6 +33,7 @@
       "backend.schema",
       "backend.scope",
       "backend.sdk",
+      "backend.specification",
       "backend.statistic",
       "backend.taxonomy",
       "backend.tenant",
@@ -6822,6 +6823,74 @@
       "authorization": true,
       "tags": [
         "sdk"
+      ]
+    },
+    "backend.specification.get": {
+      "path": "/backend/specification",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_SpecificationGet"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the TypeHub specification",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
+    "backend.specification.publish": {
+      "path": "/backend/specification",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_SpecificationPublish"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Publish the specification",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
       ]
     },
     "backend.statistic.getActivitiesPerUser": {
@@ -14830,6 +14899,28 @@
       "type": "map",
       "schema": {
         "type": "string"
+      }
+    },
+    "Backend_SpecificationGet": {
+      "type": "struct",
+      "properties": {
+        "spec": {
+          "type": "any"
+        }
+      }
+    },
+    "Backend_SpecificationPublish": {
+      "type": "struct",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "filterName": {
+          "type": "string"
+        },
+        "standalone": {
+          "type": "boolean"
+        }
       }
     },
     "Backend_StatisticChart": {

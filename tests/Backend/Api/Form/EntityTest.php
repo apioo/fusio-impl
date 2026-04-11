@@ -54,7 +54,7 @@ class EntityTest extends DbTestCase
     "id": 1,
     "status": 1,
     "name": "my_form",
-    "operationId": 271,
+    "operationId": 273,
     "uiSchema": {
         "foo": "bar"
     },
@@ -81,7 +81,7 @@ JSON;
     "id": 1,
     "status": 1,
     "name": "my_form",
-    "operationId": 271,
+    "operationId": 273,
     "uiSchema": {
         "foo": "bar"
     },

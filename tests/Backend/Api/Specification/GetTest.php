@@ -1,0 +1,872 @@
+<?php
+/*
+ * Fusio - Self-Hosted API Management for Builders.
+ * For the current version and information visit <https://www.fusio-project.org/>
+ *
+ * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Fusio\Impl\Tests\Backend\Specification;
+
+use Fusio\Impl\Tests\DbTestCase;
+
+/**
+ * GetTest
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * @link    https://www.fusio-project.org
+ */
+class GetTest extends DbTestCase
+{
+    public function testGet()
+    {
+        $response = $this->sendRequest('/backend/specification', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "spec": {
+        "baseUrl": "http:\/\/127.0.0.1",
+        "security": {
+            "type": "oauth2",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "authorizationUrl": "http:\/\/127.0.0.1\/authorization\/authorize",
+            "scopes": [
+                "bar",
+                "default",
+                "foo",
+                "plan_scope"
+            ]
+        },
+        "operations": {
+            "authorization.getWhoami": {
+                "path": "\/authorization\/whoami",
+                "method": "GET",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Backend_User"
+                    }
+                },
+                "arguments": [],
+                "throws": [
+                    {
+                        "code": 999,
+                        "schema": {
+                            "type": "reference",
+                            "target": "Common_Message"
+                        }
+                    }
+                ],
+                "description": "Returns user data of the current authenticated user",
+                "stability": 2,
+                "security": [
+                    "authorization"
+                ],
+                "authorization": true,
+                "tags": [
+                    "authorization"
+                ]
+            },
+            "authorization.revoke": {
+                "path": "\/authorization\/revoke",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Common_Message"
+                    }
+                },
+                "arguments": [],
+                "throws": [
+                    {
+                        "code": 999,
+                        "schema": {
+                            "type": "reference",
+                            "target": "Common_Message"
+                        }
+                    }
+                ],
+                "description": "Revoke the access token of the current authenticated user",
+                "stability": 2,
+                "security": [
+                    "authorization"
+                ],
+                "authorization": true,
+                "tags": [
+                    "authorization"
+                ]
+            },
+            "inspect.delete": {
+                "path": "\/inspect\/:foo",
+                "method": "DELETE",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "foo": {
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Passthru"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "inspect.get": {
+                "path": "\/inspect\/:foo",
+                "method": "GET",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "foo": {
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Passthru"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "foo",
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "foo",
+                    "bar"
+                ]
+            },
+            "inspect.patch": {
+                "path": "\/inspect\/:foo",
+                "method": "PATCH",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "foo": {
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Passthru"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "inspect.post": {
+                "path": "\/inspect\/:foo",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "foo": {
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Passthru"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "foo",
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "foo",
+                    "bar"
+                ]
+            },
+            "inspect.put": {
+                "path": "\/inspect\/:foo",
+                "method": "PUT",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "foo": {
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Passthru"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "meta.getAbout": {
+                "path": "\/",
+                "method": "GET",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "System_About"
+                    }
+                },
+                "arguments": [],
+                "throws": [
+                    {
+                        "code": 999,
+                        "schema": {
+                            "type": "reference",
+                            "target": "Common_Message"
+                        }
+                    }
+                ],
+                "description": "Returns meta information and links about the current installed Fusio version",
+                "stability": 2,
+                "security": [],
+                "authorization": false,
+                "tags": []
+            },
+            "mime.binary": {
+                "path": "\/mime\/binary",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "application\/octet-stream"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "application\/octet-stream"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "mime.form": {
+                "path": "\/mime\/form",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "application\/x-www-form-urlencoded"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "application\/x-www-form-urlencoded"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "mime.json": {
+                "path": "\/mime\/json",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "application\/json"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "application\/json"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "mime.multipart": {
+                "path": "\/mime\/multipart",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "multipart\/form-data"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "multipart\/form-data"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "mime.text": {
+                "path": "\/mime\/text",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "text\/plain"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "text\/plain"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "mime.xml": {
+                "path": "\/mime\/xml",
+                "method": "POST",
+                "return": {
+                    "code": 200,
+                    "contentType": "application\/xml"
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "contentType": "application\/xml"
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "test.createBar": {
+                "path": "\/bar",
+                "method": "POST",
+                "return": {
+                    "code": 201,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Entry"
+                    }
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Entry"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "test.createFoo": {
+                "path": "\/foo",
+                "method": "POST",
+                "return": {
+                    "code": 201,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Passthru"
+                    }
+                },
+                "arguments": {
+                    "payload": {
+                        "in": "body",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Entry"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 2,
+                "security": [
+                    "bar"
+                ],
+                "authorization": true,
+                "tags": [
+                    "bar"
+                ]
+            },
+            "test.listFoo": {
+                "path": "\/foo",
+                "method": "GET",
+                "return": {
+                    "code": 200,
+                    "schema": {
+                        "type": "reference",
+                        "target": "Collection"
+                    }
+                },
+                "arguments": {
+                    "startIndex": {
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "count": {
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "throws": [],
+                "description": "",
+                "stability": 1,
+                "security": [],
+                "authorization": false,
+                "tags": [
+                    "bar"
+                ]
+            }
+        },
+        "definitions": {
+            "Backend_App": {
+                "description": "This object represents an app to access the API on-behalf of a user",
+                "type": "struct",
+                "properties": {
+                    "id": {
+                        "description": "Unique identifier for the object",
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Status of the object either 1 = active, 2 = pending, 3 = deactivated or 4 = deleted",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Unique name of the object",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "Url where the app is hosted",
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "description": "Optional URL-encoded parameters of the app i.e. foo=bar&bar=foo",
+                        "type": "string"
+                    },
+                    "appKey": {
+                        "description": "The app key also known as client id which is generated on creation",
+                        "type": "string"
+                    },
+                    "appSecret": {
+                        "description": "The app secret also known as client secret which is generated on creation",
+                        "type": "string"
+                    },
+                    "metadata": {
+                        "description": "Use this parameter to attach key-value data",
+                        "type": "reference",
+                        "target": "Common_Metadata"
+                    },
+                    "date": {
+                        "description": "The create date of this object",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "scopes": {
+                        "description": "A list of assigned scopes for this app",
+                        "type": "array",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "tokens": {
+                        "description": "A list of tokens which are assigned to this app",
+                        "type": "array",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Backend_Token"
+                        }
+                    }
+                }
+            },
+            "Backend_Token": {
+                "description": "This object represents a token, this an access token which was requested by a user",
+                "type": "struct",
+                "properties": {
+                    "id": {
+                        "description": "Unique identifier for the object",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Status of the object either 1 = active or 2 = deleted",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "expire": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Backend_User": {
+                "description": "This object represents a user",
+                "type": "struct",
+                "properties": {
+                    "id": {
+                        "description": "Unique identifier for the object",
+                        "type": "integer"
+                    },
+                    "roleId": {
+                        "description": "A role which is assigned to the user",
+                        "type": "integer"
+                    },
+                    "planId": {
+                        "description": "A plan which is assigned to the user",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Status of the object either 1 = active, 2 = disabled or 0 = deleted",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Unique name of the object",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email address of the user",
+                        "type": "string"
+                    },
+                    "points": {
+                        "description": "Points assigned to the user",
+                        "type": "integer"
+                    },
+                    "scopes": {
+                        "description": "List of scopes which are assigned to the user",
+                        "type": "array",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "apps": {
+                        "type": "array",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Backend_App"
+                        }
+                    },
+                    "metadata": {
+                        "description": "Use this parameter to attach key-value data",
+                        "type": "reference",
+                        "target": "Common_Metadata"
+                    },
+                    "date": {
+                        "description": "The insert date",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "struct",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "itemsPerPage": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "schema": {
+                            "type": "reference",
+                            "target": "Entry"
+                        }
+                    }
+                }
+            },
+            "Common_Message": {
+                "description": "Common error message",
+                "type": "struct",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Common_Metadata": {
+                "type": "map",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "Entry": {
+                "type": "struct",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Passthru": {
+                "description": "No schema information available",
+                "type": "map",
+                "schema": {
+                    "type": "any"
+                }
+            },
+            "System_About": {
+                "type": "struct",
+                "properties": {
+                    "apiVersion": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "termsOfService": {
+                        "type": "string"
+                    },
+                    "contactName": {
+                        "type": "string"
+                    },
+                    "contactUrl": {
+                        "type": "string"
+                    },
+                    "contactEmail": {
+                        "type": "string"
+                    },
+                    "licenseName": {
+                        "type": "string"
+                    },
+                    "licenseUrl": {
+                        "type": "string"
+                    },
+                    "paymentCurrency": {
+                        "type": "string"
+                    },
+                    "categories": {
+                        "type": "array",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "apps": {
+                        "type": "reference",
+                        "target": "System_AboutApps"
+                    },
+                    "links": {
+                        "type": "array",
+                        "schema": {
+                            "type": "reference",
+                            "target": "System_AboutLink"
+                        }
+                    }
+                }
+            },
+            "System_AboutApps": {
+                "type": "map",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "System_AboutLink": {
+                "type": "struct",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+}

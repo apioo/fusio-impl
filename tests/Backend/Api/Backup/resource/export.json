@@ -264,6 +264,18 @@
       "name": "sdkgen_client_secret",
       "description": "SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)",
       "value": ""
+    },
+    {
+      "type": 1,
+      "name": "typehub_client_id",
+      "description": "TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)",
+      "value": ""
+    },
+    {
+      "type": 1,
+      "name": "typehub_client_secret",
+      "description": "TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)",
+      "value": ""
     }
   ],
   "connection": [
@@ -398,7 +410,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 271,
+          "operationId": 273,
           "authenticated": true
         }
       ]
@@ -415,7 +427,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 270
+          "operationId": 272
         }
       ]
     },
@@ -606,6 +618,7 @@
         "backend.schema",
         "backend.scope",
         "backend.sdk",
+        "backend.specification",
         "backend.statistic",
         "backend.taxonomy",
         "backend.tenant",
@@ -668,6 +681,7 @@
         "backend.schema",
         "backend.scope",
         "backend.sdk",
+        "backend.specification",
         "backend.statistic",
         "backend.taxonomy",
         "backend.tenant",

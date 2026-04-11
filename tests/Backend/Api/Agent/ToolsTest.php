@@ -680,6 +680,14 @@ class ToolsTest extends DbTestCase
             "description": "Returns a paginated list of SDKs"
         },
         {
+            "name": "backend_specification_get",
+            "description": "Returns the TypeHub specification"
+        },
+        {
+            "name": "backend_specification_publish",
+            "description": "Publish the specification"
+        },
+        {
             "name": "backend_statistic_getActivitiesPerUser",
             "description": "Returns a statistic containing the activities per user"
         },

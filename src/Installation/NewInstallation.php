@@ -100,6 +100,8 @@ class NewInstallation
         $bag->addConfig('marketplace_client_secret', Table\Config::FORM_STRING, '', 'Marketplace Client-Secret, this is either your password or app secret of the Fusio marketplace (marketplace.fusio-project.org)', tenantId: $tenantId);
         $bag->addConfig('sdkgen_client_id', Table\Config::FORM_STRING, '', 'SDKgen Client-Id, this is either your username or app key of the SDKgen app (sdkgen.app)', tenantId: $tenantId);
         $bag->addConfig('sdkgen_client_secret', Table\Config::FORM_STRING, '', 'SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)', tenantId: $tenantId);
+        $bag->addConfig('typehub_client_id', Table\Config::FORM_STRING, '', 'TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)', tenantId: $tenantId);
+        $bag->addConfig('typehub_client_secret', Table\Config::FORM_STRING, '', 'TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)', tenantId: $tenantId);
         if ($tenantId === null) {
             // we add the system connection only at the root tenant
             $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class), tenantId: $tenantId);
@@ -1955,6 +1957,25 @@ class NewInstallation
                     parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString(), 'from' => PropertyTypeFactory::getDateTime(), 'to' => PropertyTypeFactory::getDateTime(), 'operationId' => PropertyTypeFactory::getInteger(), 'appId' => PropertyTypeFactory::getInteger(), 'userId' => PropertyTypeFactory::getInteger(), 'ip' => PropertyTypeFactory::getString(), 'userAgent' => PropertyTypeFactory::getString(), 'method' => PropertyTypeFactory::getString(), 'path' => PropertyTypeFactory::getString(), 'header' => PropertyTypeFactory::getString(), 'body' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a statistic containing the user registrations',
+                ),
+                'specification.get' => new Operation(
+                    action: Backend\Action\Specification\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/specification',
+                    httpCode: 200,
+                    outgoing: Model\Backend\SpecificationGet::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the TypeHub specification',
+                ),
+                'specification.publish' => new Operation(
+                    action: Backend\Action\Specification\Publish::class,
+                    httpMethod: 'POST',
+                    httpPath: '/specification',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Model\Backend\SpecificationPublish::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Publish the specification',
                 ),
                 'tenant.setup' => new Operation(
                     action: Backend\Action\Tenant\Setup::class,
