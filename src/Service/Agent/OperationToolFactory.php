@@ -46,6 +46,10 @@ readonly class OperationToolFactory implements ToolFactoryInterface
 
     public function getTool(object|string $reference): iterable
     {
+        if (is_object($reference)) {
+            $reference = $reference::class;
+        }
+
         if ($reference !== OperationTool::class) {
             return [];
         }
