@@ -33,11 +33,11 @@ class Base
 {
     public static function getVersion(): ?string
     {
-        return InstalledVersions::getVersion('fusio/impl');
+        return InstalledVersions::getPrettyVersion('fusio/impl');
     }
 
     public static function getUserAgent(): string
     {
-        return 'Fusio v' . self::getVersion() . ' (https://www.fusio-project.org/)';
+        return 'Fusio ' . self::getVersion() . ' (https://www.fusio-project.org/)';
     }
 }
