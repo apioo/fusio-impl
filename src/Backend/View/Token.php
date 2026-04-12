@@ -24,7 +24,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -51,10 +53,12 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\TokenCollection::class)),
             'totalResults' => $this->getTable(Table\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Token::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\TokenTable::COLUMN_STATUS),
                 'name' => Table\Generated\TokenTable::COLUMN_NAME,
@@ -72,6 +76,7 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Token::class), 'findOneByTenantAndId'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Token::class)),
             'id' => Table\Generated\TokenTable::COLUMN_ID,
             'status' => Table\Generated\TokenTable::COLUMN_STATUS,
             'name' => Table\Generated\TokenTable::COLUMN_NAME,

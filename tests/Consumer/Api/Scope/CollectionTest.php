@@ -54,16 +54,19 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_ScopeCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Scope",
             "id": {$this->scopeBarId},
             "name": "bar",
             "description": "Bar access"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Scope",
             "id": {$this->scopeFooId},
             "name": "foo",
             "description": "Foo access",

@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -51,10 +53,12 @@ class Plan extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\PlanCollection::class)),
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Plan::class)),
                 'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
@@ -77,6 +81,7 @@ class Plan extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Plan::class)),
             'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,

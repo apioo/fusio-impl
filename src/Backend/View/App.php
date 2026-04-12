@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -51,10 +53,12 @@ class App extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\AppCollection::class)),
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\App::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
@@ -73,6 +77,7 @@ class App extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\App::class)),
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
             'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),

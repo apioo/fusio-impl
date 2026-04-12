@@ -22,8 +22,10 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -75,10 +77,12 @@ class Identity extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\IdentityCollection::class)),
             'totalResults' => $this->getTable(Table\Identity::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Identity::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Identity::class)),
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
                 'icon' => Table\Generated\IdentityTable::COLUMN_ICON,

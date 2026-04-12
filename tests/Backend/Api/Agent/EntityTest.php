@@ -51,6 +51,7 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
     "id": {$this->id},
     "status": 1,
     "connection": 8,

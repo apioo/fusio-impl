@@ -44,11 +44,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_LogCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Log",
             "id": 1,
             "appId": 3,
             "ip": "127.0.0.1",

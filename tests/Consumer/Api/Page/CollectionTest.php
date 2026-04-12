@@ -43,35 +43,41 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_PageCollection",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
             "id": 3,
             "title": "API",
             "slug": "api",
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
             "id": 4,
             "title": "Authorization",
             "slug": "authorization",
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
             "id": 2,
             "title": "Getting started",
             "slug": "getting-started",
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
             "id": 6,
             "title": "SDK",
             "slug": "sdk",
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
             "id": 5,
             "title": "Support",
             "slug": "support",

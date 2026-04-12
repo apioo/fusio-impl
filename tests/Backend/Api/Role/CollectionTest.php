@@ -41,23 +41,27 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 3,
             "categoryId": 1,
             "status": 1,
@@ -81,11 +85,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 2,
             "categoryId": 1,
             "status": 1,
@@ -109,23 +115,27 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
             "id": 3,
             "categoryId": 1,
             "status": 1,

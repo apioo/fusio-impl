@@ -44,11 +44,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_OperationCollection",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 285,
             "status": 1,
             "active": true,
@@ -61,6 +63,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 284,
             "status": 1,
             "active": true,
@@ -73,6 +76,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 283,
             "status": 1,
             "active": true,
@@ -85,6 +89,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 282,
             "status": 1,
             "active": true,
@@ -97,6 +102,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 281,
             "status": 1,
             "active": true,
@@ -109,6 +115,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 280,
             "status": 1,
             "active": true,
@@ -121,6 +128,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 279,
             "status": 1,
             "active": true,
@@ -133,6 +141,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 278,
             "status": 1,
             "active": true,
@@ -145,6 +154,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 277,
             "status": 1,
             "active": true,
@@ -157,6 +167,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 276,
             "status": 1,
             "active": true,
@@ -169,6 +180,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 275,
             "status": 1,
             "active": true,
@@ -181,6 +193,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 274,
             "status": 1,
             "active": true,
@@ -193,6 +206,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 273,
             "status": 1,
             "active": true,
@@ -205,6 +219,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 272,
             "status": 1,
             "active": true,
@@ -217,6 +232,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 1,
             "status": 1,
             "active": true,
@@ -246,11 +262,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_OperationCollection",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 279,
             "status": 1,
             "active": true,
@@ -263,6 +281,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 278,
             "status": 1,
             "active": true,
@@ -275,6 +294,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 277,
             "status": 1,
             "active": true,
@@ -287,6 +307,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 276,
             "status": 1,
             "active": true,
@@ -299,6 +320,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 275,
             "status": 1,
             "active": true,
@@ -328,11 +350,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_OperationCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 272,
             "status": 1,
             "active": true,
@@ -362,11 +386,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_OperationCollection",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 285,
             "status": 1,
             "active": true,
@@ -379,6 +405,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 284,
             "status": 1,
             "active": true,
@@ -391,6 +418,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 283,
             "status": 1,
             "active": true,
@@ -403,6 +431,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 282,
             "status": 1,
             "active": true,
@@ -415,6 +444,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 281,
             "status": 1,
             "active": true,
@@ -427,6 +457,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 280,
             "status": 1,
             "active": true,
@@ -439,6 +470,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 279,
             "status": 1,
             "active": true,
@@ -451,6 +483,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 278,
             "status": 1,
             "active": true,
@@ -463,6 +496,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 277,
             "status": 1,
             "active": true,
@@ -475,6 +509,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 276,
             "status": 1,
             "active": true,
@@ -487,6 +522,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 275,
             "status": 1,
             "active": true,
@@ -499,6 +535,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 274,
             "status": 1,
             "active": true,
@@ -511,6 +548,7 @@ JSON;
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 273,
             "status": 1,
             "active": true,
@@ -523,6 +561,7 @@ JSON;
             "action": "action:\/\/Sql-Insert"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 272,
             "status": 1,
             "active": true,
@@ -535,6 +574,7 @@ JSON;
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
             "id": 1,
             "status": 1,
             "active": true,

@@ -42,11 +42,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_FormCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Form",
             "id": 1,
             "status": 1,
             "name": "my_form",
@@ -73,11 +75,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_FormCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Form",
             "id": 1,
             "status": 1,
             "name": "my_form",

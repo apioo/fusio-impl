@@ -53,11 +53,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -67,6 +69,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -93,11 +96,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -124,11 +129,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -155,11 +162,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -169,6 +178,7 @@ JSON;
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",

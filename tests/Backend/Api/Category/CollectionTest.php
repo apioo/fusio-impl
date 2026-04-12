@@ -41,31 +41,37 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CategoryCollection",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 5,
             "status": 1,
             "name": "authorization"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 2,
             "status": 1,
             "name": "backend"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 3,
             "status": 1,
             "name": "consumer"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 1,
             "status": 1,
             "name": "default"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 4,
             "status": 1,
             "name": "system"
@@ -88,11 +94,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CategoryCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 2,
             "status": 1,
             "name": "backend"
@@ -115,31 +123,37 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CategoryCollection",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 5,
             "status": 1,
             "name": "authorization"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 2,
             "status": 1,
             "name": "backend"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 3,
             "status": 1,
             "name": "consumer"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 1,
             "status": 1,
             "name": "default"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Category",
             "id": 4,
             "status": 1,
             "name": "system"

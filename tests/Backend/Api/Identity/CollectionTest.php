@@ -42,11 +42,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_IdentityCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Identity",
             "id": 1,
             "roleId": 3,
             "appId": 2,
@@ -57,6 +59,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "2023-07-22T13:56:00Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Identity",
             "id": 2,
             "roleId": 3,
             "appId": 2,
@@ -67,6 +70,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "2023-07-22T13:56:00Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Identity",
             "id": 3,
             "roleId": 3,
             "appId": 2,
@@ -77,6 +81,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "2023-07-22T13:56:00Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Identity",
             "id": 4,
             "roleId": 3,
             "appId": 2,

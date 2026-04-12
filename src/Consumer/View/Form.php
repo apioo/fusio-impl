@@ -22,9 +22,11 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Service\Form\JsonSchemaResolver;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\TableManager;
@@ -64,10 +66,12 @@ class Form extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\FormCollection::class)),
             'totalResults' => $this->getTable(Table\Form::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Form::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Form::class)),
                 'id' => $builder->fieldInteger(Table\Generated\FormTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\FormTable::COLUMN_STATUS),
                 'name' => Table\Generated\FormTable::COLUMN_NAME,
@@ -83,6 +87,7 @@ class Form extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Form::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Form::class)),
             'id' => $builder->fieldInteger(Table\Generated\FormTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\FormTable::COLUMN_STATUS),
             'name' => Table\Generated\FormTable::COLUMN_NAME,

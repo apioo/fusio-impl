@@ -52,6 +52,7 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
     "id": 60,
     "name": "bar",
     "description": "Bar access",
@@ -158,6 +159,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
     "id": 60,
     "name": "bar",
     "description": "Bar access",

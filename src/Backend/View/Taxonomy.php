@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -50,10 +52,12 @@ class Taxonomy extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\TaxonomyCollection::class)),
             'totalResults' => $this->getTable(Table\Taxonomy::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Taxonomy::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Taxonomy::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_ID),
                 'parentId' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_PARENT_ID),
                 'status' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_STATUS),
@@ -69,6 +73,7 @@ class Taxonomy extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Taxonomy::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Taxonomy::class)),
             'id' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_ID),
             'parentId' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_PARENT_ID),
             'status' => $builder->fieldInteger(Table\Generated\TaxonomyTable::COLUMN_STATUS),

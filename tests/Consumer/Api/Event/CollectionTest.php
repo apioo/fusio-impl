@@ -54,11 +54,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_EventCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Event",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -68,6 +70,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Event",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -95,11 +98,13 @@ JSON;
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_EventCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Event",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",

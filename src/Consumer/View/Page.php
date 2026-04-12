@@ -22,7 +22,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -50,10 +52,12 @@ class Page extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\PageCollection::class)),
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Page::class)),
                 'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
                 'title' => Table\Generated\PageTable::COLUMN_TITLE,
                 'slug' => Table\Generated\PageTable::COLUMN_SLUG,
@@ -70,6 +74,7 @@ class Page extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Page::class), 'findOneByIdentifier'], [$context->getTenantId(), $pageId], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Page::class)),
             'id' => $builder->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
             'title' => Table\Generated\PageTable::COLUMN_TITLE,
             'slug' => Table\Generated\PageTable::COLUMN_SLUG,

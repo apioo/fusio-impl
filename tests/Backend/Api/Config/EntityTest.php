@@ -41,6 +41,7 @@ class EntityTest extends DbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Config",
     "id": 3,
     "type": 3,
     "name": "consumer_max_tokens",
@@ -63,6 +64,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Config",
     "id": 5,
     "type": 1,
     "name": "authorization_url",

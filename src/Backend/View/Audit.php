@@ -24,7 +24,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -52,10 +54,12 @@ class Audit extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\AuditCollection::class)),
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Audit::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
                 'event' => Table\Generated\AuditTable::COLUMN_EVENT,
                 'ip' => Table\Generated\AuditTable::COLUMN_IP,
@@ -72,6 +76,7 @@ class Audit extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Audit::class)),
             'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),

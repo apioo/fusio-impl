@@ -27,6 +27,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -50,6 +51,7 @@ readonly class GetAbout implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return array_filter([
+            '@type' => Service\JsonLD\TypeBuilder::build(Model\System\About::class),
             'apiVersion' => Base::getVersion(),
             'title' => $this->configService->getValue('info_title') ?: 'Fusio',
             'description' => $this->configService->getValue('info_description') ?: null,

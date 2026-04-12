@@ -43,6 +43,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
     "id": 1,
     "title": "Overview",
     "slug": "overview",
@@ -67,6 +68,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Page",
     "id": 1,
     "title": "Overview",
     "slug": "overview",

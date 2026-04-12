@@ -44,11 +44,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_UserCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -58,6 +60,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 3,
             "roleId": 3,
             "status": 2,
@@ -66,6 +69,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 2,
             "roleId": 3,
             "planId": 1,
@@ -79,6 +83,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 1,
             "roleId": 1,
             "status": 1,
@@ -106,11 +111,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_UserCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -139,11 +146,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_UserCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -153,6 +162,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 3,
             "roleId": 3,
             "status": 2,
@@ -161,6 +171,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 2,
             "roleId": 3,
             "planId": 1,
@@ -174,6 +185,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
             "id": 1,
             "roleId": 1,
             "status": 1,

@@ -44,6 +44,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogError",
     "id": 1,
     "logId": 1,
     "message": "Syntax error, malformed JSON",

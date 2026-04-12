@@ -22,7 +22,6 @@ namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Plan\Usage\UsageQueryFilter;
-use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\StatisticChart;
 
