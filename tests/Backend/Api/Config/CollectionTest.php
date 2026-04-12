@@ -41,7 +41,7 @@ class CollectionTest extends DbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 37,
+    "totalResults": 38,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -204,7 +204,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 37,
+    "totalResults": 38,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -451,6 +451,13 @@ JSON;
             "type": 1,
             "name": "typehub_client_secret",
             "description": "TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)",
+            "value": ""
+        },
+        {
+            "id": 38,
+            "type": 1,
+            "name": "typehub_document_name",
+            "description": "Name of the TypeHub document under which the specification gets published",
             "value": ""
         },
         {
