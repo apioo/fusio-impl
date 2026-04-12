@@ -48,14 +48,23 @@ readonly class Publish implements ActionInterface
 
         assert($body instanceof SpecificationPublish);
 
+        $name = $body->getName();
+        if (empty($name)) {
+            $name = $this->config->getValue('typehub_document_name');
+        }
+
         $clientId = $this->config->getValue('typehub_client_id');
         $clientSecret = $this->config->getValue('typehub_client_secret');
 
         if (empty($clientId) || empty($clientSecret)) {
-            throw new BadRequestException('TypeHub credentials are missing, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');
+            throw new BadRequestException('TypeHub credentials not configured, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');
         }
 
-        $this->publisher->publish($body->getName(), $clientId, $clientSecret, $body->getFilterName(), $body->getStandalone() ?? false);
+        if (empty($name)) {
+            throw new BadRequestException('TypeHub document name not configured, please provide a TypeHub document at System / Config (typehub_document_name) under which the specification gets published');
+        }
+
+        $this->publisher->publish($name, $clientId, $clientSecret, $body->getFilterName(), $body->getStandalone() ?? false);
 
         return [
             'success' => true,

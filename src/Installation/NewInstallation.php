@@ -102,6 +102,7 @@ class NewInstallation
         $bag->addConfig('sdkgen_client_secret', Table\Config::FORM_STRING, '', 'SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)', tenantId: $tenantId);
         $bag->addConfig('typehub_client_id', Table\Config::FORM_STRING, '', 'TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)', tenantId: $tenantId);
         $bag->addConfig('typehub_client_secret', Table\Config::FORM_STRING, '', 'TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)', tenantId: $tenantId);
+        $bag->addConfig('typehub_document_name', Table\Config::FORM_STRING, '', 'Name of the TypeHub document under which the specification gets published', tenantId: $tenantId);
         if ($tenantId === null) {
             // we add the system connection only at the root tenant
             $bag->addConnection('System', ClassName::serialize(ConnectionSystem::class), tenantId: $tenantId);
