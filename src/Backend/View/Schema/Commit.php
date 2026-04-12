@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View\Schema;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -50,10 +52,12 @@ class Commit extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\SchemaCommitCollection::class)),
             'totalResults' => $this->getTable(Table\Schema\Commit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Schema\Commit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\SchemaCommit::class)),
                 'id' => $builder->fieldInteger(Table\Generated\SchemaCommitTable::COLUMN_ID),
                 'user' => $builder->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference(Table\Generated\SchemaCommitTable::COLUMN_USER_ID)], [
                     'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),

@@ -18,6 +18,7 @@
     "fusio/cli": "^4.0",
     "fusio/model": "^4.0",
     "fusio/engine": "^6.0",
+    "fusio/sdk": "^7.0",
     "fusio/adapter-ai": "^0.2",
     "fusio/adapter-amqp": "^6.0",
     "fusio/adapter-beanstalk": "^6.0",

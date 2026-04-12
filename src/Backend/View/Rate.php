@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -51,10 +53,12 @@ class Rate extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\RateCollection::class)),
             'totalResults' => $this->getTable(Table\Rate::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Rate::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Rate::class)),
                 'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
                 'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
@@ -73,6 +77,7 @@ class Rate extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Rate::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Rate::class)),
             'id' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
             'priority' => $builder->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),

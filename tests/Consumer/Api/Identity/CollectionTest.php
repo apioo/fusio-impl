@@ -42,29 +42,34 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_IdentityCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Identity",
             "id": 1,
             "name": "Facebook",
             "icon": "bi-facebook",
             "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/1\/redirect"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Identity",
             "id": 2,
             "name": "GitHub",
             "icon": "bi-github",
             "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/2\/redirect"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Identity",
             "id": 3,
             "name": "Google",
             "icon": "bi-google",
             "redirect": "http:\/\/127.0.0.1\/consumer\/identity\/3\/redirect"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Identity",
             "id": 4,
             "name": "OpenID",
             "icon": "bi-openid",
@@ -89,6 +94,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_IdentityCollection",
     "totalResults": 0,
     "startIndex": 0,
     "itemsPerPage": 16

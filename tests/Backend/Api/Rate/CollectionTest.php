@@ -41,11 +41,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RateCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -54,6 +56,7 @@ class CollectionTest extends DbTestCase
             "timespan": "P1M"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 3,
             "status": 1,
             "priority": 5,
@@ -65,6 +68,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 2,
             "status": 1,
             "priority": 4,
@@ -73,6 +77,7 @@ class CollectionTest extends DbTestCase
             "timespan": "PT1H"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 1,
             "status": 1,
             "priority": 0,
@@ -98,11 +103,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RateCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -128,11 +135,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RateCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -141,6 +150,7 @@ JSON;
             "timespan": "P1M"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 3,
             "status": 1,
             "priority": 5,
@@ -152,6 +162,7 @@ JSON;
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 2,
             "status": 1,
             "priority": 4,
@@ -160,6 +171,7 @@ JSON;
             "timespan": "PT1H"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Rate",
             "id": 1,
             "status": 1,
             "priority": 0,

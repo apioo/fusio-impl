@@ -24,7 +24,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Backend\Filter\Transaction\TransactionQueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -51,10 +53,12 @@ class Transaction extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\TransactionCollection::class)),
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Transaction::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
                 'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
@@ -77,6 +81,7 @@ class Transaction extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Transaction::class)),
             'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
             'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),

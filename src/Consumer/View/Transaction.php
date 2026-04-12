@@ -22,7 +22,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -52,10 +54,12 @@ class Transaction extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\TransactionCollection::class)),
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Transaction::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
                 'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
@@ -81,6 +85,7 @@ class Transaction extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Transaction::class), 'findOneBy'], [$condition], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Transaction::class)),
             'id' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
             'planId' => $builder->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),

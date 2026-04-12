@@ -45,16 +45,19 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_SchemaCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 3,
             "status": 1,
             "name": "Collection-Schema",
@@ -63,11 +66,13 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 2,
             "status": 1,
             "name": "Message"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 1,
             "status": 1,
             "name": "Passthru"
@@ -90,11 +95,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_SchemaCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
@@ -117,16 +124,19 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_SchemaCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 3,
             "status": 1,
             "name": "Collection-Schema",
@@ -135,11 +145,13 @@ JSON;
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 2,
             "status": 1,
             "name": "Message"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
             "id": 1,
             "status": 1,
             "name": "Passthru"

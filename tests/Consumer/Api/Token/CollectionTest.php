@@ -45,11 +45,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_TokenCollection",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -61,6 +63,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 5,
             "status": 1,
             "name": "Developer\/Consumer",
@@ -72,6 +75,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 3,
             "status": 1,
             "name": "Foo-App\/Consumer",
@@ -83,6 +87,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 2,
             "status": 1,
             "name": "Developer\/Consumer",
@@ -114,11 +119,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_TokenCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -130,6 +137,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
             "id": 3,
             "status": 1,
             "name": "Foo-App\/Consumer",

@@ -42,11 +42,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TokenCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Token",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -75,11 +77,13 @@ JSON;
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TokenCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Token",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -108,11 +112,13 @@ JSON;
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TokenCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Token",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",

@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -50,10 +52,12 @@ class Category extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\CategoryCollection::class)),
             'totalResults' => $this->getTable(Table\Category::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Category::class)),
                 'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,
@@ -68,6 +72,7 @@ class Category extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Category::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Category::class)),
             'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
             'name' => Table\Generated\CategoryTable::COLUMN_NAME,

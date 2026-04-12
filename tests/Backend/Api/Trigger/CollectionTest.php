@@ -41,11 +41,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TriggerCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 2,
             "status": 1,
             "name": "Second-Trigger",
@@ -56,6 +58,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 1,
             "status": 1,
             "name": "Test-Trigger",
@@ -83,11 +86,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TriggerCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 1,
             "status": 1,
             "name": "Test-Trigger",
@@ -115,11 +120,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TriggerCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 2,
             "status": 1,
             "name": "Second-Trigger",
@@ -147,11 +154,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TriggerCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 2,
             "status": 1,
             "name": "Second-Trigger",
@@ -162,6 +171,7 @@ JSON;
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Trigger",
             "id": 1,
             "status": 1,
             "name": "Test-Trigger",

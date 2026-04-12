@@ -44,47 +44,55 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ConnectionCollection",
     "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 8,
             "status": 1,
             "name": "Agent",
             "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 7,
             "status": 1,
             "name": "StarwarsSDK",
             "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 6,
             "status": 1,
             "name": "FusioHttpClient",
             "class": "Fusio.Adapter.Http.Connection.Http"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 4,
             "status": 1,
             "name": "Worker",
             "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 2,
             "status": 1,
             "name": "Test",
@@ -94,6 +102,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -117,17 +126,20 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ConnectionCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -151,11 +163,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ConnectionCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 3,
             "status": 1,
             "name": "Paypal",
@@ -179,17 +193,20 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ConnectionCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -213,47 +230,55 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ConnectionCollection",
     "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 8,
             "status": 1,
             "name": "Agent",
             "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 7,
             "status": 1,
             "name": "StarwarsSDK",
             "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 6,
             "status": 1,
             "name": "FusioHttpClient",
             "class": "Fusio.Adapter.Http.Connection.Http"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 4,
             "status": 1,
             "name": "Worker",
             "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 2,
             "status": 1,
             "name": "Test",
@@ -263,6 +288,7 @@ JSON;
             }
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Connection",
             "id": 1,
             "status": 1,
             "name": "System",

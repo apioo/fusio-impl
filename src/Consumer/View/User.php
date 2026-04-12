@@ -21,7 +21,9 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -45,6 +47,7 @@ class User extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\User::class), 'findOneBy'], [$condition], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\UserAccount::class)),
             'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
             'roleId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
             'planId' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_PLAN_ID),

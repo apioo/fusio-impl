@@ -51,11 +51,13 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_WebhookCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Webhook",
             "id": 2,
             "eventId": {$this->eventId},
             "userId": 2,
@@ -63,6 +65,7 @@ class CollectionTest extends DbTestCase
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Webhook",
             "id": 1,
             "eventId": {$this->eventId},
             "userId": 1,

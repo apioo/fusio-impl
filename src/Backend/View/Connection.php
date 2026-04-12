@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use Fusio\Model\Common\FormElementInput;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -56,10 +57,12 @@ class Connection extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\ConnectionCollection::class)),
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Connection::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -76,6 +79,7 @@ class Connection extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Connection::class)),
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,

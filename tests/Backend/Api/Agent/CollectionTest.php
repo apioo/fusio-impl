@@ -45,11 +45,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 6,
             "status": 1,
             "connection": 8,
@@ -60,6 +62,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 5,
             "status": 1,
             "type": 4,
@@ -69,6 +72,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 4,
             "status": 1,
             "type": 3,
@@ -78,6 +82,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 3,
             "status": 1,
             "type": 2,
@@ -86,6 +91,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 2,
             "status": 1,
             "type": 1,
@@ -95,6 +101,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 1,
             "status": 1,
             "type": 0,
@@ -120,11 +127,13 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 6,
             "status": 1,
             "connection": 8,
@@ -154,11 +163,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 6,
             "status": 1,
             "connection": 8,
@@ -169,6 +180,7 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 5,
             "status": 1,
             "type": 4,
@@ -178,6 +190,7 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 4,
             "status": 1,
             "type": 3,
@@ -187,6 +200,7 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 3,
             "status": 1,
             "type": 2,
@@ -195,6 +209,7 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 2,
             "status": 1,
             "type": 1,
@@ -204,6 +219,7 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 1,
             "status": 1,
             "type": 0,

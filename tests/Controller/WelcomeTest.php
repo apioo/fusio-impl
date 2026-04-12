@@ -42,6 +42,7 @@ class WelcomeTest extends DbTestCase
         $body    = (string) $response->getBody();
         $expect  = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/System_About",
     "apiVersion": "{$version}",
     "title": "Fusio",
     "description": "Self-Hosted API Management for Builders.",

@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Record\RecordInterface;
 use PSX\Sql\OrderBy;
@@ -50,10 +52,12 @@ class Config extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\ConfigCollection::class)),
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Config::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
                 'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
@@ -72,6 +76,7 @@ class Config extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Config::class)),
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

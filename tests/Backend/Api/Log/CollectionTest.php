@@ -52,11 +52,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -67,6 +69,7 @@ class CollectionTest extends DbTestCase
             "date": "2015-06-25T22:49:09Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -95,11 +98,13 @@ JSON;
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -110,6 +115,7 @@ JSON;
             "date": "2015-06-25T22:49:09Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -138,11 +144,13 @@ JSON;
 
         $expect = <<<JSON
 {
+    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -153,6 +161,7 @@ JSON;
             "date": "2015-06-25T22:49:09Z"
         },
         {
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
