@@ -168,8 +168,6 @@ class NewInstallation
         ], null, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Helps to build complete operations, it uses internally the action, schema and database agent', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Helps to develop custom action business logic', self::readAgent('action.md'), [
-            'backend_action_getAll',
-            'backend_action_get',
             'backend_connection_getAll',
             'backend_connection_get',
             'backend_connection_database_getTables',
@@ -180,8 +178,6 @@ class NewInstallation
             'backend_connection_sdk_get',
         ], null, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Helps to build new schemas to describe JSON payloads', self::readAgent('schema.md'), [
-            'backend_schema_getAll',
-            'backend_schema_get',
         ], Model\Agent\Schema::class, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Helps to design database table schemas', self::readAgent('database.md'), [
             'backend_connection_database_getTables',
