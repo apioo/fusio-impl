@@ -62,7 +62,8 @@ readonly class Execute implements ActionInterface
         try {
             $response = $this->actionExecutorService->execute(
                 $request->get('action_id'),
-                $body
+                $body,
+                $context
             );
 
             if ($response instanceof HttpResponseInterface) {

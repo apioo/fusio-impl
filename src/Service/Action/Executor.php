@@ -20,11 +20,10 @@
 
 namespace Fusio\Impl\Service\Action;
 
-use Fusio\Engine\Context;
+use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Request;
-use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Model\Backend\ActionExecuteRequest;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
@@ -39,13 +38,11 @@ use PSX\Uri\Uri;
  */
 readonly class Executor
 {
-    public function __construct(
-        private ProcessorInterface $processor,
-        private FrameworkConfig $frameworkConfig
-    ) {
+    public function __construct(private ProcessorInterface $processor)
+    {
     }
 
-    public function execute(string|int $actionId, ActionExecuteRequest $request): mixed
+    public function execute(string|int $actionId, ActionExecuteRequest $request, ContextInterface $context): mixed
     {
         $body = $request->getBody();
         if ($body === null) {
@@ -76,7 +73,6 @@ readonly class Executor
         $arguments = array_merge($arguments, $uriFragments);
 
         $request = new Request($arguments, $body, new Request\HttpRequestContext($httpRequest, $uriFragments));
-        $context = new Context\AnonymousContext($this->frameworkConfig->getTenantId());
 
         return $this->processor->execute($actionId, $request, $context);
     }
