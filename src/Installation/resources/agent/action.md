@@ -56,14 +56,15 @@ return function(Worker\ExecuteRequest $request, Worker\ExecuteContext $context, 
     - `$connection->fetchOne($sql, $params)`
     - `$connection->insert("table", $data)`, `$connection->update("table", $data, $criteria)`, `$connection->delete("table", $criteria)`
 3. **Pagination**: For collections, default `startIndex` (0) and `count` (16) from `$request->getArguments()`. Return a wrapper with `totalResults`, `startIndex`, `itemsPerPage`, and `entries`.
+    - Use `$connection->getDatabasePlatform()->modifyLimitQuery($query, $limit, $offset)` to append a limit query
 4. **Response**: Return `$response->build(statusCode, headers, body)` (no `json_encode`) or use shorthand methods:
-    - `$response->ok(body)`
-    - `$response->created(body)`
+    - `$response->ok($body)`
+    - `$response->created($body)`
     - `$response->noContent()`
-    - `$response->badRequest(message)`
-    - `$response->forbidden(message)`
-    - `$response->notFound(message)`
-    - `$response->internalServerError(message)`
+    - `$response->badRequest($message)`
+    - `$response->forbidden($message)`
+    - `$response->notFound($message)`
+    - `$response->internalServerError($message)`
 
 # DATA ACCESS RULES
 
