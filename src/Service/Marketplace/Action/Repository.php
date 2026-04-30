@@ -25,7 +25,6 @@ use Fusio\Marketplace\MarketplaceAction;
 use Fusio\Marketplace\MarketplaceActionCollection;
 use Fusio\Marketplace\MarketplaceInstall;
 use Fusio\Marketplace\MarketplaceMessageException;
-use Fusio\Marketplace\MarketplaceUser;
 use Sdkgen\Client\Exception\ClientException;
 
 /**
@@ -38,35 +37,25 @@ use Sdkgen\Client\Exception\ClientException;
 class Repository extends RemoteAbstract
 {
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceActionCollection
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->action()->getAll($startIndex, 16, $query);
-        } catch (ClientException) {
-            $collection = new MarketplaceActionCollection();
-            $collection->setTotalResults(0);
-            $collection->setStartIndex(0);
-            $collection->setItemsPerPage(16);
-            $collection->setEntry([]);
-            return $collection;
-        }
+        return $this->getClient()->marketplace()->directory()->action()->getAll($startIndex, 16, $query);
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceAction
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->action()->get($user, $name);
-        } catch (ClientException) {
-            return $this->newAnonymizeAction($user, $name);
-        }
+        return $this->getClient()->marketplace()->directory()->action()->get($user, $name);
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function install(string $user, string $name): MarketplaceAction
@@ -74,21 +63,6 @@ class Repository extends RemoteAbstract
         $install = new MarketplaceInstall();
         $install->setName($user . '/' . $name);
 
-        try {
-            return $this->getClient()->marketplace()->directory()->action()->install($install);
-        } catch (ClientException) {
-            return $this->newAnonymizeAction($user, $name);
-        }
-    }
-
-    private function newAnonymizeAction(string $user, string $name): MarketplaceAction
-    {
-        $actionUser = new MarketplaceUser();
-        $actionUser->setName($user);
-
-        $action = new MarketplaceAction();
-        $action->setName($name);
-        $action->setAuthor($actionUser);
-        return $action;
+        return $this->getClient()->marketplace()->directory()->action()->install($install);
     }
 }

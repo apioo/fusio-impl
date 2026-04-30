@@ -20,7 +20,10 @@
 
 namespace Fusio\Impl\Service\Marketplace\App;
 
+use Fusio\Impl\Exception\MarketplaceException;
+use Fusio\Impl\Service\Marketplace\ClientFactory;
 use Fusio\Impl\Service\Marketplace\RemoteAbstract;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Marketplace\MarketplaceApp;
 use Fusio\Marketplace\MarketplaceAppCollection;
 use Fusio\Marketplace\MarketplaceInstall;
@@ -37,33 +40,27 @@ use Sdkgen\Client\Exception\ClientException;
  */
 class Repository extends RemoteAbstract
 {
+    public function __construct(private readonly FrameworkConfig $frameworkConfig, ClientFactory $clientFactory)
+    {
+        parent::__construct($clientFactory);
+    }
+
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceAppCollection
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
-        } catch (ClientException) {
-            $collection = new MarketplaceAppCollection();
-            $collection->setTotalResults(0);
-            $collection->setStartIndex(0);
-            $collection->setItemsPerPage(16);
-            $collection->setEntry([]);
-            return $collection;
-        }
+        return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceApp
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
-        } catch (ClientException) {
-            return $this->newAnonymizeApp($user, $name);
-        }
+        return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
     }
 
     /**
@@ -76,19 +73,40 @@ class Repository extends RemoteAbstract
 
         try {
             return $this->getClient()->marketplace()->directory()->app()->install($install);
-        } catch (ClientException) {
-            return $this->newAnonymizeApp($user, $name);
+        } catch (ClientException $e) {
+            if ($this->hasLocalApp($user, $name)) {
+                return $this->newLocalApp($user, $name);
+            } else {
+                throw $e;
+            }
         }
     }
 
-    private function newAnonymizeApp(string $user, string $name): MarketplaceApp
+    private function newLocalApp(string $user, string $name): MarketplaceApp
     {
-        $appUser = new MarketplaceUser();
-        $appUser->setName($user);
+        $author = new MarketplaceUser();
+        $author->setName($user);
 
         $app = new MarketplaceApp();
         $app->setName($name);
-        $app->setAuthor($appUser);
+        $app->setAuthor($author);
         return $app;
+    }
+
+    private function hasLocalApp(string $user, string $name): bool
+    {
+        $appsDir = $this->frameworkConfig->getAppsDir();
+        $appDir = $appsDir . '/' . $this->getDirName($user, $name);
+
+        return is_dir($appDir);
+    }
+
+    private function getDirName(string $user, string $name): string
+    {
+        if (empty($user) || $user === 'fusio') {
+            return $name;
+        } else {
+            return $user . '-' . $name;
+        }
     }
 }

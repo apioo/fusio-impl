@@ -25,7 +25,6 @@ use Fusio\Marketplace\MarketplaceBundle;
 use Fusio\Marketplace\MarketplaceBundleCollection;
 use Fusio\Marketplace\MarketplaceInstall;
 use Fusio\Marketplace\MarketplaceMessageException;
-use Fusio\Marketplace\MarketplaceUser;
 use Sdkgen\Client\Exception\ClientException;
 
 /**
@@ -38,35 +37,25 @@ use Sdkgen\Client\Exception\ClientException;
 class Repository extends RemoteAbstract
 {
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceBundleCollection
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->bundle()->getAll($startIndex, 16, $query);
-        } catch (ClientException) {
-            $collection = new MarketplaceBundleCollection();
-            $collection->setTotalResults(0);
-            $collection->setStartIndex(0);
-            $collection->setItemsPerPage(16);
-            $collection->setEntry([]);
-            return $collection;
-        }
+        return $this->getClient()->marketplace()->directory()->bundle()->getAll($startIndex, 16, $query);
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceBundle
     {
-        try {
-            return $this->getClient()->marketplace()->directory()->bundle()->get($user, $name);
-        } catch (ClientException) {
-            return $this->newAnonymizeBundle($user, $name);
-        }
+        return $this->getClient()->marketplace()->directory()->bundle()->get($user, $name);
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function install(string $user, string $name): MarketplaceBundle
@@ -74,21 +63,6 @@ class Repository extends RemoteAbstract
         $install = new MarketplaceInstall();
         $install->setName($user . '/' . $name);
 
-        try {
-            return $this->getClient()->marketplace()->directory()->bundle()->install($install);
-        } catch (ClientException) {
-            return $this->newAnonymizeBundle($user, $name);
-        }
-    }
-
-    private function newAnonymizeBundle(string $user, string $name): MarketplaceBundle
-    {
-        $bundleUser = new MarketplaceUser();
-        $bundleUser->setName($user);
-
-        $bundle = new MarketplaceBundle();
-        $bundle->setName($name);
-        $bundle->setAuthor($bundleUser);
-        return $bundle;
+        return $this->getClient()->marketplace()->directory()->bundle()->install($install);
     }
 }
