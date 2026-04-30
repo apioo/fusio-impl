@@ -25,6 +25,7 @@ use Fusio\Marketplace\MarketplaceApp;
 use Fusio\Marketplace\MarketplaceAppCollection;
 use Fusio\Marketplace\MarketplaceInstall;
 use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Marketplace\MarketplaceUser;
 use Sdkgen\Client\Exception\ClientException;
 
 /**
@@ -37,25 +38,35 @@ use Sdkgen\Client\Exception\ClientException;
 class Repository extends RemoteAbstract
 {
     /**
-     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchAll(int $startIndex = 0, ?string $query = null): MarketplaceAppCollection
     {
-        return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
+        try {
+            return $this->getClient()->marketplace()->directory()->app()->getAll($startIndex, 16, $query);
+        } catch (ClientException) {
+            $collection = new MarketplaceAppCollection();
+            $collection->setTotalResults(0);
+            $collection->setStartIndex(0);
+            $collection->setItemsPerPage(16);
+            $collection->setEntry([]);
+            return $collection;
+        }
     }
 
     /**
-     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function fetchByName(string $user, string $name): MarketplaceApp
     {
-        return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
+        try {
+            return $this->getClient()->marketplace()->directory()->app()->get($user, $name);
+        } catch (ClientException) {
+            return $this->newAnonymizeApp($user, $name);
+        }
     }
 
     /**
-     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function install(string $user, string $name): MarketplaceApp
@@ -63,6 +74,21 @@ class Repository extends RemoteAbstract
         $install = new MarketplaceInstall();
         $install->setName($user . '/' . $name);
 
-        return $this->getClient()->marketplace()->directory()->app()->install($install);
+        try {
+            return $this->getClient()->marketplace()->directory()->app()->install($install);
+        } catch (ClientException) {
+            return $this->newAnonymizeApp($user, $name);
+        }
+    }
+
+    private function newAnonymizeApp(string $user, string $name): MarketplaceApp
+    {
+        $appUser = new MarketplaceUser();
+        $appUser->setName($user);
+
+        $app = new MarketplaceApp();
+        $app->setName($name);
+        $app->setAuthor($appUser);
+        return $app;
     }
 }
