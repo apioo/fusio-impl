@@ -29,9 +29,9 @@ use Fusio\Cli\Service\AuthenticatorInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Authenticator implements AuthenticatorInterface
+readonly class Authenticator implements AuthenticatorInterface
 {
-    public function __construct(private readonly string $baseUri, private readonly string $accessToken)
+    public function __construct(private string $baseUri, private string $accessToken)
     {
     }
 
