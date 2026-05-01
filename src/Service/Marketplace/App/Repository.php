@@ -64,6 +64,7 @@ class Repository extends RemoteAbstract
     }
 
     /**
+     * @throws ClientException
      * @throws MarketplaceMessageException
      */
     public function install(string $user, string $name): MarketplaceApp
