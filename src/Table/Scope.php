@@ -166,7 +166,7 @@ class Scope extends Generated\ScopeTable
             return false;
         });
 
-        return array_map(fn(Generated\ScopeRow $scope) => $scope->getName(), $scopes);
+        return array_map(fn(Generated\ScopeRow $scope): string => $scope->getName(), $scopes);
     }
 
     public static function getNames(array $result): array

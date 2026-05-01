@@ -46,7 +46,7 @@ class Scope extends Generated\UserScopeTable
     public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
         $result = $this->getAvailableScopes($tenantId, $userId, true);
-        $data   = array();
+        $data   = [];
 
         foreach ($result as $scope) {
             if (in_array($scope['name'], $scopes)) {
@@ -62,18 +62,18 @@ class Scope extends Generated\UserScopeTable
      */
     public function getAvailableScopes(?string $tenantId, int $userId, bool $includePlanScopes = false): array
     {
-        $assignedScopes = $this->getScopesForUser($tenantId, $userId);
+        $assignedScopes = $this->getScopesForUser($userId);
 
         // get scopes for plan
         if ($includePlanScopes) {
-            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($tenantId, $userId));
+            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($userId));
         }
 
         $scopes = [];
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (!str_contains($assignedScope['name'], '.')) {
+            if (!str_contains((string) $assignedScope['name'], '.')) {
                 // load all sub scopes
                 $sql = 'SELECT scope.id,
                                scope.name,
@@ -99,7 +99,7 @@ class Scope extends Generated\UserScopeTable
         return $this->getCount($condition) > 0;
     }
 
-    private function getScopesForUser(?string $tenantId, int $userId): array
+    private function getScopesForUser(int $userId): array
     {
         $sql = '    SELECT scope.id,
                            scope.name,
@@ -109,13 +109,13 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = user_scope.scope_id
                      WHERE user_scope.user_id = :user_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAllAssociative($sql, ['user_id' => $userId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['user_id' => $userId]);
     }
 
     /**
      * @return list<array<string, mixed>>
      */
-    private function getScopesForPlan(?string $tenantId, int $userId): array
+    private function getScopesForPlan(int $userId): array
     {
         $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
         if (empty($planId)) {
@@ -130,6 +130,6 @@ class Scope extends Generated\UserScopeTable
                         ON scope.id = plan_scope.scope_id
                      WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
-        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]) ?: [];
+        return $this->connection->fetchAllAssociative($sql, ['plan_id' => $planId]);
     }
 }
