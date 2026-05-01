@@ -5,68 +5,89 @@ namespace Fusio\Impl\Table\Generated;
 class CronjobErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?int $cronjobId = null;
+    
     private ?string $message = null;
+    
     private ?string $trace = null;
+    
     private ?string $file = null;
+    
     private ?int $line = null;
+    
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setCronjobId(int $cronjobId): void
     {
         $this->cronjobId = $cronjobId;
     }
+    
     public function getCronjobId(): int
     {
         return $this->cronjobId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "cronjob_id" was provided');
     }
+    
     public function setMessage(string $message): void
     {
         $this->message = $message;
     }
+    
     public function getMessage(): string
     {
         return $this->message ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "message" was provided');
     }
+    
     public function setTrace(string $trace): void
     {
         $this->trace = $trace;
     }
+    
     public function getTrace(): string
     {
         return $this->trace ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "trace" was provided');
     }
+    
     public function setFile(string $file): void
     {
         $this->file = $file;
     }
+    
     public function getFile(): string
     {
         return $this->file ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "file" was provided');
     }
+    
     public function setLine(int $line): void
     {
         $this->line = $line;
     }
+    
     public function getLine(): int
     {
         return $this->line ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "line" was provided');
     }
+    
     public function setInsertDate(?\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
+    
     public function getInsertDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->insertDate;
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -80,10 +101,12 @@ class CronjobErrorRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

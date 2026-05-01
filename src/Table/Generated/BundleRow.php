@@ -5,104 +5,137 @@ namespace Fusio\Impl\Table\Generated;
 class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?string $tenantId = null;
+    
     private ?int $status = null;
+    
     private ?string $name = null;
+    
     private ?string $version = null;
+    
     private ?string $icon = null;
+    
     private ?string $summary = null;
+    
     private ?string $description = null;
+    
     private ?int $cost = null;
+    
     private ?string $config = null;
+    
     private ?string $metadata = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
+    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
+    
     public function setStatus(int $status): void
     {
         $this->status = $status;
     }
+    
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
+    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
+    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
+    
     public function setVersion(string $version): void
     {
         $this->version = $version;
     }
+    
     public function getVersion(): string
     {
         return $this->version ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "version" was provided');
     }
+    
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
     }
+    
     public function getIcon(): string
     {
         return $this->icon ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "icon" was provided');
     }
+    
     public function setSummary(string $summary): void
     {
         $this->summary = $summary;
     }
+    
     public function getSummary(): string
     {
         return $this->summary ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "summary" was provided');
     }
+    
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
+    
     public function getDescription(): string
     {
         return $this->description ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "description" was provided');
     }
+    
     public function setCost(int $cost): void
     {
         $this->cost = $cost;
     }
+    
     public function getCost(): int
     {
         return $this->cost ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "cost" was provided');
     }
+    
     public function setConfig(string $config): void
     {
         $this->config = $config;
     }
+    
     public function getConfig(): string
     {
         return $this->config ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "config" was provided');
     }
+    
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
+    
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -120,10 +153,12 @@ class BundleRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

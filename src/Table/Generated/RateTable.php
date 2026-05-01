@@ -8,22 +8,33 @@ namespace Fusio\Impl\Table\Generated;
 class RateTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_rate';
+    
     public const COLUMN_ID = 'id';
+    
     public const COLUMN_TENANT_ID = 'tenant_id';
+    
     public const COLUMN_STATUS = 'status';
+    
     public const COLUMN_PRIORITY = 'priority';
+    
     public const COLUMN_NAME = 'name';
+    
     public const COLUMN_RATE_LIMIT = 'rate_limit';
+    
     public const COLUMN_TIMESPAN = 'timespan';
+    
     public const COLUMN_METADATA = 'metadata';
+    
     public function getName(): string
     {
         return self::NAME;
     }
+    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PRIORITY => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_RATE_LIMIT => 0x20000a, self::COLUMN_TIMESPAN => 0xa000ff, self::COLUMN_METADATA => 0x40b00000];
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -32,6 +43,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -40,6 +52,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -47,6 +60,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -56,6 +70,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -66,6 +81,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -75,6 +91,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -84,6 +101,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -93,6 +111,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -103,6 +122,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -112,6 +132,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -121,6 +142,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -130,6 +152,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -140,6 +163,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -149,6 +173,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -158,6 +183,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -167,6 +193,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -177,6 +204,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('priority', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -186,6 +214,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('priority', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -195,6 +224,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('priority', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -204,6 +234,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('priority', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -214,6 +245,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -223,6 +255,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -232,6 +265,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -241,6 +275,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -251,6 +286,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_limit', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -260,6 +296,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_limit', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -269,6 +306,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_limit', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -278,6 +316,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_limit', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -288,6 +327,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('timespan', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -297,6 +337,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('timespan', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -306,6 +347,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('timespan', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -315,6 +357,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('timespan', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -325,6 +368,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -334,6 +378,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -343,6 +388,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -352,6 +398,7 @@ class RateTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -359,6 +406,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -366,6 +414,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -373,6 +422,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -380,6 +430,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -387,6 +438,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @param array<string, mixed> $row
      */

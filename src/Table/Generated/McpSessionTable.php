@@ -8,20 +8,29 @@ namespace Fusio\Impl\Table\Generated;
 class McpSessionTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_mcp_session';
+    
     public const COLUMN_ID = 'id';
+    
     public const COLUMN_TENANT_ID = 'tenant_id';
+    
     public const COLUMN_SESSION_ID = 'session_id';
+    
     public const COLUMN_DATA = 'data';
+    
     public const COLUMN_UPDATE_DATE = 'update_date';
+    
     public const COLUMN_INSERT_DATE = 'insert_date';
+    
     public function getName(): string
     {
         return self::NAME;
     }
+    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_SESSION_ID => 0xa00080, self::COLUMN_DATA => 0xb00000, self::COLUMN_UPDATE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x40800000];
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -30,6 +39,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -38,6 +48,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -45,6 +56,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -54,6 +66,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -64,6 +77,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -73,6 +87,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -82,6 +97,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -91,6 +107,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -101,6 +118,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -110,6 +128,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -119,6 +138,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -128,6 +148,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -138,6 +159,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('session_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -147,6 +169,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('session_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -156,6 +179,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('session_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -165,6 +189,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('session_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -175,6 +200,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('data', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -184,6 +210,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('data', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -193,6 +220,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('data', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -202,6 +230,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->like('data', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -212,6 +241,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('update_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -221,6 +251,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('update_date', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -230,6 +261,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('update_date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -239,6 +271,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('update_date', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\McpSessionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -249,6 +282,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -258,6 +292,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -267,6 +302,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -276,6 +312,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -283,6 +320,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -290,6 +328,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -297,6 +336,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -304,6 +344,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -311,6 +352,7 @@ class McpSessionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @param array<string, mixed> $row
      */

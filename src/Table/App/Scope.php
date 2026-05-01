@@ -38,13 +38,13 @@ class Scope extends Generated\AppScopeTable
         $sql = 'DELETE FROM fusio_app_scope
                       WHERE app_id = :app_id';
 
-        $this->connection->executeQuery($sql, array('app_id' => $appId));
+        $this->connection->executeQuery($sql, ['app_id' => $appId]);
     }
 
     public function getValidScopes(?string $tenantId, int $appId, array $scopes): array
     {
         $result = $this->getAvailableScopes($tenantId, $appId, true);
-        $data   = array();
+        $data   = [];
 
         foreach ($result as $scope) {
             if (in_array($scope['name'], $scopes)) {
@@ -68,7 +68,7 @@ class Scope extends Generated\AppScopeTable
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (!str_contains($assignedScope['name'], '.')) {
+            if (!str_contains((string) $assignedScope['name'], '.')) {
                 // load all sub scopes
                 $subScopes = $this->getTable(Table\Scope::class)->findSubScopes($tenantId, $assignedScope['name']);
                 foreach ($subScopes as $subScope) {
@@ -99,7 +99,7 @@ class Scope extends Generated\AppScopeTable
             ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
             ->setParameters($condition->getValues());
 
-        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
     private function getScopesForPlan(?string $tenantId, int $appId): array
@@ -131,6 +131,6 @@ class Scope extends Generated\AppScopeTable
             ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
             ->setParameters($condition->getValues());
 
-        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

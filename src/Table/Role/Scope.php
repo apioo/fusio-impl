@@ -31,7 +31,7 @@ use Fusio\Impl\Table\Generated;
  */
 class Scope extends Generated\RoleScopeTable
 {
-    public function deleteAllFromRole($roleId)
+    public function deleteAllFromRole($roleId): void
     {
         $sql = 'DELETE FROM fusio_role_scope
                       WHERE role_id = :id';
@@ -39,7 +39,10 @@ class Scope extends Generated\RoleScopeTable
         $this->connection->executeQuery($sql, ['id' => $roleId]);
     }
 
-    public function getValidScopes($roleId, array $scopes)
+    /**
+     * @return list<array{id: string, name: string, description: string}>
+     */
+    public function getValidScopes($roleId, array $scopes): array
     {
         $result = $this->getAvailableScopes($roleId);
         $data = [];
@@ -53,7 +56,10 @@ class Scope extends Generated\RoleScopeTable
         return $data;
     }
 
-    public function getAvailableScopes($roleId)
+    /**
+     * @return list<array{id: string, name: string, description: string}>
+     */
+    public function getAvailableScopes($roleId): array
     {
         $sql = '    SELECT scope.id,
                            scope.name,
@@ -63,13 +69,13 @@ class Scope extends Generated\RoleScopeTable
                         ON scope.id = role_scope.scope_id
                      WHERE role_scope.role_id = :role_id
                   ORDER BY scope.id ASC';
-        $assignedScopes = $this->connection->fetchAllAssociative($sql, ['role_id' => $roleId]) ?: [];
+        $assignedScopes = $this->connection->fetchAllAssociative($sql, ['role_id' => $roleId]);
 
         $scopes = [];
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (!str_contains($assignedScope['name'], '.')) {
+            if (!str_contains((string) $assignedScope['name'], '.')) {
                 // load all sub scopes
                 $sql = 'SELECT scope.id,
                                scope.name,

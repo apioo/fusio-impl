@@ -33,6 +33,7 @@ use PSX\Sql\Condition;
 class Taxonomy extends Generated\TaxonomyTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?TaxonomyRow

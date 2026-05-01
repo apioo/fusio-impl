@@ -5,59 +5,77 @@ namespace Fusio\Impl\Table\Generated;
 class McpSessionRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?string $tenantId = null;
+    
     private ?string $sessionId = null;
+    
     private ?string $data = null;
+    
     private ?\PSX\DateTime\LocalDateTime $updateDate = null;
+    
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
+    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
+    
     public function setSessionId(string $sessionId): void
     {
         $this->sessionId = $sessionId;
     }
+    
     public function getSessionId(): string
     {
         return $this->sessionId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "session_id" was provided');
     }
+    
     public function setData(string $data): void
     {
         $this->data = $data;
     }
+    
     public function getData(): string
     {
         return $this->data ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "data" was provided');
     }
+    
     public function setUpdateDate(?\PSX\DateTime\LocalDateTime $updateDate): void
     {
         $this->updateDate = $updateDate;
     }
+    
     public function getUpdateDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->updateDate;
     }
+    
     public function setInsertDate(?\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
+    
     public function getInsertDate(): ?\PSX\DateTime\LocalDateTime
     {
         return $this->insertDate;
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -70,10 +88,12 @@ class McpSessionRow implements \JsonSerializable, \PSX\Record\RecordableInterfac
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

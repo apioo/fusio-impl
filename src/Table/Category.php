@@ -33,12 +33,17 @@ use PSX\Sql\Condition;
 class Category extends Generated\CategoryTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public const TYPE_DEFAULT = 'default';
+    
     public const TYPE_BACKEND = 'backend';
+    
     public const TYPE_CONSUMER = 'consumer';
+    
     public const TYPE_SYSTEM = 'system';
+    
     public const TYPE_AUTHORIZATION = 'authorization';
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?CategoryRow

@@ -33,7 +33,9 @@ use PSX\Sql\Condition;
 class Response extends Generated\WebhookResponseTable
 {
     public const STATUS_PENDING = 1;
+    
     public const STATUS_DONE = 2;
+    
     public const STATUS_EXCEEDED = 3;
 
     public function getAllByWebhook(int $webhookId): array

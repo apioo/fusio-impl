@@ -8,21 +8,31 @@ namespace Fusio\Impl\Table\Generated;
 class RateAllocationTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_rate_allocation';
+    
     public const COLUMN_ID = 'id';
+    
     public const COLUMN_RATE_ID = 'rate_id';
+    
     public const COLUMN_OPERATION_ID = 'operation_id';
+    
     public const COLUMN_APP_ID = 'app_id';
+    
     public const COLUMN_USER_ID = 'user_id';
+    
     public const COLUMN_PLAN_ID = 'plan_id';
+    
     public const COLUMN_AUTHENTICATED = 'authenticated';
+    
     public function getName(): string
     {
         return self::NAME;
     }
+    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_RATE_ID => 0x20000a, self::COLUMN_OPERATION_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_AUTHENTICATED => 0x4020000a];
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -31,6 +41,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -39,6 +50,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -46,6 +58,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -55,6 +68,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -65,6 +79,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -74,6 +89,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -83,6 +99,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -92,6 +109,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -102,6 +120,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -111,6 +130,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -120,6 +140,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -129,6 +150,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('rate_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -139,6 +161,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('operation_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -148,6 +171,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('operation_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -157,6 +181,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('operation_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -166,6 +191,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('operation_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -176,6 +202,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -185,6 +212,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -194,6 +222,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -203,6 +232,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -213,6 +243,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -222,6 +253,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -231,6 +263,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -240,6 +273,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -250,6 +284,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -259,6 +294,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -268,6 +304,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -277,6 +314,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -287,6 +325,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('authenticated', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -296,6 +335,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('authenticated', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -305,6 +345,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('authenticated', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -314,6 +355,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
         $condition->equals('authenticated', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -321,6 +363,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -328,6 +371,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -335,6 +379,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -342,6 +387,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -349,6 +395,7 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @param array<string, mixed> $row
      */

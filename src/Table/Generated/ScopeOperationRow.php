@@ -5,41 +5,53 @@ namespace Fusio\Impl\Table\Generated;
 class ScopeOperationRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?int $scopeId = null;
+    
     private ?int $operationId = null;
+    
     private ?int $allow = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setScopeId(int $scopeId): void
     {
         $this->scopeId = $scopeId;
     }
+    
     public function getScopeId(): int
     {
         return $this->scopeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope_id" was provided');
     }
+    
     public function setOperationId(int $operationId): void
     {
         $this->operationId = $operationId;
     }
+    
     public function getOperationId(): int
     {
         return $this->operationId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "operation_id" was provided');
     }
+    
     public function setAllow(int $allow): void
     {
         $this->allow = $allow;
     }
+    
     public function getAllow(): int
     {
         return $this->allow ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "allow" was provided');
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -50,10 +62,12 @@ class ScopeOperationRow implements \JsonSerializable, \PSX\Record\RecordableInte
         $record->put('allow', $this->allow);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

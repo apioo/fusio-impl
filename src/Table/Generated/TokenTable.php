@@ -8,27 +8,43 @@ namespace Fusio\Impl\Table\Generated;
 class TokenTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_token';
+    
     public const COLUMN_ID = 'id';
+    
     public const COLUMN_CATEGORY_ID = 'category_id';
+    
     public const COLUMN_APP_ID = 'app_id';
+    
     public const COLUMN_USER_ID = 'user_id';
+    
     public const COLUMN_TENANT_ID = 'tenant_id';
+    
     public const COLUMN_STATUS = 'status';
+    
     public const COLUMN_NAME = 'name';
+    
     public const COLUMN_TOKEN = 'token';
+    
     public const COLUMN_REFRESH = 'refresh';
+    
     public const COLUMN_SCOPE = 'scope';
+    
     public const COLUMN_IP = 'ip';
+    
     public const COLUMN_EXPIRE = 'expire';
+    
     public const COLUMN_DATE = 'date';
+    
     public function getName(): string
     {
         return self::NAME;
     }
+    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0x40a000ff, self::COLUMN_TOKEN => 0xa00200, self::COLUMN_REFRESH => 0x40a000ff, self::COLUMN_SCOPE => 0xa003ff, self::COLUMN_IP => 0xa00028, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_DATE => 0x800000];
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -37,6 +53,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -45,6 +62,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -52,6 +70,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -61,6 +80,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -71,6 +91,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -80,6 +101,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -89,6 +111,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -98,6 +121,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -108,6 +132,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -117,6 +142,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -126,6 +152,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -135,6 +162,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -145,6 +173,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -154,6 +183,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -163,6 +193,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -172,6 +203,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('app_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -182,6 +214,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -191,6 +224,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -200,6 +234,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -209,6 +244,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -219,6 +255,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -228,6 +265,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -237,6 +275,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -246,6 +285,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -256,6 +296,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -265,6 +306,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -274,6 +316,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -283,6 +326,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -293,6 +337,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -302,6 +347,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -311,6 +357,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -320,6 +367,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -330,6 +378,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('token', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -339,6 +388,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('token', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -348,6 +398,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('token', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -357,6 +408,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('token', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -367,6 +419,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('refresh', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -376,6 +429,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('refresh', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -385,6 +439,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('refresh', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -394,6 +449,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('refresh', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -404,6 +460,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('scope', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -413,6 +470,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('scope', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -422,6 +480,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('scope', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -431,6 +490,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('scope', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -441,6 +501,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -450,6 +511,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -459,6 +521,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -468,6 +531,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -478,6 +542,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('expire', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -487,6 +552,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('expire', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -496,6 +562,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('expire', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -505,6 +572,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('expire', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TokenRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -515,6 +583,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -524,6 +593,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('date', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -533,6 +603,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -542,6 +613,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
         $condition->equals('date', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -549,6 +621,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -556,6 +629,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -563,6 +637,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -570,6 +645,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -577,6 +653,7 @@ class TokenTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @param array<string, mixed> $row
      */

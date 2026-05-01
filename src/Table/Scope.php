@@ -36,6 +36,7 @@ use PSX\Sql\OrderBy;
 class Scope extends Generated\ScopeTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?ScopeRow
@@ -64,6 +65,7 @@ class Scope extends Generated\ScopeTable
         if ($categoryId !== null) {
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
+        
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
@@ -117,7 +119,7 @@ class Scope extends Generated\ScopeTable
     {
         $names = array_filter($names);
 
-        if (!empty($names)) {
+        if ($names !== []) {
             $condition = Condition::withAnd();
             $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
             $condition->in(self::COLUMN_NAME, $names);
@@ -154,24 +156,21 @@ class Scope extends Generated\ScopeTable
         $scopes = $this->getValidScopes($tenantId, $scopes);
 
         // check that the user can assign only the scopes which are also assigned to the user account
-        $scopes = array_filter($scopes, function (Generated\ScopeRow $scope) use ($userScopes) {
+        $scopes = array_filter($scopes, function (Generated\ScopeRow $scope) use ($userScopes): bool {
             foreach ($userScopes as $userScope) {
                 if ($userScope['id'] == $scope->getId()) {
                     return true;
                 }
             }
+            
             return false;
         });
 
-        return array_map(function (Generated\ScopeRow $scope) {
-            return $scope->getName();
-        }, $scopes);
+        return array_map(fn(Generated\ScopeRow $scope) => $scope->getName(), $scopes);
     }
 
     public static function getNames(array $result): array
     {
-        return array_map(function ($row) {
-            return $row[self::COLUMN_NAME];
-        }, $result);
+        return array_map(fn(array $row) => $row[self::COLUMN_NAME], $result);
     }
 }

@@ -35,6 +35,7 @@ use PSX\Sql\Condition;
 class Token extends Generated\TokenTable
 {
     const STATUS_ACTIVE  = 0x1;
+    
     const STATUS_DELETED = 0x2;
 
     public function findOneByTenantAndId(?string $tenantId, int $id, ?int $userId = null): ?TokenRow
@@ -85,7 +86,7 @@ class Token extends Generated\TokenTable
         $con->equals(self::COLUMN_TENANT_ID, $tenantId);
         $con->equals(self::COLUMN_APP_ID, $appId);
         $con->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
-        $con->greater(self::COLUMN_EXPIRE, (new DateTime())->format('Y-m-d H:i:s'));
+        $con->greater(self::COLUMN_EXPIRE, new DateTime()->format('Y-m-d H:i:s'));
 
         return $this->findBy($con);
     }
@@ -104,7 +105,7 @@ class Token extends Generated\TokenTable
         $con = Condition::withAnd();
         $con->equals(self::COLUMN_TENANT_ID, $tenantId);
         $con->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
-        $con->greater(self::COLUMN_EXPIRE, (new DateTime())->format('Y-m-d H:i:s'));
+        $con->greater(self::COLUMN_EXPIRE, new DateTime()->format('Y-m-d H:i:s'));
         $con->equals(self::COLUMN_TOKEN, $token);
 
         return $this->findOneBy($con);

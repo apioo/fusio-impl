@@ -5,68 +5,89 @@ namespace Fusio\Impl\Table\Generated;
 class AppCodeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?int $appId = null;
+    
     private ?int $userId = null;
+    
     private ?string $code = null;
+    
     private ?string $redirectUri = null;
+    
     private ?string $scope = null;
+    
     private ?\PSX\DateTime\LocalDateTime $date = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setAppId(int $appId): void
     {
         $this->appId = $appId;
     }
+    
     public function getAppId(): int
     {
         return $this->appId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_id" was provided');
     }
+    
     public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
+    
     public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
+    
     public function setCode(string $code): void
     {
         $this->code = $code;
     }
+    
     public function getCode(): string
     {
         return $this->code ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "code" was provided');
     }
+    
     public function setRedirectUri(?string $redirectUri): void
     {
         $this->redirectUri = $redirectUri;
     }
+    
     public function getRedirectUri(): ?string
     {
         return $this->redirectUri;
     }
+    
     public function setScope(string $scope): void
     {
         $this->scope = $scope;
     }
+    
     public function getScope(): string
     {
         return $this->scope ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope" was provided');
     }
+    
     public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
+    
     public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -80,10 +101,12 @@ class AppCodeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

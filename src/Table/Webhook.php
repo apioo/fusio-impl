@@ -34,6 +34,7 @@ use PSX\Sql\Condition;
 class Webhook extends Generated\WebhookTable
 {
     const STATUS_ACTIVE = 1;
+    
     const STATUS_INACTIVE = 2;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?WebhookRow

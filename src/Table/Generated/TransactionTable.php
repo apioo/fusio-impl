@@ -8,24 +8,37 @@ namespace Fusio\Impl\Table\Generated;
 class TransactionTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_transaction';
+    
     public const COLUMN_ID = 'id';
+    
     public const COLUMN_TENANT_ID = 'tenant_id';
+    
     public const COLUMN_USER_ID = 'user_id';
+    
     public const COLUMN_PLAN_ID = 'plan_id';
+    
     public const COLUMN_TRANSACTION_ID = 'transaction_id';
+    
     public const COLUMN_AMOUNT = 'amount';
+    
     public const COLUMN_POINTS = 'points';
+    
     public const COLUMN_PERIOD_START = 'period_start';
+    
     public const COLUMN_PERIOD_END = 'period_end';
+    
     public const COLUMN_INSERT_DATE = 'insert_date';
+    
     public function getName(): string
     {
         return self::NAME;
     }
+    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x20000a, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_AMOUNT => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_START => 0x40800000, self::COLUMN_PERIOD_END => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000];
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -34,6 +47,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -42,6 +56,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -49,6 +64,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -58,6 +74,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -68,6 +85,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -77,6 +95,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -86,6 +105,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -95,6 +115,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -105,6 +126,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -114,6 +136,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -123,6 +146,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -132,6 +156,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -142,6 +167,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -151,6 +177,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -160,6 +187,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -169,6 +197,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('user_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -179,6 +208,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -188,6 +218,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -197,6 +228,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -206,6 +238,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('plan_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -216,6 +249,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('transaction_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -225,6 +259,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('transaction_id', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -234,6 +269,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('transaction_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -243,6 +279,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->like('transaction_id', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -253,6 +290,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('amount', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -262,6 +300,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('amount', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -271,6 +310,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('amount', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -280,6 +320,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('amount', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -290,6 +331,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('points', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -299,6 +341,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('points', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -308,6 +351,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('points', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -317,6 +361,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('points', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -327,6 +372,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_start', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -336,6 +382,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_start', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -345,6 +392,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_start', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -354,6 +402,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_start', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -364,6 +413,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_end', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -373,6 +423,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_end', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -382,6 +433,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_end', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -391,6 +443,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('period_end', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -401,6 +454,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -410,6 +464,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindOneBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -419,6 +474,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -428,6 +484,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -435,6 +492,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -442,6 +500,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -449,6 +508,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -456,6 +516,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
+    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -463,6 +524,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
+    
     /**
      * @param array<string, mixed> $row
      */

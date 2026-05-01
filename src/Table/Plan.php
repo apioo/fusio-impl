@@ -35,6 +35,7 @@ use PSX\Sql\Condition;
 class Plan extends Generated\PlanTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?PlanRow
@@ -95,6 +96,7 @@ class Plan extends Generated\PlanTable
         foreach ($result as $row) {
             $plans[] = $this->newRecord($row);
         }
+        
         return $plans;
     }
 }

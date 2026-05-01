@@ -34,11 +34,17 @@ use PSX\Sql\Condition;
 class Config extends Generated\ConfigTable
 {
     public const FORM_STRING   = 1;
+    
     public const FORM_BOOLEAN  = 2;
+    
     public const FORM_NUMBER   = 3;
+    
     public const FORM_DATETIME = 4;
+    
     public const FORM_EMAIL    = 5;
+    
     public const FORM_TEXT     = 6;
+    
     public const FORM_SECRET   = 7;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?ConfigRow

@@ -5,59 +5,77 @@ namespace Fusio\Impl\Table\Generated;
 class ConfigRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?string $tenantId = null;
+    
     private ?int $type = null;
+    
     private ?string $name = null;
+    
     private ?string $description = null;
+    
     private ?string $value = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
+    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
+    
     public function setType(int $type): void
     {
         $this->type = $type;
     }
+    
     public function getType(): int
     {
         return $this->type ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "type" was provided');
     }
+    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
+    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
+    
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
+    
     public function getDescription(): string
     {
         return $this->description ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "description" was provided');
     }
+    
     public function setValue(string $value): void
     {
         $this->value = $value;
     }
+    
     public function getValue(): string
     {
         return $this->value ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "value" was provided');
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -70,10 +88,12 @@ class ConfigRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('value', $this->value);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

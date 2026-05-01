@@ -5,86 +5,113 @@ namespace Fusio\Impl\Table\Generated;
 class TriggerRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
+    
     private ?int $categoryId = null;
+    
     private ?int $taxonomyId = null;
+    
     private ?string $tenantId = null;
+    
     private ?int $status = null;
+    
     private ?string $name = null;
+    
     private ?string $event = null;
+    
     private ?string $action = null;
+    
     private ?string $metadata = null;
+    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
+    
     public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
+    
     public function getCategoryId(): int
     {
         return $this->categoryId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "category_id" was provided');
     }
+    
     public function setTaxonomyId(?int $taxonomyId): void
     {
         $this->taxonomyId = $taxonomyId;
     }
+    
     public function getTaxonomyId(): ?int
     {
         return $this->taxonomyId;
     }
+    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
+    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
+    
     public function setStatus(int $status): void
     {
         $this->status = $status;
     }
+    
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
+    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
+    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
+    
     public function setEvent(string $event): void
     {
         $this->event = $event;
     }
+    
     public function getEvent(): string
     {
         return $this->event ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "event" was provided');
     }
+    
     public function setAction(string $action): void
     {
         $this->action = $action;
     }
+    
     public function getAction(): string
     {
         return $this->action ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "action" was provided');
     }
+    
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
+    
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
+    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -100,10 +127,12 @@ class TriggerRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
+    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
+    
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
