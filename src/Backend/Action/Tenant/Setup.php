@@ -35,13 +35,10 @@ use PSX\Http\Exception\BadRequestException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Setup implements ActionInterface
+readonly class Setup implements ActionInterface
 {
-    private Service\Tenant $tenantService;
-
-    public function __construct(Service\Tenant $tenantService)
+    public function __construct(private Service\Tenant $tenantService)
     {
-        $this->tenantService = $tenantService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

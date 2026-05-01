@@ -33,13 +33,10 @@ use Fusio\Impl\Provider\IdentityProvider;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetIndex implements ActionInterface
+readonly class GetIndex implements ActionInterface
 {
-    private IdentityProvider $identityProvider;
-
-    public function __construct(IdentityProvider $identityProvider)
+    public function __construct(private IdentityProvider $identityProvider)
     {
-        $this->identityProvider = $identityProvider;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

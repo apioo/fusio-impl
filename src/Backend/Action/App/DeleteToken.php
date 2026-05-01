@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class DeleteToken implements ActionInterface
+readonly class DeleteToken implements ActionInterface
 {
-    private Service\Token $tokenService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Token $tokenService, ContextFactory $contextFactory)
+    public function __construct(private Service\Token $tokenService, private ContextFactory $contextFactory)
     {
-        $this->tokenService = $tokenService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

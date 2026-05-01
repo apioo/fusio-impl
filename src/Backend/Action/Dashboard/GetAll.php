@@ -35,16 +35,24 @@ use PSX\Sql\TableManagerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+readonly class GetAll implements ActionInterface
 {
     private View\Statistic\ErrorsPerOperation $errorsPerOperation;
+    
     private View\Statistic\IncomingRequests $incomingRequests;
+    
     private View\Statistic\IncomingTransactions $incomingTransactions;
+    
     private View\Statistic\MostUsedOperations $mostUsedOperations;
+    
     private View\Statistic\TimePerOperation $timePerOperation;
+    
     private View\Statistic\TestCoverage $testCoverage;
+    
     private View\Statistic\MostUsedActivities $mostUsedActivities;
+    
     private View\Statistic\ActivitiesPerUser $activitiesPerUser;
+    
     private View\Statistic\UserRegistrations $userRegistrations;
 
     public function __construct(TableManagerInterface $tableManager)

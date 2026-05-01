@@ -43,16 +43,14 @@ readonly class GetAll extends FileAbstract
         $count = (int) $request->get('count');
         $limit = 1024;
 
-        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $startIndex = max(0, $startIndex);
         $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $objects = $this->getObjects($connection);
 
         $totalResults = count($objects);
 
-        usort($objects, static function (StorageAttributes $a, StorageAttributes $b) {
-            return strcasecmp($a->path(), $b->path());
-        });
+        usort($objects, static fn(StorageAttributes $a, StorageAttributes $b) => strcasecmp($a->path(), $b->path()));
 
         $objects = array_slice($objects, $startIndex, $count);
 

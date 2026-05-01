@@ -33,13 +33,10 @@ use Fusio\Impl\Backend\View;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetTestCoverage implements ActionInterface
+readonly class GetTestCoverage implements ActionInterface
 {
-    private View\Statistic\TestCoverage $view;
-
-    public function __construct(View\Statistic\TestCoverage $view)
+    public function __construct(private View\Statistic\TestCoverage $view)
     {
-        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

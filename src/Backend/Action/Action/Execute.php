@@ -91,11 +91,7 @@ readonly class Execute implements ActionInterface
                 ];
             }
         } catch (Throwable $e) {
-            if ($e instanceof MessageException) {
-                $body = $e->getPayload();
-            } else {
-                $body = $this->exceptionConverter->convert($e);
-            }
+            $body = $e instanceof MessageException ? $e->getPayload() : $this->exceptionConverter->convert($e);
 
             $return = [
                 'statusCode' => 500,

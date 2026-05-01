@@ -35,15 +35,10 @@ use Fusio\Model\Backend\IdentityUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Identity $identityService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Identity $identityService, ContextFactory $contextFactory)
+    public function __construct(private Identity $identityService, private ContextFactory $contextFactory)
     {
-        $this->identityService = $identityService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

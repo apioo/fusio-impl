@@ -33,7 +33,7 @@ use Fusio\Model\Backend\DatabaseRow;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update extends TableAbstract
+readonly class Update extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

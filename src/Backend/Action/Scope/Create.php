@@ -36,15 +36,10 @@ use PSX\Http\Environment\HttpResponse;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Create implements ActionInterface
+readonly class Create implements ActionInterface
 {
-    private Scope $scopeService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Scope $scopeService, ContextFactory $contextFactory)
+    public function __construct(private Scope $scopeService, private ContextFactory $contextFactory)
     {
-        $this->scopeService = $scopeService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

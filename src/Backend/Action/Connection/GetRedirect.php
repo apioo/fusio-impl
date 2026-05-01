@@ -33,13 +33,10 @@ use Fusio\Impl\Service\Connection\Token;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetRedirect implements ActionInterface
+readonly class GetRedirect implements ActionInterface
 {
-    private Token $tokenService;
-
-    public function __construct(Token $tokenService)
+    public function __construct(private Token $tokenService)
     {
-        $this->tokenService = $tokenService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

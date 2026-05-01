@@ -35,15 +35,10 @@ use Fusio\Model\Backend\TriggerUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Trigger $triggerService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Trigger $triggerService, ContextFactory $contextFactory)
+    public function __construct(private Trigger $triggerService, private ContextFactory $contextFactory)
     {
-        $this->triggerService = $triggerService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

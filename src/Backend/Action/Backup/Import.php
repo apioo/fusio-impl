@@ -36,15 +36,10 @@ use Fusio\Model\Backend\BackupImport;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Import implements ActionInterface
+readonly class Import implements ActionInterface
 {
-    private Service\Import $import;
-    private Service\Client $client;
-
-    public function __construct(Service\Import $import, Service\Client $client)
+    public function __construct(private Service\Import $import, private Service\Client $client)
     {
-        $this->import = $import;
-        $this->client = $client;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

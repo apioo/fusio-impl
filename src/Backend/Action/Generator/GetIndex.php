@@ -33,13 +33,10 @@ use Fusio\Impl\Provider\GeneratorProvider;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetIndex implements ActionInterface
+readonly class GetIndex implements ActionInterface
 {
-    private GeneratorProvider $provider;
-
-    public function __construct(GeneratorProvider $provider)
+    public function __construct(private GeneratorProvider $provider)
     {
-        $this->provider = $provider;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetIndex implements ActionInterface
+readonly class GetIndex implements ActionInterface
 {
-    private ActionProvider $actionParser;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(ActionProvider $actionParser, FrameworkConfig $frameworkConfig)
+    public function __construct(private ActionProvider $actionParser, private FrameworkConfig $frameworkConfig)
     {
-        $this->actionParser = $actionParser;
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

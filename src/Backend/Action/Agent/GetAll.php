@@ -34,7 +34,7 @@ use Fusio\Impl\Backend\View;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+readonly class GetAll implements ActionInterface
 {
     public function __construct(private View\Agent $view)
     {

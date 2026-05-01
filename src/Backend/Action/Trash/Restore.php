@@ -35,13 +35,10 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Restore implements ActionInterface
+readonly class Restore implements ActionInterface
 {
-    private Restorer $restorer;
-
-    public function __construct(Restorer $restorer)
+    public function __construct(private Restorer $restorer)
     {
-        $this->restorer = $restorer;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

@@ -33,7 +33,7 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends TableAbstract
+readonly class GetAll extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
@@ -70,7 +70,7 @@ class GetAll extends TableAbstract
         }
 
         $selected = array_intersect(explode(',', $columns), $allColumns);
-        if (empty($selected)) {
+        if ($selected === []) {
             return $allColumns;
         }
 
@@ -113,8 +113,8 @@ class GetAll extends TableAbstract
         $sortOrder = $request->get('sortOrder');
 
         if (!empty($sortBy) && !empty($sortOrder) && in_array($sortBy, $allColumns)) {
-            $sortOrder = strtoupper($sortOrder);
-            $sortOrder = in_array($sortOrder, ['ASC', 'DESC']) ? $sortOrder : 'DESC';
+            $sortOrder = strtoupper((string) $sortOrder);
+            $sortOrder = in_array($sortOrder, ['ASC', 'DESC'], true) ? $sortOrder : 'DESC';
 
             $qb->orderBy($sortBy, $sortOrder);
         } elseif (!empty($primaryKey)) {
@@ -128,7 +128,7 @@ class GetAll extends TableAbstract
         $count = (int) $request->get('count');
         $limit = 1024;
 
-        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $startIndex = max(0, $startIndex);
         $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $qb->setFirstResult($startIndex);

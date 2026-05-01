@@ -37,11 +37,8 @@ use PSX\Http\Exception as StatusCode;
  */
 abstract class GetAllAbstract implements ActionInterface
 {
-    private Marketplace\Factory $factory;
-
-    public function __construct(Marketplace\Factory $factory)
+    public function __construct(private readonly Marketplace\Factory $factory)
     {
-        $this->factory = $factory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

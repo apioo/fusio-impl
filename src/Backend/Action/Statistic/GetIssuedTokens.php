@@ -34,13 +34,10 @@ use Fusio\Impl\Backend\View;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetIssuedTokens implements ActionInterface
+readonly class GetIssuedTokens implements ActionInterface
 {
-    private View\Statistic\IssuedTokens $view;
-
-    public function __construct(View\Statistic\IssuedTokens $view)
+    public function __construct(private View\Statistic\IssuedTokens $view)
     {
-        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

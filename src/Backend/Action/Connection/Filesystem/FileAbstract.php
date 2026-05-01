@@ -65,9 +65,7 @@ readonly abstract class FileAbstract implements ActionInterface
     protected function getObjects(Flysystem $connection): array
     {
         $result = $connection->listContents('.');
-        $result = $result->filter(static function ($object) {
-            return $object instanceof FileAttributes;
-        });
+        $result = $result->filter(static fn($object) => $object instanceof FileAttributes);
 
         return iterator_to_array($result);
     }

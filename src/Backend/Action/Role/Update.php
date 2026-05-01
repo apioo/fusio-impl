@@ -35,15 +35,10 @@ use Fusio\Model\Backend\RoleUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Role $roleService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Role $roleService, ContextFactory $contextFactory)
+    public function __construct(private Role $roleService, private ContextFactory $contextFactory)
     {
-        $this->roleService = $roleService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

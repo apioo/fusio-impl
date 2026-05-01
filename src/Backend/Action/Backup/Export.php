@@ -35,15 +35,10 @@ use Fusio\Impl\Cli\Authenticator;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Export implements ActionInterface
+readonly class Export implements ActionInterface
 {
-    private Service\Export $export;
-    private Service\Client $client;
-
-    public function __construct(Service\Export $export, Service\Client $client)
+    public function __construct(private Service\Export $export, private Service\Client $client)
     {
-        $this->export = $export;
-        $this->client = $client;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

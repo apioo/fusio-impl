@@ -34,13 +34,10 @@ use Fusio\Model\Backend\SdkGenerate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Generate implements ActionInterface
+readonly class Generate implements ActionInterface
 {
-    private Sdk $sdkService;
-
-    public function __construct(Sdk $sdkService)
+    public function __construct(private Sdk $sdkService)
     {
-        $this->sdkService = $sdkService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
