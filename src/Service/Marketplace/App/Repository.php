@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Service\Marketplace\App;
 
-use Fusio\Impl\Exception\MarketplaceException;
 use Fusio\Impl\Service\Marketplace\ClientFactory;
 use Fusio\Impl\Service\Marketplace\RemoteAbstract;
 use Fusio\Impl\Service\System\FrameworkConfig;

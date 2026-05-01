@@ -34,7 +34,6 @@ use Fusio\Marketplace\MarketplaceBundleConfig;
 use Fusio\Marketplace\MarketplaceBundleCronjob;
 use Fusio\Marketplace\MarketplaceBundleEvent;
 use Fusio\Marketplace\MarketplaceBundleSchema;
-use Fusio\Marketplace\MarketplaceBundleSchemaSource;
 use Fusio\Marketplace\MarketplaceBundleTrigger;
 use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\ActionConfig;

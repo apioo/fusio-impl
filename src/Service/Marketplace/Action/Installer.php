@@ -23,7 +23,6 @@ namespace Fusio\Impl\Service\Marketplace\Action;
 use Fusio\Adapter\Worker\Action\WorkerJava;
 use Fusio\Adapter\Worker\Action\WorkerJavascript;
 use Fusio\Adapter\Worker\Action\WorkerPHP;
-use Fusio\Adapter\Worker\Action\WorkerPHPLocal;
 use Fusio\Adapter\Worker\Action\WorkerPython;
 use Fusio\Adapter\Worker\Connection\Worker;
 use Fusio\Engine\Inflection\ClassName;
