@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Service\Rate;
 
+use DateInterval;
+use DateTime;
 use Fusio\Engine\Model;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
@@ -47,14 +49,14 @@ class Limiter
         $this->frameworkConfig = $frameworkConfig;
     }
 
-    public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
+    public function assertLimit(string $ip, Table\Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): void
     {
         $rate = $this->rateAllocationTable->getRateForRequest($this->frameworkConfig->getTenantId(), $operation, $app, $user);
         if (empty($rate)) {
-            return false;
+            return;
         }
 
-        $count     = $this->getRequestCount($ip, $rate['timespan'], $user);
+        $count = $this->getRequestCount($ip, $rate['timespan'], $user);
         $rateLimit = (int) $rate['rate_limit'];
 
         if ($response !== null) {
@@ -65,8 +67,6 @@ class Limiter
         if ($count >= $rateLimit) {
             throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60 * 15);
         }
-
-        return true;
     }
 
     private function getRequestCount(string $ip, string $timespan, Model\UserInterface $user): int
@@ -75,9 +75,9 @@ class Limiter
             return 0;
         }
 
-        $now  = new \DateTime();
-        $past = new \DateTime();
-        $past->sub(new \DateInterval($timespan));
+        $now  = new DateTime();
+        $past = new DateTime();
+        $past->sub(new DateInterval($timespan));
 
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());

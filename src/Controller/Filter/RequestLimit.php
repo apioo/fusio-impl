@@ -48,21 +48,15 @@ readonly class RequestLimit implements FilterInterface
         $context = $this->contextFactory->getActive();
 
         if (!$context->isCli()) {
-            $success = $this->limiterService->assertLimit(
+            $this->limiterService->assertLimit(
                 $context->getIp(),
                 $context->getOperation(),
                 $context->getApp(),
                 $context->getUser(),
                 $response
             );
-        } else {
-            $success = true;
         }
 
-        if ($success) {
-            $filterChain->handle($request, $response);
-        } else {
-            throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60 * 15);
-        }
+        $filterChain->handle($request, $response);
     }
 }
