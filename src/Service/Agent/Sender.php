@@ -29,18 +29,12 @@ use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
 use Fusio\Model\Agent\ItemText;
 use Fusio\Model\Agent\Output;
-use Fusio\Model\Common\AgentContent;
-use Fusio\Model\Common\AgentContentObject;
-use Fusio\Model\Common\AgentContentText;
-use Fusio\Model\Common\AgentInput;
-use Fusio\Model\Common\AgentOutput;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
 use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManager;
+use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -63,8 +57,6 @@ readonly class Sender implements SenderInterface
      */
     public const CONTEXT_MESSAGES_LENGTH = 10;
 
-    private ObjectMapper $objectMapper;
-
     public function __construct(
         private Table\Agent $agentTable,
         private Table\Agent\Message $messageTable,
@@ -73,9 +65,8 @@ readonly class Sender implements SenderInterface
         private Serializer\JsonResultSerializer $jsonResultSerializer,
         private Unserializer\MessageUnserializer $messageUnserializer,
         private ConnectorInterface $connector,
-        private SchemaManager $schemaManager,
+        private ObjectMapperInterface $objectMapper,
     ) {
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function send(int $agentId, Input $input, ContextInterface $context): Output

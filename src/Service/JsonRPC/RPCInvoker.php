@@ -32,8 +32,7 @@ use PSX\Http\Response;
 use PSX\Json\Parser;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
-use PSX\Schema\ObjectMapper;
-use PSX\Schema\SchemaManager;
+use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaSource;
 use stdClass;
 
@@ -46,17 +45,14 @@ use stdClass;
  */
 readonly class RPCInvoker
 {
-    private ObjectMapper $objectMapper;
-
     public function __construct(
         private Invoker $invoker,
         private TokenValidator $tokenValidator,
         private Limiter $limiterService,
         private ResponseWriter $responseWriter,
         private ContextFactory $contextFactory,
-        SchemaManager $schemaManager,
+        private ObjectMapperInterface $objectMapper,
     ) {
-        $this->objectMapper = new ObjectMapper($schemaManager);
     }
 
     public function invoke(OperationRow $operation, RecordInterface $arguments): Response
