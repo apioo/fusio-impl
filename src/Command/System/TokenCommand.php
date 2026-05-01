@@ -40,10 +40,10 @@ use Symfony\Component\Yaml\Yaml;
 class TokenCommand extends Command
 {
     public function __construct(
-        private Service\Token $tokenService,
-        private Service\Scope $scopeService,
-        private Table\App $appTable,
-        private Table\User $userTable
+        private readonly Service\Token $tokenService,
+        private readonly Service\Scope $scopeService,
+        private readonly Table\App $appTable,
+        private readonly Table\User $userTable
     ) {
         parent::__construct();
     }
@@ -106,11 +106,7 @@ class TokenCommand extends Command
 
     private function findApp(mixed $appId): Table\Generated\AppRow
     {
-        if (!is_numeric($appId)) {
-            $app = $this->appTable->findOneByName($appId);
-        } else {
-            $app = $this->appTable->find((int) $appId);
-        }
+        $app = is_numeric($appId) ? $this->appTable->find((int) $appId) : $this->appTable->findOneByName($appId);
 
         if (!$app instanceof Table\Generated\AppRow) {
             throw new RuntimeException('Invalid app');
@@ -121,11 +117,7 @@ class TokenCommand extends Command
 
     private function findUser(mixed $userId): Table\Generated\UserRow
     {
-        if (!is_numeric($userId)) {
-            $user = $this->userTable->findOneByName($userId);
-        } else {
-            $user = $this->userTable->find((int) $userId);
-        }
+        $user = is_numeric($userId) ? $this->userTable->find((int) $userId) : $this->userTable->findOneByName($userId);
 
         if (!$user instanceof Table\Generated\UserRow) {
             throw new RuntimeException('Invalid user');

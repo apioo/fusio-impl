@@ -41,11 +41,11 @@ use Symfony\Component\Console\Question\Question;
 class UserAddCommand extends Command
 {
     public function __construct(
-        private Service\User $userService,
-        private Service\Config $configService,
-        private Service\User\Validator $validator,
-        private Service\System\ContextFactory $contextFactory,
-        private Table\Role $roleTable
+        private readonly Service\User $userService,
+        private readonly Service\Config $configService,
+        private readonly Service\User\Validator $validator,
+        private readonly Service\System\ContextFactory $contextFactory,
+        private readonly Table\Role $roleTable
     ) {
         parent::__construct();
     }
@@ -86,7 +86,7 @@ class UserAddCommand extends Command
         $name = $input->getOption('username');
         if ($name === null) {
             $question = new Question('Enter the username: ');
-            $question->setValidator(function ($value) use ($context) {
+            $question->setValidator(function (?string $value) use ($context): ?string {
                 $this->validator->assertName($value, $context->getTenantId());
                 return $value;
             });
@@ -104,7 +104,7 @@ class UserAddCommand extends Command
         $email = $input->getOption('email');
         if ($email === null) {
             $question = new Question('Enter the email: ');
-            $question->setValidator(function ($value) use ($context) {
+            $question->setValidator(function (?string $value) use ($context): ?string {
                 $this->validator->assertEmail($value, $context->getTenantId());
                 return $value;
             });
@@ -133,7 +133,7 @@ class UserAddCommand extends Command
             // repeat password
             $question = new Question('Repeat the password: ');
             $question->setHidden(true);
-            $question->setValidator(function ($value) use ($password) {
+            $question->setValidator(function ($value) use ($password): true {
                 if ($value != $password) {
                     throw new RuntimeException('The password does not match');
                 } else {

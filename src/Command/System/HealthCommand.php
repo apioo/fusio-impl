@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class HealthCommand extends Command
 {
-    public function __construct(private Health $health)
+    public function __construct(private readonly Health $health)
     {
         parent::__construct();
     }

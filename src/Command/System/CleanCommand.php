@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CleanCommand extends Command
 {
-    public function __construct(private Cleaner $cleaner)
+    public function __construct(private readonly Cleaner $cleaner)
     {
         parent::__construct();
     }
