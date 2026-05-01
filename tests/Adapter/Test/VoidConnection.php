@@ -26,6 +26,7 @@ use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
+use Override;
 
 /**
  * VoidConnection
@@ -36,6 +37,7 @@ use Fusio\Engine\ParametersInterface;
  */
 class VoidConnection extends ConnectionAbstract implements DeploymentInterface, LifecycleInterface
 {
+    #[Override]
     public function getName(): string
     {
         return 'Void-Connection';

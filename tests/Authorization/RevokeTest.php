@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class RevokeTest extends DbTestCase
 {
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/authorization/revoke', 'POST', array(
+        $response = $this->sendRequest('/authorization/revoke', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

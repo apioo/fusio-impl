@@ -31,11 +31,11 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GetRoutesTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/system/route', 'GET', array(
+        $response = $this->sendRequest('/system/route', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -84,11 +84,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/system/route', 'POST', array(
+        $response = $this->sendRequest('/system/route', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -97,11 +97,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/system/route', 'PUT', array(
+        $response = $this->sendRequest('/system/route', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -110,11 +110,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/system/route', 'DELETE', array(
+        $response = $this->sendRequest('/system/route', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

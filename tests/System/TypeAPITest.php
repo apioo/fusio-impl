@@ -33,7 +33,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class TypeAPITest extends DbTestCase
 {
     #[DataProvider('providerFilter')]
-    public function testGenerate(string $category)
+    public function testGenerate(string $category): void
     {
         $response = $this->sendRequest('/system/generator/typeapi?filter=' . $category, 'GET', [
             'User-Agent' => 'Fusio TestCase',

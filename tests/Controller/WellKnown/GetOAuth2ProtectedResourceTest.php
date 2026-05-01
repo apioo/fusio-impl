@@ -31,11 +31,11 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GetOAuth2ProtectedResourceTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'GET', array(
+        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $expect = <<<JSON
@@ -64,11 +64,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testGetResource()
+    public function testGetResource(): void
     {
-        $response = $this->sendRequest('/.well-known/oauth-protected-resource/foo/bar', 'GET', array(
+        $response = $this->sendRequest('/.well-known/oauth-protected-resource/foo/bar', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $expect = <<<JSON
@@ -96,11 +96,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'POST', array(
+        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -109,11 +109,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'PUT', array(
+        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -122,11 +122,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'DELETE', array(
+        $response = $this->sendRequest('/.well-known/oauth-protected-resource', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

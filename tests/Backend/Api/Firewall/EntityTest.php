@@ -41,12 +41,12 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_firewall', 'my_v6_rule')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -66,12 +66,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/firewall/~my_v4_rule', 'GET', array(
+        $response = $this->sendRequest('/backend/firewall/~my_v4_rule', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -91,12 +91,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/firewall/370', 'GET', array(
+        $response = $this->sendRequest('/backend/firewall/370', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -106,12 +106,12 @@ JSON;
         $this->assertStringStartsWith('Could not find firewall', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -120,16 +120,16 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'     => 'another-rule-foo',
             'type'     => 0,
             'ip'       => '2002:0db8:85a3:08d4:1319:8a2e:0370:7344',
@@ -164,12 +164,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/firewall/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

@@ -31,22 +31,22 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class PasswordResetTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'GET', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'POST', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'email' => 'consumer@localhost.com',
         ]));
 
@@ -65,11 +65,11 @@ JSON;
         $this->assertNotEmpty($token);
     }
 
-    public function testPostInvalidEmail()
+    public function testPostInvalidEmail(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'POST', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'email' => 'baz',
         ]));
 
@@ -77,14 +77,14 @@ JSON;
         $data = json_decode($body, true);
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
-        $this->assertEquals('Could not find user', substr($data['message'], 0, 19), $body);
+        $this->assertEquals('Could not find user', substr((string) $data['message'], 0, 19), $body);
     }
 
-    public function testPostNoEmail()
+    public function testPostNoEmail(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'POST', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar'
         ]));
 
@@ -95,16 +95,16 @@ JSON;
         $this->assertStringStartsWith('No email was provided', $data['message'], $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         // set token
         $this->testPost();
 
         $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => 2]);
 
-        $response = $this->sendRequest('/consumer/password_reset', 'PUT', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'token' => $token,
             'newPassword' => 'foo',
         ]));
@@ -122,15 +122,15 @@ JSON;
 
         // verify password
         $user = $this->connection->fetchAssociative('SELECT password, token FROM fusio_user WHERE id = :id', ['id' => 2]);
-        $this->assertTrue(password_verify('foo', $user['password']));
+        $this->assertTrue(password_verify('foo', (string) $user['password']));
         $this->assertEmpty($user['token']);
     }
 
-    public function testPutInvalidToken()
+    public function testPutInvalidToken(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'PUT', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'token' => 'foobar',
             'newPassword' => 'foo',
         ]));
@@ -139,14 +139,14 @@ JSON;
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid token provided', substr($data['message'], 0, 22), $body);
+        $this->assertEquals('Invalid token provided', substr((string) $data['message'], 0, 22), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/password_reset', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/password_reset', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

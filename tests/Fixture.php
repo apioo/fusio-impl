@@ -69,7 +69,7 @@ class Fixture
 
     public static function getData(): DataBag
     {
-        if (self::$data !== null) {
+        if (self::$data instanceof DataBag) {
             return self::$data;
         }
 

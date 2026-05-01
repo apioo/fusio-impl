@@ -48,7 +48,7 @@ use PSX\Uri\Uri;
  */
 class LoggerTest extends DbTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -82,7 +82,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
-    public function testHandleLongUserAgent()
+    public function testHandleLongUserAgent(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -116,7 +116,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
-    public function testHandleLongPath()
+    public function testHandleLongPath(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -150,7 +150,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
-    public function testHandlePost()
+    public function testHandlePost(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -185,7 +185,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('foobar', $log['body']);
     }
 
-    public function testAppendError()
+    public function testAppendError(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -199,7 +199,7 @@ class LoggerTest extends DbTestCase
         $filterChain->expects($this->once())
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response))
-            ->willReturnCallback(function(){
+            ->willReturnCallback(function(): void{
                 throw new \RuntimeException('foo');
             });
 
@@ -210,7 +210,7 @@ class LoggerTest extends DbTestCase
             $logger->handle($request, $response, $filterChain);
             
             $this->fail('Should throw an exception');
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
         }
 
         $error = $this->connection->fetchAssociative('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
@@ -220,7 +220,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('foo', $error['message']);
     }
 
-    public function testAppendErrorLongMessage()
+    public function testAppendErrorLongMessage(): void
     {
         $contextFactory = new ContextFactory();
         $this->newContext($contextFactory->factory());
@@ -234,7 +234,7 @@ class LoggerTest extends DbTestCase
         $filterChain->expects($this->once())
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response))
-            ->willReturnCallback(function(){
+            ->willReturnCallback(function(): void{
                 throw new \RuntimeException(str_repeat('a', 600));
             });
 
@@ -245,7 +245,7 @@ class LoggerTest extends DbTestCase
             $logger->handle($request, $response, $filterChain);
 
             $this->fail('Should throw an exception');
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
         }
 
         $error = $this->connection->fetchAssociative('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
@@ -273,6 +273,7 @@ class LoggerTest extends DbTestCase
         return $context;
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

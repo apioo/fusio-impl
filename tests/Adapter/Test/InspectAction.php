@@ -26,6 +26,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\Request\RpcRequestContext;
 use Fusio\Engine\RequestInterface;
+use Override;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -37,6 +38,7 @@ use PSX\Http\Exception as StatusCode;
  */
 class InspectAction extends ActionAbstract
 {
+    #[Override]
     public function getName(): string
     {
         return 'Inspect-Action';

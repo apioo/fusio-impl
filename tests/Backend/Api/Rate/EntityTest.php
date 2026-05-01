@@ -33,6 +33,7 @@ use Fusio\Impl\Tests\Fixture;
 class EntityTest extends DbTestCase
 {
     private int $id;
+    
     private int $operationId;
 
     protected function setUp(): void
@@ -43,12 +44,12 @@ class EntityTest extends DbTestCase
         $this->operationId = Fixture::getReference('fusio_operation', 'test.createFoo')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/rate/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -74,12 +75,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/rate/~gold', 'GET', array(
+        $response = $this->sendRequest('/backend/rate/~gold', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -105,12 +106,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/rate/10', 'GET', array(
+        $response = $this->sendRequest('/backend/rate/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -120,12 +121,12 @@ JSON;
         $this->assertStringStartsWith('Could not find rate', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/rate/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -134,16 +135,16 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/rate/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'      => 'foo',
             'rateLimit' => 20,
             'timespan'  => 'PT2H',
@@ -181,12 +182,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/rate/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

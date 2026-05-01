@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class AccountTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/account', 'GET', array(
+        $response = $this->sendRequest('/consumer/account', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -92,12 +92,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/account', 'POST', array(
+        $response = $this->sendRequest('/consumer/account', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -106,12 +106,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/account', 'PUT', array(
+        $response = $this->sendRequest('/consumer/account', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'name'  => 'fooo', // the name is ignore
             'email' => 'foo@bar.com',
         ]));
@@ -143,12 +143,12 @@ JSON;
         $this->assertEquals('admin@localhost.com', $row['email']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/account', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/account', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

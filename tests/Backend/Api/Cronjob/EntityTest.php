@@ -32,82 +32,82 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/cronjob/2', 'GET', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
-{
-    "id": 2,
-    "status": 1,
-    "name": "Test-Cron",
-    "cron": "* * * * *",
-    "action": "Sql-Select-All",
-    "executeDate": "2015-02-27T19:59:15Z",
-    "exitCode": 0,
-    "errors": [
+        $expect = <<<JSON_WRAP
         {
-            "message": "Syntax error, malformed JSON",
-            "trace": "[trace]",
-            "file": "[file]",
-            "line": 74
+            "id": 2,
+            "status": 1,
+            "name": "Test-Cron",
+            "cron": "* * * * *",
+            "action": "Sql-Select-All",
+            "executeDate": "2015-02-27T19:59:15Z",
+            "exitCode": 0,
+            "errors": [
+                {
+                    "message": "Syntax error, malformed JSON",
+                    "trace": "[trace]",
+                    "file": "[file]",
+                    "line": 74
+                }
+            ],
+            "metadata": {
+                "foo": "bar"
+            }
         }
-    ],
-    "metadata": {
-        "foo": "bar"
-    }
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/cronjob/~Test-Cron', 'GET', array(
+        $response = $this->sendRequest('/backend/cronjob/~Test-Cron', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
-{
-    "id": 2,
-    "status": 1,
-    "name": "Test-Cron",
-    "cron": "* * * * *",
-    "action": "Sql-Select-All",
-    "executeDate": "2015-02-27T19:59:15Z",
-    "exitCode": 0,
-    "metadata": {
-        "foo": "bar"
-    },
-    "errors": [
+        $expect = <<<JSON_WRAP
         {
-            "message": "Syntax error, malformed JSON",
-            "trace": "[trace]",
-            "file": "[file]",
-            "line": 74
+            "id": 2,
+            "status": 1,
+            "name": "Test-Cron",
+            "cron": "* * * * *",
+            "action": "Sql-Select-All",
+            "executeDate": "2015-02-27T19:59:15Z",
+            "exitCode": 0,
+            "metadata": {
+                "foo": "bar"
+            },
+            "errors": [
+                {
+                    "message": "Syntax error, malformed JSON",
+                    "trace": "[trace]",
+                    "file": "[file]",
+                    "line": 74
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/cronjob/10', 'GET', array(
+        $response = $this->sendRequest('/backend/cronjob/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -117,12 +117,12 @@ JSON;
         $this->assertStringStartsWith('Could not find cronjob', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/cronjob/2', 'POST', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -131,16 +131,16 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/cronjob/2', 'PUT', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'     => 'Foo-Cron',
             'cron'     => '10 * * * *',
             'action'   => 'action://Inspect-Action',
@@ -175,12 +175,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/cronjob/2', 'DELETE', array(
+        $response = $this->sendRequest('/backend/cronjob/2', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

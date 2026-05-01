@@ -45,14 +45,14 @@ class MailerTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testMail()
+    public function testMail(): void
     {
         $sender = $this->getMockBuilder(SenderInterface::class)
             ->getMock();
 
         $sender->expects($this->once())
             ->method('accept')
-            ->with($this->callback(function($dispatcher){
+            ->with($this->callback(function($dispatcher): true{
                 $this->assertInstanceOf(Mailer::class, $dispatcher);
 
                 return true;
@@ -61,11 +61,11 @@ class MailerTest extends ControllerDbTestCase
 
         $sender->expects($this->once())
             ->method('send')
-            ->with($this->callback(function($dispatcher){
+            ->with($this->callback(function($dispatcher): true{
                 $this->assertInstanceOf(Mailer::class, $dispatcher);
 
                 return true;
-            }), $this->callback(function($message){
+            }), $this->callback(function($message): true{
                 /** @var Message $message */
                 $this->assertInstanceOf(Message::class, $message);
 

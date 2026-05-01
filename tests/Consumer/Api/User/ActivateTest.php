@@ -36,23 +36,24 @@ use PSX\Framework\Test\Environment;
  */
 class ActivateTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/activate', 'GET', array(
+        $response = $this->sendRequest('/consumer/activate', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $register = new UserRegister();
         $register->setName('baz');
         $register->setEmail('baz@localhost.com');
         $register->setPassword('test1234!');
+        
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $userId = Environment::getService(Register::class)->register($register, $context);
 
@@ -72,9 +73,9 @@ class ActivateTest extends DbTestCase
 
         $token = $this->connection->fetchOne('SELECT token FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
-        $response = $this->sendRequest('/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'token' => $token,
         ]));
 
@@ -100,7 +101,7 @@ class ActivateTest extends DbTestCase
         $this->assertEquals('baz@localhost.com', $row['email']);
     }
 
-    public function testPostExpiredToken()
+    public function testPostExpiredToken(): void
     {
         $payload = [
             'jit' => 'foo',
@@ -110,9 +111,9 @@ class ActivateTest extends DbTestCase
         $jsonWebToken = Environment::getService(JsonWebToken::class);
         $token = $jsonWebToken->encode($payload);
 
-        $response = $this->sendRequest('/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'token' => $token,
         ]));
 
@@ -121,10 +122,10 @@ class ActivateTest extends DbTestCase
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success);
-        $this->assertEquals('Invalid token provided', substr($data->message, 0, 22));
+        $this->assertEquals('Invalid token provided', substr((string) $data->message, 0, 22));
     }
 
-    public function testPostInvalidUserId()
+    public function testPostInvalidUserId(): void
     {
         $payload = [
             'jit' => 'foo',
@@ -134,9 +135,9 @@ class ActivateTest extends DbTestCase
         $jsonWebToken = Environment::getService(JsonWebToken::class);
         $token = $jsonWebToken->encode($payload);
 
-        $response = $this->sendRequest('/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'token' => $token,
         ]));
 
@@ -145,14 +146,14 @@ class ActivateTest extends DbTestCase
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success);
-        $this->assertEquals('Could not find user', substr($data->message, 0, 19));
+        $this->assertEquals('Could not find user', substr((string) $data->message, 0, 19));
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/activate', 'PUT', array(
+        $response = $this->sendRequest('/consumer/activate', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -161,11 +162,11 @@ class ActivateTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/activate', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/activate', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

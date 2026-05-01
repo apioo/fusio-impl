@@ -33,12 +33,12 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/page', 'GET', array(
+        $response = $this->sendRequest('/backend/page', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -99,12 +99,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/page?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/page?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -165,11 +165,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetUnauthorized()
+    public function testGetUnauthorized(): void
     {
-        $response = $this->sendRequest('/backend/page', 'GET', array(
+        $response = $this->sendRequest('/backend/page', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -179,16 +179,16 @@ JSON;
         $this->assertStringStartsWith('Missing authorization header', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/page', 'POST', array(
+        $response = $this->sendRequest('/backend/page', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'status'   => 1,
             'title'    => 'My new page',
             'content'  => '<p>And here some content</p>',
@@ -221,12 +221,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/page', 'PUT', array(
+        $response = $this->sendRequest('/backend/page', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -235,12 +235,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/page', 'DELETE', array(
+        $response = $this->sendRequest('/backend/page', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

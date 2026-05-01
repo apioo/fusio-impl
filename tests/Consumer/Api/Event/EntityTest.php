@@ -41,12 +41,12 @@ class EntityTest extends DbTestCase
         $this->eventId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'GET', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -66,12 +66,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/consumer/event/~foo-event', 'GET', array(
+        $response = $this->sendRequest('/consumer/event/~foo-event', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -91,24 +91,24 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/consumer/event/1337', 'GET', array(
+        $response = $this->sendRequest('/consumer/event/1337', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'POST', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -117,12 +117,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'PUT', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'status' => 2,
             'name'   => 'Bar',
             'url'    => 'http://microsoft.com',
@@ -134,12 +134,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'DELETE', array(
+        $response = $this->sendRequest('/consumer/event/' . $this->eventId, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 

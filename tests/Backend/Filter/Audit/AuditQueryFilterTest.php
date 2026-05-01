@@ -36,7 +36,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class AuditQueryFilterTest extends FilterTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $filter = AuditQueryFilter::from($this->createRequest([
             'from'    => '2015-08-20',
@@ -70,7 +70,7 @@ class AuditQueryFilterTest extends FilterTestCase
         ], $condition->getValues());
     }
 
-    public function testCreateSearchIp()
+    public function testCreateSearchIp(): void
     {
         $filter = AuditQueryFilter::from($this->createRequest([
             'search' => '93.223.172.206'
@@ -79,7 +79,7 @@ class AuditQueryFilterTest extends FilterTestCase
         $this->assertEquals('93.223.172.206', $filter->getIp());
     }
 
-    public function testCreateSearchEvent()
+    public function testCreateSearchEvent(): void
     {
         $filter = AuditQueryFilter::from($this->createRequest([
             'search' => 'create'

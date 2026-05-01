@@ -34,12 +34,12 @@ use PSX\Json\Parser;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'GET', array(
+        $response = $this->sendRequest('/backend/operation', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -236,12 +236,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/operation?search=inspec', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?search=inspec', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -318,12 +318,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetTaxonomy()
+    public function testGetTaxonomy(): void
     {
-        $response = $this->sendRequest('/backend/operation?search=taxonomy_id:1', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?search=taxonomy_id:1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -352,12 +352,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/operation?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/operation?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -554,16 +554,16 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -603,16 +603,16 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
     }
 
-    public function testPostWithScheme()
+    public function testPostWithScheme(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -648,12 +648,12 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
     }
 
-    public function testPostStabilityInvalid()
+    public function testPostStabilityInvalid(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => 99,
@@ -673,12 +673,12 @@ JSON;
         $this->assertStringStartsWith('Stability contain an invalid value must be one of: 0, 1, 2, 3', $data->message);
     }
 
-    public function testPostHttpMethodInvalid()
+    public function testPostHttpMethodInvalid(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -698,12 +698,12 @@ JSON;
         $this->assertStringStartsWith('HTTP method must not be one of: GET, POST, PUT, PATCH, DELETE', $data->message);
     }
 
-    public function testPostHttpPathInvalid()
+    public function testPostHttpPathInvalid(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -723,12 +723,12 @@ JSON;
         $this->assertStringStartsWith('HTTP path must start with a /', $data->message);
     }
 
-    public function testPostHttpCodeInvalid()
+    public function testPostHttpCodeInvalid(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -748,12 +748,12 @@ JSON;
         $this->assertStringStartsWith('HTTP code contains an HTTP status code "999" which is not in the range between 200 and 299', $data->message);
     }
 
-    public function testPostHttpMethodAndPathExisting()
+    public function testPostHttpMethodAndPathExisting(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -773,12 +773,12 @@ JSON;
         $this->assertStringStartsWith('An operation exists already with the same HTTP method and path', $data->message);
     }
 
-    public function testPostNameInvalid()
+    public function testPostNameInvalid(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -798,12 +798,12 @@ JSON;
         $this->assertStringStartsWith('Invalid operation name', $data->message);
     }
 
-    public function testPostParametersInvalidName()
+    public function testPostParametersInvalidName(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -828,12 +828,12 @@ JSON;
         $this->assertStringStartsWith('Parameter name "fo&o" contains an invalid character, allowed are only alphanumeric characters and underscore', $data->message);
     }
 
-    public function testPostParametersInvalidSchema()
+    public function testPostParametersInvalidSchema(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -858,12 +858,12 @@ JSON;
         $this->assertStringStartsWith('Parameter "foo" contains an invalid schema "foobar" must be one of: string, boolean, integer, number', $data->message);
     }
 
-    public function testPostIncomingNonExistingSchema()
+    public function testPostIncomingNonExistingSchema(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -884,12 +884,12 @@ JSON;
         $this->assertStringStartsWith('Incoming schema "Foobar" does not exist', $data->message);
     }
 
-    public function testPostIncomingNonExistingSchemaWithScheme()
+    public function testPostIncomingNonExistingSchemaWithScheme(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -910,12 +910,12 @@ JSON;
         $this->assertStringStartsWith('Incoming schema "schema://Foobar" does not exist', $data->message);
     }
 
-    public function testPostOutgoingNonExistingSchema()
+    public function testPostOutgoingNonExistingSchema(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -935,12 +935,12 @@ JSON;
         $this->assertStringStartsWith('Outgoing schema "Foobar" does not exist', $data->message);
     }
 
-    public function testPostOutgoingNonExistingSchemaWithScheme()
+    public function testPostOutgoingNonExistingSchemaWithScheme(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -960,12 +960,12 @@ JSON;
         $this->assertStringStartsWith('Outgoing schema "schema://Foobar" does not exist', $data->message);
     }
 
-    public function testPostThrowNonExistingSchema()
+    public function testPostThrowNonExistingSchema(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -988,12 +988,12 @@ JSON;
         $this->assertStringStartsWith('Throw 500 schema "Foobar" does not exist', $data->message);
     }
 
-    public function testPostThrowNonExistingSchemaWithScheme()
+    public function testPostThrowNonExistingSchemaWithScheme(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1016,12 +1016,12 @@ JSON;
         $this->assertStringStartsWith('Throw 500 schema "schema://Foobar" does not exist', $data->message);
     }
 
-    public function testPostThrowInvalidStatusCode()
+    public function testPostThrowInvalidStatusCode(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1044,12 +1044,12 @@ JSON;
         $this->assertStringStartsWith('Throw contains an HTTP status code "900" which is not in the range between 400 and 599', $data->message);
     }
 
-    public function testPostActionNonExisting()
+    public function testPostActionNonExisting(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1069,12 +1069,12 @@ JSON;
         $this->assertStringStartsWith('Action "Foobar" does not exist', $data->message);
     }
 
-    public function testPostActionNonExistingWithScheme()
+    public function testPostActionNonExistingWithScheme(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1094,12 +1094,12 @@ JSON;
         $this->assertStringStartsWith('Action "action://Foobar" does not exist', $data->message);
     }
 
-    public function testPostStabilityLifeCycle()
+    public function testPostStabilityLifeCycle(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'POST', array(
+        $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active' => true,
             'public' => true,
             'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1122,10 +1122,10 @@ JSON;
         $this->assertTrue($data->success);
 
         // move operation to stable
-        $response = $this->sendRequest('/backend/operation/' . $data->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $data->id, 'PUT', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active' => true,
             'public' => true,
             'stability' => OperationInterface::STABILITY_STABLE,
@@ -1166,10 +1166,10 @@ JSON;
         $this->assertEquals('action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358', $row['action']);
 
         // move schema back to experimental
-        $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', [
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active' => true,
             'public' => true,
             'stability' => OperationInterface::STABILITY_EXPERIMENTAL,
@@ -1209,12 +1209,12 @@ JSON;
         $this->assertEquals('action://Sql-Insert', $row['action']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'PUT', array(
+        $response = $this->sendRequest('/backend/operation', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -1223,12 +1223,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/operation', 'DELETE', array(
+        $response = $this->sendRequest('/backend/operation', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

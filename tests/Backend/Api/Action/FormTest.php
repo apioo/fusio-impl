@@ -32,27 +32,27 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class FormTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', array(
+        $response = $this->sendRequest('/backend/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "element": [
+        $expect = <<<'JSON_WRAP'
         {
-            "element": "textarea",
-            "name": "response",
-            "title": "Response",
-            "help": "The response in JSON format",
-            "mode": "json"
+            "element": [
+                {
+                    "element": "textarea",
+                    "name": "response",
+                    "title": "Response",
+                    "help": "The response in JSON format",
+                    "mode": "json"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

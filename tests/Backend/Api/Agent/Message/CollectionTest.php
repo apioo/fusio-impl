@@ -33,12 +33,12 @@ use PSX\Json\Parser;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
@@ -66,12 +66,13 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
-    public function testGetParent()
+    
+    public function testGetParent(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/6/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
@@ -110,12 +111,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'POST', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'item' => [
                 'type' => 'text',
                 'content' => 'What is the meaning of life?',
@@ -148,12 +149,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(Parser::encode(['type' => 'text', 'content' => 'The answer ist: 42']), $row['content']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'PUT', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -162,12 +163,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'DELETE', array(
+        $response = $this->sendRequest('/backend/agent/6/message', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

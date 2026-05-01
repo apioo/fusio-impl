@@ -34,7 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MemoryTest extends TestCase
 {
-    public function testConnection()
+    public function testConnection(): void
     {
         $connection = new Memory();
 

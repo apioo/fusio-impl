@@ -33,89 +33,89 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'GET', array(
+        $response = $this->sendRequest('/backend/agent', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
 
-        $expect = <<<'JSON'
-{
-    "totalResults": 6,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
+        $expect = <<<'JSON_WRAP'
         {
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 3,
-            "status": 1,
-            "type": 2,
-            "name": "Fusio-Action",
-            "description": "Helps to develop custom action business logic",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 2,
-            "status": 1,
-            "type": 1,
-            "name": "Fusio-Architect",
-            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "type": 0,
-            "name": "Fusio-General",
-            "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
+            "totalResults": 6,
+            "startIndex": 0,
+            "itemsPerPage": 16,
+            "entry": [
+                {
+                    "id": 6,
+                    "status": 1,
+                    "connection": 8,
+                    "type": 0,
+                    "name": "agent-test",
+                    "description": "An agent test",
+                    "outgoing": "schema:\/\/Entry-Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 5,
+                    "status": 1,
+                    "type": 4,
+                    "name": "Fusio-Database",
+                    "description": "Helps to design database table schemas",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 4,
+                    "status": 1,
+                    "type": 3,
+                    "name": "Fusio-Schema",
+                    "description": "Helps to build new schemas to describe JSON payloads",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 3,
+                    "status": 1,
+                    "type": 2,
+                    "name": "Fusio-Action",
+                    "description": "Helps to develop custom action business logic",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 2,
+                    "status": 1,
+                    "type": 1,
+                    "name": "Fusio-Architect",
+                    "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 1,
+                    "status": 1,
+                    "type": 0,
+                    "name": "Fusio-General",
+                    "description": "Helps to answer general questions about your Fusio instance",
+                    "insertDate": "[datetime]"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/agent?search=tes', 'GET', array(
+        $response = $this->sendRequest('/backend/agent?search=tes', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -142,89 +142,89 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/agent?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/agent?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
 
-        $expect = <<<'JSON'
-{
-    "totalResults": 6,
-    "startIndex": 0,
-    "itemsPerPage": 80,
-    "entry": [
+        $expect = <<<'JSON_WRAP'
         {
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 3,
-            "status": 1,
-            "type": 2,
-            "name": "Fusio-Action",
-            "description": "Helps to develop custom action business logic",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 2,
-            "status": 1,
-            "type": 1,
-            "name": "Fusio-Architect",
-            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-            "insertDate": "[datetime]"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "type": 0,
-            "name": "Fusio-General",
-            "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
+            "totalResults": 6,
+            "startIndex": 0,
+            "itemsPerPage": 80,
+            "entry": [
+                {
+                    "id": 6,
+                    "status": 1,
+                    "connection": 8,
+                    "type": 0,
+                    "name": "agent-test",
+                    "description": "An agent test",
+                    "outgoing": "schema:\/\/Entry-Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 5,
+                    "status": 1,
+                    "type": 4,
+                    "name": "Fusio-Database",
+                    "description": "Helps to design database table schemas",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 4,
+                    "status": 1,
+                    "type": 3,
+                    "name": "Fusio-Schema",
+                    "description": "Helps to build new schemas to describe JSON payloads",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 3,
+                    "status": 1,
+                    "type": 2,
+                    "name": "Fusio-Action",
+                    "description": "Helps to develop custom action business logic",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 2,
+                    "status": 1,
+                    "type": 1,
+                    "name": "Fusio-Architect",
+                    "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 1,
+                    "status": 1,
+                    "type": 0,
+                    "name": "Fusio-General",
+                    "description": "Helps to answer general questions about your Fusio instance",
+                    "insertDate": "[datetime]"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'POST', array(
+        $response = $this->sendRequest('/backend/agent', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'connection' => 8,
             'type' => Table\Agent::TYPE_GENERAL,
             'name' => 'my-agent',
@@ -262,12 +262,12 @@ JSON;
         $this->assertEquals('Your an helpful agent which returns only useful information', $row['introduction']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'PUT', array(
+        $response = $this->sendRequest('/backend/agent', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -276,12 +276,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'DELETE', array(
+        $response = $this->sendRequest('/backend/agent', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

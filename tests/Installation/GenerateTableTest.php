@@ -39,7 +39,7 @@ class GenerateTableTest extends DbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $this->markTestSkipped();
 

@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\Fixture;
  */
 class EntityTest extends DbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -41,12 +41,12 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_agent', 'agent-test')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/agent/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -70,12 +70,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/agent/10', 'GET', array(
+        $response = $this->sendRequest('/backend/agent/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -85,12 +85,12 @@ JSON;
         $this->assertStringStartsWith('Could not find agent', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/agent/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -99,12 +99,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/agent/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name' => 'foo',
             'description' => 'foo',
             'introduction' => 'foo',
@@ -138,12 +138,12 @@ JSON;
         $this->assertEquals('foo', $row['introduction']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/agent/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

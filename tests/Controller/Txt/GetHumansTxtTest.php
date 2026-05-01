@@ -31,11 +31,11 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GetHumansTxtTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/humans.txt', 'GET', array(
+        $response = $this->sendRequest('/humans.txt', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $expect = <<<TEXT
@@ -56,11 +56,11 @@ TEXT;
         $this->assertEquals($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/humans.txt', 'POST', array(
+        $response = $this->sendRequest('/humans.txt', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -69,11 +69,11 @@ TEXT;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/humans.txt', 'PUT', array(
+        $response = $this->sendRequest('/humans.txt', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -82,11 +82,11 @@ TEXT;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/humans.txt', 'DELETE', array(
+        $response = $this->sendRequest('/humans.txt', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

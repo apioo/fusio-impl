@@ -34,12 +34,12 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/token/2', 'GET', array(
+        $response = $this->sendRequest('/consumer/token/2', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -67,12 +67,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/token/2', 'POST', array(
+        $response = $this->sendRequest('/consumer/token/2', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -81,14 +81,14 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/token/3', 'PUT', array(
+        $response = $this->sendRequest('/consumer/token/3', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
-        ), json_encode([
+        ], json_encode([
             'name' => 'baz',
-            'expire' => (new \DateTime())->add(new \DateInterval('P4D'))->format('Y-m-d'),
+            'expire' => new \DateTime()->add(new \DateInterval('P4D'))->format('Y-m-d'),
             'scopes' => ['foo', 'bar'], // scopes can not change on update
         ]));
 
@@ -133,12 +133,12 @@ JSON;
         $this->assertEquals('bar', $row['scope']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/token/2', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/token/2', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

@@ -32,11 +32,11 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class WelcomeTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/', 'GET', array(
+        $response = $this->sendRequest('/', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $version = Base::getVersion();
         $body    = (string) $response->getBody();
@@ -124,38 +124,38 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/', 'POST', array(
+        $response = $this->sendRequest('/', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/', 'PUT', array(
+        $response = $this->sendRequest('/', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
-        $response = $this->sendRequest('/', 'PATCH', array(
+        $response = $this->sendRequest('/', 'PATCH', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/', 'DELETE', array(
+        $response = $this->sendRequest('/', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $this->assertEquals(404, $response->getStatusCode());
     }

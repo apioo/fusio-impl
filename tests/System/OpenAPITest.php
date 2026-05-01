@@ -31,7 +31,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class OpenAPITest extends DbTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $response = $this->sendRequest('/system/generator/openapi', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -46,7 +46,7 @@ class OpenAPITest extends DbTestCase
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
-    public function providerFilter()
+    public function providerFilter(): array
     {
         return [
             ['default'],

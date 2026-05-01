@@ -41,7 +41,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class RegisterTest extends DbTestCase
 {
-    public function testRegister()
+    public function testRegister(): void
     {
         $register = $this->newRegisterService(true, true, 'private_key', true);
 
@@ -50,6 +50,7 @@ class RegisterTest extends DbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
+        
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $userId = $register->register($user, $context);
 
@@ -65,7 +66,7 @@ class RegisterTest extends DbTestCase
         $this->assertNotEmpty($user['password']);
     }
 
-    public function testRegisterNoApproval()
+    public function testRegisterNoApproval(): void
     {
         $register = $this->newRegisterService(true, false, 'private_key', false);
 
@@ -74,6 +75,7 @@ class RegisterTest extends DbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
+        
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $userId = $register->register($user, $context);
 
@@ -89,7 +91,7 @@ class RegisterTest extends DbTestCase
         $this->assertNotEmpty($user['password']);
     }
 
-    public function testRegisterNoCaptchaSecret()
+    public function testRegisterNoCaptchaSecret(): void
     {
         $register = $this->newRegisterService(true, true, '', true);
 
@@ -98,6 +100,7 @@ class RegisterTest extends DbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
+        
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $userId = $register->register($user, $context);
 
@@ -113,7 +116,7 @@ class RegisterTest extends DbTestCase
         $this->assertNotEmpty($user['password']);
     }
 
-    public function testRegisterInvalidCaptcha()
+    public function testRegisterInvalidCaptcha(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -124,6 +127,7 @@ class RegisterTest extends DbTestCase
         $user->setEmail('user@host.com');
         $user->setPassword('test1234');
         $user->setCaptcha('result');
+        
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $register->register($user, $context);
     }
@@ -159,10 +163,12 @@ class RegisterTest extends DbTestCase
 
         $update = new ConfigUpdate();
         $update->setValue($reCaptchaSecret);
+        
         $config->update($this->getConfigId('recaptcha_secret'), $update, $context);
 
         $update = new ConfigUpdate();
         $update->setValue($userApproval);
+        
         $config->update($this->getConfigId('user_approval'), $update, $context);
 
         return $config;

@@ -34,7 +34,7 @@ use PSX\Json\Parser;
  */
 class PasswordTest extends DbTestCase
 {
-    public function testPost()
+    public function testPost(): void
     {
         $body     = 'grant_type=password&username=Consumer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -46,7 +46,7 @@ class PasswordTest extends DbTestCase
         $this->assertAccessToken($response);
     }
 
-    public function testPostEmail()
+    public function testPostEmail(): void
     {
         $body     = 'grant_type=password&username=consumer@localhost.com&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -61,7 +61,7 @@ class PasswordTest extends DbTestCase
     /**
      * A pending app can not request an API token
      */
-    public function testPostPending()
+    public function testPostPending(): void
     {
         $body     = 'grant_type=password&username=Developer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -86,7 +86,7 @@ JSON;
     /**
      * A deactivated app can not request an API token
      */
-    public function testPostDeactivated()
+    public function testPostDeactivated(): void
     {
         $body     = 'grant_type=password&username=Developer&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -108,7 +108,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    private function assertAccessToken(ResponseInterface $response)
+    private function assertAccessToken(ResponseInterface $response): void
     {
         $body = (string) $response->getBody();
         $data = Parser::decode($body, true);
@@ -135,7 +135,7 @@ JSON;
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime((string) $row['expire'])));
+        $this->assertEquals(date('Y-m-d H:i'), substr((string) $row['date'], 0, 16));
     }
 }

@@ -31,12 +31,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class UsedPointsTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/statistic/used_points?from=2018-10-01T00:00:00&to=2018-10-31T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/statistic/used_points?from=2018-10-01T00:00:00&to=2018-10-31T23:59:59', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 

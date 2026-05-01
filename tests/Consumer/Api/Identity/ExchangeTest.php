@@ -44,7 +44,7 @@ use PSX\Uri\Url;
  */
 class ExchangeTest extends DbTestCase
 {
-    public function testGetFacebook()
+    public function testGetFacebook(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'e72e16c7e42f292c6912e7710c838347ae178b4a', 'token_type' => 'bearer', 'expires_in' => time() + 60])),
@@ -60,10 +60,10 @@ class ExchangeTest extends DbTestCase
         $client = new Client(['handler' => $handler]);
         Environment::getService(Facebook::class)->setHttpClient($client);
 
-        $response = $this->sendRequest('/consumer/identity/1/exchange?code=foobar&state=facebook-state', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange?code=foobar&state=facebook-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -91,7 +91,7 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
-    public function testGetGithub()
+    public function testGetGithub(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'e72e16c7e42f292c6912e7710c838347ae178b4a', 'scope' => 'user,gist', 'token_type' => 'bearer'])),
@@ -107,10 +107,10 @@ class ExchangeTest extends DbTestCase
         $client = new Client(['handler' => $handler]);
         Environment::getService(Github::class)->setHttpClient($client);
 
-        $response = $this->sendRequest('/consumer/identity/2/exchange?code=foobar&state=github-state', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/2/exchange?code=foobar&state=github-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -138,7 +138,7 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
-    public function testGetGoogle()
+    public function testGetGoogle(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'e72e16c7e42f292c6912e7710c838347ae178b4a', 'token_type' => 'bearer'])),
@@ -154,10 +154,10 @@ class ExchangeTest extends DbTestCase
         $client = new Client(['handler' => $handler]);
         Environment::getService(Google::class)->setHttpClient($client);
 
-        $response = $this->sendRequest('/consumer/identity/3/exchange?code=foobar&state=google-state', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/3/exchange?code=foobar&state=google-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -185,7 +185,7 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
-    public function testGetOpenIDConnect()
+    public function testGetOpenIDConnect(): void
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'e72e16c7e42f292c6912e7710c838347ae178b4a', 'token_type' => 'bearer'])),
@@ -201,10 +201,10 @@ class ExchangeTest extends DbTestCase
         $client = new Client(['handler' => $handler]);
         Environment::getService(OpenIDConnect::class)->setHttpClient($client);
 
-        $response = $this->sendRequest('/consumer/identity/4/exchange?code=foobar&state=openid-state', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/4/exchange?code=foobar&state=openid-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -232,12 +232,12 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/exchange', 'POST', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -246,12 +246,12 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/exchange', 'PUT', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -260,12 +260,12 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/exchange', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/identity/1/exchange', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -319,6 +319,7 @@ class ExchangeTest extends DbTestCase
         $this->assertEquals(null, $row['password']);
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

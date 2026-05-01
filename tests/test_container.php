@@ -4,7 +4,7 @@ use PSX\Framework\Environment\IPResolver;
 use PSX\Framework\Migration\DependencyFactoryFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $container) {
+return static function (ContainerConfigurator $container): void {
     $services = $container->services();
     $services->defaults()
         ->autowire()

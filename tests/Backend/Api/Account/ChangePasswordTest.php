@@ -31,24 +31,24 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class ChangePasswordTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/account/change_password', 'GET', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/account/change_password', 'POST', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -57,12 +57,12 @@ class ChangePasswordTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/account/change_password', 'PUT', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
-        ), json_encode([
+        ], json_encode([
             'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
             'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL!',
             'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL!',
@@ -87,15 +87,15 @@ JSON;
             ->getSQL();
         $row = $this->connection->fetchAssociative($sql, ['id' => 4]);
 
-        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL!', $row['password']));
+        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL!', (string) $row['password']));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/account/change_password', 'DELETE', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

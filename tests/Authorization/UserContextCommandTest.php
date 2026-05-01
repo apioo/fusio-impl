@@ -37,6 +37,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 class UserContextCommandTest extends DbTestCase
 {
     private Command $command;
+    
     private ContextFactory $contextFactory;
 
     protected function setUp(): void
@@ -48,7 +49,7 @@ class UserContextCommandTest extends DbTestCase
         $this->contextFactory->addContextOptions($this->command);
     }
 
-    public function testCommandContext()
+    public function testCommandContext(): void
     {
         $input = new ArrayInput([], $this->command->getDefinition());
         $userContext = $this->contextFactory->newCommandContext($input);
@@ -60,7 +61,7 @@ class UserContextCommandTest extends DbTestCase
         $this->assertEquals(null, $userContext->getAppId());
     }
 
-    public function testCommandContextWithIds()
+    public function testCommandContextWithIds(): void
     {
         $input = new ArrayInput(['--category' => 1, '--user' => 2, '--app' => 2], $this->command->getDefinition());
         $userContext = $this->contextFactory->newCommandContext($input);
@@ -72,7 +73,7 @@ class UserContextCommandTest extends DbTestCase
         $this->assertEquals(2, $userContext->getAppId());
     }
 
-    public function testCommandContextWithNames()
+    public function testCommandContextWithNames(): void
     {
         $input = new ArrayInput(['--category' => 'default', '--user' => 'Consumer', '--app' => 'Developer'], $this->command->getDefinition());
         $userContext = $this->contextFactory->newCommandContext($input);

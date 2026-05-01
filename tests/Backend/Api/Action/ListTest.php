@@ -31,192 +31,192 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class ListTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/action/list', 'GET', array(
+        $response = $this->sendRequest('/backend/action/list', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "actions": [
+        $expect = <<<'JSON_WRAP'
         {
-            "name": "AMQP-Publish",
-            "class": "Fusio.Adapter.Amqp.Action.AmqpPublish"
-        },
-        {
-            "name": "Agent-Call",
-            "class": "Fusio.Adapter.Ai.Action.AgentCall"
-        },
-        {
-            "name": "Beanstalk-Publish",
-            "class": "Fusio.Adapter.Beanstalk.Action.BeanstalkPublish"
-        },
-        {
-            "name": "CLI-Processor",
-            "class": "Fusio.Adapter.Cli.Action.CliProcessor"
-        },
-        {
-            "name": "FastCGI-Processor",
-            "class": "Fusio.Adapter.Fcgi.Action.FcgiProcessor"
-        },
-        {
-            "name": "File-Directory-Get",
-            "class": "Fusio.Adapter.File.Action.FileDirectoryGet"
-        },
-        {
-            "name": "File-Directory-GetAll",
-            "class": "Fusio.Adapter.File.Action.FileDirectoryGetAll"
-        },
-        {
-            "name": "File-Directory-Upload",
-            "class": "Fusio.Adapter.File.Action.FileDirectoryUpload"
-        },
-        {
-            "name": "File-Processor",
-            "class": "Fusio.Adapter.File.Action.FileProcessor"
-        },
-        {
-            "name": "GraphQL-Processor",
-            "class": "Fusio.Adapter.GraphQL.Action.GraphQLProcessor"
-        },
-        {
-            "name": "GraphQL-Query",
-            "class": "Fusio.Adapter.GraphQL.Action.GraphQLQuery"
-        },
-        {
-            "name": "HTTP-Composition",
-            "class": "Fusio.Adapter.Http.Action.HttpComposition"
-        },
-        {
-            "name": "HTTP-Load-Balancer",
-            "class": "Fusio.Adapter.Http.Action.HttpLoadBalancer"
-        },
-        {
-            "name": "HTTP-Processor",
-            "class": "Fusio.Adapter.Http.Action.HttpProcessor"
-        },
-        {
-            "name": "HTTP-Raw",
-            "class": "Fusio.Adapter.Http.Action.HttpRaw"
-        },
-        {
-            "name": "Inspect-Action",
-            "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
-        },
-        {
-            "name": "MIME-Action",
-            "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
-        },
-        {
-            "name": "PHP-Processor",
-            "class": "Fusio.Adapter.Php.Action.PhpProcessor"
-        },
-        {
-            "name": "PHP-Sandbox",
-            "class": "Fusio.Adapter.Php.Action.PhpSandbox"
-        },
-        {
-            "name": "SMTP-Send",
-            "class": "Fusio.Adapter.Smtp.Action.SmtpSend"
-        },
-        {
-            "name": "SQL-Builder",
-            "class": "Fusio.Adapter.Sql.Action.SqlBuilder"
-        },
-        {
-            "name": "SQL-Delete",
-            "class": "Fusio.Adapter.Sql.Action.SqlDelete"
-        },
-        {
-            "name": "SQL-Insert",
-            "class": "Fusio.Adapter.Sql.Action.SqlInsert"
-        },
-        {
-            "name": "SQL-Query-All",
-            "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryAll"
-        },
-        {
-            "name": "SQL-Query-Row",
-            "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryRow"
-        },
-        {
-            "name": "SQL-Select-All",
-            "class": "Fusio.Adapter.Sql.Action.SqlSelectAll"
-        },
-        {
-            "name": "SQL-Select-Row",
-            "class": "Fusio.Adapter.Sql.Action.SqlSelectRow"
-        },
-        {
-            "name": "SQL-Update",
-            "class": "Fusio.Adapter.Sql.Action.SqlUpdate"
-        },
-        {
-            "name": "Util-A\/B-Test",
-            "class": "Fusio.Adapter.Util.Action.UtilABTest"
-        },
-        {
-            "name": "Util-Cache",
-            "class": "Fusio.Adapter.Util.Action.UtilCache"
-        },
-        {
-            "name": "Util-Chain",
-            "class": "Fusio.Adapter.Util.Action.UtilChain"
-        },
-        {
-            "name": "Util-Condition",
-            "class": "Fusio.Adapter.Util.Action.UtilCondition"
-        },
-        {
-            "name": "Util-Dispatch-Event",
-            "class": "Fusio.Adapter.Util.Action.UtilDispatchEvent"
-        },
-        {
-            "name": "Util-JSON-Patch",
-            "class": "Fusio.Adapter.Util.Action.UtilJsonPatch"
-        },
-        {
-            "name": "Util-Redirect",
-            "class": "Fusio.Adapter.Util.Action.UtilRedirect"
-        },
-        {
-            "name": "Util-Static-Response",
-            "class": "Fusio.Adapter.Util.Action.UtilStaticResponse"
-        },
-        {
-            "name": "Util-Template",
-            "class": "Fusio.Adapter.Util.Action.UtilTemplate"
-        },
-        {
-            "name": "Void-Action",
-            "class": "Fusio.Impl.Tests.Adapter.Test.VoidAction"
-        },
-        {
-            "name": "Worker-Java",
-            "class": "Fusio.Adapter.Worker.Action.WorkerJava"
-        },
-        {
-            "name": "Worker-Javascript",
-            "class": "Fusio.Adapter.Worker.Action.WorkerJavascript"
-        },
-        {
-            "name": "Worker-PHP",
-            "class": "Fusio.Adapter.Worker.Action.WorkerPHP"
-        },
-        {
-            "name": "Worker-PHP-Local",
-            "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal"
-        },
-        {
-            "name": "Worker-Python",
-            "class": "Fusio.Adapter.Worker.Action.WorkerPython"
+            "actions": [
+                {
+                    "name": "AMQP-Publish",
+                    "class": "Fusio.Adapter.Amqp.Action.AmqpPublish"
+                },
+                {
+                    "name": "Agent-Call",
+                    "class": "Fusio.Adapter.Ai.Action.AgentCall"
+                },
+                {
+                    "name": "Beanstalk-Publish",
+                    "class": "Fusio.Adapter.Beanstalk.Action.BeanstalkPublish"
+                },
+                {
+                    "name": "CLI-Processor",
+                    "class": "Fusio.Adapter.Cli.Action.CliProcessor"
+                },
+                {
+                    "name": "FastCGI-Processor",
+                    "class": "Fusio.Adapter.Fcgi.Action.FcgiProcessor"
+                },
+                {
+                    "name": "File-Directory-Get",
+                    "class": "Fusio.Adapter.File.Action.FileDirectoryGet"
+                },
+                {
+                    "name": "File-Directory-GetAll",
+                    "class": "Fusio.Adapter.File.Action.FileDirectoryGetAll"
+                },
+                {
+                    "name": "File-Directory-Upload",
+                    "class": "Fusio.Adapter.File.Action.FileDirectoryUpload"
+                },
+                {
+                    "name": "File-Processor",
+                    "class": "Fusio.Adapter.File.Action.FileProcessor"
+                },
+                {
+                    "name": "GraphQL-Processor",
+                    "class": "Fusio.Adapter.GraphQL.Action.GraphQLProcessor"
+                },
+                {
+                    "name": "GraphQL-Query",
+                    "class": "Fusio.Adapter.GraphQL.Action.GraphQLQuery"
+                },
+                {
+                    "name": "HTTP-Composition",
+                    "class": "Fusio.Adapter.Http.Action.HttpComposition"
+                },
+                {
+                    "name": "HTTP-Load-Balancer",
+                    "class": "Fusio.Adapter.Http.Action.HttpLoadBalancer"
+                },
+                {
+                    "name": "HTTP-Processor",
+                    "class": "Fusio.Adapter.Http.Action.HttpProcessor"
+                },
+                {
+                    "name": "HTTP-Raw",
+                    "class": "Fusio.Adapter.Http.Action.HttpRaw"
+                },
+                {
+                    "name": "Inspect-Action",
+                    "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
+                },
+                {
+                    "name": "MIME-Action",
+                    "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
+                },
+                {
+                    "name": "PHP-Processor",
+                    "class": "Fusio.Adapter.Php.Action.PhpProcessor"
+                },
+                {
+                    "name": "PHP-Sandbox",
+                    "class": "Fusio.Adapter.Php.Action.PhpSandbox"
+                },
+                {
+                    "name": "SMTP-Send",
+                    "class": "Fusio.Adapter.Smtp.Action.SmtpSend"
+                },
+                {
+                    "name": "SQL-Builder",
+                    "class": "Fusio.Adapter.Sql.Action.SqlBuilder"
+                },
+                {
+                    "name": "SQL-Delete",
+                    "class": "Fusio.Adapter.Sql.Action.SqlDelete"
+                },
+                {
+                    "name": "SQL-Insert",
+                    "class": "Fusio.Adapter.Sql.Action.SqlInsert"
+                },
+                {
+                    "name": "SQL-Query-All",
+                    "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryAll"
+                },
+                {
+                    "name": "SQL-Query-Row",
+                    "class": "Fusio.Adapter.Sql.Action.Query.SqlQueryRow"
+                },
+                {
+                    "name": "SQL-Select-All",
+                    "class": "Fusio.Adapter.Sql.Action.SqlSelectAll"
+                },
+                {
+                    "name": "SQL-Select-Row",
+                    "class": "Fusio.Adapter.Sql.Action.SqlSelectRow"
+                },
+                {
+                    "name": "SQL-Update",
+                    "class": "Fusio.Adapter.Sql.Action.SqlUpdate"
+                },
+                {
+                    "name": "Util-A\/B-Test",
+                    "class": "Fusio.Adapter.Util.Action.UtilABTest"
+                },
+                {
+                    "name": "Util-Cache",
+                    "class": "Fusio.Adapter.Util.Action.UtilCache"
+                },
+                {
+                    "name": "Util-Chain",
+                    "class": "Fusio.Adapter.Util.Action.UtilChain"
+                },
+                {
+                    "name": "Util-Condition",
+                    "class": "Fusio.Adapter.Util.Action.UtilCondition"
+                },
+                {
+                    "name": "Util-Dispatch-Event",
+                    "class": "Fusio.Adapter.Util.Action.UtilDispatchEvent"
+                },
+                {
+                    "name": "Util-JSON-Patch",
+                    "class": "Fusio.Adapter.Util.Action.UtilJsonPatch"
+                },
+                {
+                    "name": "Util-Redirect",
+                    "class": "Fusio.Adapter.Util.Action.UtilRedirect"
+                },
+                {
+                    "name": "Util-Static-Response",
+                    "class": "Fusio.Adapter.Util.Action.UtilStaticResponse"
+                },
+                {
+                    "name": "Util-Template",
+                    "class": "Fusio.Adapter.Util.Action.UtilTemplate"
+                },
+                {
+                    "name": "Void-Action",
+                    "class": "Fusio.Impl.Tests.Adapter.Test.VoidAction"
+                },
+                {
+                    "name": "Worker-Java",
+                    "class": "Fusio.Adapter.Worker.Action.WorkerJava"
+                },
+                {
+                    "name": "Worker-Javascript",
+                    "class": "Fusio.Adapter.Worker.Action.WorkerJavascript"
+                },
+                {
+                    "name": "Worker-PHP",
+                    "class": "Fusio.Adapter.Worker.Action.WorkerPHP"
+                },
+                {
+                    "name": "Worker-PHP-Local",
+                    "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal"
+                },
+                {
+                    "name": "Worker-Python",
+                    "class": "Fusio.Adapter.Worker.Action.WorkerPython"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON_WRAP;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

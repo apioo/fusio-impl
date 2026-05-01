@@ -32,12 +32,12 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/hello-world', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/hello-world', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body, true);
@@ -48,12 +48,12 @@ class EntityTest extends DbTestCase
         $this->assertEquals('This bundle contains actions and schemas to return a hello world response', $data['summary']);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/foobar', 'GET', array(
+        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/foobar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -63,16 +63,16 @@ class EntityTest extends DbTestCase
         $this->assertStringStartsWith('Could not find bundle', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'POST', array(
+        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -81,7 +81,7 @@ class EntityTest extends DbTestCase
         $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
@@ -89,10 +89,10 @@ class EntityTest extends DbTestCase
 
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'PUT', array(
+        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -107,16 +107,16 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         if (!Environment::getConfig('fusio_marketplace')) {
             $this->markTestSkipped('Marketplace not enabled');
         }
 
-        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'DELETE', array(
+        $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

@@ -37,7 +37,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class LogRotateCommandTest extends DbTestCase
 {
-    public function testCommandLogRotate()
+    public function testCommandLogRotate(): void
     {
         /** @var LogRotateCommand $command */
         $command = Environment::getService(Application::class)->find('system:log_rotate');
@@ -62,8 +62,8 @@ class LogRotateCommandTest extends DbTestCase
 
     private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created archive table fusio_audit_[0-9]{8}/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_audit_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_audit_\d{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_audit_\d{8} table/', $display, $display);
         $this->assertMatchesRegularExpression('/Truncated fusio_audit table/', $display, $display);
 
         preg_match('/fusio_audit_(\d+)/', $display, $matches);
@@ -79,8 +79,8 @@ class LogRotateCommandTest extends DbTestCase
     
     private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created archive table fusio_log_[0-9]{8}/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 2 entries to fusio_log_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_log_\d{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 2 entries to fusio_log_\d{8} table/', $display, $display);
         $this->assertMatchesRegularExpression('/Truncated fusio_log table/', $display, $display);
 
         preg_match('/fusio_log_(\d+)/', $display, $matches);
@@ -99,8 +99,8 @@ class LogRotateCommandTest extends DbTestCase
 
     private function assertLogErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created archive table fusio_log_error_[0-9]{8}/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_log_error_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_log_error_\d{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_log_error_\d{8} table/', $display, $display);
         $this->assertMatchesRegularExpression('/Truncated fusio_log_error table/', $display, $display);
 
         preg_match('/fusio_log_error_(\d+)/', $display, $matches);
@@ -119,8 +119,8 @@ class LogRotateCommandTest extends DbTestCase
 
     private function assertCronjobErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
-        $this->assertMatchesRegularExpression('/Created archive table fusio_cronjob_error_[0-9]{8}/', $display, $display);
-        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_cronjob_error_[0-9]{8} table/', $display, $display);
+        $this->assertMatchesRegularExpression('/Created archive table fusio_cronjob_error_\d{8}/', $display, $display);
+        $this->assertMatchesRegularExpression('/Copied 1 entries to fusio_cronjob_error_\d{8} table/', $display, $display);
         $this->assertMatchesRegularExpression('/Truncated fusio_cronjob_error table/', $display, $display);
 
         preg_match('/fusio_cronjob_error_(\d+)/', $display, $matches);
@@ -137,6 +137,7 @@ class LogRotateCommandTest extends DbTestCase
         $schemaManager->dropTable($tableName);
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

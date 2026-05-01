@@ -35,7 +35,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class CleanCommandTest extends DbTestCase
 {
-    public function testCommandLogRotate()
+    public function testCommandLogRotate(): void
     {
         /** @var CleanCommand $command */
         $command = Environment::getService(Application::class)->find('system:clean');

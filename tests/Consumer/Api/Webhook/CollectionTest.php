@@ -41,12 +41,12 @@ class CollectionTest extends DbTestCase
         $this->eventFooId = Fixture::getReference('fusio_event', 'foo-event')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'GET', array(
+        $response = $this->sendRequest('/consumer/webhook', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -71,12 +71,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/consumer/webhook?search=on', 'GET', array(
+        $response = $this->sendRequest('/consumer/webhook?search=on', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -101,12 +101,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
+        $response = $this->sendRequest('/consumer/webhook', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'event' => 'foo-event',
             'name' => 'test',
             'endpoint' => 'http://127.0.0.1/new-callback.php',
@@ -138,12 +138,12 @@ JSON;
         $this->assertEquals('http://127.0.0.1/new-callback.php', $row['endpoint']);
     }
 
-    public function testPostEmptyEndpoint()
+    public function testPostEmptyEndpoint(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
+        $response = $this->sendRequest('/consumer/webhook', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'event' => 'foo-event',
             'endpoint' => '',
         ]));
@@ -154,12 +154,12 @@ JSON;
         $this->assertStringContainsString('Webhook endpoint must contain a value', $body, $body);
     }
 
-    public function testPostInvalidEndpoint()
+    public function testPostInvalidEndpoint(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'POST', array(
+        $response = $this->sendRequest('/consumer/webhook', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'event' => 'foo-event',
             'endpoint' => 'foobar',
         ]));
@@ -170,12 +170,12 @@ JSON;
         $this->assertStringContainsString('Webhook endpoint must be a valid url', $body, $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'PUT', array(
+        $response = $this->sendRequest('/consumer/webhook', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -184,12 +184,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/webhook', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/webhook', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

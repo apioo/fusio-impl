@@ -107,6 +107,7 @@ class TestProvider implements ProviderInterface
         $operation->setIncoming('Schema_Request');
         $operation->setOutgoing('Schema_Response');
         $operation->setAction('Action_Select');
+        
         $setup->addOperation($operation);
 
         $operation = new OperationCreate();
@@ -118,6 +119,7 @@ class TestProvider implements ProviderInterface
         $operation->setIncoming('Schema_Request');
         $operation->setOutgoing('Schema_Response');
         $operation->setAction('Action_Insert');
+        
         $setup->addOperation($operation);
     }
 

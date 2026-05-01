@@ -32,27 +32,27 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenGeneratorTest extends TestCase
 {
-    public function testGenerateRefreshToken()
+    public function testGenerateRefreshToken(): void
     {
         $this->assertEquals(80, strlen(TokenGenerator::generateRefreshToken()));
     }
 
-    public function testGenerateCode()
+    public function testGenerateCode(): void
     {
         $this->assertEquals(16, strlen(TokenGenerator::generateCode()));
     }
 
-    public function testGenerateAppKey()
+    public function testGenerateAppKey(): void
     {
         $this->assertEquals(36, strlen(TokenGenerator::generateAppKey()));
     }
 
-    public function testGenerateAppSecret()
+    public function testGenerateAppSecret(): void
     {
         $this->assertEquals(64, strlen(TokenGenerator::generateAppSecret()));
     }
 
-    public function testGenerateUserPassword()
+    public function testGenerateUserPassword(): void
     {
         $this->assertEquals(20, strlen(TokenGenerator::generateUserPassword()));
     }

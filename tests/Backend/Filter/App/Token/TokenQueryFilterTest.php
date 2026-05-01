@@ -36,7 +36,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class TokenQueryFilterTest extends FilterTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $filter = TokenQueryFilter::from($this->createRequest([
             'from'      => '2015-08-20',
@@ -71,7 +71,7 @@ class TokenQueryFilterTest extends FilterTestCase
         ], $condition->getValues());
     }
 
-    public function testCreateFromLargerToFlip()
+    public function testCreateFromLargerToFlip(): void
     {
         $filter = TokenQueryFilter::from($this->createRequest([
             'from' => '2015-08-30',
@@ -82,7 +82,7 @@ class TokenQueryFilterTest extends FilterTestCase
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
     }
 
-    public function testCreateFromToExceeded()
+    public function testCreateFromToExceeded(): void
     {
         $filter = TokenQueryFilter::from($this->createRequest([
             'from' => '2014-08-20',

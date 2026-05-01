@@ -32,7 +32,7 @@ use PSX\Json\Parser;
  */
 class FirewallTest extends DbTestCase
 {
-    public function testIPBan()
+    public function testIPBan(): void
     {
         // we send so many requests until we hit the rate limit and get an IP ban
         for ($i = 0; $i < 43; $i++) {
@@ -46,20 +46,20 @@ class FirewallTest extends DbTestCase
 
         $this->assertEquals(403, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success, $body);
-        $this->assertEquals('Your IP has sent to many requests please try again later', substr($data->message, 0, 56), $body);
+        $this->assertEquals('Your IP has sent to many requests please try again later', substr((string) $data->message, 0, 56), $body);
 
         $now = new \DateTime();
         $now->add(new \DateInterval('PT5M'));
 
         $row = $this->connection->fetchAssociative('SELECT name, type, ip, expire FROM fusio_firewall WHERE name LIKE :name', ['name' => 'Ban%']);
         $this->assertNotEmpty($row);
-        $this->assertEquals('Ban-127-0-0-1', substr($row['name'], 0, 13));
+        $this->assertEquals('Ban-127-0-0-1', substr((string) $row['name'], 0, 13));
         $this->assertEquals(0, $row['type']);
         $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertEquals($now->format('Y-m-d H:i'), substr($row['expire'], 0, 16));
+        $this->assertEquals($now->format('Y-m-d H:i'), substr((string) $row['expire'], 0, 16));
     }
 
-    public function testIPBanAuthorization()
+    public function testIPBanAuthorization(): void
     {
         // we send so many requests until we hit the rate limit and get an IP ban
         for ($i = 0; $i < 35; $i++) {
@@ -82,9 +82,9 @@ class FirewallTest extends DbTestCase
 
         $row = $this->connection->fetchAssociative('SELECT name, type, ip, expire FROM fusio_firewall WHERE name LIKE :name', ['name' => 'Ban%']);
         $this->assertNotEmpty($row);
-        $this->assertEquals('Ban-127-0-0-1', substr($row['name'], 0, 13));
+        $this->assertEquals('Ban-127-0-0-1', substr((string) $row['name'], 0, 13));
         $this->assertEquals(0, $row['type']);
         $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertEquals($now->format('Y-m-d H:i'), substr($row['expire'], 0, 16));
+        $this->assertEquals($now->format('Y-m-d H:i'), substr((string) $row['expire'], 0, 16));
     }
 }

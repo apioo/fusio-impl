@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests;
 
 use Fusio\Engine\Connector;
+use Override;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -40,6 +41,7 @@ class DbTestCase extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    #[Override]
     protected function setUp(): void
     {
         if (!self::$initialized || !$this->isTransactional()) {

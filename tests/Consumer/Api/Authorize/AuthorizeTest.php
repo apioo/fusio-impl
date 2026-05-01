@@ -33,6 +33,7 @@ use Fusio\Impl\Tests\Fixture;
 class AuthorizeTest extends DbTestCase
 {
     private ?int $scopeFooId = null;
+    
     private ?int $scopeBarId = null;
 
     protected function setUp(): void
@@ -43,12 +44,12 @@ class AuthorizeTest extends DbTestCase
         $this->scopeBarId = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/authorize?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', array(
+        $response = $this->sendRequest('/consumer/authorize?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -76,12 +77,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -95,12 +96,12 @@ JSON;
         $this->assertEquals('Invalid response type', $data['error'], $body);
     }
 
-    public function testPostCode()
+    public function testPostCode(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -118,7 +119,7 @@ JSON;
         $this->assertArrayHasKey('redirectUri', $data, $body);
         $this->assertEquals('code', $data['type'], $body);
         $this->assertNotEmpty($data['code'], $body);
-        $this->assertEquals('http://google.com?code=' . urlencode($data['code']) . '&state=state', $data['redirectUri'], $body);
+        $this->assertEquals('http://google.com?code=' . urlencode((string) $data['code']) . '&state=state', $data['redirectUri'], $body);
 
         // check database
         $sql = $this->connection->createQueryBuilder()
@@ -139,12 +140,12 @@ JSON;
         $this->assertEquals('authorization,foo,bar', $row['scope']);
     }
 
-    public function testPostCodeWithoutRedirectUri()
+    public function testPostCodeWithoutRedirectUri(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'scope' => 'bar,backend,authorization,foo',
@@ -180,12 +181,12 @@ JSON;
         $this->assertEquals('authorization,foo,bar', $row['scope']);
     }
 
-    public function testPostCodeDisallow()
+    public function testPostCodeDisallow(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -208,12 +209,12 @@ JSON;
         $this->assertEquals('http://google.com?error=access_denied&error_description=The+access+was+denied+by+the+user&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPostToken()
+    public function testPostToken(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -236,12 +237,12 @@ JSON;
         $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPostTokenWithoutRedirectUri()
+    public function testPostTokenWithoutRedirectUri(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'scope' => 'bar,backend,authorization,foo',
@@ -261,12 +262,12 @@ JSON;
         $this->assertEquals('state', $data['state'], $body);
     }
 
-    public function testPostTokenDisallow()
+    public function testPostTokenDisallow(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -288,12 +289,12 @@ JSON;
         $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPostInvalidResponseType()
+    public function testPostInvalidResponseType(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'foo',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -315,12 +316,12 @@ JSON;
         $this->assertEquals('http://google.com?error=unsupported_response_type&error_description=Invalid+response+type&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPostInvalidClient()
+    public function testPostInvalidClient(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => 'a347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://google.com',
@@ -342,12 +343,12 @@ JSON;
         $this->assertEquals('http://google.com?error=invalid_request&error_description=Provided+an+invalid+client+id&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPostInvalidRedirectUri()
+    public function testPostInvalidRedirectUri(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'foo',
@@ -368,12 +369,12 @@ JSON;
         $this->assertEquals('state', $data['state'], $body);
     }
 
-    public function testPostInvalidScheme()
+    public function testPostInvalidScheme(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'foo://google.com',
@@ -394,12 +395,12 @@ JSON;
         $this->assertEquals('state', $data['state'], $body);
     }
 
-    public function testPostInvalidHost()
+    public function testPostInvalidHost(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
             'redirectUri' => 'http://yahoo.com',
@@ -421,12 +422,12 @@ JSON;
         $this->assertEquals('http://yahoo.com?error=invalid_request&error_description=Redirect+uri+must+have+the+same+host+as+the+app+url&state=state', $data['redirectUri'], $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'PUT', array(
+        $response = $this->sendRequest('/consumer/authorize', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -435,12 +436,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/authorize', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/authorize', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

@@ -38,20 +38,19 @@ use ReflectionClass;
 class ValidatorTest extends TestCase
 {
     #[DataProvider('pathProvider')]
-    public function testAssertCron(string $cron, bool $expect, ?string $errorMessage)
+    public function testAssertCron(string $cron, bool $expect, ?string $errorMessage): void
     {
         try {
             $validator = Environment::getService(Validator::class);
             $reflection = new ReflectionClass($validator);
 
             $method = $reflection->getMethod('assertCron');
-            $method->setAccessible(true);
             $method->invoke($validator, $cron);
 
             $this->assertTrue($expect);
-        } catch (BadRequestException $e) {
+        } catch (BadRequestException $badRequestException) {
             $this->assertFalse($expect);
-            $this->assertEquals($errorMessage, $e->getMessage());
+            $this->assertEquals($errorMessage, $badRequestException->getMessage());
         }
     }
 

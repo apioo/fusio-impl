@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\Fixture;
  */
 class EntityTest extends DbTestCase
 {
-    private $id;
+    private int $id;
 
     protected function setUp(): void
     {
@@ -41,12 +41,12 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_taxonomy', 'feature_a_a')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -62,12 +62,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/taxonomy/10', 'GET', array(
+        $response = $this->sendRequest('/backend/taxonomy/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -77,7 +77,7 @@ JSON;
         $this->assertStringStartsWith('Could not find taxonomy', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $payload = [
             'operations' => [275],
@@ -87,10 +87,10 @@ JSON;
             'triggers' => [1],
         ];
 
-        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode($payload));
+        ], json_encode($payload));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -118,12 +118,12 @@ JSON;
         }
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name' => 'foo',
         ]));
 
@@ -152,12 +152,12 @@ JSON;
         $this->assertEquals('foo', $row['name']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/taxonomy/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

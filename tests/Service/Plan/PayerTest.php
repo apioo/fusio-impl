@@ -40,7 +40,7 @@ use PHPUnit\Framework\TestCase;
 class PayerTest extends TestCase
 {
     #[DataProvider('pointsProvider')]
-    public function testPay(?int $threshold, int $points, int $cost, bool $sendMail)
+    public function testPay(?int $threshold, int $points, int $cost, bool $sendMail): void
     {
         $userTable = $this->getMockBuilder(Table\User::class)
             ->disableOriginalConstructor()
@@ -56,7 +56,7 @@ class PayerTest extends TestCase
 
         $usageTable->expects($this->once())
             ->method('create')
-            ->with($this->callback(function($row) use ($cost) {
+            ->with($this->callback(function($row) use ($cost): true {
                 /** @var Table\Generated\PlanUsageRow $row */
                 $this->assertInstanceOf(Table\Generated\PlanUsageRow::class, $row);
                 $this->assertEquals(1, $row->getOperationId());

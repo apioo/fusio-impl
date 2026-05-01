@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class ExportTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/backup/export', 'GET', array(
+        $response = $this->sendRequest('/backend/backup/export', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -46,18 +46,18 @@ class ExportTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/backup/export', 'POST', array(
+        $response = $this->sendRequest('/backend/backup/export', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
         ]));
 
         $body = (string) $response->getBody();
         $data = \json_decode(Normalizer::normalize($body));
 
-        $actual = \json_decode($data->export);
+        $actual = \json_decode((string) $data->export);
         unset($actual->version);
         $actual = \json_encode($actual);
         $expect = file_get_contents(__DIR__ . '/resource/export.json');
@@ -66,12 +66,12 @@ class ExportTest extends DbTestCase
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/backup/export', 'PUT', array(
+        $response = $this->sendRequest('/backend/backup/export', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -80,12 +80,12 @@ class ExportTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/backup/export', 'DELETE', array(
+        $response = $this->sendRequest('/backend/backup/export', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

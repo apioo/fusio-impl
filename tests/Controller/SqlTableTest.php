@@ -43,7 +43,7 @@ class SqlTableTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -84,7 +84,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetChangeStatus()
+    public function testGetChangeStatus(): void
     {
         $stabilities = [
             OperationInterface::STABILITY_DEPRECATED,
@@ -168,7 +168,7 @@ JSON;
         }
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $body = <<<'JSON'
 {
@@ -203,7 +203,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPostCommitFix()
+    public function testPostCommitFix(): void
     {
         $body = <<<'JSON'
 {
@@ -236,7 +236,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testRateLimit()
+    public function testRateLimit(): void
     {
         for ($i = 0; $i < 10; $i++) {
             $response = $this->sendRequest('/foo', 'GET', [
@@ -266,12 +266,12 @@ JSON;
                 $this->assertEquals('experimental', $response->getHeader('X-Stability'), $body);
                 $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
                 $this->assertEquals(false, $data->success, $body);
-                $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
+                $this->assertEquals('Rate limit exceeded', substr((string) $data->message, 0, 19), $body);
             }
         }
     }
 
-    public function testRateLimitAuthenticated()
+    public function testRateLimitAuthenticated(): void
     {
         for ($i = 0; $i < 18; $i++) {
             $response = $this->sendRequest('/foo', 'GET', [
@@ -301,12 +301,12 @@ JSON;
                 $this->assertEquals('experimental', $response->getHeader('X-Stability'), $body);
                 $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
                 $this->assertEquals(false, $data->success, $body);
-                $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
+                $this->assertEquals('Rate limit exceeded', substr((string) $data->message, 0, 19), $body);
             }
         }
     }
 
-    public function testCosts()
+    public function testCosts(): void
     {
         // check user points
         $points = $this->connection->fetchOne('SELECT points FROM fusio_user WHERE id = 4');
@@ -349,7 +349,7 @@ JSON;
                 $this->assertEquals('stable', $response->getHeader('X-Stability'), $body);
                 $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
                 $this->assertEquals(false, $data->success, $body);
-                $this->assertEquals('Your account has not enough points to call this action. Please purchase new points in order to execute this action', substr($data->message, 0, 114), $body);
+                $this->assertEquals('Your account has not enough points to call this action. Please purchase new points in order to execute this action', substr((string) $data->message, 0, 114), $body);
 
                 // check user points
                 $points = $this->connection->fetchOne('SELECT points FROM fusio_user WHERE id = 4');
@@ -358,7 +358,7 @@ JSON;
         }
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $body = <<<'JSON'
 {
@@ -382,7 +382,7 @@ JSON;
         $this->assertStringStartsWith('Unknown location', $data->message, $body);
     }
 
-    public function testHead()
+    public function testHead(): void
     {
         $response = $this->sendRequest('/foo', 'HEAD', [
             'User-Agent' => 'Fusio TestCase',
@@ -403,7 +403,7 @@ JSON;
         $this->assertEmpty($body);
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $response = $this->sendRequest('/foo', 'OPTIONS', [
             'User-Agent' => 'Fusio TestCase',
@@ -417,7 +417,7 @@ JSON;
         $this->assertEmpty($body);
     }
 
-    public function testCorsSimpleRequest()
+    public function testCorsSimpleRequest(): void
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -437,7 +437,7 @@ JSON;
         $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
     }
 
-    public function testCorsPreflightedRequest()
+    public function testCorsPreflightedRequest(): void
     {
         $response = $this->sendRequest('/foo', 'OPTIONS', [
             'User-Agent' => 'Fusio TestCase',
@@ -458,6 +458,7 @@ JSON;
         $this->assertEmpty($body);
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

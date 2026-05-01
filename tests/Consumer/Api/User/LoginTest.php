@@ -33,22 +33,22 @@ use PSX\Framework\Test\Environment;
  */
 class LoginTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'GET', array(
+        $response = $this->sendRequest('/consumer/login', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'username' => 'Consumer',
             'password' => 'qf2vX10Ec3wFZHx0K1eL',
         ]));
@@ -85,11 +85,11 @@ class LoginTest extends DbTestCase
         $this->assertNotEmpty($row['expire']);
     }
 
-    public function testPostWithScopes()
+    public function testPostWithScopes(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'username' => 'Consumer',
             'password' => 'qf2vX10Ec3wFZHx0K1eL',
             'scopes'   => ['foo', 'bar', 'baz', 'backend']
@@ -127,11 +127,11 @@ class LoginTest extends DbTestCase
         $this->assertNotEmpty($row['expire']);
     }
 
-    public function testPostInvalidCredentials()
+    public function testPostInvalidCredentials(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'username' => 'Consumer',
             'password' => 'foo',
         ]));
@@ -140,14 +140,14 @@ class LoginTest extends DbTestCase
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid name or password', substr($data['message'], 0, 24), $body);
+        $this->assertEquals('Invalid name or password', substr((string) $data['message'], 0, 24), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'PUT', array(
+        $response = $this->sendRequest('/consumer/login', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'refresh_token' => 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2',
         ]));
 
@@ -183,11 +183,11 @@ class LoginTest extends DbTestCase
         $this->assertNotEmpty($row['expire']);
     }
 
-    public function testPutInvalidRefreshToken()
+    public function testPutInvalidRefreshToken(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'PUT', array(
+        $response = $this->sendRequest('/consumer/login', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'refresh_token' => 'foobar',
         ]));
 
@@ -195,14 +195,14 @@ class LoginTest extends DbTestCase
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid refresh token', substr($data['message'], 0, 21), $body);
+        $this->assertEquals('Invalid refresh token', substr((string) $data['message'], 0, 21), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/login', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/login', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

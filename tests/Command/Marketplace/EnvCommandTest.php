@@ -37,7 +37,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class EnvCommandTest extends DbTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         if (!is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is not installed');

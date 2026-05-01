@@ -39,7 +39,7 @@ class DataSyncronizerTest extends DbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testSync()
+    public function testSync(): void
     {
         $config = $this->getConfig('info_title');
         $operation = $this->getOperation('backend.action.execute');

@@ -49,6 +49,7 @@ class SqlDatabaseTest extends ProviderTestCase
         return file_get_contents(__DIR__ . '/resource/changelog_sqldatabase.json');
     }
 
+    #[\Override]
     protected function getExpectSchema(): string
     {
         $data = $this->getExpectChangelog();

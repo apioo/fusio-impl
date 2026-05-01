@@ -32,14 +32,14 @@ use PHPUnit\Framework\TestCase;
  */
 class BaseTest extends TestCase
 {
-    public function testGetVersion()
+    public function testGetVersion(): void
     {
         $version = Base::getVersion();
 
         $this->assertNotEmpty($version);
     }
 
-    public function testGetUserAgent()
+    public function testGetUserAgent(): void
     {
         $userAgent = Base::getUserAgent();
 

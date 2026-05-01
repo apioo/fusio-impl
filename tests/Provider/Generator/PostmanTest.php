@@ -34,12 +34,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class PostmanTest extends DbTestCase
 {
-    public function testSetup()
+    public function testSetup(): void
     {
         $import = file_get_contents(__DIR__ . '/resource/postman.json');
         $setup = new Setup();
 
-        (new Postman())->setup($setup, new Parameters(['import' => $import]));
+        new Postman()->setup($setup, new Parameters(['import' => $import]));
 
         $schemas = $setup->getSchemas();
         $actions = $setup->getActions();
