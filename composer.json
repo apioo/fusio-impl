@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.4",
     "psx/framework": "^8.0",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^1.0",
@@ -48,7 +48,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^12.0",
-    "phpstan/phpstan": "^2.1"
+    "phpstan/phpstan": "^2.1",
+    "rector/rector": "^2.4"
   },
   "autoload": {
     "psr-4": {
