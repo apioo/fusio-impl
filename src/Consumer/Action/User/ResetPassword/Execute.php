@@ -35,15 +35,10 @@ use Fusio\Model\Consumer\UserPasswordReset;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Execute implements ActionInterface
+readonly class Execute implements ActionInterface
 {
-    private UserResetPassword $resetService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(UserResetPassword $resetService, ContextFactory $contextFactory)
+    public function __construct(private UserResetPassword $resetService, private ContextFactory $contextFactory)
     {
-        $this->resetService = $resetService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

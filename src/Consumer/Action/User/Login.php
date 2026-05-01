@@ -37,15 +37,10 @@ use PSX\OAuth2\AccessToken;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Login implements ActionInterface
+readonly class Login implements ActionInterface
 {
-    private UserLogin $loginService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(UserLogin $loginService, ContextFactory $contextFactory)
+    public function __construct(private UserLogin $loginService, private ContextFactory $contextFactory)
     {
-        $this->loginService = $loginService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

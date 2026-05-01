@@ -35,15 +35,10 @@ use Fusio\Model\Consumer\WebhookUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Webhook $webhookService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Webhook $webhookService, ContextFactory $contextFactory)
+    public function __construct(private Webhook $webhookService, private ContextFactory $contextFactory)
     {
-        $this->webhookService = $webhookService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

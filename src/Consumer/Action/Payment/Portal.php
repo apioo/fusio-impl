@@ -35,15 +35,10 @@ use Fusio\Model\Consumer\PaymentPortalRequest;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Portal implements ActionInterface
+readonly class Portal implements ActionInterface
 {
-    private Payment $transactionService;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(Payment $transactionService, FrameworkConfig $frameworkConfig)
+    public function __construct(private Payment $transactionService, private FrameworkConfig $frameworkConfig)
     {
-        $this->transactionService = $transactionService;
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
