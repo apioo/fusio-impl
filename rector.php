@@ -3,6 +3,7 @@
 use Rector\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+use Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\Set\ValueObject\SetList;
@@ -30,4 +31,5 @@ return RectorConfig::configure()
         RepeatedOrEqualToInArrayRector::class,
         DisallowedEmptyRuleFixerRector::class,
         CatchExceptionNameMatchingTypeRector::class,
+        SimplifyQuoteEscapeRector::class,
     ]);
