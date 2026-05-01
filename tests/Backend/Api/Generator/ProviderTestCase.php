@@ -111,7 +111,10 @@ JSON;
     }
 
     abstract protected function getProviderClass(): string;
-    
+
+    /**
+     * @return array<string, mixed>
+     */
     abstract protected function getProviderConfig(): array;
     
     abstract protected function getExpectChangelog(): string;

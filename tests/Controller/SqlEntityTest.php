@@ -100,6 +100,11 @@ JSON;
         return $data->id;
     }
 
+    /**
+     * @param list<string> $tags
+     * @param list<int> $categoryIds
+     * @param list<int> $mapIds
+     */
     private function createHuman(string $firstName, string $lastName, int $locationId, array $tags, array $categoryIds, array $mapIds): int
     {
         $response = $this->sendRequest('/provider/human', 'POST', [

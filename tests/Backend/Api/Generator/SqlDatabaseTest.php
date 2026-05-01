@@ -36,6 +36,9 @@ class SqlDatabaseTest extends ProviderTestCase
         return SqlDatabase::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getProviderConfig(): array
     {
         return [

@@ -91,6 +91,9 @@ class PayerTest extends TestCase
         $payer->pay($cost, $context);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function pointsProvider(): array
     {
         return [

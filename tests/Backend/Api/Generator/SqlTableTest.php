@@ -36,6 +36,9 @@ class SqlTableTest extends ProviderTestCase
         return SqlTable::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getProviderConfig(): array
     {
         return [

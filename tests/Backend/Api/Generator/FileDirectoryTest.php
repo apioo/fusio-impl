@@ -36,6 +36,9 @@ class FileDirectoryTest extends ProviderTestCase
         return FileDirectory::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getProviderConfig(): array
     {
         return [

@@ -48,6 +48,9 @@ class TypeAPITest extends DbTestCase
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function providerFilter(): array
     {
         return [

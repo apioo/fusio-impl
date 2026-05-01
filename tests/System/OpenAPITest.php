@@ -46,6 +46,9 @@ class OpenAPITest extends DbTestCase
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public function providerFilter(): array
     {
         return [

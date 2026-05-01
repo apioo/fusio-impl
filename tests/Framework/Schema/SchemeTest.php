@@ -43,6 +43,9 @@ class SchemeTest extends TestCase
         $this->assertEquals($expectHash, $actualHash);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function schemeProvider(): array
     {
         return [

@@ -40,6 +40,9 @@ use Symfony\Component\Mailer\MailerInterface;
  */
 class MailerTest extends ControllerDbTestCase
 {
+    /**
+     * @return array<string, list<mixed>>
+     */
     public function getDataSet(): array
     {
         return Fixture::getDataSet();

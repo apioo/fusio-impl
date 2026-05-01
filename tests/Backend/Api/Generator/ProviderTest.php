@@ -36,6 +36,9 @@ class ProviderTest extends ProviderTestCase
         return TestProvider::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getProviderConfig(): array
     {
         return [

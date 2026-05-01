@@ -54,6 +54,9 @@ class ValidatorTest extends TestCase
         }
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function pathProvider(): array
     {
         return [

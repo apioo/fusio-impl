@@ -37,6 +37,9 @@ use PSX\Uri\Uri;
  */
 class FilterTestCase extends TestCase
 {
+    /**
+     * @param array<string, string> $parameters
+     */
     protected function createRequest(array $parameters): RequestInterface
     {
         $uri = Uri::parse('/');

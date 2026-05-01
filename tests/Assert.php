@@ -33,6 +33,9 @@ use Fusio\Impl\Service;
  */
 class Assert extends \PHPUnit\Framework\Assert
 {
+    /**
+     * @param array<string, string>|null $expectMetadata
+     */
     public static function assertAction(Connection $connection, string $expectName, string $expectClass, string $expectConfig, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()
@@ -76,6 +79,9 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertJsonStringEqualsJsonString($expectConfig, $config, $config);
     }
 
+    /**
+     * @param array<string, string>|null $expectMetadata
+     */
     public static function assertSchema(Connection $connection, string $expectName, string $expectSchema, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()
@@ -114,6 +120,10 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertJsonStringEqualsJsonString($expectSchema, $row['source'], $row['source']);
     }
 
+    /**
+     * @param list<string> $expectScopes
+     * @param array<string, string>|null $expectMetadata
+     */
     public static function assertOperation(Connection $connection, int $expectStability, string $expectName, string $expectHttpMethod, string $expectHttpPath, ?int $expectHttpCode, array $expectScopes, ?array $expectMetadata = null): void
     {
         $sql = $connection->createQueryBuilder()

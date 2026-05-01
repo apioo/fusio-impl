@@ -62,6 +62,9 @@ class RestoreCommandTest extends DbTestCase
         $this->assertEquals($status, $row['status']);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function restoreProvider(): array
     {
         return [
@@ -100,6 +103,9 @@ class RestoreCommandTest extends DbTestCase
         $this->assertMatchesRegularExpression('/Restored no record/', $display, $display);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function restoreInvalidProvider(): array
     {
         return [

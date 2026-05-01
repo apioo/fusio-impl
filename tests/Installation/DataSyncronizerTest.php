@@ -58,6 +58,9 @@ class DataSyncronizerTest extends DbTestCase
         $this->assertEquals($scope, $this->getScope('backend.action'));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getConfig(string $name): array
     {
         $config = $this->connection->fetchAssociative('SELECT * FROM fusio_config WHERE name = :name', ['name' => $name]);
@@ -71,6 +74,9 @@ class DataSyncronizerTest extends DbTestCase
         return $config;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getOperation(string $name): array
     {
         $operation = $this->connection->fetchAssociative('SELECT * FROM fusio_operation WHERE name = :name', ['name' => $name]);
@@ -86,6 +92,9 @@ class DataSyncronizerTest extends DbTestCase
         return $operation;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSchema(string $name): array
     {
         $schema = $this->connection->fetchAssociative('SELECT * FROM fusio_schema WHERE name = :name', ['name' => $name]);
@@ -99,6 +108,9 @@ class DataSyncronizerTest extends DbTestCase
         return $schema;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getEvent(string $name): array
     {
         $event = $this->connection->fetchAssociative('SELECT * FROM fusio_event WHERE name = :name', ['name' => $name]);
@@ -112,6 +124,9 @@ class DataSyncronizerTest extends DbTestCase
         return $event;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getCronjob(string $name): array
     {
         $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => $name]);
@@ -125,6 +140,9 @@ class DataSyncronizerTest extends DbTestCase
         return $cronjob;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getScope(string $name): array
     {
         $scope = $this->connection->fetchAssociative('SELECT * FROM fusio_scope WHERE name = :name', ['name' => $name]);

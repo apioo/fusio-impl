@@ -56,6 +56,9 @@ class CreditorTest extends TestCase
         $creditor->credit($cost, $context);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function pointsProvider(): array
     {
         return [

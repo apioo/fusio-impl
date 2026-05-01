@@ -47,6 +47,9 @@ class JsonResultSerializerTest extends TestCase
         $this->assertJsonStringEqualsJsonString($expect, Parser::encode($result->getPayload()));
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function serializeTextProvider(): array
     {
         return [

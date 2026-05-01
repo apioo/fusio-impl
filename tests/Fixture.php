@@ -62,6 +62,9 @@ class Fixture
 {
     private static ?DataBag $data = null;
 
+    /**
+     * @return array<string, list<mixed>>
+     */
     public static function getDataSet(): array
     {
         return self::getData()->toArray();

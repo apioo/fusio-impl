@@ -36,6 +36,9 @@ class DbTestCase extends ControllerDbTestCase
 {
     private static bool $initialized = false;
 
+    /**
+     * @return array<string, list<mixed>>
+     */
     public function getDataSet(): array
     {
         return Fixture::getDataSet();
