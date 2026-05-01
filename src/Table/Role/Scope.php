@@ -40,7 +40,7 @@ class Scope extends Generated\RoleScopeTable
     }
 
     /**
-     * @return list<array{id: string, name: string, description: string}>
+     * @return list<array{id: int, name: string, description: string}>
      */
     public function getValidScopes($roleId, array $scopes): array
     {
@@ -57,7 +57,7 @@ class Scope extends Generated\RoleScopeTable
     }
 
     /**
-     * @return list<array{id: string, name: string, description: string}>
+     * @return list<array{id: int, name: string, description: string}>
      */
     public function getAvailableScopes($roleId): array
     {
