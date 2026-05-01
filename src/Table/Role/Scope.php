@@ -31,7 +31,7 @@ use Fusio\Impl\Table\Generated;
  */
 class Scope extends Generated\RoleScopeTable
 {
-    public function deleteAllFromRole($roleId): void
+    public function deleteAllFromRole(int $roleId): void
     {
         $sql = 'DELETE FROM fusio_role_scope
                       WHERE role_id = :id';
@@ -42,7 +42,7 @@ class Scope extends Generated\RoleScopeTable
     /**
      * @return list<array{id: int, name: string, description: string}>
      */
-    public function getValidScopes($roleId, array $scopes): array
+    public function getValidScopes(int $roleId, array $scopes): array
     {
         $result = $this->getAvailableScopes($roleId);
         $data = [];
@@ -59,7 +59,7 @@ class Scope extends Generated\RoleScopeTable
     /**
      * @return list<array{id: int, name: string, description: string}>
      */
-    public function getAvailableScopes($roleId): array
+    public function getAvailableScopes(int $roleId): array
     {
         $sql = '    SELECT scope.id,
                            scope.name,

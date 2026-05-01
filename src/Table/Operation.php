@@ -73,6 +73,9 @@ class Operation extends Generated\OperationTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<string>
+     */
     public function getAvailableMethods(string $httPath): array
     {
         $result = $this->findByHttpPath($httPath);

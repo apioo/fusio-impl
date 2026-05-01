@@ -41,7 +41,8 @@ class Scope extends Generated\UserScopeTable
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @param list<string> $scopes
+     * @return list<array{id: int, name: string, description: string}>
      */
     public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
@@ -58,7 +59,7 @@ class Scope extends Generated\UserScopeTable
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @return list<array{id: int, name: string, description: string}>
      */
     public function getAvailableScopes(?string $tenantId, int $userId, bool $includePlanScopes = false): array
     {
@@ -99,6 +100,9 @@ class Scope extends Generated\UserScopeTable
         return $this->getCount($condition) > 0;
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     private function getScopesForUser(int $userId): array
     {
         $sql = '    SELECT scope.id,

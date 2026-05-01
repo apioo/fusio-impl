@@ -41,6 +41,9 @@ class Scope extends Generated\PlanScopeTable
         $this->connection->executeQuery($sql, ['id' => $planId]);
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getAvailableScopes(?string $tenantId, int $planId): array
     {
         $condition = Condition::withAnd();

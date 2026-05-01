@@ -50,6 +50,9 @@ class Token extends Generated\TokenTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return array{id: int, app_id: int, user_id: int, token: string, scope: string, expire: string, date: string}|false
+     */
     public function findByAccessToken(?string $tenantId, string $token): array|false
     {
         $now = new \DateTime();
@@ -80,6 +83,9 @@ class Token extends Generated\TokenTable
         return $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return list<TokenRow>
+     */
     public function getTokensByApp(?string $tenantId, int $appId): array
     {
         $con = Condition::withAnd();

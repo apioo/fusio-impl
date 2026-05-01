@@ -34,7 +34,7 @@ use PSX\Sql\Condition;
  */
 class Allocation extends Generated\RateAllocationTable
 {
-    public function deleteAllFromRate($rateId): void
+    public function deleteAllFromRate(int $rateId): void
     {
         $sql = 'DELETE FROM fusio_rate_allocation 
                       WHERE rate_id = :rate_id';
@@ -42,6 +42,9 @@ class Allocation extends Generated\RateAllocationTable
         $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
+    /**
+     * @return array{rate_limit: int, timespan: string}
+     */
     public function getRateForRequest(?string $tenantId, Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
     {
         $condition = Condition::withAnd();

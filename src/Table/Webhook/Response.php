@@ -38,6 +38,9 @@ class Response extends Generated\WebhookResponseTable
     
     public const STATUS_EXCEEDED = 3;
 
+    /**
+     * @return list<array{id: int, status: int, attempts: int, code: int, body: string, execute_date: string}>
+     */
     public function getAllByWebhook(int $webhookId): array
     {
         $condition = Condition::withAnd();

@@ -64,6 +64,9 @@ class Webhook extends Generated\WebhookTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<array{id: int, endpoint: string}>
+     */
     public function getWebhooksForEvent(int $eventId, ?int $userId = null): array
     {
         $condition = Condition::withAnd();

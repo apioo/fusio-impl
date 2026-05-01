@@ -71,6 +71,9 @@ class Scope extends Generated\ScopeTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<array{name: string, allow: int}>
+     */
     public function findByOperationId(?string $tenantId, int $operationId): array
     {
         $condition = Condition::withAnd();
@@ -91,6 +94,9 @@ class Scope extends Generated\ScopeTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function findSubScopes(?string $tenantId, string $scope): array
     {
         $condition = Condition::withAnd();
@@ -113,6 +119,7 @@ class Scope extends Generated\ScopeTable
     }
 
     /**
+     * @param list<string> $names
      * @return array<ScopeRow>
      */
     public function getValidScopes(?string $tenantId, array $names): array
@@ -130,6 +137,9 @@ class Scope extends Generated\ScopeTable
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAvailableScopes(int $categoryId, ?string $tenantId = null): array
     {
         $condition = Condition::withAnd();
@@ -146,6 +156,10 @@ class Scope extends Generated\ScopeTable
         return $scopes;
     }
 
+    /**
+     * @param list<string>|null $scopes
+     * @return list<string>
+     */
     public function getValidUserScopes(?string $tenantId, int $userId, ?array $scopes): array
     {
         if (empty($scopes)) {
@@ -169,8 +183,12 @@ class Scope extends Generated\ScopeTable
         return array_map(fn(Generated\ScopeRow $scope): string => $scope->getName(), $scopes);
     }
 
+    /**
+     * @param list<array{name: string}> $result
+     * @return list<string>
+     */
     public static function getNames(array $result): array
     {
-        return array_map(fn(array $row) => $row[self::COLUMN_NAME], $result);
+        return array_map(fn(array $row): string => $row[self::COLUMN_NAME], $result);
     }
 }
