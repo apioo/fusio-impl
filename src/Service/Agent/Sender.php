@@ -35,6 +35,7 @@ use PSX\Json\Parser;
 use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\ObjectMapperInterface;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaSource;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -65,6 +66,7 @@ readonly class Sender implements SenderInterface
         private Serializer\JsonResultSerializer $jsonResultSerializer,
         private Unserializer\MessageUnserializer $messageUnserializer,
         private ConnectorInterface $connector,
+        private SchemaManagerInterface $schemaManager,
         private ObjectMapperInterface $objectMapper,
     ) {
     }
