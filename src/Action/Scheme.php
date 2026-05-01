@@ -56,7 +56,6 @@ enum Scheme: string
     }
 
     /**
-     * @param string $action
      * @return array{Scheme, string, ?string}
      */
     public static function split(string $action): array
@@ -96,12 +95,14 @@ enum Scheme: string
                 if (!preg_match('/^[a-zA-Z0-9\\-\\_]{3,255}$/', $value)) {
                     throw new StatusCode\BadRequestException('Provided action url contains an invalid action name');
                 }
+                
                 break;
             case self::PHP_CLASS:
                 $value = ClassName::unserialize($value);
                 if (!class_exists($value)) {
                     throw new StatusCode\BadRequestException('Provided action url contains a not existing PHP class');
                 }
+                
                 $value = ClassName::serialize($value);
                 break;
             case self::HTTP:
@@ -110,11 +111,13 @@ enum Scheme: string
                 if (str_contains($value, '://')) {
                     throw new StatusCode\BadRequestException('Provided action url must _not_ contain a scheme');
                 }
+                
                 break;
             case self::FILE:
                 if (!is_file($value)) {
                     throw new StatusCode\BadRequestException('Provided action url contains a not existing file');
                 }
+                
                 break;
         }
 

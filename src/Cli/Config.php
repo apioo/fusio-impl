@@ -32,11 +32,8 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  */
 class Config implements ConfigInterface
 {
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(FrameworkConfig $frameworkConfig)
+    public function __construct(private readonly FrameworkConfig $frameworkConfig)
     {
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getBaseDir(): string

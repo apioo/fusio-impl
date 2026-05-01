@@ -77,6 +77,7 @@ readonly class InvokeCronjobHandler
         // set execute date
         $cronjob->setExecuteDate(LocalDateTime::now());
         $cronjob->setExitCode($exitCode);
+        
         $this->cronjobTable->update($cronjob);
     }
 }

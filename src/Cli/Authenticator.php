@@ -31,13 +31,8 @@ use Fusio\Cli\Service\AuthenticatorInterface;
  */
 class Authenticator implements AuthenticatorInterface
 {
-    private string $baseUri;
-    private string $accessToken;
-
-    public function __construct(string $baseUri, string $accessToken)
+    public function __construct(private readonly string $baseUri, private readonly string $accessToken)
     {
-        $this->baseUri = $baseUri;
-        $this->accessToken = $accessToken;
     }
 
     public function getBaseUri(): string

@@ -29,17 +29,8 @@ namespace Fusio\Impl\Mail;
  */
 class Message
 {
-    private string $from;
-    private array $to;
-    private string $subject;
-    private string $body;
-
-    public function __construct(string $from, array $to, string $subject, string $body)
+    public function __construct(private readonly string $from, private readonly array $to, private readonly string $subject, private readonly string $body)
     {
-        $this->from    = $from;
-        $this->to      = $to;
-        $this->subject = $subject;
-        $this->body    = $body;
     }
 
     public function getFrom(): string

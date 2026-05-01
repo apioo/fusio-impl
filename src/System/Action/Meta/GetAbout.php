@@ -70,6 +70,7 @@ readonly class GetAbout implements ActionInterface
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
+        
         $categories = $this->categoryTable->findAll($condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC);
 
         $result = [];
@@ -90,6 +91,7 @@ readonly class GetAbout implements ActionInterface
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $defaultCategory->getId());
+        
         $scopes = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC);
 
         $result = [];
@@ -102,78 +104,48 @@ readonly class GetAbout implements ActionInterface
 
     private function getLinks(): array
     {
-        $links = [];
-
-        $links[] = [
+        return [[
             'rel' => 'root',
             'href' => $this->frameworkConfig->getDispatchUrl(),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'apps',
             'href' => $this->frameworkConfig->getAppsUrl(),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'openapi',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-openapi'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'typeapi',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-typeapi'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'route',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'route'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'health',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'health'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth2',
             'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'whoami',
             'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'whoami'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'api-catalog',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'api-catalog'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth-authorization-server',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-authorization-server'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth-protected-resource',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-protected-resource'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'openid-configuration',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'openid-configuration'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'security',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'security.txt'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'about',
             'href' => 'https://www.fusio-project.org',
-        ];
-
-        return $links;
+        ]];
     }
 }

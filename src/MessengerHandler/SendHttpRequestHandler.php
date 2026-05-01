@@ -70,7 +70,7 @@ readonly class SendHttpRequestHandler
         $code     = $response->getStatusCode();
         $attempts = $existing->getAttempts() + 1;
 
-        if (($code >= 200 && $code < 400) || $code == 410) {
+        if (($code >= 200 && $code < 400) || $code === 410) {
             $status = Table\Webhook\Response::STATUS_DONE;
         } else {
             $status = Table\Webhook\Response::STATUS_PENDING;
@@ -86,6 +86,7 @@ readonly class SendHttpRequestHandler
         $existing->setCode($code);
         $existing->setBody((string) $response->getBody());
         $existing->setExecuteDate(LocalDateTime::now());
+        
         $this->responseTable->update($existing);
 
         if ($status === Table\Webhook\Response::STATUS_PENDING) {

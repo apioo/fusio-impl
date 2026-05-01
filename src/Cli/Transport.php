@@ -41,7 +41,7 @@ use PSX\Uri\Uri;
  */
 class Transport implements TransportInterface
 {
-    public function __construct(private Dispatch $dispatch, private ContextFactory $contextFactory)
+    public function __construct(private readonly Dispatch $dispatch, private readonly ContextFactory $contextFactory)
     {
     }
 
