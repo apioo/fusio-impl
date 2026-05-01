@@ -103,7 +103,7 @@ JSON;
     /**
      * @param list<string> $tags
      * @param list<int> $categoryIds
-     * @param list<int> $mapIds
+     * @param array<string, int> $mapIds
      */
     private function createHuman(string $firstName, string $lastName, int $locationId, array $tags, array $categoryIds, array $mapIds): int
     {

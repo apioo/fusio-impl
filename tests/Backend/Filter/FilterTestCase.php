@@ -38,7 +38,7 @@ use PSX\Uri\Uri;
 class FilterTestCase extends TestCase
 {
     /**
-     * @param array<string, string> $parameters
+     * @param array<string, scalar> $parameters
      */
     protected function createRequest(array $parameters): RequestInterface
     {

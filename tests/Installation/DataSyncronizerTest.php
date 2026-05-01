@@ -34,6 +34,9 @@ use PSX\Framework\Test\DbTestCase;
  */
 class DataSyncronizerTest extends DbTestCase
 {
+    /**
+     * @return array<string, list<mixed>>
+     */
     public function getDataSet(): array
     {
         return Fixture::getDataSet();

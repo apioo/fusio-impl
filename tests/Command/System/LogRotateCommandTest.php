@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Command\System;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Command\System\LogRotateCommand;
@@ -60,6 +61,9 @@ class LogRotateCommandTest extends DbTestCase
         $this->assertCronjobErrorTable($display, $schemaManager, $schema);
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
         $this->assertMatchesRegularExpression('/Created archive table fusio_audit_\d{8}/', $display, $display);
@@ -76,7 +80,10 @@ class LogRotateCommandTest extends DbTestCase
 
         $schemaManager->dropTable($tableName);
     }
-    
+
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
         $this->assertMatchesRegularExpression('/Created archive table fusio_log_\d{8}/', $display, $display);
@@ -97,6 +104,9 @@ class LogRotateCommandTest extends DbTestCase
         $schemaManager->dropTable($tableName);
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     private function assertLogErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
         $this->assertMatchesRegularExpression('/Created archive table fusio_log_error_\d{8}/', $display, $display);
@@ -117,6 +127,9 @@ class LogRotateCommandTest extends DbTestCase
         $schemaManager->dropTable($tableName);
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     private function assertCronjobErrorTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema): void
     {
         $this->assertMatchesRegularExpression('/Created archive table fusio_cronjob_error_\d{8}/', $display, $display);
