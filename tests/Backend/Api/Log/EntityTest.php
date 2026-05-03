@@ -40,7 +40,7 @@ class EntityTest extends DbTestCase
 
         $body = (string) $response->getBody();
 
-        $expect = <<<JSON_WRAP
+        $expect = <<<JSON
         {
             "id": 1,
             "appId": 3,
@@ -62,7 +62,7 @@ class EntityTest extends DbTestCase
             ],
             "date": "2015-06-25T22:49:09Z"
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

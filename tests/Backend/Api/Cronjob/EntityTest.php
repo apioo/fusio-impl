@@ -40,7 +40,7 @@ class EntityTest extends DbTestCase
         ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON_WRAP
+        $expect = <<<JSON
         {
             "id": 2,
             "status": 1,
@@ -61,7 +61,7 @@ class EntityTest extends DbTestCase
                 "foo": "bar"
             }
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -75,7 +75,7 @@ class EntityTest extends DbTestCase
         ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON_WRAP
+        $expect = <<<JSON
         {
             "id": 2,
             "status": 1,
@@ -96,7 +96,7 @@ class EntityTest extends DbTestCase
                 }
             ]
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

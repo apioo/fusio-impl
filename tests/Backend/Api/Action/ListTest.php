@@ -39,7 +39,7 @@ class ListTest extends DbTestCase
         ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON_WRAP'
+        $expect = <<<'JSON'
         {
             "actions": [
                 {
@@ -216,7 +216,7 @@ class ListTest extends DbTestCase
                 }
             ]
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

@@ -42,7 +42,7 @@ class CollectionTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
-        $expect = <<<'JSON_WRAP'
+        $expect = <<<'JSON'
         {
             "totalResults": 1,
             "startIndex": 0,
@@ -58,7 +58,7 @@ class CollectionTest extends DbTestCase
                 }
             ]
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -74,7 +74,7 @@ class CollectionTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
-        $expect = <<<'JSON_WRAP'
+        $expect = <<<'JSON'
         {
             "totalResults": 1,
             "startIndex": 0,
@@ -90,7 +90,7 @@ class CollectionTest extends DbTestCase
                 }
             ]
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -106,7 +106,7 @@ class CollectionTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
-        $expect = <<<'JSON_WRAP'
+        $expect = <<<'JSON'
         {
             "totalResults": 1,
             "startIndex": 0,
@@ -122,7 +122,7 @@ class CollectionTest extends DbTestCase
                 }
             ]
         }
-        JSON_WRAP;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
