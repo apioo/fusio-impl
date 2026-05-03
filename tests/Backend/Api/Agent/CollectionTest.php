@@ -45,12 +45,12 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON_WRAP'
         {
-            "totalResults": 6,
+            "totalResults": 7,
             "startIndex": 0,
             "itemsPerPage": 16,
             "entry": [
                 {
-                    "id": 6,
+                    "id": 7,
                     "status": 1,
                     "connection": 8,
                     "type": 0,
@@ -60,11 +60,20 @@ class CollectionTest extends DbTestCase
                     "insertDate": "[datetime]"
                 },
                 {
+                    "id": 6,
+                    "status": 1,
+                    "type": 5,
+                    "name": "Fusio-Seed",
+                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+                    "insertDate": "[datetime]"
+                },
+                {
                     "id": 5,
                     "status": 1,
                     "type": 4,
                     "name": "Fusio-Database",
-                    "description": "Helps to design database table schemas",
+                    "description": "Designs database table structures including columns, types, and constraints.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
                     "insertDate": "[datetime]"
                 },
@@ -73,7 +82,7 @@ class CollectionTest extends DbTestCase
                     "status": 1,
                     "type": 3,
                     "name": "Fusio-Schema",
-                    "description": "Helps to build new schemas to describe JSON payloads",
+                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
                     "insertDate": "[datetime]"
                 },
@@ -82,7 +91,7 @@ class CollectionTest extends DbTestCase
                     "status": 1,
                     "type": 2,
                     "name": "Fusio-Action",
-                    "description": "Helps to develop custom action business logic",
+                    "description": "Develops custom business logic and backend code for your API operations.",
                     "insertDate": "[datetime]"
                 },
                 {
@@ -90,7 +99,7 @@ class CollectionTest extends DbTestCase
                     "status": 1,
                     "type": 1,
                     "name": "Fusio-Architect",
-                    "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
                     "insertDate": "[datetime]"
                 },
@@ -99,7 +108,7 @@ class CollectionTest extends DbTestCase
                     "status": 1,
                     "type": 0,
                     "name": "Fusio-General",
-                    "description": "Helps to answer general questions about your Fusio instance",
+                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
                     "insertDate": "[datetime]"
                 }
             ]
@@ -125,7 +134,7 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 6,
+            "id": 7,
             "status": 1,
             "connection": 8,
             "type": 0,
@@ -154,12 +163,12 @@ JSON;
 
         $expect = <<<'JSON_WRAP'
         {
-            "totalResults": 6,
+            "totalResults": 7,
             "startIndex": 0,
             "itemsPerPage": 80,
             "entry": [
                 {
-                    "id": 6,
+                    "id": 7,
                     "status": 1,
                     "connection": 8,
                     "type": 0,
@@ -169,11 +178,20 @@ JSON;
                     "insertDate": "[datetime]"
                 },
                 {
+                    "id": 6,
+                    "status": 1,
+                    "type": 5,
+                    "name": "Fusio-Seed",
+                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+                    "insertDate": "[datetime]"
+                },
+                {
                     "id": 5,
                     "status": 1,
                     "type": 4,
                     "name": "Fusio-Database",
-                    "description": "Helps to design database table schemas",
+                    "description": "Designs database table structures including columns, types, and constraints.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
                     "insertDate": "[datetime]"
                 },
@@ -182,7 +200,7 @@ JSON;
                     "status": 1,
                     "type": 3,
                     "name": "Fusio-Schema",
-                    "description": "Helps to build new schemas to describe JSON payloads",
+                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
                     "insertDate": "[datetime]"
                 },
@@ -191,7 +209,7 @@ JSON;
                     "status": 1,
                     "type": 2,
                     "name": "Fusio-Action",
-                    "description": "Helps to develop custom action business logic",
+                    "description": "Develops custom business logic and backend code for your API operations.",
                     "insertDate": "[datetime]"
                 },
                 {
@@ -199,7 +217,7 @@ JSON;
                     "status": 1,
                     "type": 1,
                     "name": "Fusio-Architect",
-                    "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
+                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
                     "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
                     "insertDate": "[datetime]"
                 },
@@ -208,7 +226,7 @@ JSON;
                     "status": 1,
                     "type": 0,
                     "name": "Fusio-General",
-                    "description": "Helps to answer general questions about your Fusio instance",
+                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
                     "insertDate": "[datetime]"
                 }
             ]
@@ -237,7 +255,7 @@ JSON;
 {
     "success": true,
     "message": "Agent successfully created",
-    "id": "7"
+    "id": "8"
 }
 JSON;
 

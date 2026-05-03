@@ -115,7 +115,7 @@ JSON;
 {
     "success": true,
     "message": "Agent successfully updated",
-    "id": "6"
+    "id": "7"
 }
 JSON;
 
@@ -150,7 +150,7 @@ JSON;
 {
     "success": true,
     "message": "Agent successfully deleted",
-    "id": "6"
+    "id": "7"
 }
 JSON;
 

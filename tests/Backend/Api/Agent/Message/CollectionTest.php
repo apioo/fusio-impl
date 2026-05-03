@@ -35,7 +35,7 @@ class CollectionTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'GET', [
+        $response = $this->sendRequest('/backend/agent/7/message', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
@@ -69,7 +69,7 @@ JSON;
     
     public function testGetParent(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', [
+        $response = $this->sendRequest('/backend/agent/7/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
@@ -113,7 +113,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'POST', [
+        $response = $this->sendRequest('/backend/agent/7/message', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ], json_encode([
@@ -141,7 +141,7 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $row = $this->connection->fetchAssociative($sql, ['agent_id' => 6]);
+        $row = $this->connection->fetchAssociative($sql, ['agent_id' => 7]);
 
         $this->assertEquals($chatId, $row['chat_id']);
         $this->assertEquals(1, $row['child']);
