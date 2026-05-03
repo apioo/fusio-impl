@@ -33,7 +33,7 @@ use PSX\Sql\Condition;
 class Agent extends Generated\AgentTable
 {
     public const STATUS_ACTIVE  = 1;
-    
+
     public const STATUS_DELETED = 0;
 
     public const TYPE_GENERAL = 0;
@@ -45,6 +45,8 @@ class Agent extends Generated\AgentTable
     public const TYPE_SCHEMA = 3;
     
     public const TYPE_DATABASE = 4;
+
+    public const TYPE_SEED = 5;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?AgentRow
     {

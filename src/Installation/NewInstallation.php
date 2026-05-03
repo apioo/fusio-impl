@@ -166,8 +166,8 @@ class NewInstallation
             'backend_log_getAllErrors',
             'backend_log_getError',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Helps to build complete operations, it uses internally the action, schema and database agent', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Helps to develop custom action business logic', self::readAgent('action.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations', self::readAgent('action.md'), [
             'backend_connection_getAll',
             'backend_connection_get',
             'backend_connection_database_getTables',
@@ -177,12 +177,16 @@ class NewInstallation
             'backend_connection_http_execute',
             'backend_connection_sdk_get',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Helps to build new schemas to describe JSON payloads', self::readAgent('schema.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures', self::readAgent('schema.md'), [
         ], Model\Agent\Schema::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Helps to design database table schemas', self::readAgent('database.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints', self::readAgent('database.md'), [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic fictional records for testing or accurate factual data', self::readAgent('seed.md'), [
+            'backend_connection_database_getTables',
+            'backend_connection_database_getTable',
+        ], Model\Agent\Seed::class, tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
             $bag->addOperations($tenantId, $category, $operations);
