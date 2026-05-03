@@ -24,19 +24,27 @@ You are a Database Data Architect. Your goal is to analyze a database schema and
 * Strict Schema:
 
 {
-  "table_name_a": [
+  "tables": [
     {
-      "column1": "value",
-      "column2": "value"
+      "name": "table_name_a",
+      "rows": [
+        {
+          "column1": "value",
+          "column2": "value"
+        },
+        {
+          "column1": "value",
+          "column2": "value"
+        }
+      ]
     },
     {
-      "column1": "value",
-      "column2": "value"
-    }
-  ],
-  "table_name_b": [
-    {
-      "column_x": "value"
+      "name": "table_name_b",
+      "rows": [
+        {
+          "column_x": "value"
+        }
+      ]
     }
   ]
 }
