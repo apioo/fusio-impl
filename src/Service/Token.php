@@ -35,6 +35,7 @@ use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\OAuth2\AccessToken;
+use PSX\OAuth2\Exception\InvalidScopeException;
 
 /**
  * Token
@@ -59,7 +60,12 @@ readonly class Token
     public function generate(?string $tenantId, string $categoryType, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken
     {
         if (empty($scopes)) {
-            throw new StatusCode\BadRequestException('No scopes provided');
+            throw new InvalidScopeException('No scopes provided');
+        }
+
+        $scope = implode(',', $scopes);
+        if (strlen($scope) > 1023) {
+            throw new InvalidScopeException('Provided too many scopes');
         }
 
         $now = new DateTime();
@@ -86,7 +92,7 @@ readonly class Token
         $row->setName($name);
         $row->setToken($accessToken);
         $row->setRefresh($refreshToken);
-        $row->setScope(implode(',', $scopes));
+        $row->setScope($scope);
         $row->setIp($ip);
         $row->setExpire(LocalDateTime::from($expires));
         $row->setDate(LocalDateTime::now());
