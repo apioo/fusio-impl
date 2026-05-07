@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Controller;
 
+use Fusio\Impl\Service\WellKnown\AgentCard;
 use Fusio\Impl\Service\WellKnown\APICatalog;
 use Fusio\Impl\Service\WellKnown\OAuthAuthorizationServer;
 use Fusio\Impl\Service\WellKnown\OAuthProtectedResource;
@@ -42,12 +43,20 @@ use PSX\Schema\ContentType;
 class WellKnownController extends ControllerAbstract
 {
     public function __construct(
+        private readonly AgentCard $agentCard,
         private readonly APICatalog $apiCatalog,
         private readonly OAuthAuthorizationServer $oauthAuthorizationServer,
         private readonly OAuthProtectedResource $oauthProtectedResource,
         private readonly OpenIDConfiguration $openIDConfiguration,
         private readonly SecurityTxt $securityTxt,
     ) {
+    }
+
+    #[Get]
+    #[Path('/.well-known/agent-card.json')]
+    public function getAgentCard(): mixed
+    {
+        return $this->agentCard->get();
     }
 
     #[Get]
