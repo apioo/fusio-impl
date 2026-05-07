@@ -23,8 +23,6 @@ namespace Fusio\Impl\Controller;
 use Fusio\Impl\Service\A2A;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use JsonException;
-use PSX\Api\Attribute\Delete;
-use PSX\Api\Attribute\Get;
 use PSX\Api\Attribute\Incoming;
 use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
@@ -70,8 +68,8 @@ class A2AController extends ControllerAbstract
     #[Outgoing(200, ContentType::JSON)]
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        if (!$this->frameworkConfig->isJsonRPCEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('JsonRPC service is not enabled');
+        if (!$this->frameworkConfig->isA2AEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('A2A service is not enabled');
         }
 
         $body = (string) $request->getBody();

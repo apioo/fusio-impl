@@ -57,11 +57,13 @@ class Agent extends Generated\AgentTable
         }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?AgentRow
+    public function findOneByTenantAndId(?string $tenantId, ?int $categoryId, int $id): ?AgentRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        if ($categoryId !== null) {
+            $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        }
         $condition->equals(self::COLUMN_ID, $id);
 
         return $this->findOneBy($condition);

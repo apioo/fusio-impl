@@ -20,10 +20,15 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Service\A2A\CancelTask;
+use Fusio\Impl\Service\A2A\GetTask;
+use Fusio\Impl\Service\A2A\ListTasks;
 use Fusio\Impl\Service\A2A\SendMessage;
 use Fusio\Model;
 use PSX\Json\Rpc\Context as RpcContext;
 use PSX\Json\Rpc\Exception\InvalidRequestException;
+use PSX\Json\Rpc\Exception\MethodNotFoundException;
 use PSX\Record\Record;
 use stdClass;
 
@@ -38,6 +43,10 @@ readonly class A2A
 {
     public function __construct(
         private SendMessage $sendMessage,
+        private GetTask $getTask,
+        private CancelTask $cancelTask,
+        private ListTasks $listTasks,
+        private ContextFactory $contextFactory,
     ) {
     }
 
@@ -53,8 +62,14 @@ readonly class A2A
             $arguments = new Record();
         }
 
+        $context = $this->contextFactory->getActive();
+
         return match ($method) {
-            'SendMessage' => $this->sendMessage->invoke($arguments),
+            'SendMessage' => $this->sendMessage->invoke($arguments, $context),
+            'GetTask' => $this->getTask->invoke($arguments, $context),
+            'CancelTask' => $this->cancelTask->invoke($arguments, $context),
+            'ListTasks' => $this->listTasks->invoke($arguments, $context),
+            default => throw new MethodNotFoundException('Method not found'),
         };
     }
 }

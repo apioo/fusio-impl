@@ -81,7 +81,7 @@ class JsonRPCController extends ControllerAbstract implements FilterInterface
             throw new StatusCode\BadRequestException('Provided an invalid request payload, must be an JSON object or array');
         }
 
-        $return = (new Server($this->server))->invoke($data, new Context());
+        $return = new Server($this->server)->invoke($data, new Context());
 
         $response->setStatus(200);
         $response->setHeader('Content-Type', 'application/json');

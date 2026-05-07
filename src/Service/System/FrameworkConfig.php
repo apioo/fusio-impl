@@ -126,6 +126,11 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_marketplace') !== false;
     }
 
+    public function isA2AEnabled(): bool
+    {
+        return $this->config->get('fusio_a2a') === true;
+    }
+
     public function isMCPEnabled(): bool
     {
         return $this->config->get('fusio_mcp') === true;

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\A2A;
 
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Agent\Sender;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
@@ -29,7 +30,7 @@ use PSX\Record\RecordInterface;
 use stdClass;
 
 /**
- * InputSchemaBuilder
+ * SendMessage
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -41,10 +42,11 @@ readonly class SendMessage
         private Sender $sender,
         private Table\Agent $agentTable,
         private FrameworkConfig $frameworkConfig,
+
     ) {
     }
 
-    public function invoke(RecordInterface $arguments): mixed
+    public function invoke(RecordInterface $arguments, Context $context): mixed
     {
         $skillId = $arguments->get('skillId');
         if (empty($skillId)) {
