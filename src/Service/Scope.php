@@ -86,6 +86,9 @@ readonly class Scope
         return $scopeId;
     }
 
+    /**
+     * @param list<string> $scopeNames
+     */
     public function createForOperation(int $operationId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
@@ -204,6 +207,8 @@ readonly class Scope
 
     /**
      * Returns all scope names which are valid for the app and the user. The scopes are a comma separated list
+     *
+     * @return list<string>
      */
     public function getValidScopes(?string $tenantId, string $scopes, ?int $appId, ?int $userId): array
     {
@@ -243,6 +248,9 @@ readonly class Scope
         }
     }
 
+    /**
+     * @return list<string>
+     */
     public static function split(string $scopes): array
     {
         if (str_contains($scopes, ',')) {

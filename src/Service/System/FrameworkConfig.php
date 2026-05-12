@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL;
+use Doctrine\DBAL\DriverManager;
 use Fusio\Impl\Exception\InvalidConfigurationException;
 use PSX\Framework\Config\BaseUrlInterface;
 use PSX\Framework\Config\ConfigInterface;
@@ -31,6 +32,8 @@ use PSX\Framework\Config\ConfigInterface;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @phpstan-import-type Params from DriverManager
  */
 readonly class FrameworkConfig
 {
@@ -161,27 +164,27 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_apps_dir') ?: $this->getPathPublic();
     }
 
-    public function getUrl(...$pathFragment): string
+    public function getUrl(string ...$pathFragment): string
     {
         return $this->baseUrl->getUrl() . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
     }
 
-    public function getDispatchUrl(...$pathFragment): string
+    public function getDispatchUrl(string ...$pathFragment): string
     {
         return $this->baseUrl->getDispatchUrl() . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
     }
 
-    public function getPathCache(...$directoryFragment): string
+    public function getPathCache(string ...$directoryFragment): string
     {
         return $this->config->get('psx_path_cache') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
-    public function getPathPublic(...$directoryFragment): string
+    public function getPathPublic(string ...$directoryFragment): string
     {
         return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
-    public function getPathResources(...$directoryFragment): string
+    public function getPathResources(string ...$directoryFragment): string
     {
         return $this->config->get('psx_path_resources') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
@@ -201,6 +204,9 @@ readonly class FrameworkConfig
         return $this->config->get('psx_debug');
     }
 
+    /**
+     * @return Params
+     */
     public function getDoctrineConnectionParameters(): array
     {
         $connection = $this->config->get('psx_connection');

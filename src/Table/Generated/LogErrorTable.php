@@ -8,31 +8,21 @@ namespace Fusio\Impl\Table\Generated;
 class LogErrorTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_log_error';
-    
     public const COLUMN_ID = 'id';
-    
     public const COLUMN_LOG_ID = 'log_id';
-    
     public const COLUMN_MESSAGE = 'message';
-    
     public const COLUMN_TRACE = 'trace';
-    
     public const COLUMN_FILE = 'file';
-    
     public const COLUMN_LINE = 'line';
-    
     public const COLUMN_INSERT_DATE = 'insert_date';
-    
     public function getName(): string
     {
         return self::NAME;
     }
-    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_LOG_ID => 0x20000a, self::COLUMN_MESSAGE => 0xa001f4, self::COLUMN_TRACE => 0xb00000, self::COLUMN_FILE => 0xa000ff, self::COLUMN_LINE => 0x20000a, self::COLUMN_INSERT_DATE => 0x40800000];
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -41,7 +31,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -50,7 +39,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -58,7 +46,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -68,7 +55,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -79,7 +65,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -89,7 +74,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -99,7 +83,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -109,7 +92,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -120,7 +102,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('log_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -130,7 +111,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('log_id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -140,7 +120,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('log_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -150,7 +129,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('log_id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -161,7 +139,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('message', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -171,7 +148,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('message', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -181,7 +157,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('message', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -191,7 +166,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('message', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -202,7 +176,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('trace', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -212,7 +185,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('trace', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -222,7 +194,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('trace', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -232,7 +203,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('trace', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -243,7 +213,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('file', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -253,7 +222,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('file', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -263,7 +231,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('file', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -273,7 +240,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->like('file', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -284,7 +250,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('line', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -294,7 +259,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('line', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -304,7 +268,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('line', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -314,7 +277,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('line', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\LogErrorRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -325,7 +287,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -335,7 +296,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -345,7 +305,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -355,7 +314,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -363,7 +321,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -371,7 +328,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -379,7 +335,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -387,7 +342,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -395,7 +349,6 @@ class LogErrorTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @param array<string, mixed> $row
      */

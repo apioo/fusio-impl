@@ -57,6 +57,9 @@ readonly class Token
     ) {
     }
 
+    /**
+     * @param list<string> $scopes
+     */
     public function generate(?string $tenantId, string $categoryType, ?int $appId, int $userId, string $name, array $scopes, string $ip, DateInterval|DateTimeInterface $expire, ?string $state = null): AccessToken
     {
         if (empty($scopes)) {

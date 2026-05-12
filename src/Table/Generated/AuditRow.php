@@ -5,125 +5,95 @@ namespace Fusio\Impl\Table\Generated;
 class AuditRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?string $tenantId = null;
-    
     private ?int $appId = null;
-    
     private ?int $userId = null;
-    
     private ?int $refId = null;
-    
     private ?string $event = null;
-    
     private ?string $ip = null;
-    
     private ?string $message = null;
-    
     private ?string $content = null;
-    
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    
     public function setAppId(int $appId): void
     {
         $this->appId = $appId;
     }
-    
     public function getAppId(): int
     {
         return $this->appId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "app_id" was provided');
     }
-    
     public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    
     public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    
     public function setRefId(?int $refId): void
     {
         $this->refId = $refId;
     }
-    
     public function getRefId(): ?int
     {
         return $this->refId;
     }
-    
     public function setEvent(string $event): void
     {
         $this->event = $event;
     }
-    
     public function getEvent(): string
     {
         return $this->event ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "event" was provided');
     }
-    
     public function setIp(string $ip): void
     {
         $this->ip = $ip;
     }
-    
     public function getIp(): string
     {
         return $this->ip ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ip" was provided');
     }
-    
     public function setMessage(string $message): void
     {
         $this->message = $message;
     }
-    
     public function getMessage(): string
     {
         return $this->message ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "message" was provided');
     }
-    
     public function setContent(?string $content): void
     {
         $this->content = $content;
     }
-    
     public function getContent(): ?string
     {
         return $this->content;
     }
-    
     public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    
     public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -140,12 +110,13 @@ class AuditRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

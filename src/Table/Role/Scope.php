@@ -40,6 +40,7 @@ class Scope extends Generated\RoleScopeTable
     }
 
     /**
+     * @param list<string> $scopes
      * @return list<array{id: int, name: string, description: string}>
      */
     public function getValidScopes(int $roleId, array $scopes): array

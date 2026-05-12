@@ -29,5 +29,8 @@ namespace Fusio\Impl\Service\Mail;
  */
 interface MailerInterface
 {
+    /**
+     * @param list<string> $to
+     */
     public function send(string $subject, array $to, string $body): void;
 }

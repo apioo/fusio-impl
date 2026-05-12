@@ -145,6 +145,9 @@ readonly class Runner
         }
     }
 
+    /**
+     * @param array<string, string> $headers
+     */
     private function dispatch(string $uri, string $method, array $headers, ?string $body): ResponseInterface
     {
         $request  = new Request(Uri::parse($uri), $method, $headers, $body);
@@ -223,6 +226,9 @@ readonly class Runner
         return $message;
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getUriFragments(Table\Generated\TestRow $test): array
     {
         $result = [];
@@ -234,6 +240,9 @@ readonly class Runner
         return $result;
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getQueryParameters(Table\Generated\TestRow $test): array
     {
         $result = [];

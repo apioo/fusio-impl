@@ -32,8 +32,14 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
  */
 class SenderFactory
 {
+    /**
+     * @var iterable<SenderInterface>
+     */
     private iterable $senders;
 
+    /**
+     * @param iterable<SenderInterface> $senders
+     */
     public function __construct(#[TaggedIterator('fusio.mailer.sender')] iterable $senders)
     {
         $this->senders = $senders;
@@ -50,4 +56,3 @@ class SenderFactory
         return null;
     }
 }
-

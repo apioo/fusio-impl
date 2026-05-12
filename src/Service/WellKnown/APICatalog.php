@@ -35,6 +35,15 @@ readonly class APICatalog
     {
     }
 
+    /**
+     * @return array{
+     *     anchor: string,
+     *     service-desc: array{href: string, type: string},
+     *     service-doc: array{href: string, type: string},
+     *     service-meta: array{href: string, type: string},
+     *     status: array{href: string, type: string},
+     * }
+     */
     public function buildLinkSet(): array
     {
         $baseUrl = $this->frameworkConfig->getDispatchUrl();

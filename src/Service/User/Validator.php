@@ -119,7 +119,7 @@ readonly class Validator
         }
     }
 
-    public function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null): void
+    public function assertPassword(?string $password, ?int $minLength = null, ?int $minAlpha = null, ?int $minNumeric = null, ?int $minSpecial = null): void
     {
         if (empty($password)) {
             throw new StatusCode\BadRequestException('Password must not be empty');

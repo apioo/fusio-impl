@@ -151,6 +151,9 @@ readonly class Schema
         return (new Generator\Html())->generate($schema);
     }
 
+    /**
+     * @param RecordInterface<mixed>|null $source
+     */
     private function parseSource(?RecordInterface $source): ?string
     {
         if ($source instanceof RecordInterface) {

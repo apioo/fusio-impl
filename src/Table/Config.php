@@ -74,6 +74,9 @@ class Config extends Generated\ConfigTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return array<string, mixed>|false
+     */
     public function getValue(?string $tenantId, string $name): array|false
     {
         $condition = Condition::withAnd();

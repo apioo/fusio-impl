@@ -29,6 +29,9 @@ namespace Fusio\Impl\Service\System\Health;
  */
 class CheckResult
 {
+    /**
+     * @var array<string, array{healthy: bool, error: ?string}>
+     */
     private array $checks = [];
 
     public function isHealthy(): bool
@@ -43,12 +46,15 @@ class CheckResult
         return count($this->checks) === $count;
     }
 
+    /**
+     * @return array<string, array{healthy: bool, error: ?string}>
+     */
     public function getChecks(): array
     {
         return $this->checks;
     }
 
-    public function add(string $name, bool $healthy, ?string $error = null)
+    public function add(string $name, bool $healthy, ?string $error = null): void
     {
         $check = [
             'healthy' => $healthy,

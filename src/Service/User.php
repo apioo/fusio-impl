@@ -296,11 +296,17 @@ class User
         }
     }
 
+    /**
+     * @return list<string>
+     */
     public function getAvailableScopes(int $userId, UserContext $context): array
     {
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($context->getTenantId(), $userId));
     }
 
+    /**
+     * @param list<string> $scopes
+     */
     private function insertScopes(?string $tenantId, int $userId, array $scopes): void
     {
         $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);

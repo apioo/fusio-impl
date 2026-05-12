@@ -290,6 +290,9 @@ class Installer implements InstallerInterface
         }
     }
 
+    /**
+     * @return array<string, scalar>
+     */
     private function getEnv(string $appKey): array
     {
         $apiUrl = $this->frameworkConfig->getDispatchUrl();

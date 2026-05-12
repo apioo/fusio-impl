@@ -66,6 +66,9 @@ readonly class GetAbout implements ActionInterface
         ]);
     }
 
+    /**
+     * @return list<string>
+     */
     private function getCategories(ContextInterface $context): array
     {
         $condition = Condition::withAnd();
@@ -81,6 +84,9 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(ContextInterface $context): array
     {
         $defaultCategory = $this->categoryTable->findOneByTenantAndName($context->getTenantId(), 'default');
@@ -102,6 +108,9 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<array{rel: string, href: string}>
+     */
     private function getLinks(): array
     {
         return [[

@@ -30,7 +30,7 @@ use Fusio\Impl\Service\Mail\MailerInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Mailer
+readonly class Mailer
 {
     public function __construct(
         private Service\Config $configService,
@@ -39,7 +39,7 @@ class Mailer
     ) {
     }
 
-    public function sendActivationMail(string $name, string $email, string $token)
+    public function sendActivationMail(string $name, string $email, string $token): void
     {
         $this->sendMail('mail_register', $email, [
             'apps_url' => $this->frameworkConfig->getAppsUrl(),
@@ -49,7 +49,7 @@ class Mailer
         ]);
     }
 
-    public function sendResetPasswordMail(string $name, string $email, string $token)
+    public function sendResetPasswordMail(string $name, string $email, string $token): void
     {
         $this->sendMail('mail_pw_reset', $email, [
             'apps_url' => $this->frameworkConfig->getAppsUrl(),
@@ -59,7 +59,7 @@ class Mailer
         ]);
     }
 
-    public function sendPointsThresholdMail(string $name, string $email, int $points)
+    public function sendPointsThresholdMail(string $name, string $email, int $points): void
     {
         $this->sendMail('mail_points', $email, [
             'apps_url' => $this->frameworkConfig->getAppsUrl(),
@@ -69,7 +69,10 @@ class Mailer
         ]);
     }
 
-    private function sendMail(string $template, string $email, array $parameters)
+    /**
+     * @param array<string, scalar> $parameters
+     */
+    private function sendMail(string $template, string $email, array $parameters): void
     {
         $subject = (string) $this->configService->getValue($template . '_subject');
         $body    = (string) $this->configService->getValue($template . '_body');

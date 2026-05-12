@@ -138,6 +138,9 @@ class SpecificationBuilder
         return $arguments;
     }
 
+    /**
+     * @return list<Operation\Response>
+     */
     private function buildThrows(Table\Generated\OperationRow $row, DefinitionsInterface $definitions): array
     {
         $throws = json_decode($row->getThrows() ?? '');
@@ -204,7 +207,8 @@ class SpecificationBuilder
     }
 
     /**
-     * @return array<string>
+     * @param list<string> $scopes
+     * @return list<string>
      */
     private function getTagsFromScopes(array $scopes): array
     {

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Security;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Fusio\Impl\Service\System\FrameworkConfig;
+use stdClass;
 use UnexpectedValueException;
 
 /**
@@ -43,6 +44,9 @@ class JsonWebToken
         $this->frameworkConfig = $frameworkConfig;
     }
 
+    /**
+     * @param array<string, string> $payload
+     */
     public function encode(array $payload): string
     {
         return JWT::encode($payload, $this->frameworkConfig->getProjectKey(), self::ALG);
@@ -51,7 +55,7 @@ class JsonWebToken
     /**
      * @throws UnexpectedValueException
      */
-    public function decode(string $jwt): \stdClass
+    public function decode(string $jwt): stdClass
     {
         return JWT::decode($jwt, new Key($this->frameworkConfig->getProjectKey(), self::ALG));
     }

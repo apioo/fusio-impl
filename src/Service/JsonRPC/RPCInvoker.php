@@ -55,6 +55,9 @@ readonly class RPCInvoker
     ) {
     }
 
+    /**
+     * @param RecordInterface<mixed> $arguments
+     */
     public function invoke(OperationRow $operation, RecordInterface $arguments): Response
     {
         $context = $this->contextFactory->getActive();

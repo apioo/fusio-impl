@@ -329,6 +329,9 @@ readonly class Identity
         return $this->frameworkConfig->getDispatchUrl('consumer', 'identity', $existing->getId(), 'exchange');
     }
 
+    /**
+     * @param array<string, mixed>|null $config
+     */
     public static function serializeConfig(?array $config = null): ?string
     {
         if (empty($config)) {
@@ -344,6 +347,6 @@ readonly class Identity
             return null;
         }
 
-        return Parser::decode($data, true);
+        return Parser::decodeAsArray($data);
     }
 }

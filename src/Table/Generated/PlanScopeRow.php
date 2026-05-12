@@ -5,41 +5,32 @@ namespace Fusio\Impl\Table\Generated;
 class PlanScopeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?int $planId = null;
-    
     private ?int $scopeId = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setPlanId(int $planId): void
     {
         $this->planId = $planId;
     }
-    
     public function getPlanId(): int
     {
         return $this->planId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "plan_id" was provided');
     }
-    
     public function setScopeId(int $scopeId): void
     {
         $this->scopeId = $scopeId;
     }
-    
     public function getScopeId(): int
     {
         return $this->scopeId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "scope_id" was provided');
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -49,12 +40,13 @@ class PlanScopeRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('scope_id', $this->scopeId);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

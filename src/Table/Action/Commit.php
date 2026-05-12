@@ -31,6 +31,9 @@ use Fusio\Impl\Table\Generated;
  */
 class Commit extends Generated\ActionCommitTable
 {
+    /**
+     * @return array{?string, ?string}
+     */
     public function findCurrentHash(int $actionId): array
     {
         $row = $this->connection->fetchAssociative('SELECT commit_hash, config_hash FROM fusio_action_commit WHERE action_id = :action_id ORDER BY id DESC', [
