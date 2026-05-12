@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Service\System;
 
+use DateInterval;
+use DateMalformedIntervalStringException;
 use Doctrine\DBAL;
 use Doctrine\DBAL\DriverManager;
 use Fusio\Impl\Exception\InvalidConfigurationException;
@@ -44,19 +46,28 @@ readonly class FrameworkConfig
         $this->parser = new DBAL\Tools\DsnParser();
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getFirewallIgnoreIp(): ?array
     {
         return $this->config->get('fusio_firewall_ignoreip');
     }
 
-    public function getFirewallBanTime(): \DateInterval
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
+    public function getFirewallBanTime(): DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_firewall_bantime') ?? 'PT5M');
+        return new DateInterval($this->config->get('fusio_firewall_bantime') ?? 'PT5M');
     }
 
-    public function getFirewallFindTime(): \DateInterval
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
+    public function getFirewallFindTime(): DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_firewall_findtime') ?? 'PT2M');
+        return new DateInterval($this->config->get('fusio_firewall_findtime') ?? 'PT2M');
     }
 
     public function getFirewallMaxRetry(): int
@@ -64,19 +75,28 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_firewall_maxretry') ?? 32;
     }
 
+    /**
+     * @return list<int>|null
+     */
     public function getFirewallCodes(): ?array
     {
         return $this->config->get('fusio_firewall_codes');
     }
 
-    public function getExpireTokenInterval(): \DateInterval
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
+    public function getExpireTokenInterval(): DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_expire_token'));
+        return new DateInterval($this->config->get('fusio_expire_token'));
     }
 
-    public function getExpireRefreshInterval(): \DateInterval
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
+    public function getExpireRefreshInterval(): DateInterval
     {
-        return new \DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D');
+        return new DateInterval($this->config->get('fusio_expire_refresh') ?? 'P3D');
     }
 
     public function getTenantId(): ?string
@@ -94,11 +114,17 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_project_key');
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getActionExclude(): ?array
     {
         return $this->config->get('fusio_action_exclude');
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getConnectionExclude(): ?array
     {
         return $this->config->get('fusio_connection_exclude');
@@ -164,27 +190,27 @@ readonly class FrameworkConfig
         return $this->config->get('fusio_apps_dir') ?: $this->getPathPublic();
     }
 
-    public function getUrl(string ...$pathFragment): string
+    public function getUrl(mixed ...$pathFragment): string
     {
         return $this->baseUrl->getUrl() . (count($pathFragment) > 0 ? '/' . implode('/', $pathFragment) : '');
     }
 
-    public function getDispatchUrl(string ...$pathFragment): string
+    public function getDispatchUrl(mixed ...$pathFragment): string
     {
         return $this->baseUrl->getDispatchUrl() . (count($pathFragment) > 0 ? implode('/', $pathFragment) : '');
     }
 
-    public function getPathCache(string ...$directoryFragment): string
+    public function getPathCache(mixed ...$directoryFragment): string
     {
         return $this->config->get('psx_path_cache') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
-    public function getPathPublic(string ...$directoryFragment): string
+    public function getPathPublic(mixed ...$directoryFragment): string
     {
         return $this->config->get('psx_path_public') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }
 
-    public function getPathResources(string ...$directoryFragment): string
+    public function getPathResources(mixed ...$directoryFragment): string
     {
         return $this->config->get('psx_path_resources') . (count($directoryFragment) > 0 ? DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $directoryFragment) : '');
     }

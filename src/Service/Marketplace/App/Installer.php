@@ -43,6 +43,8 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @implements InstallerInterface<MarketplaceApp>
  */
 class Installer implements InstallerInterface
 {
@@ -272,7 +274,7 @@ class Installer implements InstallerInterface
             $identityName = ucfirst($appName);
             $identityRow = $this->identityTable->findOneByTenantAndName($context->getTenantId(), $identityName);
             if (!$identityRow instanceof Table\Generated\IdentityRow) {
-                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getString('role_default'));
                 if ($role instanceof Table\Generated\RoleRow) {
                     $identityCreate = new IdentityCreate();
                     $identityCreate->setRoleId($role->getId());
@@ -323,7 +325,7 @@ class Installer implements InstallerInterface
         ];
 
         foreach ($configValues as $key => $name) {
-            $value = $this->configService->getValue($name);
+            $value = $this->configService->getString($name);
             if (!empty($value)) {
                 $env[$key] = $value;
             } elseif (!isset($env[$key])) {

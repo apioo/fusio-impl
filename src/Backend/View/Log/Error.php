@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -88,7 +88,7 @@ class Error extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(int $id, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals('error.' . Table\Generated\LogErrorTable::COLUMN_ID, $id);

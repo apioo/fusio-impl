@@ -77,6 +77,9 @@ readonly class Executor
         return $this->processor->execute($actionId, $request, $context);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function parseQueryString(?string $data): array
     {
         $result = array();

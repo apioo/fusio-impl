@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity(ContextInterface $context)
+    public function getEntity(ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\UserTable::COLUMN_ID, $context->getUser()->getId());

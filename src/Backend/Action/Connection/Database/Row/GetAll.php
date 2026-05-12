@@ -62,6 +62,10 @@ readonly class GetAll extends TableAbstract
         ];
     }
 
+    /**
+     * @param list<string> $allColumns
+     * @return list<string>
+     */
     private function getColumns(RequestInterface $request, array $allColumns): array
     {
         $columns = $request->get('columns');
@@ -77,6 +81,9 @@ readonly class GetAll extends TableAbstract
         return $selected;
     }
 
+    /**
+     * @param list<string> $allColumns
+     */
     private function addFilter(RequestInterface $request, QueryBuilder $qb, array $allColumns): void
     {
         $filterBy = $request->get('filterBy');
@@ -107,6 +114,9 @@ readonly class GetAll extends TableAbstract
         }
     }
 
+    /**
+     * @param list<string> $allColumns
+     */
     private function addOrderBy(RequestInterface $request, QueryBuilder $qb, ?string $primaryKey, array $allColumns): void
     {
         $sortBy = $request->get('sortBy');

@@ -31,6 +31,9 @@ use Fusio\Engine\AdapterInterface;
  */
 class AdapterFinder
 {
+    /**
+     * @return list<string>
+     */
     public static function getFiles(string $providerFile): array
     {
         $adapterClasses = include $providerFile;

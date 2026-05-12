@@ -195,6 +195,9 @@ class NewInstallation
         return $bag;
     }
 
+    /**
+     * @return array<string, array<string, Operation>>
+     */
     private static function getOperations(): array
     {
         return [

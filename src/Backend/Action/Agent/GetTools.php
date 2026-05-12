@@ -46,6 +46,12 @@ readonly class GetTools implements ActionInterface
         ];
     }
 
+    /**
+     * @return list<array{
+     *     name: string,
+     *     description: string,
+     * }>
+     */
     private function getTools(): array
     {
         $toolbox = $this->tools->resolve();

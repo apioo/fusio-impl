@@ -79,7 +79,7 @@ class User
             $row->setName($user->getName());
             $row->setEmail($user->getEmail());
             $row->setPassword($password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null);
-            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setPoints($this->configService->getInt('points_default') ?: null);
             $row->setMetadata($user->getMetadata() !== null ? Parser::encode($user->getMetadata()) : null);
             $row->setDate(LocalDateTime::now());
             $this->userTable->create($row);
@@ -136,7 +136,7 @@ class User
             if (!empty($roleId)) {
                 $role = $this->roleTable->findOneByTenantAndId($context->getTenantId(), $roleId);
             } else {
-                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+                $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getString('role_default'));
             }
 
             if (empty($role)) {
@@ -155,7 +155,7 @@ class User
             $row->setName($name);
             $row->setEmail($email);
             $row->setPassword(null);
-            $row->setPoints($this->configService->getValue('points_default') ?: null);
+            $row->setPoints($this->configService->getInt('points_default') ?: null);
             $row->setDate(LocalDateTime::now());
             $this->userTable->create($row);
 

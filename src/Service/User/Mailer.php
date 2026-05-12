@@ -74,8 +74,8 @@ readonly class Mailer
      */
     private function sendMail(string $template, string $email, array $parameters): void
     {
-        $subject = (string) $this->configService->getValue($template . '_subject');
-        $body    = (string) $this->configService->getValue($template . '_body');
+        $subject = $this->configService->getString($template . '_subject');
+        $body    = $this->configService->getString($template . '_body');
 
         foreach ($parameters as $key => $value) {
             $body = str_replace('{' . $key . '}', $value, $body);

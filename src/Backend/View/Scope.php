@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Scope extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -67,7 +67,7 @@ class Scope extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
@@ -87,7 +87,7 @@ class Scope extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getCategories(ContextInterface $context)
+    public function getCategories(ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());

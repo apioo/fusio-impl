@@ -49,6 +49,9 @@ readonly class InputSchemaBuilder
         $this->schemaParser = new TypeSchema($schemaManager);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function build(OperationRow $operation): array
     {
         $rootType = new StructDefinitionType();

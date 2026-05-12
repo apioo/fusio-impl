@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Message extends ViewAbstract
 {
-    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context)
+    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);

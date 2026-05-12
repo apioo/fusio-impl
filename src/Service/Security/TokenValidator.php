@@ -179,6 +179,7 @@ class TokenValidator
      * If the user has as entitled scope a global scope like backend or consumer he has the right to access every sub
      * scope, so we add them to the entitled scopes
      *
+     * @param list<string> $entitledScopes
      * @return list<string>
      */
     private function substituteGlobalScopes(?string $tenantId, array $entitledScopes): array

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Event\Token;
 
+use DateTimeInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
@@ -32,21 +33,18 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class GeneratedEvent extends EventAbstract
 {
-    private int $tokenId;
-    private string $accessToken;
-    private array $scopes;
-    private \DateTimeInterface $expires;
-    private \DateTimeInterface $now;
-
-    public function __construct(int $tokenId, string $accessToken, array $scopes, \DateTimeInterface $expires, \DateTimeInterface $now, UserContext $context)
-    {
+    /**
+     * @param list<string> $scopes
+     */
+    public function __construct(
+        private int $tokenId,
+        private string $accessToken,
+        private array $scopes,
+        private DateTimeInterface $expires,
+        private DateTimeInterface $now,
+        UserContext $context
+    ) {
         parent::__construct($context);
-
-        $this->tokenId     = $tokenId;
-        $this->accessToken = $accessToken;
-        $this->scopes      = $scopes;
-        $this->expires     = $expires;
-        $this->now         = $now;
     }
 
     public function getTokenId(): int
@@ -59,16 +57,19 @@ class GeneratedEvent extends EventAbstract
         return $this->accessToken;
     }
 
-    public function getExpires(): \DateTimeInterface
+    public function getExpires(): DateTimeInterface
     {
         return $this->expires;
     }
 
-    public function getNow(): \DateTimeInterface
+    public function getNow(): DateTimeInterface
     {
         return $this->now;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getScopes(): array
     {
         return $this->scopes;

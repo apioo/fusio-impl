@@ -111,6 +111,9 @@ class AgentRepository implements Repository\AgentInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $row
+     */
     private function newAgent(array $row): Model\AgentInterface
     {
         $metadata = null;

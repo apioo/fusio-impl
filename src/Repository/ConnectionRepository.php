@@ -108,6 +108,9 @@ class ConnectionRepository implements Repository\ConnectionInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $row
+     */
     private function newConnection(array $row): Model\ConnectionInterface
     {
         $config = !empty($row[Table\Generated\ConnectionTable::COLUMN_CONFIG]) ? ConnectionService\Encrypter::decrypt($row[Table\Generated\ConnectionTable::COLUMN_CONFIG], $this->frameworkConfig->getProjectKey()) : [];

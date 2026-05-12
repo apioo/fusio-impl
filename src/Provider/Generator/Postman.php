@@ -78,7 +78,10 @@ class Postman implements ProviderInterface
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Postman JSON export'));
     }
 
-    private function walk(stdClass $item, SetupInterface $setup, array &$resources)
+    /**
+     * @param array<string, mixed> $resources
+     */
+    private function walk(stdClass $item, SetupInterface $setup, array &$resources): void
     {
         if (isset($item->item) && is_array($item->item)) {
             foreach ($item->item as $child) {
@@ -100,6 +103,10 @@ class Postman implements ProviderInterface
         }
     }
 
+    /**
+     * @param list<stdClass> $variables
+     * @return array<string, mixed>
+     */
     private function getEnv(array $variables): array
     {
         $result = [];
@@ -121,6 +128,9 @@ class Postman implements ProviderInterface
         return $data;
     }
 
+    /**
+     * @param array<string, mixed> $env
+     */
     private function buildOperation(string $method, string $path, stdClass $item, SetupInterface $setup, array $env): void
     {
         $name = $item->name ?? null;
@@ -164,6 +174,9 @@ class Postman implements ProviderInterface
         $setup->addOperation($operation);
     }
 
+    /**
+     * @param list<string> $parts
+     */
     private function buildName(array $parts): string
     {
         $result = [];
@@ -187,6 +200,10 @@ class Postman implements ProviderInterface
         return '/' . Inflection::convertPlaceholderToColon(implode('/', $path));
     }
 
+    /**
+     * @param array<string, mixed> $query
+     * @return OperationParameters
+     */
     private function getParameters(array $query): OperationParameters
     {
         $result = new OperationParameters();
@@ -208,6 +225,9 @@ class Postman implements ProviderInterface
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $env
+     */
     private function getEndpointUrl(stdClass $item, array $env): string
     {
         $host = $item->request->url->host ?? null;

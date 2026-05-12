@@ -50,6 +50,9 @@ class TransactionQueryFilter extends DateQueryFilter
         return $this->planId;
     }
 
+    /**
+     * @param array<string, ColumnInterface|string> $columnMapping
+     */
     public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
         $condition = parent::getCondition($table, $columnMapping, $alias);
@@ -62,6 +65,9 @@ class TransactionQueryFilter extends DateQueryFilter
         return $condition;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         $arguments = parent::getConstructorArguments($request);

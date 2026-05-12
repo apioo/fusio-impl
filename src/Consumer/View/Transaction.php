@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -71,7 +71,7 @@ class Transaction extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $transactionId, ContextInterface $context)
+    public function getEntity(int $transactionId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TransactionTable::COLUMN_ID, $transactionId);

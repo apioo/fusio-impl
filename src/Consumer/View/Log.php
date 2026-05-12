@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(LogQueryFilter $filter, ContextInterface $context)
+    public function getCollection(LogQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -70,7 +70,7 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $logId, ContextInterface $context)
+    public function getEntity(int $logId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);

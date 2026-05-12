@@ -29,6 +29,7 @@ use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
 use Fusio\Model\Agent\ItemText;
 use Fusio\Model\Agent\Output;
+use JsonException;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
@@ -201,6 +202,9 @@ readonly class Sender implements SenderInterface
         return $chatId;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getResponseSchema(Table\Generated\AgentRow $row): ?array
     {
         $outgoing = $row->getOutgoing();
@@ -213,7 +217,7 @@ readonly class Sender implements SenderInterface
         $config = new Config();
         $config->put('openai_mode', true);
 
-        $jsonSchema = (new JsonSchema($config))->toArray($schema->getDefinitions(), $schema->getRoot());
+        $jsonSchema = new JsonSchema($config)->toArray($schema->getDefinitions(), $schema->getRoot());
         if (count($jsonSchema) === 0) {
             return null;
         }
@@ -221,6 +225,10 @@ readonly class Sender implements SenderInterface
         return $jsonSchema;
     }
 
+    /**
+     * @return list<string>
+     * @throws JsonException
+     */
     private function getTools(Table\Generated\AgentRow $row): array
     {
         $rawTools = $row->getTools();

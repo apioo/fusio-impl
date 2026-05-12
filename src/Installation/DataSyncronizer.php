@@ -139,6 +139,9 @@ class DataSyncronizer
         }
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private static function insert(Connection $connection, string $tableName, array $data): void
     {
         $row = [];

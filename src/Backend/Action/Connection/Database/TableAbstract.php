@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\Action\Connection\Database;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
@@ -66,6 +67,9 @@ abstract readonly class TableAbstract implements ActionInterface
         return $connection;
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     protected function getTable(RequestInterface $request, AbstractSchemaManager $schemaManager): Table
     {
         $tableName = $request->get('table_name');
@@ -104,6 +108,9 @@ abstract readonly class TableAbstract implements ActionInterface
         return $primaryKey;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getRow(DatabaseRow $payload, Table $table): array
     {
         $result = [];

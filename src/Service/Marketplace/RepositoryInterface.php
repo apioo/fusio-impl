@@ -31,12 +31,15 @@ use Sdkgen\Client\Exception\ClientException;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @template T of MarketplaceObject
  */
 interface RepositoryInterface
 {
     /**
      * Returns all available objects from the marketplace repository
      *
+     * @return MarketplaceCollection<T>
      * @throws ClientException
      * @throws MarketplaceMessageException
      */
@@ -45,6 +48,7 @@ interface RepositoryInterface
     /**
      * Returns a single object from the repository
      *
+     * @return T
      * @throws ClientException
      * @throws MarketplaceMessageException
      */
@@ -53,6 +57,7 @@ interface RepositoryInterface
     /**
      * Returns a single object from the repository
      *
+     * @return T
      * @throws ClientException
      * @throws MarketplaceMessageException
      */

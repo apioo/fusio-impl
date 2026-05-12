@@ -65,8 +65,8 @@ readonly class Mcp
 
     public function build(): Server
     {
-        $title = $this->configService->getValue('info_title') ?: 'Fusio';
-        $description = $this->configService->getValue('info_description') ?: null;
+        $title = $this->configService->getString('info_title') ?: 'Fusio';
+        $description = $this->configService->getString('info_description') ?: null;
 
         $registry = new Registry($this->eventDispatcher, $this->logger);
 

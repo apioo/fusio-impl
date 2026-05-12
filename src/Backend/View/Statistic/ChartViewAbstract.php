@@ -33,6 +33,11 @@ use PSX\Sql\ViewAbstract;
  */
 abstract class ChartViewAbstract extends ViewAbstract
 {
+    /**
+     * @param list<array<int|string, int>> $data
+     * @param list<string> $seriesNames
+     * @param list<string> $labels
+     */
     protected function build(array $data, array $seriesNames, array $labels): StatisticChart
     {
         $allSeries = [];

@@ -76,7 +76,7 @@ readonly class Get extends SdkAbstract
         return new Editor\Parser($this->schemaManager)->parse($specification);
     }
 
-    private function getFirst(stdClass $data)
+    private function getFirst(stdClass $data): mixed
     {
         foreach (get_object_vars($data) as $value) {
             return $value;

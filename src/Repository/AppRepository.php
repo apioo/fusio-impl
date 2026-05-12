@@ -111,6 +111,9 @@ class AppRepository implements Repository\AppInterface
         }
     }
 
+    /**
+     * @return list<string>
+     */
     protected function getScopes(string|int $appId): array
     {
         $condition = Condition::withAnd();
@@ -136,6 +139,10 @@ class AppRepository implements Repository\AppInterface
         return $names;
     }
 
+    /**
+     * @param array<string, mixed> $row
+     * @param list<string> $scopes
+     */
     protected function newApp(array $row, array $scopes): Model\AppInterface
     {
         $parameters = [];

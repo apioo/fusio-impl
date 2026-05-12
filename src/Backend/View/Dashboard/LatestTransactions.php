@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestTransactions extends ViewAbstract
 {
-    public function getView(ContextInterface $context)
+    public function getView(ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TransactionTable::COLUMN_TENANT_ID, $context->getTenantId());

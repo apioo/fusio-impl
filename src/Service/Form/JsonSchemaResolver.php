@@ -38,6 +38,9 @@ class JsonSchemaResolver
     {
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function resolveIncomingByOperationId(int $operationId): ?array
     {
         $operation = $this->operationTable->find($operationId);
@@ -48,6 +51,9 @@ class JsonSchemaResolver
         return $this->resolveIncoming($operation);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function resolveIncoming(Table\Generated\OperationRow $operation): ?array
     {
         $incoming = $operation->getIncoming();
@@ -58,6 +64,9 @@ class JsonSchemaResolver
         return $this->buildJsonSchema($incoming);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function resolveOutgoing(Table\Generated\OperationRow $operation): ?array
     {
         $outgoing = $operation->getOutgoing();
@@ -68,6 +77,9 @@ class JsonSchemaResolver
         return $this->buildJsonSchema($outgoing);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     private function buildJsonSchema(?string $schema): ?array
     {
         if ($schema === null) {

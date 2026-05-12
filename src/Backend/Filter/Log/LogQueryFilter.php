@@ -105,6 +105,9 @@ class LogQueryFilter extends DateQueryFilter
         return $this->body;
     }
 
+    /**
+     * @param array<string, ColumnInterface|string> $columnMapping
+     */
     public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
         $condition = parent::getCondition($table, $columnMapping, $alias);
@@ -149,6 +152,9 @@ class LogQueryFilter extends DateQueryFilter
         return $condition;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         $arguments = parent::getConstructorArguments($request);

@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Connection;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -35,6 +37,9 @@ use Fusio\Engine\ParametersInterface;
  */
 class Memory implements ConnectionInterface
 {
+    /**
+     * @var array<string, Connection>
+     */
     private static array $connections = [];
 
     public function getName(): string
@@ -42,6 +47,9 @@ class Memory implements ConnectionInterface
         return 'Memory';
     }
 
+    /**
+     * @throws Exception
+     */
     public function getConnection(ParametersInterface $config): mixed
     {
         $key = $config->get('key') ?: 'default';

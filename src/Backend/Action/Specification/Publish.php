@@ -50,11 +50,11 @@ readonly class Publish implements ActionInterface
 
         $name = $body->getName();
         if (empty($name)) {
-            $name = $this->config->getValue('typehub_document_name');
+            $name = $this->config->getString('typehub_document_name');
         }
 
-        $clientId = $this->config->getValue('typehub_client_id');
-        $clientSecret = $this->config->getValue('typehub_client_secret');
+        $clientId = $this->config->getString('typehub_client_id');
+        $clientSecret = $this->config->getString('typehub_client_secret');
 
         if (empty($clientId) || empty($clientSecret)) {
             throw new BadRequestException('TypeHub credentials not configured, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');

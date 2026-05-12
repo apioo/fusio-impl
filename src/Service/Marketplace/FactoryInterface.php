@@ -20,16 +20,26 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
+use Fusio\Marketplace\MarketplaceObject;
+
 /**
  * FactoryInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @template T of MarketplaceObject
  */
 interface FactoryInterface
 {
+    /**
+     * @return RepositoryInterface<T>
+     */
     public function getRepository(): RepositoryInterface;
 
+    /**
+     * @return InstallerInterface<T>
+     */
     public function getInstaller(): InstallerInterface;
 }

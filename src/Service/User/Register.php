@@ -58,12 +58,12 @@ readonly class Register
 
         // determine initial user status
         $status = Table\User::STATUS_DISABLED;
-        $approval = $this->configService->getValue('user_approval');
+        $approval = $this->configService->getBool('user_approval');
         if (!$approval) {
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getString('role_default'));
         if (!$role instanceof Table\Generated\RoleRow) {
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }

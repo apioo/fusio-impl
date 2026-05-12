@@ -172,6 +172,9 @@ readonly class App
         return $existing->getId();
     }
 
+    /**
+     * @param list<string>|null $scopes
+     */
     protected function insertScopes(?string $tenantId, int $appId, ?array $scopes): void
     {
         if (!empty($scopes)) {

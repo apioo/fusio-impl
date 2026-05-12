@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\Filter;
 
 use Fusio\Engine\RequestInterface;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\TableInterface;
 
@@ -35,20 +36,31 @@ class ClassQueryFilter extends QueryFilter
 {
     public const COLUMN_CLASS = 'class';
 
-    private array $class;
-
-    public function __construct(array $class, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
-    {
+    /**
+     * @param list<string> $class
+     */
+    public function __construct(
+        private array $class,
+        int $startIndex,
+        int $count,
+        ?string $search = null,
+        ?string $sortBy = null,
+        ?string $sortOrder = null
+    ) {
         parent::__construct($startIndex, $count, $search, $sortBy, $sortOrder);
-
-        $this->class = $class;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getClass(): array
     {
         return $this->class;
     }
 
+    /**
+     * @param array<string, ColumnInterface|string> $columnMapping
+     */
     public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
         $condition = parent::getCondition($table, $columnMapping, $alias);
@@ -61,6 +73,9 @@ class ClassQueryFilter extends QueryFilter
         return $condition;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         $arguments = parent::getConstructorArguments($request);

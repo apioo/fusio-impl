@@ -42,7 +42,7 @@ class Captcha
 
     public function assertCaptcha(?string $captcha): void
     {
-        $secret = $this->configService->getValue('recaptcha_secret');
+        $secret = $this->configService->getString('recaptcha_secret');
         if (!empty($secret)) {
             $this->verifyCaptcha($captcha, $secret);
         }

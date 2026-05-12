@@ -63,6 +63,8 @@ readonly class GraphQL
     }
 
     /**
+     * @param array<mixed> $bodyParams
+     * @param array<mixed> $queryParams
      * @throws RequestError
      * @throws InvariantViolation
      * @throws Exception

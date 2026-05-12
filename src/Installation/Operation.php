@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Installation;
 
 use PSX\Api\OperationInterface;
+use PSX\Schema\Type\PropertyTypeAbstract;
 
 /**
  * Operation
@@ -31,6 +32,10 @@ use PSX\Api\OperationInterface;
  */
 class Operation
 {
+    /**
+     * @param array<string, PropertyTypeAbstract> $parameters
+     * @param array<int, string> $throws
+     */
     public function __construct(
         public string $action,
         public string $httpMethod,

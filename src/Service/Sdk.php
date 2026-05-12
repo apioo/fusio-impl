@@ -94,6 +94,9 @@ readonly class Sdk
         return $this->frameworkConfig->getUrl('sdk', $file);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getTypes(): array
     {
         $registry = $this->factory->factory();

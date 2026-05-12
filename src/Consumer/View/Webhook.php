@@ -37,7 +37,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Webhook extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -94,7 +94,7 @@ class Webhook extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $webhookId, ContextInterface $context)
+    public function getEntity(int $webhookId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals('webhook.' . Table\Generated\WebhookTable::COLUMN_ID, $webhookId);

@@ -35,27 +35,20 @@ use PSX\Record\RecordInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class EntityCreator
+readonly class EntityCreator
 {
-    private Service\Operation $operationService;
-    private Table\Operation $operationTable;
-    private Service\Schema $schemaService;
-    private Table\Schema $schemaTable;
-    private Service\Action $actionService;
-    private Table\Action $actionTable;
-
-    public function __construct(Service\Operation $operationService, Table\Operation $operationTable, Service\Schema $schemaService, Table\Schema $schemaTable, Service\Action $actionService, Table\Action $actionTable)
-    {
-        $this->operationService = $operationService;
-        $this->operationTable = $operationTable;
-        $this->schemaService = $schemaService;
-        $this->schemaTable = $schemaTable;
-        $this->actionService = $actionService;
-        $this->actionTable = $actionTable;
+    public function __construct(
+        private Service\Operation $operationService,
+        private Table\Operation $operationTable,
+        private Service\Schema $schemaService,
+        private Table\Schema $schemaTable,
+        private Service\Action $actionService,
+        private Table\Action $actionTable
+    ) {
     }
 
     /**
-     * @param Model\Backend\SchemaCreate[] $schemas
+     * @param array<Model\Backend\SchemaCreate> $schemas
      */
     public function createSchemas(array $schemas, string $prefix, UserContext $context): void
     {
@@ -85,7 +78,7 @@ class EntityCreator
     }
 
     /**
-     * @param Model\Backend\ActionCreate[] $actions
+     * @param array<Model\Backend\ActionCreate> $actions
      */
     public function createActions(array $actions, string $prefix, UserContext $context): void
     {
@@ -100,9 +93,10 @@ class EntityCreator
     }
 
     /**
-     * @param Model\Backend\OperationCreate[] $operations
+     * @param array<Model\Backend\OperationCreate> $operations
+     * @param list<string> $scopes
      */
-    public function createOperations(array $operations, $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
+    public function createOperations(array $operations, ?array $scopes, ?bool $public, string $basePath, string $prefix, UserContext $context): void
     {
         $scopes = $scopes ?: [];
         $reservedSchemaNames = [SchemaName::PASSTHRU, SchemaName::MESSAGE];
@@ -165,6 +159,10 @@ class EntityCreator
         return $parts;
     }
 
+    /**
+     * @param RecordInterface<mixed>|null $source
+     * @return iterable<mixed>
+     */
     private function getImport(?RecordInterface $source): iterable|\stdClass|null
     {
         if ($source === null) {

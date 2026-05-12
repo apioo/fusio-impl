@@ -54,6 +54,14 @@ readonly class Refresh implements ActionInterface
         return $this->renderToken($token);
     }
 
+    /**
+     * @return array{
+     *     token: string,
+     *     expires_in: ?int,
+     *     refresh_token: ?string,
+     *     scope: ?string,
+     * }
+     */
     private function renderToken(?AccessToken $token): array
     {
         if (!$token instanceof AccessToken) {

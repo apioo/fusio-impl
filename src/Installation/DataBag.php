@@ -27,7 +27,10 @@ use Fusio\Impl\Consumer;
 use Fusio\Impl\Table;
 use PSX\Json\Parser;
 use PSX\Schema\ContentType;
+use PSX\Schema\Type\PropertyTypeAbstract;
 use PSX\Schema\TypeInterface;
+use RuntimeException;
+use stdClass;
 
 /**
  * DataBag
@@ -38,6 +41,9 @@ use PSX\Schema\TypeInterface;
  */
 class DataBag
 {
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $data;
 
     public function __construct()
@@ -88,13 +94,15 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, Operation> $operations
+     */
     public function addOperations(?string $tenantId, string $category, array $operations): void
     {
         $this->addCategory($category, tenantId: $tenantId);
         $this->addScope($category, $category, tenantId: $tenantId);
 
         foreach ($operations as $name => $operation) {
-            /** @var Operation $operation */
             if ($category !== 'default') {
                 $path = '/' . $category . $operation->httpPath;
                 $operationName = $category . '.' . $name;
@@ -168,20 +176,25 @@ class DataBag
         }
     }
 
+    /**
+     * @param array<string, PropertyTypeAbstract> $parameters
+     */
     private function normalizeParameters(array $parameters): object
     {
-        $result = new \stdClass();
+        $result = new stdClass();
         foreach ($parameters as $name => $type) {
-            /** @var TypeInterface $type */
             $result->{$name} = $type->toArray();
         }
 
         return $result;
     }
 
+    /**
+     * @param array<int, string> $throws
+     */
     private function normalizeThrows(array $throws): object
     {
-        $result = new \stdClass();
+        $result = new stdClass();
         foreach ($throws as $code => $class) {
             if (class_exists($class)) {
                 $throw = 'php+class://' . ClassName::serialize($class);
@@ -195,6 +208,9 @@ class DataBag
         return $result;
     }
 
+    /**
+     * @return array<string, list<mixed>>
+     */
     public function toArray(): array
     {
         $result = [];
@@ -205,6 +221,9 @@ class DataBag
         return $result;
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addAction(string $category, string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_action'][$name] = [
@@ -233,6 +252,10 @@ class DataBag
         ];
     }
 
+    /**
+     * @param list<string> $tools
+     * @param array<string, mixed>|null $metadata
+     */
     public function addAgent(string $category, ?string $connection, int $type, string $name, string $description, string $introduction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         if (!empty($outgoing)) {
@@ -274,6 +297,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addApp(string $user, string $name, string $url, string $appKey, string $appSecret, int $status = Table\App::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_app'][$name] = [
@@ -325,6 +351,10 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed> $config
+     * @param array<string, mixed>|null $metadata
+     */
     public function addBundle(string $name, string $version, string $icon, string $summary, string $description, array $config, int $cost, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_bundle'][$name] = [
@@ -350,7 +380,7 @@ class DataBag
         ];
     }
 
-    public function addConfig(string $name, int $type, $value, string $description, ?string $tenantId = null): void
+    public function addConfig(string $name, int $type, mixed $value, string $description, ?string $tenantId = null): void
     {
         $this->data['fusio_config'][$name] = [
             'tenant_id' => $tenantId,
@@ -361,6 +391,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addConnection(string $name, string $class, ?string $config = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_connection'][$name] = [
@@ -373,6 +406,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addCronjob(string $category, string $name, string $cron, string $action, ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_cronjob'][$name] = [
@@ -401,6 +437,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addEvent(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_event'][$name] = [
@@ -414,6 +453,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addFirewall(string $name, string $ip, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_firewall'][$name] = [
@@ -427,6 +469,10 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed> $uiSchema
+     * @param array<string, mixed>|null $metadata
+     */
     public function addForm(string $name, string $operation, array $uiSchema, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_form'][$name] = [
@@ -529,6 +575,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_page'][$slug] = [
@@ -542,6 +591,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_plan'][$name] = [
@@ -608,6 +660,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addRate(string $name, int $priority, int $rateLimit, string $timespan, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_rate'][$name] = [
@@ -651,6 +706,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addOperation(string $category, bool $public, int $stability, string $name, string $httpMethod, string $httpPath, int $httpCode, object $parameters, ?string $incoming, ?string $outgoing, object $throws, string $action, ?int $costs = null, ?array $metadata = null, ?string $tenantId = null, ?string $description = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_operation'][$name] = [
@@ -676,6 +734,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addSchema(string $category, string $name, string $source, ?string $form = null, ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_schema'][$name] = [
@@ -702,6 +763,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addScope(string $category, string $name, string $description = '', ?array $metadata = null, ?string $tenantId = null): void
     {
         $this->data['fusio_scope'][$name] = [
@@ -749,6 +813,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addTrigger(string $category, string $name, string $event, string $action, ?array $metadata = null, ?string $tenantId = null, ?string $taxonomy = null): void
     {
         $this->data['fusio_trigger'][$name] = [
@@ -763,6 +830,9 @@ class DataBag
         ];
     }
 
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
     public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         $this->data['fusio_user'][$name] = [
@@ -797,10 +867,13 @@ class DataBag
         ];
     }
 
+    /**
+     * @param list<array<string, mixed>> $rows
+     */
     public function addTable(string $table, array $rows): void
     {
         if (isset($this->data[$table])) {
-            throw new \RuntimeException('Table ' . $table . ' already exists');
+            throw new RuntimeException('Table ' . $table . ' already exists');
         }
 
         $this->data[$table] = $rows;
@@ -809,19 +882,22 @@ class DataBag
     public function getReference(string $type, string $name, ?string $tenantId): Reference
     {
         if (!isset($this->data[$type])) {
-            throw new \RuntimeException('Provided an invalid type ' . $type);
+            throw new RuntimeException('Provided an invalid type ' . $type);
         }
 
         return new Reference($type, $name, $tenantId);
     }
 
-    public function replace(string $type, $name, $key, $value): void
+    public function replace(string $type, string $name, string $key, mixed $value): void
     {
         if (isset($this->data[$type][$name][$key])) {
             $this->data[$type][$name][$key] = $value;
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getData(string $table, ?string $column = null, mixed $value = null): array
     {
         $data = $this->data[$table] ?? throw new \InvalidArgumentException('Provided table ' . $table . ' does not exist');

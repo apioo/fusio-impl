@@ -37,7 +37,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Commit extends ViewAbstract
 {
-    public function getCollection(int $schemaId, QueryFilter $filter, ContextInterface $context)
+    public function getCollection(int $schemaId, QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();

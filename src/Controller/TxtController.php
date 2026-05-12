@@ -46,8 +46,8 @@ class TxtController extends ControllerAbstract
     #[Outgoing(200, ContentType::TEXT)]
     public function getHumansTxt(): HttpResponse
     {
-        $title = $this->configService->getValue('info_title') ?: 'Fusio';
-        $description = $this->configService->getValue('info_description') ?: null;
+        $title = $this->configService->getString('info_title') ?: 'Fusio';
+        $description = $this->configService->getString('info_description') ?: null;
 
         $body = <<<TEXT
 

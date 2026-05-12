@@ -34,6 +34,7 @@ use Fusio\Impl\Provider\IdentityProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Fusio\Model;
+use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Framework\Environment\IPResolver;
@@ -331,6 +332,7 @@ readonly class Identity
 
     /**
      * @param array<string, mixed>|null $config
+     * @throws JsonException
      */
     public static function serializeConfig(?array $config = null): ?string
     {
@@ -341,6 +343,10 @@ readonly class Identity
         return Parser::encode($config);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     * @throws JsonException
+     */
     public static function unserializeConfig(?string $data): ?array
     {
         if (empty($data)) {

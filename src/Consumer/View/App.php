@@ -40,7 +40,7 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -73,7 +73,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $appId, ContextInterface $context)
+    public function getEntity(int $appId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $appId);
@@ -108,7 +108,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey(?string $tenantId, string $appKey, ?string $scope)
+    public function getEntityByAppKey(?string $tenantId, string $appKey, ?string $scope): mixed
     {
         $app = $this->getTable(Table\App::class)->findOneByTenantAndAppKey($tenantId, $appKey);
         if (!$app instanceof Table\Generated\AppRow || $app->getStatus() !== Table\App::STATUS_ACTIVE) {

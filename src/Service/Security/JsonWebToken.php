@@ -45,7 +45,7 @@ class JsonWebToken
     }
 
     /**
-     * @param array<string, string> $payload
+     * @param array<string, scalar> $payload
      */
     public function encode(array $payload): string
     {

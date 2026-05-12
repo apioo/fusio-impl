@@ -93,6 +93,13 @@ readonly class Generator
         return $builder->getForm();
     }
 
+    /**
+     * @return array{
+     *     schemas: list<Backend\SchemaCreate>,
+     *     actions: list<Backend\ActionCreate>,
+     *     operations: list<Backend\OperationCreate>,
+     * }
+     */
     public function getChangelog(string $providerName, Backend\GeneratorProviderConfig $config): array
     {
         $setup = new Setup();

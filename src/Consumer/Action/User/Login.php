@@ -54,17 +54,25 @@ readonly class Login implements ActionInterface
         return $this->renderToken($token);
     }
 
+    /**
+     * @return array{
+     *     token: string,
+     *     expires_in: ?int,
+     *     refresh_token: ?string,
+     *     scope: ?string,
+     * }
+     */
     private function renderToken(?AccessToken $token): array
     {
-        if ($token instanceof AccessToken) {
-            return [
-                'token' => $token->getAccessToken(),
-                'expires_in' => $token->getExpiresIn(),
-                'refresh_token' => $token->getRefreshToken(),
-                'scope' => $token->getScope(),
-            ];
-        } else {
+        if (!$token instanceof AccessToken) {
             throw new StatusCode\BadRequestException('Invalid name or password');
         }
+
+        return [
+            'token' => $token->getAccessToken(),
+            'expires_in' => $token->getExpiresIn(),
+            'refresh_token' => $token->getRefreshToken(),
+            'scope' => $token->getScope(),
+        ];
     }
 }

@@ -59,6 +59,9 @@ readonly class Executor
         }
     }
 
+    /**
+     * @return list<Table\Generated\CronjobRow>
+     */
     private function getCronjobsToExecute(): array
     {
         $execute = [];
