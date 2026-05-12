@@ -33,13 +33,9 @@ use Fusio\Model\Backend\FormCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private FormCreate $form;
-
-    public function __construct(FormCreate $form, UserContext $context)
+    public function __construct(private readonly FormCreate $form, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->form = $form;
     }
 
     public function getForm(): FormCreate

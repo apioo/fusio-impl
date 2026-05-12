@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\ConnectionRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private ConnectionRow $existing;
-
-    public function __construct(ConnectionRow $existing, UserContext $context)
+    public function __construct(private readonly ConnectionRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): ConnectionRow

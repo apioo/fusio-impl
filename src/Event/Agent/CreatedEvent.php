@@ -33,13 +33,9 @@ use Fusio\Model\Backend\AgentCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private AgentCreate $agent;
-
-    public function __construct(AgentCreate $agent, UserContext $context)
+    public function __construct(private readonly AgentCreate $agent, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->agent = $agent;
     }
 
     public function getAgent(): AgentCreate

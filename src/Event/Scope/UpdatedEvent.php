@@ -34,15 +34,9 @@ use Fusio\Model\Backend\ScopeUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private ScopeUpdate $scope;
-    private ScopeRow $existing;
-
-    public function __construct(ScopeUpdate $scope, ScopeRow $existing, UserContext $context)
+    public function __construct(private readonly ScopeUpdate $scope, private readonly ScopeRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->scope = $scope;
-        $this->existing = $existing;
     }
 
     public function getScope(): ScopeUpdate

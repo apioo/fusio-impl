@@ -33,13 +33,9 @@ use Fusio\Model\Backend\TriggerCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private TriggerCreate $trigger;
-
-    public function __construct(TriggerCreate $trigger, UserContext $context)
+    public function __construct(private readonly TriggerCreate $trigger, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->trigger = $trigger;
     }
 
     public function getTrigger(): TriggerCreate

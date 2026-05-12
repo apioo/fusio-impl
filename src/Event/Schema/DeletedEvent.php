@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\SchemaRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private SchemaRow $existing;
-
-    public function __construct(SchemaRow $existing, UserContext $context)
+    public function __construct(private readonly SchemaRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): SchemaRow

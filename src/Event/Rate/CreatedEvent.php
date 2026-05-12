@@ -33,13 +33,9 @@ use Fusio\Model\Backend\RateCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private RateCreate $rate;
-
-    public function __construct(RateCreate $rate, UserContext $context)
+    public function __construct(private readonly RateCreate $rate, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->rate = $rate;
     }
 
     public function getRate(): RateCreate

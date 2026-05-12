@@ -34,15 +34,9 @@ use Fusio\Model\Backend\WebhookUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private WebhookUpdate $webhook;
-    private WebhookRow $existing;
-
-    public function __construct(WebhookUpdate $webhook, WebhookRow $existing, UserContext $context)
+    public function __construct(private readonly WebhookUpdate $webhook, private readonly WebhookRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->webhook = $webhook;
-        $this->existing = $existing;
     }
 
     public function getWebhook(): WebhookUpdate

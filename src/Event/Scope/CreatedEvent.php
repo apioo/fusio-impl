@@ -33,13 +33,9 @@ use Fusio\Model\Backend\ScopeCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private ScopeCreate $scope;
-
-    public function __construct(ScopeCreate $scope, UserContext $context)
+    public function __construct(private readonly ScopeCreate $scope, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->scope = $scope;
     }
 
     public function getScope(): ScopeCreate

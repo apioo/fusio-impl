@@ -34,15 +34,9 @@ use Fusio\Model\Backend\EventUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private EventUpdate $event;
-    private EventRow $existing;
-
-    public function __construct(EventUpdate $event, EventRow $existing, UserContext $context)
+    public function __construct(private readonly EventUpdate $event, private readonly EventRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->event    = $event;
-        $this->existing = $existing;
     }
 
     public function getEvent(): EventUpdate

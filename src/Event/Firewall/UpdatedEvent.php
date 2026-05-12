@@ -34,15 +34,9 @@ use Fusio\Model\Backend\FirewallUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private FirewallUpdate $firewall;
-    private FirewallRow $existing;
-
-    public function __construct(FirewallUpdate $firewall, FirewallRow $existing, UserContext $context)
+    public function __construct(private readonly FirewallUpdate $firewall, private readonly FirewallRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->firewall = $firewall;
-        $this->existing = $existing;
     }
 
     public function getFirewall(): FirewallUpdate

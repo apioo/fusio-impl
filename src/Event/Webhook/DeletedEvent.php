@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\WebhookRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private WebhookRow $existing;
-
-    public function __construct(WebhookRow $existing, UserContext $context)
+    public function __construct(private readonly WebhookRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): WebhookRow

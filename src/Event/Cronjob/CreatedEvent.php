@@ -33,13 +33,9 @@ use Fusio\Model\Backend\CronjobCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private CronjobCreate $cronjob;
-
-    public function __construct(CronjobCreate $cronjob, UserContext $context)
+    public function __construct(private readonly CronjobCreate $cronjob, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->cronjob = $cronjob;
     }
 
     public function getCronjob(): CronjobCreate

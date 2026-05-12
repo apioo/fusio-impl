@@ -33,13 +33,9 @@ use Fusio\Model\Backend\WebhookCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private WebhookCreate $webhook;
-
-    public function __construct(WebhookCreate $webhook, UserContext $context)
+    public function __construct(private readonly WebhookCreate $webhook, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->webhook = $webhook;
     }
 
     public function getWebhook(): WebhookCreate

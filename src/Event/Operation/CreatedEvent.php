@@ -33,13 +33,9 @@ use Fusio\Model\Backend\OperationCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private OperationCreate $operation;
-
-    public function __construct(OperationCreate $operation, UserContext $context)
+    public function __construct(private readonly OperationCreate $operation, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->operation = $operation;
     }
 
     public function getOperation(): OperationCreate

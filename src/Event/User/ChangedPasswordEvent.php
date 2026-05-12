@@ -33,13 +33,9 @@ use Fusio\Model\Backend\AccountChangePassword;
  */
 class ChangedPasswordEvent extends EventAbstract
 {
-    private AccountChangePassword $changePassword;
-
-    public function __construct(AccountChangePassword $changePassword, UserContext $context)
+    public function __construct(private readonly AccountChangePassword $changePassword, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->changePassword = $changePassword;
     }
 
     public function getChangePassword(): AccountChangePassword

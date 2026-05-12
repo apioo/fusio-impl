@@ -34,15 +34,9 @@ use Fusio\Model\Backend\PlanUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private PlanUpdate $plan;
-    private PlanRow $existing;
-
-    public function __construct(PlanUpdate $plan, PlanRow $existing, UserContext $context)
+    public function __construct(private readonly PlanUpdate $plan, private readonly PlanRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->plan = $plan;
-        $this->existing = $existing;
     }
 
     public function getPlan(): PlanUpdate

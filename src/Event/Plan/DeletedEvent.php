@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\PlanRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private PlanRow $existing;
-
-    public function __construct(PlanRow $existing, UserContext $context)
+    public function __construct(private readonly PlanRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): PlanRow

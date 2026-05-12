@@ -37,11 +37,11 @@ class GeneratedEvent extends EventAbstract
      * @param list<string> $scopes
      */
     public function __construct(
-        private int $tokenId,
-        private string $accessToken,
-        private array $scopes,
-        private DateTimeInterface $expires,
-        private DateTimeInterface $now,
+        private readonly int $tokenId,
+        private readonly string $accessToken,
+        private readonly array $scopes,
+        private readonly DateTimeInterface $expires,
+        private readonly DateTimeInterface $now,
         UserContext $context
     ) {
         parent::__construct($context);

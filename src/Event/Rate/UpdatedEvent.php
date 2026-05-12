@@ -34,15 +34,9 @@ use Fusio\Model\Backend\RateUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private RateUpdate $rate;
-    private RateRow $existing;
-
-    public function __construct(RateUpdate $rate, RateRow $existing, UserContext $context)
+    public function __construct(private readonly RateUpdate $rate, private readonly RateRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->rate     = $rate;
-        $this->existing = $existing;
     }
 
     public function getRate(): RateUpdate

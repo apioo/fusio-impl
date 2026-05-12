@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\ScopeRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private ScopeRow $existing;
-
-    public function __construct(ScopeRow $existing, UserContext $context)
+    public function __construct(private readonly ScopeRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): ScopeRow

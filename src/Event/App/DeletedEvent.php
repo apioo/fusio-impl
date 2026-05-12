@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\AppRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private AppRow $existing;
-
-    public function __construct(AppRow $existing, UserContext $context)
+    public function __construct(private readonly AppRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): AppRow

@@ -33,13 +33,9 @@ use Fusio\Model\Backend\ConfigUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private ConfigUpdate $config;
-
-    public function __construct(ConfigUpdate $config, UserContext $context)
+    public function __construct(private readonly ConfigUpdate $config, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->config = $config;
     }
 
     public function getConfig(): ConfigUpdate

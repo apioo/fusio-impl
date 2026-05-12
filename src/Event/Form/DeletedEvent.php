@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\FormRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private FormRow $existing;
-
-    public function __construct(FormRow $existing, UserContext $context)
+    public function __construct(private readonly FormRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): FormRow

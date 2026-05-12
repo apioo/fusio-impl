@@ -33,13 +33,9 @@ use Fusio\Model\Backend\TaxonomyCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private TaxonomyCreate $taxonomy;
-
-    public function __construct(TaxonomyCreate $taxonomy, UserContext $context)
+    public function __construct(private readonly TaxonomyCreate $taxonomy, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->taxonomy = $taxonomy;
     }
 
     public function getTaxonomy(): TaxonomyCreate
