@@ -25,8 +25,9 @@ use Fusio\Impl\Table;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\PromptArgument;
+use Mcp\Schema\Request\GetPromptRequest;
+use Mcp\Server\Session\Session;
 use PSX\Sql\Condition;
-use RuntimeException;
 
 /**
  * PromptLoader
@@ -58,17 +59,14 @@ readonly class PromptLoader
                 arguments: $arguments
             );
 
-            $registry->registerPrompt($prompt, function (array $arguments) use ($row): array {
-                $message = $arguments['message'] ?? null;
-                if (!is_string($message) || $message === '') {
-                    throw new RuntimeException('Could not extract message from arguments, got: ' . var_export($arguments, true));
-                }
-
+            $handler = function (?string $message, Session $_session, GetPromptRequest $_request) use ($row): array {
                 return [
                     ['role' => 'assistant', 'content' => $row->getIntroduction()],
                     ['role' => 'user', 'content' => $message],
                 ];
-            });
+            };
+
+            $registry->registerPrompt($prompt, $handler, isManual: true);
         }
     }
 }
