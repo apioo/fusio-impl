@@ -34,7 +34,6 @@ use Mcp\Server\Handler;
 use Mcp\Server\Handler\Notification\NotificationHandlerInterface;
 use Mcp\Server\Handler\Request\RequestHandlerInterface;
 use Mcp\Server\Protocol;
-use Mcp\Server\Session\SessionFactory;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -73,7 +72,6 @@ readonly class Mcp
         $this->promptLoader->load($registry);
         $this->toolLoader->load($registry);
 
-        $sessionFactory = new SessionFactory();
         $sessionStore = new SessionStore($this->sessionTable, $this->frameworkConfig);
         $messageFactory = MessageFactory::make();
 
@@ -120,8 +118,7 @@ readonly class Mcp
             requestHandlers: $requestHandlers,
             notificationHandlers: $notificationHandlers,
             messageFactory: $messageFactory,
-            sessionFactory: $sessionFactory,
-            sessionStore: $sessionStore,
+            sessionManager: new Server\Session\SessionManager($sessionStore, $this->logger),
             logger: $this->logger,
         );
 

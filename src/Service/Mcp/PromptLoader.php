@@ -51,7 +51,12 @@ readonly class PromptLoader
             $arguments = [];
             $arguments[] = new PromptArgument('message', 'The message', true);
 
-            $prompt = new Prompt($row->getName(), $row->getDescription(), $arguments);
+            $prompt = new Prompt(
+                name: $row->getName(),
+                title: $row->getName(),
+                description: $row->getDescription(),
+                arguments: $arguments
+            );
 
             $registry->registerPrompt($prompt, function (array $arguments) use ($row): array {
                 $message = $arguments['message'] ?? null;
