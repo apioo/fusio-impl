@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
 abstract class ChartViewAbstract extends ViewAbstract
 {
     /**
-     * @param list<array<int|string, int>> $data
+     * @param list<array<int|string, float>> $data
      * @param list<string> $seriesNames
      * @param list<string> $labels
      */
