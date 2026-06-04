@@ -44,7 +44,7 @@ readonly class Get implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $agent = $this->view->getEntity(
-            (int) $request->get('agent_id'),
+            $request->get('agent_id'),
             $context
         );
 
