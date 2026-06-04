@@ -47,6 +47,7 @@ readonly class Submit implements ActionInterface
 
         assert($body instanceof Input);
 
+        /** @phpstan-ignore arguments.count */
         $output = $this->sender->send(
             (int) $request->get('agent_id'),
             $body,
