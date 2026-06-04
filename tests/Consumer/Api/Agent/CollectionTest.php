@@ -18,85 +18,70 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Scope;
+namespace Fusio\Impl\Tests\Consumer\Api\Agent;
 
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
-use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
- * CategoriesTest
+ * CollectionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CategoriesTest extends DbTestCase
+class CollectionTest extends DbTestCase
 {
-    private ?int $scopeFooId = null;
-    
-    private ?int $scopeBarId = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->scopeFooId = Fixture::getReference('fusio_scope', 'foo')->resolve($this->connection);
-        $this->scopeBarId = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
-    }
-
     public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/scope/categories', 'GET', [
+        $response = $this->sendRequest('/consumer/agent', 'GET', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ]);
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
+        $expect = <<<'JSON'
+        {
+            "totalResults": 1,
+            "startIndex": 0,
+            "itemsPerPage": 16,
+            "entry": [
+                {
+                    "id": 7,
+                    "status": 1,
+                    "name": "agent-test",
+                    "description": "An agent test"
+                }
+            ]
+        }
+        JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetSearch(): void
+    {
+        $response = $this->sendRequest('/consumer/agent?search=tes', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "categories": [
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
-            "id": 5,
-            "name": "authorization",
-            "scopes": [
-                {
-                    "id": 3,
-                    "name": "authorization",
-                    "description": ""
-                },
-                {
-                    "id": 4,
-                    "name": "openid",
-                    "description": "OpenID scope"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "name": "consumer",
-            "scopes": [
-                {
-                    "id": 2,
-                    "name": "consumer",
-                    "description": ""
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "name": "default",
-            "scopes": [
-                {
-                    "id": {$this->scopeBarId},
-                    "name": "bar",
-                    "description": "Bar access"
-                },
-                {
-                    "id": {$this->scopeFooId},
-                    "name": "foo",
-                    "description": "Foo access"
-                }
-            ]
+            "id": 7,
+            "status": 1,
+            "name": "agent-test",
+            "description": "An agent test"
         }
     ]
 }
@@ -106,9 +91,39 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCount(): void
+    {
+        $response = $this->sendRequest('/consumer/agent?count=80', 'GET', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ]);
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalizeDateTime($body);
+
+        $expect = <<<'JSON'
+        {
+            "totalResults": 1,
+            "startIndex": 0,
+            "itemsPerPage": 80,
+            "entry": [
+                {
+                    "id": 7,
+                    "status": 1,
+                    "name": "agent-test",
+                    "description": "An agent test"
+                }
+            ]
+        }
+        JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'POST', [
+        $response = $this->sendRequest('/consumer/agent', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -122,7 +137,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'PUT', [
+        $response = $this->sendRequest('/consumer/agent', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -136,7 +151,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'DELETE', [
+        $response = $this->sendRequest('/consumer/agent', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
