@@ -53,16 +53,8 @@ class EntityTest extends DbTestCase
 {
     "id": {$this->id},
     "status": 1,
-    "connection": 8,
-    "type": 0,
     "name": "agent-test",
-    "description": "An agent test",
-    "introduction": "A test agent which always return \"Hello World\"",
-    "tools": [
-        "test_listFoo"
-    ],
-    "outgoing": "schema:\/\/Entry-Schema",
-    "insertDate": "2026-02-22T13:06:00Z"
+    "description": "An agent test"
 }
 JSON;
 
@@ -72,7 +64,7 @@ JSON;
 
     public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/agent/10', 'GET', [
+        $response = $this->sendRequest('/consumer/agent/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
@@ -87,7 +79,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'POST', [
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -101,7 +93,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'PUT', [
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -117,7 +109,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent/' . $this->id, 'DELETE', [
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);

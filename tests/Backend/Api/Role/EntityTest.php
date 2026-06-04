@@ -58,6 +58,7 @@ class EntityTest extends DbTestCase
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
@@ -98,6 +99,7 @@ JSON;
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",

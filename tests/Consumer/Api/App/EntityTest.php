@@ -169,6 +169,7 @@ JSON;
         $this->assertEquals([
             'consumer',
             'consumer.account',
+            'consumer.agent',
             'consumer.app',
             'consumer.event',
             'consumer.form',

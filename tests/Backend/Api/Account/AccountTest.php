@@ -92,6 +92,7 @@ class AccountTest extends DbTestCase
         "backend.webhook",
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
