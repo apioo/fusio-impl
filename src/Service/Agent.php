@@ -62,6 +62,7 @@ readonly class Agent
             $row->setConnectionId($agent->getConnection());
             $row->setStatus(Table\Agent::STATUS_ACTIVE);
             $row->setType($agent->getType() ?? Table\Agent::TYPE_GENERAL);
+            $row->setPublic($agent->getPublic() ? 1 : 0);
             $row->setName($agent->getName());
             $row->setDescription($agent->getDescription());
             $row->setIntroduction($agent->getIntroduction());
@@ -101,6 +102,7 @@ readonly class Agent
 
         $existing->setConnectionId($agent->getConnection() ?? $existing->getConnectionId());
         $existing->setType($agent->getType() ?? $existing->getType());
+        $existing->setPublic($agent->getPublic() !== null ? ($agent->getPublic() ? 1 : 0) : $existing->getPublic());
         $existing->setName($agent->getName() ?? $existing->getName());
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());

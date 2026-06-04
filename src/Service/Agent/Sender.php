@@ -72,11 +72,15 @@ readonly class Sender implements SenderInterface
     ) {
     }
 
-    public function send(int $agentId, Input $input, ContextInterface $context): Output
+    public function send(int $agentId, Input $input, ContextInterface $context, bool $public = false): Output
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
             throw new StatusCode\NotFoundException('Could not find provided agent');
+        }
+
+        if ($public === true && $row->getPublic() !== 1) {
+            throw new StatusCode\NotFoundException('Provided an invalid agent');
         }
 
         $connectionId = $row->getConnectionId();
