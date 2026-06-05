@@ -54,6 +54,7 @@ class EntityTest extends DbTestCase
     "id": {$this->id},
     "status": 1,
     "connection": 8,
+    "public": true,
     "type": 0,
     "name": "agent-test",
     "description": "An agent test",

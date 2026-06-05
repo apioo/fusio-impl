@@ -53,6 +53,7 @@ class CollectionTest extends DbTestCase
                     "id": 7,
                     "status": 1,
                     "connection": 8,
+                    "public": true,
                     "type": 0,
                     "name": "agent-test",
                     "description": "An agent test",
@@ -62,6 +63,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 6,
                     "status": 1,
+                    "public": false,
                     "type": 5,
                     "name": "Fusio-Seed",
                     "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
@@ -71,6 +73,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 5,
                     "status": 1,
+                    "public": false,
                     "type": 4,
                     "name": "Fusio-Database",
                     "description": "Designs database table structures including columns, types, and constraints.",
@@ -80,6 +83,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 4,
                     "status": 1,
+                    "public": false,
                     "type": 3,
                     "name": "Fusio-Schema",
                     "description": "Designs JSON schemas to define and validate request\/response data structures.",
@@ -89,6 +93,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 3,
                     "status": 1,
+                    "public": false,
                     "type": 2,
                     "name": "Fusio-Action",
                     "description": "Develops custom business logic and backend code for your API operations.",
@@ -97,6 +102,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 2,
                     "status": 1,
+                    "public": false,
                     "type": 1,
                     "name": "Fusio-Architect",
                     "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
@@ -106,6 +112,7 @@ class CollectionTest extends DbTestCase
                 {
                     "id": 1,
                     "status": 1,
+                    "public": false,
                     "type": 0,
                     "name": "Fusio-General",
                     "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
@@ -137,6 +144,7 @@ class CollectionTest extends DbTestCase
             "id": 7,
             "status": 1,
             "connection": 8,
+            "public": true,
             "type": 0,
             "name": "agent-test",
             "description": "An agent test",
@@ -171,6 +179,7 @@ JSON;
                     "id": 7,
                     "status": 1,
                     "connection": 8,
+                    "public": true,
                     "type": 0,
                     "name": "agent-test",
                     "description": "An agent test",
@@ -180,6 +189,7 @@ JSON;
                 {
                     "id": 6,
                     "status": 1,
+                    "public": false,
                     "type": 5,
                     "name": "Fusio-Seed",
                     "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
@@ -189,6 +199,7 @@ JSON;
                 {
                     "id": 5,
                     "status": 1,
+                    "public": false,
                     "type": 4,
                     "name": "Fusio-Database",
                     "description": "Designs database table structures including columns, types, and constraints.",
@@ -198,6 +209,7 @@ JSON;
                 {
                     "id": 4,
                     "status": 1,
+                    "public": false,
                     "type": 3,
                     "name": "Fusio-Schema",
                     "description": "Designs JSON schemas to define and validate request\/response data structures.",
@@ -207,6 +219,7 @@ JSON;
                 {
                     "id": 3,
                     "status": 1,
+                    "public": false,
                     "type": 2,
                     "name": "Fusio-Action",
                     "description": "Develops custom business logic and backend code for your API operations.",
@@ -215,6 +228,7 @@ JSON;
                 {
                     "id": 2,
                     "status": 1,
+                    "public": false,
                     "type": 1,
                     "name": "Fusio-Architect",
                     "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
@@ -224,6 +238,7 @@ JSON;
                 {
                     "id": 1,
                     "status": 1,
+                    "public": false,
                     "type": 0,
                     "name": "Fusio-General",
                     "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
