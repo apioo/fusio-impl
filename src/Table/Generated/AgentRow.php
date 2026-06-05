@@ -9,6 +9,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $connectionId = null;
     private ?string $tenantId = null;
     private ?int $status = null;
+    private ?int $public = null;
     private ?int $type = null;
     private ?string $name = null;
     private ?string $description = null;
@@ -56,6 +57,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
+    }
+    public function setPublic(int $public): void
+    {
+        $this->public = $public;
+    }
+    public function getPublic(): int
+    {
+        return $this->public ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "public" was provided');
     }
     public function setType(int $type): void
     {
@@ -130,6 +139,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('connection_id', $this->connectionId);
         $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
+        $record->put('public', $this->public);
         $record->put('type', $this->type);
         $record->put('name', $this->name);
         $record->put('description', $this->description);
@@ -155,6 +165,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->connectionId = isset($data['connection_id']) && is_int($data['connection_id']) ? $data['connection_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
+        $row->public = isset($data['public']) && is_int($data['public']) ? $data['public'] : null;
         $row->type = isset($data['type']) && is_int($data['type']) ? $data['type'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;

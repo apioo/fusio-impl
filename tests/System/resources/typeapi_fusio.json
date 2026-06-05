@@ -10767,6 +10767,179 @@
         "account"
       ]
     },
+    "consumer.agent.get": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_Agent"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific agent",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.getAll": {
+      "path": "/consumer/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agents",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.getAll": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentMessageCollection"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "chat_id": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agent messages",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.submit": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Agent_Output"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Agent_Input"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Submits a new agent message",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
     "consumer.app.create": {
       "path": "/consumer/app",
       "method": "POST",
@@ -12852,6 +13025,10 @@
         },
         "type": {
           "description": "The agent type",
+          "type": "integer"
+        },
+        "public": {
+          "description": "Indicates whether the agent is public",
           "type": "integer"
         },
         "name": {
@@ -15652,6 +15829,73 @@
       "type": "map",
       "schema": {
         "type": "string"
+      }
+    },
+    "Consumer_Agent": {
+      "description": "This object represents an agent",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the agent",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the agent",
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_AgentCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_Agent"
+        }
+      }
+    },
+    "Consumer_AgentMessage": {
+      "description": "This object represents an agent message",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "chatId": {
+          "description": "The assigned chat id which can be used to load the complete conversation",
+          "type": "string"
+        },
+        "role": {
+          "description": "The role of this message i.e. user, assistant or system",
+          "type": "string"
+        },
+        "item": {
+          "description": "The message item",
+          "type": "reference",
+          "target": "Agent_Item"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Consumer_AgentMessageCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_AgentMessage"
+        }
       }
     },
     "Consumer_App": {

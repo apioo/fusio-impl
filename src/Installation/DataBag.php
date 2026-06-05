@@ -256,7 +256,7 @@ class DataBag
      * @param list<string> $tools
      * @param array<string, mixed>|null $metadata
      */
-    public function addAgent(string $category, ?string $connection, int $type, string $name, string $description, string $introduction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAgent(string $category, ?string $connection, int $type, bool $public, string $name, string $description, string $introduction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         if (!empty($outgoing)) {
             if (class_exists($outgoing)) {
@@ -273,6 +273,7 @@ class DataBag
             'category_id' => $this->getReference('fusio_category', $category, $tenantId),
             'connection_id' => $connection !== null ? $this->getReference('fusio_connection', $connection, $tenantId) : null,
             'status' => $status,
+            'public' => $public ? 1 : 0,
             'type' => $type,
             'name' => $name,
             'description' => $description,

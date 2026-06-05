@@ -944,6 +944,22 @@ class ToolsTest extends DbTestCase
             "description": "Updates user data for the authenticated user"
         },
         {
+            "name": "consumer_agent_get",
+            "description": "Returns a specific agent"
+        },
+        {
+            "name": "consumer_agent_getAll",
+            "description": "Returns a paginated list of agents"
+        },
+        {
+            "name": "consumer_agent_message_getAll",
+            "description": "Returns a paginated list of agent messages"
+        },
+        {
+            "name": "consumer_agent_message_submit",
+            "description": "Submits a new agent message"
+        },
+        {
             "name": "consumer_app_create",
             "description": "Creates a new app for the authenticated user"
         },

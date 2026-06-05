@@ -269,72 +269,77 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 56,
+                    "id": 57,
                     "name": "consumer.account",
                     "description": ""
                 },
                 {
                     "id": 44,
-                    "name": "consumer.app",
+                    "name": "consumer.agent",
                     "description": ""
                 },
                 {
                     "id": 45,
-                    "name": "consumer.event",
-                    "description": ""
-                },
-                {
-                    "id": 49,
-                    "name": "consumer.form",
+                    "name": "consumer.app",
                     "description": ""
                 },
                 {
                     "id": 46,
-                    "name": "consumer.grant",
-                    "description": ""
-                },
-                {
-                    "id": 57,
-                    "name": "consumer.identity",
-                    "description": ""
-                },
-                {
-                    "id": 47,
-                    "name": "consumer.log",
-                    "description": ""
-                },
-                {
-                    "id": 48,
-                    "name": "consumer.page",
+                    "name": "consumer.event",
                     "description": ""
                 },
                 {
                     "id": 50,
-                    "name": "consumer.payment",
+                    "name": "consumer.form",
+                    "description": ""
+                },
+                {
+                    "id": 47,
+                    "name": "consumer.grant",
+                    "description": ""
+                },
+                {
+                    "id": 58,
+                    "name": "consumer.identity",
+                    "description": ""
+                },
+                {
+                    "id": 48,
+                    "name": "consumer.log",
+                    "description": ""
+                },
+                {
+                    "id": 49,
+                    "name": "consumer.page",
                     "description": ""
                 },
                 {
                     "id": 51,
-                    "name": "consumer.plan",
+                    "name": "consumer.payment",
                     "description": ""
                 },
                 {
                     "id": 52,
-                    "name": "consumer.scope",
+                    "name": "consumer.plan",
                     "description": ""
                 },
                 {
                     "id": 53,
-                    "name": "consumer.token",
-                    "description": ""
-                },
-                {
-                    "id": 55,
-                    "name": "consumer.transaction",
+                    "name": "consumer.scope",
                     "description": ""
                 },
                 {
                     "id": 54,
+                    "name": "consumer.token",
+                    "description": ""
+                },
+                {
+                    "id": 56,
+                    "name": "consumer.transaction",
+                    "description": ""
+                },
+                {
+                    "id": 55,
                     "name": "consumer.webhook",
                     "description": ""
                 }
@@ -345,7 +350,7 @@ class CategoriesTest extends DbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 60,
+                    "id": 61,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -355,12 +360,12 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 59,
+                    "id": 60,
                     "name": "foo",
                     "description": "Foo access"
                 },
                 {
-                    "id": 61,
+                    "id": 62,
                     "name": "plan_scope",
                     "description": "Plan scope access"
                 }
@@ -371,7 +376,7 @@ class CategoriesTest extends DbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 58,
+                    "id": 59,
                     "name": "system",
                     "description": ""
                 }

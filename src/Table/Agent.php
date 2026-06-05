@@ -48,33 +48,39 @@ class Agent extends Generated\AgentTable
 
     public const TYPE_SEED = 5;
 
-    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?AgentRow
+    public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id, ?bool $public = null): ?AgentRow
     {
         if (str_starts_with($id, '~')) {
-            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)), $public);
         } else {
-            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+            return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id, $public);
         }
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?AgentRow
+    public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id, ?bool $public = null): ?AgentRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         $condition->equals(self::COLUMN_ID, $id);
+        if ($public !== null) {
+            $condition->equals(self::COLUMN_PUBLIC, (int) $public);
+        }
 
         return $this->findOneBy($condition);
     }
 
-    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name): ?AgentRow
+    public function findOneByTenantAndName(?string $tenantId, ?int $categoryId, string $name, ?bool $public = null): ?AgentRow
     {
         $condition = Condition::withAnd();
         $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         if ($categoryId !== null) {
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
-        
+        if ($public !== null) {
+            $condition->equals(self::COLUMN_PUBLIC, (int) $public);
+        }
+
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);

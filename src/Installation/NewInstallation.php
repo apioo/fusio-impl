@@ -134,7 +134,7 @@ class NewInstallation
         $bag->addPage('Authorization', 'authorization', self::readPage('authorization.html'), tenantId: $tenantId);
         $bag->addPage('Support', 'support', self::readPage('support.html'), tenantId: $tenantId);
         $bag->addPage('SDK', 'sdk', self::readPage('sdk.html'), tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, false, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), [
             'backend_operation_getAll',
             'backend_operation_get',
             'backend_action_getAll',
@@ -166,8 +166,8 @@ class NewInstallation
             'backend_log_getAllErrors',
             'backend_log_getError',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, false, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), [
             'backend_connection_getAll',
             'backend_connection_get',
             'backend_connection_database_getTables',
@@ -177,13 +177,13 @@ class NewInstallation
             'backend_connection_http_execute',
             'backend_connection_sdk_get',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, false, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), [
         ], Model\Agent\Schema::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Seed::class, tenantId: $tenantId);
@@ -2340,6 +2340,45 @@ class NewInstallation
                 ),
             ],
             'consumer' => [
+                'agent.getAll' => new Operation(
+                    action: Consumer\Action\Agent\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\AgentCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of agents',
+                ),
+                'agent.get' => new Operation(
+                    action: Consumer\Action\Agent\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\Agent::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific agent',
+                ),
+                'agent.message.getAll' => new Operation(
+                    action: Consumer\Action\Agent\Message\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\AgentMessageCollection::class,
+                    parameters: ['chat_id' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of agent messages',
+                ),
+                'agent.message.submit' => new Operation(
+                    action: Consumer\Action\Agent\Message\Submit::class,
+                    httpMethod: 'POST',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
+                    httpCode: 201,
+                    outgoing: Model\Agent\Output::class,
+                    incoming: Model\Agent\Input::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Submits a new agent message',
+                ),
                 'app.getAll' => new Operation(
                     action: Consumer\Action\App\GetAll::class,
                     httpMethod: 'GET',
