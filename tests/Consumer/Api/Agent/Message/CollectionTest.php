@@ -50,12 +50,12 @@ class CollectionTest extends DbTestCase
     "itemsPerPage": 10,
     "entry": [
         {
-            "id": 1,
+            "id": 3,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
             "item": {
                 "type": "text",
-                "content": "This is a test message"
+                "content": "This is a consumer test message"
             },
             "insertDate": "[datetime]"
         }
@@ -84,22 +84,22 @@ JSON;
     "itemsPerPage": 10,
     "entry": [
         {
-            "id": 1,
+            "id": 3,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "user",
             "item": {
                 "type": "text",
-                "content": "This is a test message"
+                "content": "This is a consumer test message"
             },
             "insertDate": "[datetime]"
         },
         {
-            "id": 2,
+            "id": 4,
             "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
             "role": "assistant",
             "item": {
                 "type": "text",
-                "content": "And an agent response"
+                "content": "And an agent consumer response"
             },
             "insertDate": "[datetime]"
         }
