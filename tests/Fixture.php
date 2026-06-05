@@ -154,6 +154,8 @@ class Fixture
         $data->addAgent('default', 'Agent', Table\Agent::TYPE_GENERAL, true, 'agent-test', 'An agent test', 'A test agent which always return "Hello World"', ['test_listFoo'], 'Entry-Schema', date: '2026-02-22 13:06:00');
         $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_USER, 0, 'This is a test message', date: '2026-02-22 19:17:00');
         $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_ASSISTANT, 1, 'And an agent response', date: '2026-02-22 19:17:00');
+        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_USER, 0, 'This is a test message', date: '2026-06-05 16:30:00');
+        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_ASSISTANT, 1, 'And an agent response', date: '2026-06-05 16:30:00');
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');
         $data->addWebhookResponse(1);

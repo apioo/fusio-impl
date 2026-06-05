@@ -35,7 +35,7 @@ class CollectionTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent/7/message', 'GET', [
+        $response = $this->sendRequest('/consumer/agent/7/message', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
@@ -69,7 +69,7 @@ JSON;
     
     public function testGetParent(): void
     {
-        $response = $this->sendRequest('/backend/agent/7/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', [
+        $response = $this->sendRequest('/consumer/agent/7/message?chat_id=41fd19b2-2dc0-46d9-b904-85c0d0b61a77', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
@@ -113,7 +113,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent/7/message', 'POST', [
+        $response = $this->sendRequest('/consumer/agent/7/message', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -151,7 +151,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'PUT', [
+        $response = $this->sendRequest('/consumer/agent/6/message', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
@@ -165,7 +165,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent/6/message', 'DELETE', [
+        $response = $this->sendRequest('/consumer/agent/6/message', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
