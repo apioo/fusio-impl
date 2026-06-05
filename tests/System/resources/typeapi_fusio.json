@@ -13029,7 +13029,7 @@
         },
         "public": {
           "description": "Indicates whether the agent is public",
-          "type": "integer"
+          "type": "boolean"
         },
         "name": {
           "description": "Name of the agent",
