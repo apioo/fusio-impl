@@ -77,6 +77,7 @@ class Agent extends Generated\AgentTable
         if ($categoryId !== null) {
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
+        
         if ($public !== null) {
             $condition->equals(self::COLUMN_PUBLIC, (int) $public);
         }

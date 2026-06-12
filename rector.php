@@ -32,4 +32,5 @@ return RectorConfig::configure()
         DisallowedEmptyRuleFixerRector::class,
         CatchExceptionNameMatchingTypeRector::class,
         SimplifyQuoteEscapeRector::class,
+        __DIR__ . '/src/Table/Generated/*',
     ]);
