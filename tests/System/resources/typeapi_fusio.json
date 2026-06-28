@@ -6855,6 +6855,36 @@
         "specification"
       ]
     },
+    "backend.specification.getChangelog": {
+      "path": "/backend/specification/changelog",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_SpecificationChangelog"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the changelog between your current specification and the last tag",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
     "backend.specification.publish": {
       "path": "/backend/specification",
       "method": "POST",
@@ -6884,6 +6914,44 @@
         }
       ],
       "description": "Publish the specification",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
+    "backend.specification.tag": {
+      "path": "/backend/specification/tag",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Passthru"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new tag of your specification",
       "stability": 2,
       "security": [
         "backend.specification"
@@ -15076,6 +15144,26 @@
       "type": "map",
       "schema": {
         "type": "string"
+      }
+    },
+    "Backend_SpecificationChangelog": {
+      "type": "struct",
+      "properties": {
+        "master": {
+          "type": "any"
+        },
+        "tag": {
+          "type": "any"
+        },
+        "version": {
+          "type": "string"
+        },
+        "changelog": {
+          "type": "array",
+          "schema": {
+            "type": "string"
+          }
+        }
       }
     },
     "Backend_SpecificationGet": {

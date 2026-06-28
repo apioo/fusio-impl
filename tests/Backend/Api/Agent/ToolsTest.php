@@ -684,8 +684,16 @@ class ToolsTest extends DbTestCase
             "description": "Returns the TypeHub specification"
         },
         {
+            "name": "backend_specification_getChangelog",
+            "description": "Returns the changelog between your current specification and the last tag"
+        },
+        {
             "name": "backend_specification_publish",
             "description": "Publish the specification"
+        },
+        {
+            "name": "backend_specification_tag",
+            "description": "Creates a new tag of your specification"
         },
         {
             "name": "backend_statistic_getActivitiesPerUser",
