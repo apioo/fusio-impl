@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Agent;
 use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 use Fusio\Model\Agent\Input;
 use Fusio\Model\Agent\Item;
@@ -33,8 +34,10 @@ use JsonException;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Parser;
-use PSX\Schema\Generator\Config;
 use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\Generator\JsonSchemaAnthropic;
+use PSX\Schema\Generator\JsonSchemaGemini;
+use PSX\Schema\Generator\JsonSchemaOpenAI;
 use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaSource;
@@ -69,6 +72,7 @@ readonly class Sender implements SenderInterface
         private ConnectorInterface $connector,
         private SchemaManagerInterface $schemaManager,
         private ObjectMapperInterface $objectMapper,
+        private Repository\ConnectionInterface $connectionRepository,
     ) {
     }
 
@@ -112,7 +116,7 @@ readonly class Sender implements SenderInterface
 
             $messages = $messages->merge($userMessages);
 
-            $responseSchema = $this->getResponseSchema($row);
+            $responseSchema = $this->getResponseSchema($row, $connectionId);
 
             $options = [
                 'tools' => $this->getTools($row),
@@ -209,7 +213,7 @@ readonly class Sender implements SenderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function getResponseSchema(Table\Generated\AgentRow $row): ?array
+    private function getResponseSchema(Table\Generated\AgentRow $row, int $connectionId): ?array
     {
         $outgoing = $row->getOutgoing();
         if (empty($outgoing)) {
@@ -218,10 +222,9 @@ readonly class Sender implements SenderInterface
 
         $schema = $this->schemaManager->getSchema($outgoing);
 
-        $config = new Config();
-        $config->put('openai_mode', true);
+        $generator = $this->getGeneratorForConnectionType($connectionId);
 
-        $jsonSchema = new JsonSchema($config)->toArray($schema->getDefinitions(), $schema->getRoot());
+        $jsonSchema = $generator->toArray($schema->getDefinitions(), $schema->getRoot());
         if (count($jsonSchema) === 0) {
             return null;
         }
@@ -246,5 +249,18 @@ readonly class Sender implements SenderInterface
         }
 
         return $tools;
+    }
+
+    private function getGeneratorForConnectionType(int $connectionId): JsonSchema
+    {
+        $connection = $this->connectionRepository->get($connectionId);
+        $config = $connection->getConfig();
+        $type = $config['type'] ?? null;
+
+        return match ($type) {
+            'anthropic' => new JsonSchemaAnthropic(),
+            'gemini' => new JsonSchemaGemini(),
+            default => new JsonSchemaOpenAI(),
+        };
     }
 }
