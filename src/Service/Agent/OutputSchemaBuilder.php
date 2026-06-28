@@ -22,16 +22,8 @@ namespace Fusio\Impl\Service\Agent;
 
 use Fusio\Impl\Framework\Schema\Scheme;
 use Fusio\Impl\Table\Generated\OperationRow;
-use PSX\Api\Util\Inflection;
-use PSX\Json\Parser;
-use PSX\Schema\Definitions;
-use PSX\Schema\Generator\Config;
-use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\Generator\JsonSchemaOpenAI;
 use PSX\Schema\SchemaManager;
-use PSX\Schema\Type\Factory\PropertyTypeFactory;
-use PSX\Schema\Type\StructDefinitionType;
-use stdClass;
 
 /**
  * OutputSchemaBuilder
@@ -63,9 +55,6 @@ readonly class OutputSchemaBuilder
 
         $schema = $this->schemaManager->getSchema($outgoing);
 
-        $config = new Config();
-        $config->put('openai_mode', true);
-
-        return (new JsonSchema($config))->toArray($schema->getDefinitions(), $schema->getRoot());
+        return new JsonSchemaOpenAI()->toArray($schema->getDefinitions(), $schema->getRoot());
     }
 }
