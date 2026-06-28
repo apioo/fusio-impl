@@ -42,10 +42,10 @@ readonly class GetChangelog implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $spec = $this->publisher->get();
+        // @TODO get changelog
+        // $spec = $this->publisher->getChangelog();
 
         return [
-            'spec' => json_decode($spec)
         ];
     }
 }
