@@ -26,8 +26,10 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Model\Backend\SpecificationPublish;
+use PSX\Api\Exception\PublishException;
 use PSX\Api\TypeHub\PublisherInterface;
 use PSX\Http\Exception\BadRequestException;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * Publish
@@ -48,23 +50,22 @@ readonly class Publish implements ActionInterface
 
         assert($body instanceof SpecificationPublish);
 
-        $name = $body->getName();
-        if (empty($name)) {
-            $name = $this->config->getString('typehub_document_name');
-        }
-
         $clientId = $this->config->getString('typehub_client_id');
         $clientSecret = $this->config->getString('typehub_client_secret');
-
         if (empty($clientId) || empty($clientSecret)) {
             throw new BadRequestException('TypeHub credentials not configured, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');
         }
 
+        $name = $this->config->getString('typehub_document_name');
         if (empty($name)) {
             throw new BadRequestException('TypeHub document name not configured, please provide a TypeHub document at System / Config (typehub_document_name) under which the specification gets published');
         }
 
-        $this->publisher->publish($name, $clientId, $clientSecret, $body->getFilterName(), $body->getStandalone() ?? false);
+        try {
+            $this->publisher->publish($name, $clientId, $clientSecret, $body->getFilterName(), $body->getStandalone() ?? false);
+        } catch (PublishException $e) {
+            throw new InternalServerErrorException($e->getMessage(), previous: $e);
+        }
 
         return [
             'success' => true,

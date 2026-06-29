@@ -24,8 +24,12 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service;
+use Fusio\Model\Backend\SpecificationChangelog;
+use PSX\Api\Exception\PublishException;
 use PSX\Api\TypeHub\PublisherInterface;
-use function json_decode;
+use PSX\Http\Exception\BadRequestException;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * GetChangelog
@@ -36,16 +40,34 @@ use function json_decode;
  */
 readonly class GetChangelog implements ActionInterface
 {
-    public function __construct(private PublisherInterface $publisher)
+    public function __construct(private PublisherInterface $publisher, private Service\Config $config)
     {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        // @TODO get changelog
-        // $spec = $this->publisher->getChangelog();
+        $clientId = $this->config->getString('typehub_client_id');
+        $clientSecret = $this->config->getString('typehub_client_secret');
+        if (empty($clientId) || empty($clientSecret)) {
+            throw new BadRequestException('TypeHub credentials not configured, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');
+        }
 
-        return [
-        ];
+        $name = $this->config->getString('typehub_document_name');
+        if (empty($name)) {
+            throw new BadRequestException('TypeHub document name not configured, please provide a TypeHub document at System / Config (typehub_document_name) under which the specification gets published');
+        }
+
+        try {
+            $result = $this->publisher->changelog($name, $clientId, $clientSecret);
+        } catch (PublishException $e) {
+            throw new InternalServerErrorException($e->getMessage(), previous: $e);
+        }
+
+        $changelog = new SpecificationChangelog();
+        $changelog->setMaster($result->master);
+        $changelog->setTag($result->tag);
+        $changelog->setVersion($result->version);
+        $changelog->setChangelog($result->changelog);
+        return $changelog;
     }
 }

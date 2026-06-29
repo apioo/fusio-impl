@@ -24,7 +24,9 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use PSX\Api\Exception\GeneratorException;
 use PSX\Api\TypeHub\PublisherInterface;
+use PSX\Http\Exception\InternalServerErrorException;
 use function json_decode;
 
 /**
@@ -42,7 +44,11 @@ readonly class Get implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $spec = $this->publisher->get();
+        try {
+            $spec = $this->publisher->get();
+        } catch (GeneratorException $e) {
+            throw new InternalServerErrorException($e->getMessage(), previous: $e);
+        }
 
         return [
             'spec' => json_decode($spec)

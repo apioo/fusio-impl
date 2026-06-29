@@ -25,9 +25,11 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\SpecificationPublish;
+use Fusio\Model\Backend\SpecificationChangelog;
+use PSX\Api\Exception\PublishException;
 use PSX\Api\TypeHub\PublisherInterface;
 use PSX\Http\Exception\BadRequestException;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * Tag
@@ -44,12 +46,26 @@ readonly class Tag implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        // @TODO create tag
-        // $spec = $this->publisher->tag();
+        $clientId = $this->config->getString('typehub_client_id');
+        $clientSecret = $this->config->getString('typehub_client_secret');
+        if (empty($clientId) || empty($clientSecret)) {
+            throw new BadRequestException('TypeHub credentials not configured, in order to push your specification to TypeHub you need to register an account at typehub.cloud and configure the credentials at System / Config (typehub_client_id/typehub_client_secret)');
+        }
+
+        $name = $this->config->getString('typehub_document_name');
+        if (empty($name)) {
+            throw new BadRequestException('TypeHub document name not configured, please provide a TypeHub document at System / Config (typehub_document_name) under which the specification gets published');
+        }
+
+        try {
+            $this->publisher->tag($name, $clientId, $clientSecret);
+        } catch (PublishException $e) {
+            throw new InternalServerErrorException($e->getMessage(), previous: $e);
+        }
 
         return [
             'success' => true,
-            'message' => 'Specification published successfully',
+            'message' => 'Specification tag successfully created',
         ];
     }
 }
