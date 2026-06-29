@@ -66,6 +66,9 @@ class GenerateTest extends DbTestCase
         "model-html": null,
         "model-java": null,
         "model-jsonschema": null,
+        "model-jsonschema-anthropic": null,
+        "model-jsonschema-gemini": null,
+        "model-jsonschema-openai": null,
         "model-kotlin": null,
         "model-markdown": null,
         "model-php": null,
@@ -76,7 +79,14 @@ class GenerateTest extends DbTestCase
         "model-swift": null,
         "model-typescript": null,
         "model-typeschema": null,
-        "model-visualbasic": null
+        "model-visualbasic": null,
+        "client-csharp": null,
+        "client-go": null,
+        "client-java": null,
+        "client-python": null,
+        "server-csharp": null,
+        "server-java": null,
+        "server-python": null
     }
 }
 JSON;
