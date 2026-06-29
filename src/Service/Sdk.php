@@ -116,6 +116,8 @@ readonly class Sdk
             }
         }
 
+        ksort($result);
+
         return $result;
     }
 
