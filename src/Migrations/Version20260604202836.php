@@ -23,6 +23,7 @@ final class Version20260604202836 extends AbstractMigration
         $agentTable = $schema->getTable('fusio_agent');
         if (!$agentTable->hasColumn('public')) {
             $agentTable->addColumn('public', 'integer', ['default' => 0]);
+            $agentTable->addColumn('temperature', 'decimal', ['default' => 1.0, 'precision' => 3, 'scale' => 2]);
         }
     }
 
