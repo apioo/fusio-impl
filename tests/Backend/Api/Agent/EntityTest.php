@@ -51,7 +51,7 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 7,
+    "id": {$this->id},
     "status": 1,
     "connection": 8,
     "public": true,
