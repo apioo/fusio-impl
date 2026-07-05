@@ -66,6 +66,7 @@ readonly class Agent
             $row->setName($agent->getName());
             $row->setDescription($agent->getDescription());
             $row->setIntroduction($agent->getIntroduction());
+            $row->setTemperature((int) ($agent->getTemperature() * 100));
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
             $row->setInsertDate(LocalDateTime::now());
@@ -106,6 +107,7 @@ readonly class Agent
         $existing->setName($agent->getName() ?? $existing->getName());
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());
+        $existing->setTemperature($agent->getTemperature() !== null ? ((int) ($agent->getTemperature() * 100)) : $existing->getTemperature());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());
         $existing->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : $existing->getMetadata());

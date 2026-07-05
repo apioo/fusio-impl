@@ -14,6 +14,7 @@ enum AgentColumn : string implements \PSX\Sql\ColumnInterface
     case NAME = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_NAME;
     case DESCRIPTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_DESCRIPTION;
     case INTRODUCTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_INTRODUCTION;
+    case TEMPERATURE = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_TEMPERATURE;
     case TOOLS = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_TOOLS;
     case OUTGOING = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_OUTGOING;
     case METADATA = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_METADATA;

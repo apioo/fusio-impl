@@ -51,7 +51,7 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": {$this->id},
+    "id": 7,
     "status": 1,
     "connection": 8,
     "public": true,
@@ -59,6 +59,7 @@ class EntityTest extends DbTestCase
     "name": "agent-test",
     "description": "An agent test",
     "introduction": "A test agent which always return \"Hello World\"",
+    "temperature": 1,
     "tools": [
         "test_listFoo"
     ],

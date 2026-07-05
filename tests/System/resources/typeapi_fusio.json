@@ -13111,6 +13111,10 @@
           "description": "Introduction message",
           "type": "string"
         },
+        "temperature": {
+          "description": "The used temperature default is 1.0",
+          "type": "number"
+        },
         "tools": {
           "description": "Tools available to this agent",
           "type": "array",
