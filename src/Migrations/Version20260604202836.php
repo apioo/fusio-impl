@@ -24,6 +24,7 @@ final class Version20260604202836 extends AbstractMigration
         if (!$agentTable->hasColumn('public')) {
             $agentTable->addColumn('public', 'integer', ['default' => 0]);
             $agentTable->addColumn('temperature', 'integer', ['default' => 100]);
+            $agentTable->addColumn('costs', 'integer', ['notnull' => false]);
         }
     }
 
