@@ -97,7 +97,7 @@ readonly class Sender implements SenderInterface
 
         $costs = $row->getCosts() ?? 0;
         if ($costs > 0) {
-            $estimatedInputTokens = ceil(mb_strlen($item->getContent() ?? '') / 4);
+            $estimatedInputTokens = (int) ceil(mb_strlen($item->getContent() ?? '') / 4);
 
             if (!$this->planPayerService->canSpent($estimatedInputTokens * $costs, $context)) {
                 throw new StatusCode\PaymentRequiredException('Your account has not enough points to invoke this agent. Please purchase new points in order to execute this agent');
