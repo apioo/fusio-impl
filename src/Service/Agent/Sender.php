@@ -25,6 +25,7 @@ use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
+use Fusio\Impl\Service;
 use Fusio\Model\Agent\Input;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
@@ -46,6 +47,7 @@ use PSX\Sql\OrderBy;
 use Symfony\AI\Agent\AgentInterface;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
+use Symfony\AI\Platform\TokenUsage\TokenUsageInterface;
 use Throwable;
 
 /**
@@ -73,6 +75,7 @@ readonly class Sender implements SenderInterface
         private SchemaManagerInterface $schemaManager,
         private ObjectMapperInterface $objectMapper,
         private Repository\ConnectionInterface $connectionRepository,
+        private Service\Plan\Payer $planPayerService,
     ) {
     }
 
@@ -87,6 +90,20 @@ readonly class Sender implements SenderInterface
             throw new StatusCode\NotFoundException('Provided an invalid agent');
         }
 
+        $item = $input->getItem();
+        if (!$item instanceof ItemText) {
+            throw new StatusCode\BadRequestException('Only text input is supported');
+        }
+
+        $costs = $row->getCosts() ?? 0;
+        if ($costs > 0) {
+            $estimatedInputTokens = ceil(mb_strlen($item->getContent() ?? '') / 4);
+
+            if (!$this->planPayerService->canSpent($estimatedInputTokens * $costs, $context)) {
+                throw new StatusCode\PaymentRequiredException('Your account has not enough points to invoke this agent. Please purchase new points in order to execute this agent');
+            }
+        }
+
         $connectionId = $row->getConnectionId();
         if (empty($connectionId)) {
             throw new StatusCode\InternalServerErrorException('No agent connection was configured, please create first an agent connection to a LLM provider like ChatGPT or Ollama in order to use an agent');
@@ -96,6 +113,8 @@ readonly class Sender implements SenderInterface
         if (!$agent instanceof AgentInterface) {
             throw new StatusCode\InternalServerErrorException('Provided an invalid connection, the connection must be an agent connection');
         }
+
+        $type = $this->getType($connectionId);
 
         $chatId = $input->getPreviousId();
         $item = $input->getItem() ?? throw new StatusCode\BadRequestException('Provided no input');
@@ -116,12 +135,20 @@ readonly class Sender implements SenderInterface
 
             $messages = $messages->merge($userMessages);
 
-            $responseSchema = $this->getResponseSchema($row, $connectionId);
+            $responseSchema = $this->getResponseSchema($row, $type);
 
             $options = [
                 'tools' => $this->getTools($row),
                 'temperature' => round($row->getTemperature() / 100, 2),
             ];
+
+            if ($costs > 0) {
+                if ($type === Type::GEMINI) {
+                    $options['max_output_tokens'] = $context->getUser()->getPoints();
+                } elseif ($type === Type::OPENAI || $type === Type::ANTHROPIC) {
+                    $options['max_tokens'] = $context->getUser()->getPoints();
+                }
+            }
 
             if ($responseSchema !== null) {
                 $options['response_format'] = [
@@ -135,6 +162,13 @@ readonly class Sender implements SenderInterface
             }
 
             $result = $agent->call($messages, $options);
+
+            if ($costs > 0) {
+                $tokenUsage = $result->getMetadata()->get('token_usage');
+                if ($tokenUsage instanceof TokenUsageInterface) {
+                    $this->planPayerService->pay($tokenUsage->getTotalTokens() * $costs, $context);
+                }
+            }
 
             if ($responseSchema !== null) {
                 $item = $this->jsonResultSerializer->serialize($result);
@@ -213,7 +247,7 @@ readonly class Sender implements SenderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function getResponseSchema(Table\Generated\AgentRow $row, int $connectionId): ?array
+    private function getResponseSchema(Table\Generated\AgentRow $row, Type $type): ?array
     {
         $outgoing = $row->getOutgoing();
         if (empty($outgoing)) {
@@ -222,7 +256,7 @@ readonly class Sender implements SenderInterface
 
         $schema = $this->schemaManager->getSchema($outgoing);
 
-        $generator = $this->getGeneratorForConnectionType($connectionId);
+        $generator = $this->getGeneratorForConnectionType($type);
 
         $jsonSchema = $generator->toArray($schema->getDefinitions(), $schema->getRoot());
         if (count($jsonSchema) === 0) {
@@ -251,16 +285,25 @@ readonly class Sender implements SenderInterface
         return $tools;
     }
 
-    private function getGeneratorForConnectionType(int $connectionId): JsonSchema
+    private function getGeneratorForConnectionType(Type $type): JsonSchema
+    {
+        return match ($type) {
+            Type::ANTHROPIC => new JsonSchemaAnthropic(),
+            Type::GEMINI => new JsonSchemaGemini(),
+            default => new JsonSchemaOpenAI(),
+        };
+    }
+
+    private function getType(int $connectionId): Type
     {
         $connection = $this->connectionRepository->get($connectionId);
         $config = $connection->getConfig();
-        $type = $config['type'] ?? null;
 
-        return match ($type) {
-            'anthropic' => new JsonSchemaAnthropic(),
-            'gemini' => new JsonSchemaGemini(),
-            default => new JsonSchemaOpenAI(),
-        };
+        $type = $config['type'] ?? null;
+        if (is_string($type)) {
+            return Type::from($type);
+        } else {
+            return Type::OPENAI;
+        }
     }
 }
