@@ -13115,6 +13115,10 @@
           "description": "The used temperature default is 1.0",
           "type": "number"
         },
+        "costs": {
+          "description": "Costs per token",
+          "type": "integer"
+        },
         "tools": {
           "description": "Tools available to this agent",
           "type": "array",
