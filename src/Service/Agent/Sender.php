@@ -144,9 +144,9 @@ readonly class Sender implements SenderInterface
 
             if ($costs > 0) {
                 if ($type === Type::GEMINI) {
-                    $options['max_output_tokens'] = $context->getUser()->getPoints();
+                    $options['max_output_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
                 } elseif ($type === Type::OPENAI || $type === Type::ANTHROPIC) {
-                    $options['max_tokens'] = $context->getUser()->getPoints();
+                    $options['max_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
                 }
             }
 
