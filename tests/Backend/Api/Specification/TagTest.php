@@ -55,14 +55,14 @@ JSON;
         foreach ($result as $row) {
             $this->assertGreaterThanOrEqual(1, $row['commit_id']);
             $this->assertGreaterThanOrEqual(1, $row['user_id']);
-            $this->assertSame('0.1.1', $row['version']);
+            $this->assertSame('0.1.2', $row['version']);
         }
 
         $result = $this->connection->fetchAllAssociative('SELECT commit_id, user_id, version FROM fusio_schema_tag');
         foreach ($result as $row) {
             $this->assertGreaterThanOrEqual(1, $row['commit_id']);
             $this->assertGreaterThanOrEqual(1, $row['user_id']);
-            $this->assertSame('0.1.1', $row['version']);
+            $this->assertSame('0.1.2', $row['version']);
         }
     }
 }
