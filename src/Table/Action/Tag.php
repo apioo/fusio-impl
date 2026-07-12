@@ -31,4 +31,18 @@ use Fusio\Impl\Table\Generated;
  */
 class Tag extends Generated\ActionTagTable
 {
+    public function findHashByVersion(string $version, int $actionId): ?string
+    {
+        $query = 'SELECT cmt.commit_hash
+                    FROM fusio_action_tag tag
+              INNER JOIN fusio_action_commit cmt
+                      ON tag.commit_id = cmt.id
+                   WHERE tag.version = :version
+                     AND cmt.action_id = :action_id';
+
+        return $this->connection->fetchOne($query, [
+            'version' => $version,
+            'action_id' => $actionId
+        ]);
+    }
 }
