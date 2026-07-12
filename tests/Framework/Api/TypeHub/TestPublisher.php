@@ -48,11 +48,11 @@ class TestPublisher implements PublisherInterface
 
     public function changelog(string $name, string $clientId, string $clientSecret): Changelog
     {
-        return new Changelog(['foo' => 'bar'], ['foo' => 'bar'], '0.1.0', 'Initial version');
+        return new Changelog(['foo' => 'bar'], ['foo' => 'bar'], '0.1.1', 'Update version');
     }
 
     public function tag(string $name, string $clientId, string $clientSecret): Tag
     {
-        return new Tag('1', '0.1.0');
+        return new Tag('2', '0.1.1');
     }
 }

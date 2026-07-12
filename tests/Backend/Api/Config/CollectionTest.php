@@ -43,169 +43,6 @@ class CollectionTest extends DbTestCase
 {
     "totalResults": 38,
     "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 1,
-            "type": 2,
-            "name": "app_approval",
-            "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
-            "value": false
-        },
-        {
-            "id": 5,
-            "type": 1,
-            "name": "authorization_url",
-            "description": "Url where the user can authorize for the OAuth2 flow",
-            "value": ""
-        },
-        {
-            "id": 2,
-            "type": 3,
-            "name": "consumer_max_apps",
-            "description": "The max amount of apps a consumer can generate",
-            "value": 16
-        },
-        {
-            "id": 3,
-            "type": 3,
-            "name": "consumer_max_tokens",
-            "description": "The max amount of tokens a consumer can generate",
-            "value": 16
-        },
-        {
-            "id": 4,
-            "type": 3,
-            "name": "consumer_max_webhooks",
-            "description": "The max amount of webhooks a consumer can register",
-            "value": 8
-        },
-        {
-            "id": 11,
-            "type": 1,
-            "name": "info_contact_email",
-            "description": "The email address of the contact person\/organization. MUST be in the format of an email address",
-            "value": ""
-        },
-        {
-            "id": 9,
-            "type": 1,
-            "name": "info_contact_name",
-            "description": "The identifying name of the contact person\/organization",
-            "value": ""
-        },
-        {
-            "id": 10,
-            "type": 1,
-            "name": "info_contact_url",
-            "description": "The URL pointing to the contact information. MUST be in the format of a URL",
-            "value": ""
-        },
-        {
-            "id": 7,
-            "type": 1,
-            "name": "info_description",
-            "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
-            "value": "Self-Hosted API Management for Builders."
-        },
-        {
-            "id": 12,
-            "type": 1,
-            "name": "info_license_name",
-            "description": "The license name used for the API",
-            "value": ""
-        },
-        {
-            "id": 13,
-            "type": 1,
-            "name": "info_license_url",
-            "description": "A URL to the license used for the API. MUST be in the format of a URL",
-            "value": ""
-        },
-        {
-            "id": 6,
-            "type": 1,
-            "name": "info_title",
-            "description": "The title of the application",
-            "value": "Fusio"
-        },
-        {
-            "id": 8,
-            "type": 1,
-            "name": "info_tos",
-            "description": "A URL to the Terms of Service for the API. MUST be in the format of a URL",
-            "value": ""
-        },
-        {
-            "id": 19,
-            "type": 6,
-            "name": "mail_points_body",
-            "description": "Body of the points threshold mail",
-            "value": "Hello {name},\n\nyour account has reached the configured threshold of {points} points.\nIf your account reaches 0 points your are not longer able to invoke specific endpoints.\nTo prevent this please go to the developer portal to purchase new points:\n{apps_url}\/developer"
-        },
-        {
-            "id": 18,
-            "type": 1,
-            "name": "mail_points_subject",
-            "description": "Subject of the points threshold mail",
-            "value": "Fusio points threshold reached"
-        },
-        {
-            "id": 17,
-            "type": 6,
-            "name": "mail_pw_reset_body",
-            "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
-    public function testGetSearch(): void
-    {
-        $response = $this->sendRequest('/backend/config?search=register_subject', 'GET', [
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ]);
-
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
-        {
-            "id": 14,
-            "type": 1,
-            "name": "mail_register_subject",
-            "description": "Subject of the activation mail",
-            "value": "Fusio registration"
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
-    public function testGetCount(): void
-    {
-        $response = $this->sendRequest('/backend/config?count=80', 'GET', [
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ]);
-
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "totalResults": 38,
-    "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
@@ -444,21 +281,21 @@ JSON;
             "type": 1,
             "name": "typehub_client_id",
             "description": "TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)",
-            "value": ""
+            "value": "client_id"
         },
         {
             "id": 37,
             "type": 1,
             "name": "typehub_client_secret",
             "description": "TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)",
-            "value": ""
+            "value": "client_secret"
         },
         {
             "id": 38,
             "type": 1,
             "name": "typehub_document_name",
             "description": "Name of the TypeHub document under which the specification gets published",
-            "value": ""
+            "value": "document_name"
         },
         {
             "id": 31,

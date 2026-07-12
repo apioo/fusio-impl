@@ -48,8 +48,8 @@ class GetChangelogTest extends DbTestCase
     "tag": {
         "foo": "bar"
     },
-    "version": "0.1.0",
-    "changelog": "Initial version"
+    "version": "0.1.1",
+    "changelog": "Update version"
 }
 JSON;
 

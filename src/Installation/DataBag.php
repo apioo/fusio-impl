@@ -89,7 +89,9 @@ class DataBag
             'fusio_user_attribute' => [],
             'fusio_role_scope' => [],
             'fusio_action_commit' => [],
+            'fusio_action_tag' => [],
             'fusio_schema_commit' => [],
+            'fusio_schema_tag' => [],
             'fusio_agent_message' => [],
         ];
     }
@@ -248,6 +250,16 @@ class DataBag
             'commit_hash' => $commitHash,
             'config_hash' => sha1($config),
             'config' => $config,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addActionTag(string $commitHash, string $user, string $version, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_action_tag'][$commitHash] = [
+            'commit_id' => $this->getReference('fusio_action_commit', $commitHash, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'version' => $version,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
@@ -760,6 +772,16 @@ class DataBag
             'commit_hash' => $commitHash,
             'source_hash' => sha1($source),
             'source' => $source,
+            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addSchemaTag(string $commitHash, string $user, string $version, ?string $insertDate = null, ?string $tenantId = null): void
+    {
+        $this->data['fusio_schema_tag'][$commitHash] = [
+            'commit_id' => $this->getReference('fusio_schema_commit', $commitHash, $tenantId),
+            'user_id' => $this->getReference('fusio_user', $user, $tenantId),
+            'version' => $version,
             'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
