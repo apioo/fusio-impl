@@ -58,10 +58,43 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 2,
+            "user": {
+                "id": 2,
+                "status": 1,
+                "name": "Consumer"
+            },
+            "commitHash": "8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6",
+            "schema": {
+                "definitions": {
+                    "Entry": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "content": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "$ref": "Entry"
+            },
+            "insertDate": "[datetime]"
+        },
         {
             "id": 1,
             "user": {
