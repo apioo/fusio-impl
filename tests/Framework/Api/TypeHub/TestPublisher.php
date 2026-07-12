@@ -53,6 +53,6 @@ class TestPublisher implements PublisherInterface
 
     public function tag(string $name, string $clientId, string $clientSecret): Tag
     {
-        return new Tag(1, '0.1.0');
+        return new Tag('1', '0.1.0');
     }
 }
