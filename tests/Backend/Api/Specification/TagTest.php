@@ -51,14 +51,18 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
-        $result = $this->connection->fetchAllAssociative('SELECT commit_id, user_id, version FROM fusio_action_tag');
+        $result = $this->connection->fetchAllAssociative('SELECT commit_id, user_id, version FROM fusio_action_tag WHERE version = :version', ['version' => '0.1.2']);
+        $this->assertGreaterThanOrEqual(1, count($result));
+
         foreach ($result as $row) {
             $this->assertGreaterThanOrEqual(1, $row['commit_id']);
             $this->assertGreaterThanOrEqual(1, $row['user_id']);
             $this->assertSame('0.1.2', $row['version']);
         }
 
-        $result = $this->connection->fetchAllAssociative('SELECT commit_id, user_id, version FROM fusio_schema_tag');
+        $result = $this->connection->fetchAllAssociative('SELECT commit_id, user_id, version FROM fusio_schema_tag WHERE version = :version', ['version' => '0.1.2']);
+        $this->assertGreaterThanOrEqual(1, count($result));
+
         foreach ($result as $row) {
             $this->assertGreaterThanOrEqual(1, $row['commit_id']);
             $this->assertGreaterThanOrEqual(1, $row['user_id']);

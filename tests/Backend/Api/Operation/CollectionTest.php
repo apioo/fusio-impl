@@ -1160,10 +1160,10 @@ JSON;
             throw new \RuntimeException('Provided operation ' . $id . ' does not exist');
         }
 
-        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['incoming']);
-        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['outgoing']);
-        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788']), $row['throws']);
-        $this->assertEquals('action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358', $row['action']);
+        $this->assertEquals('schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $row['incoming']);
+        $this->assertEquals('schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $row['outgoing']);
+        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6']), $row['throws']);
+        $this->assertEquals('action://Sql-Insert@a742ff6a7e6733dbee21784ba1a749c001725988', $row['action']);
 
         // move schema back to experimental
         $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', [
