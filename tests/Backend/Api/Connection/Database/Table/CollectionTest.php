@@ -42,7 +42,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 49,
+    "totalResults": 51,
     "itemsPerPage": 16,
     "startIndex": 0,
     "entry": [
@@ -57,6 +57,9 @@ class CollectionTest extends DbTestCase
         },
         {
             "name": "fusio_action_commit"
+        },
+        {
+            "name": "fusio_action_tag"
         },
         {
             "name": "fusio_agent"
@@ -90,9 +93,6 @@ class CollectionTest extends DbTestCase
         },
         {
             "name": "fusio_cronjob"
-        },
-        {
-            "name": "fusio_cronjob_error"
         }
     ]
 }
