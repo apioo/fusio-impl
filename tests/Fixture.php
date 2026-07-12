@@ -129,8 +129,10 @@ class Fixture
         $data->addAction('default', 'MIME-Action', MimeAction::class);
         $data->addActionCommit('Sql-Insert', 'Consumer', 'd9b98d4f5d951d59632e7dfdc0c5737a25936358', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addActionCommit('PHP-Local', 'Consumer', '913c5d62a340e5db90e2577f01caf9bd072e1bfa', Service\Action::serializeConfig(['code' => $localPhpFix]));
+        $data->addActionCommit('PHP-Local', 'Consumer', '60a9f26837f13da44dbdcf792c95e7dc30b74b7e', Service\Action::serializeConfig(['code' => $localPhp]));
         $data->addActionTag('d9b98d4f5d951d59632e7dfdc0c5737a25936358', 'Consumer', '0.1.0');
         $data->addActionTag('913c5d62a340e5db90e2577f01caf9bd072e1bfa', 'Consumer', '0.1.0');
+        $data->addActionTag('60a9f26837f13da44dbdcf792c95e7dc30b74b7e', 'Consumer', '0.1.1');
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
