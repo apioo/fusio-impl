@@ -128,9 +128,11 @@ class Fixture
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
         $data->addAction('default', 'MIME-Action', MimeAction::class);
         $data->addActionCommit('Sql-Insert', 'Consumer', 'd9b98d4f5d951d59632e7dfdc0c5737a25936358', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
+        $data->addActionCommit('Sql-Insert', 'Consumer', 'a742ff6a7e6733dbee21784ba1a749c001725988', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addActionCommit('PHP-Local', 'Consumer', '913c5d62a340e5db90e2577f01caf9bd072e1bfa', Service\Action::serializeConfig(['code' => $localPhpFix]));
         $data->addActionCommit('PHP-Local', 'Consumer', '60a9f26837f13da44dbdcf792c95e7dc30b74b7e', Service\Action::serializeConfig(['code' => $localPhp]));
         $data->addActionTag('d9b98d4f5d951d59632e7dfdc0c5737a25936358', 'Consumer', '0.1.0');
+        $data->addActionTag('a742ff6a7e6733dbee21784ba1a749c001725988', 'Consumer', '0.1.1');
         $data->addActionTag('913c5d62a340e5db90e2577f01caf9bd072e1bfa', 'Consumer', '0.1.0');
         $data->addActionTag('60a9f26837f13da44dbdcf792c95e7dc30b74b7e', 'Consumer', '0.1.1');
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
@@ -178,7 +180,9 @@ class Fixture
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource, null, ['foo' => 'bar']);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addSchemaCommit('Entry-Schema', 'Consumer', '7d28d0f99f1d839a054cf080b37556d77166d788', $schemaEntrySource);
+        $data->addSchemaCommit('Entry-Schema', 'Consumer', '8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $schemaEntrySource);
         $data->addSchemaTag('7d28d0f99f1d839a054cf080b37556d77166d788', 'Consumer', '0.1.0');
+        $data->addSchemaTag('8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', 'Consumer', '0.1.1');
         $data->addScope('default', 'foo', 'Foo access', ['foo' => 'bar']);
         $data->addScope('default', 'bar', 'Bar access');
         $data->addScope('default', 'plan_scope', 'Plan scope access');
