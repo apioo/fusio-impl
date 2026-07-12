@@ -46,4 +46,21 @@ class Commit extends Generated\ActionCommitTable
 
         return [$row['commit_hash'], $row['config_hash']];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function findAllLatestCommitIds(): array
+    {
+        $query = 'WITH latest_commits AS (
+                       SELECT id,
+                              ROW_NUMBER() OVER (PARTITION BY action_id ORDER BY insert_date DESC, id DESC) as rn
+                         FROM fusio_action_commit
+                       )
+                SELECT id
+                  FROM latest_commits
+                 WHERE rn = 1';
+
+        return $this->connection->fetchFirstColumn($query);
+    }
 }

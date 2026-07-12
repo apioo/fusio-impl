@@ -25,7 +25,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
-use Fusio\Model\Backend\SpecificationChangelog;
 use PSX\Api\Exception\PublishException;
 use PSX\Api\TypeHub\PublisherInterface;
 use PSX\Http\Exception\BadRequestException;
@@ -40,7 +39,7 @@ use PSX\Http\Exception\InternalServerErrorException;
  */
 readonly class Tag implements ActionInterface
 {
-    public function __construct(private PublisherInterface $publisher, private Service\Config $config)
+    public function __construct(private PublisherInterface $publisher, private Service\Action\Tag $tag, private Service\Config $config)
     {
     }
 
@@ -58,10 +57,12 @@ readonly class Tag implements ActionInterface
         }
 
         try {
-            $this->publisher->tag($name, $clientId, $clientSecret);
+            $tag = $this->publisher->tag($name, $clientId, $clientSecret);
         } catch (PublishException $e) {
             throw new InternalServerErrorException($e->getMessage(), previous: $e);
         }
+
+        $this->tag->tag($tag->version, $context);
 
         return [
             'success' => true,
