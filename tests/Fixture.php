@@ -177,6 +177,9 @@ class Fixture
         $data->addScope('default', 'foo', 'Foo access', ['foo' => 'bar']);
         $data->addScope('default', 'bar', 'Bar access');
         $data->addScope('default', 'plan_scope', 'Plan scope access');
+        $data->addConfig('typehub_client_id', Table\Config::FORM_STRING, 'client_id', 'TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)');
+        $data->addConfig('typehub_client_secret', Table\Config::FORM_STRING, 'client_secret', 'TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)');
+        $data->addConfig('typehub_document_name', Table\Config::FORM_STRING, 'document_name', 'Name of the TypeHub document under which the specification gets published');
         $data->addAppScope('Foo-App', 'authorization');
         $data->addAppScope('Foo-App', 'foo');
         $data->addAppScope('Foo-App', 'bar');
