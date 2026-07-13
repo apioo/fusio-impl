@@ -52,7 +52,7 @@ class RequestsPerUser extends ChartViewAbstract
                         ON log.user_id = usr.id
                      WHERE ' . $expression . '
                   GROUP BY log.user_id, usr.name
-                  ORDER BY COUNT(log.id) DESC';
+                  ORDER BY COUNT(log.id) DESC, usr.name ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 

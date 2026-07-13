@@ -52,7 +52,7 @@ class RequestsPerOperation extends ChartViewAbstract
                         ON log.operation_id = operation.id
                      WHERE ' . $expression . '
                   GROUP BY log.operation_id, operation.name
-                  ORDER BY COUNT(log.id) DESC';
+                  ORDER BY COUNT(log.id) DESC, operation.name ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
