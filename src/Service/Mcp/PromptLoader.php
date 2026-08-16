@@ -66,7 +66,7 @@ readonly class PromptLoader
                 ];
             };
 
-            $registry->registerPrompt($prompt, $handler, isManual: true);
+            $registry->registerPrompt($prompt, $handler);
         }
     }
 }

@@ -98,9 +98,8 @@ class McpController extends ControllerAbstract
             throw new ServiceUnavailableException('MCP service is not enabled');
         }
 
-        $corsHeaders = [];
         $factory = new Psr17Factory();
-        $transport = new StreamableHttpTransport($this->psrFactory->toPsrServerRequest($request), $factory, $factory, $corsHeaders, $this->logger);
+        $transport = new StreamableHttpTransport($this->psrFactory->toPsrServerRequest($request), $factory, $factory, $this->logger);
 
         $server = $this->mcp->build();
 
