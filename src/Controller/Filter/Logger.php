@@ -22,7 +22,6 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
