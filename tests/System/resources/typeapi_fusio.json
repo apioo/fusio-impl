@@ -12498,7 +12498,7 @@
     },
     "system.captcha.challenge": {
       "path": "/system/captcha/challenge",
-      "method": "POST",
+      "method": "GET",
       "return": {
         "code": 200,
         "schema": {

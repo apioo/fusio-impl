@@ -2942,7 +2942,7 @@ class NewInstallation
                 ),
                 'captcha.challenge' => new Operation(
                     action: System\Action\Captcha\Challenge::class,
-                    httpMethod: 'POST',
+                    httpMethod: 'GET',
                     httpPath: '/captcha/challenge',
                     httpCode: 200,
                     outgoing: Model\System\CaptchaChallenge::class,

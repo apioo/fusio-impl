@@ -20,14 +20,16 @@
 
 namespace Fusio\Impl\System\Action\Captcha;
 
+use DateTime;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 
 /**
  * Challenge
@@ -40,11 +42,31 @@ readonly class Challenge implements ActionInterface
 {
     public function __construct(
         private Service\Captcha $captchaService,
+        private Table\Log $logTable,
+        private IPResolver $ipResolver,
+        private Service\System\FrameworkConfig $frameworkConfig,
     ) {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        if ($this->getRequestCount() > 15) {
+            throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60);
+        }
+
         return $this->captchaService->challenge();
+    }
+
+    private function getRequestCount(): int
+    {
+        $past = new DateTime();
+        $past->sub(new \DateInterval('PT1M'));
+
+        $condition = Condition::withAnd();
+        $condition->equals(Table\Generated\LogTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals(Table\Generated\LogTable::COLUMN_IP, $this->ipResolver->resolveByEnvironment());
+        $condition->greater(Table\Generated\LogTable::COLUMN_DATE, $past->format('Y-m-d H:i:s'));
+
+        return $this->logTable->getCount($condition);
     }
 }
