@@ -57,7 +57,7 @@ class CollectionTest extends DbTestCase
         $expect = <<<'JSON'
 {
     "kind": "[kind]",
-    "totalResults": 10,
+    "totalResults": 9,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -123,13 +123,6 @@ class CollectionTest extends DbTestCase
             "status": 4,
             "operationName": "test.createFoo",
             "message": "Expected status code 201 got 402"
-        },
-        {
-            "kind": "[kind]",
-            "id": 7,
-            "message": "/ property \"kind\" is unknown",
-            "operationName": "meta.getAbout",
-            "status": 4
         }
     ]
 }

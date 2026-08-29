@@ -569,6 +569,10 @@ class GetTest extends DbTestCase
                 "description": "This object represents an app to access the API on-behalf of a user",
                 "type": "struct",
                 "properties": {
+                    "kind": {
+                        "description": "Uniquely identifies the object schema type",
+                        "type": "string"
+                    },
                     "id": {
                         "description": "Unique identifier for the object",
                         "type": "integer"
@@ -631,6 +635,10 @@ class GetTest extends DbTestCase
                 "description": "This object represents a token, this an access token which was requested by a user",
                 "type": "struct",
                 "properties": {
+                    "kind": {
+                        "description": "Uniquely identifies the object schema type",
+                        "type": "string"
+                    },
                     "id": {
                         "description": "Unique identifier for the object",
                         "type": "integer"
@@ -665,6 +673,10 @@ class GetTest extends DbTestCase
                 "description": "This object represents a user",
                 "type": "struct",
                 "properties": {
+                    "kind": {
+                        "description": "Uniquely identifies the object schema type",
+                        "type": "string"
+                    },
                     "id": {
                         "description": "Unique identifier for the object",
                         "type": "integer"
@@ -744,13 +756,20 @@ class GetTest extends DbTestCase
                 "description": "Common error message",
                 "type": "struct",
                 "properties": {
+                    "kind": {
+                        "description": "Uniquely identifies the object schema type",
+                        "type": "string"
+                    },
                     "success": {
+                        "description": "Indicates whether the requested operation was successful",
                         "type": "boolean"
                     },
                     "message": {
+                        "description": "Human-readable message describing the outcome of the operation",
                         "type": "string"
                     },
                     "id": {
+                        "description": "Optional unique identifier of the resource associated with the operation",
                         "type": "string"
                     }
                 }
@@ -789,6 +808,10 @@ class GetTest extends DbTestCase
             "System_About": {
                 "type": "struct",
                 "properties": {
+                    "kind": {
+                        "description": "Uniquely identifies the object schema type",
+                        "type": "string"
+                    },
                     "apiVersion": {
                         "type": "string"
                     },
