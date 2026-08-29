@@ -2945,10 +2945,10 @@ class NewInstallation
                     httpMethod: 'POST',
                     httpPath: '/captcha/challenge',
                     httpCode: 200,
-                    outgoing: Model\Common\Message::class,
+                    outgoing: Model\System\CaptchaChallenge::class,
                     throws: [999 => Model\Common\Message::class],
                     public: true,
-                    description: 'Payment webhook endpoint after successful purchase of a plan',
+                    description: 'Endpoint to generate a captcha challenge',
                 ),
             ],
             'authorization' => [

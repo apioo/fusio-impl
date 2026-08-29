@@ -12503,7 +12503,7 @@
         "code": 200,
         "schema": {
           "type": "reference",
-          "target": "Common_Message"
+          "target": "System_CaptchaChallenge"
         }
       },
       "arguments": [],
@@ -12516,7 +12516,7 @@
           }
         }
       ],
-      "description": "Payment webhook endpoint after successful purchase of a plan",
+      "description": "Endpoint to generate a captcha challenge",
       "stability": 2,
       "security": [],
       "authorization": false,
@@ -17255,6 +17255,29 @@
         },
         "href": {
           "type": "string"
+        }
+      }
+    },
+    "System_CaptchaChallenge": {
+      "type": "struct",
+      "properties": {
+        "algorithm": {
+          "type": "string"
+        },
+        "challenge": {
+          "type": "string"
+        },
+        "maxnumber": {
+          "type": "integer"
+        },
+        "salt": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "expires": {
+          "type": "integer"
         }
       }
     },
