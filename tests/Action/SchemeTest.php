@@ -43,6 +43,9 @@ class SchemeTest extends TestCase
         $this->assertEquals($expectHash, $actualHash);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function splitProvider(): array
     {
         return [
@@ -61,6 +64,9 @@ class SchemeTest extends TestCase
         $this->assertEquals($expectAction, $action);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function wrapProvider(): array
     {
         return [

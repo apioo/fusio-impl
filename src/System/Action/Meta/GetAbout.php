@@ -53,25 +53,29 @@ readonly class GetAbout implements ActionInterface
         return array_filter([
             '@type' => Service\JsonLD\TypeBuilder::build(Model\System\About::class),
             'apiVersion' => Base::getVersion(),
-            'title' => $this->configService->getValue('info_title') ?: 'Fusio',
-            'description' => $this->configService->getValue('info_description') ?: null,
-            'termsOfService' => $this->configService->getValue('info_tos') ?: null,
-            'contactName' => $this->configService->getValue('info_contact_name') ?: null,
-            'contactUrl' => $this->configService->getValue('info_contact_url') ?: null,
-            'contactEmail' => $this->configService->getValue('info_contact_email') ?: null,
-            'licenseName' => $this->configService->getValue('info_license_name') ?: null,
-            'licenseUrl' => $this->configService->getValue('info_license_url') ?: null,
-            'paymentCurrency' => $this->configService->getValue('payment_currency') ?: 'EUR',
+            'title' => $this->configService->getString('info_title') ?: 'Fusio',
+            'description' => $this->configService->getString('info_description') ?: null,
+            'termsOfService' => $this->configService->getString('info_tos') ?: null,
+            'contactName' => $this->configService->getString('info_contact_name') ?: null,
+            'contactUrl' => $this->configService->getString('info_contact_url') ?: null,
+            'contactEmail' => $this->configService->getString('info_contact_email') ?: null,
+            'licenseName' => $this->configService->getString('info_license_name') ?: null,
+            'licenseUrl' => $this->configService->getString('info_license_url') ?: null,
+            'paymentCurrency' => $this->configService->getString('payment_currency') ?: 'EUR',
             'categories' => $this->getCategories($context),
             'scopes' => $this->getScopes($context),
             'links' => $this->getLinks(),
         ]);
     }
 
+    /**
+     * @return list<string>
+     */
     private function getCategories(ContextInterface $context): array
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\CategoryTable::COLUMN_TENANT_ID, $context->getTenantId());
+        
         $categories = $this->categoryTable->findAll($condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC);
 
         $result = [];
@@ -82,6 +86,9 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(ContextInterface $context): array
     {
         $defaultCategory = $this->categoryTable->findOneByTenantAndName($context->getTenantId(), 'default');
@@ -92,6 +99,7 @@ readonly class GetAbout implements ActionInterface
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\ScopeTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $defaultCategory->getId());
+        
         $scopes = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC);
 
         $result = [];
@@ -102,80 +110,53 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<array{rel: string, href: string}>
+     */
     private function getLinks(): array
     {
-        $links = [];
-
-        $links[] = [
+        return [[
             'rel' => 'root',
             'href' => $this->frameworkConfig->getDispatchUrl(),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'apps',
             'href' => $this->frameworkConfig->getAppsUrl(),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'openapi',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-openapi'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'typeapi',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'generator', 'spec-typeapi'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'route',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'route'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'health',
             'href' => $this->frameworkConfig->getDispatchUrl('system', 'health'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth2',
             'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'whoami',
             'href' => $this->frameworkConfig->getDispatchUrl('authorization', 'whoami'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'api-catalog',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'api-catalog'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth-authorization-server',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-authorization-server'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'oauth-protected-resource',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'oauth-protected-resource'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'openid-configuration',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'openid-configuration'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'security',
             'href' => $this->frameworkConfig->getDispatchUrl('.well-known', 'security.txt'),
-        ];
-
-        $links[] = [
+        ], [
             'rel' => 'about',
             'href' => 'https://www.fusio-project.org',
-        ];
-
-        return $links;
+        ]];
     }
 }

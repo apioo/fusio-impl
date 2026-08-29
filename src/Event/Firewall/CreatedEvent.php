@@ -33,13 +33,9 @@ use Fusio\Model\Backend\FirewallCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private FirewallCreate $firewall;
-
-    public function __construct(FirewallCreate $firewall, UserContext $context)
+    public function __construct(private readonly FirewallCreate $firewall, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->firewall = $firewall;
     }
 
     public function getFirewall(): FirewallCreate

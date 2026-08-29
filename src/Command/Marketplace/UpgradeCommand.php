@@ -86,6 +86,7 @@ class UpgradeCommand extends Command
             if ($output->isVerbose()) {
                 $output->writeln($e->getTraceAsString());
             }
+            
             $output->writeln('');
         }
 

@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\TriggerRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private TriggerRow $existing;
-
-    public function __construct(TriggerRow $existing, UserContext $context)
+    public function __construct(private readonly TriggerRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): TriggerRow

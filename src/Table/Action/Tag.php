@@ -18,26 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Table\Action;
 
-use PSX\Http\Client\PostRequest;
+use Fusio\Impl\Table\Generated;
 
 /**
- * FriendlyCaptcha
+ * Tag
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class FriendlyCaptcha extends CaptchaAbstract
+class Tag extends Generated\ActionTagTable
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool
+    public function findHashByVersion(string $version, int $actionId): ?string
     {
-        $request = new PostRequest('https://global.frcapi.com/api/v2/captcha/siteverify', [], [
-            'sitekey'  => $secret,
-            'response' => $captcha,
-        ]);
+        $query = 'SELECT cmt.commit_hash
+                    FROM fusio_action_tag tag
+              INNER JOIN fusio_action_commit cmt
+                      ON tag.commit_id = cmt.id
+                   WHERE tag.version = :version
+                     AND cmt.action_id = :action_id';
 
-        return $this->request($request);
+        return $this->connection->fetchOne($query, [
+            'version' => $version,
+            'action_id' => $actionId
+        ]);
     }
 }

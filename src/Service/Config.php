@@ -20,6 +20,9 @@
 
 namespace Fusio\Impl\Service;
 
+use DateMalformedStringException;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Config\UpdatedEvent;
 use Fusio\Impl\Service\System\FrameworkConfig;
@@ -35,7 +38,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Config
+readonly class Config
 {
     public function __construct(
         private Table\Config $configTable,
@@ -59,34 +62,72 @@ class Config
         return $existing->getId();
     }
 
-    public function getValue(string $name)
+    public function getInt(string $name): int
     {
-        $config = $this->configTable->getValue($this->frameworkConfig->getTenantId(), $name);
-        if (!empty($config)) {
-            return self::convertValueToType($config['value'], $config['type']);
-        } else {
+        $value = $this->getValue($name);
+        if ($value === null) {
+            return 0;
+        }
+
+        return (int) $value;
+    }
+
+    public function getBool(string $name): bool
+    {
+        $value = $this->getValue($name);
+        if ($value === null) {
+            return false;
+        }
+
+        return (bool) $value;
+    }
+
+    public function getDateTime(string $name): ?DateTimeInterface
+    {
+        $value = $this->getString($name);
+        if ($value === null) {
+            return null;
+        }
+
+        try {
+            return new DateTimeImmutable($value);
+        } catch (DateMalformedStringException) {
             return null;
         }
     }
 
-    public static function convertValueToType(mixed $value, int $type)
+    public function getString(string $name): ?string
     {
-        switch ($type) {
-            case Table\Config::FORM_NUMBER:
-                return 0 + $value;
+        $value = $this->getValue($name);
 
-            case Table\Config::FORM_BOOLEAN:
-                return (bool) $value;
+        return $value !== null ? (string) $value : null;
+    }
 
-            case Table\Config::FORM_DATETIME:
-                return new \DateTime($value);
-
-            case Table\Config::FORM_TEXT:
-            case Table\Config::FORM_EMAIL:
-            case Table\Config::FORM_STRING:
-            case Table\Config::FORM_SECRET:
-            default:
-                return $value;
+    private function getValue(string $name): mixed
+    {
+        $config = $this->configTable->getValue($this->frameworkConfig->getTenantId(), $name);
+        if (empty($config)) {
+            return null;
         }
+
+        $value = $config['value'] ?? null;
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @throws DateMalformedStringException
+     */
+    public static function convertValueToType(mixed $value, int $type): mixed
+    {
+        return match ($type) {
+            Table\Config::FORM_NUMBER => 0 + $value,
+            Table\Config::FORM_BOOLEAN => (bool)$value,
+            Table\Config::FORM_DATETIME => new DateTimeImmutable($value),
+            default => $value,
+        };
     }
 }

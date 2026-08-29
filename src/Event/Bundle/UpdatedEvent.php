@@ -34,15 +34,9 @@ use Fusio\Model\Backend\BundleUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private BundleUpdate $bundle;
-    private BundleRow $existing;
-
-    public function __construct(BundleUpdate $bundle, BundleRow $existing, UserContext $context)
+    public function __construct(private readonly BundleUpdate $bundle, private readonly BundleRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->bundle = $bundle;
-        $this->existing = $existing;
     }
 
     public function getBundle(): BundleUpdate

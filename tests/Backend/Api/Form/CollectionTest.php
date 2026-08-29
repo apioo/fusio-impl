@@ -32,12 +32,12 @@ use PSX\Json\Parser;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/form', 'GET', array(
+        $response = $this->sendRequest('/backend/form', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -52,7 +52,7 @@ class CollectionTest extends DbTestCase
             "id": 1,
             "status": 1,
             "name": "my_form",
-            "operationId": 273,
+            "operationId": 280,
             "metadata": {
                 "foo": "bar"
             }
@@ -65,7 +65,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $metadata = [
             'foo' => 'bar'
@@ -75,10 +75,10 @@ JSON;
             'my' => 'schema'
         ];
 
-        $response = $this->sendRequest('/backend/form', 'POST', array(
+        $response = $this->sendRequest('/backend/form', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'        => 'new-form',
             'operationId' => 20,
             'uiSchema'    => $uiSchema,
@@ -116,12 +116,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/form', 'PUT', array(
+        $response = $this->sendRequest('/backend/form', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -130,12 +130,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/form', 'DELETE', array(
+        $response = $this->sendRequest('/backend/form', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

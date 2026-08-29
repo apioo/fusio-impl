@@ -35,6 +35,13 @@ use PSX\Sql\ViewAbstract;
  */
 class CountRequests extends ViewAbstract
 {
+    /**
+     * @return array{
+     *     count: int,
+     *     from: string,
+     *     to: string,
+     * }
+     */
     public function getView(Log\LogQueryFilter $filter, ContextInterface $context): array
     {
         $condition = $filter->getCondition($this->getTable(Table\Log::class), [QueryFilter::COLUMN_SEARCH => Table\Generated\LogColumn::PATH], 'log');

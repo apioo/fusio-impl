@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Service\Captcha;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * RegisterTest
@@ -31,25 +33,30 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class RegisterTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'GET', array(
+        $response = $this->sendRequest('/consumer/register', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'POST', array(
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
+        $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@localhost.com',
             'password' => 'foobar!123',
+            'captcha'  => $captcha,
         ]));
 
         $body  = (string) $response->getBody();
@@ -77,62 +84,77 @@ class RegisterTest extends DbTestCase
         $this->assertEquals('baz@localhost.com', $row['email']);
     }
 
-    public function testPostInvalidEmail()
+    public function testPostInvalidEmail(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'POST', array(
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
+        $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz',
             'password' => 'foo!12',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid email format', substr($data['message'], 0, 20), $body);
+        $this->assertEquals('Invalid email format', substr((string) $data['message'], 0, 20), $body);
     }
 
-    public function testPostInvalidPasswordLength()
+    public function testPostInvalidPasswordLength(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'POST', array(
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
+        $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
             'password' => 'foo!12',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must have at least 8 characters', substr($data['message'], 0, 40), $body);
+        $this->assertEquals('Password must have at least 8 characters', substr((string) $data['message'], 0, 40), $body);
     }
 
-    public function testPostInvalidPasswordCharacters()
+    public function testPostInvalidPasswordCharacters(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'POST', array(
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
+        $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
             'password' => 'foobar foobar',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must contain only printable ascii characters', substr($data['message'], 0, 53), $body);
+        $this->assertEquals('Password must contain only printable ascii characters', substr((string) $data['message'], 0, 53), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'PUT', array(
+        $response = $this->sendRequest('/consumer/register', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -141,11 +163,11 @@ class RegisterTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/register', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/register', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

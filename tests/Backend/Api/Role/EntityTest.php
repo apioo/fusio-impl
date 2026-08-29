@@ -41,12 +41,12 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_role', 'Consumer')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/role/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/role/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -59,6 +59,7 @@ class EntityTest extends DbTestCase
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
@@ -82,12 +83,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/role/~Consumer', 'GET', array(
+        $response = $this->sendRequest('/backend/role/~Consumer', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -100,6 +101,7 @@ JSON;
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
@@ -123,12 +125,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/role/10', 'GET', array(
+        $response = $this->sendRequest('/backend/role/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -138,12 +140,12 @@ JSON;
         $this->assertStringStartsWith('Could not find role', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/role/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/role/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -152,12 +154,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/role/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/role/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'categoryId' => 3,
             'name'       => 'foo',
             'scopes'     => ['backend.action'],
@@ -201,12 +203,12 @@ JSON;
         $this->assertEquals(7, $result[0]['scope_id']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/role/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/role/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

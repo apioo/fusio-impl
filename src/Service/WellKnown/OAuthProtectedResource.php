@@ -39,6 +39,15 @@ readonly class OAuthProtectedResource
     {
     }
 
+    /**
+     * @return array{
+     *     resource: string,
+     *     authorization_servers: list<string>,
+     *     scopes_supported: list<string>,
+     *     bearer_methods_supported: list<string>,
+     *     resource_signing_alg_values_supported: list<string>,
+     * }
+     */
     public function get(?string $resource = null): array
     {
         return [
@@ -50,6 +59,9 @@ readonly class OAuthProtectedResource
         ];
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(): array
     {
         $condition = Condition::withAnd();

@@ -40,7 +40,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Token extends ViewAbstract
 {
-    public function getCollection(TokenQueryFilter $filter, ContextInterface $context)
+    public function getCollection(TokenQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -75,7 +75,7 @@ class Token extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $tokenId, ContextInterface $context)
+    public function getEntity(int $tokenId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TokenTable::COLUMN_ID, $tokenId);

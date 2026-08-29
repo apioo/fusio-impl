@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+readonly class Get implements ActionInterface
 {
-    private View\Page $view;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(View\Page $view, FrameworkConfig $frameworkConfig)
+    public function __construct(private View\Page $view, private FrameworkConfig $frameworkConfig)
     {
-        $this->view = $view;
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

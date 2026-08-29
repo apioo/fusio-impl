@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Run implements ActionInterface
+readonly class Run implements ActionInterface
 {
-    private Service\Test $testService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Test $testService, ContextFactory $contextFactory)
+    public function __construct(private Service\Test $testService, private ContextFactory $contextFactory)
     {
-        $this->testService = $testService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

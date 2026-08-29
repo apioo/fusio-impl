@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\Fixture;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/scope', 'GET', array(
+        $response = $this->sendRequest('/backend/scope', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -49,19 +49,19 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 61,
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 60,
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 59,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -82,12 +82,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/scope?search=fo', 'GET', array(
+        $response = $this->sendRequest('/backend/scope?search=fo', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -99,7 +99,7 @@ JSON;
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 59,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -114,12 +114,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/scope?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/scope?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -131,19 +131,19 @@ JSON;
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 61,
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 60,
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-            "id": 59,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -164,16 +164,16 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/scope', 'POST', array(
+        $response = $this->sendRequest('/backend/scope', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'        => 'test',
             'description' => 'Test description',
             'operations'  => [[
@@ -221,21 +221,21 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 275,
+            'operation_id' => 282,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 272,
+            'operation_id' => 279,
             'allow' => 1,
         ]], $operations);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/scope', 'PUT', array(
+        $response = $this->sendRequest('/backend/scope', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -244,12 +244,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/scope', 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

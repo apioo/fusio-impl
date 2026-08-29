@@ -35,7 +35,7 @@ use Symfony\Component\Mailer\Transport\NullTransport;
  */
 class SMTPTest extends TestCase
 {
-    public function testAccept()
+    public function testAccept(): void
     {
         $sender = new SMTP();
 
@@ -43,7 +43,7 @@ class SMTPTest extends TestCase
         $this->assertFalse($sender->accept(new \stdClass()));
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         $transport = new MemoryTransport();
         $dispatcher = new Mailer($transport);

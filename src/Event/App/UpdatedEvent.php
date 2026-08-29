@@ -34,15 +34,9 @@ use Fusio\Model\Backend\AppUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private AppUpdate $app;
-    private AppRow $existing;
-
-    public function __construct(AppUpdate $app, AppRow $existing, UserContext $context)
+    public function __construct(private readonly AppUpdate $app, private readonly AppRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->app      = $app;
-        $this->existing = $existing;
     }
 
     public function getApp(): AppUpdate

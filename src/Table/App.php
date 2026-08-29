@@ -35,8 +35,11 @@ use PSX\Sql\Condition;
 class App extends Generated\AppTable
 {
     public const STATUS_ACTIVE      = 0x1;
+    
     public const STATUS_PENDING     = 0x2;
+    
     public const STATUS_DEACTIVATED = 0x3;
+    
     public const STATUS_DELETED     = 0x4;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?AppRow

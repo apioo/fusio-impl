@@ -134,6 +134,9 @@ class ActionRepository implements Repository\ActionInterface
         $this->async = $async;
     }
 
+    /**
+     * @param array<string, mixed> $row
+     */
     private function newAction(array $row, ?string $hash = null): Model\ActionInterface
     {
         $config = !empty($row[Table\Generated\ActionTable::COLUMN_CONFIG]) ? Service\Action::unserializeConfig($row[Table\Generated\ActionTable::COLUMN_CONFIG]) : [];

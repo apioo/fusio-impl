@@ -20,11 +20,14 @@
 
 namespace Fusio\Impl\Service\Marketplace\App;
 
+use Fusio\Impl\Service\Marketplace\ClientFactory;
 use Fusio\Impl\Service\Marketplace\RemoteAbstract;
+use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Marketplace\MarketplaceApp;
 use Fusio\Marketplace\MarketplaceAppCollection;
 use Fusio\Marketplace\MarketplaceInstall;
 use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Marketplace\MarketplaceUser;
 use Sdkgen\Client\Exception\ClientException;
 
 /**
@@ -33,9 +36,16 @@ use Sdkgen\Client\Exception\ClientException;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @extends RemoteAbstract<MarketplaceApp>
  */
 class Repository extends RemoteAbstract
 {
+    public function __construct(private readonly FrameworkConfig $frameworkConfig, ClientFactory $clientFactory)
+    {
+        parent::__construct($clientFactory);
+    }
+
     /**
      * @throws ClientException
      * @throws MarketplaceMessageException
@@ -63,6 +73,42 @@ class Repository extends RemoteAbstract
         $install = new MarketplaceInstall();
         $install->setName($user . '/' . $name);
 
-        return $this->getClient()->marketplace()->directory()->app()->install($install);
+        try {
+            return $this->getClient()->marketplace()->directory()->app()->install($install);
+        } catch (ClientException $e) {
+            if ($this->hasLocalApp($user, $name)) {
+                return $this->newLocalApp($user, $name);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    private function newLocalApp(string $user, string $name): MarketplaceApp
+    {
+        $author = new MarketplaceUser();
+        $author->setName($user);
+
+        $app = new MarketplaceApp();
+        $app->setName($name);
+        $app->setAuthor($author);
+        return $app;
+    }
+
+    private function hasLocalApp(string $user, string $name): bool
+    {
+        $appsDir = $this->frameworkConfig->getAppsDir();
+        $appDir = $appsDir . '/' . $this->getDirName($user, $name);
+
+        return is_dir($appDir);
+    }
+
+    private function getDirName(string $user, string $name): string
+    {
+        if (empty($user) || $user === 'fusio') {
+            return $name;
+        } else {
+            return $user . '-' . $name;
+        }
     }
 }

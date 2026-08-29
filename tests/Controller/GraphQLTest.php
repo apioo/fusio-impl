@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GraphQLTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->sendRequest('/graphql?query={testListFoo{totalResults}}', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
@@ -54,7 +54,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $body = <<<JSON
 {
@@ -82,7 +82,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPostArguments()
+    public function testPostArguments(): void
     {
         $body = <<<JSON
 {
@@ -114,7 +114,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPostMultipleQuery()
+    public function testPostMultipleQuery(): void
     {
         $body = <<<JSON
 {
@@ -156,7 +156,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $response = $this->sendRequest('/graphql', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
@@ -166,7 +166,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         $response = $this->sendRequest('/graphql', 'PATCH', [
             'User-Agent'    => 'Fusio TestCase',
@@ -176,7 +176,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->sendRequest('/graphql', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',

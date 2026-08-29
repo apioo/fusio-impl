@@ -34,6 +34,7 @@ use PSX\Sql\Condition;
 class Role extends Generated\RoleTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?RoleRow

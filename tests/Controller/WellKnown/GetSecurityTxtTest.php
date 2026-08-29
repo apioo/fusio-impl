@@ -31,13 +31,13 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GetSecurityTxtTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/.well-known/security.txt', 'GET', array(
+        $response = $this->sendRequest('/.well-known/security.txt', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
-        $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
+        $expires = new \DateTime()->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
 
         $actual = (string) $response->getBody();
         $expect = 'Contact: mailto:security@fusio-project.org' . "\n";
@@ -52,11 +52,11 @@ class GetSecurityTxtTest extends DbTestCase
         $this->assertEquals($expect, $actual, $actual);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/.well-known/security.txt', 'POST', array(
+        $response = $this->sendRequest('/.well-known/security.txt', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -65,11 +65,11 @@ class GetSecurityTxtTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/.well-known/security.txt', 'PUT', array(
+        $response = $this->sendRequest('/.well-known/security.txt', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -78,11 +78,11 @@ class GetSecurityTxtTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/.well-known/security.txt', 'DELETE', array(
+        $response = $this->sendRequest('/.well-known/security.txt', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

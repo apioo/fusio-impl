@@ -46,12 +46,12 @@ class CollectionTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_action', 'Sql-Insert')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'GET', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -59,12 +59,26 @@ class CollectionTest extends DbTestCase
         $expect = <<<'JSON'
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCommitCollection",
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCommit",
+            "id": 2,
+            "user": {
+                "id": 2,
+                "status": 1,
+                "name": "Consumer"
+            },
+            "commitHash": "a742ff6a7e6733dbee21784ba1a749c001725988",
+            "config": {
+                "connection": 2,
+                "table": "app_news"
+            },
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 1,
             "user": {
                 "id": 2,
@@ -86,12 +100,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'POST', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -100,12 +114,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'PUT', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -114,12 +128,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'DELETE', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id . '/commit', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

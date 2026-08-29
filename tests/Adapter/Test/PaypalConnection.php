@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ParametersInterface;
+use Override;
 
 /**
  * Dummy paypal connection to test the payment provider
@@ -32,6 +33,7 @@ use Fusio\Engine\ParametersInterface;
  */
 class PaypalConnection extends ConnectionAbstract
 {
+    #[Override]
     public function getName(): string
     {
         return 'Paypal-Connection';

@@ -18,26 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Consumer\Action\Agent\Message;
 
-use PSX\Http\Client\PostRequest;
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Consumer\View;
 
 /**
- * HCaptcha
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class HCaptcha extends CaptchaAbstract
+readonly class GetAll implements ActionInterface
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool
+    public function __construct(private View\Agent\Message $view)
     {
-        $request = new PostRequest('https://hcaptcha.com/siteverify', [], [
-            'secret'   => $secret,
-            'response' => $captcha,
-        ]);
+    }
 
-        return $this->request($request);
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    {
+        return $this->view->getCollection(
+            (int) $request->get('agent_id'),
+            $request->get('chat_id'),
+            $context
+        );
     }
 }

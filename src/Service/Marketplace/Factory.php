@@ -20,6 +20,9 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
+use Fusio\Marketplace\MarketplaceAction;
+use Fusio\Marketplace\MarketplaceApp;
+
 /**
  * Factory
  *
@@ -36,7 +39,7 @@ readonly class Factory
     ) {
     }
 
-    public function factory(Type $type): FactoryInterface
+    public function factory(Type $type): Action\Factory|App\Factory|Bundle\Factory
     {
         return match ($type) {
             Type::ACTION => $this->actionFactory,

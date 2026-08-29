@@ -31,7 +31,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class WebhookTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->sendRequest('/system/payment/paypal/webhook', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -42,7 +42,7 @@ class WebhookTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $response = $this->sendRequest('/system/payment/paypal/webhook', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -60,7 +60,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $response = $this->sendRequest('/system/payment/paypal/webhook', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
@@ -73,7 +73,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->sendRequest('/system/payment/paypal/webhook', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',

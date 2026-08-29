@@ -74,6 +74,9 @@ class ConfigRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return (object) $this->toRecord()->getAll();
     }
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

@@ -33,7 +33,7 @@ use PSX\Http\Exception\GoneException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Form implements ActionInterface
+readonly class Form implements ActionInterface
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

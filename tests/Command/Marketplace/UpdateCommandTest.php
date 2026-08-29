@@ -38,7 +38,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class UpdateCommandTest extends DbTestCase
 {
-    public function testCommandApp()
+    public function testCommandApp(): void
     {
         $appsDir = Environment::getConfig('fusio_apps_dir');
 
@@ -69,7 +69,7 @@ class UpdateCommandTest extends DbTestCase
         $this->assertStringContainsString('FUSIO_APP_KEY', $content);
     }
 
-    public function testCommandAction()
+    public function testCommandAction(): void
     {
         $this->install();
 

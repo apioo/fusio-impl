@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class JsonRPCTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->sendRequest('/jsonrpc', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
@@ -42,7 +42,7 @@ class JsonRPCTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $body = <<<'JSON'
 {
@@ -86,7 +86,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPostBatch()
+    public function testPostBatch(): void
     {
         $body = <<<'JSON'
 [
@@ -161,7 +161,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $response = $this->sendRequest('/jsonrpc', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
@@ -171,7 +171,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         $response = $this->sendRequest('/jsonrpc', 'PATCH', [
             'User-Agent'    => 'Fusio TestCase',
@@ -181,7 +181,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode());
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->sendRequest('/jsonrpc', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',

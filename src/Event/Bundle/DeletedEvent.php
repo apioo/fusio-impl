@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\BundleRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private BundleRow $existing;
-
-    public function __construct(BundleRow $existing, UserContext $context)
+    public function __construct(private readonly BundleRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): BundleRow

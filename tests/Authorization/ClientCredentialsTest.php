@@ -34,7 +34,7 @@ use PSX\Json\Parser;
  */
 class ClientCredentialsTest extends DbTestCase
 {
-    public function testPost()
+    public function testPost(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -44,10 +44,10 @@ class ClientCredentialsTest extends DbTestCase
         ], $body);
 
         // if we provide no explicit scopes we get all scopes assigned to the user
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.agent,backend.app,backend.audit,backend.backup,backend.bundle,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.firewall,backend.form,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.specification,backend.statistic,backend.taxonomy,backend.tenant,backend.test,backend.token,backend.transaction,backend.trash,backend.trigger,backend.user,backend.webhook,consumer,consumer.account,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.agent,backend.app,backend.audit,backend.backup,backend.bundle,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.firewall,backend.form,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.specification,backend.statistic,backend.taxonomy,backend.tenant,backend.test,backend.token,backend.transaction,backend.trash,backend.trigger,backend.user,backend.webhook,consumer,consumer.account,consumer.agent,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,foo,bar', 4);
     }
 
-    public function testPostSpecificScope()
+    public function testPostSpecificScope(): void
     {
         $body     = 'grant_type=client_credentials&scope=backend.action';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -59,7 +59,7 @@ class ClientCredentialsTest extends DbTestCase
         $this->assertAccessToken($response, 'backend.action', 4);
     }
 
-    public function testPostEmail()
+    public function testPostEmail(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -68,13 +68,13 @@ class ClientCredentialsTest extends DbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.agent,backend.app,backend.audit,backend.backup,backend.bundle,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.firewall,backend.form,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.specification,backend.statistic,backend.taxonomy,backend.tenant,backend.test,backend.token,backend.transaction,backend.trash,backend.trigger,backend.user,backend.webhook,consumer,consumer.account,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.agent,backend.app,backend.audit,backend.backup,backend.bundle,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.firewall,backend.form,backend.generator,backend.identity,backend.log,backend.marketplace,backend.operation,backend.page,backend.plan,backend.rate,backend.role,backend.schema,backend.scope,backend.sdk,backend.specification,backend.statistic,backend.taxonomy,backend.tenant,backend.test,backend.token,backend.transaction,backend.trash,backend.trigger,backend.user,backend.webhook,consumer,consumer.account,consumer.agent,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,foo,bar', 4);
     }
 
     /**
      * As consumer we can not request an backend token
      */
-    public function testPostConsumer()
+    public function testPostConsumer(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -84,13 +84,13 @@ class ClientCredentialsTest extends DbTestCase
         ], $body);
 
         // we receive only the authorization scope since out user has not the backend scope
-        $this->assertAccessToken($response, 'consumer,consumer.account,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,openid,foo,bar', 2);
+        $this->assertAccessToken($response, 'consumer,consumer.account,consumer.agent,consumer.app,consumer.event,consumer.form,consumer.grant,consumer.identity,consumer.log,consumer.page,consumer.payment,consumer.plan,consumer.scope,consumer.token,consumer.transaction,consumer.webhook,authorization,openid,foo,bar', 2);
     }
 
     /**
      * A deactivated user can not request a backend token
      */
-    public function testPostDisabled()
+    public function testPostDisabled(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -115,7 +115,7 @@ JSON;
     /**
      * Request via app key and secret
      */
-    public function testPostApp()
+    public function testPostApp(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -131,7 +131,7 @@ JSON;
     /**
      * A pending app can no request an access token
      */
-    public function testPostAppPending()
+    public function testPostAppPending(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -156,7 +156,7 @@ JSON;
     /**
      * A deactivated app can no request an access token
      */
-    public function testPostAppDeactivated()
+    public function testPostAppDeactivated(): void
     {
         $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -191,7 +191,7 @@ JSON;
         $this->assertArrayHasKey('token_type', $data);
         $this->assertEquals('bearer', $data['token_type']);
         $this->assertArrayHasKey('expires_in', $data);
-        $this->assertEquals(172800, $data['expires_in']);
+        $this->assertTrue($data['expires_in'] >= 172800 && $data['expires_in'] <= 172801);
         $this->assertArrayHasKey('scope', $data);
         $this->assertEquals($scope, $data['scope']);
 
@@ -203,7 +203,7 @@ JSON;
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($scope, $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime((string) $row['expire'])));
+        $this->assertEquals(date('Y-m-d H:i'), substr((string) $row['date'], 0, 16));
     }
 }

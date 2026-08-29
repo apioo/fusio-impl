@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Agent extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -61,6 +61,7 @@ class Agent extends ViewAbstract
                 'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
                 'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),
+                'public' => $builder->fieldBoolean(Table\Generated\AgentTable::COLUMN_PUBLIC),
                 'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
                 'name' => Table\Generated\AgentTable::COLUMN_NAME,
                 'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
@@ -73,7 +74,7 @@ class Agent extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
@@ -82,10 +83,15 @@ class Agent extends ViewAbstract
             'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
             'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),
+            'public' => $builder->fieldBoolean(Table\Generated\AgentTable::COLUMN_PUBLIC),
             'type' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_TYPE),
             'name' => Table\Generated\AgentTable::COLUMN_NAME,
             'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
             'introduction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION,
+            'temperature' => $builder->fieldCallback(Table\Generated\AgentTable::COLUMN_TEMPERATURE, function (int $value) {
+                return round($value / 100, 2);
+            }),
+            'costs' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_COSTS),
             'tools' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_TOOLS),
             'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
             'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),

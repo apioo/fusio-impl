@@ -39,15 +39,8 @@ use PSX\Http\Exception as StatusCode;
  */
 abstract class UpgradeAbstract implements ActionInterface
 {
-    private Installer $installerService;
-    private FrameworkConfig $frameworkConfig;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Installer $installerService, FrameworkConfig $frameworkConfig, ContextFactory $contextFactory)
+    public function __construct(private readonly Installer $installerService, private readonly FrameworkConfig $frameworkConfig, private readonly ContextFactory $contextFactory)
     {
-        $this->installerService = $installerService;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

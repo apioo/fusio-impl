@@ -35,15 +35,10 @@ use Fusio\Model\Backend\ActionUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Action $actionService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Action $actionService, ContextFactory $contextFactory)
+    public function __construct(private Action $actionService, private ContextFactory $contextFactory)
     {
-        $this->actionService = $actionService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

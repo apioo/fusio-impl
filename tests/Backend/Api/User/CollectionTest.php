@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/user', 'GET', array(
+        $response = $this->sendRequest('/backend/user', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -99,12 +99,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/user?search=Dev', 'GET', array(
+        $response = $this->sendRequest('/backend/user?search=Dev', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -134,12 +134,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/user?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/user?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -201,16 +201,16 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/user', 'POST', array(
+        $response = $this->sendRequest('/backend/user', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'roleId'   => 1,
             'planId'   => 1,
             'status'   => 0,
@@ -243,7 +243,7 @@ JSON;
         $this->assertEquals(0, $row['status']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('test@localhost.com', $row['email']);
-        $this->assertTrue(password_verify('fooo123!', $row['password']));
+        $this->assertTrue(password_verify('fooo123!', (string) $row['password']));
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
 
         $sql = $this->connection->createQueryBuilder()
@@ -255,15 +255,15 @@ JSON;
 
         $userScopes = $this->connection->fetchAllAssociative($sql, ['user_id' => $data->id]);
 
-        $this->assertEquals(56, count($userScopes));
+        $this->assertEquals(57, count($userScopes));
     }
 
-    public function testPostNameExists()
+    public function testPostNameExists(): void
     {
-        $response = $this->sendRequest('/backend/user', 'POST', array(
+        $response = $this->sendRequest('/backend/user', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'roleId'   => 1,
             'status'   => 0,
             'name'     => 'Consumer',
@@ -280,12 +280,12 @@ JSON;
         $this->assertStringStartsWith('User name already exists', $data->message);
     }
 
-    public function testPostEmailExists()
+    public function testPostEmailExists(): void
     {
-        $response = $this->sendRequest('/backend/user', 'POST', array(
+        $response = $this->sendRequest('/backend/user', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'roleId'   => 1,
             'status'   => 0,
             'name'     => 'test',
@@ -302,12 +302,12 @@ JSON;
         $this->assertStringStartsWith('User email already exists', $data->message);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/user', 'PUT', array(
+        $response = $this->sendRequest('/backend/user', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -316,12 +316,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/user', 'DELETE', array(
+        $response = $this->sendRequest('/backend/user', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

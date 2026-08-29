@@ -38,19 +38,10 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get implements ActionInterface
+readonly class Get implements ActionInterface
 {
-    private View\Connection $view;
-    private FrameworkConfig $frameworkConfig;
-    private ConnectionProvider $connectionParser;
-    private Token $tokenService;
-
-    public function __construct(View\Connection $view, FrameworkConfig $frameworkConfig, ConnectionProvider $connectionParser, Token $tokenService)
+    public function __construct(private View\Connection $view, private FrameworkConfig $frameworkConfig, private ConnectionProvider $connectionParser, private Token $tokenService)
     {
-        $this->view = $view;
-        $this->frameworkConfig = $frameworkConfig;
-        $this->connectionParser = $connectionParser;
-        $this->tokenService = $tokenService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

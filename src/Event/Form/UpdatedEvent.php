@@ -34,15 +34,9 @@ use Fusio\Model\Backend\FormUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private FormUpdate $form;
-    private FormRow $existing;
-
-    public function __construct(FormUpdate $form, FormRow $existing, UserContext $context)
+    public function __construct(private readonly FormUpdate $form, private readonly FormRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->form = $form;
-        $this->existing = $existing;
     }
 
     public function getForm(): FormUpdate

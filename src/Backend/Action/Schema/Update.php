@@ -35,15 +35,10 @@ use Fusio\Model\Backend\SchemaUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Schema $schemaService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Schema $schemaService, ContextFactory $contextFactory)
+    public function __construct(private Schema $schemaService, private ContextFactory $contextFactory)
     {
-        $this->schemaService = $schemaService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

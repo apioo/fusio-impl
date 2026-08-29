@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\RoleRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private RoleRow $existing;
-
-    public function __construct(RoleRow $existing, UserContext $context)
+    public function __construct(private readonly RoleRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): RoleRow

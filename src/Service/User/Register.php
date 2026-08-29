@@ -38,7 +38,7 @@ readonly class Register
 {
     public function __construct(
         private Service\User $userService,
-        private Captcha $captchaService,
+        private Service\Captcha\Verifier $captchaVerifier,
         private Token $tokenService,
         private Mailer $mailerService,
         private Service\Config $configService,
@@ -54,16 +54,16 @@ readonly class Register
             throw new StatusCode\ServiceUnavailableException('User registration is not enabled');
         }
 
-        $this->captchaService->assertCaptcha($register->getCaptcha());
+        $this->captchaVerifier->assertCaptcha($register->getCaptcha());
 
         // determine initial user status
         $status = Table\User::STATUS_DISABLED;
-        $approval = $this->configService->getValue('user_approval');
+        $approval = $this->configService->getBool('user_approval');
         if (!$approval) {
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getValue('role_default'));
+        $role = $this->roleTable->findOneByTenantAndName($context->getTenantId(), $this->configService->getString('role_default'));
         if (!$role instanceof Table\Generated\RoleRow) {
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }

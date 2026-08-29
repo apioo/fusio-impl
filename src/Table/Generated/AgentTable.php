@@ -13,10 +13,13 @@ class AgentTable extends \PSX\Sql\TableAbstract
     public const COLUMN_CONNECTION_ID = 'connection_id';
     public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_STATUS = 'status';
+    public const COLUMN_PUBLIC = 'public';
     public const COLUMN_TYPE = 'type';
     public const COLUMN_NAME = 'name';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_INTRODUCTION = 'introduction';
+    public const COLUMN_TEMPERATURE = 'temperature';
+    public const COLUMN_COSTS = 'costs';
     public const COLUMN_TOOLS = 'tools';
     public const COLUMN_OUTGOING = 'outgoing';
     public const COLUMN_METADATA = 'metadata';
@@ -27,7 +30,7 @@ class AgentTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x4020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_TOOLS => 0x40b00000, self::COLUMN_OUTGOING => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_CONNECTION_ID => 0x4020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PUBLIC => 0x20000a, self::COLUMN_TYPE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_INTRODUCTION => 0xb00000, self::COLUMN_TEMPERATURE => 0x20000a, self::COLUMN_COSTS => 0x4020000a, self::COLUMN_TOOLS => 0x40b00000, self::COLUMN_OUTGOING => 0x40a000ff, self::COLUMN_METADATA => 0x40b00000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>
@@ -250,6 +253,43 @@ class AgentTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\AgentRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
+    public function findByPublic(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('public', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByPublic(int $value): ?\Fusio\Impl\Table\Generated\AgentRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('public', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByPublic(int $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('public', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByPublic(int $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('public', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AgentRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
     public function findByType(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
     {
         $condition = \PSX\Sql\Condition::withAnd();
@@ -392,6 +432,80 @@ class AgentTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->like('introduction', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AgentRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByTemperature(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('temperature', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByTemperature(int $value): ?\Fusio\Impl\Table\Generated\AgentRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('temperature', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByTemperature(int $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('temperature', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByTemperature(int $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('temperature', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AgentRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByCosts(int $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('costs', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByCosts(int $value): ?\Fusio\Impl\Table\Generated\AgentRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('costs', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByCosts(int $value, \Fusio\Impl\Table\Generated\AgentRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('costs', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByCosts(int $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->equals('costs', $value);
         return $this->doDeleteBy($condition);
     }
     /**

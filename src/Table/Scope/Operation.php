@@ -47,6 +47,9 @@ class Operation extends Generated\ScopeOperationTable
         $this->connection->executeQuery($sql, ['id' => $operationId]);
     }
 
+    /**
+     * @return list<array{name: string}>
+     */
     public function getScopeNamesForOperation(int $operationId): array
     {
         $sql = 'SELECT scope.name
@@ -60,6 +63,9 @@ class Operation extends Generated\ScopeOperationTable
         return $this->connection->fetchAllAssociative($sql, ['id' => $operationId]);
     }
 
+    /**
+     * @return list<string>
+     */
     public function getScopesForOperation(int $operationId): array
     {
         $sql = 'SELECT scope.name

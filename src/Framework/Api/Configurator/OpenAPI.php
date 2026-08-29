@@ -57,14 +57,14 @@ class OpenAPI implements ConfiguratorInterface
             throw new \InvalidArgumentException('Provided an invalid generator');
         }
 
-        $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
-        $generator->setDescription($this->configService->getValue('info_description') ?: null);
-        $generator->setTermsOfService($this->configService->getValue('info_tos') ?: null);
-        $generator->setContactName($this->configService->getValue('info_contact_name') ?: null);
-        $generator->setContactUrl($this->configService->getValue('info_contact_url') ?: null);
-        $generator->setContactEmail($this->configService->getValue('info_contact_email') ?: null);
-        $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
-        $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
+        $generator->setTitle($this->configService->getString('info_title') ?: 'Fusio');
+        $generator->setDescription($this->configService->getString('info_description') ?: null);
+        $generator->setTermsOfService($this->configService->getString('info_tos') ?: null);
+        $generator->setContactName($this->configService->getString('info_contact_name') ?: null);
+        $generator->setContactUrl($this->configService->getString('info_contact_url') ?: null);
+        $generator->setContactEmail($this->configService->getString('info_contact_email') ?: null);
+        $generator->setLicenseName($this->configService->getString('info_license_name') ?: null);
+        $generator->setLicenseUrl($this->configService->getString('info_license_url') ?: null);
 
         $filterId = $filter !== null ? (int) $filter->getId() : 1;
         $scopes = $this->scopeTable->getAvailableScopes($filterId, $this->frameworkConfig->getTenantId());

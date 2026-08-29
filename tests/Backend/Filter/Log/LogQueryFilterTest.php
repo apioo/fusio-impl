@@ -36,7 +36,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class LogQueryFilterTest extends FilterTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2015-08-20',
@@ -83,7 +83,7 @@ class LogQueryFilterTest extends FilterTestCase
         ], $condition->getValues());
     }
 
-    public function testCreateFromLargerToFlip()
+    public function testCreateFromLargerToFlip(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2015-08-30',
@@ -94,7 +94,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
     }
 
-    public function testCreateFromToExceeded()
+    public function testCreateFromToExceeded(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'from' => '2014-08-20',
@@ -105,7 +105,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('2014-10-20', $filter->getTo()->format('Y-m-d'));
     }
 
-    public function testCreateSearchIp()
+    public function testCreateSearchIp(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'search' => '93.223.172.206'
@@ -114,7 +114,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('93.223.172.206', $filter->getIp());
     }
 
-    public function testCreateSearchPath()
+    public function testCreateSearchPath(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'search' => '/foo/bar'
@@ -123,7 +123,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('/foo/bar', $filter->getPath());
     }
 
-    public function testCreateSearchMethod()
+    public function testCreateSearchMethod(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'search' => 'GET'
@@ -132,7 +132,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('GET', $filter->getMethod());
     }
 
-    public function testCreateSearchHeader()
+    public function testCreateSearchHeader(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'search' => 'User-Agent: Foo'
@@ -141,7 +141,7 @@ class LogQueryFilterTest extends FilterTestCase
         $this->assertEquals('User-Agent: Foo', $filter->getHeader());
     }
 
-    public function testCreateSearchBody()
+    public function testCreateSearchBody(): void
     {
         $filter = LogQueryFilter::from($this->createRequest([
             'search' => '{"foo": "bar"}'

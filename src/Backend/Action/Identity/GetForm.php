@@ -35,13 +35,10 @@ use PSX\Http\Exception\InternalServerErrorException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetForm implements ActionInterface
+readonly class GetForm implements ActionInterface
 {
-    private IdentityProvider $identityProvider;
-
-    public function __construct(IdentityProvider $identityProvider)
+    public function __construct(private IdentityProvider $identityProvider)
     {
-        $this->identityProvider = $identityProvider;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

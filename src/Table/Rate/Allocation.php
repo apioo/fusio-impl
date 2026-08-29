@@ -34,7 +34,7 @@ use PSX\Sql\Condition;
  */
 class Allocation extends Generated\RateAllocationTable
 {
-    public function deleteAllFromRate($rateId): void
+    public function deleteAllFromRate(int $rateId): void
     {
         $sql = 'DELETE FROM fusio_rate_allocation 
                       WHERE rate_id = :rate_id';
@@ -42,7 +42,10 @@ class Allocation extends Generated\RateAllocationTable
         $this->connection->executeStatement($sql, ['rate_id' => $rateId]);
     }
 
-    public function getRateForRequest(?string $tenantId, Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array
+    /**
+     * @return array{rate_limit: int, timespan: string}|false
+     */
+    public function getRateForRequest(?string $tenantId, Generated\OperationRow $operation, Model\AppInterface $app, Model\UserInterface $user): array|false
     {
         $condition = Condition::withAnd();
         $condition->equals(Generated\RateTable::COLUMN_TENANT_ID, $tenantId);
@@ -74,11 +77,6 @@ class Allocation extends Generated\RateAllocationTable
             ->orderBy('rate.' . Generated\RateTable::COLUMN_PRIORITY, 'DESC')
             ->setParameters($condition->getValues());
 
-        $row = $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
-        if (empty($row)) {
-            throw new \RuntimeException('Could not find rate for request');
-        }
-
-        return $row;
+        return $this->connection->fetchAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

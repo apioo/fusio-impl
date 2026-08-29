@@ -35,15 +35,10 @@ use Fusio\Model;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Register implements ActionInterface
+readonly class Register implements ActionInterface
 {
-    private UserRegister $registerService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(UserRegister $registerService, ContextFactory $contextFactory)
+    public function __construct(private UserRegister $registerService, private ContextFactory $contextFactory)
     {
-        $this->registerService = $registerService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

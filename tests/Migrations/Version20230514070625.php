@@ -12,6 +12,7 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20230514070625 extends AbstractMigration
 {
+    #[\Override]
     public function getDescription() : string
     {
         return 'Insert test data';
@@ -29,6 +30,7 @@ final class Version20230514070625 extends AbstractMigration
         }
     }
 
+    #[\Override]
     public function down(Schema $schema) : void
     {
         $schema->dropTable('app_news');
@@ -37,6 +39,7 @@ final class Version20230514070625 extends AbstractMigration
     /**
      * @see https://github.com/doctrine/migrations/issues/1104
      */
+    #[\Override]
     public function isTransactional(): bool
     {
         return false;

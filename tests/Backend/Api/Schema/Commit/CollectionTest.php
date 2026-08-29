@@ -46,12 +46,12 @@ class CollectionTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_schema', 'Entry-Schema')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
@@ -59,12 +59,45 @@ class CollectionTest extends DbTestCase
         $expect = <<<'JSON'
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_SchemaCommitCollection",
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_SchemaCommit",
+            "id": 2,
+            "user": {
+                "id": 2,
+                "status": 1,
+                "name": "Consumer"
+            },
+            "commitHash": "8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6",
+            "schema": {
+                "definitions": {
+                    "Entry": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "content": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "$ref": "Entry"
+            },
+            "insertDate": "[datetime]"
+        },
+        {
             "id": 1,
             "user": {
                 "id": 2,
@@ -105,12 +138,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'POST', array(
+        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -119,12 +152,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'PUT', array(
+        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -133,12 +166,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'DELETE', array(
+        $response = $this->sendRequest('/backend/schema/' . $this->id . '/commit', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

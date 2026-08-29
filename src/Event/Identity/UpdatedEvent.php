@@ -34,15 +34,9 @@ use Fusio\Model\Backend\IdentityUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private IdentityUpdate $identity;
-    private IdentityRow $existing;
-
-    public function __construct(IdentityUpdate $identity, IdentityRow $existing, UserContext $context)
+    public function __construct(private readonly IdentityUpdate $identity, private readonly IdentityRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->identity = $identity;
-        $this->existing = $existing;
     }
 
     public function getIdentity(): IdentityUpdate

@@ -42,103 +42,103 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_scope', 'bar')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-    "id": 60,
+    "id": 61,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 285,
+            "scopeId": 61,
+            "operationId": 292,
+            "allow": true
+        },
+        {
+            "id": 284,
+            "scopeId": 61,
+            "operationId": 291,
+            "allow": true
+        },
+        {
+            "id": 283,
+            "scopeId": 61,
+            "operationId": 290,
+            "allow": true
+        },
+        {
+            "id": 282,
+            "scopeId": 61,
+            "operationId": 289,
+            "allow": true
+        },
+        {
+            "id": 281,
+            "scopeId": 61,
+            "operationId": 288,
+            "allow": true
+        },
+        {
+            "id": 280,
+            "scopeId": 61,
+            "operationId": 287,
+            "allow": true
+        },
+        {
             "id": 279,
-            "scopeId": 60,
-            "operationId": 285,
+            "scopeId": 61,
+            "operationId": 286,
             "allow": true
         },
         {
             "id": 278,
-            "scopeId": 60,
-            "operationId": 284,
+            "scopeId": 61,
+            "operationId": 285,
             "allow": true
         },
         {
             "id": 277,
-            "scopeId": 60,
-            "operationId": 283,
+            "scopeId": 61,
+            "operationId": 284,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 60,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 275,
-            "scopeId": 60,
-            "operationId": 281,
+            "scopeId": 61,
+            "operationId": 283,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 60,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 273,
-            "scopeId": 60,
-            "operationId": 279,
+            "scopeId": 61,
+            "operationId": 282,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 60,
-            "operationId": 278,
+            "scopeId": 61,
+            "operationId": 281,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 60,
-            "operationId": 277,
+            "scopeId": 61,
+            "operationId": 280,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 60,
-            "operationId": 276,
-            "allow": true
-        },
-        {
-            "id": 268,
-            "scopeId": 60,
-            "operationId": 275,
-            "allow": true
-        },
-        {
-            "id": 266,
-            "scopeId": 60,
-            "operationId": 274,
-            "allow": true
-        },
-        {
-            "id": 265,
-            "scopeId": 60,
-            "operationId": 273,
-            "allow": true
-        },
-        {
-            "id": 264,
-            "scopeId": 60,
-            "operationId": 272,
+            "scopeId": 61,
+            "operationId": 279,
             "allow": true
         }
     ]
@@ -149,103 +149,103 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/scope/~bar', 'GET', array(
+        $response = $this->sendRequest('/backend/scope/~bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
-    "id": 60,
+    "id": 61,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 285,
+            "scopeId": 61,
+            "operationId": 292,
+            "allow": true
+        },
+        {
+            "id": 284,
+            "scopeId": 61,
+            "operationId": 291,
+            "allow": true
+        },
+        {
+            "id": 283,
+            "scopeId": 61,
+            "operationId": 290,
+            "allow": true
+        },
+        {
+            "id": 282,
+            "scopeId": 61,
+            "operationId": 289,
+            "allow": true
+        },
+        {
+            "id": 281,
+            "scopeId": 61,
+            "operationId": 288,
+            "allow": true
+        },
+        {
+            "id": 280,
+            "scopeId": 61,
+            "operationId": 287,
+            "allow": true
+        },
+        {
             "id": 279,
-            "scopeId": 60,
-            "operationId": 285,
+            "scopeId": 61,
+            "operationId": 286,
             "allow": true
         },
         {
             "id": 278,
-            "scopeId": 60,
-            "operationId": 284,
+            "scopeId": 61,
+            "operationId": 285,
             "allow": true
         },
         {
             "id": 277,
-            "scopeId": 60,
-            "operationId": 283,
+            "scopeId": 61,
+            "operationId": 284,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 60,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 275,
-            "scopeId": 60,
-            "operationId": 281,
+            "scopeId": 61,
+            "operationId": 283,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 60,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 273,
-            "scopeId": 60,
-            "operationId": 279,
+            "scopeId": 61,
+            "operationId": 282,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 60,
-            "operationId": 278,
+            "scopeId": 61,
+            "operationId": 281,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 60,
-            "operationId": 277,
+            "scopeId": 61,
+            "operationId": 280,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 60,
-            "operationId": 276,
-            "allow": true
-        },
-        {
-            "id": 268,
-            "scopeId": 60,
-            "operationId": 275,
-            "allow": true
-        },
-        {
-            "id": 266,
-            "scopeId": 60,
-            "operationId": 274,
-            "allow": true
-        },
-        {
-            "id": 265,
-            "scopeId": 60,
-            "operationId": 273,
-            "allow": true
-        },
-        {
-            "id": 264,
-            "scopeId": 60,
-            "operationId": 272,
+            "scopeId": 61,
+            "operationId": 279,
             "allow": true
         }
     ]
@@ -256,12 +256,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/scope/100', 'GET', array(
+        $response = $this->sendRequest('/backend/scope/100', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -271,12 +271,12 @@ JSON;
         $this->assertStringStartsWith('Could not find scope', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -285,16 +285,16 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'     => 'Test',
             'metadata' => $metadata,
         ]));
@@ -304,7 +304,7 @@ JSON;
 {
     "success": true,
     "message": "Scope successfully updated",
-    "id": "60"
+    "id": "61"
 }
 JSON;
 
@@ -324,24 +324,24 @@ JSON;
         $this->assertJsonStringEqualsJsonString(json_encode($metadata), $row['metadata']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         // delete all scope references to successful delete an scope
         $this->connection->executeStatement('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
         $this->connection->executeStatement('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
         $this->connection->executeStatement('DELETE FROM fusio_plan_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
 
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
     "message": "Scope successfully deleted",
-    "id": "60"
+    "id": "61"
 }
 JSON;
 
@@ -360,14 +360,14 @@ JSON;
         $this->assertEquals(Table\Scope::STATUS_DELETED, $row['status']);
     }
 
-    public function testDeleteAppScopeAssigned()
+    public function testDeleteAppScopeAssigned(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
 
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -387,14 +387,14 @@ JSON;
         $this->assertNotEmpty($row);
     }
 
-    public function testDeleteUserScopeAssigned()
+    public function testDeleteUserScopeAssigned(): void
     {
         $this->connection->executeStatement('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
 
-        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);

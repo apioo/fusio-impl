@@ -33,7 +33,7 @@ use PSX\Data\Exception\UploadException;
  */
 class MimeTest extends DbTestCase
 {
-    public function testBinary()
+    public function testBinary(): void
     {
         $response = $this->sendRequest('/mime/binary', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -55,7 +55,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testForm()
+    public function testForm(): void
     {
         $response = $this->sendRequest('/mime/form', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -79,7 +79,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testJson()
+    public function testJson(): void
     {
         $response = $this->sendRequest('/mime/json', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -103,7 +103,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testMultipart()
+    public function testMultipart(): void
     {
         $this->markTestSkipped();
 
@@ -144,7 +144,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testText()
+    public function testText(): void
     {
         $response = $this->sendRequest('/mime/text', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -166,7 +166,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testXml()
+    public function testXml(): void
     {
         $response = $this->sendRequest('/mime/xml', 'POST', [
             'User-Agent' => 'Fusio TestCase',

@@ -37,7 +37,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class InstallCommandTest extends DbTestCase
 {
-    public function testCommandApp()
+    public function testCommandApp(): void
     {
         if (is_dir(Environment::getConfig('fusio_apps_dir') . '/fusio')) {
             $this->markTestSkipped('The fusio app is already installed');
@@ -68,7 +68,7 @@ class InstallCommandTest extends DbTestCase
         $this->assertStringContainsString('FUSIO_APP_KEY', $content);
     }
 
-    public function testCommandAction()
+    public function testCommandAction(): void
     {
         $command = new InstallCommand(
             Environment::getService(Installer::class),

@@ -39,17 +39,10 @@ use PSX\OAuth2\AccessToken;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Exchange implements ActionInterface
+readonly class Exchange implements ActionInterface
 {
-    private Service\Identity $identity;
-    private ReverseRouter $reverseRouter;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Identity $identity, ReverseRouter $reverseRouter, ContextFactory $contextFactory)
+    public function __construct(private Service\Identity $identity, private ReverseRouter $reverseRouter, private ContextFactory $contextFactory)
     {
-        $this->identity = $identity;
-        $this->reverseRouter = $reverseRouter;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

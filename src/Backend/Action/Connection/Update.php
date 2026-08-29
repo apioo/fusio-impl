@@ -35,15 +35,10 @@ use Fusio\Model\Backend\ConnectionUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Connection $connectionService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Connection $connectionService, ContextFactory $contextFactory)
+    public function __construct(private Connection $connectionService, private ContextFactory $contextFactory)
     {
-        $this->connectionService = $connectionService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

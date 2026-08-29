@@ -33,7 +33,7 @@ use PSX\Json\Parser;
  */
 class RefreshTokenTest extends DbTestCase
 {
-    public function testPost()
+    public function testPost(): void
     {
         // update insert date so that the refresh token is not expired
         $qb  = $this->connection->createQueryBuilder();
@@ -73,11 +73,11 @@ class RefreshTokenTest extends DbTestCase
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals('bar', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime((string) $row['expire'])));
+        $this->assertEquals(date('Y-m-d H:i'), substr((string) $row['date'], 0, 16));
     }
 
-    public function testPostExpiredToken()
+    public function testPostExpiredToken(): void
     {
         $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e5be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -98,7 +98,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual);
     }
 
-    public function testPostInvalidToken()
+    public function testPostInvalidToken(): void
     {
         $body     = 'grant_type=refresh_token&refresh_token=foobar';
         $response = $this->sendRequest('/authorization/token', 'POST', [

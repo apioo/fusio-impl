@@ -35,6 +35,7 @@ use PSX\Sql\Condition;
 class Trigger extends Generated\TriggerTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?TriggerRow
@@ -63,6 +64,7 @@ class Trigger extends Generated\TriggerTable
         if ($categoryId !== null) {
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
+        
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);

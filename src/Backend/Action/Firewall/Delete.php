@@ -34,15 +34,10 @@ use Fusio\Impl\Service\System\ContextFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Delete implements ActionInterface
+readonly class Delete implements ActionInterface
 {
-    private Firewall $firewallService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Firewall $firewallService, ContextFactory $contextFactory)
+    public function __construct(private Firewall $firewallService, private ContextFactory $contextFactory)
     {
-        $this->firewallService = $firewallService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

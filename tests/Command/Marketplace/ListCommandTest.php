@@ -35,7 +35,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class ListCommandTest extends DbTestCase
 {
-    public function testCommandApp()
+    public function testCommandApp(): void
     {
         $command = new ListCommand(
             Environment::getService(Factory::class)
@@ -48,11 +48,11 @@ class ListCommandTest extends DbTestCase
 
         $apps = ['fusio'];
         foreach ($apps as $appName) {
-            $this->assertTrue(strpos($actual, $appName) !== false, $actual);
+            $this->assertTrue(str_contains($actual, $appName), $actual);
         }
     }
 
-    public function testCommandAction()
+    public function testCommandAction(): void
     {
         $command = new ListCommand(
             Environment::getService(Factory::class)
@@ -65,7 +65,7 @@ class ListCommandTest extends DbTestCase
 
         $actions = ['BulkInsert'];
         foreach ($actions as $actionName) {
-            $this->assertTrue(strpos($actual, $actionName) !== false, $actual);
+            $this->assertTrue(str_contains($actual, $actionName), $actual);
         }
     }
 }

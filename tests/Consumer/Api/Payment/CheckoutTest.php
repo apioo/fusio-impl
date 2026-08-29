@@ -31,24 +31,24 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class CheckoutTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'GET', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'planId' => 1,
             'returnUrl' => 'http://myapp.com',
         ]));
@@ -64,12 +64,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPostInvalid()
+    public function testPostInvalid(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -81,12 +81,12 @@ JSON;
         $this->assertStringStartsWith('No plan id provided', $data->message);
     }
 
-    public function testPostInvalidReturnUrl()
+    public function testPostInvalidReturnUrl(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'planId' => 1,
             'returnUrl' => 'foobar',
         ]));
@@ -99,12 +99,12 @@ JSON;
         $this->assertStringStartsWith('Invalid return url', $data->message);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'PUT', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -113,12 +113,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/payment/Paypal/checkout', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 

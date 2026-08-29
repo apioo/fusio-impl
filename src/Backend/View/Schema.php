@@ -38,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -69,7 +69,7 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
@@ -86,7 +86,7 @@ class Schema extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithForm(string $name, ContextInterface $context)
+    public function getEntityWithForm(string $name, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 

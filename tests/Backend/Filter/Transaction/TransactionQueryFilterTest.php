@@ -36,7 +36,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class TransactionQueryFilterTest extends FilterTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $filter = TransactionQueryFilter::from($this->createRequest([
             'from'   => '2015-08-20',

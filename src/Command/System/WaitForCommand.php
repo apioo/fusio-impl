@@ -26,6 +26,7 @@ use PSX\Framework\Config\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * WaitForCommand
@@ -36,9 +37,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class WaitForCommand extends Command
 {
-    private const MAX_TRY = 40;
+    private const int MAX_TRY = 40;
 
-    public function __construct(private ConfigInterface $config)
+    public function __construct(private readonly ConfigInterface $config)
     {
         parent::__construct();
     }
@@ -54,14 +55,14 @@ class WaitForCommand extends Command
     {
         $connection = $this->config->get('psx_connection');
         if (is_string($connection)) {
-            $params = (new DsnParser())->parse($connection);
+            $params = new DsnParser()->parse($connection);
         } elseif (is_array($connection)) {
             $params = $connection;
         } else {
             throw new \RuntimeException('Invalid connection');
         }
 
-        $this->waitFor('database', $output, function() use ($params) {
+        $this->waitFor('database', $output, function() use ($params): void {
             $connection = DriverManager::getConnection($params);
             $connection->fetchFirstColumn($connection->getDatabasePlatform()->getDummySelectSQL());
         });
@@ -77,7 +78,7 @@ class WaitForCommand extends Command
                 $closure();
                 $output->writeln('* Connection to ' . $name . ' successful');
                 return;
-            } catch (\Throwable $e) {
+            } catch (Throwable) {
             }
 
             $output->writeln('* Waiting for connection ' . $name);

@@ -26,6 +26,7 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Override;
 
 /**
  * VoidAction
@@ -36,6 +37,7 @@ use Fusio\Engine\RequestInterface;
  */
 class VoidAction extends ActionAbstract
 {
+    #[Override]
     public function getName(): string
     {
         return 'Void-Action';

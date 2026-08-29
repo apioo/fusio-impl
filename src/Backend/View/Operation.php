@@ -42,7 +42,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Operation extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -80,7 +80,7 @@ class Operation extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
@@ -109,7 +109,7 @@ class Operation extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getRoutes(?FilterInterface $filter, ContextInterface $context)
+    public function getRoutes(?FilterInterface $filter, ContextInterface $context): mixed
     {
         if ($filter instanceof CategoryFilter) {
             $categoryId = $filter->getId();

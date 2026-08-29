@@ -34,15 +34,9 @@ use Fusio\Model\Backend\CronjobUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private CronjobUpdate $cronjob;
-    private CronjobRow $existing;
-
-    public function __construct(CronjobUpdate $cronjob, CronjobRow $existing, UserContext $context)
+    public function __construct(private readonly CronjobUpdate $cronjob, private readonly CronjobRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->cronjob  = $cronjob;
-        $this->existing = $existing;
     }
 
     public function getCronjob(): CronjobUpdate

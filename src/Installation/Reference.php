@@ -47,15 +47,22 @@ class Reference implements ResolvableInterface
 
     public function resolve(Connection $connection): int
     {
+        $hasTenantColumn = true;
         if ($this->tableName === 'fusio_page') {
             $column = 'slug';
+        } elseif ($this->tableName === 'fusio_action_commit' || $this->tableName === 'fusio_schema_commit') {
+            $column = 'commit_hash';
+            $hasTenantColumn = false;
         } else {
             $column = 'name';
         }
 
         $condition = Condition::withAnd();
-        $condition->equals('tenant_id', $this->tenantId);
         $condition->equals($column, $this->name);
+
+        if ($hasTenantColumn) {
+            $condition->equals('tenant_id', $this->tenantId);
+        }
 
         $queryBuilder = $connection->createQueryBuilder()
             ->select(['target.id'])

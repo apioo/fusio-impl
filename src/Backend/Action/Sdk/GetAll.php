@@ -33,13 +33,10 @@ use Fusio\Impl\Service\Sdk;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+readonly class GetAll implements ActionInterface
 {
-    private Sdk $sdkService;
-
-    public function __construct(Sdk $sdkService)
+    public function __construct(private Sdk $sdkService)
     {
-        $this->sdkService = $sdkService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

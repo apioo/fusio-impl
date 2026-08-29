@@ -35,15 +35,10 @@ use Fusio\Model\Backend\Test;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Service\Test $testService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Test $testService, ContextFactory $contextFactory)
+    public function __construct(private Service\Test $testService, private ContextFactory $contextFactory)
     {
-        $this->testService = $testService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

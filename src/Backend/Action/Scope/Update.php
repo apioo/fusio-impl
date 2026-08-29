@@ -35,15 +35,10 @@ use Fusio\Model\Backend\ScopeUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Scope $scopeService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Scope $scopeService, ContextFactory $contextFactory)
+    public function __construct(private Scope $scopeService, private ContextFactory $contextFactory)
     {
-        $this->scopeService = $scopeService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

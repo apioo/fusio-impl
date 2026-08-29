@@ -73,10 +73,10 @@ readonly class Get extends SdkAbstract
             throw new StatusCode\InternalServerErrorException('Found no specification');
         }
 
-        return (new Editor\Parser($this->schemaManager))->parse($specification);
+        return new Editor\Parser($this->schemaManager)->parse($specification);
     }
 
-    private function getFirst(stdClass $data)
+    private function getFirst(stdClass $data): mixed
     {
         foreach (get_object_vars($data) as $value) {
             return $value;

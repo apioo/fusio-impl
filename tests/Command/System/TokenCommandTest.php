@@ -35,7 +35,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TokenCommandTest extends DbTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $command = Environment::getService(Application::class)->find('system:token');
 

@@ -33,9 +33,11 @@ use PSX\Sql\Condition;
 class Firewall extends Generated\FirewallTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public const TYPE_DENY = 0;
+    
     public const TYPE_ALLOW = 1;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?FirewallRow

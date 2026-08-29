@@ -35,15 +35,10 @@ use Fusio\Model;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Activate implements ActionInterface
+readonly class Activate implements ActionInterface
 {
-    private UserActivate $activateService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(UserActivate $activateService, ContextFactory $contextFactory)
+    public function __construct(private UserActivate $activateService, private ContextFactory $contextFactory)
     {
-        $this->activateService = $activateService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

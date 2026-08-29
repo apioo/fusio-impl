@@ -33,13 +33,9 @@ use Fusio\Model\Backend\IdentityCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private IdentityCreate $identity;
-
-    public function __construct(IdentityCreate $identity, UserContext $context)
+    public function __construct(private readonly IdentityCreate $identity, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->identity = $identity;
     }
 
     public function getIdentity(): IdentityCreate

@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LogRotateCommand extends Command
 {
-    public function __construct(private LogRotator $logRotator)
+    public function __construct(private readonly LogRotator $logRotator)
     {
         parent::__construct();
     }

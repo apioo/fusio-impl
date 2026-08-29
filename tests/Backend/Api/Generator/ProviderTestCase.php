@@ -111,8 +111,14 @@ JSON;
     }
 
     abstract protected function getProviderClass(): string;
+
+    /**
+     * @return array<string, mixed>
+     */
     abstract protected function getProviderConfig(): array;
+    
     abstract protected function getExpectChangelog(): string;
+    
     abstract protected function getExpectForm(): string;
 
     protected function getExpectSchema(): string
@@ -120,6 +126,7 @@ JSON;
         return $this->getExpectChangelog();
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

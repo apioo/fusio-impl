@@ -33,7 +33,7 @@ use PSX\Sql\Condition;
  */
 class Scope extends Generated\PlanScopeTable
 {
-    public function deleteAllFromPlan(int $planId)
+    public function deleteAllFromPlan(int $planId): void
     {
         $sql = 'DELETE FROM fusio_plan_scope
                       WHERE plan_id = :id';
@@ -41,6 +41,9 @@ class Scope extends Generated\PlanScopeTable
         $this->connection->executeQuery($sql, ['id' => $planId]);
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getAvailableScopes(?string $tenantId, int $planId): array
     {
         $condition = Condition::withAnd();
@@ -59,6 +62,6 @@ class Scope extends Generated\PlanScopeTable
             ->orderBy('scope.' . self::COLUMN_ID, 'ASC')
             ->setParameters($condition->getValues());
 
-        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

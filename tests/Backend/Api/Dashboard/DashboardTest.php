@@ -32,15 +32,16 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class DashboardTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $actual = Normalizer::normalize($actual);
+        
         $expect = file_get_contents(__DIR__ . '/resource/dashboard_get.json');
 
         $this->assertEquals(200, $response->getStatusCode(), $actual);

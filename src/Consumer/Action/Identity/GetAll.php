@@ -35,13 +35,10 @@ use Fusio\Model;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll implements ActionInterface
+readonly class GetAll implements ActionInterface
 {
-    private View\Identity $identity;
-
-    public function __construct(View\Identity $identity)
+    public function __construct(private View\Identity $identity)
     {
-        $this->identity = $identity;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

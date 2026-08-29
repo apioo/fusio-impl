@@ -36,7 +36,7 @@ use PSX\OAuth2\AccessToken;
  */
 class TokenTest extends DbTestCase
 {
-    public function testGenerateAccessToken()
+    public function testGenerateAccessToken(): void
     {
         /** @var Token $tokenService */
         $tokenService = Environment::getService(Token::class);

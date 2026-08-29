@@ -36,6 +36,7 @@ use PSX\Sql\OrderBy;
 class Scope extends Generated\ScopeTable
 {
     public const STATUS_ACTIVE  = 1;
+    
     public const STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?ScopeRow
@@ -64,11 +65,15 @@ class Scope extends Generated\ScopeTable
         if ($categoryId !== null) {
             $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
         }
+        
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<array{name: string, allow: int}>
+     */
     public function findByOperationId(?string $tenantId, int $operationId): array
     {
         $condition = Condition::withAnd();
@@ -89,6 +94,9 @@ class Scope extends Generated\ScopeTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function findSubScopes(?string $tenantId, string $scope): array
     {
         $condition = Condition::withAnd();
@@ -111,13 +119,14 @@ class Scope extends Generated\ScopeTable
     }
 
     /**
+     * @param list<string> $names
      * @return array<ScopeRow>
      */
     public function getValidScopes(?string $tenantId, array $names): array
     {
         $names = array_filter($names);
 
-        if (!empty($names)) {
+        if ($names !== []) {
             $condition = Condition::withAnd();
             $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
             $condition->in(self::COLUMN_NAME, $names);
@@ -128,6 +137,9 @@ class Scope extends Generated\ScopeTable
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAvailableScopes(int $categoryId, ?string $tenantId = null): array
     {
         $condition = Condition::withAnd();
@@ -144,6 +156,10 @@ class Scope extends Generated\ScopeTable
         return $scopes;
     }
 
+    /**
+     * @param list<string>|null $scopes
+     * @return list<string>
+     */
     public function getValidUserScopes(?string $tenantId, int $userId, ?array $scopes): array
     {
         if (empty($scopes)) {
@@ -154,24 +170,25 @@ class Scope extends Generated\ScopeTable
         $scopes = $this->getValidScopes($tenantId, $scopes);
 
         // check that the user can assign only the scopes which are also assigned to the user account
-        $scopes = array_filter($scopes, function (Generated\ScopeRow $scope) use ($userScopes) {
+        $scopes = array_filter($scopes, function (Generated\ScopeRow $scope) use ($userScopes): bool {
             foreach ($userScopes as $userScope) {
                 if ($userScope['id'] == $scope->getId()) {
                     return true;
                 }
             }
+            
             return false;
         });
 
-        return array_map(function (Generated\ScopeRow $scope) {
-            return $scope->getName();
-        }, $scopes);
+        return array_map(fn(Generated\ScopeRow $scope): string => $scope->getName(), $scopes);
     }
 
+    /**
+     * @param list<array{name: string}> $result
+     * @return list<string>
+     */
     public static function getNames(array $result): array
     {
-        return array_map(function ($row) {
-            return $row[self::COLUMN_NAME];
-        }, $result);
+        return array_map(fn(array $row): string => $row[self::COLUMN_NAME], $result);
     }
 }

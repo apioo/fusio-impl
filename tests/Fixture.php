@@ -62,6 +62,9 @@ class Fixture
 {
     private static ?DataBag $data = null;
 
+    /**
+     * @return array<string, list<mixed>>
+     */
     public static function getDataSet(): array
     {
         return self::getData()->toArray();
@@ -69,7 +72,7 @@ class Fixture
 
     public static function getData(): DataBag
     {
-        if (self::$data !== null) {
+        if (self::$data instanceof DataBag) {
             return self::$data;
         }
 
@@ -125,7 +128,13 @@ class Fixture
         $data->addAction('default', 'Inspect-Action', InspectAction::class);
         $data->addAction('default', 'MIME-Action', MimeAction::class);
         $data->addActionCommit('Sql-Insert', 'Consumer', 'd9b98d4f5d951d59632e7dfdc0c5737a25936358', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
+        $data->addActionCommit('Sql-Insert', 'Consumer', 'a742ff6a7e6733dbee21784ba1a749c001725988', Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']));
         $data->addActionCommit('PHP-Local', 'Consumer', '913c5d62a340e5db90e2577f01caf9bd072e1bfa', Service\Action::serializeConfig(['code' => $localPhpFix]));
+        $data->addActionCommit('PHP-Local', 'Consumer', '60a9f26837f13da44dbdcf792c95e7dc30b74b7e', Service\Action::serializeConfig(['code' => $localPhp]));
+        $data->addActionTag('d9b98d4f5d951d59632e7dfdc0c5737a25936358', 'Consumer', '0.1.0');
+        $data->addActionTag('a742ff6a7e6733dbee21784ba1a749c001725988', 'Consumer', '0.1.1');
+        $data->addActionTag('913c5d62a340e5db90e2577f01caf9bd072e1bfa', 'Consumer', '0.1.0');
+        $data->addActionTag('60a9f26837f13da44dbdcf792c95e7dc30b74b7e', 'Consumer', '0.1.1');
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, ['foo' => 'bar']);
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING);
         $data->addApp('Consumer', 'Deactivated', 'http://google.com', 'f46af464-f7eb-4d04-8661-13063a30826b', '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', Table\App::STATUS_DEACTIVATED);
@@ -148,9 +157,11 @@ class Fixture
         $data->addFirewall('my_v4_rule', '192.168.2.1', ['foo' => 'bar']);
         $data->addFirewall('my_v6_rule', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344', ['foo' => 'bar']);
         $data->addForm('my_form', 'test.createFoo', ['foo' => 'bar'], ['foo' => 'bar']);
-        $data->addAgent('default', 'Agent', Table\Agent::TYPE_GENERAL, 'agent-test', 'An agent test', 'A test agent which always return "Hello World"', ['test_listFoo'], 'Entry-Schema', date: '2026-02-22 13:06:00');
+        $data->addAgent('default', 'Agent', Table\Agent::TYPE_GENERAL, true, 'agent-test', 'An agent test', 'A test agent which always return "Hello World"', ['test_listFoo'], 'Entry-Schema', date: '2026-02-22 13:06:00');
         $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_USER, 0, 'This is a test message', date: '2026-02-22 19:17:00');
         $data->addAgentMessage('agent-test', 'Administrator', Table\Agent\Message::ORIGIN_ASSISTANT, 1, 'And an agent response', date: '2026-02-22 19:17:00');
+        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_USER, 0, 'This is a consumer test message', date: '2026-06-05 16:30:00');
+        $data->addAgentMessage('agent-test', 'Consumer', Table\Agent\Message::ORIGIN_ASSISTANT, 1, 'And an agent consumer response', date: '2026-06-05 16:30:00');
         $data->addWebhook('foo-event', 'Administrator', 'ping', 'http://www.fusio-project.org/ping');
         $data->addWebhook('foo-event', 'Consumer', 'pong', 'http://www.fusio-project.org/ping');
         $data->addWebhookResponse(1);
@@ -169,9 +180,15 @@ class Fixture
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource, null, ['foo' => 'bar']);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addSchemaCommit('Entry-Schema', 'Consumer', '7d28d0f99f1d839a054cf080b37556d77166d788', $schemaEntrySource);
+        $data->addSchemaCommit('Entry-Schema', 'Consumer', '8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $schemaEntrySource);
+        $data->addSchemaTag('7d28d0f99f1d839a054cf080b37556d77166d788', 'Consumer', '0.1.0');
+        $data->addSchemaTag('8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', 'Consumer', '0.1.1');
         $data->addScope('default', 'foo', 'Foo access', ['foo' => 'bar']);
         $data->addScope('default', 'bar', 'Bar access');
         $data->addScope('default', 'plan_scope', 'Plan scope access');
+        $data->addConfig('typehub_client_id', Table\Config::FORM_STRING, 'client_id', 'TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)');
+        $data->addConfig('typehub_client_secret', Table\Config::FORM_STRING, 'client_secret', 'TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)');
+        $data->addConfig('typehub_document_name', Table\Config::FORM_STRING, 'document_name', 'Name of the TypeHub document under which the specification gets published');
         $data->addAppScope('Foo-App', 'authorization');
         $data->addAppScope('Foo-App', 'foo');
         $data->addAppScope('Foo-App', 'bar');

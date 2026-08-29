@@ -31,24 +31,24 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/grant/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/grant/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -57,12 +57,12 @@ class EntityTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/grant/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -71,12 +71,12 @@ class EntityTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/grant/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

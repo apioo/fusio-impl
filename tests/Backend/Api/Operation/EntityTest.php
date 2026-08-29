@@ -44,18 +44,18 @@ class EntityTest extends DbTestCase
         $this->id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'GET', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
-    "id": 272,
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -87,18 +87,18 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/operation/~test.listFoo', 'GET', array(
+        $response = $this->sendRequest('/backend/operation/~test.listFoo', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Operation",
-    "id": 272,
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -130,12 +130,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/operation/1000', 'GET', array(
+        $response = $this->sendRequest('/backend/operation/1000', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -145,12 +145,12 @@ JSON;
         $this->assertStringStartsWith('Could not find operation', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'POST', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -159,16 +159,16 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_STABLE,
@@ -197,7 +197,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 
@@ -212,12 +212,12 @@ JSON;
      * If we are sending a put against a stable operation we are only able to change the stability all other properties
      * should not change
      */
-    public function testPutStable()
+    public function testPutStable(): void
     {
-        $response = $this->sendRequest('/backend/operation/~test.createFoo', 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/~test.createFoo', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_DEPRECATED,
@@ -245,7 +245,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "273"
+    "id": "280"
 }
 JSON;
 
@@ -256,16 +256,16 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_DEPRECATED, 'test.createFoo', 'POST', '/foo', 201, ['bar']);
     }
 
-    public function testPutWithHash()
+    public function testPutWithHash(): void
     {
         $metadata = [
             'foo' => 'bar'
         ];
 
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'active'     => true,
             'public'     => true,
             'stability'  => OperationInterface::STABILITY_STABLE,
@@ -294,7 +294,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 
@@ -305,19 +305,19 @@ JSON;
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_STABLE, 'test.baz', 'GET', '/foo', 201, ['foo', 'baz'], $metadata);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/operation/' . $this->id, 'DELETE', array(
+        $response = $this->sendRequest('/backend/operation/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 

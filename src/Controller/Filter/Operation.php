@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Service\Operation\VersionSelector;
 use Fusio\Impl\Table;
 use PSX\Api\OperationInterface;
 use PSX\Framework\Util\Uuid;
@@ -41,6 +42,7 @@ readonly class Operation implements FilterInterface
 {
     public function __construct(
         private Table\Operation $operationTable,
+        private VersionSelector $versionSelector,
         private ContextFactory $contextFactory,
     ) {
     }
@@ -69,6 +71,12 @@ readonly class Operation implements FilterInterface
             $response->setHeader('Allow', implode(', ', array_merge($globalMethods, $availableMethods)));
             $response->setHeader('X-Powered-By', 'Fusio');
             return;
+        }
+
+        // in case the user has requested a specific version we adjust the action and schema
+        $version = $request->getHeader('Api-Version');
+        if (!empty($version) && preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/', $version)) {
+            $this->versionSelector->select($version, $operation, $context);
         }
 
         $context->setOperation($operation);

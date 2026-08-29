@@ -34,7 +34,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class ClearCacheCommandTest extends DbTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $command = Environment::getService(Application::class)->find('system:clear_cache');
 

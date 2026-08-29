@@ -44,6 +44,9 @@ class SqlEntityTest extends ProviderTestCase
         return SqlEntity::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getProviderConfig(): array
     {
         $typeSchema = \json_decode(file_get_contents(__DIR__ . '/resource/typeschema.json'));
@@ -59,6 +62,7 @@ class SqlEntityTest extends ProviderTestCase
         return file_get_contents(__DIR__ . '/resource/changelog_sqlentity.json');
     }
 
+    #[\Override]
     protected function getExpectSchema(): string
     {
         $data = $this->getExpectChangelog();

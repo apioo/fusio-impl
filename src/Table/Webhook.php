@@ -34,6 +34,7 @@ use PSX\Sql\Condition;
 class Webhook extends Generated\WebhookTable
 {
     const STATUS_ACTIVE = 1;
+    
     const STATUS_INACTIVE = 2;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?WebhookRow
@@ -63,6 +64,9 @@ class Webhook extends Generated\WebhookTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<array{id: int, endpoint: string}>
+     */
     public function getWebhooksForEvent(int $eventId, ?int $userId = null): array
     {
         $condition = Condition::withAnd();

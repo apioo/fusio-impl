@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\PageRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private PageRow $existing;
-
-    public function __construct(PageRow $existing, UserContext $context)
+    public function __construct(private readonly PageRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): PageRow

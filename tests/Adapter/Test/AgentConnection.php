@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ParametersInterface;
+use Override;
 use Symfony\AI\Agent\MockAgent;
 use Symfony\AI\Agent\MockResponse;
 
@@ -34,6 +35,7 @@ use Symfony\AI\Agent\MockResponse;
  */
 class AgentConnection extends ConnectionAbstract
 {
+    #[Override]
     public function getName(): string
     {
         return 'Agent-Connection';

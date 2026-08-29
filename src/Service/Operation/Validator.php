@@ -320,6 +320,9 @@ readonly class Validator
         }
     }
 
+    /**
+     * @return list<string>
+     */
     private function getReserved(): array
     {
         return [

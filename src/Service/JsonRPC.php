@@ -48,6 +48,9 @@ readonly class JsonRPC
     ) {
     }
 
+    /**
+     * @param array<string, mixed>|stdClass|null $params
+     */
     public function __invoke(string $method, array|stdClass|null $params, RpcContext $rpcContext): mixed
     {
         if (is_array($params)) {

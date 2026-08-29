@@ -32,12 +32,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/schema/1', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -57,12 +57,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/schema/~Passthru', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/~Passthru', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -82,12 +82,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/schema/200', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/200', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -97,12 +97,12 @@ JSON;
         $this->assertStringStartsWith('Could not find schema', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/schema/2', 'POST', array(
+        $response = $this->sendRequest('/backend/schema/2', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -111,7 +111,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $metadata = [
             'foo' => 'bar'
@@ -132,10 +132,10 @@ JSON;
             ],
         ];
 
-        $response = $this->sendRequest('/backend/schema/2', 'PUT', array(
+        $response = $this->sendRequest('/backend/schema/2', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'     => 'Test-Schema',
             'source'   => $schema,
             'metadata' => $metadata,
@@ -157,12 +157,12 @@ JSON;
         Assert::assertSchema($this->connection, 'Test-Schema', json_encode($schema), $metadata);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/schema/2', 'DELETE', array(
+        $response = $this->sendRequest('/backend/schema/2', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

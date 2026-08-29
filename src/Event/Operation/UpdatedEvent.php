@@ -34,15 +34,9 @@ use Fusio\Model\Backend\OperationUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private OperationUpdate $operation;
-    private OperationRow $existing;
-
-    public function __construct(OperationUpdate $operation, OperationRow $existing, UserContext $context)
+    public function __construct(private readonly OperationUpdate $operation, private readonly OperationRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->operation = $operation;
-        $this->existing  = $existing;
     }
 
     public function getOperation(): OperationUpdate

@@ -35,15 +35,10 @@ use Fusio\Model\Consumer\PaymentCheckoutRequest;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Checkout implements ActionInterface
+readonly class Checkout implements ActionInterface
 {
-    private Payment $paymentService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Payment $paymentService, ContextFactory $contextFactory)
+    public function __construct(private Payment $paymentService, private ContextFactory $contextFactory)
     {
-        $this->paymentService = $paymentService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

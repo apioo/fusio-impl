@@ -33,13 +33,9 @@ use Fusio\Model\Backend\PlanCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private PlanCreate $plan;
-
-    public function __construct(PlanCreate $plan, UserContext $context)
+    public function __construct(private readonly PlanCreate $plan, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->plan = $plan;
     }
 
     public function getPlan(): PlanCreate

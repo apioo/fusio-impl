@@ -48,7 +48,7 @@ use PSX\Uri\Uri;
  */
 class AuthenticationTest extends DbTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $authorization = 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873';
 
@@ -80,7 +80,7 @@ class AuthenticationTest extends DbTestCase
         $this->assertEquals('Consumer', $user->getName());
     }
 
-    public function testHandleInvalidJWTFormat()
+    public function testHandleInvalidJWTFormat(): void
     {
         $this->expectException(\DomainException::class);
 
@@ -105,7 +105,7 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    public function testHandleInvalidToken()
+    public function testHandleInvalidToken(): void
     {
         $this->expectException(UnauthorizedException::class);
 
@@ -130,7 +130,7 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    public function testHandleInvalidAuthType()
+    public function testHandleInvalidAuthType(): void
     {
         $this->expectException(UnauthorizedException::class);
 
@@ -155,7 +155,7 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    public function testHandleNoAuthorizationHeader()
+    public function testHandleNoAuthorizationHeader(): void
     {
         $this->expectException(UnauthorizedException::class);
 
@@ -186,9 +186,10 @@ class AuthenticationTest extends DbTestCase
         $id = Fixture::getReference('fusio_operation', 'test.listFoo')->resolve($this->connection);
         $row = Environment::getService(TableManagerInterface::class)->getTable(Operation::class)->find($id);
         $row->setPublic(0);
+        
         $context->setOperation($row);
 
-        $app = (new AppRepository($this->connection, Environment::getService(FrameworkConfig::class)))->get(1);
+        $app = new AppRepository($this->connection, Environment::getService(FrameworkConfig::class))->get(1);
         $context->setApp($app);
     }
 }

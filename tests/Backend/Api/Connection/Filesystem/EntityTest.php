@@ -31,12 +31,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = file_get_contents(__DIR__ . '/../../../../resources/collection_schema.json');
@@ -48,12 +48,12 @@ class EntityTest extends DbTestCase
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/foobar', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/foobar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -63,12 +63,12 @@ class EntityTest extends DbTestCase
         $this->assertStringStartsWith('Provided in invalid id', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', array(
+        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -77,16 +77,17 @@ class EntityTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $this->markTestSkipped('File upload is difficult to test');
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $this->markTestSkipped('File upload is difficult to test');
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

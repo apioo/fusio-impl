@@ -154,6 +154,9 @@ readonly class Plan
         return $existing->getId();
     }
 
+    /**
+     * @param list<string> $scopes
+     */
     private function insertScopes(?string $tenantId, int $planId, array $scopes): void
     {
         $scopes = $this->scopeTable->getValidScopes($tenantId, $scopes);

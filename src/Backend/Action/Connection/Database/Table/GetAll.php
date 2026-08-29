@@ -32,7 +32,7 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends TableAbstract
+readonly class GetAll extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
@@ -41,7 +41,7 @@ class GetAll extends TableAbstract
         $count = (int) $request->get('count');
         $limit = 1024;
 
-        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $startIndex = max(0, $startIndex);
         $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $tableNames = $connection->createSchemaManager()->listTableNames();

@@ -31,12 +31,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -65,12 +65,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetLimit()
+    public function testGetLimit(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?startsIndex=2&count=1', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?startsIndex=2&count=1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -93,12 +93,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetFilter()
+    public function testGetFilter(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?filterBy=title&filterOp=contains&filterValue=bar', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?filterBy=title&filterOp=contains&filterValue=bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -121,12 +121,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetColumns()
+    public function testGetColumns(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?columns=id,title', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?columns=id,title', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -151,12 +151,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'POST', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'title'   => 'foo',
             'content' => 'foo',
             'date'    => '2024-06-08 21:07:15',
@@ -191,12 +191,12 @@ JSON;
         $this->assertEquals('2024-06-08 21:07:15', $row['date']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'PUT', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -205,12 +205,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'DELETE', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

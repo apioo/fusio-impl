@@ -33,7 +33,7 @@ use PSX\Json\Parser;
  */
 class AuthorizationCodeTest extends DbTestCase
 {
-    public function testPost()
+    public function testPost(): void
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -68,11 +68,11 @@ class AuthorizationCodeTest extends DbTestCase
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H'), substr($row['date'], 0, 13));
+        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime((string) $row['expire'])));
+        $this->assertEquals(date('Y-m-d H'), substr((string) $row['date'], 0, 13));
     }
 
-    public function testPostIDToken()
+    public function testPostIDToken(): void
     {
         $body     = 'grant_type=authorization_code&code=108742516c3fdf32';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -107,14 +107,14 @@ class AuthorizationCodeTest extends DbTestCase
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('openid', $row['scope']);
-        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H'), substr($row['date'], 0, 13));
+        $this->assertEquals(date('Y-m-d H', $expireDate), date('Y-m-d H', strtotime((string) $row['expire'])));
+        $this->assertEquals(date('Y-m-d H'), substr((string) $row['date'], 0, 13));
     }
 
     /**
      * A pending app can not request an API token
      */
-    public function testPostPending()
+    public function testPostPending(): void
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
         $response = $this->sendRequest('/authorization/token', 'POST', [
@@ -139,7 +139,7 @@ JSON;
     /**
      * A pending app can not request an API token
      */
-    public function testPostDeactivated()
+    public function testPostDeactivated(): void
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
         $response = $this->sendRequest('/authorization/token', 'POST', [

@@ -37,11 +37,8 @@ use Fusio\Engine\ParametersInterface;
  */
 class Native implements ConnectionInterface, PingableInterface
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     public function getName(): string
@@ -64,7 +61,7 @@ class Native implements ConnectionInterface, PingableInterface
             try {
                 $connection->createSchemaManager()->listTableNames();
                 return true;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 return false;
             }
         } else {

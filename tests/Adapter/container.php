@@ -11,7 +11,7 @@ use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
 use Fusio\Impl\Tests\Service\Generator\TestProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $container) {
+return static function (ContainerConfigurator $container): void {
     $services = ServiceBuilder::build($container);
     $services->set(AgentConnection::class);
     $services->set(InspectAction::class);

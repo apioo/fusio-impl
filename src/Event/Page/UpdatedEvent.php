@@ -34,15 +34,9 @@ use Fusio\Model\Backend\PageUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private PageUpdate $page;
-    private PageRow $existing;
-
-    public function __construct(PageUpdate $page, PageRow $existing, UserContext $context)
+    public function __construct(private readonly PageUpdate $page, private readonly PageRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->page = $page;
-        $this->existing = $existing;
     }
 
     public function getPage(): PageUpdate

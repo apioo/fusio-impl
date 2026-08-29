@@ -6855,6 +6855,36 @@
         "specification"
       ]
     },
+    "backend.specification.getChangelog": {
+      "path": "/backend/specification/changelog",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_SpecificationChangelog"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the changelog between your current specification and the last tag",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
     "backend.specification.publish": {
       "path": "/backend/specification",
       "method": "POST",
@@ -6884,6 +6914,44 @@
         }
       ],
       "description": "Publish the specification",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
+    "backend.specification.tag": {
+      "path": "/backend/specification/tag",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Passthru"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new tag of your specification",
       "stability": 2,
       "security": [
         "backend.specification"
@@ -10767,6 +10835,179 @@
         "account"
       ]
     },
+    "consumer.agent.get": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_Agent"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific agent",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.getAll": {
+      "path": "/consumer/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agents",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.getAll": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentMessageCollection"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "chat_id": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agent messages",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.submit": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Agent_Output"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Agent_Input"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Submits a new agent message",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
     "consumer.app.create": {
       "path": "/consumer/app",
       "method": "POST",
@@ -12255,6 +12496,32 @@
         "webhook"
       ]
     },
+    "system.captcha.challenge": {
+      "path": "/system/captcha/challenge",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "System_CaptchaChallenge"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Endpoint to generate a captcha challenge",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": []
+    },
     "system.connection.callback": {
       "path": "/system/connection/:name/callback",
       "method": "GET",
@@ -12854,6 +13121,10 @@
           "description": "The agent type",
           "type": "integer"
         },
+        "public": {
+          "description": "Indicates whether the agent is public",
+          "type": "boolean"
+        },
         "name": {
           "description": "Name of the agent",
           "type": "string"
@@ -12865,6 +13136,14 @@
         "introduction": {
           "description": "Introduction message",
           "type": "string"
+        },
+        "temperature": {
+          "description": "The used temperature default is 1.0",
+          "type": "number"
+        },
+        "costs": {
+          "description": "Costs per token",
+          "type": "integer"
         },
         "tools": {
           "description": "Tools available to this agent",
@@ -14901,6 +15180,23 @@
         "type": "string"
       }
     },
+    "Backend_SpecificationChangelog": {
+      "type": "struct",
+      "properties": {
+        "master": {
+          "type": "any"
+        },
+        "tag": {
+          "type": "any"
+        },
+        "version": {
+          "type": "string"
+        },
+        "changelog": {
+          "type": "string"
+        }
+      }
+    },
     "Backend_SpecificationGet": {
       "type": "struct",
       "properties": {
@@ -15652,6 +15948,73 @@
       "type": "map",
       "schema": {
         "type": "string"
+      }
+    },
+    "Consumer_Agent": {
+      "description": "This object represents an agent",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the agent",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the agent",
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_AgentCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_Agent"
+        }
+      }
+    },
+    "Consumer_AgentMessage": {
+      "description": "This object represents an agent message",
+      "type": "struct",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "chatId": {
+          "description": "The assigned chat id which can be used to load the complete conversation",
+          "type": "string"
+        },
+        "role": {
+          "description": "The role of this message i.e. user, assistant or system",
+          "type": "string"
+        },
+        "item": {
+          "description": "The message item",
+          "type": "reference",
+          "target": "Agent_Item"
+        },
+        "insertDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Consumer_AgentMessageCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_AgentMessage"
+        }
       }
     },
     "Consumer_App": {
@@ -16892,6 +17255,29 @@
         },
         "href": {
           "type": "string"
+        }
+      }
+    },
+    "System_CaptchaChallenge": {
+      "type": "struct",
+      "properties": {
+        "algorithm": {
+          "type": "string"
+        },
+        "challenge": {
+          "type": "string"
+        },
+        "maxnumber": {
+          "type": "integer"
+        },
+        "salt": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "expires": {
+          "type": "integer"
         }
       }
     },

@@ -33,13 +33,9 @@ use Fusio\Model\Backend\UserCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private UserCreate $user;
-
-    public function __construct(UserCreate $user, UserContext $context)
+    public function __construct(private readonly UserCreate $user, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->user = $user;
     }
 
     public function getUser(): UserCreate

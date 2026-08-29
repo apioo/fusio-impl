@@ -18,46 +18,41 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User;
+namespace Fusio\Impl\Tests\Framework\Api\TypeHub;
 
-use Fusio\Impl\Service;
-use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
+use PSX\Api\TypeHub\Changelog;
+use PSX\Api\TypeHub\PublisherInterface;
+use PSX\Api\TypeHub\Tag;
 
 /**
- * Captcha
+ * TestPublisher
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Captcha
+class TestPublisher implements PublisherInterface
 {
-    public function __construct(
-        private Service\Config $configService,
-        private Service\User\Captcha\CaptchaInterface $captcha,
-        private IPResolver $ipResolver,
-    ) {
+    public function __construct(private PublisherInterface $publisher)
+    {
     }
 
-    public function assertCaptcha(?string $captcha): void
+    public function get(?string $filterName = null, bool $standalone = false): string
     {
-        $secret = $this->configService->getValue('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
+        return $this->publisher->get($filterName, $standalone);
     }
 
-    protected function verifyCaptcha(?string $captcha, string $secret): bool
+    public function publish(string $name, string $clientId, string $clientSecret, ?string $filterName = null, bool $standalone = false): void
     {
-        if (empty($captcha)) {
-            throw new StatusCode\BadRequestException('Invalid captcha');
-        }
+    }
 
-        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
-            return true;
-        }
+    public function changelog(string $name, string $clientId, string $clientSecret): Changelog
+    {
+        return new Changelog(['foo' => 'bar'], ['foo' => 'bar'], '0.1.2', 'Update version');
+    }
 
-        throw new StatusCode\BadRequestException('Invalid captcha');
+    public function tag(string $name, string $clientId, string $clientSecret): Tag
+    {
+        return new Tag('2', '0.1.2');
     }
 }

@@ -26,6 +26,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * CheckCommand
@@ -57,7 +58,7 @@ class CheckCommand extends Command
 
         try {
             $result = $this->executeCheck($check);
-        } catch (\Throwable $e) {
+        } catch (Throwable) {
             $result = false;
         }
 
@@ -75,12 +76,10 @@ class CheckCommand extends Command
 
     protected function executeCheck(string $check): ?bool
     {
-        switch ($check) {
-            case 'user':
-                return $this->checkUser();
-        }
-
-        return null;
+        return match ($check) {
+            'user' => $this->checkUser(),
+            default => null,
+        };
     }
 
     /**

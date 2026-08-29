@@ -37,10 +37,10 @@ class GetDebug implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
-            'class' => get_class($request),
+            'class' => $request::class,
             'arguments' => $request->getArguments(),
             'payload' => $request->getPayload(),
-            'context' => get_class($request->getContext()),
+            'context' => $request->getContext()::class,
         ];
     }
 }

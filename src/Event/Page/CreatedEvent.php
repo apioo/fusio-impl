@@ -33,13 +33,9 @@ use Fusio\Model\Backend\PageCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private PageCreate $page;
-
-    public function __construct(PageCreate $page, UserContext $context)
+    public function __construct(private readonly PageCreate $page, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->page = $page;
     }
 
     public function getPage(): PageCreate

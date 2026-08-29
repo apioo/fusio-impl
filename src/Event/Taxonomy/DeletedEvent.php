@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\TaxonomyRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private TaxonomyRow $existing;
-
-    public function __construct(TaxonomyRow $existing, UserContext $context)
+    public function __construct(private readonly TaxonomyRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): TaxonomyRow

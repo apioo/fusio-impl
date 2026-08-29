@@ -86,11 +86,18 @@ readonly class Authenticator
         return null;
     }
 
+    /**
+     * @param list<string> $scopes
+     * @return list<string>
+     */
     public function getValidScopes(?string $tenantId, int $userId, array $scopes): array
     {
         return Table\Scope::getNames($this->userScopeTable->getValidScopes($tenantId, $userId, $scopes));
     }
 
+    /**
+     * @return list<string>
+     */
     public function getAvailableScopes(?string $tenantId, int $userId): array
     {
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($tenantId, $userId));

@@ -32,6 +32,9 @@ use Symfony\Component\Mailer\Transport\AbstractTransport;
  */
 final class MemoryTransport extends AbstractTransport
 {
+    /**
+     * @var list<SentMessage>
+     */
     private array $messages = [];
 
     protected function doSend(SentMessage $message): void

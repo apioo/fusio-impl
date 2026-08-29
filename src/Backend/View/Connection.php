@@ -42,7 +42,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Connection extends ViewAbstract
 {
-    public function getCollection(ClassQueryFilter $filter, ContextInterface $context)
+    public function getCollection(ClassQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -74,7 +74,7 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
@@ -90,7 +90,7 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ContextInterface $context)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 

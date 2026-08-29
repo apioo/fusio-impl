@@ -54,11 +54,7 @@ readonly class InvokeTriggerHandler
             }
 
             $payload = $event->getPayload();
-            if (is_object($payload) || is_iterable($payload)) {
-                $data = Record::from($payload);
-            } else {
-                $data = new Record();
-            }
+            $data = is_object($payload) || is_iterable($payload) ? Record::from($payload) : new Record();
 
             $request = new Request([], $data, new Request\EventRequestContext($event->getEventName()));
             $context = $event->getContext() ?? new Context\AnonymousContext($event->getTenantId());

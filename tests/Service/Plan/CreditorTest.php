@@ -38,7 +38,7 @@ use PHPUnit\Framework\TestCase;
 class CreditorTest extends TestCase
 {
     #[DataProvider('pointsProvider')]
-    public function testCredit(int $points, int $cost)
+    public function testCredit(int $points, int $cost): void
     {
         $userTable = $this->getMockBuilder(Table\User::class)
             ->disableOriginalConstructor()
@@ -56,6 +56,9 @@ class CreditorTest extends TestCase
         $creditor->credit($cost, $context);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function pointsProvider(): array
     {
         return [

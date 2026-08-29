@@ -31,12 +31,12 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/config/3', 'GET', array(
+        $response = $this->sendRequest('/backend/config/3', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -54,12 +54,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
-        $response = $this->sendRequest('/backend/config/~authorization_url', 'GET', array(
+        $response = $this->sendRequest('/backend/config/~authorization_url', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -77,12 +77,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/config/3', 'POST', array(
+        $response = $this->sendRequest('/backend/config/3', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -91,12 +91,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/config/3', 'PUT', array(
+        $response = $this->sendRequest('/backend/config/3', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'value' => 32,
         ]));
 
@@ -128,12 +128,12 @@ JSON;
         $this->assertEquals(32, $row['value']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/config/3', 'POST', array(
+        $response = $this->sendRequest('/backend/config/3', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

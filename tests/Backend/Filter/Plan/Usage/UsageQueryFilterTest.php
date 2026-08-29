@@ -36,7 +36,7 @@ use PSX\Sql\TableManagerInterface;
  */
 class UsageQueryFilterTest extends FilterTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $filter = UsageQueryFilter::from($this->createRequest([
             'from' => '2015-08-20',

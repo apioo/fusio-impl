@@ -32,12 +32,12 @@ use PSX\Uri\Url;
  */
 class RedirectTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/redirect', 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -51,12 +51,12 @@ class RedirectTest extends DbTestCase
         $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
     }
 
-    public function testGetRedirect()
+    public function testGetRedirect(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/redirect?redirect_uri=' . urlencode('http://127.0.0.1/callback'), 'GET', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect?redirect_uri=' . urlencode('http://127.0.0.1/callback'), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
 
@@ -71,12 +71,12 @@ class RedirectTest extends DbTestCase
         $this->assertEquals('http://127.0.0.1/consumer/identity/1/exchange', $parameters['redirect_uri']);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/redirect', 'POST', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -85,12 +85,12 @@ class RedirectTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/consumer/identity', 'PUT', array(
+        $response = $this->sendRequest('/consumer/identity', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -99,12 +99,12 @@ class RedirectTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/consumer/identity/1/redirect', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/identity/1/redirect', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

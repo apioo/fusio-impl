@@ -34,7 +34,6 @@ use Fusio\Marketplace\MarketplaceBundleConfig;
 use Fusio\Marketplace\MarketplaceBundleCronjob;
 use Fusio\Marketplace\MarketplaceBundleEvent;
 use Fusio\Marketplace\MarketplaceBundleSchema;
-use Fusio\Marketplace\MarketplaceBundleSchemaSource;
 use Fusio\Marketplace\MarketplaceBundleTrigger;
 use Fusio\Marketplace\MarketplaceObject;
 use Fusio\Model\Backend\ActionConfig;
@@ -57,6 +56,8 @@ use Throwable;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @implements InstallerInterface<MarketplaceBundle>
  */
 readonly class Installer implements InstallerInterface
 {

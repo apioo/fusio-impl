@@ -62,6 +62,9 @@ readonly class Execute extends HttpAbstract
         ]);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function convertHeaders(ResponseInterface $response): array
     {
         $result = [];

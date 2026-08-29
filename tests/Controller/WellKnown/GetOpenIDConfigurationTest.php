@@ -31,11 +31,11 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class GetOpenIDConfigurationTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/.well-known/openid-configuration', 'GET', array(
+        $response = $this->sendRequest('/.well-known/openid-configuration', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-        ));
+        ]);
 
         $actual = (string) $response->getBody();
         $expect = <<<JSON
@@ -87,11 +87,11 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/.well-known/openid-configuration', 'POST', array(
+        $response = $this->sendRequest('/.well-known/openid-configuration', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -100,11 +100,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/.well-known/openid-configuration', 'PUT', array(
+        $response = $this->sendRequest('/.well-known/openid-configuration', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -113,11 +113,11 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/.well-known/openid-configuration', 'DELETE', array(
+        $response = $this->sendRequest('/.well-known/openid-configuration', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

@@ -33,96 +33,112 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class CollectionTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'GET', array(
+        $response = $this->sendRequest('/backend/agent', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
 
         $expect = <<<'JSON'
-{
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
-    "totalResults": 6,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
+            "totalResults": 7,
+            "startIndex": 0,
+            "itemsPerPage": 16,
+            "entry": [
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+            "id": 7,
+                    "status": 1,
+                    "connection": 8,
+                    "public": true,
+                    "type": 0,
+                    "name": "agent-test",
+                    "description": "An agent test",
+                    "outgoing": "schema:\/\/Entry-Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 6,
+                    "status": 1,
+                    "public": false,
+                    "type": 5,
+                    "name": "Fusio-Seed",
+                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+                    "status": 1,
+                    "public": false,
+                    "type": 4,
+                    "name": "Fusio-Database",
+                    "description": "Designs database table structures including columns, types, and constraints.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+                    "status": 1,
+                    "public": false,
+                    "type": 3,
+                    "name": "Fusio-Schema",
+                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 3,
-            "status": 1,
-            "type": 2,
-            "name": "Fusio-Action",
-            "description": "Helps to develop custom action business logic",
-            "insertDate": "[datetime]"
-        },
-        {
+                    "status": 1,
+                    "public": false,
+                    "type": 2,
+                    "name": "Fusio-Action",
+                    "description": "Develops custom business logic and backend code for your API operations.",
+                    "insertDate": "[datetime]"
+                },
+                {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 2,
-            "status": 1,
-            "type": 1,
-            "name": "Fusio-Architect",
-            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-            "insertDate": "[datetime]"
-        },
-        {
+                    "id": 2,
+                    "status": 1,
+                    "public": false,
+                    "type": 1,
+                    "name": "Fusio-Architect",
+                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+                    "insertDate": "[datetime]"
+                },
+                {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 1,
-            "status": 1,
-            "type": 0,
-            "name": "Fusio-General",
-            "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
+                    "id": 1,
+                    "status": 1,
+                    "public": false,
+                    "type": 0,
+                    "name": "Fusio-General",
+                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
+                    "insertDate": "[datetime]"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetSearch()
+    public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/agent?search=tes', 'GET', array(
+        $response = $this->sendRequest('/backend/agent?search=tes', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -134,9 +150,10 @@ JSON;
     "entry": [
         {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 6,
+            "id": 7,
             "status": 1,
             "connection": 8,
+            "public": true,
             "type": 0,
             "name": "agent-test",
             "description": "An agent test",
@@ -151,96 +168,112 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCount()
+    public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/agent?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/agent?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
 
         $expect = <<<'JSON'
-{
+        {
     "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentCollection",
-    "totalResults": 6,
-    "startIndex": 0,
-    "itemsPerPage": 80,
-    "entry": [
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 6,
-            "status": 1,
-            "connection": 8,
-            "type": 0,
-            "name": "agent-test",
-            "description": "An agent test",
-            "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+            "totalResults": 7,
+            "startIndex": 0,
+            "itemsPerPage": 80,
+            "entry": [
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+            "id": 7,
+                    "status": 1,
+                    "connection": 8,
+                    "public": true,
+                    "type": 0,
+                    "name": "agent-test",
+                    "description": "An agent test",
+                    "outgoing": "schema:\/\/Entry-Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "id": 6,
+                    "status": 1,
+                    "public": false,
+                    "type": 5,
+                    "name": "Fusio-Seed",
+                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 5,
-            "status": 1,
-            "type": 4,
-            "name": "Fusio-Database",
-            "description": "Helps to design database table schemas",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+                    "status": 1,
+                    "public": false,
+                    "type": 4,
+                    "name": "Fusio-Database",
+                    "description": "Designs database table structures including columns, types, and constraints.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 4,
-            "status": 1,
-            "type": 3,
-            "name": "Fusio-Schema",
-            "description": "Helps to build new schemas to describe JSON payloads",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-            "insertDate": "[datetime]"
-        },
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+                    "status": 1,
+                    "public": false,
+                    "type": 3,
+                    "name": "Fusio-Schema",
+                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+                    "insertDate": "[datetime]"
+                },
+                {
+                    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
             "id": 3,
-            "status": 1,
-            "type": 2,
-            "name": "Fusio-Action",
-            "description": "Helps to develop custom action business logic",
-            "insertDate": "[datetime]"
-        },
-        {
+                    "status": 1,
+                    "public": false,
+                    "type": 2,
+                    "name": "Fusio-Action",
+                    "description": "Develops custom business logic and backend code for your API operations.",
+                    "insertDate": "[datetime]"
+                },
+                {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 2,
-            "status": 1,
-            "type": 1,
-            "name": "Fusio-Architect",
-            "description": "Helps to build complete operations, it uses internally the action, schema and database agent",
-            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-            "insertDate": "[datetime]"
-        },
-        {
+                    "id": 2,
+                    "status": 1,
+                    "public": false,
+                    "type": 1,
+                    "name": "Fusio-Architect",
+                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+                    "insertDate": "[datetime]"
+                },
+                {
             "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
-            "id": 1,
-            "status": 1,
-            "type": 0,
-            "name": "Fusio-General",
-            "description": "Helps to answer general questions about your Fusio instance",
-            "insertDate": "[datetime]"
+                    "id": 1,
+                    "status": 1,
+                    "public": false,
+                    "type": 0,
+                    "name": "Fusio-General",
+                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
+                    "insertDate": "[datetime]"
+                }
+            ]
         }
-    ]
-}
-JSON;
+        JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'POST', array(
+        $response = $this->sendRequest('/backend/agent', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'connection' => 8,
             'type' => Table\Agent::TYPE_GENERAL,
             'name' => 'my-agent',
@@ -253,7 +286,7 @@ JSON;
 {
     "success": true,
     "message": "Agent successfully created",
-    "id": "7"
+    "id": "8"
 }
 JSON;
 
@@ -278,12 +311,12 @@ JSON;
         $this->assertEquals('Your an helpful agent which returns only useful information', $row['introduction']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'PUT', array(
+        $response = $this->sendRequest('/backend/agent', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -292,12 +325,12 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/agent', 'DELETE', array(
+        $response = $this->sendRequest('/backend/agent', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 

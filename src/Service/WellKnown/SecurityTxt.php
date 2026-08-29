@@ -37,8 +37,8 @@ readonly class SecurityTxt
 
     public function build(): string
     {
-        $contactUrl = $this->configService->getValue('info_contact_url') ?: null;
-        $contactEmail = $this->configService->getValue('info_contact_email') ?: null;
+        $contactUrl = $this->configService->getString('info_contact_url') ?: null;
+        $contactEmail = $this->configService->getString('info_contact_email') ?: null;
 
         $expires = (new \DateTime())->add(new \DateInterval('P1M'))->format('Y-m-d\T00:00:00.000\Z');
 

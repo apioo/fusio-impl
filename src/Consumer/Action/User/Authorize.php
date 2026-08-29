@@ -34,13 +34,10 @@ use Fusio\Model\Consumer\AuthorizeRequest;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Authorize implements ActionInterface
+readonly class Authorize implements ActionInterface
 {
-    private UserAuthorize $authorizeService;
-
-    public function __construct(UserAuthorize $authorizeService)
+    public function __construct(private UserAuthorize $authorizeService)
     {
-        $this->authorizeService = $authorizeService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

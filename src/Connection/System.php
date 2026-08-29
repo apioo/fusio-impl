@@ -40,11 +40,8 @@ use Fusio\Impl\Service\System\FrameworkConfig;
  */
 class System implements ConnectionInterface, PingableInterface
 {
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(FrameworkConfig $frameworkConfig)
+    public function __construct(private readonly FrameworkConfig $frameworkConfig)
     {
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     public function getName(): string
@@ -56,7 +53,7 @@ class System implements ConnectionInterface, PingableInterface
     {
         $params = $this->frameworkConfig->getDoctrineConnectionParameters();
         $config = new DBAL\Configuration();
-        $config->setSchemaAssetsFilter(static function($assetName) {
+        $config->setSchemaAssetsFilter(static function($assetName): false|int {
             if ($assetName instanceof AbstractAsset) {
                 $assetName = $assetName->getName();
             }
@@ -81,7 +78,7 @@ class System implements ConnectionInterface, PingableInterface
             try {
                 $connection->createSchemaManager()->listTableNames();
                 return true;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 return false;
             }
         } else {

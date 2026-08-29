@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Filter;
 use DateTimeImmutable;
 use Exception;
 use Fusio\Engine\RequestInterface;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\TableInterface;
 
@@ -58,6 +59,9 @@ class DateQueryFilter extends QueryFilter
         return $this->to;
     }
 
+    /**
+     * @param array<string, ColumnInterface|string> $columnMapping
+     */
     public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
         $condition = parent::getCondition($table, $columnMapping, $alias);
@@ -76,6 +80,9 @@ class DateQueryFilter extends QueryFilter
         return $value !== null && $value !== '' ? (int) $value : null;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         $arguments = parent::getConstructorArguments($request);

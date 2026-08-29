@@ -39,7 +39,7 @@ readonly class Config implements ConfigInterface
 
     public function getClientId(): ?string
     {
-        $clientId = $this->configService->getValue('sdkgen_client_id');
+        $clientId = $this->configService->getString('sdkgen_client_id');
         if (!empty($clientId)) {
             return $clientId;
         }
@@ -49,7 +49,7 @@ readonly class Config implements ConfigInterface
 
     public function getClientSecret(): ?string
     {
-        $clientSecret = $this->configService->getValue('sdkgen_client_secret');
+        $clientSecret = $this->configService->getString('sdkgen_client_secret');
         if (!empty($clientSecret)) {
             return $clientSecret;
         }

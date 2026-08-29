@@ -33,13 +33,10 @@ use Fusio\Impl\Service\Schema;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetPreview implements ActionInterface
+readonly class GetPreview implements ActionInterface
 {
-    private Schema $schemaService;
-
-    public function __construct(Schema $schemaService)
+    public function __construct(private Schema $schemaService)
     {
-        $this->schemaService = $schemaService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

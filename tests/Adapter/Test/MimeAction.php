@@ -25,6 +25,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Override;
 use Psr\Http\Message\StreamInterface;
 use PSX\Data\Body\Form;
 use PSX\Data\Body\Json;
@@ -39,6 +40,7 @@ use PSX\Data\Body\Multipart;
  */
 class MimeAction extends ActionAbstract
 {
+    #[Override]
     public function getName(): string
     {
         return 'MIME-Action';

@@ -34,7 +34,7 @@ use PSX\Http\Environment\HttpResponse;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Create extends TableAbstract
+readonly class Create extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

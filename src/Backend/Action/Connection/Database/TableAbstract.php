@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\Action\Connection\Database;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
@@ -45,15 +46,10 @@ use PSX\Http\Exception\NotFoundException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-abstract class TableAbstract implements ActionInterface
+abstract readonly class TableAbstract implements ActionInterface
 {
-    private Connector $connector;
-    private FrameworkConfig $frameworkConfig;
-
-    public function __construct(Connector $connector, FrameworkConfig $frameworkConfig)
+    public function __construct(private Connector $connector, private FrameworkConfig $frameworkConfig)
     {
-        $this->connector = $connector;
-        $this->frameworkConfig = $frameworkConfig;
     }
 
     protected function getConnection(RequestInterface $request): Connection
@@ -71,6 +67,9 @@ abstract class TableAbstract implements ActionInterface
         return $connection;
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     protected function getTable(RequestInterface $request, AbstractSchemaManager $schemaManager): Table
     {
         $tableName = $request->get('table_name');
@@ -78,7 +77,7 @@ abstract class TableAbstract implements ActionInterface
             throw new BadRequestException('Provided an no table');
         }
 
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $tableName)) {
+        if (!preg_match('/^\w+$/', (string) $tableName)) {
             throw new BadRequestException('Provided an invalid table');
         }
 
@@ -109,6 +108,9 @@ abstract class TableAbstract implements ActionInterface
         return $primaryKey;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getRow(DatabaseRow $payload, Table $table): array
     {
         $result = [];

@@ -35,7 +35,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class UpgradeCommand extends Command
 {
-    public function __construct(private FrameworkConfig $config)
+    public function __construct(private readonly FrameworkConfig $config)
     {
         parent::__construct();
     }
@@ -161,21 +161,21 @@ class UpgradeCommand extends Command
         }
 
         if (isset($data['incoming'])) {
-            $lines[] = '$operation->setIncoming(' . substr($data['incoming'], 4) . '::class);';
+            $lines[] = '$operation->setIncoming(' . substr((string) $data['incoming'], 4) . '::class);';
         }
 
         if (isset($data['outgoing'])) {
-            $lines[] = '$operation->setOutgoing(' . substr($data['outgoing'], 4) . '::class);';
+            $lines[] = '$operation->setOutgoing(' . substr((string) $data['outgoing'], 4) . '::class);';
         }
 
         if (isset($data['throws']) && is_array($data['throws'])) {
             foreach ($data['throws'] as $httpCode => $schema) {
-                $lines[] = '$operation->addThrow(' . $httpCode . ', ' . substr($schema, 4) . '::class);';
+                $lines[] = '$operation->addThrow(' . $httpCode . ', ' . substr((string) $schema, 4) . '::class);';
             }
         }
 
         if (isset($data['action'])) {
-            $lines[] = '$operation->setAction(' . substr($data['action'], 4) . '::class);';
+            $lines[] = '$operation->setAction(' . substr((string) $data['action'], 4) . '::class);';
         }
 
         $content = implode("\n    ", $lines);

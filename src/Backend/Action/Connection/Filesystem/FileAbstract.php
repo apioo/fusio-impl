@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\Filesystem as Flysystem;
+use League\Flysystem\StorageAttributes;
 use PSX\Data\Multipart\Body;
 use PSX\Data\Multipart\File;
 use PSX\DateTime\LocalDateTime;
@@ -62,12 +63,13 @@ readonly abstract class FileAbstract implements ActionInterface
         return $connection;
     }
 
+    /**
+     * @return array<StorageAttributes>
+     */
     protected function getObjects(Flysystem $connection): array
     {
         $result = $connection->listContents('.');
-        $result = $result->filter(static function ($object) {
-            return $object instanceof FileAttributes;
-        });
+        $result = $result->filter(static fn($object) => $object instanceof FileAttributes);
 
         return iterator_to_array($result);
     }

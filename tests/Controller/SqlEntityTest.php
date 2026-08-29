@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class SqlEntityTest extends DbTestCase
 {
-    public function testExecuteProviderAndCallRoutes()
+    public function testExecuteProviderAndCallRoutes(): void
     {
         $this->executeProvider();
 
@@ -100,6 +100,11 @@ JSON;
         return $data->id;
     }
 
+    /**
+     * @param list<string> $tags
+     * @param list<int> $categoryIds
+     * @param array<string, int> $mapIds
+     */
     private function createHuman(string $firstName, string $lastName, int $locationId, array $tags, array $categoryIds, array $mapIds): int
     {
         $response = $this->sendRequest('/provider/human', 'POST', [
@@ -109,8 +114,8 @@ JSON;
             'lastName' => $lastName,
             'location' => ['id' => $locationId],
             'tags' => $tags,
-            'categories' => array_map(fn (int $categoryId) => ['id' => $categoryId], $categoryIds),
-            'map' => array_map(fn (int $mapIds) => ['id' => $mapIds], $mapIds),
+            'categories' => array_map(fn (int $categoryId): array => ['id' => $categoryId], $categoryIds),
+            'map' => array_map(fn (int $mapIds): array => ['id' => $mapIds], $mapIds),
         ]));
 
         $body = (string) $response->getBody();
@@ -134,10 +139,10 @@ JSON;
     {
         $typeSchema = \json_decode(file_get_contents(__DIR__ . '/../Backend/Api/Generator/resource/typeschema.json'));
 
-        $response = $this->sendRequest('/backend/generator/sqlentity', 'POST', array(
+        $response = $this->sendRequest('/backend/generator/sqlentity', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'path' => '/provider',
             'scopes' => ['provider'],
             'public' => true,
@@ -172,6 +177,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

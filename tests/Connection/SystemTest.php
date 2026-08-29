@@ -37,7 +37,7 @@ use PSX\Framework\Config\Config;
  */
 class SystemTest extends TestCase
 {
-    public function testConnection()
+    public function testConnection(): void
     {
         $config = new FrameworkConfig(
             new Config(['psx_connection' => 'pdo-sqlite:///:memory:']),

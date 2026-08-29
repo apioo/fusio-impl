@@ -91,7 +91,7 @@ readonly class Payment
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $webhookSecret = $this->configService->getValue('payment_' . strtolower($name) . '_secret');
+        $webhookSecret = $this->configService->getString('payment_' . strtolower($name) . '_secret');
 
         $provider->webhook($request, $this->webhook, $webhookSecret, $this->frameworkConfig->getUrl());
     }
@@ -103,7 +103,7 @@ readonly class Payment
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $configurationId = $this->configService->getValue('payment_' . strtolower($name) . '_portal_configuration');
+        $configurationId = $this->configService->getString('payment_' . strtolower($name) . '_portal_configuration');
 
         $connection = $this->connector->getConnection($name);
 
@@ -129,7 +129,7 @@ readonly class Payment
 
     private function buildCheckoutContext(string $returnUrl): CheckoutContext
     {
-        $currency = $this->configService->getValue('payment_currency');
+        $currency = $this->configService->getString('payment_currency');
         if (empty($currency)) {
             $currency = 'EUR';
         }

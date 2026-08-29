@@ -36,15 +36,10 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Redirect implements ActionInterface
+readonly class Redirect implements ActionInterface
 {
-    private Service\Identity $identity;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Service\Identity $identity, ContextFactory $contextFactory)
+    public function __construct(private Service\Identity $identity, private ContextFactory $contextFactory)
     {
-        $this->identity = $identity;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

@@ -32,7 +32,7 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Delete extends TableAbstract
+readonly class Delete extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

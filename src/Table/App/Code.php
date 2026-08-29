@@ -33,6 +33,9 @@ use PSX\Sql\Condition;
  */
 class Code extends Generated\AppCodeTable
 {
+    /**
+     * @return array{id: int, app_id: int, user_id: int, scope: string, date: string}|false
+     */
     public function getCodeByRequest(string $appKey, string $appSecret, string $code, ?string $redirectUri, ?string $tenantId = null): array|false
     {
         $condition = Condition::withAnd();

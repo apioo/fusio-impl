@@ -38,13 +38,17 @@ class Scope extends Generated\AppScopeTable
         $sql = 'DELETE FROM fusio_app_scope
                       WHERE app_id = :app_id';
 
-        $this->connection->executeQuery($sql, array('app_id' => $appId));
+        $this->connection->executeQuery($sql, ['app_id' => $appId]);
     }
 
+    /**
+     * @param list<string> $scopes
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getValidScopes(?string $tenantId, int $appId, array $scopes): array
     {
         $result = $this->getAvailableScopes($tenantId, $appId, true);
-        $data   = array();
+        $data   = [];
 
         foreach ($result as $scope) {
             if (in_array($scope['name'], $scopes)) {
@@ -55,6 +59,9 @@ class Scope extends Generated\AppScopeTable
         return $data;
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getAvailableScopes(?string $tenantId, int $appId, bool $includePlanScopes = false): array
     {
         $assignedScopes = $this->getScopesForApp($tenantId, $appId);
@@ -68,7 +75,7 @@ class Scope extends Generated\AppScopeTable
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (!str_contains($assignedScope['name'], '.')) {
+            if (!str_contains((string) $assignedScope['name'], '.')) {
                 // load all sub scopes
                 $subScopes = $this->getTable(Table\Scope::class)->findSubScopes($tenantId, $assignedScope['name']);
                 foreach ($subScopes as $subScope) {
@@ -80,6 +87,9 @@ class Scope extends Generated\AppScopeTable
         return array_values($scopes);
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     private function getScopesForApp(?string $tenantId, int $appId): array
     {
         $condition = Condition::withAnd();
@@ -99,9 +109,12 @@ class Scope extends Generated\AppScopeTable
             ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
             ->setParameters($condition->getValues());
 
-        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     private function getScopesForPlan(?string $tenantId, int $appId): array
     {
         $userId = $this->getTable(Table\App::class)->getUserId($tenantId, $appId);
@@ -131,6 +144,6 @@ class Scope extends Generated\AppScopeTable
             ->orderBy('scope.' . Generated\ScopeTable::COLUMN_ID, 'ASC')
             ->setParameters($condition->getValues());
 
-        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters()) ?: [];
+        return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 }

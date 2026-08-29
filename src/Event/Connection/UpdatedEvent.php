@@ -34,15 +34,9 @@ use Fusio\Model\Backend\ConnectionUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private ConnectionUpdate $connection;
-    private ConnectionRow $existing;
-
-    public function __construct(ConnectionUpdate $connection, ConnectionRow $existing, UserContext $context)
+    public function __construct(private readonly ConnectionUpdate $connection, private readonly ConnectionRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->connection = $connection;
-        $this->existing   = $existing;
     }
 
     public function getConnection(): ConnectionUpdate

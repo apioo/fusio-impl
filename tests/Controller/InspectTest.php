@@ -32,7 +32,7 @@ use Fusio\Impl\Tests\Normalizer;
  */
 class InspectTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -72,7 +72,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testGetError()
+    public function testGetError(): void
     {
         $response = $this->sendRequest('/inspect/bar?throw=1', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -86,10 +86,10 @@ JSON;
         $data = json_decode($body);
 
         $this->assertFalse($data->success);
-        $this->assertEquals('Foobar', substr($data->message, 0, 6));
+        $this->assertEquals('Foobar', substr((string) $data->message, 0, 6));
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'POST', [
             'User-Agent' => 'Fusio TestCase',
@@ -131,7 +131,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
@@ -173,7 +173,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PATCH', [
             'User-Agent' => 'Fusio TestCase',
@@ -215,7 +215,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',

@@ -37,7 +37,7 @@ use PSX\Framework\Test\Environment;
  */
 class UserContextTest extends TestCase
 {
-    public function testAnonymousContext()
+    public function testAnonymousContext(): void
     {
         $userContext = Environment::getService(ContextFactory::class)->newAnonymousContext();
 
@@ -46,7 +46,7 @@ class UserContextTest extends TestCase
         $this->assertEquals(null, $userContext->getAppId());
     }
 
-    public function testActionContext()
+    public function testActionContext(): void
     {
         $app = new App(false, 1, 0, 0 , '', '', '', [], []);
         $user = new User(false, 1, 0, 0, 0, '', '', 0);
@@ -59,7 +59,7 @@ class UserContextTest extends TestCase
         $this->assertEquals(1, $userContext->getAppId());
     }
 
-    public function testContext()
+    public function testContext(): void
     {
         $userContext = UserContext::newContext(1, 1, 1);
 

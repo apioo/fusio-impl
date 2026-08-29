@@ -33,13 +33,9 @@ use Fusio\Model\Backend\EventCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private EventCreate $event;
-
-    public function __construct(EventCreate $event, UserContext $context)
+    public function __construct(private readonly EventCreate $event, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->event = $event;
     }
 
     public function getEvent(): EventCreate

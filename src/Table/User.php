@@ -34,7 +34,9 @@ use PSX\Sql\Condition;
 class User extends Generated\UserTable
 {
     public const STATUS_DISABLED = 2;
+    
     public const STATUS_ACTIVE   = 1;
+    
     public const STATUS_DELETED  = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?UserRow
@@ -116,7 +118,7 @@ class User extends Generated\UserTable
             return false;
         }
 
-        if (!$verifyOld || password_verify($oldPassword ?? '', $password)) {
+        if (!$verifyOld || password_verify($oldPassword ?? '', (string) $password)) {
             $this->connection->update('fusio_user', [
                 self::COLUMN_PASSWORD => \password_hash($newPassword, PASSWORD_DEFAULT),
             ], [

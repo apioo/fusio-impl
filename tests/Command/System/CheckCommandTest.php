@@ -34,7 +34,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class CheckCommandTest extends DbTestCase
 {
-    public function testCommandUser()
+    public function testCommandUser(): void
     {
         $command = Environment::getService(Application::class)->find('system:check');
 
@@ -47,7 +47,7 @@ class CheckCommandTest extends DbTestCase
         $this->assertSame(0, $commandTester->getStatusCode());
     }
 
-    public function testCommandUnknownCheck()
+    public function testCommandUnknownCheck(): void
     {
         $command = Environment::getService(Application::class)->find('system:check');
 

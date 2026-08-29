@@ -34,18 +34,14 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
-        if ($this->connection->getDatabasePlatform() instanceof MySQLPlatform) {
-            $length = '0';
-        } else {
-            $length = 'null';
-        }
+        $length = $this->connection->getDatabasePlatform() instanceof MySQLPlatform ? '0' : 'null';
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
@@ -115,12 +111,12 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/foobar', 'GET', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/foobar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);
@@ -130,12 +126,12 @@ JSON;
         $this->assertStringStartsWith('Provided table does not exist', $data->message);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/connection/Test/database/app_news', 'POST', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/app_news', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -144,7 +140,7 @@ JSON;
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $schemaManager = $this->connection->createSchemaManager();
         if ($schemaManager->tablesExist('my_table')) {
@@ -155,12 +151,13 @@ JSON;
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('title', 'string');
         $table->setPrimaryKey(['id']);
+        
         $schemaManager->createTable($table);
 
-        $response = $this->sendRequest('/backend/connection/Test/database/my_table', 'PUT', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/my_table', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'name'    => 'app_news',
             'columns' => [
                 [
@@ -207,7 +204,7 @@ JSON;
         $this->assertEquals('string', Type::lookupName($columns['description']->getType()));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $schemaManager = $this->connection->createSchemaManager();
         if ($schemaManager->tablesExist('my_table')) {
@@ -218,12 +215,13 @@ JSON;
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('title', 'string');
         $table->setPrimaryKey(['id']);
+        
         $schemaManager->createTable($table);
 
-        $response = $this->sendRequest('/backend/connection/Test/database/my_table', 'DELETE', array(
+        $response = $this->sendRequest('/backend/connection/Test/database/my_table', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -240,6 +238,7 @@ JSON;
         $this->assertFalse($schemaManager->tablesExist('my_table_delete'));
     }
 
+    #[\Override]
     protected function isTransactional(): bool
     {
         return false;

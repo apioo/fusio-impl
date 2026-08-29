@@ -37,7 +37,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class RegisterCommandTest extends DbTestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $command = Environment::getService(Application::class)->find('system:register');
         $answers = ['y', '1'];
@@ -81,7 +81,7 @@ class RegisterCommandTest extends DbTestCase
         $this->assertEquals($expect, $actual);
     }
 
-    public function testCommandAutoConfirm()
+    public function testCommandAutoConfirm(): void
     {
         $command = Environment::getService(Application::class)->find('system:register');
 

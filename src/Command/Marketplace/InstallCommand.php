@@ -95,6 +95,7 @@ class InstallCommand extends Command
             if ($output->isVerbose()) {
                 $output->writeln($e->getTraceAsString());
             }
+            
             $output->writeln('');
         }
 

@@ -113,6 +113,9 @@ class UserRepository implements Repository\UserInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $row
+     */
     private function newUser(array $row): Model\UserInterface
     {
         $metadata = null;
@@ -138,7 +141,7 @@ class UserRepository implements Repository\UserInterface
         );
     }
 
-    private function getCategoryForRole($roleId): int
+    private function getCategoryForRole(int $roleId): int
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\RoleTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());

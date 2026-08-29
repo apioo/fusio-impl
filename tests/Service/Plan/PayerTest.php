@@ -40,7 +40,7 @@ use PHPUnit\Framework\TestCase;
 class PayerTest extends TestCase
 {
     #[DataProvider('pointsProvider')]
-    public function testPay(?int $threshold, int $points, int $cost, bool $sendMail)
+    public function testPay(?int $threshold, int $points, int $cost, bool $sendMail): void
     {
         $userTable = $this->getMockBuilder(Table\User::class)
             ->disableOriginalConstructor()
@@ -56,7 +56,7 @@ class PayerTest extends TestCase
 
         $usageTable->expects($this->once())
             ->method('create')
-            ->with($this->callback(function($row) use ($cost) {
+            ->with($this->callback(function($row) use ($cost): true {
                 /** @var Table\Generated\PlanUsageRow $row */
                 $this->assertInstanceOf(Table\Generated\PlanUsageRow::class, $row);
                 $this->assertEquals(1, $row->getOperationId());
@@ -71,7 +71,7 @@ class PayerTest extends TestCase
             ->getMock();
 
         $configService->expects($this->once())
-            ->method('getValue')
+            ->method('getInt')
             ->withAnyParameters()
             ->willReturn($threshold);
 
@@ -91,6 +91,9 @@ class PayerTest extends TestCase
         $payer->pay($cost, $context);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function pointsProvider(): array
     {
         return [
@@ -133,16 +136,6 @@ class PayerTest extends TestCase
             [0, 98, 1, false],
             [0, 97, 1, false],
             [0, 96, 1, false],
-
-            [null, 104, 1, false],
-            [null, 103, 1, false],
-            [null, 102, 1, false],
-            [null, 101, 1, false],
-            [null, 100, 1, false],
-            [null, 99, 1, false],
-            [null, 98, 1, false],
-            [null, 97, 1, false],
-            [null, 96, 1, false],
         ];
     }
 }

@@ -9,10 +9,13 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $connectionId = null;
     private ?string $tenantId = null;
     private ?int $status = null;
+    private ?int $public = null;
     private ?int $type = null;
     private ?string $name = null;
     private ?string $description = null;
     private ?string $introduction = null;
+    private ?int $temperature = null;
+    private ?int $costs = null;
     private ?string $tools = null;
     private ?string $outgoing = null;
     private ?string $metadata = null;
@@ -57,6 +60,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
+    public function setPublic(int $public): void
+    {
+        $this->public = $public;
+    }
+    public function getPublic(): int
+    {
+        return $this->public ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "public" was provided');
+    }
     public function setType(int $type): void
     {
         $this->type = $type;
@@ -88,6 +99,22 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getIntroduction(): string
     {
         return $this->introduction ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "introduction" was provided');
+    }
+    public function setTemperature(int $temperature): void
+    {
+        $this->temperature = $temperature;
+    }
+    public function getTemperature(): int
+    {
+        return $this->temperature ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "temperature" was provided');
+    }
+    public function setCosts(?int $costs): void
+    {
+        $this->costs = $costs;
+    }
+    public function getCosts(): ?int
+    {
+        return $this->costs;
     }
     public function setTools(?string $tools): void
     {
@@ -130,10 +157,13 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('connection_id', $this->connectionId);
         $record->put('tenant_id', $this->tenantId);
         $record->put('status', $this->status);
+        $record->put('public', $this->public);
         $record->put('type', $this->type);
         $record->put('name', $this->name);
         $record->put('description', $this->description);
         $record->put('introduction', $this->introduction);
+        $record->put('temperature', $this->temperature);
+        $record->put('costs', $this->costs);
         $record->put('tools', $this->tools);
         $record->put('outgoing', $this->outgoing);
         $record->put('metadata', $this->metadata);
@@ -144,6 +174,9 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return (object) $this->toRecord()->getAll();
     }
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();
@@ -152,10 +185,13 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->connectionId = isset($data['connection_id']) && is_int($data['connection_id']) ? $data['connection_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
+        $row->public = isset($data['public']) && is_int($data['public']) ? $data['public'] : null;
         $row->type = isset($data['type']) && is_int($data['type']) ? $data['type'] : null;
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
         $row->introduction = isset($data['introduction']) && is_string($data['introduction']) ? $data['introduction'] : null;
+        $row->temperature = isset($data['temperature']) && is_int($data['temperature']) ? $data['temperature'] : null;
+        $row->costs = isset($data['costs']) && is_int($data['costs']) ? $data['costs'] : null;
         $row->tools = isset($data['tools']) && is_string($data['tools']) ? $data['tools'] : null;
         $row->outgoing = isset($data['outgoing']) && is_string($data['outgoing']) ? $data['outgoing'] : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;

@@ -34,13 +34,10 @@ use Fusio\Impl\Backend\View;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetUsedPoints implements ActionInterface
+readonly class GetUsedPoints implements ActionInterface
 {
-    private View\Statistic\UsedPoints $view;
-
-    public function __construct(View\Statistic\UsedPoints $view)
+    public function __construct(private View\Statistic\UsedPoints $view)
     {
-        $this->view = $view;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

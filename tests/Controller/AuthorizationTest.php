@@ -31,7 +31,7 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class AuthorizationTest extends DbTestCase
 {
-    public function testPublic()
+    public function testPublic(): void
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -71,48 +71,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPublicWithAuthorization()
-    {
-        $response = $this->sendRequest('/foo', 'GET', [
-            'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ]);
-
-        $body = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "totalResults": 2,
-    "itemsPerPage": 16,
-    "startIndex": 0,
-    "entry": [
-        {
-            "id": 2,
-            "title": "bar",
-            "content": "foo",
-            "date": "2015-02-27T19:59:15+00:00"
-        },
-        {
-            "id": 1,
-            "title": "foo",
-            "content": "bar",
-            "date": "2015-02-27T19:59:15+00:00"
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals('8', $response->getHeader('RateLimit-Limit'), $body);
-        $this->assertEquals('8', $response->getHeader('RateLimit-Remaining'), $body);
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
-        $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
-        $this->assertEquals('test.listFoo', $response->getHeader('X-Operation-Id'), $body);
-        $this->assertEquals('experimental', $response->getHeader('X-Stability'), $body);
-        $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testPublicWithInvalidAuthorization()
+    public function testPublicWithAuthorization(): void
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -153,7 +112,48 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPublicWithEmptyAuthorization()
+    public function testPublicWithInvalidAuthorization(): void
+    {
+        $response = $this->sendRequest('/foo', 'GET', [
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ]);
+
+        $body = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27T19:59:15+00:00"
+        },
+        {
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27T19:59:15+00:00"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('8', $response->getHeader('RateLimit-Limit'), $body);
+        $this->assertEquals('8', $response->getHeader('RateLimit-Remaining'), $body);
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'), $body);
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $response->getHeader('X-Request-Id'), $body);
+        $this->assertEquals('test.listFoo', $response->getHeader('X-Operation-Id'), $body);
+        $this->assertEquals('experimental', $response->getHeader('X-Stability'), $body);
+        $this->assertEquals('Fusio', $response->getHeader('X-Powered-By'), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPublicWithEmptyAuthorization(): void
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
@@ -194,7 +194,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testNotPublic()
+    public function testNotPublic(): void
     {
         $body = <<<'JSON'
 {
@@ -222,7 +222,7 @@ JSON;
         $this->assertStringStartsWith('Missing authorization header', $data->message);
     }
 
-    public function testNotPublicWithAuthorization()
+    public function testNotPublicWithAuthorization(): void
     {
         $body = <<<'JSON'
 {
@@ -257,7 +257,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testNotPublicWithInvalidAuthorization()
+    public function testNotPublicWithInvalidAuthorization(): void
     {
         $body = <<<'JSON'
 {
@@ -286,7 +286,7 @@ JSON;
         $this->assertStringStartsWith('Invalid access token', $data->message);
     }
 
-    public function testNotPublicWithEmptyAuthorization()
+    public function testNotPublicWithEmptyAuthorization(): void
     {
         $body = <<<'JSON'
 {

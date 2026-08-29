@@ -64,7 +64,7 @@ class App
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
-        $appApproval = $this->configService->getValue('app_approval');
+        $appApproval = $this->configService->getBool('app_approval');
 
         $backendApp = new Model\Backend\AppCreate();
         $backendApp->setUserId($context->getUserId());
@@ -137,7 +137,7 @@ class App
     private function assertMaxAppCount(UserContext $context): void
     {
         $count = $this->appTable->getCountForUser($context->getTenantId(), $context->getUserId());
-        if ($count > $this->configService->getValue('consumer_max_apps')) {
+        if ($count > $this->configService->getInt('consumer_max_apps')) {
             throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to create a new one');
         }
     }

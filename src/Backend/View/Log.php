@@ -41,7 +41,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(LogQueryFilter $filter, ContextInterface $context)
+    public function getCollection(LogQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -75,7 +75,7 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(int $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 

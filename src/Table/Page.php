@@ -35,7 +35,9 @@ use PSX\Sql\Condition;
 class Page extends Generated\PageTable
 {
     public const STATUS_VISIBLE   = 1;
+    
     public const STATUS_INVISIBLE = 2;
+    
     public const STATUS_DELETED   = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?PageRow

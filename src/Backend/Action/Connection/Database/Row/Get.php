@@ -33,7 +33,7 @@ use PSX\Http\Exception\NotFoundException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get extends TableAbstract
+readonly class Get extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {

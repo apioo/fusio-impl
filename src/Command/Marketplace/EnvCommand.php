@@ -45,7 +45,14 @@ class EnvCommand extends Command
 {
     use TypeSafeTrait;
 
+    /**
+     * @var RepositoryInterface<MarketplaceApp>
+     */
     private RepositoryInterface $repository;
+
+    /**
+     * @var InstallerInterface<MarketplaceApp>
+     */
     private InstallerInterface $installer;
 
     public function __construct(
@@ -106,6 +113,7 @@ class EnvCommand extends Command
             if ($output->isVerbose()) {
                 $output->writeln($e->getTraceAsString());
             }
+            
             $output->writeln('');
         } catch (\Throwable $e) {
             $output->writeln('');
@@ -113,6 +121,7 @@ class EnvCommand extends Command
             if ($output->isVerbose()) {
                 $output->writeln($e->getTraceAsString());
             }
+            
             $output->writeln('');
         }
 

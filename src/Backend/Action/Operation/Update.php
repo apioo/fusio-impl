@@ -35,15 +35,10 @@ use Fusio\Model\Backend\OperationUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Operation $operationService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Operation $operationService, ContextFactory $contextFactory)
+    public function __construct(private Operation $operationService, private ContextFactory $contextFactory)
     {
-        $this->operationService = $operationService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

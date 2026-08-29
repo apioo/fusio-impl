@@ -33,7 +33,7 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends TableAbstract
+readonly class GetAll extends TableAbstract
 {
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
@@ -62,6 +62,10 @@ class GetAll extends TableAbstract
         ];
     }
 
+    /**
+     * @param list<string> $allColumns
+     * @return list<string>
+     */
     private function getColumns(RequestInterface $request, array $allColumns): array
     {
         $columns = $request->get('columns');
@@ -70,13 +74,16 @@ class GetAll extends TableAbstract
         }
 
         $selected = array_intersect(explode(',', $columns), $allColumns);
-        if (empty($selected)) {
+        if ($selected === []) {
             return $allColumns;
         }
 
         return $selected;
     }
 
+    /**
+     * @param list<string> $allColumns
+     */
     private function addFilter(RequestInterface $request, QueryBuilder $qb, array $allColumns): void
     {
         $filterBy = $request->get('filterBy');
@@ -107,14 +114,17 @@ class GetAll extends TableAbstract
         }
     }
 
+    /**
+     * @param list<string> $allColumns
+     */
     private function addOrderBy(RequestInterface $request, QueryBuilder $qb, ?string $primaryKey, array $allColumns): void
     {
         $sortBy = $request->get('sortBy');
         $sortOrder = $request->get('sortOrder');
 
         if (!empty($sortBy) && !empty($sortOrder) && in_array($sortBy, $allColumns)) {
-            $sortOrder = strtoupper($sortOrder);
-            $sortOrder = in_array($sortOrder, ['ASC', 'DESC']) ? $sortOrder : 'DESC';
+            $sortOrder = strtoupper((string) $sortOrder);
+            $sortOrder = in_array($sortOrder, ['ASC', 'DESC'], true) ? $sortOrder : 'DESC';
 
             $qb->orderBy($sortBy, $sortOrder);
         } elseif (!empty($primaryKey)) {
@@ -128,7 +138,7 @@ class GetAll extends TableAbstract
         $count = (int) $request->get('count');
         $limit = 1024;
 
-        $startIndex = $startIndex < 0 ? 0 : $startIndex;
+        $startIndex = max(0, $startIndex);
         $count = $count >= 1 && $count <= $limit ? $count : 16;
 
         $qb->setFirstResult($startIndex);

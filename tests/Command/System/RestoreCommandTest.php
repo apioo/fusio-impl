@@ -37,7 +37,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class RestoreCommandTest extends DbTestCase
 {
     #[DataProvider('restoreProvider')]
-    public function testCommandRestore(string $type, int|string $id, int $status)
+    public function testCommandRestore(string $type, int|string $id, int $status): void
     {
         $column = is_numeric($id) ? 'id' : 'name';
 
@@ -62,6 +62,9 @@ class RestoreCommandTest extends DbTestCase
         $this->assertEquals($status, $row['status']);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function restoreProvider(): array
     {
         return [
@@ -83,7 +86,7 @@ class RestoreCommandTest extends DbTestCase
     }
 
     #[DataProvider('restoreInvalidProvider')]
-    public function testCommandRestoreInvalid(string $type, int $id)
+    public function testCommandRestoreInvalid(string $type, int $id): void
     {
         $command = Environment::getService(Application::class)->find('system:restore');
 
@@ -100,6 +103,9 @@ class RestoreCommandTest extends DbTestCase
         $this->assertMatchesRegularExpression('/Restored no record/', $display, $display);
     }
 
+    /**
+     * @return list<list<mixed>>
+     */
     public static function restoreInvalidProvider(): array
     {
         return [

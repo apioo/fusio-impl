@@ -144,6 +144,9 @@ readonly class Role
         return $existing->getId();
     }
 
+    /**
+     * @param list<string>|null $scopes
+     */
     private function insertScopes(?string $tenantId, int $roleId, ?array $scopes): void
     {
         if (!empty($scopes)) {
@@ -160,6 +163,9 @@ readonly class Role
         }
     }
 
+    /**
+     * @param list<Table\Generated\ScopeRow> $scopes
+     */
     private function addScopesToUsers(int $roleId, array $scopes): void
     {
         $users = $this->userTable->findByRoleId($roleId);

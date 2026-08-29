@@ -21,8 +21,10 @@
 namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
+use Generator;
 
 /**
  * To keep the system fast we rotate specific tables which get otherwise really large over time. We simply copy all
@@ -33,16 +35,16 @@ use Doctrine\DBAL\Schema\Schema;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class LogRotator
+final class LogRotator
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
-    public function rotate(): \Generator
+    /**
+     * @return Generator<string>
+     */
+    public function rotate(): Generator
     {
         $schemaManager = $this->connection->createSchemaManager();
         $schema = $schemaManager->introspectSchema();
@@ -53,7 +55,11 @@ class LogRotator
         yield from $this->archiveCronjobErrorTable($schemaManager, $schema);
     }
 
-    private function archiveAuditTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     * @return Generator<string>
+     */
+    private function archiveAuditTable(AbstractSchemaManager $schemaManager, Schema $schema): Generator
     {
         $tableName = 'fusio_audit_' . date('Ymd');
 
@@ -81,7 +87,11 @@ class LogRotator
         yield from $this->copy('fusio_audit', $tableName, ['id', 'tenant_id', 'app_id', 'user_id', 'ref_id', 'event', 'ip', 'message', 'content', 'date']);
     }
 
-    private function archiveLogTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     * @return Generator<string>
+     */
+    private function archiveLogTable(AbstractSchemaManager $schemaManager, Schema $schema): Generator
     {
         $tableName = 'fusio_log_' . date('Ymd');
 
@@ -112,7 +122,11 @@ class LogRotator
         yield from $this->copy('fusio_log', $tableName, ['id', 'tenant_id', 'operation_id', 'app_id', 'user_id', 'ip', 'user_agent', 'method', 'path', 'header', 'body', 'execution_time', 'date']);
     }
 
-    private function archiveLogErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     * @return Generator<string>
+     */
+    private function archiveLogErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): Generator
     {
         $tableName = 'fusio_log_error_' . date('Ymd');
 
@@ -137,7 +151,11 @@ class LogRotator
         yield from $this->copy('fusio_log_error', $tableName, ['id', 'log_id', 'message', 'trace', 'file', 'line', 'insert_date']);
     }
 
-    private function archiveCronjobErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): \Generator
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     * @return Generator<string>
+     */
+    private function archiveCronjobErrorTable(AbstractSchemaManager $schemaManager, Schema $schema): Generator
     {
         $tableName = 'fusio_cronjob_error_' . date('Ymd');
 
@@ -162,7 +180,11 @@ class LogRotator
         yield from $this->copy('fusio_cronjob_error', $tableName, ['id', 'cronjob_id', 'message', 'trace', 'file', 'line', 'insert_date']);
     }
 
-    private function copy(string $sourceTable, string $archiveTable, array $columns): \Generator
+    /**
+     * @param list<string> $columns
+     * @return Generator<string>
+     */
+    private function copy(string $sourceTable, string $archiveTable, array $columns): Generator
     {
         $count = $this->connection->executeStatement('INSERT INTO ' . $archiveTable . ' SELECT ' . implode(', ', $columns) . ' FROM ' . $sourceTable);
         yield 'Copied ' . $count . ' entries to ' . $archiveTable . ' table';

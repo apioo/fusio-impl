@@ -1,0 +1,121 @@
+<?php
+/*
+ * Fusio - Self-Hosted API Management for Builders.
+ * For the current version and information visit <https://www.fusio-project.org/>
+ *
+ * Copyright (c) Christoph Kappestein <christoph.kappestein@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Fusio\Impl\Tests\Consumer\Api\Agent;
+
+use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Fixture;
+
+/**
+ * EntityTest
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * @link    https://www.fusio-project.org
+ */
+class EntityTest extends DbTestCase
+{
+    private int $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getReference('fusio_agent', 'agent-test')->resolve($this->connection);
+    }
+
+    public function testGet(): void
+    {
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'GET', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ]);
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": {$this->id},
+    "status": 1,
+    "name": "agent-test",
+    "description": "An agent test"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetNotFound(): void
+    {
+        $response = $this->sendRequest('/consumer/agent/10', 'GET', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ]);
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body);
+
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertFalse($data->success);
+        $this->assertStringStartsWith('Could not find agent', $data->message);
+    }
+
+    public function testPost(): void
+    {
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ], json_encode([
+            'foo' => 'bar',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+    }
+
+    public function testPut(): void
+    {
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'PUT', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ], json_encode([
+            'name' => 'foo',
+            'description' => 'foo',
+            'introduction' => 'foo',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+    }
+
+    public function testDelete(): void
+    {
+        $response = $this->sendRequest('/consumer/agent/' . $this->id, 'DELETE', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ]);
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+    }
+}

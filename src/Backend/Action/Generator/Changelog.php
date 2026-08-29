@@ -34,13 +34,10 @@ use Fusio\Model\Backend\GeneratorProviderConfig;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Changelog implements ActionInterface
+readonly class Changelog implements ActionInterface
 {
-    private Generator $generatorService;
-
-    public function __construct(Generator $generatorService)
+    public function __construct(private Generator $generatorService)
     {
-        $this->generatorService = $generatorService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed

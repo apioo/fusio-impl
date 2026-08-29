@@ -33,14 +33,14 @@ use Fusio\Impl\Tests\DbTestCase;
  */
 class EntityTest extends DbTestCase
 {
-    private const TENANT_ID = 'customer_a';
+    private const string TENANT_ID = 'customer_a';
 
-    public function testGet()
+    public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'GET', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -49,12 +49,12 @@ class EntityTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'POST', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -63,12 +63,12 @@ class EntityTest extends DbTestCase
         $this->assertEquals(404, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -79,13 +79,13 @@ class EntityTest extends DbTestCase
         $this->assertTrue($data->success, $body);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         // create a tenant before we delete the data
-        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
+        ], json_encode([
             'foo' => 'bar',
         ]));
 
@@ -100,10 +100,10 @@ class EntityTest extends DbTestCase
         $this->connection->insert('fusio_connection', ['tenant_id' => self::TENANT_ID, 'status' => 1, 'name' => 'Paypal', 'class' => PaypalConnection::class]);
 
         // now delete the tenant
-        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'DELETE', array(
+        $response = $this->sendRequest('/backend/tenant/' . self::TENANT_ID, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
+        ]);
 
         $body = (string) $response->getBody();
         $data = \json_decode($body);

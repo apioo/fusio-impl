@@ -35,6 +35,9 @@ use PSX\Framework\Loader\RoutingParserInterface;
  */
 class CompositeParser implements RoutingParserInterface, InvalidateableInterface
 {
+    /**
+     * @var array<string, RoutingCollection>
+     */
     private array $collection = [];
     private DatabaseParser $databaseParser;
     private AttributeParser $attributeParser;

@@ -35,15 +35,10 @@ use Fusio\Model\Backend\CronjobUpdate;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Update implements ActionInterface
+readonly class Update implements ActionInterface
 {
-    private Cronjob $cronjobService;
-    private ContextFactory $contextFactory;
-
-    public function __construct(Cronjob $cronjobService, ContextFactory $contextFactory)
+    public function __construct(private Cronjob $cronjobService, private ContextFactory $contextFactory)
     {
-        $this->cronjobService = $cronjobService;
-        $this->contextFactory = $contextFactory;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
