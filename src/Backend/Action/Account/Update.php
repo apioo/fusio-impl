@@ -25,8 +25,10 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Service\User;
 use Fusio\Model\Backend\UserUpdate;
+use Fusio\Model\Common\Message;
 
 /**
  * Update
@@ -57,6 +59,7 @@ readonly class Update implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Account successful changed',
             'id' => '' . $id,

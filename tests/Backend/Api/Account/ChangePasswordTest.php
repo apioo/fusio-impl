@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Account;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * ChangePasswordTest
@@ -68,9 +69,12 @@ class ChangePasswordTest extends DbTestCase
             'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL!',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Password successful changed"
 }
