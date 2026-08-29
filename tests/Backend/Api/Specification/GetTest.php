@@ -578,6 +578,7 @@ class GetTest extends DbTestCase
                         "type": "integer"
                     },
                     "userId": {
+                        "description": "Unique identifier of the owning user",
                         "type": "integer"
                     },
                     "status": {
@@ -648,22 +649,27 @@ class GetTest extends DbTestCase
                         "type": "integer"
                     },
                     "name": {
+                        "description": "Name or friendly description for the token",
                         "type": "string"
                     },
                     "scopes": {
+                        "description": "List of access scopes granted to this token",
                         "type": "array",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "ip": {
+                        "description": "IP address from which the token was requested",
                         "type": "string"
                     },
                     "expire": {
+                        "description": "Expiration timestamp after which the token is invalid",
                         "type": "string",
                         "format": "date-time"
                     },
                     "date": {
+                        "description": "Creation timestamp of the token",
                         "type": "string",
                         "format": "date-time"
                     }
@@ -713,6 +719,7 @@ class GetTest extends DbTestCase
                         }
                     },
                     "apps": {
+                        "description": "List of applications associated with or owned by the user",
                         "type": "array",
                         "schema": {
                             "type": "reference",
@@ -813,52 +820,66 @@ class GetTest extends DbTestCase
                         "type": "string"
                     },
                     "apiVersion": {
+                        "description": "The current version of the API",
                         "type": "string"
                     },
                     "title": {
+                        "description": "The title or name of the API project",
                         "type": "string"
                     },
                     "description": {
+                        "description": "A comprehensive description of the API and its capabilities",
                         "type": "string"
                     },
                     "termsOfService": {
+                        "description": "URL to the terms of service for using the API",
                         "type": "string"
                     },
                     "contactName": {
+                        "description": "The name of the primary contact person or organization for the API",
                         "type": "string"
                     },
                     "contactUrl": {
+                        "description": "URL to contact information or support site for the API",
                         "type": "string"
                     },
                     "contactEmail": {
+                        "description": "The email address to reach out to for API support",
                         "type": "string"
                     },
                     "licenseName": {
+                        "description": "The name of the license under which the API is exposed",
                         "type": "string"
                     },
                     "licenseUrl": {
+                        "description": "URL to the full text of the API license agreement",
                         "type": "string"
                     },
                     "paymentCurrency": {
+                        "description": "The primary ISO currency code used for API billing and payments",
                         "type": "string"
                     },
                     "categories": {
+                        "description": "List of categories or tags assigned to classify the API",
                         "type": "array",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "scopes": {
+                        "description": "List of global scopes available across the API",
                         "type": "array",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "apps": {
+                        "description": "Map of available application endpoints or integration links",
                         "type": "reference",
                         "target": "System_AboutApps"
                     },
                     "links": {
+                        "description": "List of related hypermedia links providing contextual navigational paths",
                         "type": "array",
                         "schema": {
                             "type": "reference",
@@ -877,9 +898,11 @@ class GetTest extends DbTestCase
                 "type": "struct",
                 "properties": {
                     "rel": {
+                        "description": "The relationship type defining the target URL's connection to the current context",
                         "type": "string"
                     },
                     "href": {
+                        "description": "The target URI for the linked resource",
                         "type": "string"
                     }
                 }
