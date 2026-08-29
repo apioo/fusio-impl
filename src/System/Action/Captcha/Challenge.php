@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -48,13 +49,18 @@ readonly class Challenge implements ActionInterface
     ) {
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponse
     {
         if ($this->getRequestCount() > 15) {
             throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60);
         }
 
-        return $this->captchaService->challenge();
+        $headers = [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+        ];
+
+        return new HttpResponse(200, $headers, $this->captchaService->challenge());
     }
 
     private function getRequestCount(): int
