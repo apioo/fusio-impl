@@ -18,26 +18,25 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Service\Captcha\Provider;
 
-use PSX\Http\Client\PostRequest;
+use Fusio\Impl\Service\Captcha\CaptchaInterface;
 
 /**
- * HCaptcha
+ * MockCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class HCaptcha extends CaptchaAbstract
+readonly class MockCaptcha implements CaptchaInterface
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool
+    public function __construct(private bool $result = true)
     {
-        $request = new PostRequest('https://hcaptcha.com/siteverify', [], [
-            'secret'   => $secret,
-            'response' => $captcha,
-        ]);
+    }
 
-        return $this->request($request);
+    public function verify(string $captcha, string $secret, string $ip): bool
+    {
+        return $this->result;
     }
 }

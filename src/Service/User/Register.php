@@ -38,7 +38,7 @@ readonly class Register
 {
     public function __construct(
         private Service\User $userService,
-        private Captcha $captchaService,
+        private Service\Captcha\Verifier $captchaVerifier,
         private Token $tokenService,
         private Mailer $mailerService,
         private Service\Config $configService,
@@ -54,7 +54,7 @@ readonly class Register
             throw new StatusCode\ServiceUnavailableException('User registration is not enabled');
         }
 
-        $this->captchaService->assertCaptcha($register->getCaptcha());
+        $this->captchaVerifier->assertCaptcha($register->getCaptcha());
 
         // determine initial user status
         $status = Table\User::STATUS_DISABLED;

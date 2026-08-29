@@ -18,47 +18,27 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Service\Captcha\Provider;
 
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\RequestInterface;
-use PSX\Json\Parser;
+use Fusio\Impl\Service\Captcha\CaptchaAbstract;
+use PSX\Http\Client\PostRequest;
 
 /**
- * ReCaptcha
+ * FriendlyCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly abstract class CaptchaAbstract implements CaptchaInterface
+readonly class FriendlyCaptcha extends CaptchaAbstract
 {
-    public function __construct(private ClientInterface $httpClient)
+    public function verify(string $captcha, string $secret, string $ip): bool
     {
-    }
+        $request = new PostRequest('https://global.frcapi.com/api/v2/captcha/siteverify', [], [
+            'sitekey'  => $secret,
+            'response' => $captcha,
+        ]);
 
-    protected function request(RequestInterface $request, string $successProperty = 'success'): bool
-    {
-        $response = $this->httpClient->request($request);
-        if ($response->getStatusCode() !== 200) {
-            return false;
-        }
-
-        try {
-            $data = Parser::decode((string) $response->getBody());
-        } catch (\JsonException) {
-            return false;
-        }
-
-        if (!$data instanceof \stdClass) {
-            return false;
-        }
-
-        $success = $data->{$successProperty} ?? null;
-        if ($success !== true) {
-            return false;
-        }
-
-        return true;
+        return $this->request($request);
     }
 }

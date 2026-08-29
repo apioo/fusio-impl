@@ -84,8 +84,9 @@ class NewInstallation
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha Key', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha Secret', tenantId: $tenantId);
+        $bag->addConfig('captcha_type', Table\Config::FORM_STRING, 'fusio', 'Captcha Type, must be one of: friendly, hcaptcha, recaptcha or fusio', tenantId: $tenantId);
+        $bag->addConfig('captcha_key', Table\Config::FORM_STRING, '', 'Captcha Key', tenantId: $tenantId);
+        $bag->addConfig('captcha_secret', Table\Config::FORM_STRING, '', 'Captcha Secret', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_portal_configuration', Table\Config::FORM_STRING, '', 'The stripe portal configuration id', tenantId: $tenantId);
         $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments', tenantId: $tenantId);
@@ -2933,6 +2934,16 @@ class NewInstallation
                     action: System\Action\Payment\Webhook::class,
                     httpMethod: 'POST',
                     httpPath: '/payment/:provider/webhook',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    public: true,
+                    description: 'Payment webhook endpoint after successful purchase of a plan',
+                ),
+                'captcha.challenge' => new Operation(
+                    action: System\Action\Captcha\Challenge::class,
+                    httpMethod: 'POST',
+                    httpPath: '/captcha/challenge',
                     httpCode: 200,
                     outgoing: Model\Common\Message::class,
                     throws: [999 => Model\Common\Message::class],

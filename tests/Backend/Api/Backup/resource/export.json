@@ -171,14 +171,20 @@
     },
     {
       "type": 1,
-      "name": "recaptcha_key",
-      "description": "ReCaptcha Key",
+      "name": "captcha_type",
+      "description": "Captcha Type, must be one of: friendly, hcaptcha, recaptcha or fusio",
+      "value": "fusio"
+    },
+    {
+      "type": 1,
+      "name": "captcha_key",
+      "description": "Captcha Key",
       "value": ""
     },
     {
       "type": 1,
-      "name": "recaptcha_secret",
-      "description": "ReCaptcha Secret",
+      "name": "captcha_secret",
+      "description": "Captcha Secret",
       "value": ""
     },
     {
@@ -416,7 +422,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 279,
+          "operationId": 280,
           "authenticated": true
         }
       ]
@@ -433,7 +439,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 278
+          "operationId": 279
         }
       ]
     },

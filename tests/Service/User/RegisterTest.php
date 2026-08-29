@@ -146,11 +146,19 @@ class RegisterTest extends DbTestCase
         );
     }
 
-    private function newCaptchaService(bool $success): Service\User\Captcha
+    private function newCaptchaService(bool $success): Service\Captcha\Verifier
     {
-        return new Service\User\Captcha(
+        $factory = $this->getMockBuilder(Service\Captcha\CaptchaFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $factory->expects($this->once())
+            ->method('factory')
+            ->willReturn(new Service\Captcha\Provider\MockCaptcha($success));
+
+        return new Service\Captcha\Verifier(
             Environment::getService(Service\Config::class),
-            new Service\User\Captcha\MockCaptcha($success),
+            $factory,
             Environment::getService(IPResolver::class),
         );
     }
@@ -164,7 +172,7 @@ class RegisterTest extends DbTestCase
         $update = new ConfigUpdate();
         $update->setValue($reCaptchaSecret);
         
-        $config->update($this->getConfigId('recaptcha_secret'), $update, $context);
+        $config->update($this->getConfigId('captcha_secret'), $update, $context);
 
         $update = new ConfigUpdate();
         $update->setValue($userApproval);

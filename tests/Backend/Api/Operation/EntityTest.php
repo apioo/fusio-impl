@@ -54,7 +54,7 @@ class EntityTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 278,
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -96,7 +96,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 278,
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -195,7 +195,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "278"
+    "id": "279"
 }
 JSON;
 
@@ -243,7 +243,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "279"
+    "id": "280"
 }
 JSON;
 
@@ -292,7 +292,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully updated",
-    "id": "278"
+    "id": "279"
 }
 JSON;
 
@@ -315,7 +315,7 @@ JSON;
 {
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "278"
+    "id": "279"
 }
 JSON;
 

@@ -18,16 +18,19 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Service\Captcha;
 
 /**
- * CaptchaInterface
+ * CaptchaType
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-interface CaptchaInterface
+enum CaptchaType: string
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool;
+    case FRIENDLY = 'friendly';
+    case HCAPTCHA = 'hcaptcha';
+    case RECAPTCHA = 'recaptcha';
+    case FUSIO = 'fusio';
 }

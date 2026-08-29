@@ -18,24 +18,26 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Service\Captcha\Provider;
 
+use Fusio\Impl\Service\Captcha\CaptchaAbstract;
 use PSX\Http\Client\PostRequest;
 
 /**
- * FriendlyCaptcha
+ * ReCaptcha
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class FriendlyCaptcha extends CaptchaAbstract
+readonly class ReCaptcha extends CaptchaAbstract
 {
-    public function verify(?string $captcha, string $secret, string $ip): bool
+    public function verify(string $captcha, string $secret, string $ip): bool
     {
-        $request = new PostRequest('https://global.frcapi.com/api/v2/captcha/siteverify', [], [
-            'sitekey'  => $secret,
+        $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
+            'secret'   => $secret,
             'response' => $captcha,
+            'remoteip' => $ip,
         ]);
 
         return $this->request($request);

@@ -1116,6 +1116,10 @@ class ToolsTest extends DbTestCase
             "description": "Returns meta information and links about the current installed Fusio version"
         },
         {
+            "name": "system_captcha_challenge",
+            "description": "Payment webhook endpoint after successful purchase of a plan"
+        },
+        {
             "name": "system_connection_callback",
             "description": "Connection OAuth2 callback to authorize a connection"
         },

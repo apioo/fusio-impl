@@ -18,46 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User;
+namespace Fusio\Impl\System\Action\Captcha;
 
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequestContext;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
 use PSX\Framework\Environment\IPResolver;
-use PSX\Http\Exception as StatusCode;
 
 /**
- * Captcha
+ * Challenge
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Captcha
+readonly class Challenge implements ActionInterface
 {
     public function __construct(
-        private Service\Config $configService,
-        private Service\User\Captcha\CaptchaInterface $captcha,
-        private IPResolver $ipResolver,
+        private Service\Captcha $captchaService,
     ) {
     }
 
-    public function assertCaptcha(?string $captcha): void
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $secret = $this->configService->getString('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
-    }
-
-    protected function verifyCaptcha(?string $captcha, string $secret): bool
-    {
-        if (empty($captcha)) {
-            throw new StatusCode\BadRequestException('Invalid captcha');
-        }
-
-        if ($this->captcha->verify($captcha, $secret, $this->ipResolver->resolveByEnvironment())) {
-            return true;
-        }
-
-        throw new StatusCode\BadRequestException('Invalid captcha');
+        return $this->captchaService->challenge();
     }
 }

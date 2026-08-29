@@ -12496,6 +12496,32 @@
         "webhook"
       ]
     },
+    "system.captcha.challenge": {
+      "path": "/system/captcha/challenge",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Payment webhook endpoint after successful purchase of a plan",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": []
+    },
     "system.connection.callback": {
       "path": "/system/connection/:name/callback",
       "method": "GET",

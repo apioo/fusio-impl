@@ -37,7 +37,7 @@ use PSX\Http\Exception as StatusCode;
 readonly class ResetPassword
 {
     public function __construct(
-        private Captcha $captchaService,
+        private Service\Captcha\Verifier $captchaVerifier,
         private Token $tokenService,
         private Mailer $mailerService,
         private Table\User $userTable,
@@ -46,7 +46,7 @@ readonly class ResetPassword
 
     public function resetPassword(UserEmail $reset, UserContext $context): void
     {
-        $this->captchaService->assertCaptcha($reset->getCaptcha());
+        $this->captchaVerifier->assertCaptcha($reset->getCaptcha());
 
         $email = $reset->getEmail();
         if (empty($email)) {

@@ -41,28 +41,28 @@ class EntityTest extends DbTestCase
         $body = (string) $response->getBody();
 
         $expect = <<<JSON
+{
+    "id": 1,
+    "appId": 3,
+    "operationId": 279,
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
+    "method": "GET",
+    "path": "\/bar",
+    "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
+    "body": "foobar",
+    "errors": [
         {
             "id": 1,
-            "appId": 3,
-            "operationId": 278,
-            "ip": "127.0.0.1",
-            "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
-            "method": "GET",
-            "path": "\/bar",
-            "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
-            "body": "foobar",
-            "errors": [
-                {
-                    "id": 1,
-                    "message": "Syntax error, malformed JSON",
-                    "trace": "[trace]",
-                    "file": "[file]",
-                    "line": 74
-                }
-            ],
-            "date": "2015-06-25T22:49:09Z"
+            "message": "Syntax error, malformed JSON",
+            "trace": "[trace]",
+            "file": "[file]",
+            "line": 74
         }
-        JSON;
+    ],
+    "date": "2015-06-25T22:49:09Z"
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
