@@ -44,7 +44,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Token",
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "name": "Backend\/Administrator",

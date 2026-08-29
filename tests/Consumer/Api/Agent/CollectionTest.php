@@ -44,20 +44,20 @@ class CollectionTest extends DbTestCase
         $body = Normalizer::normalizeDateTime($body);
 
         $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
-            "totalResults": 1,
-            "startIndex": 0,
-            "itemsPerPage": 16,
-            "entry": [
-                {
-                    "id": 7,
-                    "status": 1,
-                    "name": "agent-test",
-                    "description": "An agent test"
-                }
-            ]
+            "id": 7,
+            "status": 1,
+            "name": "agent-test",
+            "description": "An agent test"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -102,20 +102,20 @@ JSON;
         $body = Normalizer::normalizeDateTime($body);
 
         $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
         {
-            "totalResults": 1,
-            "startIndex": 0,
-            "itemsPerPage": 80,
-            "entry": [
-                {
-                    "id": 7,
-                    "status": 1,
-                    "name": "agent-test",
-                    "description": "An agent test"
-                }
-            ]
+            "id": 7,
+            "status": 1,
+            "name": "agent-test",
+            "description": "An agent test"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

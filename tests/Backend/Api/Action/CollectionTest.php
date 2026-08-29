@@ -47,13 +47,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCollection",
+    "kind": "[kind]",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "name": "MIME-Action",
@@ -61,7 +61,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "Inspect-Action",
@@ -69,7 +69,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "PHP-Local",
@@ -77,7 +77,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
@@ -85,7 +85,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
@@ -93,7 +93,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "Util-Static-Response",
@@ -123,13 +123,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
@@ -137,7 +137,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
@@ -164,13 +164,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
@@ -197,13 +197,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCollection",
+    "kind": "[kind]",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "name": "MIME-Action",
@@ -211,7 +211,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "Inspect-Action",
@@ -219,7 +219,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "PHP-Local",
@@ -227,7 +227,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Sql-Insert",
@@ -235,7 +235,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Sql-Select-All",
@@ -243,7 +243,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Action",
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "Util-Static-Response",

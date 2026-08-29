@@ -44,7 +44,7 @@ class AccountTest extends DbTestCase
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_UserAccount",
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "planId": 1,

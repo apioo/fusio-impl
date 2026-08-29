@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Role;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,30 +39,32 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
+    "kind": "[kind]",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 3,
             "categoryId": 1,
             "status": 1,
@@ -82,16 +85,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
@@ -112,30 +117,32 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_RoleCollection",
+    "kind": "[kind]",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Role",
+            "kind": "[kind]",
             "id": 3,
             "categoryId": 1,
             "status": 1,

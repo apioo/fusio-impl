@@ -77,12 +77,12 @@ class Identity extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\IdentityCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\IdentityCollection::class)),
             'totalResults' => $this->getTable(Table\Identity::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Identity::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Identity::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Identity::class)),
                 'id' => $builder->fieldInteger(Table\Generated\IdentityTable::COLUMN_ID),
                 'name' => Table\Generated\IdentityTable::COLUMN_NAME,
                 'icon' => Table\Generated\IdentityTable::COLUMN_ICON,

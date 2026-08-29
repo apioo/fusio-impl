@@ -21,7 +21,10 @@
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Base;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
+use Fusio\Sdk\SystemAbout;
 
 /**
  * GetAboutTest
@@ -39,10 +42,13 @@ class GetAboutTest extends DbTestCase
         ]);
 
         $version = Base::getVersion();
-        $body    = (string) $response->getBody();
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect  = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/System_About",
+    "kind": "[kind]",
     "apiVersion": "{$version}",
     "title": "Fusio",
     "description": "Self-Hosted API Management for Builders.",

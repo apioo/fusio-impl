@@ -81,12 +81,12 @@ class Webhook extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\WebhookCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\WebhookCollection::class)),
             'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Webhook::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Webhook::class)),
                 'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
                 'name' => Table\Generated\WebhookTable::COLUMN_NAME,
@@ -122,7 +122,7 @@ class Webhook extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Webhook::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Webhook::class)),
             'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_STATUS),
             'name' => Table\Generated\WebhookTable::COLUMN_NAME,

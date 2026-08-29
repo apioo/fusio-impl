@@ -52,12 +52,12 @@ class Commit extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\ActionCommitCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ActionCommitCollection::class)),
             'totalResults' => $this->getTable(Table\Action\Commit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Action\Commit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\ActionCommit::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ActionCommit::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ActionCommitTable::COLUMN_ID),
                 'user' => $builder->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference(Table\Generated\ActionCommitTable::COLUMN_USER_ID)], [
                     'id' => $builder->fieldInteger(Table\Generated\UserTable::COLUMN_ID),

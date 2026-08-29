@@ -75,12 +75,12 @@ class Grant extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\GrantCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\GrantCollection::class)),
             'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Grant::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Grant::class)),
                 'id' => $builder->fieldInteger(Table\Generated\UserGrantTable::COLUMN_ID),
                 'allow' => $builder->fieldInteger(Table\Generated\UserGrantTable::COLUMN_ALLOW),
                 'createDate' => $builder->fieldDateTime(Table\Generated\UserGrantTable::COLUMN_DATE),

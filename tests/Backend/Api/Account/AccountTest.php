@@ -42,9 +42,9 @@ class AccountTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_User",
+    "kind": "[kind]",
     "id": 4,
     "roleId": 2,
     "status": 1,

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Log;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -39,10 +40,11 @@ class EntityTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+    "kind": "[kind]",
     "id": 1,
     "appId": 3,
     "operationId": 279,
@@ -61,7 +63,7 @@ class EntityTest extends DbTestCase
             "line": 74
         }
     ],
-    "date": "2015-06-25T22:49:09Z"
+    "date": "[datetime]"
 }
 JSON;
 

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Scope;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,28 +40,30 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ScopeCollection",
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 60,
             "name": "foo",
             "description": "Foo access",
@@ -69,7 +72,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 5,
             "name": "default",
             "description": ""
@@ -89,16 +92,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ScopeCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 60,
             "name": "foo",
             "description": "Foo access",
@@ -121,28 +126,30 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ScopeCollection",
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 60,
             "name": "foo",
             "description": "Foo access",
@@ -151,7 +158,7 @@ JSON;
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Scope",
+            "kind": "[kind]",
             "id": 5,
             "name": "default",
             "description": ""

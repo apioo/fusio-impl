@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\JsonLD;
+namespace Fusio\Impl\Service\TypeSystem;
 
 use Composer\InstalledVersions;
 
@@ -29,7 +29,7 @@ use Composer\InstalledVersions;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class TypeBuilder
+readonly class KindBuilder
 {
     /**
      * @param class-string $modelClass

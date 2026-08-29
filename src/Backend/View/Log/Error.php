@@ -74,12 +74,12 @@ class Error extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\LogErrorCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogErrorCollection::class)),
             'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\LogError::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogError::class)),
                 'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
                 'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
@@ -117,7 +117,7 @@ class Error extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\LogError::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogError::class)),
             'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
             'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
             'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,

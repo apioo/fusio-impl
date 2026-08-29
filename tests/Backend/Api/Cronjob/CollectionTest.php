@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Cronjob;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,35 +39,37 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CronjobCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Second-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"
@@ -87,22 +90,24 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CronjobCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"
@@ -123,22 +128,24 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CronjobCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Second-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"
@@ -159,35 +166,37 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_CronjobCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Second-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Cronjob",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Test-Cron",
             "cron": "* * * * *",
             "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
+            "executeDate": "[datetime]",
             "exitCode": 0,
             "metadata": {
                 "foo": "bar"

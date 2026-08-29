@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Base;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * WelcomeTest
@@ -39,10 +40,13 @@ class WelcomeTest extends DbTestCase
         ]);
 
         $version = Base::getVersion();
-        $body    = (string) $response->getBody();
+
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect  = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/System_About",
+    "kind": "[kind]",
     "apiVersion": "{$version}",
     "title": "Fusio",
     "description": "Self-Hosted API Management for Builders.",

@@ -45,13 +45,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_TokenCollection",
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -63,7 +63,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "Developer\/Consumer",
@@ -75,7 +75,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Foo-App\/Consumer",
@@ -87,7 +87,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Developer\/Consumer",
@@ -119,13 +119,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_TokenCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -137,7 +137,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Token",
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Foo-App\/Consumer",

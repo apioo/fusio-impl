@@ -52,12 +52,12 @@ class Bundle extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\BundleCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\BundleCollection::class)),
             'totalResults' => $this->getTable(Table\Bundle::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Bundle::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Bundle::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Bundle::class)),
                 'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
                 'name' => Table\Generated\BundleTable::COLUMN_NAME,
@@ -75,7 +75,7 @@ class Bundle extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Bundle::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Bundle::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Bundle::class)),
             'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
             'name' => Table\Generated\BundleTable::COLUMN_NAME,

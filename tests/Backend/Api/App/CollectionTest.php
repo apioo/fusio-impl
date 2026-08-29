@@ -47,13 +47,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AppCollection",
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 4,
             "userId": 2,
             "status": 2,
@@ -62,7 +62,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 3,
             "userId": 2,
             "status": 1,
@@ -74,7 +74,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 2,
             "userId": 1,
             "status": 1,
@@ -83,7 +83,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 1,
             "userId": 1,
             "status": 1,
@@ -111,13 +111,13 @@ JSON;
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AppCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 3,
             "userId": 2,
             "status": 1,
@@ -148,13 +148,13 @@ JSON;
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AppCollection",
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 4,
             "userId": 2,
             "status": 2,
@@ -163,7 +163,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 3,
             "userId": 2,
             "status": 1,
@@ -175,7 +175,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 2,
             "userId": 1,
             "status": 1,
@@ -184,7 +184,7 @@ JSON;
             "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_App",
+            "kind": "[kind]",
             "id": 1,
             "userId": 1,
             "status": 1,

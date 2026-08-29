@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -39,10 +40,12 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "name": "Passthru",
@@ -64,10 +67,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Schema",
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "name": "Passthru",

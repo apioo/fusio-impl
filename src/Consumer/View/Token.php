@@ -56,12 +56,12 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\TokenCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\TokenCollection::class)),
             'totalResults' => $this->getTable(Table\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
             'entry' => $builder->doCollection([$this->getTable(Table\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Token::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Token::class)),
                 'id' => Table\Generated\TokenTable::COLUMN_ID,
                 'status' => Table\Generated\TokenTable::COLUMN_STATUS,
                 'name' => Table\Generated\TokenTable::COLUMN_NAME,
@@ -87,7 +87,7 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Token::class), 'findOneBy'], [$condition], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Consumer\Token::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Token::class)),
             'id' => Table\Generated\TokenTable::COLUMN_ID,
             'status' => Table\Generated\TokenTable::COLUMN_STATUS,
             'name' => Table\Generated\TokenTable::COLUMN_NAME,

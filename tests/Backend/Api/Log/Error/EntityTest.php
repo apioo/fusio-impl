@@ -43,17 +43,17 @@ class EntityTest extends DbTestCase
         $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
-        {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogError",
-            "id": 1,
-            "logId": 1,
-            "message": "Syntax error, malformed JSON",
-            "trace": "[trace]",
-            "file": "[file]",
-            "line": 74,
-            "insertDate": "[datetime]"
-        }
-        JSON;
+{
+    "kind": "[kind]",
+    "id": 1,
+    "logId": 1,
+    "message": "Syntax error, malformed JSON",
+    "trace": "[trace]",
+    "file": "[file]",
+    "line": 74,
+    "insertDate": "[datetime]"
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

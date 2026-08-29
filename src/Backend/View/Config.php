@@ -52,12 +52,12 @@ class Config extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\ConfigCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ConfigCollection::class)),
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Config::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Config::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
                 'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
@@ -76,7 +76,7 @@ class Config extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Config::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Config::class)),
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

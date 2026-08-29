@@ -58,13 +58,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCommitCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_ActionCommit",
+            "kind": "[kind]",
             "id": 2,
             "user": {
                 "id": 2,
@@ -79,6 +79,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "user": {
                 "id": 2,

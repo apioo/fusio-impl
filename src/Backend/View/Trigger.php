@@ -53,12 +53,12 @@ class Trigger extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\TriggerCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\TriggerCollection::class)),
             'totalResults' => $this->getTable(Table\Trigger::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Trigger::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Trigger::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Trigger::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TriggerTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\TriggerTable::COLUMN_STATUS),
                 'name' => Table\Generated\TriggerTable::COLUMN_NAME,
@@ -76,7 +76,7 @@ class Trigger extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Trigger::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Trigger::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Trigger::class)),
             'id' => Table\Generated\TriggerTable::COLUMN_ID,
             'status' => $builder->fieldInteger(Table\Generated\TriggerTable::COLUMN_STATUS),
             'name' => Table\Generated\TriggerTable::COLUMN_NAME,

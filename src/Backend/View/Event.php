@@ -53,12 +53,12 @@ class Event extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\EventCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\EventCollection::class)),
             'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Event::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Event::class)),
                 'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
                 'name' => Table\Generated\EventTable::COLUMN_NAME,
@@ -75,7 +75,7 @@ class Event extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Event::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Event::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Event::class)),
             'id' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
             'name' => Table\Generated\EventTable::COLUMN_NAME,

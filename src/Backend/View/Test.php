@@ -54,12 +54,12 @@ class Test extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\TestCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\TestCollection::class)),
             'totalResults' => $this->getTable(Table\Test::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Test::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Test::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Test::class)),
                 'id' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_STATUS),
                 'operationName' => $builder->doValue([$this->getTable(Table\Operation::class), 'find'], [new Reference(Table\Generated\TestTable::COLUMN_OPERATION_ID)], Table\Generated\OperationTable::COLUMN_NAME),
@@ -75,7 +75,7 @@ class Test extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Test::class), 'findOneByTenantAndId'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Test::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Test::class)),
             'id' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\TestTable::COLUMN_STATUS),
             'operationName' => $builder->doValue([$this->getTable(Table\Operation::class), 'find'], [new Reference(Table\Generated\TestTable::COLUMN_OPERATION_ID)], Table\Generated\OperationTable::COLUMN_NAME),

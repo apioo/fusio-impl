@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Event;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -51,16 +52,18 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -70,7 +73,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -94,16 +97,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -127,16 +132,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -160,16 +167,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_EventCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -179,7 +188,7 @@ JSON;
             }
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Event",
+            "kind": "[kind]",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",

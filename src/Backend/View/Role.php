@@ -53,12 +53,12 @@ class Role extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\RoleCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\RoleCollection::class)),
             'totalResults' => $this->getTable(Table\Role::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Role::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Role::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Role::class)),
                 'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
                 'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
                 'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
@@ -74,7 +74,7 @@ class Role extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Role::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Role::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Role::class)),
             'id' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
             'categoryId' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
             'status' => $builder->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),

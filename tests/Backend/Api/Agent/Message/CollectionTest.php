@@ -41,19 +41,19 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentMessageCollection",
+    "kind": "[kind]",
     "totalResults": 16,
     "startIndex": 0,
     "itemsPerPage": 10,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentMessage",
+            "kind": "[kind]",
             "id": 1,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "user",
             "item": {
                 "type": "text",
@@ -77,19 +77,19 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentMessageCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 10,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentMessage",
+            "kind": "[kind]",
             "id": 1,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "user",
             "item": {
                 "type": "text",
@@ -98,9 +98,9 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_AgentMessage",
+            "kind": "[kind]",
             "id": 2,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "assistant",
             "item": {
                 "type": "text",

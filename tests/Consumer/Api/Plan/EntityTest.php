@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Plan;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -38,10 +39,12 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Plan",
+    "kind": "[kind]",
     "id": 1,
     "name": "Plan A",
     "description": "",

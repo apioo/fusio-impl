@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Scope;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -52,22 +53,23 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_ScopeCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Scope",
+            "kind": "[kind]",
             "id": {$this->scopeBarId},
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Scope",
+            "kind": "[kind]",
             "id": {$this->scopeFooId},
             "name": "foo",
             "description": "Foo access",

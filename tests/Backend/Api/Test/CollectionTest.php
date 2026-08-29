@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Test;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -50,81 +51,83 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_TestCollection",
+    "kind": "[kind]",
     "totalResults": 10,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 10,
             "status": 4,
             "operationName": "mime.json",
             "message": "Expected status code 200 got 500"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 9,
             "status": 4,
             "operationName": "mime.form",
             "message": "Expected status code 200 got 500"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 2,
             "status": 4,
             "operationName": "inspect.delete",
             "message": "Missing parameter \"foo\" in path"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 4,
             "status": 4,
             "operationName": "inspect.patch",
             "message": "Missing parameter \"foo\" in path"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 6,
             "status": 4,
             "operationName": "inspect.put",
             "message": "Missing parameter \"foo\" in path"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 5,
             "status": 4,
             "operationName": "inspect.post",
             "message": "Missing parameter \"foo\" in path"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 3,
             "status": 4,
             "operationName": "inspect.get",
             "message": "Missing parameter \"foo\" in path"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 14,
             "status": 4,
             "operationName": "test.createBar",
             "message": "Expected status code 201 got 402"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 15,
             "status": 4,
             "operationName": "test.createFoo",
             "message": "Expected status code 201 got 402"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Test",
+            "kind": "[kind]",
             "id": 7,
-            "message": "/ property \"@type\" is unknown",
+            "message": "/ property \"kind\" is unknown",
             "operationName": "meta.getAbout",
             "status": 4
         }

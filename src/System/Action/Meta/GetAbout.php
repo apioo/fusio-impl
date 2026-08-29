@@ -51,7 +51,7 @@ readonly class GetAbout implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return array_filter([
-            '@type' => Service\JsonLD\TypeBuilder::build(Model\System\About::class),
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\About::class),
             'apiVersion' => Base::getVersion(),
             'title' => $this->configService->getString('info_title') ?: 'Fusio',
             'description' => $this->configService->getString('info_description') ?: null,

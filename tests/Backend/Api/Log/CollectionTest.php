@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Log;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -49,16 +50,17 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -66,10 +68,10 @@ class CollectionTest extends DbTestCase
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -77,7 +79,7 @@ class CollectionTest extends DbTestCase
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -95,16 +97,17 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -112,10 +115,10 @@ JSON;
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -123,7 +126,7 @@ JSON;
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -141,16 +144,17 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_LogCollection",
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 2,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -158,10 +162,10 @@ JSON;
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         },
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Log",
+            "kind": "[kind]",
             "id": 1,
             "appId": 3,
             "operationId": {$this->operationId},
@@ -169,7 +173,7 @@ JSON;
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
             "path": "\/bar",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }

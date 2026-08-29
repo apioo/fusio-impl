@@ -52,12 +52,12 @@ class Webhook extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\WebhookCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\WebhookCollection::class)),
             'totalResults' => $this->getTable(Table\Webhook::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Webhook::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Webhook::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Webhook::class)),
                 'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
                 'eventId' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_EVENT_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_USER_ID),
@@ -74,7 +74,7 @@ class Webhook extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Webhook::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Webhook::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Webhook::class)),
             'id' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_ID),
             'eventId' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_EVENT_ID),
             'userId' => $builder->fieldInteger(Table\Generated\WebhookTable::COLUMN_USER_ID),

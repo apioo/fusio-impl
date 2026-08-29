@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Form;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -39,10 +40,11 @@ class EntityTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Form",
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "name": "my_form",
@@ -87,10 +89,11 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Form",
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "name": "my_form",

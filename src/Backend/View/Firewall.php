@@ -52,12 +52,12 @@ class Firewall extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\FirewallCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\FirewallCollection::class)),
             'totalResults' => $this->getTable(Table\Firewall::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Firewall::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Firewall::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Firewall::class)),
                 'id' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_STATUS),
                 'name' => Table\Generated\FirewallTable::COLUMN_NAME,
@@ -76,7 +76,7 @@ class Firewall extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Firewall::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\Firewall::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Firewall::class)),
             'id' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\FirewallTable::COLUMN_STATUS),
             'name' => Table\Generated\FirewallTable::COLUMN_NAME,

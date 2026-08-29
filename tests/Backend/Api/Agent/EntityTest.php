@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -48,10 +49,12 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Backend_Agent",
+    "kind": "[kind]",
     "id": {$this->id},
     "status": 1,
     "connection": 8,
@@ -65,7 +68,7 @@ class EntityTest extends DbTestCase
         "test_listFoo"
     ],
     "outgoing": "schema:\/\/Entry-Schema",
-    "insertDate": "2026-02-22T13:06:00Z"
+    "insertDate": "[datetime]"
 }
 JSON;
 

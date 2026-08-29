@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Grant;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,19 +40,20 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
-    "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_GrantCollection",
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "@type": "https://typehub.cloud/s/fusio/sdk/7.0.7/Consumer_Grant",
+            "kind": "[kind]",
             "id": 1,
             "allow": 1,
-            "createDate": "2015-02-27T19:59:15Z",
+            "createDate": "[datetime]",
             "app": {
                 "id": 3,
                 "name": "Foo-App",

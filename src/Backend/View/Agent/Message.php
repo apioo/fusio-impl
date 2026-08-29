@@ -64,12 +64,12 @@ class Message extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
-            '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\AgentMessageCollection::class)),
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentMessageCollection::class)),
             'totalResults' => $count,
             'startIndex' => 0,
             'itemsPerPage' => Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH,
             'entry' => $builder->doCollection([$this->getTable(Table\Agent\Message::class), 'findBy'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                '@type' => $builder->fieldValue(Service\JsonLD\TypeBuilder::build(Model\Backend\AgentMessage::class)),
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentMessage::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AgentMessageTable::COLUMN_ID),
                 'chatId' => Table\Generated\AgentMessageTable::COLUMN_CHAT_ID,
                 'role' => $builder->fieldCallback(Table\Generated\AgentMessageTable::COLUMN_ORIGIN, function ($value) {
