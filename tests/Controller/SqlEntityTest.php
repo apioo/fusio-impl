@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Controller;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * SqlEntityTest
@@ -153,8 +154,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Provider successfully executed"
 }
