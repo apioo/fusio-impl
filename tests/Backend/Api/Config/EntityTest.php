@@ -105,9 +105,12 @@ JSON;
             'value' => 32,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Config successfully updated",
     "id": "3"

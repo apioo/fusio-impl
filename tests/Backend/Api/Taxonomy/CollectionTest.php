@@ -162,9 +162,12 @@ JSON;
             'name' => 'feature_a_a_a',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Taxonomy successfully created",
     "id": "4"

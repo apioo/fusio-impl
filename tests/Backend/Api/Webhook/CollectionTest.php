@@ -95,9 +95,12 @@ JSON;
             'endpoint' => 'http://localhost',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Webhook successfully created",
     "id": "3"

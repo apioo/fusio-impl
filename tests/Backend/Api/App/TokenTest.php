@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\App;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * TokenTest
@@ -78,9 +79,12 @@ class TokenTest extends DbTestCase
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Removed token successful"
 }

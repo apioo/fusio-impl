@@ -25,6 +25,9 @@ use Fusio\Engine\Agent\ToolsInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Backend\AgentTools;
+use Fusio\Model\Common\Message;
 
 /**
  * GetTools
@@ -42,6 +45,7 @@ readonly class GetTools implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
+            'kind' => KindBuilder::build(AgentTools::class),
             'tools' => $this->getTools(),
         ];
     }

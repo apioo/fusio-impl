@@ -285,9 +285,12 @@ JSON;
             'introduction' => 'Your an helpful agent which returns only useful information',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Agent successfully created",
     "id": "8"

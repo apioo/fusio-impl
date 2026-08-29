@@ -25,8 +25,10 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Service\User\Register as UserRegister;
 use Fusio\Model;
+use Fusio\Model\Common\Message;
 
 /**
  * Register
@@ -50,6 +52,7 @@ readonly class Register implements ActionInterface
         $this->registerService->register($body, $this->contextFactory->newAnonymousContext());
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Registration successful',
         ];

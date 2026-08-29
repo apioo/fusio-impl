@@ -101,9 +101,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Webhook successfully updated",
     "id": "2"
@@ -140,9 +142,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Webhook successfully deleted",
     "id": "2"

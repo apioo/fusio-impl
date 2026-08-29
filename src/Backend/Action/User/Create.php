@@ -25,8 +25,10 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Service\User;
 use Fusio\Model\Backend\UserCreate;
+use Fusio\Model\Common\Message;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -54,6 +56,7 @@ readonly class Create implements ActionInterface
         );
 
         return new HttpResponse(201, [], [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'User successfully created',
             'id' => '' . $id,

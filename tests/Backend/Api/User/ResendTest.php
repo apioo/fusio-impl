@@ -64,9 +64,12 @@ class ResendTest extends DbTestCase
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Activation mail was successfully resent"
 }

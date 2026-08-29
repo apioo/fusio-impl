@@ -167,9 +167,12 @@ JSON;
             'scopes'     => ['backend.action', 'backend.schema'],
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Role successfully created",
     "id": "4"

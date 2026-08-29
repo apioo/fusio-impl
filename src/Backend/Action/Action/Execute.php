@@ -26,7 +26,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Action;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\ActionExecuteRequest;
+use Fusio\Model\Backend\ActionExecuteResponse;
 use Fusio\Worker\MessageException;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
@@ -79,12 +81,14 @@ readonly class Execute implements ActionInterface
                 }
 
                 $return = [
+                    'kind' => KindBuilder::build(ActionExecuteResponse::class),
                     'statusCode' => $response->getStatusCode(),
                     'headers' => $headers,
                     'body' => $body,
                 ];
             } else {
                 $return = [
+                    'kind' => KindBuilder::build(ActionExecuteResponse::class),
                     'statusCode' => 200,
                     'headers' => new stdClass(),
                     'body' => $response,
@@ -94,6 +98,7 @@ readonly class Execute implements ActionInterface
             $body = $e instanceof MessageException ? $e->getPayload() : $this->exceptionConverter->convert($e);
 
             $return = [
+                'kind' => KindBuilder::build(ActionExecuteResponse::class),
                 'statusCode' => 500,
                 'headers' => new stdClass(),
                 'body' => $body,

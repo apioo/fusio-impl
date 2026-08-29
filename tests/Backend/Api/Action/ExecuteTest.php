@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\System\Action\Meta\GetDebug;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * ExecuteTest
@@ -58,9 +59,12 @@ class ExecuteTest extends DbTestCase
             'body'         => new \stdClass(),
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "statusCode": 200,
     "headers": {},
     "body": {
