@@ -22,7 +22,11 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Table;
+use Fusio\Model;
+use Fusio\Model\Common\Message;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -53,10 +57,12 @@ class Scope extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ScopeCollection::class)),
             'totalResults' => $this->getTable(Table\Scope::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Scope::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
@@ -72,6 +78,7 @@ class Scope extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Scope::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Scope::class)),
             'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
@@ -95,6 +102,7 @@ class Scope extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => KindBuilder::build(Model\Backend\ScopeCategories::class),
             'categories' => $builder->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, 0, 1024, Table\Generated\CategoryColumn::NAME, OrderBy::ASC], [
                 'id' => $builder->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
                 'name' => Table\Generated\CategoryTable::COLUMN_NAME,

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Backup;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * ImportTest
@@ -54,9 +55,12 @@ class ImportTest extends DbTestCase
             'import' => file_get_contents(__DIR__ . '/resource/import.json'),
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Import successfully executed",
     "logs": [

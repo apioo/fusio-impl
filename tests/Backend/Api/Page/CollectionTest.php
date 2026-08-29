@@ -45,11 +45,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "title": "API",
@@ -57,6 +59,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "title": "Authorization",
@@ -64,6 +67,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "title": "Getting started",
@@ -71,6 +75,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 2,
             "title": "Overview",
@@ -78,6 +83,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "title": "SDK",
@@ -85,6 +91,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "title": "Support",
@@ -111,11 +118,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "title": "API",
@@ -123,6 +132,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "title": "Authorization",
@@ -130,6 +140,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "title": "Getting started",
@@ -137,6 +148,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 2,
             "title": "Overview",
@@ -144,6 +156,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "title": "SDK",
@@ -151,6 +164,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "title": "Support",
@@ -195,9 +209,12 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Page successfully created",
     "id": "7"

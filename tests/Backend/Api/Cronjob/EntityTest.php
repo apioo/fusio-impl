@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Cronjob;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -39,29 +40,32 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
+{
+    "kind": "[kind]",
+    "id": 2,
+    "status": 1,
+    "name": "Test-Cron",
+    "cron": "* * * * *",
+    "action": "Sql-Select-All",
+    "executeDate": "[datetime]",
+    "exitCode": 0,
+    "errors": [
         {
-            "id": 2,
-            "status": 1,
-            "name": "Test-Cron",
-            "cron": "* * * * *",
-            "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0,
-            "errors": [
-                {
-                    "message": "Syntax error, malformed JSON",
-                    "trace": "[trace]",
-                    "file": "[file]",
-                    "line": 74
-                }
-            ],
-            "metadata": {
-                "foo": "bar"
-            }
+            "message": "Syntax error, malformed JSON",
+            "trace": "[trace]",
+            "file": "[file]",
+            "line": 74
         }
-        JSON;
+    ],
+    "metadata": {
+        "foo": "bar"
+    }
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -74,29 +78,32 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
+{
+    "kind": "[kind]",
+    "id": 2,
+    "status": 1,
+    "name": "Test-Cron",
+    "cron": "* * * * *",
+    "action": "Sql-Select-All",
+    "executeDate": "[datetime]",
+    "exitCode": 0,
+    "metadata": {
+        "foo": "bar"
+    },
+    "errors": [
         {
-            "id": 2,
-            "status": 1,
-            "name": "Test-Cron",
-            "cron": "* * * * *",
-            "action": "Sql-Select-All",
-            "executeDate": "2015-02-27T19:59:15Z",
-            "exitCode": 0,
-            "metadata": {
-                "foo": "bar"
-            },
-            "errors": [
-                {
-                    "message": "Syntax error, malformed JSON",
-                    "trace": "[trace]",
-                    "file": "[file]",
-                    "line": 74
-                }
-            ]
+            "message": "Syntax error, malformed JSON",
+            "trace": "[trace]",
+            "file": "[file]",
+            "line": 74
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -147,9 +154,12 @@ class EntityTest extends DbTestCase
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Cronjob successfully updated",
     "id": "2"
@@ -182,9 +192,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Cronjob successfully deleted",
     "id": "2"

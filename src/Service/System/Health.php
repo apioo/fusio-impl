@@ -26,6 +26,7 @@ use Fusio\Engine\Parameters;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use Throwable;
 
 /**
  * Health
@@ -51,12 +52,12 @@ class Health
     {
         $checks = new Health\CheckResult();
 
-        $condition  = Condition::withAnd();
+        $condition = Condition::withAnd();
         $condition->equals('status', Table\Connection::STATUS_ACTIVE);
 
         $result = $this->connectionTable->findAll($condition, 0, 1024);
         foreach ($result as $row) {
-            $factory    = $this->connectionFactory->factory($row->getClass());
+            $factory = $this->connectionFactory->factory($row->getClass());
             $parameters = Service\Connection\Encrypter::decrypt($row->getConfig(), $this->secretKey);
             $connection = $factory->getConnection(new Parameters($parameters));
 
@@ -65,7 +66,7 @@ class Health
                     $factory->ping($connection);
 
                     $checks->add($row->getName(), true);
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $checks->add($row->getName(), false, $e->getMessage());
                 }
             }

@@ -26,7 +26,9 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Framework\Schema\Scheme;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaManagerInterface;
@@ -65,6 +67,7 @@ readonly class GetSchema implements ActionInterface
         $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
 
         return [
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\Schema::class),
             'schema' => $json,
             'form' => $schema['form'],
         ];

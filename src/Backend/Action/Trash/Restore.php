@@ -25,7 +25,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\Restorer;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\TrashRestore;
+use Fusio\Model\Common\Message;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -58,6 +60,7 @@ readonly class Restore implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Restore successful',
         ];

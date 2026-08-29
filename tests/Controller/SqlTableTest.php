@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
 use PSX\Json\Parser;
 
@@ -102,9 +103,12 @@ JSON;
                 'stability' => $stability,
             ]));
 
-            $body = (string)$response->getBody();
+            $body = (string) $response->getBody();
+            $body = Normalizer::normalize($body);
+
             $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
     "id": "279"
@@ -120,7 +124,7 @@ JSON;
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
             ]);
 
-            $body = (string)$response->getBody();
+            $body = (string) $response->getBody();
 
             $expect = <<<'JSON'
 {

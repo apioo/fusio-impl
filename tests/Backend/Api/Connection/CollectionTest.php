@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Connection;
 use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -41,50 +42,60 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 8,
             "status": 1,
             "name": "Agent",
             "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
         },
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "StarwarsSDK",
             "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "name": "FusioHttpClient",
             "class": "Fusio.Adapter.Http.Connection.Http"
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "Worker",
             "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Test",
@@ -94,6 +105,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -114,20 +126,25 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -148,14 +165,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Paypal",
@@ -176,20 +197,25 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -210,50 +236,60 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 8,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 8,
             "status": 1,
             "name": "Agent",
             "class": "Fusio.Impl.Tests.Adapter.Test.AgentConnection"
         },
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "StarwarsSDK",
             "class": "Fusio.Adapter.SdkFabric.Connection.Starwars"
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "status": 1,
             "name": "FusioHttpClient",
             "class": "Fusio.Adapter.Http.Connection.Http"
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "LocalFilesystem",
             "class": "Fusio.Adapter.File.Connection.Filesystem"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "Worker",
             "class": "Fusio.Adapter.Worker.Connection.Worker"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Paypal",
             "class": "Fusio.Impl.Tests.Adapter.Test.PaypalConnection"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Test",
@@ -263,6 +299,7 @@ JSON;
             }
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "System",
@@ -296,9 +333,12 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Connection successfully created",
     "id": "9"

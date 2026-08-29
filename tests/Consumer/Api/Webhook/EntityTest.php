@@ -54,6 +54,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "status": 1,
     "name": "pong",
@@ -100,9 +101,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Webhook successfully updated",
     "id": "2"
@@ -139,9 +142,11 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Webhook successfully deleted",
     "id": "2"

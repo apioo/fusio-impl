@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Consumer\Webhook;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Common\Message;
 use Fusio\Model\Consumer\WebhookUpdate;
 
 /**
@@ -54,6 +56,7 @@ readonly class Update implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Webhook successfully updated',
             'id' => '' . $id,

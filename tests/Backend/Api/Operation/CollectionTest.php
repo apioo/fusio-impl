@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
 use PSX\Json\Parser;
 
@@ -41,14 +42,18 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 292,
             "status": 1,
             "active": true,
@@ -61,6 +66,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 291,
             "status": 1,
             "active": true,
@@ -73,6 +79,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 290,
             "status": 1,
             "active": true,
@@ -85,6 +92,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 289,
             "status": 1,
             "active": true,
@@ -97,6 +105,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 288,
             "status": 1,
             "active": true,
@@ -109,6 +118,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 287,
             "status": 1,
             "active": true,
@@ -121,6 +131,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 286,
             "status": 1,
             "active": true,
@@ -133,6 +144,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 285,
             "status": 1,
             "active": true,
@@ -145,6 +157,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 284,
             "status": 1,
             "active": true,
@@ -157,6 +170,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 283,
             "status": 1,
             "active": true,
@@ -169,6 +183,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 282,
             "status": 1,
             "active": true,
@@ -181,6 +196,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 281,
             "status": 1,
             "active": true,
@@ -193,6 +209,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
+            "kind": "[kind]",
             "id": 280,
             "status": 1,
             "active": true,
@@ -205,6 +222,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
+            "kind": "[kind]",
             "id": 279,
             "status": 1,
             "active": true,
@@ -217,6 +235,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "active": true,
@@ -243,14 +262,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 286,
             "status": 1,
             "active": true,
@@ -263,6 +286,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 285,
             "status": 1,
             "active": true,
@@ -275,6 +299,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 284,
             "status": 1,
             "active": true,
@@ -287,6 +312,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 283,
             "status": 1,
             "active": true,
@@ -299,6 +325,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 282,
             "status": 1,
             "active": true,
@@ -325,14 +352,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 279,
             "status": 1,
             "active": true,
@@ -359,14 +390,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 292,
             "status": 1,
             "active": true,
@@ -379,6 +414,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 291,
             "status": 1,
             "active": true,
@@ -391,6 +427,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 290,
             "status": 1,
             "active": true,
@@ -403,6 +440,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 289,
             "status": 1,
             "active": true,
@@ -415,6 +453,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 288,
             "status": 1,
             "active": true,
@@ -427,6 +466,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 287,
             "status": 1,
             "active": true,
@@ -439,6 +479,7 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
+            "kind": "[kind]",
             "id": 286,
             "status": 1,
             "active": true,
@@ -451,6 +492,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 285,
             "status": 1,
             "active": true,
@@ -463,6 +505,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 284,
             "status": 1,
             "active": true,
@@ -475,6 +518,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 283,
             "status": 1,
             "active": true,
@@ -487,6 +531,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 282,
             "status": 1,
             "active": true,
@@ -499,6 +544,7 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
+            "kind": "[kind]",
             "id": 281,
             "status": 1,
             "active": true,
@@ -511,6 +557,7 @@ JSON;
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
+            "kind": "[kind]",
             "id": 280,
             "status": 1,
             "active": true,
@@ -523,6 +570,7 @@ JSON;
             "action": "action:\/\/Sql-Insert"
         },
         {
+            "kind": "[kind]",
             "id": 279,
             "status": 1,
             "active": true,
@@ -535,6 +583,7 @@ JSON;
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "active": true,
@@ -587,9 +636,12 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully created",
     "id": "293"

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Category;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,34 +39,42 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "authorization"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "backend"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "consumer"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "default"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "system"
@@ -85,14 +94,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "backend"
@@ -112,34 +125,42 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 5,
             "status": 1,
             "name": "authorization"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "backend"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "consumer"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "default"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "system"
@@ -161,9 +182,12 @@ JSON;
             'name' => 'developer',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Category successfully created",
     "id": "6"

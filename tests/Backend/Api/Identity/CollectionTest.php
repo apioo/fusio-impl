@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Identity;
 
 use Fusio\Impl\Provider\Identity\Google;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,14 +40,18 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "roleId": 3,
             "appId": 2,
@@ -54,9 +59,10 @@ class CollectionTest extends DbTestCase
             "name": "Facebook",
             "icon": "bi-facebook",
             "class": "Fusio\\Impl\\Provider\\Identity\\Facebook",
-            "insertDate": "2023-07-22T13:56:00Z"
+            "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "roleId": 3,
             "appId": 2,
@@ -64,9 +70,10 @@ class CollectionTest extends DbTestCase
             "name": "GitHub",
             "icon": "bi-github",
             "class": "Fusio\\Impl\\Provider\\Identity\\Github",
-            "insertDate": "2023-07-22T13:56:00Z"
+            "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "roleId": 3,
             "appId": 2,
@@ -74,9 +81,10 @@ class CollectionTest extends DbTestCase
             "name": "Google",
             "icon": "bi-google",
             "class": "Fusio\\Impl\\Provider\\Identity\\Google",
-            "insertDate": "2023-07-22T13:56:00Z"
+            "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "roleId": 3,
             "appId": 2,
@@ -84,7 +92,7 @@ class CollectionTest extends DbTestCase
             "name": "OpenID",
             "icon": "bi-openid",
             "class": "Fusio\\Impl\\Provider\\Identity\\OpenIDConnect",
-            "insertDate": "2023-07-22T13:56:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -116,9 +124,12 @@ JSON;
             ]
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Identity successfully created",
     "id": "5"

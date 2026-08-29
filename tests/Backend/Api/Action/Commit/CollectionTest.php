@@ -58,11 +58,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 2,
             "user": {
                 "id": 2,
@@ -77,6 +79,7 @@ class CollectionTest extends DbTestCase
             "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "user": {
                 "id": 2,

@@ -44,6 +44,7 @@ class WhoamiTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "planId": 1,

@@ -44,6 +44,7 @@ class AccountTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "planId": 1,
@@ -117,9 +118,12 @@ JSON;
             'email' => 'foo@bar.com',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Account successfully updated"
 }

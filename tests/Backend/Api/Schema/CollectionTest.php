@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Framework\Test\Environment;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
@@ -42,19 +43,24 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Collection-Schema",
@@ -63,11 +69,13 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Message"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "Passthru"
@@ -87,14 +95,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
@@ -114,19 +126,24 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "name": "Collection-Schema",
@@ -135,11 +152,13 @@ JSON;
             }
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "name": "Message"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "name": "Passthru"
@@ -189,9 +208,12 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Schema successfully created",
     "id": "5"

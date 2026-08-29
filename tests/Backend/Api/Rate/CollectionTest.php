@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Rate;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,14 +39,18 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -54,6 +59,7 @@ class CollectionTest extends DbTestCase
             "timespan": "P1M"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "priority": 5,
@@ -65,6 +71,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "priority": 4,
@@ -73,6 +80,7 @@ class CollectionTest extends DbTestCase
             "timespan": "PT1H"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "priority": 0,
@@ -95,14 +103,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -125,14 +137,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "status": 1,
             "priority": 10,
@@ -141,6 +157,7 @@ JSON;
             "timespan": "P1M"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "status": 1,
             "priority": 5,
@@ -152,6 +169,7 @@ JSON;
             }
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "status": 1,
             "priority": 4,
@@ -160,6 +178,7 @@ JSON;
             "timespan": "PT1H"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "priority": 0,

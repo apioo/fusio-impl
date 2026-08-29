@@ -26,7 +26,9 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\Taxonomy;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\TaxonomyMove;
+use Fusio\Model\Common\Message;
 
 /**
  * Move
@@ -54,9 +56,10 @@ readonly class Move implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Moved objects to taxonomy successfully',
-            'id'      => '' . $taxonomyId,
+            'id' => '' . $taxonomyId,
         ];
     }
 }

@@ -18,38 +18,33 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Test;
+namespace Fusio\Impl\Service\TypeSystem;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service;
-use Fusio\Impl\Service\System\ContextFactory;
-use Fusio\Impl\Service\TypeSystem\KindBuilder;
-use Fusio\Model\Common\Message;
+use Composer\InstalledVersions;
 
 /**
- * Run
+ * TypeBuilder
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Run implements ActionInterface
+readonly class KindBuilder
 {
-    public function __construct(private Service\Test $testService, private ContextFactory $contextFactory)
+    /**
+     * @param class-string $modelClass
+     */
+    public static function build(string $modelClass): ?string
     {
-    }
+        $version = ltrim(InstalledVersions::getPrettyVersion('fusio/sdk'), 'v');
+        $parts = explode('\\', $modelClass);
+        $component = $parts[count($parts) - 2] ?? null;
+        $name = $parts[count($parts) - 1] ?? null;
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
-    {
-        $this->testService->run($this->contextFactory->newActionContext($context));
+        if (empty($component) || empty($name)) {
+            return null;
+        }
 
-        return [
-            'kind' => KindBuilder::build(Message::class),
-            'success' => true,
-            'message' => 'Tests successfully executed',
-        ];
+        return 'https://typehub.cloud/s/fusio/sdk/' . $version . '/' . $component . '_' . $name;
     }
 }

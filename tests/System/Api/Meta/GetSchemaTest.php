@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * GetSchemaTest
@@ -37,9 +38,12 @@ class GetSchemaTest extends DbTestCase
             'User-Agent' => 'Fusio TestCase',
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "schema": {
         "definitions": {
             "Entry": {

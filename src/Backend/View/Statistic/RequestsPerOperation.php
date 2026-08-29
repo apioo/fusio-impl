@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;

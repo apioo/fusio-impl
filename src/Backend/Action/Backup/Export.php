@@ -27,6 +27,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Cli\Authenticator;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Backend\BackupExport;
 
 /**
  * Export
@@ -55,7 +57,8 @@ readonly class Export implements ActionInterface
         $export = $this->export->export();
 
         return [
-            'export' => $export
+            'kind' => KindBuilder::build(BackupExport::class),
+            'export' => $export,
         ];
     }
 }

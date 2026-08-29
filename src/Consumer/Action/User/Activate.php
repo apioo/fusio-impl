@@ -25,8 +25,10 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Impl\Service\User\Activate as UserActivate;
 use Fusio\Model;
+use Fusio\Model\Common\Message;
 
 /**
  * Activate
@@ -50,6 +52,7 @@ readonly class Activate implements ActionInterface
         $this->activateService->activate($body, $this->contextFactory->newAnonymousContext());
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Activation successful',
         ];

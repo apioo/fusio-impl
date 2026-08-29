@@ -27,7 +27,9 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Cli\Authenticator;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\BackupImport;
+use Fusio\Model\Backend\BackupImportResult;
 
 /**
  * Import
@@ -66,6 +68,7 @@ readonly class Import implements ActionInterface
         }
 
         return [
+            'kind' => KindBuilder::build(BackupImportResult::class),
             'success' => true,
             'message' => 'Import successfully executed',
             'logs' => $logs,

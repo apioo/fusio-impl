@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -50,10 +52,12 @@ class Agent extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentCollection::class)),
             'totalResults' => $this->getTable(Table\Agent::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Agent::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Agent::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
                 'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),
@@ -75,6 +79,7 @@ class Agent extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Agent::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Agent::class)),
             'id' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_STATUS),
             'connection' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_CONNECTION_ID),

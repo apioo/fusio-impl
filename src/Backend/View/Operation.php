@@ -23,7 +23,9 @@ namespace Fusio\Impl\Backend\View;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Framework\Api\Scanner\CategoryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Api\Scanner\FilterInterface;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -55,10 +57,12 @@ class Operation extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\OperationCollection::class)),
             'totalResults' => $this->getTable(Table\Operation::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Operation::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Operation::class)),
                 'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
                 'active' => $builder->fieldBoolean(Table\Generated\OperationTable::COLUMN_ACTIVE),
@@ -81,6 +85,7 @@ class Operation extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Operation::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Operation::class)),
             'id' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\OperationTable::COLUMN_STATUS),
             'name' => Table\Generated\OperationTable::COLUMN_NAME,
@@ -127,6 +132,7 @@ class Operation extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\Route::class),
             'routes' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'http_path' => 'http_path',
                 'http_method' => 'http_method',

@@ -44,11 +44,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -58,6 +60,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "roleId": 3,
             "status": 2,
@@ -66,6 +69,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "roleId": 3,
             "planId": 1,
@@ -79,6 +83,7 @@ class CollectionTest extends DbTestCase
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "roleId": 1,
             "status": 1,
@@ -106,11 +111,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -139,11 +146,13 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 4,
             "roleId": 2,
             "status": 1,
@@ -153,6 +162,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "roleId": 3,
             "status": 2,
@@ -161,6 +171,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "roleId": 3,
             "planId": 1,
@@ -174,6 +185,7 @@ JSON;
             "date": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "roleId": 1,
             "status": 1,
