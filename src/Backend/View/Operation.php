@@ -132,6 +132,7 @@ class Operation extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\Route::class),
             'routes' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
                 'http_path' => 'http_path',
                 'http_method' => 'http_method',

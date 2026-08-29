@@ -24,7 +24,9 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\Health;
+use Fusio\Model;
 
 /**
  * GetHealth
@@ -45,6 +47,7 @@ readonly class GetHealth implements ActionInterface
         $healthy = $result->isHealthy();
 
         return [
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\HealthCheck::class),
             'healthy' => $healthy,
             'checks'  => $result->getChecks(),
         ];
