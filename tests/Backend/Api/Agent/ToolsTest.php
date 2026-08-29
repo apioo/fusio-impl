@@ -1117,7 +1117,7 @@ class ToolsTest extends DbTestCase
         },
         {
             "name": "system_captcha_challenge",
-            "description": "Payment webhook endpoint after successful purchase of a plan"
+            "description": "Endpoint to generate a captcha challenge"
         },
         {
             "name": "system_connection_callback",
